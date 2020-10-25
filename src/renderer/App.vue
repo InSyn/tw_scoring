@@ -11,8 +11,7 @@
   >
     <header
       :style="{
-        background: `${$vuetify.theme.themes[appTheme].cardBackgroundRGBA}`,
-        boxShadow: `0 0 12px 2px ${$vuetify.theme.themes[appTheme].cardBackgroundRGBA}`
+        background: `${$vuetify.theme.themes[appTheme].cardBackgroundRGBA}`
       }"
       style="z-index: 1; "
       class="d-flex align-center px-4"

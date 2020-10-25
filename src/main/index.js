@@ -23,7 +23,9 @@ io.on("connection", socket => {
 app.on("startSocketServer", start_socket_server);
 function start_socket_server() {
   http.listen(process.env.PORT || 3000, () => {
-    console.log(`Listening on ${process.env.PORT || 3000}`);
+    console.log(
+      `Listening on ${http.address().address} ${http.address().port}`
+    );
   });
 }
 /**
