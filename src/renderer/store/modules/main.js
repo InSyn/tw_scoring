@@ -7,6 +7,7 @@ export default {
     showMenu: false,
     serverStatus: false,
     appTheme: "dark",
+    serverMessages: [],
     appMenu: [
       {
         icon: "viewDashboard",
@@ -43,6 +44,7 @@ export default {
 
   getters: {
     socket: state => state.socket,
+    serverMessages: state => state.serverMessages,
     showMenu: state => {
       return state.showMenu;
     },
@@ -60,6 +62,9 @@ export default {
   mutations: {
     changeMenuState: state => {
       state.showMenu = !state.showMenu;
+    },
+    pushServerMessage: (state, message) => {
+      state.serverMessages.push(message);
     },
     changeTheme: state => {
       state.appTheme === "light"

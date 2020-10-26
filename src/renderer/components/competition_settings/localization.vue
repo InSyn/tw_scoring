@@ -1,10 +1,11 @@
 <template>
-  <div class="d-flex pa-2">
+  <div style="height: 100%;" class="d-flex pa-2">
     <div
+      class="flex-column pa-2"
       style="height: 100%;width: 100%;"
       :style="{ borderRadius: `6px`, backgroundColor: styles.cardBackground }"
     >
-      <v-row no-gutters>
+      <v-row style="height: 20%;" no-gutters>
         <v-col cols="6" class="pa-2 ">
           <v-btn
             @click="startServer()"
@@ -36,15 +37,36 @@
           </div>
         </v-col>
       </v-row>
+      <div
+        class="pa-2"
+        style="height: 80%; max-height: 250px; overflow-y: auto"
+        :style="{
+          backgroundColor:
+            $vuetify.theme.themes[appTheme].standardBackgroundRGBA
+        }"
+      >
+        <v-row
+          no-gutters
+          v-for="(mes, m) in serverMessages"
+          :key="m"
+          v-html="serverMessages[m]"
+        ></v-row>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
+const { ipcRenderer } = require("electron");
 const { app } = require("electron").remote;
 export default {
   name: "localization",
+  mounted() {
+    ipcRenderer.on("server_message", (e, message) => {
+      this.$store.commit("main/pushServerMessage", message);
+    });
+  },
   methods: {
     startServer() {
       app.emit("startSocketServer");
@@ -56,6 +78,7 @@ export default {
   computed: {
     ...mapGetters("main", [
       "socket",
+      "serverMessages",
       "competition",
       "appTheme",
       "serverStatus"
