@@ -12,23 +12,26 @@ let connections = [];
 
 io.on("connection", socket => {
   socket.emit("serverConnected");
-  mainWindow.webContents.send("server_message", `Connected ${socket.id}`);
+  mainWindow &&
+    mainWindow.webContents.send("server_message", `Connected ${socket.id}`);
   console.log(`Connected ${socket.id}`);
   socket.on("checkServer", () => {
     socket.emit("checkOk", true);
   });
   socket.on("disconnect", reason => {
-    mainWindow.webContents.send("server_message", `${reason} ${socket.id}`);
+    mainWindow &&
+      mainWindow.webContents.send("server_message", `${reason} ${socket.id}`);
     console.log(`${reason} ${socket.id}`);
   });
 });
 app.on("startSocketServer", start_socket_server);
 function start_socket_server() {
-  http.listen(process.env.PORT || 3000, () => {
-    mainWindow.webContents.send(
-      "server_message",
-      `Listening on ${http.address().address} ${http.address().port}`
-    );
+  http.listen(3000, "127.0.0.1", () => {
+    mainWindow &&
+      mainWindow.webContents.send(
+        "server_message",
+        `Listening on ${http.address().address} ${http.address().port}`
+      );
     console.log(
       `Listening on ${http.address().address} ${http.address().port}`
     );
