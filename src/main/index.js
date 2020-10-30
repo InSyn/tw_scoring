@@ -13,30 +13,61 @@ let connections = [];
 io.on("connection", socket => {
   socket.emit("serverConnected");
   mainWindow &&
-    mainWindow.webContents.send("server_message", `Connected ${socket.id}`);
+    mainWindow.webContents.send("server_message", [
+      3,
+      `Connected ${socket.id}`
+    ]);
   console.log(`Connected ${socket.id}`);
   socket.on("checkServer", () => {
     socket.emit("checkOk", true);
   });
   socket.on("disconnect", reason => {
     mainWindow &&
-      mainWindow.webContents.send("server_message", `${reason} ${socket.id}`);
+      mainWindow.webContents.send("server_message", [
+        4,
+        `${reason} ${socket.id}`
+      ]);
     console.log(`${reason} ${socket.id}`);
   });
 });
-app.on("startSocketServer", start_socket_server);
-function start_socket_server() {
-  http.listen(3000, "127.0.0.1", () => {
+
+app.on("startSocketServer", config => {
+  if (http["_handle"]) {
     mainWindow &&
-      mainWindow.webContents.send(
-        "server_message",
-        `Listening on ${http.address().address} ${http.address().port}`
-      );
+      mainWindow.webContents.send("server_message", [
+        2,
+        `Server already started on ${http.address().address} ${
+          http.address().port
+        }`
+      ]);
     console.log(
       `Listening on ${http.address().address} ${http.address().port}`
     );
-  });
-}
+  } else {
+    http.listen(config[1], config[0], () => {
+      mainWindow &&
+        mainWindow.webContents.send("server_message", [
+          1,
+          `Listening on ${http.address().address} ${http.address().port}`
+        ]);
+      console.log(
+        `Listening on ${http.address().address} ${http.address().port}`
+      );
+    });
+  }
+});
+
+app.on("close_server", () => {
+  if (http["_handle"]) {
+    mainWindow &&
+      mainWindow.webContents.send("server_message", [0, `Server shut down`]);
+    http.close();
+  } else {
+    mainWindow &&
+      mainWindow.webContents.send("server_message", [0, `No started server`]);
+    console.log(`No started server`);
+  }
+});
 /**
  * SOCKET SERVER
  * **/

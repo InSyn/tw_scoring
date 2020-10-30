@@ -146,7 +146,6 @@
       <span class="ml-2">{{ new Date().getFullYear() }}</span
       ><v-spacer></v-spacer
       ><span
-        @click="socket.disconnect()"
         v-if="competition"
         :style="{ color: `${$vuetify.theme.themes[appTheme].accent}` }"
         v-html="
@@ -186,26 +185,14 @@ export default {
         })();
     });
     this.createCompetition(new this.EventClass());
-    this.socket.on("serverConnected", () => {
-      this.serverSetStatus("True");
-    });
     this.competition.timer.ticker();
-    this.serverStatusChecker = setInterval(() => {
-      this.checkServerStatus()
-        ? this.serverSetStatus(true)
-        : this.serverSetStatus(false);
-    }, 3000);
   },
   methods: {
     ...mapActions("main", [
       "changeMenuState",
       "changeTheme",
-      "createCompetition",
-      "serverSetStatus"
-    ]),
-    checkServerStatus() {
-      return this.socket.connected;
-    }
+      "createCompetition"
+    ])
   },
   data() {
     return {

@@ -38,7 +38,9 @@ const opts = {
         accentRgba: { r: 24, g: 190, b: 177, a: 1 },
         success: "#2ABE6A",
         action_yellow: "#D9BB23",
-        action_blue: "#2474D9"
+        action_darkYellow: "#D98E3D",
+        action_blue: "#2474D9",
+        action_red: "#D9412D"
       },
       light: {
         standardBackground: { r: 208, g: 208, b: 214, a: 1 },
@@ -67,7 +69,9 @@ const opts = {
         accentRgba: { r: 217, g: 144, b: 27, a: 1 },
         success: "#2ABE6A",
         action_yellow: "#D9BB23",
-        action_blue: "#2474D9"
+        action_darkYellow: "#D98E3D",
+        action_blue: "#2474D9",
+        action_red: "#D9412D"
       }
     }
   }

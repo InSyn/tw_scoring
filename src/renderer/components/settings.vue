@@ -25,6 +25,9 @@
                 },
                 (hover || isActive) && {
                   backgroundColor: $vuetify.theme.themes[appTheme].accent
+                },
+                isActive && {
+                  height: '2.6rem'
                 }
               ]"
             >

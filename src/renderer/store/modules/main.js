@@ -2,7 +2,7 @@ import io from "socket.io-client";
 export default {
   namespaced: true,
   state: {
-    socket: io("http://localhost:3000", { query: { name: "admin" } }),
+    socket: null,
     competition: null,
     showMenu: false,
     serverStatus: false,
@@ -62,6 +62,13 @@ export default {
   mutations: {
     changeMenuState: state => {
       state.showMenu = !state.showMenu;
+    },
+    connect_socket: (state, config) => {
+      state.socket = io(`http://${config[0]}:${config[1]}`);
+    },
+    close_socket: state => {
+      state.socket && state.socket.disconnect();
+      state.socket = null;
     },
     pushServerMessage: (state, message) => {
       state.serverMessages.push(message);
