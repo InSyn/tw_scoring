@@ -26,7 +26,7 @@ export default {
       },
       {
         icon: "clipboardList",
-        title: "Стартовые списки",
+        title: "Заезды",
         link: "start_protocols"
       },
       {

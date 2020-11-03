@@ -56,7 +56,11 @@
         ><v-col cols="6" class="d-flex align-center">
           <div class="d-flex align-center font-weight-bold">
             Server status
-            <div class="ml-2" v-if="!serverStatus" :style="{ color: 'red' }">
+            <div
+              class="ml-2"
+              v-if="!serverStatus"
+              :style="{ color: $vuetify.theme.themes[appTheme].action_red }"
+            >
               OFF
             </div>
             <div

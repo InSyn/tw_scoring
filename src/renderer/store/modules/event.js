@@ -2,7 +2,63 @@ export default {
   namespaced: true,
   state: {
     EventClass: class {
+      constructor() {
+        this.structure.selected.type = this.structure.type[0];
+        this.structure.selected.discipline = this.structure.type[0].disciplines[0];
+      }
       weather = [];
+      structure = {
+        selected: {
+          type: "",
+          discipline: ""
+        },
+        type: [
+          {
+            title: "Сноуборд",
+            disciplines: [
+              {
+                title: "Слоуп-Стайл"
+              },
+              {
+                title: "Биг-Эйр"
+              },
+              {
+                title: "Хаф-Пайп"
+              },
+              {
+                title: "Пользовательский"
+              }
+            ]
+          },
+          {
+            title: "Фристайл",
+            disciplines: [
+              {
+                title: "Слоуп-Стайл"
+              },
+              {
+                title: "Биг-Эйр"
+              },
+              {
+                title: "Хаф-Пайп"
+              },
+              {
+                title: "Пользовательский"
+              }
+            ]
+          },
+          {
+            title: "Пользовательский",
+            disciplines: [
+              {
+                title: "Пользовательский"
+              }
+            ]
+          }
+        ],
+        accuracy: ["1", "1/10", "1/100", "1/1000"]
+      };
+      races = [];
       mainData = {
         title: {
           title: "Название",
@@ -102,13 +158,18 @@ export default {
           }, 1000);
         }
       };
+    },
+    RaceClass: class {
+      title = "";
+      startList = [];
     }
   },
 
   getters: {
     EventClass: state => {
       return state.EventClass;
-    }
+    },
+    RaceClass: state => state.RaceClass
   },
 
   mutations: {},

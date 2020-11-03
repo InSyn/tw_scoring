@@ -14,7 +14,7 @@
           <v-hover v-slot:default="{ hover }">
             <div
               class="d-flex align-center justify-center pa-1"
-              style="cursor: pointer; clip-path: polygon(0 0, 100% 0, 100% 40%, 90% 100%, 10% 100%, 0 40%)"
+              style="cursor: pointer"
               :active="isActive"
               :href="href"
               @click="navigate"
@@ -25,9 +25,6 @@
                 },
                 (hover || isActive) && {
                   backgroundColor: $vuetify.theme.themes[appTheme].accent
-                },
-                isActive && {
-                  height: '2.6rem'
                 }
               ]"
             >

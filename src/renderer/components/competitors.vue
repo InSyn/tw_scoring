@@ -1,6 +1,7 @@
 <template>
   <v-container fluid v-if="competition"
     ><div class="px-4">
+      Не одинаковые БИБЫ
       <v-row class="px-4 pb-4" no-gutters
         ><v-col style="font-size: 1.4rem; font-weight:bold;">Участники</v-col
         ><v-spacer></v-spacer>

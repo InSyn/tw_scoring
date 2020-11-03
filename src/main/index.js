@@ -21,6 +21,9 @@ io.on("connection", socket => {
   socket.on("checkServer", () => {
     socket.emit("checkOk", true);
   });
+  socket.on("judge_message", m => {
+    io.sockets.emit("judge_message", m);
+  });
   socket.on("disconnect", reason => {
     mainWindow &&
       mainWindow.webContents.send("server_message", [
