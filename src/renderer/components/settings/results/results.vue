@@ -1,16 +1,7 @@
 <template>
-  <v-container>
-    <v-row>
-      <v-col>Вид соревнования</v-col>
-      <v-col>Дисциплина</v-col>
-    </v-row>
-    <v-row>
-      <v-col>Формула подстчёта</v-col>
-    </v-row>
-    <v-row>
-      <v-col>Формула подстчёта</v-col>
-    </v-row>
-  </v-container>
+  <div class="wrapper d-flex pa-2 justify-center align-center">
+    RESULTS
+  </div>
 </template>
 
 <script>

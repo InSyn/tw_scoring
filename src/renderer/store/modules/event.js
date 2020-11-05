@@ -5,12 +5,14 @@ export default {
       constructor() {
         this.structure.selected.type = this.structure.type[0];
         this.structure.selected.discipline = this.structure.type[0].disciplines[0];
+        this.structure.selected.accuracy = this.structure.accuracy[2];
       }
       weather = [];
       structure = {
         selected: {
           type: "",
-          discipline: ""
+          discipline: "",
+          accuracy: null
         },
         type: [
           {
@@ -160,8 +162,12 @@ export default {
       };
     },
     RaceClass: class {
-      title = "";
-      startList = [];
+      constructor(title, type, discipline, competitors) {
+        this.title = title || "Заезд";
+        this.type = type;
+        this.discipline = discipline;
+        this.startList = competitors || [];
+      }
     }
   },
 
