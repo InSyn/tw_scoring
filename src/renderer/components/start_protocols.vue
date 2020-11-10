@@ -169,9 +169,24 @@
             competition.races[race_menu.selected].discipline.title
           } / ${competition.races[race_menu.selected].title}`
         }}</v-row>
-      </div>
-    </v-container></v-container
-  >
+        <div class="pa-2" style="max-height: 65vh; overflow-y: auto">
+          <v-row
+            no-gutters
+            v-for="(competitor, comp) in competition.races[race_menu.selected]
+              .startList"
+            :key="comp"
+          >
+            <v-col
+              class="pa-1"
+              v-for="(field, f) in competition.races[race_menu.selected]
+                .startList[comp]"
+              :key="f"
+              v-html="field"
+            ></v-col>
+          </v-row>
+        </div>
+      </div> </v-container
+  ></v-container>
 </template>
 
 <script>
