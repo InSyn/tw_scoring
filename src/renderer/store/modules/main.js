@@ -8,6 +8,7 @@ export default {
     serverStatus: false,
     appTheme: "dark",
     serverMessages: [],
+    messages: [],
     appMenu: [
       {
         icon: "viewDashboard",
@@ -45,26 +46,21 @@ export default {
   getters: {
     socket: state => state.socket,
     serverMessages: state => state.serverMessages,
-    showMenu: state => {
-      return state.showMenu;
-    },
-    competition: state => {
-      return state.competition;
-    },
+    showMenu: state => state.showMenu,
+    competition: state => state.competition,
     serverStatus: state => state.serverStatus,
-    appTheme: state => {
-      return state.appTheme;
-    },
-    appMenu: state => {
-      return state.appMenu;
-    }
+    appTheme: state => state.appTheme,
+    appMenu: state => state.appMenu,
+    messages: state => state.messages
   },
   mutations: {
     changeMenuState: state => {
       state.showMenu = !state.showMenu;
     },
     connect_socket: (state, config) => {
-      state.socket = io(`http://${config[0]}:${config[1]}`);
+      if (!state.socket) {
+        state.socket = io(`http://${config[0]}:${config[1]}`);
+      }
     },
     close_socket: state => {
       state.socket && state.socket.disconnect();

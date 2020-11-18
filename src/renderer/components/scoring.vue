@@ -1,17 +1,44 @@
 <template>
   <v-container fluid
-    ><v-row no-gutters
-      ><v-col class="px-8 pb-4" style="font-size: 1.4rem; font-weight:bold;"
-        >Скоринг</v-col
-      ></v-row
-    >
+    ><v-row no-gutters style="height: 35%; min-height: 240px">
+      <setup></setup>
+      <chat></chat>
+      <marks-list></marks-list> </v-row
+    ><v-row no-gutters style="height: 25%; min-height: 120px">
+      <start-list></start-list>
+      <on-race></on-race> </v-row
+    ><v-row no-gutters style="height: 40%; min-height: 240px"
+      ><finish-table></finish-table>
+    </v-row>
   </v-container>
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+import setup from "./scoring/setup";
+import chat from "./scoring/chat";
+import marksList from "./scoring/marksList";
+import startList from "./scoring/startList";
+import onRace from "./scoring/onRace";
+import finishTable from "./scoring/finishTable";
 export default {
-  name: "scoring"
+  name: "scoring",
+  components: {
+    setup,
+    chat,
+    marksList,
+    startList,
+    onRace,
+    finishTable
+  },
+  computed: {
+    ...mapGetters("main", ["competition", "appTheme"])
+  }
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+* {
+  /*border: 1px solid #c3d9ff;*/
+}
+</style>

@@ -237,9 +237,11 @@ export default {
       width: 8px;
     }
     &::-webkit-scrollbar-track {
+      border-radius: 6px;
       background: #888;
     }
     &::-webkit-scrollbar-thumb {
+      border-radius: 6px;
       background: #f1f1f1;
     }
     &::-webkit-scrollbar-thumb:hover {

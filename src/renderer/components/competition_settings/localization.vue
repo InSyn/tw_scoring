@@ -132,11 +132,17 @@ export default {
       this.socket.on("serverConnected", () => {
         this.serverSetStatus("True");
       });
-      this.serverStatusChecker = setInterval(() => {
-        this.checkServerStatus()
-          ? this.serverSetStatus(true)
-          : this.serverSetStatus(false);
-      }, 3000);
+
+      this.socket.on("judge_message", message => {
+        this.messages.push(message);
+      });
+      if (this.serverStatusChecker === null) {
+        this.serverStatusChecker = setInterval(() => {
+          this.checkServerStatus()
+            ? this.serverSetStatus(true)
+            : this.serverSetStatus(false);
+        }, 3000);
+      }
     },
     close_server() {
       this.$store.commit("main/close_socket");
@@ -148,6 +154,7 @@ export default {
   },
   data() {
     return {
+      serverStatusChecker: null,
       server: {
         ip: "127.0.0.1",
         port: "3000"
@@ -158,6 +165,7 @@ export default {
     ...mapGetters("main", [
       "socket",
       "serverMessages",
+      "messages",
       "competition",
       "appTheme",
       "serverStatus"

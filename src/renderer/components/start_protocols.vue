@@ -144,7 +144,8 @@
             :style="[
               {
                 backgroundColor:
-                  $vuetify.theme.themes[appTheme].cardBackgroundRGBA
+                  $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
+                border: `1px solid ${$vuetify.theme.themes[appTheme].standardBackgroundRGBA}`
               },
               r === race_menu.selected && {
                 backgroundColor: $vuetify.theme.themes[appTheme].accent
