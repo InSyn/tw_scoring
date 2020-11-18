@@ -61,8 +61,10 @@ export default {
   },
   methods: {
     addMessage(m) {
-      m !== "" && this.socket.emit("judge_message", m);
-      this.message = "";
+      if (this.socket) {
+        m !== "" && this.socket.emit("judge_message", m);
+        this.message = "";
+      } else console.log("server not started");
     }
   }
 };

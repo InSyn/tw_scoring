@@ -25,15 +25,27 @@
           <v-hover v-for="n in 50" :key="n" v-slot:default="{ hover }">
             <v-row
               no-gutters
-              :style="hover && { backgroundColor: `rgba(255,255,255,.15)` }"
+              :style="
+                hover
+                  ? appTheme === 'dark'
+                    ? { backgroundColor: `rgba(255,255,255,.15)` }
+                    : { backgroundColor: `rgba(0,0,0,.15)` }
+                  : null
+              "
             >
               <v-col
                 class="pa-2"
                 :style="
                   n % 2 === 0
-                    ? { backgroundColor: `rgba(255,255,255,.04)` }
+                    ? appTheme === 'dark'
+                      ? { backgroundColor: `rgba(255,255,255,.04)` }
+                      : { backgroundColor: `rgba(0,0,0,.03)` }
+                    : appTheme === 'dark'
+                    ? {
+                        backgroundColor: `rgba(255,255,255,.06)`
+                      }
                     : {
-                        backgroundColor: `rgba(255,255,255,0.06)`
+                        backgroundColor: `rgba(0,0,0,.08)`
                       }
                 "
                 v-for="(field, f, i) in competitor"
