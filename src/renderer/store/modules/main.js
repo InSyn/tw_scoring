@@ -6,6 +6,7 @@ export default {
     competition: null,
     showMenu: false,
     serverStatus: false,
+    serverStatusChecker: null,
     appTheme: "dark",
     serverMessages: [],
     messages: [],
@@ -49,6 +50,7 @@ export default {
     showMenu: state => state.showMenu,
     competition: state => state.competition,
     serverStatus: state => state.serverStatus,
+    serverStatusChecker: state => state.serverStatusChecker,
     appTheme: state => state.appTheme,
     appMenu: state => state.appMenu,
     messages: state => state.messages
@@ -57,6 +59,17 @@ export default {
     changeMenuState: state => {
       state.showMenu = !state.showMenu;
     },
+    createServerChecker: state => {
+      state.serverStatusChecker === null
+        ? (state.serverStatusChecker = setInterval(() => {
+            if (state.socket)
+              state.socket.connected
+                ? (state.serverStatus = true)
+                : (state.serverStatus = false);
+          }, 3000))
+        : null;
+    },
+    serverSetStatus: (state, status) => (state.serverStatus = status),
     connect_socket: (state, config) => {
       if (!state.socket) {
         state.socket = io(`http://${config[0]}:${config[1]}`);
@@ -76,8 +89,7 @@ export default {
     },
     createCompetition: (state, competition) => {
       state.competition = competition;
-    },
-    serverSetStatus: (state, status) => (state.serverStatus = status)
+    }
   },
   actions: {
     changeMenuState: ({ commit }) => {

@@ -102,22 +102,12 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
-const { ipcRenderer } = require("electron");
 const { app } = require("electron").remote;
 export default {
   name: "localization",
-  mounted() {
-    ipcRenderer.on("server_message", (e, message) => {
-      this.$store.commit("main/pushServerMessage", message);
-    });
-  },
+  mounted() {},
   methods: {
     ...mapActions("main", ["serverSetStatus"]),
-    checkServerStatus() {
-      if (this.socket) {
-        return this.socket.connected;
-      } else return false;
-    },
     async startServer() {
       await app.emit("startSocketServer", this.server_config);
       this.serverStatus
@@ -132,17 +122,10 @@ export default {
       this.socket.on("serverConnected", () => {
         this.serverSetStatus("True");
       });
-
-      this.socket.on("judge_message", message => {
+      this.socket.on("chat_message", message => {
         this.messages.push(message);
       });
-      if (this.serverStatusChecker === null) {
-        this.serverStatusChecker = setInterval(() => {
-          this.checkServerStatus()
-            ? this.serverSetStatus(true)
-            : this.serverSetStatus(false);
-        }, 3000);
-      }
+      this.$store.commit("main/createServerChecker");
     },
     close_server() {
       this.$store.commit("main/close_socket");
@@ -154,7 +137,6 @@ export default {
   },
   data() {
     return {
-      serverStatusChecker: null,
       server: {
         ip: "127.0.0.1",
         port: "3000"
@@ -165,6 +147,8 @@ export default {
     ...mapGetters("main", [
       "socket",
       "serverMessages",
+      "serverStatusChecker",
+      "serverStatus",
       "messages",
       "competition",
       "appTheme",

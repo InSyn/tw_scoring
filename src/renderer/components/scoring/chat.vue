@@ -62,7 +62,7 @@ export default {
   methods: {
     addMessage(m) {
       if (this.socket) {
-        m !== "" && this.socket.emit("judge_message", m);
+        m !== "" && this.socket.emit("chat_message", m);
         this.message = "";
       } else console.log("server not started");
     }

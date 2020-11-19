@@ -169,6 +169,7 @@ import {
 } from "@mdi/js";
 import fs from "fs";
 import io from "socket.io-client";
+const { ipcRenderer } = require("electron");
 const { app } = require("electron").remote;
 
 export default {
@@ -183,6 +184,9 @@ export default {
         (() => {
           return 0;
         })();
+    });
+    ipcRenderer.on("server_message", (e, message) => {
+      this.$store.commit("main/pushServerMessage", message);
     });
     this.createCompetition(new this.EventClass());
     this.competition.timer.ticker();
