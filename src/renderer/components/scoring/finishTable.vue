@@ -25,13 +25,16 @@
           <v-hover v-for="n in 50" :key="n" v-slot:default="{ hover }">
             <v-row
               no-gutters
-              :style="
+              :style="[
                 hover
                   ? appTheme === 'dark'
                     ? { backgroundColor: `rgba(255,255,255,.15)` }
                     : { backgroundColor: `rgba(0,0,0,.15)` }
-                  : null
-              "
+                  : null,
+                {
+                  borderBottom: `1px solid ${$vuetify.theme.themes[appTheme].standardBackgroundRGBA}`
+                }
+              ]"
             >
               <v-col
                 class="pa-2"
