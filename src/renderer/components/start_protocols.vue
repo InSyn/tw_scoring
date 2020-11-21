@@ -233,7 +233,8 @@ export default {
     addAll() {
       const list = this.filtered_list;
       for (let i in list) {
-        this.dialogs.create_race.competitors.push(list[i]);
+        if (list.hasOwnProperty(i))
+          this.dialogs.create_race.competitors.push(list[i]);
       }
     }
   },
