@@ -6,10 +6,19 @@
         backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA
       }"
     >
-      start
-    </div></v-col
-  ></template
->
+      <div class="pa-2" style="height: 100%;">
+        <v-row no-gutters style="height: 40px"> </v-row>
+        <v-row no-gutters style="height: calc(100% - 40px)">
+          <div
+            style="height: 100%; width: 100%; overflow: auto; border-radius: 6px"
+            :style="{
+              backgroundColor:
+                $vuetify.theme.themes[appTheme].standardBackgroundRGBA
+            }"
+          ></div>
+        </v-row>
+      </div></div></v-col
+></template>
 
 <script>
 import { mapGetters } from "vuex";
