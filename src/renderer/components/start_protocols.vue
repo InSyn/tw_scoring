@@ -4,130 +4,134 @@
       ><v-col class="px-8 pb-4" style="font-size: 1.4rem; font-weight:bold;"
         >Стартовые списки</v-col
       ></v-row
-    >
-    <v-dialog width="720" persistent v-model="dialogs.create_race.state">
-      <template v-slot:activator="{ on }">
-        <v-btn v-on="on" :color="$vuetify.theme.themes[appTheme].success" text
-          >Создать заезд</v-btn
-        ></template
-      >
-      <v-card
-        elevation="0"
-        class="create_race"
-        style="position: relative"
-        :style="{
-          color: $vuetify.theme.themes[appTheme].textDefault,
-          backgroundColor: styles.card
-        }"
-      >
-        <v-card-title class="mb-8" style="font-size: 2rem"
-          >{{
-            `${competition.structure.selected.type.title}. ${competition.mainData.title.value}. Новый заезд`
-          }}
-        </v-card-title>
-        <v-card-text
-          :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
+    ><v-row no-gutters>
+      <v-spacer></v-spacer>
+      <v-dialog width="720" persistent v-model="dialogs.create_race.state">
+        <template v-slot:activator="{ on }">
+          <v-btn v-on="on" :color="$vuetify.theme.themes[appTheme].success" text
+            >Создать заезд</v-btn
+          ></template
         >
-          <v-row no-gutters
-            ><v-col class="d-flex">
-              <div class="ma-1">
-                <label class="font-weight-bold" for="title">Название</label>
-                <input
-                  id="title"
-                  class="ml-2 pa-1"
-                  type="text"
-                  style="border-radius: 6px"
-                  :style="{
-                    color: $vuetify.theme.themes[appTheme].textDefault,
-                    backgroundColor: styles.input
-                  }"
-                  v-model="dialogs.create_race.title"
-                />
-              </div>
-              <div class="ma-1">
-                <label class="font-weight-bold" for="title">Дисциплина</label>
-                <input
-                  id="discipline"
-                  class="ml-2 pa-1"
-                  type="text"
-                  style="border-radius: 6px"
-                  :style="{
-                    color: $vuetify.theme.themes[appTheme].textDefault,
-                    backgroundColor: styles.input
-                  }"
-                  v-model="competition.structure.selected.discipline.title"
-                />
-              </div> </v-col
-          ></v-row>
-          <v-card-actions class="dialog_action_bar d-flex justify-center"
+        <v-card
+          elevation="0"
+          class="create_race"
+          style="position: relative"
+          :style="{
+            color: $vuetify.theme.themes[appTheme].textDefault,
+            backgroundColor: styles.card
+          }"
+        >
+          <v-card-title class="mb-8" style="font-size: 2rem"
+            >{{
+              `${competition.structure.selected.type.title}. ${competition.mainData.title.value}. Новый заезд`
+            }}
+          </v-card-title>
+          <v-card-text
+            :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
+          >
+            <v-row no-gutters
+              ><v-col class="d-flex">
+                <div class="ma-1">
+                  <label class="font-weight-bold" for="title">Название</label>
+                  <input
+                    id="title"
+                    class="ml-2 pa-1"
+                    type="text"
+                    style="border-radius: 6px"
+                    :style="{
+                      color: $vuetify.theme.themes[appTheme].textDefault,
+                      backgroundColor: styles.input
+                    }"
+                    v-model="dialogs.create_race.title"
+                  />
+                </div>
+                <div class="ma-1">
+                  <label class="font-weight-bold" for="title">Дисциплина</label>
+                  <input
+                    id="discipline"
+                    class="ml-2 pa-1"
+                    type="text"
+                    style="border-radius: 6px"
+                    :style="{
+                      color: $vuetify.theme.themes[appTheme].textDefault,
+                      backgroundColor: styles.input
+                    }"
+                    v-model="competition.structure.selected.discipline.title"
+                  />
+                </div> </v-col
+            ></v-row>
+            <v-card-actions class="dialog_action_bar d-flex justify-center"
+              ><v-btn
+                text
+                :color="$vuetify.theme.themes[appTheme].success"
+                @click="addAll()"
+                >Добавить всех&nbsp;<v-icon>mdi-arrow-right</v-icon></v-btn
+              ></v-card-actions
+            >
+            <v-row class="sheet">
+              <v-col>
+                <v-list
+                  :key="Math.random()"
+                  :dark="appTheme === 'dark'"
+                  :color="$vuetify.theme.themes[appTheme].cardBackgroundRGBA"
+                  class="pa-2"
+                  style="max-height: 400px; overflow-y: auto; border-radius: 6px"
+                >
+                  <v-list-item-group>
+                    <v-list-item
+                      v-for="(competitor, c) in filtered_list"
+                      @dblclick="
+                        dialogs.create_race.competitors.push(competitor)
+                      "
+                      :key="c"
+                      v-html="`${competitor}`"
+                    ></v-list-item
+                  ></v-list-item-group> </v-list
+              ></v-col>
+              <v-col>
+                <v-list
+                  :key="Math.random()"
+                  :dark="appTheme === 'dark'"
+                  :color="$vuetify.theme.themes[appTheme].cardBackgroundRGBA"
+                  class="pa-2"
+                  style="max-height: 400px; overflow-y: auto; border-radius: 6px"
+                >
+                  <v-list-item-group>
+                    <v-list-item
+                      v-for="(competitorToRace, c_r) in dialogs.create_race
+                        .competitors"
+                      :key="c_r"
+                      v-html="`${competitorToRace}`"
+                    ></v-list-item
+                  ></v-list-item-group> </v-list></v-col
+            ></v-row>
+          </v-card-text>
+          <v-card-actions class="d-flex justify-center"
             ><v-btn
+              @click="
+                create_race(
+                  dialogs.create_race.title,
+                  competition.structure.selected.type,
+                  competition.structure.selected.discipline,
+                  dialogs.create_race.competitors,
+                  dialogs.create_race.competitors
+                )
+              "
               text
               :color="$vuetify.theme.themes[appTheme].success"
-              @click="addAll()"
-              >Добавить всех&nbsp;<v-icon>mdi-arrow-right</v-icon></v-btn
+              >Создать</v-btn
             ></v-card-actions
           >
-          <v-row class="sheet">
-            <v-col>
-              <v-list
-                :key="Math.random()"
-                :dark="appTheme === 'dark'"
-                :color="$vuetify.theme.themes[appTheme].cardBackgroundRGBA"
-                class="pa-2"
-                style="max-height: 400px; overflow-y: auto; border-radius: 6px"
-              >
-                <v-list-item-group>
-                  <v-list-item
-                    v-for="(competitor, c) in filtered_list"
-                    @dblclick="dialogs.create_race.competitors.push(competitor)"
-                    :key="c"
-                    v-html="`${competitor}`"
-                  ></v-list-item
-                ></v-list-item-group> </v-list
-            ></v-col>
-            <v-col>
-              <v-list
-                :key="Math.random()"
-                :dark="appTheme === 'dark'"
-                :color="$vuetify.theme.themes[appTheme].cardBackgroundRGBA"
-                class="pa-2"
-                style="max-height: 400px; overflow-y: auto; border-radius: 6px"
-              >
-                <v-list-item-group>
-                  <v-list-item
-                    v-for="(competitorToRace, c_r) in dialogs.create_race
-                      .competitors"
-                    :key="c_r"
-                    v-html="`${competitorToRace}`"
-                  ></v-list-item
-                ></v-list-item-group> </v-list></v-col
-          ></v-row>
-        </v-card-text>
-        <v-card-actions class="d-flex justify-center"
-          ><v-btn
-            @click="
-              create_race(
-                dialogs.create_race.title,
-                competition.structure.selected.type,
-                competition.structure.selected.discipline,
-                dialogs.create_race.competitors,
-                dialogs.create_race.competitors
-              )
-            "
-            text
-            :color="$vuetify.theme.themes[appTheme].success"
-            >Создать</v-btn
-          ></v-card-actions
-        >
-        <v-btn
-          icon
-          style="position: absolute; top: 0;right: 0;"
-          @click="dialogs.create_race.state = false"
-          :color="$vuetify.theme.themes[appTheme].action_red"
-          ><v-icon>mdi-close</v-icon></v-btn
-        >
-      </v-card>
-    </v-dialog>
+          <v-btn
+            icon
+            style="position: absolute; top: 0;right: 0;"
+            @click="dialogs.create_race.state = false"
+            :color="$vuetify.theme.themes[appTheme].action_red"
+            ><v-icon>mdi-close</v-icon></v-btn
+          >
+        </v-card>
+      </v-dialog></v-row
+    >
     <v-container fluid>
       <v-row class="d-flex" style="width: 100%" no-gutters>
         <v-btn

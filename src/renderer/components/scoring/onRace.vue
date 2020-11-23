@@ -80,10 +80,10 @@
                 v-for="(judge, j) in competition.stuff.judges"
               >
                 <div
-                  class="d-flex justify-center align-center pa-1"
+                  class="d-flex justify-center align-center"
                   style="font-size: 1.9rem; font-weight: bold"
                 >
-                  {{ `J${j + 1}` }}
+                  <div>{{ `J${j + 1}` }}</div>
                 </div>
                 <div
                   class="d-flex justify-center align-center pa-1"
@@ -91,10 +91,11 @@
                   :style="{
                     backgroundColor:
                       $vuetify.theme.themes[appTheme].textDefault,
-                    color: $vuetify.theme.themes[appTheme].cardBackgroundRGBA
+                    color:
+                      $vuetify.theme.themes[appTheme].standardBackgroundRGBA
                   }"
                 >
-                  {{ Math.floor(Math.random() * 100) }}
+                  <div>{{ Math.floor(Math.random() * 100) }}</div>
                 </div>
               </div>
             </div>
@@ -161,8 +162,8 @@
             <div>Старший судья</div>
             <div
               @click="chiefJudgeStatus = !chiefJudgeStatus"
-              class="ml-2 d-flex justify-center align-center"
-              style="height: 1.6rem; width: 2.8rem; border-radius: 3px; user-select: none; cursor:pointer;"
+              class="ml-2 px-2 py-1 d-flex justify-center align-center"
+              style="border-radius: 3px; user-select: none; cursor:pointer;"
               :style="[
                 chiefJudgeStatus
                   ? {
@@ -177,7 +178,7 @@
                 }
               ]"
             >
-              OK
+              <div>OK</div>
             </div>
           </div>
 
