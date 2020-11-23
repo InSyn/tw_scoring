@@ -110,6 +110,7 @@
                 dialogs.create_race.title,
                 competition.structure.selected.type,
                 competition.structure.selected.discipline,
+                dialogs.create_race.competitors,
                 dialogs.create_race.competitors
               )
             "
@@ -213,7 +214,7 @@ export default {
         }
       }
     },
-    create_race(title, type, discipline, competitors) {
+    create_race(title, type, discipline, competitors, onStart) {
       this.competition.races.push(
         new this.RaceClass(
           title ||
@@ -224,7 +225,8 @@ export default {
             }`,
           type,
           discipline,
-          competitors
+          competitors,
+          onStart
         )
       );
       this.dialogs.create_race.state = false;

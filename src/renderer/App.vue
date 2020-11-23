@@ -73,10 +73,10 @@
         ><v-icon v-html="'mdi-brightness-6'"></v-icon
       ></v-btn>
     </header>
-    <main>
+    <main style="position:relative;">
       <div
         class="menu"
-        style="z-index: 2; transition: width 228ms,min-width 228ms, border-right 720ms; min-width: 220px; overflow: hidden"
+        style="z-index: 2; position: absolute; top: 0;bottom: 0;left: 0; transition: 156ms; min-width: 220px; overflow: hidden"
         :style="[
           {
             background: `rgba(${$vuetify.theme.themes[appTheme].cardBackground.r},
@@ -102,7 +102,7 @@
           :to="{ name: page.link }"
           tag="div"
         >
-          <v-hover v-slot:default="{ hover }">
+          <v-hover v-slot:default="{ hover }" @click="changeMenuState">
             <div
               class="d-flex flex-nowrap align-center pa-2"
               style="cursor: pointer; transition: background-color 256ms"
@@ -168,13 +168,16 @@ import {
   mdiTrophyVariant
 } from "@mdi/js";
 import fs from "fs";
-import io from "socket.io-client";
 const { ipcRenderer } = require("electron");
 const { app } = require("electron").remote;
 
 export default {
   name: "tw_scoring",
   mounted() {
+    document.addEventListener("keyup", e => {
+      (e.key === "M") | (e.key === "m") | (e.key === "Ь") | (e.key === "ь") &&
+        this.changeMenuState();
+    });
     fs.readdir("./StartList", (err, res) => {
       err &&
         fs.mkdir("./StartList", err => {

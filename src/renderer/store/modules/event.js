@@ -61,6 +61,7 @@ export default {
         accuracy: ["1", "1/10", "1/100", "1/1000"]
       };
       races = [];
+      selected_race = null;
       mainData = {
         title: {
           title: "Название",
@@ -162,12 +163,16 @@ export default {
       };
     },
     RaceClass: class {
-      constructor(title, type, discipline, competitors) {
+      constructor(title, type, discipline, competitors, onStart) {
         this.title = title || "Заезд";
         this.type = type;
         this.discipline = discipline;
         this.startList = competitors || [];
+        this.onStart = onStart || [];
       }
+      onStart = [];
+      finished = [];
+      onTrack = null;
     }
   },
 

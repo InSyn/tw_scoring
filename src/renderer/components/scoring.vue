@@ -1,13 +1,13 @@
 <template>
-  <v-container fluid
+  <v-container v-if="competition" fluid
     ><v-row no-gutters style="height: 35%; min-height: 240px">
       <setup></setup>
       <chat></chat>
       <marks-list></marks-list> </v-row
-    ><v-row no-gutters style="height: 25%; min-height: 120px">
+    ><v-row no-gutters style="height: 30%; min-height: 120px">
       <start-list></start-list>
       <on-race></on-race> </v-row
-    ><v-row no-gutters style="height: 40%; min-height: 240px"
+    ><v-row no-gutters style="height: 35%; min-height: 240px"
       ><finish-table></finish-table>
     </v-row>
   </v-container>
