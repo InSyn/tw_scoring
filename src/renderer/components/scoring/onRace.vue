@@ -37,10 +37,24 @@
             ></div>
             <v-spacer></v-spacer>
             <div
-              class="ml-6"
-              style="font-size: 2rem; font-weight: bold"
-              v-html="`Рез. 76,2`"
-            ></div>
+              class="d-flex align-center ml-6 pa-1"
+              style="font-size: 2rem; font-weight: bold; border-radius: 6px"
+              :style="{
+                backgroundColor: $vuetify.theme.themes[appTheme].accent
+              }"
+            >
+              <div v-html="`Рез.`"></div>
+              <div
+                class="pa-1 ml-1 d-flex justify-center align-center"
+                style="border-radius: 6px; height: 2.6rem;min-width: 3rem"
+                :style="{
+                  backgroundColor:
+                    $vuetify.theme.themes[appTheme].cardBackgroundRGBA
+                }"
+              >
+                <div v-html="`77,2`"></div>
+              </div>
+            </div>
             <div class="pl-4">
               <v-row class="pa-1" no-gutters>
                 <v-col class="pr-2" cols="6"
@@ -188,7 +202,7 @@
           >
             <v-btn
               :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
-              :color="$vuetify.theme.themes[appTheme].action_blue"
+              :color="$vuetify.theme.themes[appTheme].accent"
               >Опубликовать</v-btn
             >
           </div>
