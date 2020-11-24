@@ -61,7 +61,10 @@ export default {
         accuracy: ["1", "1/10", "1/100", "1/1000"]
       };
       races = [];
-      selected_race = null;
+      selected_race_id = 0;
+      get selected_race() {
+        return this.races[this.selected_race_id];
+      }
       mainData = {
         title: {
           title: "Название",

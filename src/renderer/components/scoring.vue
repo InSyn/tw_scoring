@@ -1,5 +1,5 @@
 <template>
-  <v-container v-if="competition" fluid
+  <v-container v-if="competition" fluid style="min-width: 1220px"
     ><v-row no-gutters style="height: 35%; min-height: 240px">
       <setup></setup>
       <chat></chat>

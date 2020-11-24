@@ -37,16 +37,16 @@
             ></div>
             <v-spacer></v-spacer>
             <div
-              class="d-flex align-center ml-6 pa-1"
+              class="d-flex align-center ml-6 py-1 px-2"
               style="font-size: 2rem; font-weight: bold; border-radius: 6px"
               :style="{
-                backgroundColor: $vuetify.theme.themes[appTheme].accent
+                backgroundColor: $vuetify.theme.themes[appTheme].success
               }"
             >
               <div v-html="`Рез.`"></div>
               <div
-                class="pa-1 ml-1 d-flex justify-center align-center"
-                style="border-radius: 6px; height: 2.6rem;min-width: 3rem"
+                class="px-2 py-1 ml-2 d-flex justify-center align-center"
+                style="border-radius: 6px;min-width: 3rem"
                 :style="{
                   backgroundColor:
                     $vuetify.theme.themes[appTheme].cardBackgroundRGBA
@@ -57,17 +57,32 @@
             </div>
             <div class="pl-4">
               <v-row class="pa-1" no-gutters>
-                <v-col class="pr-2" cols="6"
+                <v-col
+                  class="d-flex align-center justify-space-between"
+                  cols="12"
                   ><v-btn
+                    depressed
+                    class="flex-grow-1 mr-1"
+                    height="2rem"
                     style="font-weight: bold"
-                    :color="$vuetify.theme.themes[appTheme].textDefault"
+                    :color="
+                      $vuetify.theme.themes[appTheme].standardBackgroundRGBA
+                    "
+                    :style="{
+                      color: $vuetify.theme.themes[appTheme].textDefault
+                    }"
                     >DSQ</v-btn
-                  ></v-col
-                ><v-spacer></v-spacer>
-                <v-col class="pl-2" cols="6"
                   ><v-btn
+                    depressed
+                    class="flex-grow-1 ml-1"
+                    height="2rem"
                     style="font-weight: bold"
-                    :color="$vuetify.theme.themes[appTheme].textDefault"
+                    :color="
+                      $vuetify.theme.themes[appTheme].standardBackgroundRGBA
+                    "
+                    :style="{
+                      color: $vuetify.theme.themes[appTheme].textDefault
+                    }"
                     >DNF</v-btn
                   ></v-col
                 >
@@ -75,8 +90,13 @@
               <v-row class="pa-1" no-gutters>
                 <v-col cols="12"
                   ><v-btn
+                    depressed
                     style="font-weight: bold"
-                    :color="$vuetify.theme.themes[appTheme].textDefault"
+                    height="2rem"
+                    :color="$vuetify.theme.themes[appTheme].action_blue"
+                    :style="{
+                      color: $vuetify.theme.themes[appTheme].textDefault
+                    }"
                     >Изменить оценки</v-btn
                   ></v-col
                 >
@@ -202,7 +222,7 @@
           >
             <v-btn
               :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
-              :color="$vuetify.theme.themes[appTheme].accent"
+              :color="$vuetify.theme.themes[appTheme].action_blue"
               >Опубликовать</v-btn
             >
           </div>
