@@ -37,7 +37,7 @@
           </div>
           <v-spacer></v-spacer>
           <v-btn
-            @click="setToTrack(selectedCompetitor)"
+            @click="selectedCompetitor && setToTrack(selectedCompetitor)"
             icon
             :color="$vuetify.theme.themes[appTheme].success"
             ><v-icon>mdi-play</v-icon></v-btn
@@ -59,6 +59,8 @@
               >
                 <v-row
                   no-gutters
+                  tabindex="0"
+                  @focus=""
                   @dblclick="
                     selectedCompetitor = competition.selected_race.onStart[c]
                   "
