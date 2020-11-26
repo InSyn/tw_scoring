@@ -10,6 +10,7 @@
         ><v-col style="height: 100%;" cols="9">
           <v-row
             no-gutters
+            :key="competition.selected_race_id"
             class="pa-2 d-flex align-center flex-nowrap"
             style="height: 50%;"
           >
@@ -52,7 +53,10 @@
                     $vuetify.theme.themes[appTheme].cardBackgroundRGBA
                 }"
               >
-                <div v-html="`77,2`"></div>
+                <div
+                  style="min-height: 3rem; min-width: 4rem; cursor: pointer"
+                  v-html="res"
+                ></div>
               </div>
             </div>
             <div class="pl-4">
@@ -251,6 +255,7 @@ export default {
   },
   data() {
     return {
+      res: "",
       chiefJudgeStatus: false,
       indicators: {
         timeout: 812,

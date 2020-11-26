@@ -166,14 +166,13 @@ export default {
       };
     },
     RaceClass: class {
-      constructor(title, type, discipline, competitors, onStart) {
+      constructor(title, type, discipline, competitors) {
         this.title = title || "Заезд";
         this.type = type;
         this.discipline = discipline;
         this.startList = competitors || [];
-        this.onStart = onStart || [];
+        this.onStart = this.startList || [];
       }
-      onStart = [];
       finished = [];
       onTrack = null;
     }

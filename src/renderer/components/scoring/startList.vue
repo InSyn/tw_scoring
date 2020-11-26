@@ -60,24 +60,31 @@
                 <v-row
                   no-gutters
                   tabindex="0"
-                  @focus=""
+                  @focus="
+                    $event.target.style.border = `1px solid ${$vuetify.theme.themes[appTheme].accent}`
+                  "
+                  @blur="$event.target.style.border = `1px solid transparent`"
                   @dblclick="
                     selectedCompetitor = competition.selected_race.onStart[c]
                   "
-                  class="px-2 py-1"
-                  style="cursor: pointer"
-                  :style="
+                  @keypress.enter="
+                    selectedCompetitor = competition.selected_race.onStart[c]
+                  "
+                  style="cursor: pointer; outline: none"
+                  :style="[
+                    { border: `1px solid transparent` },
                     hover && {
                       backgroundColor:
                         $vuetify.theme.themes[appTheme].subjectBackgroundRGBA
                     }
-                  "
+                  ]"
                 >
                   <v-col
                     v-for="(data, d) in competitor"
+                    v-if="d < 3"
                     :key="d"
-                    class="d-flex justify-start align-center"
-                    style="font-weight: bold"
+                    class="pa-1 d-flex flex-nowrap justify-start align-center"
+                    style="font-weight: bold; white-space: nowrap; border: 1px solid #363636"
                     v-html="`${data}`"
                   ></v-col> </v-row
               ></v-hover>
