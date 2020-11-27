@@ -135,7 +135,15 @@ export default {
       ];
       sponsors = [];
       competitorsSheet = {
-        header: [],
+        header: [
+          { id: "bib", title: "Bib" },
+          { id: "name", title: "Имя" },
+          { id: "surname", title: "Фамилия" },
+          { id: "year", title: "Год" },
+          { id: "group", title: "Группа" },
+          { id: "rank", title: "Разряд" },
+          { id: "fis", title: "Fis code" }
+        ],
         competitors: []
       };
       timer = {

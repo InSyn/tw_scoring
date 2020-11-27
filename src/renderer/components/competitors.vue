@@ -48,11 +48,12 @@
           >Экспорт<v-icon>mdi-arrow-right-bold</v-icon></v-btn
         ></v-row
       >
-      <div style="position:relative">
+      <div style="position:relative; border-radius: 6px; overflow: hidden">
         <v-row
           no-gutters
           :style="{
-            backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA
+            backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
+            borderBottom: `1px solid ${$vuetify.theme.themes[appTheme].accent}`
           }"
         >
           <v-col
@@ -61,22 +62,25 @@
           >
             <v-btn
               @click="
-                sortByCol(competition.competitorsSheet.competitors, head, h)
+                sortByCol(competition.competitorsSheet.competitors, head.id, h)
               "
               style="border-radius: 0; width: 100%; font-weight:bold;"
               small
               text
               :color="$vuetify.theme.themes[appTheme].accent"
-              ><div v-html="head"></div>
+              ><div v-html="head.title"></div>
               <v-spacer></v-spacer>
-              <v-icon v-show="sortBy.title === head" small>{{
+              <v-icon v-show="sortBy.title === head.id" small>{{
                 sortBy.dir === "desc" ? `mdi-chevron-down` : `mdi-chevron-up`
               }}</v-icon></v-btn
             ></v-col
           >
         </v-row>
         <div
-          style="overflow-y: auto; overflow-x:hidden; max-height: 70vh; padding-left: 12px"
+          style="overflow-y: auto; overflow-x:hidden; height: 70vh"
+          :style="{
+            backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA
+          }"
         >
           <v-hover
             v-slot:default="{ hover }"
@@ -84,6 +88,7 @@
             :key="r"
           >
             <v-row
+              no-gutters
               v-if="sheet"
               style="position:relative;"
               :style="[
@@ -95,7 +100,7 @@
               ]"
             >
               <v-col
-                class="d-flex pa-0 align-center"
+                class="d-flex align-center"
                 v-for="(col, c) in row"
                 :key="c"
               >
@@ -144,7 +149,7 @@
                   class="d-flex align-center"
                   style="width: 100%;height: 100%;position:relative; transition: background-color 112ms"
                 >
-                  <div
+                  <input
                     class="pa-1"
                     @focus="
                       $event.target.parentNode.childNodes[2].style.transform =
@@ -155,12 +160,12 @@
                         'scaleX(0)'
                     "
                     type="text"
-                    v-html="competition.competitorsSheet.competitors[r][c]"
+                    v-model="competition.competitorsSheet.competitors[r][c]"
                     :style="[
                       { color: $vuetify.theme.themes[appTheme].textDefault }
                     ]"
                     style="width: 100%;"
-                  ></div>
+                  />
                   <span
                     class="d-block"
                     style="position: absolute; bottom: 0; width: 100%; height: 1px; transform-origin: left; transform: scaleX(0)"
@@ -212,7 +217,8 @@ export default {
     },
     load_sheet(path) {
       xslx(`${path}`).then(rows => {
-        this.competition.competitorsSheet.header = rows[0];
+        this.competition.competitorsSheet.competitors = [];
+
         rows.forEach((row, index) => {
           index > 0 && this.competition.competitorsSheet.competitors.push(row);
         });
