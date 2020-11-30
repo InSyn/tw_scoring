@@ -68,7 +68,10 @@
               small
               text
               :color="$vuetify.theme.themes[appTheme].accent"
-              ><div v-html="head.title"></div>
+              ><div
+                :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
+                v-html="head.title"
+              ></div>
               <v-spacer></v-spacer>
               <v-icon v-show="sortBy.title === head.id" small>{{
                 sortBy.dir === "desc" ? `mdi-chevron-down` : `mdi-chevron-up`
@@ -76,6 +79,117 @@
             ></v-col
           >
         </v-row>
+        <v-dialog width="720px" v-model="addColumnDialog.state">
+          <template v-slot:activator="{ on }">
+            <v-btn
+              v-on="on"
+              icon
+              small
+              style="position:absolute; right: 0; top: 0"
+              :color="$vuetify.theme.themes[appTheme].accent"
+              ><v-icon>mdi-settings</v-icon></v-btn
+            ></template
+          ><v-card
+            :style="{
+              backgroundColor:
+                $vuetify.theme.themes[appTheme].cardBackgroundRGBA
+            }"
+            ><v-card-title
+              :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
+              >Настройка столбцов<v-spacer></v-spacer
+              ><v-btn
+                small
+                icon
+                @click="addColumnDialog.state = false"
+                :color="$vuetify.theme.themes[appTheme].action_red"
+                ><v-icon>mdi-close</v-icon></v-btn
+              ></v-card-title
+            >
+            <v-card-text
+              class="d-flex flex-wrap"
+              :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
+            >
+              <v-hover
+                v-slot:default="{ hover }"
+                v-for="(col, c) in competition.competitorsSheet.header"
+                :key="c"
+              >
+                <div
+                  class="d-flex flex-column pa-2 pt-4"
+                  style="cursor: pointer; position: relative; border-radius: 6px"
+                  :style="[
+                    c > 0 && { marginTop: `4px` },
+                    hover && {
+                      backgroundColor:
+                        $vuetify.theme.themes[appTheme].subjectBackgroundRGBA
+                    }
+                  ]"
+                >
+                  <div class="d-flex align-center pa-1">
+                    <label for="ID" style="width: 2rem;" v-html="`ID: `"></label
+                    ><input
+                      id="ID"
+                      class="ml-2 pa-1"
+                      style="border-radius: 4px"
+                      :style="{
+                        color: $vuetify.theme.themes[appTheme].textDefault,
+                        backgroundColor:
+                          $vuetify.theme.themes[appTheme].standardBackgroundRGBA
+                      }"
+                      v-model="competition.competitorsSheet.header[c].id"
+                    />
+                  </div>
+                  <div class="d-flex align-center pa-1">
+                    <label
+                      for="Title"
+                      style="width: 2rem;"
+                      v-html="`Title: `"
+                    ></label
+                    ><input
+                      id="Title"
+                      class="ml-2 pa-1"
+                      style="border-radius: 4px"
+                      :style="{
+                        color: $vuetify.theme.themes[appTheme].textDefault,
+                        backgroundColor:
+                          $vuetify.theme.themes[appTheme].standardBackgroundRGBA
+                      }"
+                      v-model="competition.competitorsSheet.header[c].title"
+                    />
+                  </div>
+                  <v-btn
+                    text
+                    @click.prevent="
+                      competition.competitorsSheet.header = competition.competitorsSheet.header.filter(
+                        column => {
+                          return (
+                            column.id !==
+                            competition.competitorsSheet.header[c].id
+                          );
+                        }
+                      )
+                    "
+                    style="position: absolute; top: 0; right: 0; font-size: 0.6rem; height: 1rem; width: 3rem"
+                    :color="$vuetify.theme.themes[appTheme].action_red"
+                    >удалить</v-btn
+                  >
+                </div></v-hover
+              > </v-card-text
+            ><v-card-actions class="d-flex"
+              ><v-btn
+                text
+                @click="
+                  competition.competitorsSheet.header.push({
+                    id: '',
+                    title: ''
+                  })
+                "
+                :color="$vuetify.theme.themes[appTheme].accent"
+                >Добавить столбец</v-btn
+              ></v-card-actions
+            ></v-card
+          ></v-dialog
+        >
         <div
           style="overflow-y: auto; overflow-x:hidden; height: 70vh"
           :style="{
@@ -267,6 +381,9 @@ export default {
   },
   data() {
     return {
+      addColumnDialog: {
+        state: false
+      },
       sortBy: { title: "", dir: "" },
       startListFolder: {
         dialog: false,
