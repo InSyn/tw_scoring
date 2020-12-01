@@ -79,7 +79,7 @@
             ></v-col
           >
         </v-row>
-        <v-dialog width="720px" v-model="addColumnDialog.state">
+        <v-dialog width="720px" scrollable v-model="addColumnDialog.state">
           <template v-slot:activator="{ on }">
             <v-btn
               v-on="on"
@@ -100,13 +100,14 @@
               ><v-btn
                 small
                 icon
-                @click="addColumnDialog.state = false"
+                @click="closeColsDialog()"
                 :color="$vuetify.theme.themes[appTheme].action_red"
                 ><v-icon>mdi-close</v-icon></v-btn
               ></v-card-title
             >
             <v-card-text
               class="d-flex flex-wrap"
+              style="max-height: 320px; overflow-y: auto"
               :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
             >
               <v-hover
@@ -160,13 +161,8 @@
                   <v-btn
                     text
                     @click.prevent="
-                      competition.competitorsSheet.header = competition.competitorsSheet.header.filter(
-                        column => {
-                          return (
-                            column.id !==
-                            competition.competitorsSheet.header[c].id
-                          );
-                        }
+                      addColumnDialog.colToDel.push(
+                        competition.competitorsSheet.header[c]
                       )
                     "
                     style="position: absolute; top: 0; right: 0; font-size: 0.6rem; height: 1rem; width: 3rem"
@@ -174,18 +170,25 @@
                     >удалить</v-btn
                   >
                 </div></v-hover
-              > </v-card-text
+              >
+              <div>{{ addColumnDialog.colToAdd }}</div>
+              <div>{{ addColumnDialog.colToDel }}</div></v-card-text
             ><v-card-actions class="d-flex"
               ><v-btn
                 text
                 @click="
-                  competition.competitorsSheet.header.push({
+                  addColumnDialog.colToAdd.push({
                     id: '',
                     title: ''
                   })
                 "
                 :color="$vuetify.theme.themes[appTheme].accent"
                 >Добавить столбец</v-btn
+              ><v-spacer></v-spacer
+              ><v-btn
+                @click="acceptCols()"
+                :color="$vuetify.theme.themes[appTheme].success"
+                >Применить</v-btn
               ></v-card-actions
             ></v-card
           ></v-dialog
@@ -338,6 +341,26 @@ export default {
         });
       });
     },
+    closeColsDialog() {
+      this.addColumnDialog.colToDel = [];
+      this.addColumnDialog.colToAdd = [];
+      this.addColumnDialog.state = false;
+    },
+    acceptCols() {
+      this.addColumnDialog.colToDel.forEach(col => {
+        this.competition.competitorsSheet.header = this.competition.competitorsSheet.header.filter(
+          header => {
+            return header.id !== col.id;
+          }
+        );
+      });
+      this.competition.competitorsSheet.header.push(
+        ...this.addColumnDialog.colToAdd
+      );
+      this.addColumnDialog.colToDel = [];
+      this.addColumnDialog.colToAdd = [];
+      this.addColumnDialog.state = false;
+    },
     sortByCol(list, col, id) {
       if (this.sortBy.title !== col) {
         this.competition.competitorsSheet.competitors = list.sort((a, b) => {
@@ -382,7 +405,9 @@ export default {
   data() {
     return {
       addColumnDialog: {
-        state: false
+        state: false,
+        colToAdd: [],
+        colToDel: []
       },
       sortBy: { title: "", dir: "" },
       startListFolder: {
