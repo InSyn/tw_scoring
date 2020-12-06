@@ -23,16 +23,16 @@
                   color: $vuetify.theme.themes[appTheme].cardBackgroundRGBA
                 }"
                 style="border-radius: 2px"
-                v-html="selectedCompetitor[0]"
+                v-html="selectedCompetitor['bib']"
               ></div>
             </div>
             <div
               class="d-flex justify-center align-center pa-1"
-              v-html="selectedCompetitor[1]"
+              v-html="selectedCompetitor['name']"
             ></div>
             <div
               class="d-flex justify-center align-center pa-1"
-              v-html="selectedCompetitor[2]"
+              v-html="selectedCompetitor['surname']"
             ></div>
           </div>
           <v-spacer></v-spacer>
@@ -81,7 +81,7 @@
                 >
                   <v-col
                     v-for="(data, d) in competitor"
-                    v-if="d < 3"
+                    v-if="d === 'bib' || d === 'name' || d === 'surname'"
                     :key="d"
                     class="pa-1 d-flex flex-nowrap justify-start align-center"
                     style="font-weight: bold; white-space: nowrap; border: 1px solid #363636"
