@@ -84,7 +84,11 @@
                         dialogs.create_race.competitors.push(competitor)
                       "
                       :key="c"
-                      v-html="`${competitor}`"
+                      v-html="
+                        `${competitor.bib ? competitor.bib : ' '} ${
+                          competitor.surname ? competitor.surname : ' '
+                        } ${competitor.name ? competitor.name : ' '}`
+                      "
                     ></v-list-item
                   ></v-list-item-group> </v-list
               ></v-col>
@@ -101,7 +105,15 @@
                       v-for="(competitorToRace, c_r) in dialogs.create_race
                         .competitors"
                       :key="c_r"
-                      v-html="`${competitorToRace}`"
+                      v-html="
+                        `${competitorToRace.bib ? competitorToRace.bib : ' '} ${
+                          competitorToRace.surname
+                            ? competitorToRace.surname
+                            : ' '
+                        } ${
+                          competitorToRace.name ? competitorToRace.name : ' '
+                        }`
+                      "
                     ></v-list-item
                   ></v-list-item-group> </v-list></v-col
             ></v-row>

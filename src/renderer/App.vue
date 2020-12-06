@@ -175,8 +175,7 @@ export default {
   name: "tw_scoring",
   mounted() {
     document.addEventListener("keyup", e => {
-      (e.key === "M") | (e.key === "m") | (e.key === "Ь") | (e.key === "ь") &&
-        this.changeMenuState();
+      e.key === "Home" && this.changeMenuState();
     });
     fs.readdir("./StartList", (err, res) => {
       err &&

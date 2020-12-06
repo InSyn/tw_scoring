@@ -2,8 +2,11 @@ export default {
   namespaced: true,
   state: {
     CompetitorClass: class {
-      name = "Имя";
-      surName = "Фамилия";
+      constructor(fields) {
+        fields.map(field => {
+          this[field[0]] = field[1];
+        });
+      }
     },
     JuryClass: class {
       constructor(title) {
