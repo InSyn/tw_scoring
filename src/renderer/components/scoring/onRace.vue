@@ -41,7 +41,8 @@
               class="d-flex align-center ml-6 py-1 px-2"
               style="font-size: 2rem; font-weight: bold; border-radius: 6px"
               :style="{
-                backgroundColor: $vuetify.theme.themes[appTheme].success
+                color: $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
+                backgroundColor: $vuetify.theme.themes[appTheme].textDefault
               }"
             >
               <div v-html="`Рез.`"></div>
@@ -54,6 +55,12 @@
                 }"
               >
                 <div
+                  @click="res = `${Math.floor(30 + Math.random() * 70)}`"
+                  :style="{
+                    color: $vuetify.theme.themes[appTheme].textDefault,
+                    backgroundColor:
+                      $vuetify.theme.themes[appTheme].cardBackgroundRGBA
+                  }"
                   style="min-height: 3rem; min-width: 4rem; cursor: pointer"
                   v-html="res"
                 ></div>
@@ -133,7 +140,11 @@
                       $vuetify.theme.themes[appTheme].standardBackgroundRGBA
                   }"
                 >
-                  <div>{{ Math.floor(Math.random() * 100) }}</div>
+                  <div
+                    class="d-flex justify-center align-center"
+                    style="height: 3rem; width: 4rem"
+                    v-html="``"
+                  ></div>
                 </div>
               </div>
             </div>
