@@ -80,7 +80,7 @@
                   <v-list-item-group>
                     <v-list-item
                       v-for="(competitor, c) in filtered_list"
-                      @dblclick="
+                      @dblclick.prevent="
                         dialogs.create_race.competitors.push(competitor)
                       "
                       :key="c"
@@ -181,13 +181,32 @@
           ><v-icon>mdi-chevron-double-right</v-icon></v-btn
         >
       </v-row>
-      <div class="pa-2" v-if="competition.races[race_menu.selected]">
-        <v-row class="pa-2 font-weight-bold" style="font-size: 1.4rem">{{
-          `${competition.races[race_menu.selected].type.title} / ${
-            competition.races[race_menu.selected].discipline.title
-          } / ${competition.races[race_menu.selected].title}`
-        }}</v-row>
-        <div class="pa-2" style="max-height: 65vh; overflow-y: auto">
+      <div
+        class="mt-2 pa-2"
+        v-if="competition.races[race_menu.selected]"
+        style="border-radius: 6px"
+        :style="{
+          backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA
+        }"
+      >
+        <v-row
+          no-gutters
+          class="pa-2 font-weight-bold"
+          style="font-size: 1.4rem"
+          >{{
+            `${competition.races[race_menu.selected].type.title} / ${
+              competition.races[race_menu.selected].discipline.title
+            } / ${competition.races[race_menu.selected].title}`
+          }}</v-row
+        >
+        <div
+          class="pa-2"
+          style="max-height: 60vh; overflow-y: auto; border-radius: 6px"
+          :style="{
+            backgroundColor:
+              $vuetify.theme.themes[appTheme].standardBackgroundRGBA
+          }"
+        >
           <v-row
             no-gutters
             v-for="(competitor, comp) in competition.races[race_menu.selected]

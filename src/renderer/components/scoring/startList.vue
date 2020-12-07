@@ -81,10 +81,25 @@
                 >
                   <v-col
                     v-for="(data, d) in competitor"
-                    v-if="d === 'bib' || d === 'name' || d === 'surname'"
+                    v-if="
+                      d === 'bib' ||
+                        d === 'name' ||
+                        d === 'surname' ||
+                        d === 'year' ||
+                        d === 'region'
+                    "
                     :key="d"
                     class="pa-1 d-flex flex-nowrap justify-start align-center"
                     style="font-weight: bold; white-space: nowrap; border: 1px solid #363636"
+                    :style="
+                      d === 'bib' && {
+                        width: '3rem',
+                        backgroundColor:
+                          $vuetify.theme.themes[appTheme].textDefault,
+                        color:
+                          $vuetify.theme.themes[appTheme].standardBackgroundRGBA
+                      }
+                    "
                     v-html="`${data}`"
                   ></v-col> </v-row
               ></v-hover>

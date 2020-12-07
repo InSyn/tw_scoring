@@ -411,6 +411,7 @@
                 ><v-btn
                   icon
                   small
+                  @click="closeCreateCompetitorDialog()"
                   :color="$vuetify.theme.themes[appTheme].action_red"
                   ><v-icon>mdi-close</v-icon></v-btn
                 ></v-card-title
@@ -544,6 +545,10 @@ export default {
       this.competition.competitorsSheet.competitors.push(
         new this.CompetitorClass(fields)
       );
+      this.createCompetitorDialog.state = false;
+      this.createCompetitorDialog.newCompetitor = [];
+    },
+    closeCreateCompetitorDialog() {
       this.createCompetitorDialog.state = false;
       this.createCompetitorDialog.newCompetitor = [];
     },
