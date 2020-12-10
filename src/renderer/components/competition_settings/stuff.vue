@@ -131,7 +131,10 @@
             background: styles.cardBackground
           }"
         >
-          <div class="d-flex justify-center align-center">
+          <div
+            class="d-flex justify-center align-center"
+            style="position:relative;"
+          >
             <div
               :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
               style="font-weight: bold; font-size: 1.2rem"

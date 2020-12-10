@@ -1,12 +1,12 @@
 <template>
   <div style="height: 100%;" class="d-flex pa-2">
     <div
-      class="flex-column pa-2"
+      class="d-flex flex-column pa-2"
       style="height: 100%;width: 100%;"
       :style="{ borderRadius: `6px`, backgroundColor: styles.cardBackground }"
     >
-      <v-row style="height: 26%;" no-gutters>
-        <v-col cols="12" class="d-flex align-center">
+      <div>
+        <div class="d-flex align-center">
           <label for="ip" class="d-inline-block pa-1 font-weight-bold"
             >IP:</label
           >
@@ -37,8 +37,12 @@
             type="text"
             v-model="server.port"
           />
-        </v-col>
-        <v-col cols="6" class="d-flex align-center">
+          <v-spacer></v-spacer>
+          <v-btn text small :color="$vuetify.theme.themes[appTheme].success"
+            >Добавить судей</v-btn
+          >
+        </div>
+        <div class="d-flex align-center">
           <v-btn
             @click="startServer()"
             :color="$vuetify.theme.themes[appTheme].textDefault"
@@ -52,8 +56,9 @@
             :color="$vuetify.theme.themes[appTheme].action_blue"
             icon
             ><v-icon>mdi-refresh</v-icon></v-btn
-          ></v-col
-        ><v-col cols="6" class="d-flex align-center">
+          >
+        </div>
+        <div class="d-flex align-center">
           <div class="d-flex align-center font-weight-bold">
             Server status
             <div
@@ -75,11 +80,11 @@
           <v-btn @click="close_server()" :color="`red`" text
             ><v-icon :color="`red`">mdi-power</v-icon>Shut down</v-btn
           >
-        </v-col>
-      </v-row>
+        </div>
+      </div>
       <div
-        class="pa-2"
-        style="height: 74%; max-height: 250px; border-radius: 0 0 6px 6px; overflow-y: auto"
+        class="flex-grow-1 pa-2"
+        style="max-height: 250px; border-radius: 0 0 6px 6px; overflow-y: auto"
         :style="{
           backgroundColor:
             $vuetify.theme.themes[appTheme].standardBackgroundRGBA
@@ -133,7 +138,8 @@ export default {
     },
     close_socket() {
       this.$store.commit("main/close_socket");
-    }
+    },
+    set_judges() {}
   },
   data() {
     return {

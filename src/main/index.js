@@ -9,6 +9,8 @@ const io = require("socket.io")(http);
 
 let users = [];
 let connections = [];
+let judges_list = [];
+let connected_judges = [];
 
 io.on("connection", socket => {
   socket.emit("serverConnected");
@@ -23,6 +25,19 @@ io.on("connection", socket => {
   });
   socket.on("chat_message", m => {
     io.sockets.emit("chat_message", m);
+  });
+  socket.on("create_judges", judges => {
+    judges_list = judges;
+  });
+  socket.on("judge_in", (judge_data, check) => {
+    if (
+      judges_list.map(judge => {
+        return judge.id === judge_data.id;
+      }) === true
+    ) {
+      connected_judges.push(judge_data);
+      check(true);
+    } else check(false);
   });
   socket.on("disconnect", reason => {
     mainWindow &&
