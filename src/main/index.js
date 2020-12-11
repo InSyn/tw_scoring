@@ -26,8 +26,19 @@ io.on("connection", socket => {
   socket.on("chat_message", m => {
     io.sockets.emit("chat_message", m);
   });
-  socket.on("create_judges", judges => {
+  socket.on("create_judges", (judges, cb) => {
     judges_list = judges;
+    cb(judges_list);
+    mainWindow &&
+      mainWindow.webContents.send("server_message", [
+        1,
+        `К соревнованию могут подключиться судьи: ${judges_list.map(judge => {
+          return ` ${judge.id}`;
+        })}`
+      ]);
+    judges_list.forEach(j => {
+      console.log(j);
+    });
   });
   socket.on("judge_in", (judge_data, check) => {
     if (

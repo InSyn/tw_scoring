@@ -128,7 +128,8 @@
           style="min-height: 100%;"
           :style="{
             borderRadius: `6px`,
-            background: styles.cardBackground
+            background: styles.cardBackground,
+            border: `1px solid ${$vuetify.theme.themes[appTheme].accent}`
           }"
         >
           <div
@@ -158,6 +159,12 @@
               icon
               :color="$vuetify.theme.themes[appTheme].accent"
               ><v-icon>mdi-plus</v-icon></v-btn
+            >
+            <v-icon
+              class="pa-2"
+              :color="$vuetify.theme.themes[appTheme].accent"
+              style="position:absolute; top: 0; right: 0;"
+              >mdi-account-group-outline</v-icon
             >
           </div>
           <div class="flex-column px-2">

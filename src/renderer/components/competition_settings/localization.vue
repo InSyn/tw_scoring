@@ -38,8 +38,12 @@
             v-model="server.port"
           />
           <v-spacer></v-spacer>
-          <v-btn text small :color="$vuetify.theme.themes[appTheme].success"
-            >Добавить судей</v-btn
+          <v-btn
+            text
+            small
+            :color="$vuetify.theme.themes[appTheme].success"
+            @click="set_judges()"
+            >Создать слоты для судей</v-btn
           >
         </div>
         <div class="d-flex align-center">
@@ -139,7 +143,17 @@ export default {
     close_socket() {
       this.$store.commit("main/close_socket");
     },
-    set_judges() {}
+    set_judges() {
+      this.socket &&
+        this.socket.connected &&
+        this.socket.emit(
+          "create_judges",
+          this.competition.stuff.judges,
+          res => {
+            console.log(res);
+          }
+        );
+    }
   },
   data() {
     return {
