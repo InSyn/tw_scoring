@@ -28,7 +28,12 @@
             <v-row
               class="align-center px-2 pb-4 pt-6 mb-2"
               style="position: relative; font-size: 0.9rem; border-radius: 6px"
-              :style="{ background: styles.subjectBackground }"
+              :style="[
+                { background: styles.subjectBackground },
+                jury.connected !== undefined && {
+                  border: `1px solid ${$vuetify.theme.themes[appTheme].accent}`
+                }
+              ]"
               no-gutters
               v-for="(jury, jr) in competition.stuff.jury"
               :key="jr"
@@ -36,6 +41,7 @@
               <v-col class="d-flex align-center pa-1" cols="12"
                 ><div>Должность:</div>
                 <input
+                  :readonly="jury.connected !== undefined"
                   @focus="
                     $event.target.style.borderBottom = `1px solid ${$vuetify.theme.themes[appTheme].accent}`
                   "
@@ -105,10 +111,17 @@
                   type="text"
                   v-model="competition.stuff.jury[jr].loc"
               /></v-col>
+              <v-icon
+                v-if="jury.connected !== undefined"
+                style="position:absolute; top: 4px; right: 24px"
+                :color="$vuetify.theme.themes[appTheme].accent"
+                >mdi-alpha-j</v-icon
+              >
               <v-btn
                 small
                 icon
                 style="position:absolute; top: 2px; right: 4px"
+                :disabled="jury.connected !== undefined"
                 @click="
                   competition.stuff.jury.splice(
                     competition.stuff.jury.indexOf(jury),
@@ -119,6 +132,26 @@
               >
                 <v-icon small>mdi-close</v-icon></v-btn
               >
+              <span
+                v-if="jury.connected !== undefined"
+                @click="
+                  competition.stuff.jury[jr].connected = !competition.stuff
+                    .jury[jr].connected
+                "
+                style="display: block; transition: background-color 192ms, box-shadow 192ms; position:absolute; border-radius: 4px; bottom: 8px; left: 50%; transform: translateX(-50%); height: 4px; width: 48px;"
+                :style="
+                  competition.stuff.jury[jr].connected
+                    ? {
+                        backgroundColor:
+                          $vuetify.theme.themes[appTheme].success,
+                        boxShadow: `0 0 3px 1px ${$vuetify.theme.themes[appTheme].success}`
+                      }
+                    : {
+                        backgroundColor: styles.standardBackground,
+                        boxShadow: `none`
+                      }
+                "
+              ></span>
             </v-row>
           </div>
         </div>

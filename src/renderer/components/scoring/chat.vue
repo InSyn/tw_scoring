@@ -11,7 +11,7 @@
         class="pa-2"
         style="height: calc(100% - 40px); width: 100%;"
         ><div
-          style="height: 100%; width: 100%; border-radius: 6px"
+          style="height: 100%; width: 100%; overflow-y: auto; border-radius: 6px"
           :style="{
             backgroundColor:
               $vuetify.theme.themes[appTheme].standardBackgroundRGBA

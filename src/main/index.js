@@ -9,6 +9,14 @@ const io = require("socket.io")(http);
 
 let users = [];
 let connections = [];
+
+let competition = {
+  title: "",
+  discipline: "",
+  date: "",
+  time: ""
+};
+
 let judges_list = [];
 let connected_judges = [];
 

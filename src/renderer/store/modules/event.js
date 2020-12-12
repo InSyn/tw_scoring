@@ -123,7 +123,15 @@ export default {
         }
       };
       stuff = {
-        jury: [],
+        jury: [
+          {
+            title: "Главный судья",
+            name: "",
+            surName: "",
+            loc: "",
+            connected: false
+          }
+        ],
         judges: [],
         openers: []
       };
