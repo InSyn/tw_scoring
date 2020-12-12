@@ -191,6 +191,11 @@ export default {
       this.$store.commit("main/pushServerMessage", message);
     });
     this.createCompetition(new this.EventClass());
+    this.serverStatusChecker = setInterval(() => {
+      this.socket && this.socket.connected
+        ? this.$store.commit("main/serverSetStatus", true)
+        : this.$store.commit("main/serverSetStatus", false);
+    }, 2250);
     this.competition.timer.ticker();
   },
   methods: {

@@ -134,10 +134,6 @@
               >
               <span
                 v-if="jury.connected !== undefined"
-                @click="
-                  competition.stuff.jury[jr].connected = !competition.stuff
-                    .jury[jr].connected
-                "
                 style="display: block; transition: background-color 192ms, box-shadow 192ms; position:absolute; border-radius: 4px; bottom: 8px; left: 50%; transform: translateX(-50%); height: 4px; width: 48px;"
                 :style="
                   competition.stuff.jury[jr].connected
@@ -330,10 +326,6 @@
                 <v-icon small>mdi-close</v-icon></v-btn
               >
               <span
-                @click="
-                  competition.stuff.judges[jd].connected = !competition.stuff
-                    .judges[jd].connected
-                "
                 style="display: block; transition: background-color 192ms, box-shadow 192ms; position:absolute; border-radius: 4px; bottom: 8px; left: 50%; transform: translateX(-50%); height: 4px; width: 48px;"
                 :style="
                   competition.stuff.judges[jd].connected

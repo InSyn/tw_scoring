@@ -44,18 +44,22 @@ io.on("connection", socket => {
           return ` ${judge.id}`;
         })}`
       ]);
-    judges_list.forEach(j => {
-      console.log(j);
-    });
   });
   socket.on("judge_in", (judge_data, check) => {
+    console.log(judge_data);
     if (
-      judges_list.map(judge => {
-        return judge.id === judge_data.id;
+      judges_list.some(judge => {
+        return judge.id.toString() === judge_data.id.toString();
       }) === true
     ) {
       connected_judges.push(judge_data);
-      check(true);
+      io.sockets.emit("judge_connected", [judges_list, judge_data]);
+      check(
+        true,
+        judges_list.filter(judge => {
+          return judge.id.toString() === judge_data.id.toString();
+        })
+      );
     } else check(false);
   });
   socket.on("disconnect", reason => {

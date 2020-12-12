@@ -70,9 +70,26 @@ export default {
         : null;
     },
     serverSetStatus: (state, status) => (state.serverStatus = status),
+    setStatusChecker: (state, checker) => {
+      state.serverStatusChecker = checker;
+    },
     connect_socket: (state, config) => {
       if (!state.socket) {
         state.socket = io(`http://${config[0]}:${config[1]}`);
+
+        state.socket.on("serverConnected", () => {
+          state.serverStatus = true;
+        });
+        state.socket.on("chat_message", message => {
+          state.messages.push(message);
+        });
+        state.socket.on("judge_connected", judge_data => {
+          state.competition &&
+            state.competition.stuff.judges.forEach(judge => {
+              if (judge.id.toString() === judge_data[1].id.toString())
+                judge.connected = true;
+            });
+        });
       }
     },
     close_socket: state => {

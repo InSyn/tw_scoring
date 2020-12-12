@@ -129,12 +129,6 @@ export default {
           this.server_config[0],
           this.server_config[1]
         ]);
-        this.socket.on("serverConnected", () => {
-          this.serverSetStatus("True");
-        });
-        this.socket.on("chat_message", message => {
-          this.messages.push(message);
-        });
         this.$store.commit("main/createServerChecker");
       }
     },
