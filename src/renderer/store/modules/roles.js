@@ -7,6 +7,14 @@ export default {
           this[field[0]] = field[1];
         });
       }
+      marks = [];
+    },
+    MarkClass: class {
+      constructor(race, judgeID, value) {
+        this.value = value || 0;
+        this.race = race;
+        this.judge = judgeID;
+      }
     },
     JuryClass: class {
       constructor(title) {
@@ -44,20 +52,11 @@ export default {
     }
   },
   getters: {
-    CompetitorClass: state => {
-      return state.CompetitorClass;
-    },
-    JudgeClass: state => {
-      return state.JudgeClass;
-    },
-    OpenerClass: state => {
-      return state.OpenerClass;
-    },
-    JuryClass: state => {
-      return state.JuryClass;
-    },
-    SponsorClass: state => {
-      return state.SponsorClass;
-    }
+    CompetitorClass: state => state.CompetitorClass,
+    JudgeClass: state => state.JudgeClass,
+    OpenerClass: state => state.OpenerClass,
+    JuryClass: state => state.JuryClass,
+    SponsorClass: state => state.SponsorClass,
+    MarkClass: state => state.MarkClass
   }
 };

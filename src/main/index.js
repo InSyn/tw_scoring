@@ -17,6 +17,12 @@ let competition = {
   time: ""
 };
 
+let chief_judge = {
+  name: "",
+  surName: "",
+  location: "",
+  connected: ""
+};
 let judges_list = [];
 let connected_judges = [];
 
@@ -34,6 +40,20 @@ io.on("connection", socket => {
   socket.on("chat_message", m => {
     io.sockets.emit("chat_message", m);
   });
+  socket.on("set_competition_data", (data, cb) => {
+    chief_judge.name = data[1].jury[0].name;
+    chief_judge.surName = data[1].jury[0].surName;
+    chief_judge.location = data[1].jury[0].loc;
+
+    competition.title = data[0].title.value;
+    competition.discipline = data[0].discipline.value;
+    competition.date = data[0].date.value;
+    competition.time = data[0].date.time;
+
+    io.sockets.emit("competition_data_updated", [competition, chief_judge]);
+    cb([chief_judge, competition]);
+  });
+
   socket.on("create_judges", (judges, cb) => {
     judges_list = judges;
     cb(judges_list);
@@ -45,8 +65,15 @@ io.on("connection", socket => {
         })}`
       ]);
   });
+  socket.on("chief_judge_in", check => {
+    if (!chief_judge.connected) {
+      io.sockets.emit("chief_judge_connected");
+      check(true);
+    } else {
+      check(false);
+    }
+  });
   socket.on("judge_in", (judge_data, check) => {
-    console.log(judge_data);
     if (
       judges_list.some(judge => {
         return judge.id.toString() === judge_data.id.toString();
@@ -54,12 +81,7 @@ io.on("connection", socket => {
     ) {
       connected_judges.push(judge_data);
       io.sockets.emit("judge_connected", [judges_list, judge_data]);
-      check(
-        true,
-        judges_list.filter(judge => {
-          return judge.id.toString() === judge_data.id.toString();
-        })
-      );
+      check(true, competition);
     } else check(false);
   });
   socket.on("disconnect", reason => {

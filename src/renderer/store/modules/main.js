@@ -90,6 +90,10 @@ export default {
                 judge.connected = true;
             });
         });
+        state.socket.on("chief_judge_connected", () => {
+          if (state.competition)
+            state.competition.stuff.jury[0].connected = true;
+        });
       }
     },
     close_socket: state => {

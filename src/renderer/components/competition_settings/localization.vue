@@ -6,7 +6,7 @@
       :style="{ borderRadius: `6px`, backgroundColor: styles.cardBackground }"
     >
       <div>
-        <div class="d-flex align-center">
+        <div class="d-flex flex-wrap align-center">
           <label for="ip" class="d-inline-block pa-1 font-weight-bold"
             >IP:</label
           >
@@ -41,9 +41,18 @@
           <v-btn
             text
             small
+            class="ma-1"
             :color="$vuetify.theme.themes[appTheme].success"
             @click="set_judges()"
             >Создать слоты для судей</v-btn
+          >
+          <v-btn
+            text
+            small
+            class="ma-1"
+            :color="$vuetify.theme.themes[appTheme].success"
+            @click="set_competition_data()"
+            >Применить данные</v-btn
           >
         </div>
         <div class="d-flex align-center">
@@ -145,6 +154,17 @@ export default {
         this.socket.emit(
           "create_judges",
           this.competition.stuff.judges,
+          res => {
+            console.log(res);
+          }
+        );
+    },
+    set_competition_data() {
+      this.socket &&
+        this.socket.connected &&
+        this.socket.emit(
+          "set_competition_data",
+          [this.competition.mainData, this.competition.stuff],
           res => {
             console.log(res);
           }
