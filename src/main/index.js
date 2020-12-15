@@ -7,24 +7,25 @@ const socketApp = require("express")();
 const http = require("http").Server(socketApp);
 const io = require("socket.io")(http);
 
-let users = [];
-let connections = [];
-
 let competition = {
   title: "",
   discipline: "",
   date: "",
-  time: ""
+  time: "",
+  secretary: {
+    name: "",
+    surName: "",
+    connected: ""
+  },
+  chief_judge: {
+    name: "",
+    surName: "",
+    location: "",
+    connected: ""
+  },
+  judges: [],
+  races: []
 };
-
-let chief_judge = {
-  name: "",
-  surName: "",
-  location: "",
-  connected: ""
-};
-let judges_list = [];
-let connected_judges = [];
 
 io.on("connection", socket => {
   socket.emit("serverConnected");
@@ -41,32 +42,34 @@ io.on("connection", socket => {
     io.sockets.emit("chat_message", m);
   });
   socket.on("set_competition_data", (data, cb) => {
-    chief_judge.name = data[1].jury[0].name;
-    chief_judge.surName = data[1].jury[0].surName;
-    chief_judge.location = data[1].jury[0].loc;
+    competition.chief_judge.name = data[1].jury[0].name;
+    competition.chief_judge.surName = data[1].jury[0].surName;
+    competition.chief_judge.location = data[1].jury[0].loc;
 
     competition.title = data[0].title.value;
     competition.discipline = data[0].discipline.value;
     competition.date = data[0].date.value;
     competition.time = data[0].date.time;
 
-    io.sockets.emit("competition_data_updated", [competition, chief_judge]);
-    cb([chief_judge, competition]);
+    io.sockets.emit("competition_data_updated", competition);
+    cb(competition);
   });
 
   socket.on("create_judges", (judges, cb) => {
-    judges_list = judges;
-    cb(judges_list);
+    competition.judges_list = judges;
+    cb(competition.judges);
     mainWindow &&
       mainWindow.webContents.send("server_message", [
         1,
-        `К соревнованию могут подключиться судьи: ${judges_list.map(judge => {
-          return ` ${judge.id}`;
-        })}`
+        `К соревнованию могут подключиться судьи: ${competition.judges.map(
+          judge => {
+            return ` ${judge.id}`;
+          }
+        )}`
       ]);
   });
   socket.on("chief_judge_in", check => {
-    if (!chief_judge.connected) {
+    if (!competition.chief_judge.connected) {
       io.sockets.emit("chief_judge_connected");
       check(true);
     } else {
@@ -75,12 +78,12 @@ io.on("connection", socket => {
   });
   socket.on("judge_in", (judge_data, check) => {
     if (
-      judges_list.some(judge => {
+      competition.judges.some(judge => {
         return judge.id.toString() === judge_data.id.toString();
       }) === true
     ) {
-      connected_judges.push(judge_data);
-      io.sockets.emit("judge_connected", [judges_list, judge_data]);
+      competition.judges.push(judge_data);
+      io.sockets.emit("judge_connected", [competition.judges, judge_data]);
       check(true, competition);
     } else check(false);
   });
@@ -93,7 +96,6 @@ io.on("connection", socket => {
     console.log(`${reason} ${socket.id}`);
   });
 });
-
 app.on("startSocketServer", config => {
   if (http["_handle"]) {
     mainWindow &&
