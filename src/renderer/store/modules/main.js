@@ -90,9 +90,20 @@ export default {
                 judge.connected = true;
             });
         });
+        state.socket.on("judge_disconnected", judge_data => {
+          state.competition &&
+            state.competition.stuff.judges.forEach(judge => {
+              if (judge.id.toString() === judge_data[1].id.toString())
+                judge.connected = false;
+            });
+        });
         state.socket.on("chief_judge_connected", () => {
           if (state.competition)
             state.competition.stuff.jury[0].connected = true;
+        });
+        state.socket.on("chief_judge_disconnected", () => {
+          if (state.competition)
+            state.competition.stuff.jury[0].connected = false;
         });
       }
     },

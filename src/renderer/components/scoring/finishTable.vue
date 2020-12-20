@@ -22,7 +22,7 @@
               $vuetify.theme.themes[appTheme].standardBackgroundRGBA
           }"
         >
-          <v-hover v-for="n in 50" :key="n" v-slot:default="{ hover }">
+          <v-hover v-for="n in 2" :key="n" v-slot:default="{ hover }">
             <v-row
               no-gutters
               :style="[

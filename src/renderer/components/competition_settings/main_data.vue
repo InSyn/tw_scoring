@@ -7,10 +7,10 @@
       :key="md"
       no-gutters
     >
-      <v-col cols="12" style="position:relative;">
+      <v-col cols="12" class="d-flex align-center" style="position:relative;">
         <div
-          class="d-flex align-center px-2 py-1"
-          style="position:relative; transition: background-color 128ms; width: 100%; overflow: hidden; border-radius: 6px"
+          class="d-flex align-center flex-grow-1 px-2 py-1"
+          style="position:relative; transition: background-color 128ms; overflow: hidden; border-radius: 6px"
           :style="[{ backgroundColor: styles.cardBackground }]"
         >
           <span class="d-block" style="min-width: 11rem;font-weight: bold">{{
@@ -124,6 +124,13 @@
             ]"
           ></span>
         </div>
+        <v-btn
+          class="ml-4"
+          v-if="md === `codex`"
+          @click="set_competition_data()"
+          :color="$vuetify.theme.themes[appTheme].success"
+          >Применить</v-btn
+        >
       </v-col>
     </v-row>
   </div>
@@ -134,10 +141,22 @@ import { mapGetters, mapActions } from "vuex";
 export default {
   name: "main_data",
   methods: {
-    ...mapActions("main", ["input_focus", "input_blur"])
+    ...mapActions("main", ["input_focus", "input_blur"]),
+
+    set_competition_data() {
+      this.socket &&
+        this.socket.connected &&
+        this.socket.emit(
+          "set_competition_data",
+          [this.competition.mainData, this.competition.stuff],
+          res => {
+            console.log(res);
+          }
+        );
+    }
   },
   computed: {
-    ...mapGetters("main", ["appTheme", "competition"]),
+    ...mapGetters("main", ["appTheme", "competition", "socket"]),
     styles() {
       return {
         inputWrapper: {

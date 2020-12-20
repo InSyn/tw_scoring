@@ -25,7 +25,7 @@
             $vuetify.theme.themes[appTheme].standardBackgroundRGBA
         }"
       >
-        <v-row no-gutters class="pa-1" v-for="m in 16" :key="m">
+        <v-row no-gutters class="pa-1">
           <v-col class="d-flex justify-center align-center" cols="2">C8</v-col>
           <v-col class="d-flex justify-center align-center" cols="2"
             ><div

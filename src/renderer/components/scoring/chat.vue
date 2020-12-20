@@ -18,7 +18,7 @@
           }"
         >
           <v-row no-gutters v-for="(mes, m) in messages" :key="m">{{
-            `${m}: ${messages[m]}`
+            `${messages[m][1][0]}:${messages[m][1][1]}  ${messages[m][0]}`
           }}</v-row>
         </div></v-row
       >
@@ -57,12 +57,13 @@ export default {
     };
   },
   computed: {
-    ...mapGetters("main", ["appTheme", "socket", "messages"])
+    ...mapGetters("main", ["appTheme", "socket", "messages", "competition"])
   },
   methods: {
     addMessage(m) {
       if (this.socket) {
-        m !== "" && this.socket.emit("chat_message", m);
+        const time = [this.competition.timer.hrs, this.competition.timer.min];
+        m !== "" && this.socket.emit("chat_message", [m, time]);
         this.message = "";
       } else console.log("server not started");
     }

@@ -76,7 +76,7 @@
     <main style="position:relative;">
       <div
         class="menu"
-        style="z-index: 2; position: absolute; top: 0;bottom: 0;left: 0; transition: 156ms; min-width: 220px; overflow: hidden"
+        style="z-index: 2; position: relative; min-width: 220px; overflow: hidden"
         :style="[
           {
             background: `rgba(${$vuetify.theme.themes[appTheme].cardBackground.r},

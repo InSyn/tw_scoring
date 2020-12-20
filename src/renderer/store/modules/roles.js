@@ -33,6 +33,7 @@ export default {
       surName = "";
       location = "";
       category = "";
+      socket_id = null;
       connected = false;
     },
     OpenerClass: class {

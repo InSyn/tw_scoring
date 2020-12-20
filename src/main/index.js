@@ -21,9 +21,11 @@ let competition = {
     name: "",
     surName: "",
     location: "",
-    connected: ""
+    connected: "",
+    socket_id: null
   },
   judges: [],
+  changed_marks: [],
   races: []
 };
 
@@ -56,7 +58,7 @@ io.on("connection", socket => {
   });
 
   socket.on("create_judges", (judges, cb) => {
-    competition.judges_list = judges;
+    competition.judges = judges;
     cb(competition.judges);
     mainWindow &&
       mainWindow.webContents.send("server_message", [
@@ -71,6 +73,14 @@ io.on("connection", socket => {
   socket.on("chief_judge_in", check => {
     if (!competition.chief_judge.connected) {
       io.sockets.emit("chief_judge_connected");
+      competition.chief_judge.connected = true;
+      competition.chief_judge.socket_id = socket.id;
+
+      mainWindow &&
+        mainWindow.webContents.send("server_message", [
+          1,
+          `Главный судья ${competition.chief_judge.surName} ${competition.chief_judge.name} подключился`
+        ]);
       check(true);
     } else {
       check(false);
@@ -82,12 +92,47 @@ io.on("connection", socket => {
         return judge.id.toString() === judge_data.id.toString();
       }) === true
     ) {
-      competition.judges.push(judge_data);
+      competition.judges.forEach(judge => {
+        if (judge.id.toString() === judge_data.id.toString()) {
+          judge.socket_id = socket.id;
+          judge.connected = true;
+
+          mainWindow &&
+            mainWindow.webContents.send("server_message", [
+              1,
+              `Судья ${judge.id} ${judge.surName} ${judge.name} подключился`
+            ]);
+        }
+      });
       io.sockets.emit("judge_connected", [competition.judges, judge_data]);
-      check(true, competition);
+      check(true);
     } else check(false);
   });
   socket.on("disconnect", reason => {
+    competition.judges.forEach(judge => {
+      if (judge.socket_id === socket.id) {
+        mainWindow &&
+          mainWindow.webContents.send("server_message", [
+            4,
+            `Судья ${judge.id} ${judge.surName} ${judge.name} отключился`
+          ]);
+
+        io.sockets.emit("judge_disconnected", [competition.judges, judge]);
+        judge.socket_id = null;
+        judge.connected = false;
+      }
+    });
+    if (competition.chief_judge.socket_id === socket.id) {
+      competition.chief_judge.socket_id = null;
+      competition.chief_judge.connected = false;
+
+      mainWindow &&
+        mainWindow.webContents.send("server_message", [
+          4,
+          `Главный судья ${competition.chief_judge.surName} ${competition.chief_judge.name} отключился`
+        ]);
+      io.sockets.emit("chief_judge_disconnected", competition.chief_judge);
+    }
     mainWindow &&
       mainWindow.webContents.send("server_message", [
         4,
