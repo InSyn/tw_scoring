@@ -24,7 +24,7 @@
                 backgroundColor: $vuetify.theme.themes[appTheme].textDefault,
                 color: $vuetify.theme.themes[appTheme].cardBackgroundRGBA
               }"
-              v-html="`${competition.selected_race.onTrack['bib']}`"
+              v-html="`${competition.selected_race.onTrack.info_data['bib']}`"
             ></div>
             <div
               v-if="
@@ -33,7 +33,7 @@
               class="ml-6"
               style="font-size: 2rem"
               v-html="
-                `${competition.selected_race.onTrack['name']} ${competition.selected_race.onTrack['surname']}`
+                `${competition.selected_race.onTrack.info_data['name']} ${competition.selected_race.onTrack.info_data['surname']}`
               "
             ></div>
             <v-spacer></v-spacer>

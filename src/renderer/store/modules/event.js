@@ -123,6 +123,10 @@ export default {
         }
       };
       stuff = {
+        secretary: {
+          name: "",
+          surName: ""
+        },
         jury: [
           {
             title: "Главный судья",
