@@ -71,7 +71,6 @@
             <v-row class="sheet">
               <v-col>
                 <v-list
-                  :key="Math.random()"
                   :dark="appTheme === 'dark'"
                   :color="$vuetify.theme.themes[appTheme].cardBackgroundRGBA"
                   class="pa-2"
@@ -85,16 +84,25 @@
                       "
                       :key="c"
                       v-html="
-                        `${competitor.bib ? competitor.bib : ' '} ${
-                          competitor.surname ? competitor.surname : ' '
-                        } ${competitor.name ? competitor.name : ' '}`
+                        `${
+                          competitor.info_data.bib
+                            ? competitor.info_data.bib
+                            : ' '
+                        } ${
+                          competitor.info_data.surname
+                            ? competitor.info_data.surname
+                            : ' '
+                        } ${
+                          competitor.info_data.name
+                            ? competitor.info_data.name
+                            : ' '
+                        }`
                       "
                     ></v-list-item
                   ></v-list-item-group> </v-list
               ></v-col>
               <v-col>
                 <v-list
-                  :key="Math.random()"
                   :dark="appTheme === 'dark'"
                   :color="$vuetify.theme.themes[appTheme].cardBackgroundRGBA"
                   class="pa-2"
@@ -106,12 +114,18 @@
                         .competitors"
                       :key="c_r"
                       v-html="
-                        `${competitorToRace.bib ? competitorToRace.bib : ' '} ${
-                          competitorToRace.surname
-                            ? competitorToRace.surname
+                        `${
+                          competitorToRace.info_data.bib
+                            ? competitorToRace.info_data.bib
                             : ' '
                         } ${
-                          competitorToRace.name ? competitorToRace.name : ' '
+                          competitorToRace.info_data.surname
+                            ? competitorToRace.info_data.surname
+                            : ' '
+                        } ${
+                          competitorToRace.info_data.name
+                            ? competitorToRace.info_data.name
+                            : ' '
                         }`
                       "
                     ></v-list-item
@@ -214,9 +228,9 @@
             :key="comp"
           >
             <v-col
-              class="pa-1"
+              class="d-flex pa-1"
               v-for="(field, f) in competition.races[race_menu.selected]
-                .startList[comp]"
+                .startList[comp].info_data"
               :key="f"
               v-html="field"
             ></v-col>

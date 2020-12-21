@@ -4,9 +4,10 @@ export default {
     CompetitorClass: class {
       constructor(fields) {
         fields.map(field => {
-          this[field[0]] = field[1];
+          this.info_data[field[0]] = field[1];
         });
       }
+      info_data = {};
       marks = [];
     },
     MarkClass: class {

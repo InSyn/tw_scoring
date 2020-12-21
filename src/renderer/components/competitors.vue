@@ -299,7 +299,7 @@
             >
               <v-col
                 class="d-flex align-center"
-                v-for="(col, c, indx) in row"
+                v-for="(col, c, indx) in row.info_data"
                 :key="c"
               >
                 <div
@@ -358,7 +358,11 @@
                         'scaleX(0)'
                     "
                     type="text"
-                    v-model="competition.competitorsSheet.competitors[r][c]"
+                    v-model="
+                      competition.competitorsSheet.competitors[r]['info_data'][
+                        c
+                      ]
+                    "
                     :style="[
                       { color: $vuetify.theme.themes[appTheme].textDefault }
                     ]"
