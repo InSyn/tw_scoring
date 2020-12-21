@@ -126,6 +126,7 @@
         </div>
         <v-btn
           class="ml-4"
+          style="height: 2.6rem; font-weight: bold;"
           v-if="md === `codex`"
           @click="set_competition_data()"
           :color="$vuetify.theme.themes[appTheme].success"
