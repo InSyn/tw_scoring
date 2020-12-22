@@ -73,6 +73,7 @@
                 <v-list
                   :dark="appTheme === 'dark'"
                   :color="$vuetify.theme.themes[appTheme].cardBackgroundRGBA"
+                  :key="Math.random()"
                   class="pa-2"
                   style="max-height: 400px; overflow-y: auto; border-radius: 6px"
                 >
@@ -105,6 +106,7 @@
                 <v-list
                   :dark="appTheme === 'dark'"
                   :color="$vuetify.theme.themes[appTheme].cardBackgroundRGBA"
+                  :key="Math.random()"
                   class="pa-2"
                   style="max-height: 400px; overflow-y: auto; border-radius: 6px"
                 >
@@ -151,7 +153,7 @@
           <v-btn
             icon
             style="position: absolute; top: 0;right: 0;"
-            @click="dialogs.create_race.state = false"
+            @click="closeRaceDialog()"
             :color="$vuetify.theme.themes[appTheme].action_red"
             ><v-icon>mdi-close</v-icon></v-btn
           >
@@ -287,6 +289,11 @@ export default {
         if (list.hasOwnProperty(i))
           this.dialogs.create_race.competitors.push(list[i]);
       }
+    },
+    closeRaceDialog() {
+      this.dialogs.create_race.competitors = [];
+      this.dialogs.create_race.title = "";
+      this.dialogs.create_race.state = false;
     }
   },
   data() {

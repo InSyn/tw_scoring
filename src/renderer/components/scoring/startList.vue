@@ -76,7 +76,8 @@
                         $vuetify.theme.themes[appTheme].standardBackgroundRGBA
                     },
                     hover && {
-                      border: `1px solid ${$vuetify.theme.themes[appTheme].accent}`
+                      border: `1px solid ${$vuetify.theme.themes[appTheme].accent}`,
+                      boxShadow: `inset 0 0 2px 1px ${$vuetify.theme.themes[appTheme].accent}`
                     }
                   ]"
                 >
