@@ -16,6 +16,7 @@
             v-model="competition.structure.selected.type"
           >
             <v-radio
+              class="ma-1"
               v-for="(type, t) in competition.structure.type"
               :dark="appTheme === 'dark'"
               :color="$vuetify.theme.themes[appTheme].action_blue"
@@ -32,6 +33,7 @@
             v-model="competition.structure.selected.discipline"
           >
             <v-radio
+              class="ma-1"
               v-for="(discipline, d) in competition.structure.selected.type
                 .disciplines"
               :dark="appTheme === 'dark'"

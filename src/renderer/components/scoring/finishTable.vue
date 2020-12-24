@@ -1,5 +1,5 @@
 <template>
-  <v-col class="pa-2" cols="12"
+  <v-col class="pa-2" cols="8"
     ><div
       style="height: 100%; border-radius: 6px"
       :style="{
@@ -22,8 +22,14 @@
               $vuetify.theme.themes[appTheme].standardBackgroundRGBA
           }"
         >
-          <v-hover v-for="n in 2" :key="n" v-slot:default="{ hover }">
+          <v-hover
+            v-for="(competitor, key, i) in competition.competitorsSheet
+              .competitors"
+            :key="i"
+            v-slot:default="{ hover }"
+          >
             <v-row
+              @click="log(competitor)"
               no-gutters
               :style="[
                 hover
@@ -39,7 +45,7 @@
               <v-col
                 class="pa-2"
                 :style="
-                  n % 2 === 0
+                  i % 2 === 0
                     ? appTheme === 'dark'
                       ? { backgroundColor: `rgba(255,255,255,.04)` }
                       : { backgroundColor: `rgba(0,0,0,.03)` }
@@ -51,9 +57,16 @@
                         backgroundColor: `rgba(0,0,0,.08)`
                       }
                 "
-                v-for="(field, f, i) in competitor"
+                v-for="(field, f, i) in competitor.info_data"
                 :key="i"
                 v-html="`${field}`"
+              ></v-col
+              ><v-col class="d-flex"
+                ><div
+                  v-for="(mark, m) in competitor.marks"
+                  :key="mark.id"
+                  v-html="mark.value"
+                ></div
               ></v-col> </v-row
           ></v-hover>
         </div>
@@ -64,6 +77,11 @@
 import { mapGetters } from "vuex";
 export default {
   name: "finishTable",
+  methods: {
+    log(data) {
+      console.log(data);
+    }
+  },
   data() {
     return {
       competitor: {
@@ -83,7 +101,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters("main", ["appTheme"])
+    ...mapGetters("main", ["competition", "appTheme"])
   }
 };
 </script>

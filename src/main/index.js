@@ -44,6 +44,7 @@ io.on("connection", socket => {
     io.sockets.emit("chat_message", m);
   });
   socket.on("set_competition_data", (data, cb) => {
+    console.log(data);
     competition.chief_judge.name = data[1].jury[0].name;
     competition.chief_judge.surName = data[1].jury[0].surName;
     competition.chief_judge.location = data[1].jury[0].loc;

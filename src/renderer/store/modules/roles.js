@@ -16,6 +16,9 @@ export default {
         this.race = race;
         this.judge = judgeID;
       }
+      id = Math.random()
+        .toString(36)
+        .substr(2, 9);
     },
     JuryClass: class {
       constructor(title) {

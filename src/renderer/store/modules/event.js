@@ -151,10 +151,8 @@ export default {
           { id: "bib", title: "Bib" },
           { id: "name", title: "Имя" },
           { id: "surname", title: "Фамилия" },
-          { id: "year", title: "Год" },
-          { id: "group", title: "Группа" },
-          { id: "rank", title: "Разряд" },
-          { id: "fis", title: "Fis code" }
+          { id: "gender", title: "Пол" },
+          { id: "year", title: "Год" }
         ],
         competitors: []
       };

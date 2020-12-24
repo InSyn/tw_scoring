@@ -7,8 +7,9 @@
     ><v-row no-gutters style="height: 30%; min-height: 120px">
       <start-list></start-list>
       <on-race></on-race> </v-row
-    ><v-row no-gutters style="height: 35%; min-height: 240px"
-      ><finish-table></finish-table>
+    ><v-row no-gutters style="height: 35%; min-height: 240px">
+      <display-control-panel></display-control-panel>
+      <finish-table></finish-table>
     </v-row>
   </v-container>
 </template>
@@ -20,7 +21,9 @@ import chat from "./scoring/chat";
 import marksList from "./scoring/marksList";
 import startList from "./scoring/startList";
 import onRace from "./scoring/onRace";
+import displayControlPanel from "./scoring/displayControlPanel";
 import finishTable from "./scoring/finishTable";
+
 export default {
   name: "scoring",
   components: {
@@ -29,6 +32,7 @@ export default {
     marksList,
     startList,
     onRace,
+    displayControlPanel,
     finishTable
   },
   computed: {

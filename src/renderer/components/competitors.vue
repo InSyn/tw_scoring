@@ -38,7 +38,7 @@
           type="file"
           id="startListInput"
           hidden
-          @change="load_sheet($event.target.files[0].path)"
+          @change="load_sheet($event)"
         />
 
         <v-btn :color="$vuetify.theme.themes[appTheme].action_blue" text
@@ -500,8 +500,8 @@ export default {
         }
       }
     },
-    load_sheet(path) {
-      xslx(`${path}`).then(rows => {
+    load_sheet(e) {
+      xslx(`${e.target.files[0].path}`).then(rows => {
         this.competition.competitorsSheet.competitors = [];
 
         rows.map(row => {
@@ -515,6 +515,11 @@ export default {
           this.competition.competitorsSheet.competitors.push(
             new this.CompetitorClass(fields)
           );
+        });
+        this.competition.competitorsSheet.competitors.forEach(comp => {
+          for (var i = 0; i <= 2; i++) {
+            comp.marks.push(new this.MarkClass(0, 0, 50));
+          }
         });
       });
     },
@@ -559,10 +564,10 @@ export default {
     sortByCol(list, col) {
       if (this.sortBy.title !== col) {
         this.competition.competitorsSheet.competitors = list.sort((a, b) => {
-          if (a[col] > b[col]) {
+          if (a.info_data[col] > b.info_data[col]) {
             return 1;
           }
-          if (a[col] < b[col]) {
+          if (a.info_data[col] < b.info_data[col]) {
             return -1;
           }
           return 0;
@@ -571,10 +576,10 @@ export default {
         this.sortBy.dir = "asc";
       } else if (this.sortBy.dir === "asc") {
         this.competition.competitorsSheet.competitors = list.sort((a, b) => {
-          if (a[col] > b[col]) {
+          if (a.info_data[col] > b.info_data[col]) {
             return -1;
           }
-          if (a[col] < b[col]) {
+          if (a.info_data[col] < b.info_data[col]) {
             return 1;
           }
           return 0;
@@ -582,10 +587,10 @@ export default {
         this.sortBy.dir = "desc";
       } else {
         this.competition.competitorsSheet.competitors = list.sort((a, b) => {
-          if (a[col] > b[col]) {
+          if (a.info_data[col] > b.info_data[col]) {
             return 1;
           }
-          if (a[col] < b[col]) {
+          if (a.info_data[col] < b.info_data[col]) {
             return -1;
           }
           return 0;
@@ -618,7 +623,7 @@ export default {
   },
   computed: {
     ...mapGetters("main", ["appTheme", "competition"]),
-    ...mapGetters("roles", ["CompetitorClass"])
+    ...mapGetters("roles", ["CompetitorClass", "MarkClass"])
   }
 };
 </script>
