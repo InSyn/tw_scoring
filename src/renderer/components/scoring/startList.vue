@@ -68,7 +68,7 @@
                   @keypress.enter="
                     selectedCompetitor = competition.selected_race.onStart[c]
                   "
-                  style="cursor: pointer; outline: none; width: 100%; border-radius: 6px"
+                  style="cursor: pointer; outline: none; width: 100%; border-radius: 6px; transition: box-shadow 128ms, border 128ms"
                   :style="[
                     {
                       border: `1px solid transparent`,

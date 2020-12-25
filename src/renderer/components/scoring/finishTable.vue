@@ -10,65 +10,124 @@
         class="pa-2 d-flex align-center"
         ver
         no-gutters
-        style="height: 40px;font-size: 1.2rem; font-weight: bold"
+        style="height: 32px;font-size: 1.2rem; font-weight: bold"
       >
         <div v-html="`На финише:`"></div>
       </v-row>
-      <v-row class="pa-2" no-gutters style="height: calc(100% - 40px)">
+      <v-row
+        class="pa-2"
+        no-gutters
+        style="position: relative; height: calc(100% - 32px)"
+      >
         <div
-          style="height: 100%; width: 100%; border-radius: 6px; overflow: auto"
+          style="position: relative; height: 100%; width: 100%; border-radius: 6px;"
           :style="{
             backgroundColor:
               $vuetify.theme.themes[appTheme].standardBackgroundRGBA
           }"
         >
-          <v-hover
-            v-for="(competitor, key, i) in competition.competitorsSheet
-              .competitors"
-            :key="i"
-            v-slot:default="{ hover }"
+          <v-row
+            class="pa-1"
+            no-gutters
+            style="position:absolute; height: 32px; top: 0;right: 0;left: 0;"
           >
-            <v-row
-              @click="log(competitor)"
-              no-gutters
-              :style="[
-                hover
-                  ? appTheme === 'dark'
-                    ? { backgroundColor: `rgba(255,255,255,.15)` }
-                    : { backgroundColor: `rgba(0,0,0,.15)` }
-                  : null,
-                {
-                  borderBottom: `1px solid ${$vuetify.theme.themes[appTheme].standardBackgroundRGBA}`
-                }
-              ]"
+            <v-col
+              class="d-flex justify-center align-center"
+              style="max-width: 5rem"
+              v-html="`Место`"
+            ></v-col>
+            <v-col
+              class="d-flex justify-center align-center"
+              style="max-width: 5rem"
+              v-html="`Ст.№`"
+            ></v-col>
+            <v-col
+              class="d-flex align-center"
+              style="max-width: 16rem"
+              v-html="`Фамилия, имя`"
+            ></v-col>
+            <v-col
+              class="d-flex justify-center align-center"
+              style="max-width: 8rem"
+              v-html="`Пол`"
+            ></v-col>
+            <v-col
+              class="d-flex justify-center align-center"
+              style="max-width: 5rem"
+              v-for="(race, r) in competition.races"
+              :key="r"
+              v-html="`${race.title}`"
+              @click="log(race)"
+            ></v-col>
+            <v-spacer></v-spacer>
+            <v-col
+              class="d-flex justify-end align-center"
+              style="max-width: 5rem"
+              v-html="`Результат`"
+            ></v-col>
+          </v-row>
+          <div
+            style="position: absolute; left: 0;right: 0;top: 32px;height: calc(100% - 32px); overflow-y: auto"
+          >
+            <v-hover
+              v-for="(competitor, key, i) in competition.competitorsSheet
+                .competitors"
+              :key="i"
+              v-slot:default="{ hover }"
             >
-              <v-col
-                class="pa-2"
-                :style="
-                  i % 2 === 0
+              <v-row
+                @click="log(competitor)"
+                no-gutters
+                class="pa-1"
+                style="height: 32px"
+                :style="[
+                  hover
                     ? appTheme === 'dark'
-                      ? { backgroundColor: `rgba(255,255,255,.04)` }
-                      : { backgroundColor: `rgba(0,0,0,.03)` }
-                    : appTheme === 'dark'
-                    ? {
-                        backgroundColor: `rgba(255,255,255,.06)`
-                      }
-                    : {
-                        backgroundColor: `rgba(0,0,0,.08)`
-                      }
-                "
-                v-for="(field, f, i) in competitor.info_data"
-                :key="i"
-                v-html="`${field}`"
-              ></v-col
-              ><v-col class="d-flex"
-                ><div
-                  v-for="(mark, m) in competitor.marks"
-                  :key="mark.id"
-                  v-html="mark.value"
-                ></div
-              ></v-col> </v-row
-          ></v-hover>
+                      ? { backgroundColor: `rgba(255,255,255,.15)` }
+                      : { backgroundColor: `rgba(0,0,0,.15)` }
+                    : null,
+                  {
+                    borderBottom: `1px solid ${$vuetify.theme.themes[appTheme].standardBackgroundRGBA}`
+                  }
+                ]"
+              >
+                <v-col
+                  class="d-flex justify-center align-center"
+                  style="max-width: 5rem"
+                  v-html="`#`"
+                ></v-col>
+                <v-col
+                  class="d-flex justify-center align-center"
+                  style="max-width: 5rem"
+                  v-html="`${competitor.info_data.bib}`"
+                ></v-col>
+                <v-col
+                  class="d-flex align-center"
+                  style="max-width: 16rem"
+                  v-html="
+                    `${competitor.info_data.surname} ${competitor.info_data.name}`
+                  "
+                ></v-col>
+                <v-col
+                  class="d-flex justify-center align-center"
+                  style="max-width: 8rem"
+                  v-html="`${competitor.info_data.gender}`"
+                ></v-col>
+                <v-col
+                  class="d-flex justify-center align-center"
+                  style="max-width: 5rem"
+                  v-for="(race_res, rr) in competition.races"
+                  :key="rr"
+                  v-html="`#`"
+                ></v-col
+                ><v-spacer></v-spacer
+                ><v-col
+                  class="d-flex justify-end align-center"
+                  style="max-width: 5rem"
+                  v-html="`res`"
+                ></v-col></v-row
+            ></v-hover>
+          </div>
         </div>
       </v-row></div></v-col
 ></template>
@@ -97,6 +156,23 @@ export default {
           ["34", "74"],
           ["68", "64"]
         ]
+      },
+      sheet: {
+        place: {
+          title: "Место"
+        },
+        bib: {
+          title: "Ст.№"
+        },
+        name: {
+          title: "Фамилия, имя"
+        },
+        races: {
+          title: "Заезд"
+        },
+        res: {
+          title: "Результат"
+        }
       }
     };
   },

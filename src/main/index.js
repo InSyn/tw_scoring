@@ -6,37 +6,73 @@ import { app, ipcMain, BrowserWindow } from "electron";
 const socketApp = require("express")();
 const http = require("http").Server(socketApp);
 const io = require("socket.io")(http);
-
 let competition = {
-  title: "",
-  discipline: "",
-  date: "",
-  time: "",
+  mainData: {
+    title: {
+      title: "Название",
+      value: "Новое соревнование"
+    },
+    discipline: {
+      title: "Дисциплина",
+      value: "",
+      min: ""
+    },
+    date: {
+      title: "Дата проведения",
+      value: "",
+      time: ""
+    },
+    country: {
+      title: "Страна",
+      value: ""
+    },
+    location: {
+      title: "Место проведения",
+      value: ""
+    },
+    provider: {
+      title: "Организатор",
+      value: ""
+    },
+    providerTiming: {
+      title: "Timing provider",
+      value: ""
+    },
+    codex: {
+      title: "Codex",
+      value: "0000"
+    }
+  },
   secretary: {
     name: "",
     surName: "",
     connected: ""
   },
-  chief_judge: {
-    name: "",
-    surName: "",
-    location: "",
-    connected: "",
-    socket_id: null
+  stuff: {
+    jury: [
+      {
+        title: "Главный судья",
+        name: "",
+        surName: "",
+        loc: "",
+        connected: false,
+        socket_id: null
+      }
+    ],
+    judges: []
   },
-  judges: [],
+  competitors: [],
   changed_marks: [],
   races: []
 };
-
 io.on("connection", socket => {
   socket.emit("serverConnected");
+  console.log(`Connected ${socket.id}`);
   mainWindow &&
     mainWindow.webContents.send("server_message", [
       3,
       `Connected ${socket.id}`
     ]);
-  console.log(`Connected ${socket.id}`);
   socket.on("checkServer", () => {
     socket.emit("checkOk", true);
   });
@@ -45,26 +81,32 @@ io.on("connection", socket => {
   });
   socket.on("set_competition_data", (data, cb) => {
     console.log(data);
-    competition.chief_judge.name = data[1].jury[0].name;
-    competition.chief_judge.surName = data[1].jury[0].surName;
-    competition.chief_judge.location = data[1].jury[0].loc;
-
-    competition.title = data[0].title.value;
-    competition.discipline = data[0].discipline.value;
-    competition.date = data[0].date.value;
-    competition.time = data[0].date.time;
-
+    competition.mainData !== data.mainData
+      ? (competition.mainData = data.mainData)
+      : null;
+    competition.stuff.judges !== data.stuff.judges
+      ? (competition.stuff.judges = data.stuff.judges)
+      : null;
+    competition.stuff.jury !== data.stuff.jury
+      ? (competition.stuff.jury = data.stuff.jury)
+      : null;
+    competition.races !== data.races ? (competition.races = data.races) : null;
+    competition.competitors !== data.competitors
+      ? (competition.competitors = data.competitors)
+      : null;
+    competition.changedMarks !== data.changedMarks
+      ? (competition.changedMarks = data.changedMarks)
+      : null;
     io.sockets.emit("competition_data_updated", competition);
     cb(competition);
   });
-
   socket.on("create_judges", (judges, cb) => {
-    competition.judges = judges;
-    cb(competition.judges);
+    competition.stuff.judges = judges;
+    cb(competition.stuff.judges);
     mainWindow &&
       mainWindow.webContents.send("server_message", [
         1,
-        `К соревнованию могут подключиться судьи: ${competition.judges.map(
+        `К соревнованию могут подключиться судьи: ${competition.stuff.judges.map(
           judge => {
             return ` ${judge.id}`;
           }
@@ -72,15 +114,15 @@ io.on("connection", socket => {
       ]);
   });
   socket.on("chief_judge_in", check => {
-    if (!competition.chief_judge.connected) {
+    if (!competition.stuff.jury[0]) {
       io.sockets.emit("chief_judge_connected");
-      competition.chief_judge.connected = true;
-      competition.chief_judge.socket_id = socket.id;
+      competition.stuff.jury[0].connected = true;
+      competition.stuff.jury[0].socket_id = socket.id;
 
       mainWindow &&
         mainWindow.webContents.send("server_message", [
           1,
-          `Главный судья ${competition.chief_judge.surName} ${competition.chief_judge.name} подключился`
+          `Главный судья ${competition.stuff.jury[0].surName} ${competition.stuff.jury[0].name} подключился`
         ]);
       check(true);
     } else {
@@ -89,15 +131,16 @@ io.on("connection", socket => {
   });
   socket.on("judge_in", (judge_data, check) => {
     if (
-      competition.judges.some(judge => {
+      competition.stuff.judges.some(judge => {
         return judge.id.toString() === judge_data.id.toString();
       }) === true
     ) {
-      competition.judges.forEach(judge => {
+      competition.stuff.judges.forEach(judge => {
         if (judge.id.toString() === judge_data.id.toString()) {
           judge.socket_id = socket.id;
           judge.connected = true;
 
+          socket.emit("competition_data_updated", competition);
           mainWindow &&
             mainWindow.webContents.send("server_message", [
               1,
@@ -105,12 +148,15 @@ io.on("connection", socket => {
             ]);
         }
       });
-      io.sockets.emit("judge_connected", [competition.judges, judge_data]);
+      io.sockets.emit("judge_connected", [
+        competition.stuff.judges,
+        judge_data
+      ]);
       check(true);
     } else check(false);
   });
   socket.on("disconnect", reason => {
-    competition.judges.forEach(judge => {
+    competition.stuff.judges.forEach(judge => {
       if (judge.socket_id === socket.id) {
         mainWindow &&
           mainWindow.webContents.send("server_message", [
@@ -118,21 +164,24 @@ io.on("connection", socket => {
             `Судья ${judge.id} ${judge.surName} ${judge.name} отключился`
           ]);
 
-        io.sockets.emit("judge_disconnected", [competition.judges, judge]);
+        io.sockets.emit("judge_disconnected", [
+          competition.stuff.judges,
+          judge
+        ]);
         judge.socket_id = null;
         judge.connected = false;
       }
     });
-    if (competition.chief_judge.socket_id === socket.id) {
-      competition.chief_judge.socket_id = null;
-      competition.chief_judge.connected = false;
+    if (competition.stuff.jury[0].socket_id === socket.id) {
+      competition.stuff.jury[0].socket_id = null;
+      competition.stuff.jury[0].connected = false;
 
       mainWindow &&
         mainWindow.webContents.send("server_message", [
           4,
-          `Главный судья ${competition.chief_judge.surName} ${competition.chief_judge.name} отключился`
+          `Главный судья ${competition.stuff.jury[0].surName} ${competition.stuff.jury[0].name} отключился`
         ]);
-      io.sockets.emit("chief_judge_disconnected", competition.chief_judge);
+      io.sockets.emit("chief_judge_disconnected", competition.stuff.jury[0]);
     }
     mainWindow &&
       mainWindow.webContents.send("server_message", [
@@ -167,7 +216,6 @@ app.on("startSocketServer", config => {
     });
   }
 });
-
 app.on("close_server", () => {
   if (http["_handle"]) {
     mainWindow &&
@@ -192,7 +240,6 @@ if (process.env.NODE_ENV !== "development") {
     .join(__dirname, "/static")
     .replace(/\\/g, "\\\\");
 }
-
 let mainWindow;
 const winURL =
   process.env.NODE_ENV === "development"

@@ -7,6 +7,9 @@ export default {
           this.info_data[field[0]] = field[1];
         });
       }
+      id = Math.random()
+        .toString(36)
+        .substr(2, 9);
       info_data = {};
       marks = [];
     },

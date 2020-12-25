@@ -147,13 +147,9 @@ export default {
     set_competition_data() {
       this.socket &&
         this.socket.connected &&
-        this.socket.emit(
-          "set_competition_data",
-          [this.competition.mainData, this.competition.stuff],
-          res => {
-            console.log(res);
-          }
-        );
+        this.socket.emit("set_competition_data", this.competition, res => {
+          console.log(res);
+        });
     }
   },
   computed: {
