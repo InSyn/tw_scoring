@@ -193,6 +193,7 @@ export default {
       }
       finished = [];
       onTrack = null;
+      selectedCompetitor = null;
     }
   },
 

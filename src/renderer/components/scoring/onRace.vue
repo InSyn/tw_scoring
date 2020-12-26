@@ -234,6 +234,7 @@
             style="font-size: 1.2rem; font-weight:bold;"
           >
             <v-btn
+              @click="publishResult(competition.selected_race.onTrack)"
               :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
               :color="$vuetify.theme.themes[appTheme].action_blue"
               >Опубликовать</v-btn
@@ -249,8 +250,35 @@
 import { mapGetters } from "vuex";
 export default {
   name: "onRace",
-
   methods: {
+    setSelectedCompetitor(competitor) {
+      this.competition.selected_race.selectedCompetitor = this.competition.selected_race.onStart[
+        competitor
+      ];
+      this.socket &&
+        this.socket.connected &&
+        (() => {
+          this.socket.emit("set_selected_competitor", [
+            [
+              this.competition.selected_race.onStart[competitor].id,
+              this.competition.selected_race_id
+            ],
+            this.competition
+          ]);
+        })();
+    },
+    publishResult(competitor) {
+      this.competition.selected_race.finished.push(competitor);
+      this.competition.selected_race.onTrack = null;
+      this.socket &&
+        this.socket.connected &&
+        (() => {
+          this.socket.emit("set_finished_competitor", [
+            [competitor.id, this.competition.selected_race_id],
+            this.competition
+          ]);
+        })();
+    },
     setBlinker(val) {
       if (this.indicators.blinker === null) {
         this.indicators.blinker = setInterval(() => {
@@ -275,7 +303,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters("main", ["competition", "appTheme"])
+    ...mapGetters("main", ["competition", "appTheme", "socket"])
   }
 };
 </script>

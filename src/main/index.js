@@ -156,6 +156,33 @@ io.on("connection", socket => {
       check(true);
     } else check(false);
   });
+  /**
+   * RACE EVENTS
+   * **/
+  socket.on("set_selected_competitor", data => {
+    data[1].races !== competition.races &&
+      (() => {
+        competition.races = data[1].races;
+        io.sockets.emit("competition_data_updated", competition);
+      })();
+    io.sockets.emit("competition_data_updated", competition);
+  });
+  socket.on("set_finished_competitor", data => {
+    console.log(data);
+    data[1].races !== competition.races &&
+      (() => {
+        competition.races = data[1].races;
+        io.sockets.emit("competition_data_updated", competition);
+      })();
+    io.sockets.emit("competition_data_updated", competition);
+  });
+  socket.on("set_mark", data => {
+    competition.races[data[1]].onTrack.marks.push(data[0]);
+    io.sockets.emit("competition_data_updated", competition);
+  });
+  /**
+   * RACE EVENTS
+   * **/
   socket.on("disconnect", reason => {
     competition.stuff.judges.forEach(judge => {
       if (judge.socket_id === socket.id) {

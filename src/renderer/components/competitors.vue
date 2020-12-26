@@ -516,11 +516,6 @@ export default {
             new this.CompetitorClass(fields)
           );
         });
-        this.competition.competitorsSheet.competitors.forEach(comp => {
-          for (var i = 0; i <= 2; i++) {
-            comp.marks.push(new this.MarkClass(0, 0, 50));
-          }
-        });
       });
     },
     closeColsDialog() {

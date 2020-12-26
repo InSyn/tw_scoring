@@ -67,11 +67,11 @@
             ></v-col>
           </v-row>
           <div
+            v-if="competition.selected_race"
             style="position: absolute; left: 0;right: 0;top: 32px;height: calc(100% - 32px); overflow-y: auto"
           >
             <v-hover
-              v-for="(competitor, key, i) in competition.competitorsSheet
-                .competitors"
+              v-for="(competitor, key, i) in competition.selected_race.finished"
               :key="i"
               v-slot:default="{ hover }"
             >

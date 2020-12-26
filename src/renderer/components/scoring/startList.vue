@@ -11,7 +11,13 @@
           no-gutters
           style="height: 3.6rem; font-size: 1.2rem; font-weight: bold"
         >
-          <div class="d-flex align-center" v-if="selectedCompetitor">
+          <div
+            class="d-flex align-center"
+            v-if="
+              competition.selected_race &&
+                competition.selected_race.selectedCompetitor
+            "
+          >
             <div
               class="d-flex justify-center align-center pa-1"
               style="font-weight: bold"
@@ -23,21 +29,33 @@
                   color: $vuetify.theme.themes[appTheme].cardBackgroundRGBA
                 }"
                 style="border-radius: 2px"
-                v-html="selectedCompetitor.info_data['bib']"
+                v-html="
+                  competition.selected_race.selectedCompetitor.info_data['bib']
+                "
               ></div>
             </div>
             <div
               class="d-flex justify-center align-center pa-1"
-              v-html="selectedCompetitor.info_data['name']"
+              v-html="
+                competition.selected_race.selectedCompetitor.info_data['name']
+              "
             ></div>
             <div
               class="d-flex justify-center align-center pa-1"
-              v-html="selectedCompetitor.info_data['surname']"
+              v-html="
+                competition.selected_race.selectedCompetitor.info_data[
+                  'surname'
+                ]
+              "
             ></div>
           </div>
           <v-spacer></v-spacer>
           <v-btn
-            @click="selectedCompetitor && setToTrack(selectedCompetitor)"
+            @click="
+              competition.selected_race &&
+                competition.selected_race.selectedCompetitor &&
+                setToTrack(competition.selected_race.selectedCompetitor)
+            "
             icon
             :color="$vuetify.theme.themes[appTheme].success"
             ><v-icon>mdi-play</v-icon></v-btn
@@ -62,12 +80,8 @@
                   tabindex="0"
                   @focus="setFocused($event)"
                   @blur="setBlured($event)"
-                  @dblclick="
-                    selectedCompetitor = competition.selected_race.onStart[c]
-                  "
-                  @keypress.enter="
-                    selectedCompetitor = competition.selected_race.onStart[c]
-                  "
+                  @dblclick="setSelectedCompetitor(c)"
+                  @keypress.enter="setSelectedCompetitor(c)"
                   style="cursor: pointer; outline: none; width: 100%; border-radius: 6px; transition: box-shadow 128ms, border 128ms"
                   :style="[
                     {
@@ -118,8 +132,44 @@ import { mapGetters } from "vuex";
 export default {
   name: "startList",
   methods: {
+    setSelectedCompetitor(competitor_key) {
+      this.competition.selected_race.selectedCompetitor = this.competition.selected_race.onStart[
+        competitor_key
+      ];
+      this.socket &&
+        this.socket.connected &&
+        (() => {
+          this.socket.emit("set_selected_competitor", [
+            [
+              this.competition.selected_race.onStart[competitor_key].id,
+              this.competition.selected_race_id
+            ],
+            this.competition
+          ]);
+        })();
+    },
     setToTrack(competitor) {
-      this.competition.selected_race.onTrack = competitor;
+      this.competition.selected_race.onTrack === null &&
+        (() => {
+          this.competition.selected_race.onTrack = competitor;
+          this.competition.selected_race.onStart = this.competition.selected_race.onStart.filter(
+            startedCompetitor => {
+              return competitor.id !== startedCompetitor.id;
+            }
+          );
+          this.competition.selected_race.selectedCompetitor = this.competition.selected_race.onStart[0];
+          this.socket &&
+            this.socket.connected &&
+            (() => {
+              this.socket.emit("set_selected_competitor", [
+                [
+                  this.competition.selected_race.onStart[0].id,
+                  this.competition.selected_race_id
+                ],
+                this.competition
+              ]);
+            })();
+        })();
     },
     setFocused(e) {
       e.target.style.backgroundColor = `${
@@ -130,14 +180,10 @@ export default {
       e.target.style.backgroundColor = `${
         this.$vuetify.theme.themes[this.appTheme].standardBackgroundRGBA
       }`;
-    },
-    setToFinished(competitor) {}
-  },
-  data() {
-    return { selectedCompetitor: null };
+    }
   },
   computed: {
-    ...mapGetters("main", ["competition", "appTheme"])
+    ...mapGetters("main", ["competition", "appTheme", "socket"])
   }
 };
 </script>
