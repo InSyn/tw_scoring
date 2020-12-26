@@ -63,7 +63,8 @@ let competition = {
   },
   competitors: [],
   changed_marks: [],
-  races: []
+  races: [],
+  selected_race_id: 0
 };
 io.on("connection", socket => {
   socket.emit("serverConnected");
@@ -80,7 +81,6 @@ io.on("connection", socket => {
     io.sockets.emit("chat_message", m);
   });
   socket.on("set_competition_data", (data, cb) => {
-    console.log(data);
     competition.mainData !== data.mainData
       ? (competition.mainData = data.mainData)
       : null;
@@ -114,11 +114,12 @@ io.on("connection", socket => {
       ]);
   });
   socket.on("chief_judge_in", check => {
-    if (!competition.stuff.jury[0]) {
+    if (!competition.stuff.jury[0].connected) {
       io.sockets.emit("chief_judge_connected");
       competition.stuff.jury[0].connected = true;
       competition.stuff.jury[0].socket_id = socket.id;
 
+      socket.emit("competition_data_updated", competition);
       mainWindow &&
         mainWindow.webContents.send("server_message", [
           1,
