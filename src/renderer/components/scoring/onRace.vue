@@ -141,7 +141,22 @@
                   <div
                     class="d-flex justify-center align-center"
                     style="height: 3rem; width: 4rem"
-                    v-html="``"
+                    v-html="
+                      `${
+                        competition.selected_race &&
+                        competition.selected_race.onTrack &&
+                        competition.selected_race.onTrack.marks.length > 0 &&
+                        competition.selected_race.onTrack.marks.filter(mark => {
+                          return mark.judge === judge.id;
+                        })[0]
+                          ? competition.selected_race.onTrack.marks.filter(
+                              mark => {
+                                return mark.judge === judge.id;
+                              }
+                            )[0].value
+                          : ' '
+                      }`
+                    "
                   ></div>
                 </div>
               </div>

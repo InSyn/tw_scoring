@@ -105,6 +105,27 @@ export default {
           if (state.competition)
             state.competition.stuff.jury[0].connected = false;
         });
+        state.socket.on("competition_data_updated", data => {
+          state.competition.mainData !== data.mainData
+            ? (state.competition.mainData = data.mainData)
+            : null;
+          state.competition.stuff.judges !== data.stuff.judges
+            ? (state.competition.stuff.judges = data.stuff.judges)
+            : null;
+          state.competition.stuff.jury !== data.stuff.jury
+            ? (state.competition.stuff.jury = data.stuff.jury)
+            : null;
+          state.competition.races !== data.races
+            ? (state.competition.races = data.races)
+            : null;
+          state.competition.competitors !== data.competitors
+            ? (state.competition.competitors = data.competitors)
+            : null;
+
+          state.competition.changedMarks !== data.changedMarks
+            ? (state.competition.changedMarks = data.changedMarks)
+            : null;
+        });
       }
     },
     close_socket: state => {

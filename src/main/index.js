@@ -133,7 +133,9 @@ io.on("connection", socket => {
   socket.on("judge_in", (judge_data, check) => {
     if (
       competition.stuff.judges.some(judge => {
-        return judge.id.toString() === judge_data.id.toString();
+        return (
+          judge.id.toString() === judge_data.id.toString() && !judge.connected
+        );
       }) === true
     ) {
       competition.stuff.judges.forEach(judge => {
@@ -178,7 +180,19 @@ io.on("connection", socket => {
   });
   socket.on("set_mark", mark => {
     console.log(mark);
+    competition.races[mark.race].onTrack &&
+    !competition.races[mark.race].onTrack.marks.some(_mark => {
+      return _mark.judge === mark.judge;
+    })
+      ? competition.races[mark.race].onTrack.marks.push(mark)
+      : competition.races[mark.race].onTrack.marks.some(markToChange => {
+          markToChange.judge === mark.judge
+            ? (markToChange.value = mark.value)
+            : null;
+        });
+
     io.sockets.emit("competition_data_updated", competition);
+
   });
   /**
    * RACE EVENTS

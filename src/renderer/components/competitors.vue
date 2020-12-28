@@ -394,7 +394,7 @@
           }"
         >
           <v-spacer></v-spacer>
-          <v-dialog width="720px" v-model="createCompetitorDialog.state"
+          <v-dialog width="fit-content" v-model="createCompetitorDialog.state"
             ><template v-slot:activator="{ on }">
               <v-btn
                 v-on="on"
