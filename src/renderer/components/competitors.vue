@@ -517,6 +517,11 @@ export default {
           );
         });
       });
+      this.socket &&
+        this.socket.connected &&
+        this.socket.emit("set_competition_data", this.competition, res => {
+          console.log(res);
+        });
     },
     closeColsDialog() {
       this.addColumnDialog.colToDel = [];
@@ -617,7 +622,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters("main", ["appTheme", "competition"]),
+    ...mapGetters("main", ["appTheme", "competition", "socket"]),
     ...mapGetters("roles", ["CompetitorClass", "MarkClass"])
   }
 };

@@ -282,6 +282,12 @@ export default {
       );
       this.dialogs.create_race.state = false;
       this.dialogs.create_race.competitors = [];
+
+      this.socket &&
+        this.socket.connected &&
+        this.socket.emit("set_competition_data", this.competition, res => {
+          console.log(res);
+        });
     },
     addAll() {
       const list = this.filtered_list;
@@ -311,7 +317,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters("main", ["competition", "appTheme"]),
+    ...mapGetters("main", ["competition", "appTheme", "socket"]),
     ...mapGetters("event", ["RaceClass"]),
     filtered_list() {
       return this.competition.competitorsSheet.competitors.filter(

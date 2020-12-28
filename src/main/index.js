@@ -176,8 +176,8 @@ io.on("connection", socket => {
       })();
     io.sockets.emit("competition_data_updated", competition);
   });
-  socket.on("set_mark", data => {
-    competition.races[data[1]].onTrack.marks.push(data[0]);
+  socket.on("set_mark", mark => {
+    console.log(mark);
     io.sockets.emit("competition_data_updated", competition);
   });
   /**
