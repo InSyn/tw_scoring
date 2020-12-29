@@ -192,7 +192,6 @@ io.on("connection", socket => {
         });
 
     io.sockets.emit("competition_data_updated", competition);
-
   });
   /**
    * RACE EVENTS
