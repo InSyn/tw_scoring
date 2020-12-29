@@ -129,7 +129,19 @@
           style="height: 2.6rem; font-weight: bold;"
           v-if="md === `codex`"
           @click="set_competition_data()"
-          :color="$vuetify.theme.themes[appTheme].success"
+          :disabled="!socket || !socket.connected"
+          :style="
+            socket && socket.connected
+              ? {
+                  backgroundColor: $vuetify.theme.themes[appTheme].success,
+                  color: $vuetify.theme.themes[appTheme].standardBackgroundRGBA
+                }
+              : {
+                  backgroundColor:
+                    $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
+                  color: $vuetify.theme.themes[appTheme].textDefault
+                }
+          "
           >Применить</v-btn
         >
       </v-col>

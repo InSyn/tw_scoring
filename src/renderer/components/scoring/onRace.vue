@@ -18,24 +18,27 @@
               v-if="
                 competition.selected_race && competition.selected_race.onTrack
               "
-              class="pa-2"
-              style="border-radius: 6px; font-weight: bold; font-size: 2rem"
+              class="pa-2 d-flex align-center flex-nowrap"
+              style="border-radius: 6px; font-weight: bold; font-size: 2rem; overflow: hidden"
               :style="{
-                backgroundColor: $vuetify.theme.themes[appTheme].textDefault,
-                color: $vuetify.theme.themes[appTheme].cardBackgroundRGBA
+                backgroundColor:
+                  $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
+                color: $vuetify.theme.themes[appTheme].textDefault
               }"
-              v-html="`${competition.selected_race.onTrack.info_data['bib']}`"
+              v-html="
+                `${competition.selected_race.onTrack.info_data.bib ||
+                  ''} ${competition.selected_race.onTrack.info_data.surname ||
+                  ''} ${competition.selected_race.onTrack.info_data.name || ''}`
+              "
             ></div>
             <div
-              v-if="
-                competition.selected_race && competition.selected_race.onTrack
-              "
-              class="ml-6"
-              style="font-size: 2rem"
-              v-html="
-                `${competition.selected_race.onTrack.info_data['name']} ${competition.selected_race.onTrack.info_data['surname']}`
-              "
-            ></div>
+              class="d-flex justify-center align-center pa-2"
+              style="border-radius: 6px; font-weight: bold; font-size: 2rem"
+              v-else
+            >
+              <v-icon>mdi-snowboard</v-icon>
+              <div class="d-flex align-center"></div>
+            </div>
             <v-spacer></v-spacer>
             <div
               class="d-flex align-center ml-6 py-1 px-2"
@@ -60,7 +63,12 @@
                     color: $vuetify.theme.themes[appTheme].textDefault
                   }"
                   style="min-height: 3rem; min-width: 4rem; cursor: pointer"
-                  v-html="res"
+                  v-html="
+                    (this.competition.selected_race &&
+                      this.competition.selected_race.onTrack &&
+                      get_res(this.competition.selected_race.onTrack)) ||
+                      0
+                  "
                 ></div>
               </div>
             </div>
@@ -142,20 +150,15 @@
                     class="d-flex justify-center align-center"
                     style="height: 3rem; width: 4rem"
                     v-html="
-                      `${
-                        competition.selected_race &&
+                      `${(competition.selected_race &&
                         competition.selected_race.onTrack &&
-                        competition.selected_race.onTrack.marks.length > 0 &&
-                        competition.selected_race.onTrack.marks.filter(mark => {
+                        competition.selected_race.onTrack.marks.find(mark => {
                           return mark.judge === judge.id;
-                        })[0]
-                          ? competition.selected_race.onTrack.marks.filter(
-                              mark => {
-                                return mark.judge === judge.id;
-                              }
-                            )[0].value
-                          : ' '
-                      }`
+                        }) &&
+                        competition.selected_race.onTrack.marks.find(mark => {
+                          return mark.judge === judge.id;
+                        }).value) ||
+                        '0'}`
                     "
                   ></div>
                 </div>
@@ -293,6 +296,27 @@ export default {
             this.competition
           ]);
         })();
+    },
+    get_res(competitor) {
+      return (
+        Math.round(
+          (this.competition.stuff.judges
+            .map(judge => {
+              let mark;
+              competitor.marks.find(mark => {
+                return mark.judge === judge.id;
+              })
+                ? (mark = competitor.marks.find(mark => {
+                    return mark.judge === judge.id;
+                  }).value)
+                : (mark = 0);
+              return mark;
+            })
+            .reduce((m1, m2) => +m1 + +m2, 0) /
+            this.competition.stuff.judges.length) *
+            10 || 0
+        ) / 10
+      );
     },
     setBlinker(val) {
       if (this.indicators.blinker === null) {
