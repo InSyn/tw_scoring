@@ -9,15 +9,14 @@
       <div class="pa-2" style="height: 100%;">
         <v-row
           no-gutters
-          style="height: 3.6rem; font-size: 1.2rem; font-weight: bold"
+          class="d-flex align-center pa-2"
+          :style="{
+            backgroundColor:
+              $vuetify.theme.themes[appTheme].standardBackgroundRGBA
+          }"
+          style="height: 3.6rem; font-size: 1.2rem; font-weight: bold; border-radius: 6px"
         >
-          <div
-            class="d-flex align-center"
-            v-if="
-              competition.selected_race &&
-                competition.selected_race.selectedCompetitor
-            "
-          >
+          <div class="d-flex align-center">
             <div
               class="d-flex justify-center align-center pa-1"
               style="font-weight: bold"
@@ -30,22 +29,30 @@
                 }"
                 style="border-radius: 2px"
                 v-html="
-                  competition.selected_race.selectedCompetitor.info_data['bib']
+                  competition.selected_race &&
+                    competition.selected_race.selectedCompetitor &&
+                    competition.selected_race.selectedCompetitor.info_data[
+                      'bib'
+                    ]
                 "
               ></div>
             </div>
             <div
               class="d-flex justify-center align-center pa-1"
               v-html="
-                competition.selected_race.selectedCompetitor.info_data['name']
+                competition.selected_race &&
+                  competition.selected_race.selectedCompetitor &&
+                  competition.selected_race.selectedCompetitor.info_data['name']
               "
             ></div>
             <div
               class="d-flex justify-center align-center pa-1"
               v-html="
-                competition.selected_race.selectedCompetitor.info_data[
-                  'surname'
-                ]
+                competition.selected_race &&
+                  competition.selected_race.selectedCompetitor &&
+                  competition.selected_race.selectedCompetitor.info_data[
+                    'surname'
+                  ]
               "
             ></div>
           </div>
@@ -61,7 +68,7 @@
             ><v-icon>mdi-play</v-icon></v-btn
           >
         </v-row>
-        <v-row no-gutters style="height: calc(100% - 3.6rem)">
+        <v-row no-gutters class="pt-2" style="height: calc(100% - 3.6rem)">
           <div
             style="height: 100%; width: 100%; overflow: auto; border-radius: 6px"
             :style="{
@@ -69,7 +76,7 @@
                 $vuetify.theme.themes[appTheme].standardBackgroundRGBA
             }"
           >
-            <div v-if="competition.selected_race">
+            <div class="pa-1" v-if="competition.selected_race">
               <v-hover
                 v-slot:default="{ hover }"
                 v-for="(competitor, c) in competition.selected_race.onStart"
