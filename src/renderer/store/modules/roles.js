@@ -11,6 +11,8 @@ export default {
         .toString(36)
         .substr(2, 9);
       info_data = {};
+      race_status = null;
+      res_accepted = false;
       marks = [];
     },
     MarkClass: class {

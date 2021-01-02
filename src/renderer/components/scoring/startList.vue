@@ -164,13 +164,16 @@ export default {
               return competitor.id !== startedCompetitor.id;
             }
           );
-          this.competition.selected_race.selectedCompetitor = this.competition.selected_race.onStart[0];
+          this.competition.selected_race.selectedCompetitor = this.competition
+            .selected_race.onStart[0]
+            ? this.competition.selected_race.onStart[0]
+            : null;
           this.socket &&
             this.socket.connected &&
             (() => {
               this.socket.emit("set_selected_competitor", [
                 [
-                  this.competition.selected_race.onStart[0].id,
+                  this.competition.selected_race.selectedCompetitor,
                   this.competition.selected_race_id
                 ],
                 this.competition

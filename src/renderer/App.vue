@@ -142,7 +142,7 @@
         borderTop: `1px solid ${$vuetify.theme.themes[appTheme].accent}`
       }"
     >
-      Powered by Timing Web &copy;
+      Created by Timing Web &copy;
       <span class="ml-2">{{ new Date().getFullYear() }}</span
       ><v-spacer></v-spacer
       ><span

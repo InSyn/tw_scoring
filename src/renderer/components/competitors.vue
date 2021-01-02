@@ -401,7 +401,7 @@
                 text
                 small
                 :color="$vuetify.theme.themes[appTheme].accent"
-                >Создать участника</v-btn
+                >Создать участника1</v-btn
               ></template
             ><v-card
               :style="{
@@ -523,6 +523,25 @@ export default {
           console.log(res);
         });
     },
+    createCompetitor(data) {
+      let fields = [];
+      this.competition.competitorsSheet.header.map(col =>
+        fields.push([
+          col.id,
+          data[this.competition.competitorsSheet.header.indexOf(col)] || ""
+        ])
+      );
+      this.competition.competitorsSheet.competitors.push(
+        new this.CompetitorClass(fields)
+      );
+      this.socket &&
+        this.socket.connected &&
+        this.socket.emit("set_competition_data", this.competition, res => {
+          console.log(res);
+        });
+      this.createCompetitorDialog.state = false;
+      this.createCompetitorDialog.newCompetitor = [];
+    },
     closeColsDialog() {
       this.addColumnDialog.colToDel = [];
       this.addColumnDialog.colToAdd = [];
@@ -542,20 +561,6 @@ export default {
       this.addColumnDialog.colToDel = [];
       this.addColumnDialog.colToAdd = [];
       this.addColumnDialog.state = false;
-    },
-    createCompetitor(data) {
-      let fields = [];
-      this.competition.competitorsSheet.header.map(col =>
-        fields.push([
-          col.id,
-          data[this.competition.competitorsSheet.header.indexOf(col)] || ""
-        ])
-      );
-      this.competition.competitorsSheet.competitors.push(
-        new this.CompetitorClass(fields)
-      );
-      this.createCompetitorDialog.state = false;
-      this.createCompetitorDialog.newCompetitor = [];
     },
     closeCreateCompetitorDialog() {
       this.createCompetitorDialog.state = false;

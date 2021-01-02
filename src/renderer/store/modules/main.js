@@ -115,6 +115,9 @@ export default {
           state.competition.stuff.jury !== data.stuff.jury
             ? (state.competition.stuff.jury = data.stuff.jury)
             : null;
+          state.competition.selected_race_id !== data.selected_race_id
+            ? (state.competition.selected_race_id = data.selected_race_id)
+            : null;
           state.competition.races !== data.races
             ? (state.competition.races = data.races)
             : null;

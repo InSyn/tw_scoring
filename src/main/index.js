@@ -161,6 +161,13 @@ io.on("connection", socket => {
   /**
    * RACE EVENTS
    * **/
+  socket.on("set_raceId", id => {
+    competition.races[id] &&
+      (() => {
+        competition.selected_race_id = id;
+      })();
+    io.sockets.emit("competition_data_updated", competition);
+  });
   socket.on("set_selected_competitor", data => {
     data[1].races !== competition.races &&
       (() => {
@@ -170,7 +177,6 @@ io.on("connection", socket => {
     io.sockets.emit("competition_data_updated", competition);
   });
   socket.on("set_finished_competitor", data => {
-    console.log(data);
     data[1].races !== competition.races &&
       (() => {
         competition.races = data[1].races;
@@ -179,7 +185,6 @@ io.on("connection", socket => {
     io.sockets.emit("competition_data_updated", competition);
   });
   socket.on("set_mark", mark => {
-    console.log(mark);
     competition.races[mark.race].onTrack &&
     !competition.races[mark.race].onTrack.marks.some(_mark => {
       return _mark.judge === mark.judge;
@@ -191,6 +196,29 @@ io.on("connection", socket => {
             : null;
         });
 
+    io.sockets.emit("competition_data_updated", competition);
+  });
+  socket.on("set_raceStatus", status => {
+    competition.races[status.race_id] &&
+      competition.races[status.race_id].onTrack &&
+      competition.races[status.race_id].onTrack.id === status.competitor_id &&
+      (() => {
+        competition.races[status.race_id].onTrack.race_status === status.status
+          ? (competition.races[status.race_id].onTrack.race_status = "")
+          : (competition.races[status.race_id].onTrack.race_status =
+              status.status);
+      })();
+    io.sockets.emit("competition_data_updated", competition);
+  });
+  socket.on("accept_res", data => {
+    competition.races[data.race_id] &&
+      competition.races[data.race_id].onTrack &&
+      competition.races[data.race_id].onTrack.id === data.competitor_id &&
+      (() => {
+        competition.races[data.race_id].onTrack.res_accepted
+          ? (competition.races[data.race_id].onTrack.res_accepted = false)
+          : (competition.races[data.race_id].onTrack.res_accepted = true);
+      })();
     io.sockets.emit("competition_data_updated", competition);
   });
   /**

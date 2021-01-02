@@ -257,6 +257,7 @@ export default {
               this.competition.selected_race_id - 1)
           : (this.competition.selected_race_id =
               this.competition.races.length - 1);
+      this.socket.emit("set_raceId", this.competition.selected_race_id);
     },
     nextRace() {
       if (this.competition.races.length > 0)
@@ -264,6 +265,7 @@ export default {
           ? (this.competition.selected_race_id =
               this.competition.selected_race_id + 1)
           : (this.competition.selected_race_id = 0);
+      this.socket.emit("set_raceId", this.competition.selected_race_id);
     }
   },
   data() {
