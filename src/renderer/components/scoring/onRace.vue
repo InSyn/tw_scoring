@@ -36,16 +36,40 @@
               style="border-radius: 6px; font-weight: bold; font-size: 2rem"
               v-else
             >
-              <v-icon>mdi-snowboard</v-icon>
-              <div class="d-flex align-center"></div>
+              <v-icon
+                size="32px"
+                :color="$vuetify.theme.themes[appTheme].textDefault"
+                >mdi-snowboard</v-icon
+              >
+              <div class="d-flex align-center pa-2" v-html="`Ожидание`"></div>
             </div>
             <v-spacer></v-spacer>
             <div
               class="d-flex align-center ml-6 py-1 px-2"
               style="font-size: 2rem; font-weight: bold; border-radius: 6px"
-              :style="{
-                backgroundColor: $vuetify.theme.themes[appTheme].success
-              }"
+              :style="
+                (competition.selected_race &&
+                  competition.selected_race.onTrack &&
+                  competition.selected_race.onTrack.race_status &&
+                  competition.selected_race.onTrack.race_status === 'DSQ' && {
+                    backgroundColor: $vuetify.theme.themes[appTheme].action_red
+                  }) ||
+                  (competition.selected_race &&
+                    competition.selected_race.onTrack &&
+                    competition.selected_race.onTrack.race_status &&
+                    competition.selected_race.onTrack.race_status === 'DNF' && {
+                      backgroundColor:
+                        $vuetify.theme.themes[appTheme].action_yellow
+                    }) ||
+                  (competition.selected_race &&
+                    competition.selected_race.onTrack &&
+                    competition.selected_race.onTrack.res_accepted && {
+                      backgroundColor: $vuetify.theme.themes[appTheme].success
+                    }) || {
+                    backgroundColor:
+                      $vuetify.theme.themes[appTheme].standardBackgroundRGBA
+                  }
+              "
             >
               <div v-html="`Рез.`"></div>
               <div
@@ -58,15 +82,14 @@
               >
                 <div
                   class="d-flex justify-center align-center"
-                  @click="res = `${Math.floor(30 + Math.random() * 70)}`"
                   :style="{
                     color: $vuetify.theme.themes[appTheme].textDefault
                   }"
                   style="min-height: 3rem; min-width: 4rem; cursor: pointer"
                   v-html="
-                    (this.competition.selected_race &&
-                      this.competition.selected_race.onTrack &&
-                      get_res(this.competition.selected_race.onTrack)) ||
+                    (competition.selected_race &&
+                      competition.selected_race.onTrack &&
+                      get_res(competition.selected_race.onTrack)) ||
                       0
                   "
                 ></div>
@@ -78,24 +101,58 @@
                   class="d-flex align-center justify-space-between"
                   cols="12"
                   ><v-btn
+                    @click="
+                      competition.selected_race &&
+                        competition.selected_race.onTrack &&
+                        (() => {
+                          set_raceStatus({
+                            race_id: competition.selected_race_id,
+                            competitor_id:
+                              competition.races[competition.selected_race_id]
+                                .onTrack.id,
+                            status: 'DSQ'
+                          });
+                        })()
+                    "
                     depressed
                     class="flex-grow-1 mr-1"
                     height="2rem"
                     style="font-weight: bold"
                     :color="
-                      $vuetify.theme.themes[appTheme].standardBackgroundRGBA
+                      competition.selected_race &&
+                      competition.selected_race.onTrack &&
+                      competition.selected_race.onTrack.race_status === 'DSQ'
+                        ? $vuetify.theme.themes[appTheme].action_red
+                        : $vuetify.theme.themes[appTheme].standardBackgroundRGBA
                     "
                     :style="{
                       color: $vuetify.theme.themes[appTheme].textDefault
                     }"
                     >DSQ</v-btn
                   ><v-btn
+                    @click="
+                      competition.selected_race &&
+                        competition.selected_race.onTrack &&
+                        (() => {
+                          set_raceStatus({
+                            race_id: competition.selected_race_id,
+                            competitor_id:
+                              competition.races[competition.selected_race_id]
+                                .onTrack.id,
+                            status: 'DNF'
+                          });
+                        })()
+                    "
                     depressed
                     class="flex-grow-1 ml-1"
                     height="2rem"
                     style="font-weight: bold"
                     :color="
-                      $vuetify.theme.themes[appTheme].standardBackgroundRGBA
+                      competition.selected_race &&
+                      competition.selected_race.onTrack &&
+                      competition.selected_race.onTrack.race_status === 'DNF'
+                        ? $vuetify.theme.themes[appTheme].action_yellow
+                        : $vuetify.theme.themes[appTheme].standardBackgroundRGBA
                     "
                     :style="{
                       color: $vuetify.theme.themes[appTheme].textDefault
@@ -226,18 +283,30 @@
           >
             <div>Старший судья</div>
             <div
-              @click="chiefJudgeStatus = !chiefJudgeStatus"
+              @click="
+                competition.selected_race &&
+                  competition.selected_race.onTrack &&
+                  !competition.stuff.jury[0].connected &&
+                  (() => {
+                    accept_res({
+                      race_id: competition.selected_race_id,
+                      competitor_id:
+                        competition.races[competition.selected_race_id].onTrack
+                          .id
+                    });
+                  })()
+              "
               class="ml-2 px-2 py-1 d-flex justify-center align-center"
               style="border-radius: 3px; user-select: none; cursor:pointer;"
               :style="[
-                chiefJudgeStatus
-                  ? {
-                      backgroundColor: $vuetify.theme.themes[appTheme].success
-                    }
-                  : {
-                      backgroundColor:
-                        $vuetify.theme.themes[appTheme].standardBackgroundRGBA
-                    },
+                (competition.selected_race &&
+                  competition.selected_race.onTrack &&
+                  competition.selected_race.onTrack.res_accepted && {
+                    backgroundColor: $vuetify.theme.themes[appTheme].success
+                  }) || {
+                  backgroundColor:
+                    $vuetify.theme.themes[appTheme].standardBackgroundRGBA
+                },
                 {
                   color: $vuetify.theme.themes[appTheme].textDefault
                 }
@@ -252,7 +321,12 @@
             style="font-size: 1.2rem; font-weight:bold;"
           >
             <v-btn
-              @click="publishResult(competition.selected_race.onTrack)"
+              @click="
+                competition.selected_race &&
+                  competition.selected_race.onTrack &&
+                  competition.selected_race.onTrack.res_accepted &&
+                  publishResult(competition.selected_race.onTrack)
+              "
               :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
               :color="$vuetify.theme.themes[appTheme].action_blue"
               >Опубликовать</v-btn
@@ -297,26 +371,36 @@ export default {
           ]);
         })();
     },
+    set_raceStatus(status) {
+      this.socket &&
+        this.socket.connected &&
+        this.socket.emit("set_raceStatus", status);
+    },
+    accept_res(data) {
+      this.socket &&
+        this.socket.connected &&
+        this.socket.emit("accept_res", data);
+    },
     get_res(competitor) {
-      return (
-        Math.round(
-          (this.competition.stuff.judges
-            .map(judge => {
-              let mark;
-              competitor.marks.find(mark => {
-                return mark.judge === judge.id;
+      return competitor.race_status
+        ? competitor.race_status
+        : Math.round(
+            (this.competition.stuff.judges
+              .map(judge => {
+                let mark;
+                competitor.marks.find(mark => {
+                  return mark.judge === judge.id;
+                })
+                  ? (mark = competitor.marks.find(mark => {
+                      return mark.judge === judge.id;
+                    }).value)
+                  : (mark = 0);
+                return mark;
               })
-                ? (mark = competitor.marks.find(mark => {
-                    return mark.judge === judge.id;
-                  }).value)
-                : (mark = 0);
-              return mark;
-            })
-            .reduce((m1, m2) => +m1 + +m2, 0) /
-            this.competition.stuff.judges.length) *
-            10 || 0
-        ) / 10
-      );
+              .reduce((m1, m2) => +m1 + +m2, 0) /
+              this.competition.stuff.judges.length) *
+              10 || 0
+          ) / 10;
     },
     setBlinker(val) {
       if (this.indicators.blinker === null) {
@@ -331,8 +415,6 @@ export default {
   },
   data() {
     return {
-      res: "",
-      chiefJudgeStatus: false,
       indicators: {
         timeout: 812,
         blinker: null,

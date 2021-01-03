@@ -8,50 +8,99 @@
       }"
     >
       <v-row no-gutters>
-        <v-col cols="6"
+        <v-col cols="6" class="pa-2"
           ><v-card-title>Вид соревнования</v-card-title>
           <v-radio-group
-            :key="Math.random()"
             row
+            hide-details
+            class="ma-0 pa-0"
+            style="border-radius: 6px"
+            :style="{
+              backgroundColor:
+                $vuetify.theme.themes[appTheme].standardBackgroundRGBA
+            }"
+            :key="Math.random()"
             v-model="competition.structure.selected.type"
           >
             <v-radio
-              class="ma-1"
-              v-for="(type, t) in competition.structure.type"
+              class="pa-2"
+              v-for="(type, t) in competition.structure.types"
               :dark="appTheme === 'dark'"
-              :color="$vuetify.theme.themes[appTheme].action_blue"
+              :color="$vuetify.theme.themes[appTheme].accent"
               :key="t"
-              :value="type"
+              :value="type.id"
               :label="type.title"
             ></v-radio> </v-radio-group
         ></v-col>
-        <v-col cols="6"
+        <v-col cols="6" class="pa-2"
           ><v-card-title>Дисциплина</v-card-title>
           <v-radio-group
             row
+            hide-details
+            class="ma-0 pa-0"
+            style="border-radius: 6px"
+            :style="{
+              backgroundColor:
+                $vuetify.theme.themes[appTheme].standardBackgroundRGBA
+            }"
             :key="Math.random()"
             v-model="competition.structure.selected.discipline"
           >
             <v-radio
-              class="ma-1"
-              v-for="(discipline, d) in competition.structure.selected.type
-                .disciplines"
+              class="pa-2"
+              v-for="(discipline,
+              d) in competition.structure.disciplines.filter(type => {
+                return competition.structure.types[
+                  competition.structure.selected.type
+                ].disciplines.includes(type.id);
+              })"
               :dark="appTheme === 'dark'"
-              :color="$vuetify.theme.themes[appTheme].accent"
+              :color="$vuetify.theme.themes[appTheme].success"
               :key="d"
-              :value="discipline"
+              :value="discipline.id"
               :label="discipline.title"
             ></v-radio> </v-radio-group
         ></v-col>
       </v-row>
+      <v-row class="pa-2" no-gutters>
+        <v-card-title>Точность результа</v-card-title>
+        <v-col cols="12">
+          <v-radio-group
+            row
+            hide-details
+            class="ma-0 pa-0"
+            style="border-radius: 6px"
+            :style="{
+              backgroundColor:
+                $vuetify.theme.themes[appTheme].standardBackgroundRGBA
+            }"
+            v-model="competition.structure.selected.accuracy"
+          >
+            <v-radio
+              class="pa-2"
+              v-for="(acc_lvl, acc) in competition.structure.accuracy"
+              :value="acc_lvl.id"
+              :label="acc_lvl.title"
+              :dark="appTheme === 'dark'"
+              :color="$vuetify.theme.themes[appTheme].action_yellow"
+            ></v-radio>
+          </v-radio-group> </v-col
+      ></v-row>
       <v-row no-gutters>
         <v-card-title>Формула подстчёта заезда</v-card-title>
-        <v-col cols="12"></v-col>
+        <v-col
+          cols="12"
+          v-html="
+            `${(competition.structure.disciplines.find(disc => {
+              return disc.id === competition.structure.selected.discipline;
+            }) &&
+              competition.structure.disciplines.find(disc => {
+                return disc.id === competition.structure.selected.discipline;
+              }).res_formula) ||
+              'Select discipline'}`
+          "
+        ></v-col>
       </v-row>
-      <v-row no-gutters>
-        <v-card-title>Точность результа</v-card-title>
-        <v-col cols="12"></v-col
-      ></v-row>
       <v-row no-gutters>
         <v-card-title>Подсчёт итогового результата</v-card-title>
         <v-col cols="12"></v-col
@@ -64,6 +113,9 @@
 import { mapGetters } from "vuex";
 export default {
   name: "results",
+  methods: {
+    log: data => console.log(data)
+  },
   computed: {
     ...mapGetters("main", ["competition", "appTheme"])
   }

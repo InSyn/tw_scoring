@@ -55,7 +55,7 @@
             ></v-icon>
             <div
               class="d-flex justify-center align-center"
-              v-html="`Judge ${user.id + 1}`"
+              v-html="`Judge ${u_id + 1}`"
             ></div>
           </div>
         </div>

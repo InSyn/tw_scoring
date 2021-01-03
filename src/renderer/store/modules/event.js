@@ -3,62 +3,35 @@ export default {
   state: {
     EventClass: class {
       constructor() {
-        this.structure.selected.type = this.structure.type[0];
-        this.structure.selected.discipline = this.structure.type[0].disciplines[0];
-        this.structure.selected.accuracy = this.structure.accuracy[2];
+        this.structure.selected.type = 0;
+        this.structure.selected.discipline = 0;
       }
       weather = [];
       structure = {
         selected: {
           type: "",
           discipline: "",
-          accuracy: null
+          accuracy: 1
         },
-        type: [
-          {
-            title: "Сноуборд",
-            disciplines: [
-              {
-                title: "Слоуп-Стайл"
-              },
-              {
-                title: "Биг-Эйр"
-              },
-              {
-                title: "Хаф-Пайп"
-              },
-              {
-                title: "Пользовательский"
-              }
-            ]
-          },
-          {
-            title: "Фристайл",
-            disciplines: [
-              {
-                title: "Слоуп-Стайл"
-              },
-              {
-                title: "Биг-Эйр"
-              },
-              {
-                title: "Хаф-Пайп"
-              },
-              {
-                title: "Пользовательский"
-              }
-            ]
-          },
-          {
-            title: "Пользовательский",
-            disciplines: [
-              {
-                title: "Пользовательский"
-              }
-            ]
-          }
+        types: [
+          { id: 0, title: "Сноуборд", disciplines: [0, 1, 2, 100] },
+          { id: 1, title: "Фристайл", disciplines: [0, 1, 2, 3, 4, 5, 100] },
+          { id: 2, title: "Пользовательский", disciplines: [100] }
         ],
-        accuracy: ["1", "1/10", "1/100", "1/1000"]
+        disciplines: [
+          { id: 0, title: "Слоуп-Стайл", res_formula: [1] },
+          { id: 1, title: "Биг-Эйр", res_formula: [2] },
+          { id: 2, title: "Хаф-Пайп", res_formula: [3] },
+          { id: 3, title: "Акробатика", res_formula: [4] },
+          { id: 4, title: "Могул", res_formula: [5] },
+          { id: 100, title: "Пользовательский", res_formula: [100] }
+        ],
+        accuracy: [
+          { id: 0, title: "1", value: 1 },
+          { id: 1, title: "1/10", value: 10 },
+          { id: 2, title: "1/100", value: 1000 },
+          { id: 3, title: "1/1000", value: 10000 }
+        ]
       };
       races = [];
       selected_race_id = 0;
@@ -129,7 +102,7 @@ export default {
         },
         jury: [
           {
-            title: "Главный судья",
+            title: "Старший судья",
             name: "",
             surName: "",
             loc: "",
