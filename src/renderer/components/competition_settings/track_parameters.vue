@@ -23,10 +23,10 @@
         no-gutters
         v-for="(techString, ts) in competition.technicalInfo"
         :key="ts"
-        class="pa-1 d-flex"
+        class="pt-1 d-flex align-center"
         style="font-size: 0.9rem; border-radius: 6px"
       >
-        <v-col cols="5">
+        <v-col cols="4">
           <input
             @focus="
               $event.target.style.backgroundColor = `${styles.subjectBackground}`
@@ -60,6 +60,21 @@
               backgroundColor: styles.standardBackground
             }"
         /></v-col>
+        <v-col class="d-flex justify-center align-center" cols="1"
+          ><v-btn
+            @click="
+              competition.technicalInfo.splice(
+                competition.technicalInfo.indexOf(techString),
+                1
+              )
+            "
+            icon
+            small
+            ><v-icon :color="$vuetify.theme.themes[appTheme].action_red"
+              >mdi-minus</v-icon
+            ></v-btn
+          ></v-col
+        >
       </v-row>
     </div>
   </div>

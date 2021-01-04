@@ -7,6 +7,10 @@ export default {
         this.structure.selected.discipline = 0;
       }
       weather = [];
+      result_formula = {
+        judges: [],
+        sections: []
+      };
       structure = {
         selected: {
           type: "",
@@ -15,7 +19,7 @@ export default {
         },
         types: [
           { id: 0, title: "Сноуборд", disciplines: [0, 1, 2, 100] },
-          { id: 1, title: "Фристайл", disciplines: [0, 1, 2, 3, 4, 5, 100] },
+          { id: 1, title: "Фристайл", disciplines: [0, 1, 2, 3, 4, 100] },
           { id: 2, title: "Пользовательский", disciplines: [100] }
         ],
         disciplines: [
@@ -118,7 +122,6 @@ export default {
           value: ""
         }
       ];
-      sponsors = [];
       competitorsSheet = {
         header: [
           { id: "bib", title: "Bib" },
@@ -128,6 +131,35 @@ export default {
           { id: "year", title: "Год" }
         ],
         competitors: []
+      };
+      protocolSettings = {
+        sponsors: [],
+        protocol_headers: [],
+        title: "",
+        print_header: true,
+        strings_at_page: 12,
+        font_size: 16,
+        notations: "",
+        signs: {
+          left: {
+            text: "",
+            img: ""
+          },
+          center: {
+            text: "",
+            img: ""
+          },
+          right: {
+            text: "",
+            img: ""
+          }
+        },
+        use_grid: false,
+        use_string_light: true,
+        string_lights: {
+          odd: "#A2A2A2",
+          even: "#363636"
+        }
       };
       timer = {
         sec: null,

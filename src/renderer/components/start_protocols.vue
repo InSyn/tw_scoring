@@ -23,7 +23,10 @@
         >
           <v-card-title class="mb-8" style="font-size: 2rem"
             >{{
-              `${competition.structure.selected.type.title}. ${competition.mainData.title.value}. Новый заезд`
+              `${competition.mainData.discipline.value &&
+                competition.mainData.discipline.value + "."} ${competition
+                .mainData.title.value &&
+                competition.mainData.title.value + "."} Новый заезд`
             }}
           </v-card-title>
           <v-card-text
@@ -56,7 +59,7 @@
                       color: $vuetify.theme.themes[appTheme].textDefault,
                       backgroundColor: styles.input
                     }"
-                    v-model="competition.structure.selected.discipline.title"
+                    v-html="competition.structure.selected.discipline.title"
                   />
                 </div> </v-col
             ></v-row>
@@ -75,62 +78,92 @@
                   :color="$vuetify.theme.themes[appTheme].cardBackgroundRGBA"
                   :key="Math.random()"
                   class="pa-2"
-                  style="max-height: 400px; overflow-y: auto; border-radius: 6px"
+                  style="height: 320px; overflow-y: auto; border-radius: 6px"
                 >
                   <v-list-item-group>
                     <v-list-item
+                      class="d-flex align-center flex-nowrap"
                       v-for="(competitor, c) in filtered_list"
-                      @dblclick.prevent="
-                        dialogs.create_race.competitors.push(competitor)
-                      "
                       :key="c"
-                      v-html="
-                        `${
-                          competitor.info_data.bib
-                            ? competitor.info_data.bib
-                            : ' '
-                        } ${
-                          competitor.info_data.surname
-                            ? competitor.info_data.surname
-                            : ' '
-                        } ${
-                          competitor.info_data.name
-                            ? competitor.info_data.name
-                            : ' '
-                        }`
-                      "
-                    ></v-list-item
-                  ></v-list-item-group> </v-list
-              ></v-col>
+                    >
+                      <div
+                        v-html="
+                          `${
+                            competitor.info_data.bib
+                              ? competitor.info_data.bib
+                              : ' '
+                          } ${
+                            competitor.info_data.surname
+                              ? competitor.info_data.surname
+                              : ' '
+                          } ${
+                            competitor.info_data.name
+                              ? competitor.info_data.name
+                              : ' '
+                          }`
+                        "
+                      ></div>
+                      <v-spacer></v-spacer>
+                      <v-btn
+                        icon
+                        @click="
+                          dialogs.create_race.competitors.push(competitor)
+                        "
+                        :color="$vuetify.theme.themes[appTheme].success"
+                      >
+                        <v-icon style="font-size: 2rem">mdi-arrow-right</v-icon>
+                      </v-btn>
+                    </v-list-item></v-list-item-group
+                  >
+                </v-list></v-col
+              >
               <v-col>
                 <v-list
                   :dark="appTheme === 'dark'"
                   :color="$vuetify.theme.themes[appTheme].cardBackgroundRGBA"
                   :key="Math.random()"
                   class="pa-2"
-                  style="max-height: 400px; overflow-y: auto; border-radius: 6px"
+                  style="height: 320px; overflow-y: auto; border-radius: 6px"
                 >
                   <v-list-item-group>
                     <v-list-item
                       v-for="(competitorToRace, c_r) in dialogs.create_race
                         .competitors"
                       :key="c_r"
-                      v-html="
-                        `${
-                          competitorToRace.info_data.bib
-                            ? competitorToRace.info_data.bib
-                            : ' '
-                        } ${
-                          competitorToRace.info_data.surname
-                            ? competitorToRace.info_data.surname
-                            : ' '
-                        } ${
-                          competitorToRace.info_data.name
-                            ? competitorToRace.info_data.name
-                            : ' '
-                        }`
-                      "
-                    ></v-list-item
+                    >
+                      <v-btn
+                        icon
+                        @click="
+                          dialogs.create_race.competitors.splice(
+                            dialogs.create_race.competitors.indexOf(
+                              competitorToRace
+                            ),
+                            1
+                          )
+                        "
+                        :color="
+                          $vuetify.theme.themes[appTheme].action_darkYellow
+                        "
+                      >
+                        <v-icon style="font-size: 2rem">mdi-arrow-left</v-icon>
+                      </v-btn>
+                      <div
+                        v-html="
+                          `${
+                            competitorToRace.info_data.bib
+                              ? competitorToRace.info_data.bib
+                              : ' '
+                          } ${
+                            competitorToRace.info_data.surname
+                              ? competitorToRace.info_data.surname
+                              : ' '
+                          } ${
+                            competitorToRace.info_data.name
+                              ? competitorToRace.info_data.name
+                              : ' '
+                          }`
+                        "
+                      ></div></v-list-item
                   ></v-list-item-group> </v-list></v-col
             ></v-row>
           </v-card-text>
@@ -139,8 +172,12 @@
               @click="
                 create_race(
                   dialogs.create_race.title,
-                  competition.structure.selected.type,
-                  competition.structure.selected.discipline,
+                  competition.structure.types[
+                    competition.structure.selected.type
+                  ],
+                  competition.structure.disciplines[
+                    competition.structure.selected.discipline
+                  ],
                   dialogs.create_race.competitors,
                   dialogs.create_race.competitors
                 )

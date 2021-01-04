@@ -25,9 +25,9 @@
             <v-radio
               class="pa-2"
               v-for="(type, t) in competition.structure.types"
+              :key="t"
               :dark="appTheme === 'dark'"
               :color="$vuetify.theme.themes[appTheme].accent"
-              :key="t"
               :value="type.id"
               :label="type.title"
             ></v-radio> </v-radio-group
@@ -54,9 +54,9 @@
                   competition.structure.selected.type
                 ].disciplines.includes(type.id);
               })"
+              :key="d"
               :dark="appTheme === 'dark'"
               :color="$vuetify.theme.themes[appTheme].success"
-              :key="d"
               :value="discipline.id"
               :label="discipline.title"
             ></v-radio> </v-radio-group
@@ -79,6 +79,7 @@
             <v-radio
               class="pa-2"
               v-for="(acc_lvl, acc) in competition.structure.accuracy"
+              :key="acc"
               :value="acc_lvl.id"
               :label="acc_lvl.title"
               :dark="appTheme === 'dark'"

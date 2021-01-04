@@ -111,12 +111,20 @@
                   type="text"
                   v-model="competition.stuff.jury[jr].loc"
               /></v-col>
-              <v-icon
-                v-if="jury.connected !== undefined"
-                style="position:absolute; top: 4px; right: 24px"
-                :color="$vuetify.theme.themes[appTheme].accent"
-                >mdi-alpha-j</v-icon
-              >
+              <div style="position:absolute; top: 4px; right: 32px">
+                <v-icon
+                  v-if="jury.connected !== undefined"
+                  style="width: 0.6rem;"
+                  :color="$vuetify.theme.themes[appTheme].accent"
+                  >mdi-alpha-c</v-icon
+                >
+                <v-icon
+                  v-if="jury.connected !== undefined"
+                  style="width: 0.6rem;"
+                  :color="$vuetify.theme.themes[appTheme].accent"
+                  >mdi-alpha-j</v-icon
+                >
+              </div>
               <v-btn
                 small
                 icon
@@ -180,7 +188,7 @@
                       ? competition.stuff.judges[
                           competition.stuff.judges.length - 1
                         ].id + 1
-                      : 0
+                      : 1
                   )
                 )
               "
