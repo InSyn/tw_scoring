@@ -195,10 +195,10 @@ export default {
         this.discipline = discipline;
         this.startList = competitors || [];
         this.onStart = this.startList || [];
+        this.selectedCompetitor = competitors[0] || null;
       }
       finished = [];
       onTrack = null;
-      selectedCompetitor = null;
     }
   },
 

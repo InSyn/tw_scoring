@@ -339,6 +339,7 @@
               ></div> </template
             ><v-card
               ><v-color-picker
+                :dark="appTheme === 'dark'"
                 v-model="competition.protocolSettings.string_lights.odd"
               ></v-color-picker> </v-card
           ></v-dialog>
