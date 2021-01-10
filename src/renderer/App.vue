@@ -224,7 +224,6 @@ export default {
       "showMenu",
       "appTheme",
       "appMenu",
-      "counter",
       "competition"
     ]),
     ...mapGetters("event", ["EventClass"])

@@ -56,7 +56,7 @@
               })"
               :key="d"
               :dark="appTheme === 'dark'"
-              :color="$vuetify.theme.themes[appTheme].success"
+              :color="$vuetify.theme.themes[appTheme].accent"
               :value="discipline.id"
               :label="discipline.title"
             ></v-radio> </v-radio-group
@@ -83,7 +83,7 @@
               :value="acc_lvl.id"
               :label="acc_lvl.title"
               :dark="appTheme === 'dark'"
-              :color="$vuetify.theme.themes[appTheme].action_yellow"
+              :color="$vuetify.theme.themes[appTheme].accent"
             ></v-radio>
           </v-radio-group> </v-col
       ></v-row>

@@ -201,7 +201,6 @@ export default {
       onTrack = null;
     }
   },
-
   getters: {
     EventClass: state => {
       return state.EventClass;

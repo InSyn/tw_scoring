@@ -401,7 +401,7 @@
                 text
                 small
                 :color="$vuetify.theme.themes[appTheme].accent"
-                >Создать участника1</v-btn
+                >Создать участника</v-btn
               ></template
             ><v-card
               :style="{
