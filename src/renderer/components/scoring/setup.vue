@@ -1,8 +1,49 @@
 <template>
-  <v-col class="pa-2" cols="4"
+  <v-col class="pa-2 d-flex flex-column" cols="4"
+    ><v-row
+      class="pa-2"
+      style="border-radius: 6px"
+      :style="{
+        backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA
+      }"
+      no-gutters
+    >
+      <v-col
+        cols="12"
+        style="font-weight: bold; font-size: 1.2rem"
+        v-html="`Секретарь хронометрист`"
+      ></v-col
+      ><v-col class="d-flex align-center" style="font-weight: bold">
+        <span class="mr-2">Фамилия</span>
+        <input
+          v-model="competition.stuff.secretary.surName"
+          type="text"
+          class="pa-1"
+          style="border-radius: 4px; width: 12rem"
+          :style="{
+            backgroundColor:
+              $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
+            color: $vuetify.theme.themes[appTheme].textDefault
+          }"
+        />
+      </v-col>
+      <v-col class="d-flex align-center ml-4" style="font-weight: bold">
+        <span class="mr-2">Имя</span>
+        <input
+          v-model="competition.stuff.secretary.name"
+          type="text"
+          class="pa-1"
+          style="border-radius: 4px; width: 8rem"
+          :style="{
+            backgroundColor:
+              $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
+            color: $vuetify.theme.themes[appTheme].textDefault
+          }"
+        />
+      </v-col> </v-row
     ><v-container
-      class="pa-2 d-flex flex-column"
-      style="height: 100%; border-radius: 6px"
+      class="pa-2 mt-2 d-flex flex-column flex-grow-1"
+      style="border-radius: 6px"
       :style="{
         backgroundColor: `${$vuetify.theme.themes[appTheme].cardBackgroundRGBA}`
       }"
@@ -33,49 +74,8 @@
             v-html="
               `Server started on: ${socket.io.opts.hostname}:${socket.io.opts.port}`
             "
-          ></div> </v-col></v-row
-      ><v-row
-        class="pa-2"
-        style="border-radius: 6px"
-        :style="{
-          backgroundColor: $vuetify.theme.themes[appTheme].subjectBackgroundRGBA
-        }"
-        no-gutters
-      >
-        <v-col
-          cols="12"
-          style="font-weight: bold; font-size: 1.2rem"
-          v-html="`Секретарь хронометрист`"
-        ></v-col
-        ><v-col class="d-flex align-center" style="font-weight: bold">
-          <span class="mr-2">Фамилия</span>
-          <input
-            v-model="competition.stuff.secretary.surName"
-            type="text"
-            class="pa-1"
-            style="border-radius: 4px; width: 12rem"
-            :style="{
-              backgroundColor:
-                $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
-              color: $vuetify.theme.themes[appTheme].textDefault
-            }"
-          />
-        </v-col>
-        <v-col class="d-flex align-center ml-4" style="font-weight: bold">
-          <span class="mr-2">Имя</span>
-          <input
-            v-model="competition.stuff.secretary.name"
-            type="text"
-            class="pa-1"
-            style="border-radius: 4px; width: 8rem"
-            :style="{
-              backgroundColor:
-                $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
-              color: $vuetify.theme.themes[appTheme].textDefault
-            }"
-          />
-        </v-col>
-      </v-row>
+          ></div> </v-col
+      ></v-row>
       <v-row no-gutters>
         <div
           class="pa-1"

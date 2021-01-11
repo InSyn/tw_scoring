@@ -19,7 +19,7 @@
                 competition.selected_race && competition.selected_race.onTrack
               "
               class="pa-2 d-flex align-center flex-nowrap"
-              style="border-radius: 6px; font-weight: bold; font-size: 2rem; overflow: hidden"
+              style="border-radius: 6px; font-weight: bold; font-size: 1.6rem; overflow: hidden"
               :style="{
                 backgroundColor:
                   $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
@@ -31,13 +31,14 @@
                   ''} ${competition.selected_race.onTrack.info_data.name || ''}`
               "
             ></div>
+
             <div
               class="d-flex justify-center align-center pa-2"
-              style="border-radius: 6px; font-weight: bold; font-size: 2rem"
+              style="border-radius: 6px; font-weight: bold; font-size: 1.6rem"
               v-else
             >
               <v-icon
-                size="32px"
+                size="24px"
                 :color="$vuetify.theme.themes[appTheme].textDefault"
                 >mdi-snowboard</v-icon
               >
@@ -97,9 +98,7 @@
             </div>
             <div class="pl-4">
               <v-row class="pa-1" no-gutters>
-                <v-col
-                  class="d-flex align-center justify-space-between"
-                  cols="12"
+                <v-col class="d-flex align-center" cols="12"
                   ><v-btn
                     @click="
                       competition.selected_race &&
@@ -114,8 +113,8 @@
                           });
                         })()
                     "
+                    class="pa-0"
                     depressed
-                    class="flex-grow-1 mr-1"
                     height="2rem"
                     style="font-weight: bold"
                     :color="
@@ -139,18 +138,17 @@
                             competitor_id:
                               competition.races[competition.selected_race_id]
                                 .onTrack.id,
-                            status: 'DNF'
+                            status: 'DNS'
                           });
                         })()
                     "
                     depressed
-                    class="flex-grow-1 ml-1"
                     height="2rem"
                     style="font-weight: bold"
                     :color="
                       competition.selected_race &&
                       competition.selected_race.onTrack &&
-                      competition.selected_race.onTrack.race_status === 'DNF'
+                      competition.selected_race.onTrack.race_status === 'DNS'
                         ? $vuetify.theme.themes[appTheme].action_yellow
                         : $vuetify.theme.themes[appTheme].standardBackgroundRGBA
                     "
@@ -158,14 +156,43 @@
                       color: $vuetify.theme.themes[appTheme].textDefault
                     }"
                     >DNF</v-btn
-                  ></v-col
-                >
+                  >
+                  <v-btn
+                    @click="
+                      competition.selected_race &&
+                        competition.selected_race.onTrack &&
+                        (() => {
+                          set_raceStatus({
+                            race_id: competition.selected_race_id,
+                            competitor_id:
+                              competition.races[competition.selected_race_id]
+                                .onTrack.id,
+                            status: 'DNF'
+                          });
+                        })()
+                    "
+                    depressed
+                    height="2rem"
+                    style="font-weight: bold"
+                    :color="
+                      competition.selected_race &&
+                      competition.selected_race.onTrack &&
+                      competition.selected_race.onTrack.race_status === 'DNF'
+                        ? $vuetify.theme.themes[appTheme].action_darkYellow
+                        : $vuetify.theme.themes[appTheme].standardBackgroundRGBA
+                    "
+                    :style="{
+                      color: $vuetify.theme.themes[appTheme].textDefault
+                    }"
+                    >DNF</v-btn
+                  >
+                </v-col>
               </v-row>
               <v-row class="pa-1" no-gutters>
                 <v-col cols="12"
                   ><v-btn
                     depressed
-                    style="font-weight: bold"
+                    style="width: 100%;font-weight: bold"
                     height="2rem"
                     :color="$vuetify.theme.themes[appTheme].action_blue"
                     :style="{

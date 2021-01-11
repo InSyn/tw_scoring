@@ -178,7 +178,13 @@
                   competition.structure.disciplines[
                     competition.structure.selected.discipline
                   ],
-                  dialogs.create_race.competitors,
+                  competition.competitorsSheet.competitors.filter(
+                    competitor => {
+                      return dialogs.create_race.competitors.some(_comp => {
+                        return competitor.id === _comp.id;
+                      });
+                    }
+                  ),
                   dialogs.create_race.competitors
                 )
               "

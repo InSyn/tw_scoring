@@ -118,13 +118,13 @@
                   style="max-width: 5rem"
                   v-for="(race_res, rr) in competition.races"
                   :key="rr"
-                  v-html="`#`"
+                  v-html="get_race_res(competitor, rr)"
                 ></v-col
                 ><v-spacer></v-spacer
                 ><v-col
                   class="d-flex justify-end align-center"
                   style="max-width: 5rem"
-                  v-html="`res`"
+                  v-html="get_result(competitor)"
                 ></v-col></v-row
             ></v-hover>
           </div>
@@ -139,6 +139,24 @@ export default {
   methods: {
     log(data) {
       console.log(data);
+    },
+    get_race_res(competitor, _race) {
+      return this.competition.result_formula.get_race_result(
+        competitor.marks.filter(mark => {
+          return mark.race === _race;
+        })
+      );
+    },
+    get_result(competitor) {
+      let races_marks = [];
+      this.competition.races.forEach(race => {
+        races_marks.push(
+          this.get_race_res(competitor, this.competition.races.indexOf(race))
+        );
+      });
+      return races_marks.reduce((acc, val) => {
+        return acc + val;
+      });
     }
   },
   data() {

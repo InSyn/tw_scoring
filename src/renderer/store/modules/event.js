@@ -7,10 +7,6 @@ export default {
         this.structure.selected.discipline = 0;
       }
       weather = [];
-      result_formula = {
-        judges: [],
-        sections: []
-      };
       structure = {
         selected: {
           type: "",
@@ -113,7 +109,48 @@ export default {
             connected: false
           }
         ],
-        judges: [],
+        judges: [
+          {
+            category: "",
+            connected: false,
+            id: 1,
+            location: "",
+            name: "J",
+            socket_id: null,
+            surName: "1",
+            title: "Судья"
+          },
+          {
+            category: "",
+            connected: false,
+            id: 2,
+            location: "",
+            name: "J",
+            socket_id: null,
+            surName: "2",
+            title: "Судья"
+          },
+          {
+            category: "",
+            connected: false,
+            id: 3,
+            location: "",
+            name: "J",
+            socket_id: null,
+            surName: "3",
+            title: "Судья"
+          },
+          {
+            category: "",
+            connected: false,
+            id: 4,
+            location: "",
+            name: "J",
+            socket_id: null,
+            surName: "4",
+            title: "Судья"
+          }
+        ],
         openers: []
       };
       technicalInfo = [
@@ -131,6 +168,39 @@ export default {
           { id: "year", title: "Год" }
         ],
         competitors: []
+      };
+      media_settings = {
+        display: {
+          modes: [
+            { id: 0, title: "Результаты" },
+            { id: 1, title: "Стартовый" },
+            { id: 2, title: "Результат последнего на финише" },
+            { id: 3, title: "Участник на старте" },
+            { id: 4, title: "Награждение" }
+          ],
+          selected: 1
+        }
+      };
+      result_formula = {
+        sections: [],
+        get_race_result: data => {
+          let marks = (data.length > 0 && data) || [0, 0];
+          let sections_res = [];
+          let race_res = 0;
+          let _marks = marks.map(mark => {
+            return +mark.value;
+          });
+          race_res =
+            _marks.reduce((acc, cur) => {
+              return acc + cur;
+            }) / (_marks.length > 0 && _marks.length) || 0;
+          return race_res;
+        },
+        get_result: marks => {
+          return marks.reduce((acc, cur) => {
+            return acc + cur;
+          });
+        }
       };
       protocolSettings = {
         sponsors: [],
