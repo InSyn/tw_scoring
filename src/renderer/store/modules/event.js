@@ -260,6 +260,9 @@ export default {
     },
     RaceClass: class {
       constructor(title, type, discipline, competitors) {
+        this.id = Math.random()
+          .toString(36)
+          .substr(2, 9);
         this.title = title || "Заезд";
         this.type = type;
         this.discipline = discipline;
@@ -267,6 +270,7 @@ export default {
         this.onStart = this.startList || [];
         this.selectedCompetitor = competitors[0] || null;
       }
+      del_dialog = false;
       finished = [];
       onTrack = null;
     }
