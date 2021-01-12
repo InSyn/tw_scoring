@@ -61,7 +61,10 @@ let competition = {
     ],
     judges: []
   },
-  competitors: [],
+  competitorsSheet: {
+    header: [],
+    competitors: []
+  },
   changed_marks: [],
   races: [],
   selected_race_id: 0
@@ -91,8 +94,10 @@ io.on("connection", socket => {
       ? (competition.stuff.jury = data.stuff.jury)
       : null;
     competition.races !== data.races ? (competition.races = data.races) : null;
-    competition.competitors !== data.competitors
-      ? (competition.competitors = data.competitors)
+    competition.competitorsSheet.competitors !==
+    data.competitorsSheet.competitors
+      ? (competition.competitorsSheet.competitors =
+          data.competitorsSheet.competitors)
       : null;
     competition.changedMarks !== data.changedMarks
       ? (competition.changedMarks = data.changedMarks)
@@ -186,15 +191,27 @@ io.on("connection", socket => {
   });
   socket.on("set_mark", mark => {
     competition.races[mark.race].onTrack &&
-    !competition.races[mark.race].onTrack.marks.some(_mark => {
-      return _mark.judge === mark.judge;
-    })
-      ? competition.races[mark.race].onTrack.marks.push(mark)
-      : competition.races[mark.race].onTrack.marks.some(markToChange => {
-          markToChange.judge === mark.judge
-            ? (markToChange.value = mark.value)
-            : null;
-        });
+    !competition.competitorsSheet.competitors
+      .find(_comp => {
+        return _comp.id === competition.races[mark.race].onTrack;
+      })
+      .marks.some(_mark => {
+        return _mark.judge === mark.judge;
+      })
+      ? competition.competitorsSheet.competitors
+          .find(_comp => {
+            return _comp.id === competition.races[mark.race].onTrack;
+          })
+          .marks.push(mark)
+      : competition.competitorsSheet.competitors
+          .find(_comp => {
+            return _comp.id === competition.races[mark.race].onTrack;
+          })
+          .marks.some(markToChange => {
+            markToChange.judge === mark.judge
+              ? (markToChange.value = mark.value)
+              : null;
+          });
 
     io.sockets.emit("competition_data_updated", competition);
   });
@@ -211,14 +228,36 @@ io.on("connection", socket => {
     io.sockets.emit("competition_data_updated", competition);
   });
   socket.on("accept_res", data => {
+    console.log(data);
     competition.races[data.race_id] &&
       competition.races[data.race_id].onTrack &&
-      competition.races[data.race_id].onTrack.id === data.competitor_id &&
+      competition.races[data.race_id].onTrack === data.competitor_id &&
       (() => {
-        competition.races[data.race_id].onTrack.res_accepted
-          ? (competition.races[data.race_id].onTrack.res_accepted = false)
-          : (competition.races[data.race_id].onTrack.res_accepted = true);
+        competition.competitorsSheet.competitors.find(_comp => {
+          return (
+            _comp.id === competition.races[competition.selected_race_id].onTrack
+          );
+        }).res_accepted
+          ? (competition.competitorsSheet.competitors.find(_comp => {
+              return (
+                _comp.id ===
+                competition.races[competition.selected_race_id].onTrack
+              );
+            }).res_accepted = false)
+          : (competition.competitorsSheet.competitors.find(_comp => {
+              return (
+                _comp.id ===
+                competition.races[competition.selected_race_id].onTrack
+              );
+            }).res_accepted = true);
       })();
+    console.log(
+      competition.competitorsSheet.competitors.find(_comp => {
+        return (
+          _comp.id === competition.races[competition.selected_race_id].onTrack
+        );
+      })
+    );
     io.sockets.emit("competition_data_updated", competition);
   });
   /**

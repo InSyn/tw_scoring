@@ -348,7 +348,6 @@
                       race_id: competition.selected_race_id,
                       competitor_id:
                         competition.races[competition.selected_race_id].onTrack
-                          .id
                     });
                   })()
               "
@@ -357,7 +356,9 @@
               :style="[
                 (competition.selected_race &&
                   competition.selected_race.onTrack &&
-                  competition.selected_race.onTrack.res_accepted && {
+                  competition.competitorsSheet.competitors.find(_comp => {
+                    return _comp.id === competition.selected_race.onTrack;
+                  }).res_accepted && {
                     backgroundColor: $vuetify.theme.themes[appTheme].success
                   }) || {
                   backgroundColor:

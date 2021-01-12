@@ -121,8 +121,10 @@ export default {
           state.competition.races !== data.races
             ? (state.competition.races = data.races)
             : null;
-          state.competition.competitors !== data.competitors
-            ? (state.competition.competitors = data.competitors)
+          state.competition.competitorsSheet.competitors !==
+          data.competitorsSheet.competitors
+            ? (state.competition.competitorsSheet.competitors =
+                data.competitorsSheet.competitors)
             : null;
 
           state.competition.changedMarks !== data.changedMarks
