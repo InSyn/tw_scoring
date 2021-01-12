@@ -513,7 +513,16 @@ export default {
             ])
           );
           this.competition.competitorsSheet.competitors.push(
-            new this.CompetitorClass(fields)
+            new this.CompetitorClass(
+              fields,
+              (() => {
+                let _marks = [];
+                for (let i = 0; i < 5; i++) {
+                  _marks.push(new this.MarkClass(0, i, 50));
+                }
+                return _marks;
+              })()
+            )
           );
         });
       });

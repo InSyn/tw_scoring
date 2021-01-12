@@ -2,10 +2,11 @@ export default {
   namespaced: true,
   state: {
     CompetitorClass: class {
-      constructor(fields) {
+      constructor(fields, marks) {
         fields.map(field => {
           this.info_data[field[0]] = field[1];
         });
+        this.marks = marks || [];
       }
       id = Math.random()
         .toString(36)
@@ -13,7 +14,6 @@ export default {
       info_data = {};
       race_status = null;
       res_accepted = false;
-      marks = [];
     },
     MarkClass: class {
       constructor(race, judgeID, value) {

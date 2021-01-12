@@ -31,9 +31,12 @@
                 v-html="
                   competition.selected_race &&
                     competition.selected_race.selectedCompetitor &&
-                    competition.selected_race.selectedCompetitor.info_data[
-                      'bib'
-                    ]
+                    competition.competitorsSheet.competitors.find(_comp => {
+                      return (
+                        _comp.id ===
+                        competition.selected_race.selectedCompetitor
+                      );
+                    }).info_data['bib']
                 "
               ></div>
             </div>
@@ -42,7 +45,11 @@
               v-html="
                 competition.selected_race &&
                   competition.selected_race.selectedCompetitor &&
-                  competition.selected_race.selectedCompetitor.info_data['name']
+                  competition.competitorsSheet.competitors.find(_comp => {
+                    return (
+                      _comp.id === competition.selected_race.selectedCompetitor
+                    );
+                  }).info_data['name']
               "
             ></div>
             <div
@@ -50,9 +57,11 @@
               v-html="
                 competition.selected_race &&
                   competition.selected_race.selectedCompetitor &&
-                  competition.selected_race.selectedCompetitor.info_data[
-                    'surname'
-                  ]
+                  competition.competitorsSheet.competitors.find(_comp => {
+                    return (
+                      _comp.id === competition.selected_race.selectedCompetitor
+                    );
+                  }).info_data['surname']
               "
             ></div>
           </div>
@@ -79,7 +88,10 @@
             <div class="pa-1" v-if="competition.selected_race">
               <v-hover
                 v-slot:default="{ hover }"
-                v-for="(competitor, c) in competition.selected_race.onStart"
+                v-for="(competitor,
+                c) in competition.competitorsSheet.competitors.filter(_comp => {
+                  return competition.selected_race.onStart.includes(_comp.id);
+                })"
                 :key="c"
               >
                 <div
@@ -160,8 +172,8 @@ export default {
         (() => {
           this.competition.selected_race.onTrack = competitor;
           this.competition.selected_race.onStart = this.competition.selected_race.onStart.filter(
-            startedCompetitor => {
-              return competitor.id !== startedCompetitor.id;
+            _competitor => {
+              return _competitor !== competitor;
             }
           );
           this.competition.selected_race.selectedCompetitor = this.competition

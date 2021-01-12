@@ -26,9 +26,15 @@
                 color: $vuetify.theme.themes[appTheme].textDefault
               }"
               v-html="
-                `${competition.selected_race.onTrack.info_data.bib ||
-                  ''} ${competition.selected_race.onTrack.info_data.surname ||
-                  ''} ${competition.selected_race.onTrack.info_data.name || ''}`
+                `${competition.competitorsSheet.competitors.find(_comp => {
+                  return _comp.id === competition.selected_race.onTrack;
+                }).info_data.bib ||
+                  ''} ${competition.competitorsSheet.competitors.find(_comp => {
+                  return _comp.id === competition.selected_race.onTrack;
+                }).info_data.surname ||
+                  ''} ${competition.competitorsSheet.competitors.find(_comp => {
+                  return _comp.id === competition.selected_race.onTrack;
+                }).info_data.name || ''}`
               "
             ></div>
 
@@ -90,7 +96,16 @@
                   v-html="
                     (competition.selected_race &&
                       competition.selected_race.onTrack &&
-                      get_res(competition.selected_race.onTrack)) ||
+                      get_res(
+                        competition.competitorsSheet.competitors.find(
+                          _competitor => {
+                            return (
+                              _competitor.id ===
+                              competition.selected_race.onTrack
+                            );
+                          }
+                        )
+                      )) ||
                       0
                   "
                 ></div>
@@ -236,12 +251,26 @@
                     v-html="
                       `${(competition.selected_race &&
                         competition.selected_race.onTrack &&
-                        competition.selected_race.onTrack.marks.find(mark => {
-                          return mark.judge === judge.id;
-                        }) &&
-                        competition.selected_race.onTrack.marks.find(mark => {
-                          return mark.judge === judge.id;
-                        }).value) ||
+                        competition.competitorsSheet.competitors
+                          .find(_competitor => {
+                            return (
+                              _competitor.id ===
+                              competition.selected_race.onTrack
+                            );
+                          })
+                          .marks.find(mark => {
+                            return mark.judge === judge.id;
+                          }) &&
+                        competition.competitorsSheet.competitors
+                          .find(_competitor => {
+                            return (
+                              _competitor.id ===
+                              competition.selected_race.onTrack
+                            );
+                          })
+                          .marks.find(mark => {
+                            return mark.judge === judge.id;
+                          }).value) ||
                         '0'}`
                     "
                   ></div>
