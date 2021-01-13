@@ -381,7 +381,9 @@
               @click="
                 competition.selected_race &&
                   competition.selected_race.onTrack &&
-                  competition.selected_race.onTrack.res_accepted &&
+                  competition.competitorsSheet.competitors.find(_comp => {
+                    return _comp.id === competition.selected_race.onTrack;
+                  }).res_accepted &&
                   publishResult(competition.selected_race.onTrack)
               "
               :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
@@ -418,12 +420,15 @@ export default {
     },
     publishResult(competitor) {
       this.competition.selected_race.finished.push(competitor);
+      this.competition.competitorsSheet.competitors.find(_comp => {
+        return _comp.id === competitor;
+      }).res_accepted = false;
       this.competition.selected_race.onTrack = null;
       this.socket &&
         this.socket.connected &&
         (() => {
           this.socket.emit("set_finished_competitor", [
-            [competitor.id, this.competition.selected_race_id],
+            [competitor, this.competition.selected_race_id],
             this.competition
           ]);
         })();

@@ -57,7 +57,6 @@
               v-for="(race, r) in competition.races"
               :key="r"
               v-html="`${race.title}`"
-              @click="log(race)"
             ></v-col>
             <v-spacer></v-spacer>
             <v-col
@@ -71,12 +70,15 @@
             style="position: absolute; left: 0;right: 0;top: 32px;height: calc(100% - 32px); overflow-y: auto"
           >
             <v-hover
-              v-for="(competitor, key, i) in competition.selected_race.finished"
+              v-for="(competitor,
+              key,
+              i) in competition.competitorsSheet.competitors.filter(_comp => {
+                return competition.selected_race.finished.includes(_comp.id);
+              })"
               :key="i"
               v-slot:default="{ hover }"
             >
               <v-row
-                @click="log(competitor)"
                 no-gutters
                 class="pa-1"
                 style="height: 32px"

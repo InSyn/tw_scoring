@@ -518,7 +518,12 @@ export default {
               (() => {
                 let _marks = [];
                 for (let i = 0; i < 5; i++) {
-                  _marks.push(new this.MarkClass(0, i, 50));
+                  _marks.push(
+                    new this.MarkClass(0, i, Math.ceil(Math.random() * 100))
+                  );
+                  _marks.push(
+                    new this.MarkClass(1, i, Math.ceil(Math.random() * 100))
+                  );
                 }
                 return _marks;
               })()
