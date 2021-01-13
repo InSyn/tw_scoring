@@ -218,17 +218,21 @@ io.on("connection", socket => {
   socket.on("set_raceStatus", status => {
     competition.races[status.race_id] &&
       competition.races[status.race_id].onTrack &&
-      competition.races[status.race_id].onTrack.id === status.competitor_id &&
+      competition.races[status.race_id].onTrack === status.competitor_id &&
       (() => {
-        competition.races[status.race_id].onTrack.race_status === status.status
-          ? (competition.races[status.race_id].onTrack.race_status = "")
-          : (competition.races[status.race_id].onTrack.race_status =
-              status.status);
+        competition.competitorsSheet.competitors.find(_comp => {
+          return _comp.id === status.competitor_id;
+        }).race_status === status.status
+          ? (competition.competitorsSheet.competitors.find(_comp => {
+              return _comp.id === status.competitor_id;
+            }).race_status = "")
+          : (competition.competitorsSheet.competitors.find(_comp => {
+              return _comp.id === status.competitor_id;
+            }).race_status = status.status);
       })();
     io.sockets.emit("competition_data_updated", competition);
   });
   socket.on("accept_res", data => {
-    console.log(data);
     competition.races[data.race_id] &&
       competition.races[data.race_id].onTrack &&
       competition.races[data.race_id].onTrack === data.competitor_id &&
@@ -251,13 +255,6 @@ io.on("connection", socket => {
               );
             }).res_accepted = true);
       })();
-    console.log(
-      competition.competitorsSheet.competitors.find(_comp => {
-        return (
-          _comp.id === competition.races[competition.selected_race_id].onTrack
-        );
-      })
-    );
     io.sockets.emit("competition_data_updated", competition);
   });
   /**

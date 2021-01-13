@@ -57,20 +57,41 @@
               :style="
                 (competition.selected_race &&
                   competition.selected_race.onTrack &&
-                  competition.selected_race.onTrack.race_status &&
-                  competition.selected_race.onTrack.race_status === 'DSQ' && {
+                  competition.competitorsSheet.competitors.find(_comp => {
+                    return _comp.id === competition.selected_race.onTrack;
+                  }).race_status &&
+                  competition.competitorsSheet.competitors.find(_comp => {
+                    return _comp.id === competition.selected_race.onTrack;
+                  }).race_status === 'DSQ' && {
                     backgroundColor: $vuetify.theme.themes[appTheme].action_red
                   }) ||
                   (competition.selected_race &&
                     competition.selected_race.onTrack &&
-                    competition.selected_race.onTrack.race_status &&
-                    competition.selected_race.onTrack.race_status === 'DNF' && {
+                    competition.competitorsSheet.competitors.find(_comp => {
+                      return _comp.id === competition.selected_race.onTrack;
+                    }).race_status &&
+                    competition.competitorsSheet.competitors.find(_comp => {
+                      return _comp.id === competition.selected_race.onTrack;
+                    }).race_status === 'DNS' && {
                       backgroundColor:
                         $vuetify.theme.themes[appTheme].action_yellow
                     }) ||
                   (competition.selected_race &&
                     competition.selected_race.onTrack &&
-                    competition.selected_race.onTrack.res_accepted && {
+                    competition.competitorsSheet.competitors.find(_comp => {
+                      return _comp.id === competition.selected_race.onTrack;
+                    }).race_status &&
+                    competition.competitorsSheet.competitors.find(_comp => {
+                      return _comp.id === competition.selected_race.onTrack;
+                    }).race_status === 'DNF' && {
+                      backgroundColor:
+                        $vuetify.theme.themes[appTheme].action_darkYellow
+                    }) ||
+                  (competition.selected_race &&
+                    competition.selected_race.onTrack &&
+                    competition.competitorsSheet.competitors.find(_comp => {
+                      return _comp.id === competition.selected_race.onTrack;
+                    }).res_accepted && {
                       backgroundColor: $vuetify.theme.themes[appTheme].success
                     }) || {
                     backgroundColor:
@@ -123,7 +144,7 @@
                             race_id: competition.selected_race_id,
                             competitor_id:
                               competition.races[competition.selected_race_id]
-                                .onTrack.id,
+                                .onTrack,
                             status: 'DSQ'
                           });
                         })()
@@ -135,7 +156,9 @@
                     :color="
                       competition.selected_race &&
                       competition.selected_race.onTrack &&
-                      competition.selected_race.onTrack.race_status === 'DSQ'
+                      competition.competitorsSheet.competitors.find(_comp => {
+                        return _comp.id === competition.selected_race.onTrack;
+                      }).race_status === 'DSQ'
                         ? $vuetify.theme.themes[appTheme].action_red
                         : $vuetify.theme.themes[appTheme].standardBackgroundRGBA
                     "
@@ -152,7 +175,7 @@
                             race_id: competition.selected_race_id,
                             competitor_id:
                               competition.races[competition.selected_race_id]
-                                .onTrack.id,
+                                .onTrack,
                             status: 'DNS'
                           });
                         })()
@@ -163,7 +186,9 @@
                     :color="
                       competition.selected_race &&
                       competition.selected_race.onTrack &&
-                      competition.selected_race.onTrack.race_status === 'DNS'
+                      competition.competitorsSheet.competitors.find(_comp => {
+                        return _comp.id === competition.selected_race.onTrack;
+                      }).race_status === 'DNS'
                         ? $vuetify.theme.themes[appTheme].action_yellow
                         : $vuetify.theme.themes[appTheme].standardBackgroundRGBA
                     "
@@ -181,7 +206,7 @@
                             race_id: competition.selected_race_id,
                             competitor_id:
                               competition.races[competition.selected_race_id]
-                                .onTrack.id,
+                                .onTrack,
                             status: 'DNF'
                           });
                         })()
@@ -192,7 +217,9 @@
                     :color="
                       competition.selected_race &&
                       competition.selected_race.onTrack &&
-                      competition.selected_race.onTrack.race_status === 'DNF'
+                      competition.competitorsSheet.competitors.find(_comp => {
+                        return _comp.id === competition.selected_race.onTrack;
+                      }).race_status === 'DNF'
                         ? $vuetify.theme.themes[appTheme].action_darkYellow
                         : $vuetify.theme.themes[appTheme].standardBackgroundRGBA
                     "

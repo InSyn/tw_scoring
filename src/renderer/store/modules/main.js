@@ -126,7 +126,6 @@ export default {
             ? (state.competition.competitorsSheet.competitors =
                 data.competitorsSheet.competitors)
             : null;
-
           state.competition.changedMarks !== data.changedMarks
             ? (state.competition.changedMarks = data.changedMarks)
             : null;
