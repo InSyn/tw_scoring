@@ -109,9 +109,17 @@ export default {
           state.competition.mainData !== data.mainData
             ? (state.competition.mainData = data.mainData)
             : null;
-          state.competition.stuff.judges !== data.stuff.judges
-            ? (state.competition.stuff.judges = data.stuff.judges)
-            : null;
+          state.competition.stuff.judges.forEach(_judge => {
+            data.stuff.judges.map(_data_judge => {
+              if (_data_judge.id === _judge.id) {
+                for (let _field in _judge) {
+                  if (_judge[_field] !== _data_judge[_field]) {
+                    _judge[_field] = _data_judge[_field];
+                  }
+                }
+              }
+            });
+          });
           state.competition.stuff.jury !== data.stuff.jury
             ? (state.competition.stuff.jury = data.stuff.jury)
             : null;
@@ -138,6 +146,12 @@ export default {
     },
     pushServerMessage: (state, message) => {
       state.serverMessages.push(message);
+    },
+    force_disconnect: (state, user_id) => {
+      state.socket &&
+        state.socket.connected &&
+        state.socket.emit("force_disconnect", user_id);
+      console.log(user_id);
     },
     changeTheme: state => {
       state.appTheme === "light"

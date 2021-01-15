@@ -283,6 +283,9 @@
                             section_dialog.section.judges_to_add.length > 0 &&
                               (() => {
                                 competition.result_formula.sections.push({
+                                  id: Math.random()
+                                    .toString(36)
+                                    .substr(2, 9),
                                   coefficient:
                                     section_dialog.section.coefficient,
                                   judges: section_dialog.section.judges_to_add
@@ -304,14 +307,31 @@
                     :key="sc"
                   >
                     <div
-                      class="pa-1 d-flex flex-column"
-                      style="border-radius: 6px;"
+                      class="pa-1 pr-4 d-flex flex-column"
+                      style="border-radius: 6px;position:relative;"
                       :style="{
                         backgroundColor:
                           $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
                         border: `1px solid ${$vuetify.theme.themes[appTheme].accent}`
                       }"
                     >
+                      <div
+                        class="d-flex justify-center align-center"
+                        style="position: absolute; top: 0;right: 0;"
+                      >
+                        <v-icon
+                          @click="
+                            competition.result_formula.sections = competition.result_formula.sections.filter(
+                              _section => {
+                                return _section.id !== section.id;
+                              }
+                            )
+                          "
+                          small
+                          :color="$vuetify.theme.themes[appTheme].action_red"
+                          >mdi-close</v-icon
+                        >
+                      </div>
                       <div
                         class="pa-1 d-flex align-self-start"
                         style="border-radius: 6px"
@@ -356,10 +376,10 @@
           </div>
         </div>
       </div>
-      <v-row no-gutters>
-        <v-card-title>Подсчёт итогового результата</v-card-title>
-        <v-col cols="12"></v-col
-      ></v-row>
+      <div class="pa-2 d-flex flex-column">
+        <v-card-title>Формула подстчёта заезда</v-card-title>
+        <div class="d-flex flex-wrap align-center"></div>
+      </div>
     </v-card>
   </v-container>
 </template>

@@ -21,10 +21,10 @@ export default {
         this.value = value || 0;
         this.race = race;
         this.judge = judgeID;
+        this.id = Math.random()
+          .toString(36)
+          .substr(2, 9);
       }
-      id = Math.random()
-        .toString(36)
-        .substr(2, 9);
     },
     JuryClass: class {
       constructor(title) {

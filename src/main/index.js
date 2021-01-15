@@ -124,7 +124,7 @@ io.on("connection", socket => {
       competition.stuff.jury[0].connected = true;
       competition.stuff.jury[0].socket_id = socket.id;
 
-      socket.emit("competition_data_updated", competition);
+      io.sockets.emit("competition_data_updated", competition);
       mainWindow &&
         mainWindow.webContents.send("server_message", [
           1,
@@ -148,11 +148,11 @@ io.on("connection", socket => {
           judge.socket_id = socket.id;
           judge.connected = true;
 
-          socket.emit("competition_data_updated", competition);
+          io.sockets.emit("competition_data_updated", competition);
           mainWindow &&
             mainWindow.webContents.send("server_message", [
               1,
-              `Судья ${judge.id} ${judge.surName} ${judge.name} подключился`
+              `Судья ${judge.id} ${judge.surName} ${judge.name} подключился. ID: ${judge.socket_id}`
             ]);
         }
       });
@@ -162,6 +162,15 @@ io.on("connection", socket => {
       ]);
       check(true);
     } else check(false);
+  });
+  socket.on("force_disconnect", socket_id => {
+    for (let stuffKey in competition.stuff) {
+      for (let user in competition.stuff[stuffKey]) {
+        competition.stuff[stuffKey][user].socket_id &&
+          competition.stuff[stuffKey][user].socket_id === socket_id &&
+          io.sockets.connected[socket_id].disconnect();
+      }
+    }
   });
   /**
    * RACE EVENTS

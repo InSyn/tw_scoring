@@ -334,7 +334,8 @@
                 <v-icon small>mdi-close</v-icon></v-btn
               >
               <span
-                style="display: block; transition: background-color 192ms, box-shadow 192ms; position:absolute; border-radius: 4px; bottom: 8px; left: 50%; transform: translateX(-50%); height: 4px; width: 48px;"
+                @click="force_disconnect(judge.socket_id)"
+                style="display: block; cursor:pointer; transition: background-color 192ms, box-shadow 192ms; position:absolute; border-radius: 4px; bottom: 8px; left: 50%; transform: translateX(-50%); height: 4px; width: 48px;"
                 :style="
                   competition.stuff.judges[jd].connected
                     ? {
@@ -360,6 +361,14 @@
 import { mapGetters } from "vuex";
 export default {
   name: "stuff",
+  methods: {
+    force_disconnect(socket_id) {
+      this.$store.commit("main/force_disconnect", socket_id);
+    },
+    log(data) {
+      console.log(data);
+    }
+  },
   computed: {
     ...mapGetters("main", ["competition", "appTheme"]),
     ...mapGetters("roles", ["JudgeClass", "JuryClass"]),

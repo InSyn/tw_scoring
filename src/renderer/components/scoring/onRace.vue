@@ -483,8 +483,11 @@ export default {
             (this.competition.stuff.judges
               .map(judge => {
                 let mark;
-                competitor.marks.find(mark => {
-                  return mark.judge === judge.id;
+                competitor.marks.find(_mark => {
+                  return (
+                    _mark.judge === judge.id &&
+                    _mark.race === this.competition.selected_race_id
+                  );
                 })
                   ? (mark = competitor.marks.find(mark => {
                       return mark.judge === judge.id;
