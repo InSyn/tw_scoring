@@ -280,7 +280,7 @@
                     v-html="`Удалить`"
                   ></v-btn
                   ><v-btn
-                    @click="dialogs.del_dialog.state = false"
+                    @click="race.del_dialog = false"
                     v-html="`Отмена`"
                   ></v-btn>
                 </v-card-actions> </v-card
@@ -303,16 +303,21 @@
           backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA
         }"
       >
-        <v-row
-          no-gutters
-          class="pa-2 font-weight-bold"
+        <div
+          class="pa-2 d-flex align-center flex-nowrap font-weight-bold"
           style="font-size: 1.4rem"
-          >{{
+        >
+          {{
             `${competition.races[race_menu.selected].type.title} / ${
               competition.races[race_menu.selected].discipline.title
             } / ${competition.races[race_menu.selected].title}`
-          }}</v-row
-        >
+          }}<v-spacer></v-spacer
+          ><v-btn
+            v-html="`Добавить участника`"
+            text
+            :color="$vuetify.theme.themes[appTheme].success"
+          ></v-btn>
+        </div>
         <div
           style="max-height: 60vh; overflow-y: auto; border-radius: 6px"
           :style="{
@@ -320,8 +325,12 @@
               $vuetify.theme.themes[appTheme].standardBackgroundRGBA
           }"
         >
-          <v-hover
-            v-slot:default="{ hover }"
+          <v-dialog
+            v-model="
+              competition.competitorsSheet.competitors.find(_comp => {
+                return _comp.id === competitor.id;
+              }).info_dialog.state
+            "
             v-for="(competitor,
             comp) in competition.competitorsSheet.competitors.filter(
               _competitor => {
@@ -331,24 +340,95 @@
               }
             )"
             :key="competitor.id"
-          >
-            <v-row
-              no-gutters
-              class="pa-1"
-              :style="
-                hover && {
-                  backgroundColor:
-                    $vuetify.theme.themes[appTheme].subjectBackgroundRGBA
-                }
-              "
+            width="320px"
+            ><template v-slot:activator="{ on }">
+              <v-hover v-slot:default="{ hover }">
+                <v-row
+                  v-on="on"
+                  no-gutters
+                  class="pa-1"
+                  style="cursor:pointer;"
+                  :style="
+                    hover && {
+                      backgroundColor:
+                        $vuetify.theme.themes[appTheme].subjectBackgroundRGBA
+                    }
+                  "
+                >
+                  <v-col
+                    class="d-flex pa-1"
+                    v-for="(field, f) in competitor.info_data"
+                    :key="f"
+                    v-html="field"
+                  ></v-col> </v-row></v-hover></template
+            ><v-card
+              :style="{
+                backgroundColor:
+                  $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
+                color: $vuetify.theme.themes[appTheme].textDefault
+              }"
+              class="d-flex flex-column"
             >
-              <v-col
-                class="d-flex pa-1"
-                v-for="(field, f) in competitor.info_data"
-                :key="f"
-                v-html="field"
-              ></v-col> </v-row
-          ></v-hover>
+              <v-card-title
+                class="px-4 ma-0 d-flex align-center justify-space-between"
+                style="font-weight:bold; font-size: 1.2rem"
+                ><div>Изменить данные участника</div>
+                <v-btn
+                  @click="
+                    competition.competitorsSheet.competitors.find(_comp => {
+                      return _comp.id === competitor.id;
+                    }).info_dialog.state = false
+                  "
+                  icon
+                  :color="$vuetify.theme.themes[appTheme].action_red"
+                  ><v-icon>mdi-close</v-icon></v-btn
+                ></v-card-title
+              >
+              <v-card-text class="pa-2 ma-0" style="font-size: 1rem"
+                ><div
+                  class="pa-1 d-flex align-center flex-nowrap"
+                  v-for="(info, i) in competitor.info_data"
+                  :key="i"
+                  :style="{
+                    color: $vuetify.theme.themes[appTheme].textDefault
+                  }"
+                >
+                  <label
+                    :for="competitor.id"
+                    v-html="`${i}`"
+                    style="width: 4rem; font-weight: bold;"
+                  ></label
+                  ><input
+                    :id="competitor.id"
+                    v-model="
+                      competition.competitorsSheet.competitors.find(_comp => {
+                        return _comp.id === competitor.id;
+                      }).info_data[i]
+                    "
+                    type="text"
+                    class="ml-2 pa-1"
+                    style="border-radius: 2px"
+                    :style="{
+                      color: $vuetify.theme.themes[appTheme].textDefault,
+                      backgroundColor:
+                        $vuetify.theme.themes[appTheme].standardBackgroundRGBA
+                    }"
+                  /></div
+              ></v-card-text>
+              <v-card-actions class="d-flex align-center flex-nowrap"
+                ><v-btn
+                  @click="
+                    remove_competitor(
+                      competitor.id,
+                      competition.races[race_menu.selected].id
+                    )
+                  "
+                  text
+                  :color="$vuetify.theme.themes[appTheme].action_red"
+                  v-html="`Удалить участника`"
+                ></v-btn
+              ></v-card-actions> </v-card
+          ></v-dialog>
         </div>
       </div> </v-container
   ></v-container>
@@ -404,13 +484,43 @@ export default {
         });
     },
     del_race(race_id) {
-      console.log(`Deleted ${race_id}`);
       this.competition.races.find(race => {
         return race.id === race_id;
       }).del_dialog = false;
       this.competition.races = this.competition.races.filter(race => {
         return race.id !== race_id;
       });
+      this.socket &&
+        this.socket.connected &&
+        this.socket.emit("set_competition_data", this.competition, res => {
+          console.log(res);
+        });
+    },
+    remove_competitor(competitor_id, race_id) {
+      this.competition.competitorsSheet.competitors.find(_comp => {
+        return _comp.id === competitor_id;
+      }).info_dialog.state = false;
+
+      this.competition.races.find(_race => {
+        return _race.id === race_id;
+      }).startList = this.competition.races
+        .find(_race => {
+          return _race.id === race_id;
+        })
+        .startList.filter(_comp => {
+          return !(_comp === competitor_id);
+        });
+
+      this.competition.races.find(_race => {
+        return _race.id === race_id;
+      }).onStart = this.competition.races
+        .find(_race => {
+          return _race.id === race_id;
+        })
+        .onStart.filter(_comp => {
+          return !(_comp === competitor_id);
+        });
+
       this.socket &&
         this.socket.connected &&
         this.socket.emit("set_competition_data", this.competition, res => {

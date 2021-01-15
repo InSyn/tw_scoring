@@ -196,7 +196,7 @@ io.on("connection", socket => {
         return _comp.id === competition.races[mark.race].onTrack;
       })
       .marks.some(_mark => {
-        return _mark.judge === mark.judge;
+        return _mark.judge === mark.judge && _mark.race === mark.race_id;
       })
       ? competition.competitorsSheet.competitors
           .find(_comp => {

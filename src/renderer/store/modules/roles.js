@@ -12,6 +12,7 @@ export default {
         .toString(36)
         .substr(2, 9);
       info_data = {};
+      info_dialog = { state: false };
       race_status = null;
       res_accepted = false;
     },

@@ -286,7 +286,10 @@
                             );
                           })
                           .marks.find(mark => {
-                            return mark.judge === judge.id;
+                            return (
+                              mark.judge === judge.id &&
+                              mark.race === competition.selected_race_id
+                            );
                           }) &&
                         competition.competitorsSheet.competitors
                           .find(_competitor => {
@@ -296,7 +299,10 @@
                             );
                           })
                           .marks.find(mark => {
-                            return mark.judge === judge.id;
+                            return (
+                              mark.judge === judge.id &&
+                              mark.race === competition.selected_race_id
+                            );
                           }).value) ||
                         '0'}`
                     "
