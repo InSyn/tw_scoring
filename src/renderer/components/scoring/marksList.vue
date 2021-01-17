@@ -7,7 +7,7 @@
         backgroundColor: `${$vuetify.theme.themes[appTheme].cardBackgroundRGBA}`
       }"
     >
-      <v-row class="pa-1" style="height: 2rem;" no-gutters>
+      <v-row class="pa-1" style="font-size:0.8rem; height: 2rem;" no-gutters>
         <v-col class="d-flex justify-center align-center" cols="2">J/№</v-col>
         <v-col class="d-flex justify-center align-center" cols="2">Ст.№</v-col>
         <v-col class="d-flex justify-center align-center" cols="2">Run</v-col>

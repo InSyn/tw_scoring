@@ -460,10 +460,7 @@ export default {
       this.socket &&
         this.socket.connected &&
         (() => {
-          this.socket.emit("set_finished_competitor", [
-            [competitor, this.competition.selected_race_id],
-            this.competition
-          ]);
+          this.socket.emit("set_finished_competitor", this.competition);
         })();
     },
     set_raceStatus(status) {
@@ -489,8 +486,11 @@ export default {
                     _mark.race === this.competition.selected_race_id
                   );
                 })
-                  ? (mark = competitor.marks.find(mark => {
-                      return mark.judge === judge.id;
+                  ? (mark = competitor.marks.find(_mark => {
+                      return (
+                        _mark.judge === judge.id &&
+                        _mark.race === this.competition.selected_race_id
+                      );
                     }).value)
                   : (mark = 0);
                 return mark;

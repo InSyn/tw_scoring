@@ -191,11 +191,11 @@ io.on("connection", socket => {
     io.sockets.emit("competition_data_updated", competition);
   });
   socket.on("set_finished_competitor", data => {
-    data[1].races !== competition.races &&
-      (() => {
-        competition.races = data[1].races;
-        io.sockets.emit("competition_data_updated", competition);
-      })();
+    for (let _field in competition) {
+      competition[_field] !== data[_field]
+        ? (competition[_field] = data[_field])
+        : null;
+    }
     io.sockets.emit("competition_data_updated", competition);
   });
   socket.on("set_mark", mark => {
@@ -216,8 +216,9 @@ io.on("connection", socket => {
           .find(_comp => {
             return _comp.id === competition.races[mark.race].onTrack;
           })
-          .marks.some(markToChange => {
-            markToChange.judge === mark.judge
+          .marks.find(markToChange => {
+            return markToChange.judge === mark.judge &&
+              markToChange.race === mark.race_id
               ? (markToChange.value = mark.value)
               : null;
           });

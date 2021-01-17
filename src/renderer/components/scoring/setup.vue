@@ -93,7 +93,6 @@
                 : ''
             }`
           "
-          @click="log(competition)"
         ></div>
       </v-row>
 
