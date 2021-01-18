@@ -17,8 +17,8 @@
     "postinstall": ""
   },
   "build": {
-    "productName": "tw_scoring",
-    "appId": "www.timingweb.com",
+    "productName": "TW Scoring",
+    "appId": "TW Scoring Secretary Terminal",
     "directories": {
       "output": "build"
     },

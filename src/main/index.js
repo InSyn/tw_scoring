@@ -199,13 +199,14 @@ io.on("connection", socket => {
     io.sockets.emit("competition_data_updated", competition);
   });
   socket.on("set_mark", mark => {
+    console.log(mark);
     competition.races[mark.race].onTrack &&
     !competition.competitorsSheet.competitors
       .find(_comp => {
         return _comp.id === competition.races[mark.race].onTrack;
       })
       .marks.some(_mark => {
-        return _mark.judge === mark.judge && _mark.race === mark.race_id;
+        return _mark.judge === mark.judge && _mark.race === mark.race;
       })
       ? competition.competitorsSheet.competitors
           .find(_comp => {
@@ -218,7 +219,7 @@ io.on("connection", socket => {
           })
           .marks.find(markToChange => {
             return markToChange.judge === mark.judge &&
-              markToChange.race === mark.race_id
+              markToChange.race === mark.race
               ? (markToChange.value = mark.value)
               : null;
           });
