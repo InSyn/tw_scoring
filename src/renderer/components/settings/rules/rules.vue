@@ -104,7 +104,7 @@
               >
                 <div
                   class="pa-1 d-flex"
-                  style="font-weight:bold;"
+                  style="font-weight:bold; font-size: 1.4rem"
                   v-html="`Судьи`"
                 ></div>
                 <div class="pa-1 d-flex flex-wrap align-center">
@@ -141,10 +141,13 @@
               >
                 <div
                   class="pa-1 d-flex"
-                  style="font-weight:bold;"
+                  style="font-weight:bold; font-size: 1.4rem"
                   v-html="`Секции`"
                 ></div>
-                <div class="pa-1 d-flex flex-wrap align-center">
+                <div
+                  class="pa-1 d-flex flex-wrap align-center"
+                  style="min-height: 100px"
+                >
                   <v-dialog v-model="section_dialog.state" width="420px"
                     ><template v-slot:activator="{ on }"
                       ><v-btn
@@ -210,7 +213,7 @@
                               v-for="judge in competition.stuff.judges.filter(
                                 _judge => {
                                   return (
-                                    !competition.result_formula.sections.some(
+                                    !competition.result_formula.types[1].sections.some(
                                       section => {
                                         return section.judges.includes(_judge);
                                       }
@@ -282,14 +285,16 @@
                           @click="
                             section_dialog.section.judges_to_add.length > 0 &&
                               (() => {
-                                competition.result_formula.sections.push({
-                                  id: Math.random()
-                                    .toString(36)
-                                    .substr(2, 9),
-                                  coefficient:
-                                    section_dialog.section.coefficient,
-                                  judges: section_dialog.section.judges_to_add
-                                });
+                                competition.result_formula.types[1].sections.push(
+                                  {
+                                    id: Math.random()
+                                      .toString(36)
+                                      .substr(2, 9),
+                                    coefficient:
+                                      section_dialog.section.coefficient,
+                                    judges: section_dialog.section.judges_to_add
+                                  }
+                                );
                                 section_dialog.state = false;
                                 section_dialog.section.coefficient = 1;
                                 section_dialog.section.judges_to_add = [];
@@ -303,11 +308,12 @@
                   >
                   <div
                     class="pa-1"
-                    v-for="(section, sc) in competition.result_formula.sections"
+                    v-for="(section, sc) in competition.result_formula.types[1]
+                      .sections"
                     :key="sc"
                   >
                     <div
-                      class="pa-1 pr-4 d-flex flex-column"
+                      class="pa-2 pr-4 d-flex flex-column"
                       style="border-radius: 6px;position:relative;"
                       :style="{
                         backgroundColor:
@@ -321,7 +327,7 @@
                       >
                         <v-icon
                           @click="
-                            competition.result_formula.sections = competition.result_formula.sections.filter(
+                            competition.result_formula.types[1].sections = competition.result_formula.types[1].sections.filter(
                               _section => {
                                 return _section.id !== section.id;
                               }

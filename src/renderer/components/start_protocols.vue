@@ -312,11 +312,97 @@
               competition.races[race_menu.selected].discipline.title
             } / ${competition.races[race_menu.selected].title}`
           }}<v-spacer></v-spacer
-          ><v-btn
-            v-html="`Добавить участника`"
-            text
-            :color="$vuetify.theme.themes[appTheme].success"
-          ></v-btn>
+          ><v-dialog
+            v-model="dialogs.add_competitor_to_race.state"
+            width="480px"
+            ><template v-slot:activator="{ on }"
+              ><v-btn
+                v-on="on"
+                v-html="`Добавить участника`"
+                text
+                :color="$vuetify.theme.themes[appTheme].success"
+              ></v-btn></template
+            ><v-card
+              class="pa-2 ma-0"
+              :style="{
+                backgroundColor:
+                  $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
+                color: $vuetify.theme.themes[appTheme].textDefault
+              }"
+            >
+              <v-card-title
+                class="pa-2 ma-0"
+                v-html="
+                  `Добавить участника в ${
+                    competition.races[race_menu.selected].title
+                  }`
+                "
+              ></v-card-title>
+              <div class="pa-2 d-flex flex-nowrap" style="height: 240px;">
+                <div
+                  class="pa-2 ma-1 d-flex flex-column"
+                  style="border-radius: 6px; flex-basis: 50%; height: 100%;overflow-y: auto"
+                  :style="{
+                    backgroundColor:
+                      $vuetify.theme.themes[appTheme].standardBackgroundRGBA
+                  }"
+                >
+                  <v-hover
+                    v-slot:default="{ hover }"
+                    v-for="competitor in competition.competitorsSheet
+                      .competitors"
+                    :key="competitor.id"
+                  >
+                    <div
+                      class="pa-2"
+                      :style="
+                        hover && {
+                          backgroundColor:
+                            $vuetify.theme.themes[appTheme].cardBackgroundRGBA
+                        }
+                      "
+                      v-html="
+                        `${competitor.info_data.bib &&
+                          competitor.info_data.bib} ${competitor.info_data
+                          .surname && competitor.info_data.surname} ${competitor
+                          .info_data.name && competitor.info_data.name}`
+                      "
+                    ></div>
+                  </v-hover>
+                </div>
+                <div
+                  class="pa-2 ma-1 d-flex flex-column"
+                  style="border-radius: 6px; flex-basis: 50%; height: 100%;overflow-y: auto"
+                  :style="{
+                    backgroundColor:
+                      $vuetify.theme.themes[appTheme].standardBackgroundRGBA
+                  }"
+                >
+                  <v-hover
+                    v-slot:default="{ hover }"
+                    v-for="competitor in competition.competitorsSheet
+                      .competitors"
+                    :key="competitor.id"
+                  >
+                    <div
+                      class="pa-2"
+                      :style="
+                        hover && {
+                          backgroundColor:
+                            $vuetify.theme.themes[appTheme].cardBackgroundRGBA
+                        }
+                      "
+                      v-html="
+                        `${competitor.info_data.bib &&
+                          competitor.info_data.bib} ${competitor.info_data
+                          .surname && competitor.info_data.surname} ${competitor
+                          .info_data.name && competitor.info_data.name}`
+                      "
+                    ></div>
+                  </v-hover>
+                </div>
+              </div> </v-card
+          ></v-dialog>
         </div>
         <div
           style="max-height: 60vh; overflow-y: auto; border-radius: 6px"
@@ -548,6 +634,10 @@ export default {
       dialogs: {
         del_dialog: {
           state: false
+        },
+        add_competitor_to_race: {
+          state: false,
+          competitors: []
         },
         create_race: {
           state: false,

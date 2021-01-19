@@ -182,7 +182,25 @@ export default {
         }
       };
       result_formula = {
-        sections: [],
+        type: 0,
+        types: [
+          {
+            id: 0,
+            title: "По судьям",
+            lower_marks: 0,
+            higher_marks: 0,
+            formula: 0,
+            formulas: [
+              { id: 0, title: "Среднее" },
+              { id: 1, title: "Сумма" }
+            ]
+          },
+          {
+            id: 1,
+            title: "По секциям",
+            sections: []
+          }
+        ],
         get_race_result: data => {
           let marks = (data.length > 0 && data) || [0, 0];
           let sections_res = [];
