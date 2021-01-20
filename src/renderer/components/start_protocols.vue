@@ -314,7 +314,8 @@
           }}<v-spacer></v-spacer
           ><v-dialog
             v-model="dialogs.add_competitor_to_race.state"
-            width="480px"
+            persistent
+            width="640px"
             ><template v-slot:activator="{ on }"
               ><v-btn
                 v-on="on"
@@ -330,17 +331,30 @@
                 color: $vuetify.theme.themes[appTheme].textDefault
               }"
             >
-              <v-card-title
-                class="pa-2 ma-0"
-                v-html="
-                  `Добавить участника в ${
-                    competition.races[race_menu.selected].title
-                  }`
-                "
-              ></v-card-title>
-              <div class="pa-2 d-flex flex-nowrap" style="height: 240px;">
+              <div
+                class="d-flex flex-nowrap align-center justify-space-between"
+              >
+                <v-card-title
+                  class="pa-2 ma-0"
+                  v-html="
+                    `Добавить участника в ${
+                      competition.races[race_menu.selected].title
+                    }`
+                  "
+                ></v-card-title
+                ><v-btn
+                  @click="
+                    (dialogs.add_competitor_to_race.competitors = []),
+                      (dialogs.add_competitor_to_race.state = false)
+                  "
+                  icon
+                  :color="$vuetify.theme.themes[appTheme].action_red"
+                  ><v-icon>mdi-close</v-icon></v-btn
+                >
+              </div>
+              <div class="pa-2 d-flex flex-nowrap" style="height: 320px;">
                 <div
-                  class="pa-2 ma-1 d-flex flex-column"
+                  class="ma-1 d-flex flex-column"
                   style="border-radius: 6px; flex-basis: 50%; height: 100%;overflow-y: auto"
                   :style="{
                     backgroundColor:
@@ -349,16 +363,31 @@
                 >
                   <v-hover
                     v-slot:default="{ hover }"
-                    v-for="competitor in competition.competitorsSheet
-                      .competitors"
+                    v-for="competitor in competition.competitorsSheet.competitors.filter(
+                      _comp => {
+                        return (
+                          !dialogs.add_competitor_to_race.competitors.includes(
+                            _comp.id
+                          ) &&
+                          !competition.races[
+                            race_menu.selected
+                          ].onStart.includes(_comp.id)
+                        );
+                      }
+                    )"
                     :key="competitor.id"
                   >
                     <div
                       class="pa-2"
+                      style="cursor:pointer;"
+                      @click="
+                        dialogs.add_competitor_to_race.competitors.push(
+                          competitor.id
+                        )
+                      "
                       :style="
                         hover && {
-                          backgroundColor:
-                            $vuetify.theme.themes[appTheme].cardBackgroundRGBA
+                          backgroundColor: `rgba(48,242,192,.4)`
                         }
                       "
                       v-html="
@@ -371,7 +400,7 @@
                   </v-hover>
                 </div>
                 <div
-                  class="pa-2 ma-1 d-flex flex-column"
+                  class="ma-1 d-flex flex-column"
                   style="border-radius: 6px; flex-basis: 50%; height: 100%;overflow-y: auto"
                   :style="{
                     backgroundColor:
@@ -380,16 +409,28 @@
                 >
                   <v-hover
                     v-slot:default="{ hover }"
-                    v-for="competitor in competition.competitorsSheet
-                      .competitors"
+                    v-for="competitor in competition.competitorsSheet.competitors.filter(
+                      _comp => {
+                        return dialogs.add_competitor_to_race.competitors.includes(
+                          _comp.id
+                        );
+                      }
+                    )"
                     :key="competitor.id"
                   >
                     <div
+                      @click="
+                        dialogs.add_competitor_to_race.competitors = dialogs.add_competitor_to_race.competitors.filter(
+                          _comp => {
+                            return _comp !== competitor.id;
+                          }
+                        )
+                      "
                       class="pa-2"
+                      style="cursor:pointer;"
                       :style="
                         hover && {
-                          backgroundColor:
-                            $vuetify.theme.themes[appTheme].cardBackgroundRGBA
+                          backgroundColor: `rgba(242,48,92,.4)`
                         }
                       "
                       v-html="
@@ -401,7 +442,24 @@
                     ></div>
                   </v-hover>
                 </div>
-              </div> </v-card
+              </div>
+              <v-card-actions class="d-flex align-center justify-end"
+                ><v-btn
+                  style="font-size: 1.2rem"
+                  @click="
+                    competition.races[race_menu.selected].startList.push(
+                      ...dialogs.add_competitor_to_race.competitors
+                    ),
+                      (competition.races[race_menu.selected].onStart =
+                        competition.races[race_menu.selected].startList),
+                      (dialogs.add_competitor_to_race.state = false),
+                      (dialogs.add_competitor_to_race.competitors = [])
+                  "
+                  text
+                  :color="$vuetify.theme.themes[appTheme].action_blue"
+                  v-html="`Применить`"
+                ></v-btn
+              ></v-card-actions> </v-card
           ></v-dialog>
         </div>
         <div
@@ -418,7 +476,7 @@
               }).info_dialog.state
             "
             v-for="(competitor,
-            comp) in competition.competitorsSheet.competitors.filter(
+            comp_n) in competition.competitorsSheet.competitors.filter(
               _competitor => {
                 return competition.races[race_menu.selected].startList.includes(
                   _competitor.id
@@ -441,6 +499,11 @@
                     }
                   "
                 >
+                  <div
+                    class="d-flex align-center justify-center align-self-center font-weight-bold"
+                    style="width: 2rem;height: 100%;"
+                    v-html="comp_n"
+                  ></div>
                   <v-col
                     class="d-flex pa-1"
                     v-for="(field, f) in competitor.info_data"

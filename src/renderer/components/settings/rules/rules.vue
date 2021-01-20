@@ -94,8 +94,9 @@
         <v-card-title>Формула подстчёта заезда</v-card-title>
         <div class="d-flex flex-column" style="border-radius: 6px">
           <div class="d-flex flex-nowrap">
-            <div class="pa-2 d-flex flex-column" style="width: 50%;">
+            <div class="mr-2 d-flex flex-column" style="width: 50%;">
               <div
+                class="pa-2"
                 :style="{
                   backgroundColor:
                     $vuetify.theme.themes[appTheme].standardBackgroundRGBA
@@ -103,7 +104,7 @@
                 style="border-radius: 6px"
               >
                 <div
-                  class="pa-1 d-flex"
+                  class="d-flex"
                   style="font-weight:bold; font-size: 1.4rem"
                   v-html="`Судьи`"
                 ></div>
@@ -131,8 +132,9 @@
                 </div>
               </div>
             </div>
-            <div class="pa-2 d-flex flex-column" style="width: 50%;">
+            <div class="ml-2 d-flex flex-column" style="width: 50%;">
               <div
+                class="pa-2"
                 style="border-radius: 6px"
                 :style="{
                   backgroundColor:
@@ -140,7 +142,7 @@
                 }"
               >
                 <div
-                  class="pa-1 d-flex"
+                  class="d-flex"
                   style="font-weight:bold; font-size: 1.4rem"
                   v-html="`Секции`"
                 ></div>

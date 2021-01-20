@@ -183,6 +183,11 @@
                   </div>
                   <v-btn
                     text
+                    :disabled="
+                      col.id === 'bib' ||
+                        col.id === 'name' ||
+                        col.id === 'surname'
+                    "
                     @click.prevent="
                       addColumnDialog.colToDel.push(
                         competition.competitorsSheet.header[c]
