@@ -193,12 +193,28 @@ export default {
             formulas: [
               { id: 0, title: "Среднее" },
               { id: 1, title: "Сумма" }
-            ]
+            ],
+            get_result(judges, race) {
+              let marks = [];
+              for (let judge in judges) {
+                marks.push(judges[judge] || 0);
+              }
+              console.log(marks);
+              return marks;
+            }
           },
           {
             id: 1,
             title: "По секциям",
-            sections: []
+            sections: [],
+            get_result(judges, race, competitor) {
+              let marks = [];
+              for (let judge in judges) {
+                marks.push(judges[judge] || 0);
+              }
+              console.log(marks);
+              return marks;
+            }
           }
         ],
         get_race_result: data => {

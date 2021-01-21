@@ -106,7 +106,14 @@
         </div>
       </div>
       <div class="pa-2 d-flex flex-column">
-        <v-card-title>Формула подстчёта заезда</v-card-title>
+        <v-card-title
+          @click="
+            competition.result_formula.types[
+              competition.result_formula.type
+            ].get_result(competition.stuff.judges)
+          "
+          >Формула подстчёта заезда</v-card-title
+        >
         <div class="d-flex flex-column" style="border-radius: 6px">
           <div class="d-flex flex-nowrap">
             <div class="mr-2 d-flex" style="width: 50%;min-height: 100px">
