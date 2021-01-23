@@ -182,14 +182,6 @@ io.on("connection", socket => {
       })();
     io.sockets.emit("competition_data_updated", competition);
   });
-  socket.on("set_selected_competitor", data => {
-    data[1].races !== competition.races &&
-      (() => {
-        competition.races = data[1].races;
-        io.sockets.emit("competition_data_updated", competition);
-      })();
-    io.sockets.emit("competition_data_updated", competition);
-  });
   socket.on("set_finished_competitor", data => {
     for (let _field in competition) {
       competition[_field] !== data[_field]

@@ -301,7 +301,6 @@ export default {
         this.type = type;
         this.discipline = discipline;
         this.startList = competitors || [];
-        this.onStart = this.startList || [];
         this.selectedCompetitor = competitors[0] || null;
       }
       del_dialog = false;

@@ -88,19 +88,22 @@
             <div class="pa-1" v-if="competition.selected_race">
               <v-hover
                 v-slot:default="{ hover }"
-                v-for="(competitor,
-                c) in competition.competitorsSheet.competitors.filter(_comp => {
-                  return competition.selected_race.onStart.includes(_comp.id);
-                })"
-                :key="c"
+                v-for="competitor in competition.competitorsSheet.competitors.filter(
+                  _comp => {
+                    return competition.selected_race.startList.includes(
+                      _comp.id
+                    );
+                  }
+                )"
+                :key="competitor.id"
               >
                 <div
                   class="d-flex flex-nowrap"
                   tabindex="0"
                   @focus="setFocused($event)"
                   @blur="setBlured($event)"
-                  @dblclick="setSelectedCompetitor(c)"
-                  @keypress.enter="setSelectedCompetitor(c)"
+                  @dblclick="setSelectedCompetitor(competitor.id)"
+                  @keypress.enter="setSelectedCompetitor(competitor.id)"
                   style="cursor: pointer; outline: none; width: 100%; border-radius: 6px; transition: box-shadow 128ms, border 128ms"
                   :style="[
                     {
@@ -151,47 +154,42 @@ import { mapGetters } from "vuex";
 export default {
   name: "startList",
   methods: {
-    setSelectedCompetitor(competitor_key) {
-      this.competition.selected_race.selectedCompetitor = this.competition.selected_race.onStart[
-        competitor_key
-      ];
+    setSelectedCompetitor(competitor_id) {
+      this.competition.selected_race.selectedCompetitor = competitor_id;
       this.socket &&
         this.socket.connected &&
         (() => {
-          this.socket.emit("set_selected_competitor", [
-            [
-              this.competition.selected_race.onStart[competitor_key].id,
-              this.competition.selected_race_id
-            ],
-            this.competition
-          ]);
+          this.socket.emit("set_competition_data", this.competition, res => {
+            console.log(res);
+          });
         })();
     },
-    setToTrack(competitor) {
-      this.competition.selected_race.onTrack === null &&
-        (() => {
-          this.competition.selected_race.onTrack = competitor;
-          this.competition.selected_race.onStart = this.competition.selected_race.onStart.filter(
-            _competitor => {
-              return _competitor !== competitor;
-            }
-          );
-          this.competition.selected_race.selectedCompetitor = this.competition
-            .selected_race.onStart[0]
-            ? this.competition.selected_race.onStart[0]
-            : null;
-          this.socket &&
-            this.socket.connected &&
-            (() => {
-              this.socket.emit("set_selected_competitor", [
-                [
-                  this.competition.selected_race.selectedCompetitor,
-                  this.competition.selected_race_id
-                ],
-                this.competition
-              ]);
-            })();
-        })();
+    setToTrack(competitor_id) {
+      (() => {
+        this.competition.selected_race.onTrack !== null &&
+          (() => {
+            this.competition.selected_race.startList.unshift(
+              this.competition.selected_race.onTrack
+            );
+          })();
+        this.competition.selected_race.onTrack = competitor_id;
+        this.competition.selected_race.startList = this.competition.selected_race.startList.filter(
+          _competitor => {
+            return _competitor !== competitor_id;
+          }
+        );
+        this.competition.selected_race.selectedCompetitor = this.competition
+          .selected_race.startList[0]
+          ? this.competition.selected_race.startList[0]
+          : null;
+        this.socket &&
+          this.socket.connected &&
+          (() => {
+            this.socket.emit("set_competition_data", this.competition, res => {
+              console.log(res);
+            });
+          })();
+      })();
     },
     setFocused(e) {
       e.target.style.backgroundColor = `${
