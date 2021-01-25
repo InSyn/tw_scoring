@@ -191,6 +191,9 @@ export default {
       this.$store.commit("main/pushServerMessage", message);
     });
     this.createCompetition(new this.EventClass());
+    for (let i = 0; i < 4; i++) {
+      this.competition.stuff.judges.push(new this.JudgeClass(null, i + 1));
+    }
     this.serverStatusChecker = setInterval(() => {
       this.socket && this.socket.connected
         ? this.$store.commit("main/serverSetStatus", true)
@@ -226,7 +229,8 @@ export default {
       "appMenu",
       "competition"
     ]),
-    ...mapGetters("event", ["EventClass"])
+    ...mapGetters("event", ["EventClass"]),
+    ...mapGetters("roles", ["JudgeClass"])
   }
 };
 </script>

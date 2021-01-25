@@ -70,12 +70,14 @@
             style="position: absolute; left: 0;right: 0;top: 32px;height: calc(100% - 32px); overflow-y: auto"
           >
             <v-hover
-              v-for="(competitor,
-              key,
-              i) in competition.competitorsSheet.competitors.filter(_comp => {
-                return competition.selected_race.finished.includes(_comp.id);
-              })"
-              :key="i"
+              v-for="competitor in competition.selected_race.finished.map(
+                _comp => {
+                  return competition.competitorsSheet.competitors.find(comp => {
+                    return comp.id === _comp;
+                  });
+                }
+              )"
+              :key="competitor.id"
               v-slot:default="{ hover }"
             >
               <v-row

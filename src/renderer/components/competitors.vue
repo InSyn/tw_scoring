@@ -518,29 +518,7 @@ export default {
             ])
           );
           this.competition.competitorsSheet.competitors.push(
-            new this.CompetitorClass(
-              fields,
-              (() => {
-                let marks = [];
-                for (let i = 1; i <= 4; i++) {
-                  marks.push(
-                    new this.MarkClass(
-                      0,
-                      i,
-                      Math.floor(30 + Math.random() * 70)
-                    )
-                  );
-                  marks.push(
-                    new this.MarkClass(
-                      1,
-                      i,
-                      Math.floor(30 + Math.random() * 70)
-                    )
-                  );
-                }
-                return marks;
-              })()
-            )
+            new this.CompetitorClass(fields)
           );
         });
       });

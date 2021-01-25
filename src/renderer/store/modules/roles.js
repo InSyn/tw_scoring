@@ -17,10 +17,11 @@ export default {
       res_accepted = false;
     },
     MarkClass: class {
-      constructor(race, judgeID, value) {
+      constructor(race, race_id, judge_id, value) {
         this.value = value || 0;
         this.race = race;
-        this.judge = judgeID;
+        this.race_id = race_id;
+        this.judge = judge_id;
         this.id = Math.random()
           .toString(36)
           .substr(2, 9);
@@ -38,6 +39,9 @@ export default {
       constructor(title, id) {
         this.title = title || "Судья";
         this.id = id || 0;
+        this._id = Math.random()
+          .toString(36)
+          .substr(2, 9);
       }
       name = "";
       surName = "";

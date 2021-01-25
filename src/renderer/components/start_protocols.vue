@@ -178,13 +178,6 @@
                   competition.structure.disciplines[
                     competition.structure.selected.discipline
                   ],
-                  competition.competitorsSheet.competitors.filter(
-                    competitor => {
-                      return dialogs.create_race.competitors.some(_comp => {
-                        return competitor.id === _comp.id;
-                      });
-                    }
-                  ),
                   dialogs.create_race.competitors
                 )
               "
@@ -392,7 +385,7 @@
                       "
                       :style="
                         hover && {
-                          backgroundColor: `rgba(48,242,192,.4)`
+                          backgroundColor: `rgba(42,190,106,.4)`
                         }
                       "
                       v-html="
@@ -435,7 +428,7 @@
                       style="cursor:pointer;"
                       :style="
                         hover && {
-                          backgroundColor: `rgba(242,48,92,.4)`
+                          backgroundColor: `rgba(217,45,65,.4)`
                         }
                       "
                       v-html="
@@ -472,7 +465,27 @@
               $vuetify.theme.themes[appTheme].standardBackgroundRGBA
           }"
         >
-          <div v-for="section in ['startList', 'onTrack', 'finished']">
+          <div
+            v-for="section in ['startList', 'onTrack', 'finished']"
+            @click="
+              log(
+                section === 'onTrack'
+                  ? competition.competitorsSheet.competitors.find(_comp => {
+                      return (
+                        _comp.id ===
+                        competition.races[race_menu.selected].onTrack
+                      );
+                    })
+                  : competition.races[race_menu.selected][section].map(comp => {
+                      return competition.competitorsSheet.competitors.find(
+                        _comp => {
+                          return _comp.id === comp;
+                        }
+                      );
+                    })
+              )
+            "
+          >
             <div
               class="pa-1 d-flex align-center justify-center font-weight-bold"
               v-html="section.toUpperCase()"
@@ -484,33 +497,26 @@
                   return _comp.id === competitor.id;
                 }).info_dialog.state
               "
-              v-for="(competitor, comp_n) in [
-                ...competition.competitorsSheet.competitors
-                  .filter(_competitor => {
-                    return section !== 'onTrack'
-                      ? competition.races[race_menu.selected][section].includes(
-                          _competitor.id
-                        )
-                      : competition.races[race_menu.selected][section] ===
-                          _competitor.id;
-                  })
-                  .sort((_comp1, _comp2) => {
-                    log(`${competition.races[race_menu.selected][
-                      section
-                    ].indexOf(_comp2.id)} -
-                      ${competition.races[race_menu.selected][section].indexOf(
-                        _comp1.id
-                      )}`);
+              v-for="(competitor, comp_n) in section === 'onTrack'
+                ? competition.competitorsSheet.competitors.find(_comp => {
                     return (
-                      competition.races[race_menu.selected][section].indexOf(
-                        _comp2.id
-                      ) -
-                      competition.races[race_menu.selected][section].indexOf(
-                        _comp1.id
-                      )
+                      _comp.id === competition.races[race_menu.selected].onTrack
                     );
-                  })
-              ]"
+                  }) && [
+                    competition.competitorsSheet.competitors.find(_comp => {
+                      return (
+                        _comp.id ===
+                        competition.races[race_menu.selected].onTrack
+                      );
+                    })
+                  ]
+                : competition.races[race_menu.selected][section].map(comp => {
+                    return competition.competitorsSheet.competitors.find(
+                      _comp => {
+                        return _comp.id === comp;
+                      }
+                    );
+                  })"
               :key="competitor.id"
               width="320px"
               ><template v-slot:activator="{ on }">
@@ -530,7 +536,7 @@
                     <div
                       class="d-flex align-center justify-center align-self-center font-weight-bold"
                       style="width: 2rem;height: 100%;"
-                      v-html="comp_n"
+                      v-html="comp_n + 1"
                     ></div>
                     <v-col
                       class="d-flex pa-1"
@@ -594,6 +600,7 @@
                 ></v-card-text>
                 <v-card-actions class="d-flex align-center flex-nowrap"
                   ><v-btn
+                    :disabled="section !== 'startList'"
                     @click="
                       remove_competitor(
                         competitor.id,
@@ -667,6 +674,7 @@ export default {
       this.competition.races = this.competition.races.filter(race => {
         return race.id !== race_id;
       });
+      this.competition.selected_race_id = 0;
       this.socket &&
         this.socket.connected &&
         this.socket.emit("set_competition_data", this.competition, res => {

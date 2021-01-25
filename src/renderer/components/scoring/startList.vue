@@ -88,10 +88,12 @@
             <div class="pa-1" v-if="competition.selected_race">
               <v-hover
                 v-slot:default="{ hover }"
-                v-for="competitor in competition.competitorsSheet.competitors.filter(
+                v-for="competitor in competition.selected_race.startList.map(
                   _comp => {
-                    return competition.selected_race.startList.includes(
-                      _comp.id
+                    return competition.competitorsSheet.competitors.find(
+                      comp => {
+                        return comp.id === _comp;
+                      }
                     );
                   }
                 )"
@@ -112,8 +114,8 @@
                         $vuetify.theme.themes[appTheme].standardBackgroundRGBA
                     },
                     hover && {
-                      border: `1px solid ${$vuetify.theme.themes[appTheme].accent}`,
-                      boxShadow: `inset 0 0 2px 1px ${$vuetify.theme.themes[appTheme].accent}`
+                      border: `1px solid ${$vuetify.theme.themes[appTheme].success}`,
+                      boxShadow: `inset 0 0 2px 1px ${$vuetify.theme.themes[appTheme].success}`
                     }
                   ]"
                 >

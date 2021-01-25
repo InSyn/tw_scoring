@@ -109,48 +109,7 @@ export default {
             connected: false
           }
         ],
-        judges: [
-          {
-            category: "",
-            connected: false,
-            id: 1,
-            location: "",
-            name: "J",
-            socket_id: null,
-            surName: "1",
-            title: "Судья"
-          },
-          {
-            category: "",
-            connected: false,
-            id: 2,
-            location: "",
-            name: "J",
-            socket_id: null,
-            surName: "2",
-            title: "Судья"
-          },
-          {
-            category: "",
-            connected: false,
-            id: 3,
-            location: "",
-            name: "J",
-            socket_id: null,
-            surName: "3",
-            title: "Судья"
-          },
-          {
-            category: "",
-            connected: false,
-            id: 4,
-            location: "",
-            name: "J",
-            socket_id: null,
-            surName: "4",
-            title: "Судья"
-          }
-        ],
+        judges: [],
         openers: []
       };
       technicalInfo = [
@@ -194,11 +153,15 @@ export default {
               { id: 0, title: "Среднее" },
               { id: 1, title: "Сумма" }
             ],
-            get_result(judges, race) {
-              let marks = [];
-              for (let judge in judges) {
-                marks.push(judges[judge] || 0);
-              }
+            get_result: (judges, race_id, competitor_id) => {
+              let competitor = this.competitorsSheet.competitors.find(_comp => {
+                return _comp.id === competitor_id;
+              });
+              let marks = judges.forEach(_judge => {
+                competitor.marks.filter(_mark => {
+                  return _mark.race === race_id && _mark.judge === _judge._id;
+                });
+              });
               console.log(marks);
               return marks;
             }
