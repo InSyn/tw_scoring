@@ -160,26 +160,74 @@
                   ></v-hover>
                 </div>
                 <div class="mt-1 d-flex flex-nowrap flex-grow-1">
-                  <div class="d-flex flex-wrap flex-grow-1">
+                  <div class="d-flex flex-column flex-grow-1">
                     <div
-                      class="pa-1"
-                      v-for="(judge, jd) in competition.stuff.judges"
-                      :key="jd"
+                      class="d-flex flex-wrap justify-start align-start flex-grow-1"
                     >
                       <div
-                        class="pa-1 d-flex flex-column"
-                        style="border-radius: 6px; min-height: 3rem;"
-                        :style="{
-                          backgroundColor:
-                            $vuetify.theme.themes[appTheme].cardBackgroundRGBA
-                        }"
+                        class="pa-1"
+                        v-for="(judge, jd) in competition.stuff.judges"
+                        :key="jd"
                       >
                         <div
-                          class="pa-1 font-weight-bold"
-                          v-html="`Судья ${judge.id}`"
-                        ></div>
-                        <div v-html="`${judge.surName} ${judge.name}`"></div>
+                          class="pa-1 d-flex flex-column"
+                          style="border-radius: 6px; min-height: 3rem;"
+                          :style="{
+                            backgroundColor:
+                              $vuetify.theme.themes[appTheme].cardBackgroundRGBA
+                          }"
+                        >
+                          <div
+                            class="pa-1 font-weight-bold"
+                            v-html="`Судья ${judge.id}`"
+                          ></div>
+                          <div v-html="`${judge.surName} ${judge.name}`"></div>
+                        </div>
                       </div>
+                    </div>
+                    <div
+                      class="pa-1 mr-1 d-flex flex-wrap align-center"
+                      style="border-radius: 6px"
+                      :style="{
+                        backgroundColor:
+                          $vuetify.theme.themes[appTheme].cardBackgroundRGBA
+                      }"
+                    >
+                      <v-hover
+                        v-for="formula in competition.result_formula.types[0]
+                          .formulas"
+                        :key="formula.id"
+                        v-slot:default="{ hover }"
+                      >
+                        <div
+                          @click="
+                            competition.result_formula.types[0].formula =
+                              formula.id
+                          "
+                          class="mr-2 d-flex flex-nowrap align-center"
+                          style="cursor:pointer;"
+                        >
+                          <div
+                            style="height: 1.2rem;width: 1.2rem; border-radius: 50%; transition: background-color 112ms, box-shadow 192ms"
+                            :style="[
+                              {
+                                backgroundColor:
+                                  $vuetify.theme.themes[appTheme]
+                                    .standardBackgroundRGBA
+                              },
+                              formula.id ===
+                                competition.result_formula.types[0].formula && {
+                                backgroundColor:
+                                  $vuetify.theme.themes[appTheme].success,
+                                boxShadow: `0 0 2px 1px ${$vuetify.theme.themes[appTheme].success}`
+                              }
+                            ]"
+                          ></div>
+                          <div
+                            class="ml-1 font-weight-bold"
+                            v-html="formula.title"
+                          ></div></div
+                      ></v-hover>
                     </div>
                   </div>
                   <div

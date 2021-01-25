@@ -150,21 +150,120 @@ export default {
             higher_marks: 0,
             formula: 0,
             formulas: [
-              { id: 0, title: "Среднее" },
-              { id: 1, title: "Сумма" }
-            ],
-            get_result: (judges, race_id, competitor_id) => {
-              let competitor = this.competitorsSheet.competitors.find(_comp => {
-                return _comp.id === competitor_id;
-              });
-              let marks = judges.forEach(_judge => {
-                competitor.marks.filter(_mark => {
-                  return _mark.race === race_id && _mark.judge === _judge._id;
-                });
-              });
-              console.log(marks);
-              return marks;
-            }
+              {
+                id: 0,
+                title: "Среднее",
+                get_result: (comp_id, race_id, judges) => {
+                  let acc = this.structure.accuracy[
+                    this.structure.selected.accuracy
+                  ].value;
+                  let marks = [];
+                  judges.forEach(_j => {
+                    marks.push(
+                      ...this.competitorsSheet.competitors
+                        .find(_comp => {
+                          return _comp.id === comp_id;
+                        })
+                        .marks.filter(_mark => {
+                          return _mark.judge === _j && _mark.race === race_id;
+                        })
+                        .map(_mark => {
+                          return _mark.value;
+                        })
+                    );
+                  });
+                  for (
+                    let high = 0;
+                    high < +this.result_formula.types[0].higher_marks;
+                    high++
+                  ) {
+                    console.log(+this.result_formula.types[0].higher_marks);
+                    marks = marks.filter(_mark => {
+                      return _mark !== Math.max(...marks);
+                    });
+                  }
+                  for (
+                    let low = 0;
+                    low < +this.result_formula.types[0].lower_marks;
+                    low++
+                  ) {
+                    console.log(+this.result_formula.types[0].lower_marks);
+                    marks = marks.filter(_mark => {
+                      return _mark !== Math.min(...marks);
+                    });
+                  }
+                  return (
+                    (+this.result_formula.types[0].lower_marks +
+                      +this.result_formula.types[0].higher_marks <
+                      marks.length &&
+                      Math.round(
+                        acc *
+                          (marks.reduce((a, b) => {
+                            return +a + +b;
+                          }) /
+                            marks.length)
+                      ) / acc) ||
+                    0
+                  );
+                }
+              },
+              {
+                id: 1,
+                title: "Сумма",
+                get_result: (comp_id, race_id, judges) => {
+                  let acc = this.structure.accuracy[
+                    this.structure.selected.accuracy
+                  ].value;
+                  let marks = [];
+                  judges.forEach(_j => {
+                    marks.push(
+                      ...this.competitorsSheet.competitors
+                        .find(_comp => {
+                          return _comp.id === comp_id;
+                        })
+                        .marks.filter(_mark => {
+                          return _mark.judge === _j && _mark.race === race_id;
+                        })
+                        .map(_mark => {
+                          return _mark.value;
+                        })
+                    );
+                  });
+                  for (
+                    let high = 0;
+                    high < +this.result_formula.types[0].higher_marks;
+                    high++
+                  ) {
+                    console.log(+this.result_formula.types[0].higher_marks);
+                    marks = marks.filter(_mark => {
+                      return _mark !== Math.max(...marks);
+                    });
+                  }
+                  for (
+                    let low = 0;
+                    low < +this.result_formula.types[0].lower_marks;
+                    low++
+                  ) {
+                    console.log(+this.result_formula.types[0].lower_marks);
+                    marks = marks.filter(_mark => {
+                      return _mark !== Math.min(...marks);
+                    });
+                  }
+                  return (
+                    (+this.result_formula.types[0].lower_marks +
+                      +this.result_formula.types[0].higher_marks <
+                      marks.length &&
+                      Math.round(
+                        acc *
+                          marks.reduce((a, b) => {
+                            return +a + +b;
+                          })
+                      ) / acc) ||
+                    0
+                  );
+                }
+              }
+            ]
           },
           {
             id: 1,

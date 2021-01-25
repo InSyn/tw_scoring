@@ -520,6 +520,32 @@ export default {
           this.competition.competitorsSheet.competitors.push(
             new this.CompetitorClass(fields)
           );
+          for (let _j in this.competition.stuff.judges) {
+            this.competition.competitorsSheet.competitors[
+              this.competition.competitorsSheet.competitors.length - 1
+            ].marks.push(
+              new this.MarkClass(
+                0,
+                Math.random()
+                  .toString(36)
+                  .substr(2, 9),
+                this.competition.stuff.judges[_j].id,
+                Math.floor(30 + Math.random() * 70)
+              )
+            );
+            this.competition.competitorsSheet.competitors[
+              this.competition.competitorsSheet.competitors.length - 1
+            ].marks.push(
+              new this.MarkClass(
+                1,
+                Math.random()
+                  .toString(36)
+                  .substr(2, 9),
+                this.competition.stuff.judges[_j].id,
+                Math.floor(30 + Math.random() * 70)
+              )
+            );
+          }
         });
       });
       this.socket &&

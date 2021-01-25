@@ -113,21 +113,28 @@
                   :style="{
                     color: $vuetify.theme.themes[appTheme].textDefault
                   }"
-                  style="min-height: 3rem; min-width: 4rem; cursor: pointer"
+                  style="min-height: 3rem; min-width: 4rem; overflow-y: auto; cursor: pointer"
                   v-html="
-                    (competition.selected_race &&
+                    competition.selected_race &&
                       competition.selected_race.onTrack &&
-                      get_res(
-                        competition.competitorsSheet.competitors.find(
-                          _competitor => {
-                            return (
-                              _competitor.id ===
-                              competition.selected_race.onTrack
-                            );
-                          }
+                      competition.result_formula.types[
+                        competition.result_formula.type
+                      ].formulas
+                        .find(_f => {
+                          return (
+                            _f.id ===
+                            competition.result_formula.types[
+                              competition.result_formula.type
+                            ].formula
+                          );
+                        })
+                        .get_result(
+                          competition.selected_race.onTrack,
+                          competition.selected_race_id,
+                          competition.stuff.judges.map(_j => {
+                            return +_j.id;
+                          })
                         )
-                      )) ||
-                      0
                   "
                 ></div>
               </div>
