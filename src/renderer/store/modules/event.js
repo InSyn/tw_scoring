@@ -29,8 +29,8 @@ export default {
         accuracy: [
           { id: 0, title: "1", value: 1 },
           { id: 1, title: "1/10", value: 10 },
-          { id: 2, title: "1/100", value: 1000 },
-          { id: 3, title: "1/1000", value: 10000 }
+          { id: 2, title: "1/100", value: 100 },
+          { id: 3, title: "1/1000", value: 1000 }
         ]
       };
       races = [];
@@ -172,14 +172,14 @@ export default {
                         })
                     );
                   });
+                  let _marks = marks;
                   for (
                     let high = 0;
                     high < +this.result_formula.types[0].higher_marks;
                     high++
                   ) {
-                    console.log(+this.result_formula.types[0].higher_marks);
-                    marks = marks.filter(_mark => {
-                      return _mark !== Math.max(...marks);
+                    _marks = _marks.filter(_mark => {
+                      return _mark !== Math.max(..._marks);
                     });
                   }
                   for (
@@ -187,21 +187,28 @@ export default {
                     low < +this.result_formula.types[0].lower_marks;
                     low++
                   ) {
-                    console.log(+this.result_formula.types[0].lower_marks);
-                    marks = marks.filter(_mark => {
-                      return _mark !== Math.min(...marks);
+                    _marks = _marks.filter(_mark => {
+                      return _mark !== Math.min(..._marks);
                     });
                   }
+                  console.log(
+                    +this.result_formula.types[0].lower_marks,
+                    +this.result_formula.types[0].higher_marks,
+                    +this.result_formula.types[0].lower_marks +
+                      +this.result_formula.types[0].higher_marks,
+                    marks,
+                    _marks
+                  );
                   return (
                     (+this.result_formula.types[0].lower_marks +
                       +this.result_formula.types[0].higher_marks <
                       marks.length &&
                       Math.round(
                         acc *
-                          (marks.reduce((a, b) => {
+                          (_marks.reduce((a, b) => {
                             return +a + +b;
                           }) /
-                            marks.length)
+                            _marks.length)
                       ) / acc) ||
                     0
                   );
