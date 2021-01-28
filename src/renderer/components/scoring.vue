@@ -4,7 +4,7 @@
       <setup></setup>
       <chat></chat>
       <marks-list></marks-list> </v-row
-    ><v-row no-gutters style="height: 30%; min-height: 120px">
+    ><v-row no-gutters style="height: 30%; min-height: 200px">
       <start-list></start-list>
       <on-race></on-race> </v-row
     ><v-row no-gutters style="height: 35%; min-height: 240px">

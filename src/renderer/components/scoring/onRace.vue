@@ -99,7 +99,18 @@
                   }
               "
             >
-              <div v-html="`Рез.`"></div>
+              <v-hover v-slot:default="{ hover }"
+                ><div
+                  style="cursor:pointer;"
+                  :style="
+                    hover && {
+                      color: $vuetify.theme.themes[appTheme].action_blue
+                    }
+                  "
+                  @click="pushMarks()"
+                  v-html="`Рез.`"
+                ></div
+              ></v-hover>
               <div
                 class="px-2 py-1 ml-2 d-flex justify-center align-center"
                 style="border-radius: 6px;min-width: 3rem"
@@ -130,7 +141,7 @@
                         })
                         .get_result(
                           competition.selected_race.onTrack,
-                          competition.selected_race_id,
+                          competition.races[competition.selected_race_id].id,
                           competition.stuff.judges.map(_j => {
                             return +_j.id;
                           })
@@ -442,6 +453,26 @@ import { mapGetters } from "vuex";
 export default {
   name: "onRace",
   methods: {
+    pushMarks() {
+      this.competition.stuff.judges.forEach(_judge => {
+        this.competition.competitorsSheet.competitors.forEach(_comp => {
+          !_comp.marks.some(_mark => {
+            return (
+              _mark.judge === _judge.id &&
+              _mark.race_id === this.competition.selected_race.id
+            );
+          }) &&
+            _comp.marks.push(
+              new this.MarkClass(
+                this.competition.selected_race_id,
+                this.competition.selected_race.id,
+                _judge.id,
+                Math.round(30 + Math.random() * 70)
+              )
+            );
+        });
+      });
+    },
     setSelectedCompetitor(competitor) {
       this.competition.selected_race.selectedCompetitor = this.competition.selected_race.onStart[
         competitor
@@ -529,7 +560,8 @@ export default {
     };
   },
   computed: {
-    ...mapGetters("main", ["competition", "appTheme", "socket"])
+    ...mapGetters("main", ["competition", "appTheme", "socket"]),
+    ...mapGetters("roles", ["MarkClass"])
   }
 };
 </script>

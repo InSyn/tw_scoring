@@ -357,8 +357,8 @@
                     >
                       <v-card-title class="pa-2 d-flex align-center"
                         ><div v-html="`Создание секции`"></div>
-                        <v-spacer></v-spacer
-                        ><v-btn
+                        <v-spacer></v-spacer>
+                        <v-btn
                           icon
                           @click="
                             () => {
@@ -377,7 +377,7 @@
                             <input
                               class="pa-1 ml-2"
                               type="number"
-                              step="0.1"
+                              step="0.05"
                               style="border-radius: 2px; width: 4rem; font-weight: bold;"
                               v-model="section_dialog.section.coefficient"
                               :style="{
@@ -530,16 +530,23 @@
                             >mdi-close</v-icon
                           >
                         </div>
-                        <div
-                          class="pa-1 d-flex align-self-start"
-                          style="border-radius: 6px"
-                          :style="{
-                            backgroundColor:
-                              $vuetify.theme.themes[appTheme]
-                                .standardBackgroundRGBA
-                          }"
-                          v-html="`Kоэф. ${section.coefficient}`"
-                        ></div>
+                        <div class="d-flex align-center flex-nowrap">
+                          <div class="font-weight-bold" v-html="`Kоэф`"></div>
+                          <input
+                            type="number"
+                            step="0.05"
+                            class="ml-2 py-1 px-2"
+                            style="width: 5rem;border-radius: 6px"
+                            :style="{
+                              color:
+                                $vuetify.theme.themes[appTheme].textDefault,
+                              backgroundColor:
+                                $vuetify.theme.themes[appTheme]
+                                  .standardBackgroundRGBA
+                            }"
+                            v-model="section.coefficient"
+                          />
+                        </div>
                         <div
                           class="mt-2 d-flex align-center flex-wrap"
                           style="border-radius: 6px"
@@ -577,7 +584,41 @@
       </div>
       <div class="pa-2 d-flex flex-column">
         <v-card-title>Формула подстчёта заезда</v-card-title>
-        <div class="d-flex flex-wrap align-center"></div>
+        <div
+          class="pa-2 d-flex flex-wrap align-center"
+          style="border-radius: 6px"
+          :style="{
+            backgroundColor:
+              $vuetify.theme.themes[appTheme].standardBackgroundRGBA
+          }"
+        >
+          <v-btn
+            class="mr-2"
+            v-for="overall_type in competition.result_formula.overall_result
+              .types"
+            @click="
+              competition.result_formula.overall_result.type = +overall_type.id
+            "
+            :disabled="+overall_type.id === 3"
+            :depressed="
+              overall_type.id === competition.result_formula.overall_result.type
+            "
+            :key="overall_type.id"
+            :style="[
+              {
+                color: $vuetify.theme.themes[appTheme].textDefault,
+                backgroundColor:
+                  $vuetify.theme.themes[appTheme].cardBackgroundRGBA
+              },
+              overall_type.id ===
+                competition.result_formula.overall_result.type && {
+                color: $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
+                backgroundColor: $vuetify.theme.themes[appTheme].success
+              }
+            ]"
+            v-html="overall_type.title"
+          ></v-btn>
+        </div>
       </div>
     </v-card>
   </v-container>

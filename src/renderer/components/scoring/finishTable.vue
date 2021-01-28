@@ -122,13 +122,41 @@
                   style="max-width: 5rem"
                   v-for="(race_res, rr) in competition.races"
                   :key="rr"
-                  v-html="get_race_res(competitor, rr)"
+                  v-html="
+                    competition.result_formula.types[
+                      competition.result_formula.type
+                    ].formulas
+                      .find(_f => {
+                        return (
+                          _f.id ===
+                          competition.result_formula.types[
+                            competition.result_formula.type
+                          ].formula
+                        );
+                      })
+                      .get_result(
+                        competitor.id,
+                        race_res.id,
+                        competition.stuff.judges.map(_j => {
+                          return +_j.id;
+                        })
+                      )
+                  "
                 ></v-col
                 ><v-spacer></v-spacer
                 ><v-col
                   class="d-flex justify-end align-center"
                   style="max-width: 5rem"
-                  v-html="get_result(competitor)"
+                  v-html="
+                    competition.result_formula.overall_result.types
+                      .find(_f => {
+                        return (
+                          _f.id ===
+                          competition.result_formula.overall_result.type
+                        );
+                      })
+                      .result(competitor.id)
+                  "
                 ></v-col></v-row
             ></v-hover>
           </div>

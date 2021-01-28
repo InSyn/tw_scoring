@@ -37,6 +37,7 @@
         <input
           type="file"
           id="startListInput"
+          :key="Math.round(Math.random() * 100)"
           hidden
           @change="load_sheet($event)"
         />
@@ -398,6 +399,44 @@
         0.85)`
           }"
         >
+          <v-dialog width="320px" v-model="clearDialog">
+            <template v-slot:activator="{ on }">
+              <v-btn
+                v-on="on"
+                text
+                small
+                :color="$vuetify.theme.themes[appTheme].action_red"
+                >Очистить таблицу</v-btn
+              ></template
+            ><v-card
+              class="pa-2"
+              :style="{
+                backgroundColor:
+                  $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
+                color: $vuetify.theme.themes[appTheme].textDefault
+              }"
+            >
+              <v-card-title
+                class="ma-0 pa-0"
+                v-html="'Удаление участников'"
+              ></v-card-title>
+              <div class="d-flex align-center">
+                <div v-html="`Удалить всех участников?`"></div>
+                <v-btn
+                  small
+                  @click="clearSheet(), (clearDialog = false)"
+                  text
+                  :color="$vuetify.theme.themes[appTheme].accent"
+                  v-html="`Да`"
+                ></v-btn
+                ><v-btn
+                  small
+                  @click="clearDialog = false"
+                  text
+                  :color="$vuetify.theme.themes[appTheme].action_red"
+                  v-html="`Нет`"
+                ></v-btn></div></v-card
+          ></v-dialog>
           <v-spacer></v-spacer>
           <v-dialog width="fit-content" v-model="createCompetitorDialog.state"
             ><template v-slot:activator="{ on }">
@@ -520,32 +559,66 @@ export default {
           this.competition.competitorsSheet.competitors.push(
             new this.CompetitorClass(fields)
           );
-          for (let _j in this.competition.stuff.judges) {
-            this.competition.competitorsSheet.competitors[
-              this.competition.competitorsSheet.competitors.length - 1
-            ].marks.push(
-              new this.MarkClass(
-                0,
-                Math.random()
-                  .toString(36)
-                  .substr(2, 9),
-                this.competition.stuff.judges[_j].id,
-                Math.floor(30 + Math.random() * 70)
-              )
-            );
-            this.competition.competitorsSheet.competitors[
-              this.competition.competitorsSheet.competitors.length - 1
-            ].marks.push(
-              new this.MarkClass(
-                1,
-                Math.random()
-                  .toString(36)
-                  .substr(2, 9),
-                this.competition.stuff.judges[_j].id,
-                Math.floor(30 + Math.random() * 70)
-              )
-            );
-          }
+        });
+        this.competition.races.forEach(_race => {
+          _race.startList = _race.startList.filter(_comp => {
+            return this.competition.competitorsSheet.competitors.some(comp => {
+              return comp.id === _comp;
+            });
+          });
+          !this.competition.competitorsSheet.competitors.some(_comp => {
+            return _comp.id === _race.selectedCompetitor;
+          }) &&
+            (() => {
+              _race.selectedCompetitor = null;
+            })();
+          !this.competition.competitorsSheet.competitors.some(_comp => {
+            return _comp.id === _race.onTrack;
+          }) &&
+            (() => {
+              _race.onTrack = null;
+            })();
+          _race.finished = _race.finished.filter(_comp => {
+            return this.competition.competitorsSheet.competitors.some(comp => {
+              return comp.id === _comp;
+            });
+          });
+        });
+      });
+      this.socket &&
+        this.socket.connected &&
+        this.socket.emit("set_competition_data", this.competition, res => {
+          console.log(res);
+        });
+    },
+    clearSheet() {
+      this.competition.competitorsSheet.competitors = this.competition.competitorsSheet.competitors.filter(
+        _c => {
+          return 0;
+        }
+      );
+      this.competition.races.forEach(_race => {
+        _race.startList = _race.startList.filter(_comp => {
+          return this.competition.competitorsSheet.competitors.some(comp => {
+            return comp.id === _comp;
+          });
+        });
+        !this.competition.competitorsSheet.competitors.some(_comp => {
+          return _comp.id === _race.selectedCompetitor;
+        }) &&
+          (() => {
+            _race.selectedCompetitor = null;
+          })();
+        !this.competition.competitorsSheet.competitors.some(_comp => {
+          return _comp.id === _race.onTrack;
+        }) &&
+          (() => {
+            _race.onTrack = null;
+          })();
+        _race.finished = _race.finished.filter(_comp => {
+          return this.competition.competitorsSheet.competitors.some(comp => {
+            return comp.id === _comp;
+          });
         });
       });
       this.socket &&
@@ -640,6 +713,7 @@ export default {
   },
   data() {
     return {
+      clearDialog: false,
       addColumnDialog: {
         state: false,
         colToAdd: [],

@@ -141,6 +141,122 @@ export default {
         }
       };
       result_formula = {
+        overall_result: {
+          type: 1,
+          types: [
+            {
+              id: 0,
+              title: "Лучший",
+              result: comp_id => {
+                let res = [],
+                  acc = this.structure.accuracy[
+                    this.structure.selected.accuracy
+                  ].value;
+                this.races.forEach(_race => {
+                  res.push(
+                    this.result_formula.types[this.result_formula.type].formulas
+                      .find(_f => {
+                        return (
+                          _f.id ===
+                          this.result_formula.types[this.result_formula.type]
+                            .formula
+                        );
+                      })
+                      .get_result(
+                        comp_id,
+                        _race.id,
+                        this.stuff.judges.map(_j => {
+                          return +_j.id;
+                        })
+                      )
+                  );
+                });
+                return res.length > 0
+                  ? Math.round(acc * Math.max(...res)) / acc
+                  : 0;
+              }
+            },
+            {
+              id: 1,
+              title: "Сумма",
+              result: comp_id => {
+                let res = [],
+                  acc = this.structure.accuracy[
+                    this.structure.selected.accuracy
+                  ].value;
+                this.races.forEach(_race => {
+                  res.push(
+                    this.result_formula.types[this.result_formula.type].formulas
+                      .find(_f => {
+                        return (
+                          _f.id ===
+                          this.result_formula.types[this.result_formula.type]
+                            .formula
+                        );
+                      })
+                      .get_result(
+                        comp_id,
+                        _race.id,
+                        this.stuff.judges.map(_j => {
+                          return +_j.id;
+                        })
+                      )
+                  );
+                });
+                return res.length > 0
+                  ? Math.round(
+                      acc *
+                        res.reduce((a, b) => {
+                          return +a + +b;
+                        })
+                    ) / acc
+                  : 0;
+              }
+            },
+            {
+              id: 2,
+              title: "Среднее",
+              result: comp_id => {
+                let res = [],
+                  acc = this.structure.accuracy[
+                    this.structure.selected.accuracy
+                  ].value;
+                this.races.forEach(_race => {
+                  res.push(
+                    this.result_formula.types[this.result_formula.type].formulas
+                      .find(_f => {
+                        return (
+                          _f.id ===
+                          this.result_formula.types[this.result_formula.type]
+                            .formula
+                        );
+                      })
+                      .get_result(
+                        comp_id,
+                        _race.id,
+                        this.stuff.judges.map(_j => {
+                          return +_j.id;
+                        })
+                      )
+                  );
+                });
+                return res.length > 0
+                  ? Math.round(
+                      (acc *
+                        res.reduce((a, b) => {
+                          return +a + +b;
+                        })) /
+                        res.length
+                    ) / acc
+                  : 0;
+              }
+            },
+            {
+              id: 3,
+              title: "ABC"
+            }
+          ]
+        },
         type: 0,
         types: [
           {
@@ -165,10 +281,12 @@ export default {
                           return _comp.id === comp_id;
                         })
                         .marks.filter(_mark => {
-                          return _mark.judge === _j && _mark.race === race_id;
+                          return (
+                            +_mark.judge === +_j && _mark.race_id === race_id
+                          );
                         })
                         .map(_mark => {
-                          return _mark.value;
+                          return +_mark.value;
                         })
                     );
                   });
@@ -191,14 +309,6 @@ export default {
                       return _mark !== Math.min(..._marks);
                     });
                   }
-                  console.log(
-                    +this.result_formula.types[0].lower_marks,
-                    +this.result_formula.types[0].higher_marks,
-                    +this.result_formula.types[0].lower_marks +
-                      +this.result_formula.types[0].higher_marks,
-                    marks,
-                    _marks
-                  );
                   return (
                     (+this.result_formula.types[0].lower_marks +
                       +this.result_formula.types[0].higher_marks <
@@ -229,10 +339,12 @@ export default {
                           return _comp.id === comp_id;
                         })
                         .marks.filter(_mark => {
-                          return _mark.judge === _j && _mark.race === race_id;
+                          return (
+                            +_mark.judge === +_j && _mark.race_id === race_id
+                          );
                         })
                         .map(_mark => {
-                          return _mark.value;
+                          return +_mark.value;
                         })
                     );
                   });
@@ -241,7 +353,6 @@ export default {
                     high < +this.result_formula.types[0].higher_marks;
                     high++
                   ) {
-                    console.log(+this.result_formula.types[0].higher_marks);
                     marks = marks.filter(_mark => {
                       return _mark !== Math.max(...marks);
                     });
@@ -251,7 +362,6 @@ export default {
                     low < +this.result_formula.types[0].lower_marks;
                     low++
                   ) {
-                    console.log(+this.result_formula.types[0].lower_marks);
                     marks = marks.filter(_mark => {
                       return _mark !== Math.min(...marks);
                     });
@@ -276,14 +386,63 @@ export default {
             id: 1,
             title: "По секциям",
             sections: [],
-            get_result(judges, race, competitor) {
-              let marks = [];
-              for (let judge in judges) {
-                marks.push(judges[judge] || 0);
+            formula: 0,
+            formulas: [
+              {
+                id: 0,
+                get_result: (comp_id, race_id) => {
+                  let acc = this.structure.accuracy[
+                    this.structure.selected.accuracy
+                  ].value;
+                  let s_results = [];
+                  this.result_formula.types[1].sections.forEach(_section => {
+                    let section = [];
+                    _section.judges.forEach(_judge => {
+                      section.push(
+                        (this.competitorsSheet.competitors
+                          .find(_comp => {
+                            return _comp.id === comp_id;
+                          })
+                          .marks.find(_mark => {
+                            return (
+                              _mark.race_id === race_id &&
+                              _mark.judge === _judge.id
+                            );
+                          }) &&
+                          this.competitorsSheet.competitors
+                            .find(_comp => {
+                              return _comp.id === comp_id;
+                            })
+                            .marks.find(_mark => {
+                              return (
+                                _mark.race_id === race_id &&
+                                _mark.judge === _judge.id
+                              );
+                            }).value) ||
+                          0
+                      );
+                    });
+                    s_results.push(
+                      section.length > 0
+                        ? (_section.coefficient *
+                            section.reduce((a, b) => {
+                              return +a + +b;
+                            })) /
+                            section.length
+                        : 0
+                    );
+                  });
+                  return s_results.length > 0
+                    ? Math.round(
+                        acc *
+                          s_results.reduce((a, b) => {
+                            return +a + +b;
+                          })
+                      ) / acc
+                    : 0;
+                }
               }
-              console.log(marks);
-              return marks;
-            }
+            ]
           }
         ],
         get_race_result: data => {
