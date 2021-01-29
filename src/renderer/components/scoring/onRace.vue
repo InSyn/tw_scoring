@@ -472,6 +472,11 @@ export default {
             );
         });
       });
+      this.socket &&
+        this.socket.connected &&
+        this.socket.emit("set_competition_data", this.competition, res => {
+          console.log(res);
+        });
     },
     setSelectedCompetitor(competitor) {
       this.competition.selected_race.selectedCompetitor = this.competition.selected_race.onStart[

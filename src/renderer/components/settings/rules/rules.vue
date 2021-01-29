@@ -585,39 +585,129 @@
       <div class="pa-2 d-flex flex-column">
         <v-card-title>Формула подстчёта заезда</v-card-title>
         <div
-          class="pa-2 d-flex flex-wrap align-center"
+          class="pa-1 d-flex flex-nowrap align-center"
           style="border-radius: 6px"
           :style="{
             backgroundColor:
               $vuetify.theme.themes[appTheme].standardBackgroundRGBA
           }"
         >
-          <v-btn
-            class="mr-2"
-            v-for="overall_type in competition.result_formula.overall_result
-              .types"
-            @click="
-              competition.result_formula.overall_result.type = +overall_type.id
-            "
-            :disabled="+overall_type.id === 3"
-            :depressed="
-              overall_type.id === competition.result_formula.overall_result.type
-            "
-            :key="overall_type.id"
-            :style="[
-              {
-                color: $vuetify.theme.themes[appTheme].textDefault,
-                backgroundColor:
-                  $vuetify.theme.themes[appTheme].cardBackgroundRGBA
-              },
-              overall_type.id ===
-                competition.result_formula.overall_result.type && {
-                color: $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
-                backgroundColor: $vuetify.theme.themes[appTheme].success
-              }
-            ]"
-            v-html="overall_type.title"
-          ></v-btn>
+          <div class="d-flex flex-wrap align-center">
+            <v-btn
+              class="mr-2"
+              v-for="overall_type in competition.result_formula.overall_result
+                .types"
+              @click="
+                competition.result_formula.overall_result.type = +overall_type.id
+              "
+              :disabled="+overall_type.id === 3"
+              :depressed="
+                overall_type.id ===
+                  competition.result_formula.overall_result.type
+              "
+              :key="overall_type.id"
+              :style="[
+                {
+                  color: $vuetify.theme.themes[appTheme].textDefault,
+                  backgroundColor:
+                    $vuetify.theme.themes[appTheme].cardBackgroundRGBA
+                },
+                overall_type.id ===
+                  competition.result_formula.overall_result.type && {
+                  color: $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
+                  backgroundColor: $vuetify.theme.themes[appTheme].success
+                }
+              ]"
+              v-html="overall_type.title"
+            ></v-btn>
+          </div>
+          <v-spacer></v-spacer>
+          <div
+            class="pa-2 d-flex flex-column"
+            style="width: 250px;height: 100%;border-radius: 6px"
+            :style="{
+              backgroundColor:
+                $vuetify.theme.themes[appTheme].cardBackgroundRGBA
+            }"
+          >
+            <div
+              v-for="mode in competition.result_formula.overall_result
+                .select_heats.modes"
+              class="pa-1 px-2 d-flex justify-center align-center font-weight-bold"
+              style="border-radius: 6px"
+              :style="
+                competition.result_formula.overall_result.select_heats.mode ===
+                  mode.id && {
+                  backgroundColor: $vuetify.theme.themes[appTheme].success,
+                  color: $vuetify.theme.themes[appTheme].standardBackgroundRGBA
+                }
+              "
+            >
+              <div v-html="mode.title"></div>
+              <div
+                v-if="mode.id === 1"
+                class="ml-2 d-flex align-center"
+                style="border-radius: 6px"
+                :style="
+                  mode.id === 1 && {
+                    backgroundColor:
+                      $vuetify.theme.themes[appTheme].cardBackgroundRGBA
+                  }
+                "
+              >
+                <v-icon
+                  :color="$vuetify.theme.themes[appTheme].textDefault"
+                  small
+                  @click="
+                    competition.result_formula.overall_result.select_heats
+                      .heats > 0 &&
+                      competition.result_formula.overall_result.select_heats
+                        .heats--
+                  "
+                  >mdi-chevron-left</v-icon
+                >
+                <div
+                  class="pa-1 font-weight-bold"
+                  style="font-size: 1.2rem;"
+                  :style="{
+                    color: $vuetify.theme.themes[appTheme].textDefault
+                  }"
+                  v-html="
+                    competition.result_formula.overall_result.select_heats.heats
+                  "
+                ></div>
+                <v-icon
+                  :color="$vuetify.theme.themes[appTheme].textDefault"
+                  small
+                  @click="
+                    competition.result_formula.overall_result.select_heats
+                      .heats++
+                  "
+                  >mdi-chevron-right</v-icon
+                >
+              </div>
+              <v-spacer></v-spacer>
+              <div
+                @click="
+                  competition.result_formula.overall_result.select_heats.mode =
+                    mode.id
+                "
+                style="border-radius: 50%; height: 1rem;width: 1rem; cursor:pointer;"
+                :style="[
+                  {
+                    backgroundColor:
+                      $vuetify.theme.themes[appTheme].standardBackgroundRGBA
+                  },
+                  competition.result_formula.overall_result.select_heats
+                    .mode === mode.id && {
+                    backgroundColor:
+                      $vuetify.theme.themes[appTheme].textDefault,
+                    boxShadow: `0 0 2px 1px ${$vuetify.theme.themes[appTheme].textDefault}`
+                  }
+                ]"
+              ></div>
+            </div>
+          </div>
         </div>
       </div>
     </v-card>

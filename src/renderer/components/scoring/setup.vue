@@ -163,9 +163,17 @@
                     <div
                       class="pa-2"
                       @click="
-                        competition.selected_race_id = competition.races.indexOf(
+                        (competition.selected_race_id = competition.races.indexOf(
                           prev
-                        )
+                        )),
+                          (() => {
+                            socket &&
+                              socket.connected &&
+                              socket.emit(
+                                'set_raceId',
+                                competition.selected_race_id
+                              );
+                          })()
                       "
                       style="width: 100%;"
                       :style="
@@ -200,9 +208,17 @@
                     <div
                       class="pa-2"
                       @click="
-                        competition.selected_race_id = competition.races.indexOf(
+                        (competition.selected_race_id = competition.races.indexOf(
                           next
-                        )
+                        )),
+                          (() => {
+                            socket &&
+                              socket.connected &&
+                              socket.emit(
+                                'set_raceId',
+                                competition.selected_race_id
+                              );
+                          })()
                       "
                       style="width: 100%;"
                       :style="

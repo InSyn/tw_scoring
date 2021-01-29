@@ -143,6 +143,14 @@ export default {
       result_formula = {
         overall_result: {
           type: 1,
+          select_heats: {
+            heats: 0,
+            mode: 0,
+            modes: [
+              { id: 0, title: "Подсчёт из всех" },
+              { id: 1, title: "Подсчёт из N лучших" }
+            ]
+          },
           types: [
             {
               id: 0,
@@ -203,6 +211,23 @@ export default {
                       )
                   );
                 });
+                this.result_formula.overall_result.select_heats.mode === 1 &&
+                  this.result_formula.overall_result.select_heats.heats > 0 &&
+                  (() => {
+                    for (
+                      let i = 0;
+                      i <=
+                      res.length -
+                        this.result_formula.overall_result.select_heats.heats;
+                      i++
+                    ) {
+                      res.length > 0
+                        ? (res = res.filter(_res => {
+                            return _res !== Math.min(...res);
+                          }))
+                        : null;
+                    }
+                  })();
                 return res.length > 0
                   ? Math.round(
                       acc *
@@ -240,6 +265,23 @@ export default {
                       )
                   );
                 });
+                this.result_formula.overall_result.select_heats.mode === 1 &&
+                  this.result_formula.overall_result.select_heats.heats > 0 &&
+                  (() => {
+                    for (
+                      let i = 0;
+                      i <=
+                      res.length -
+                        this.result_formula.overall_result.select_heats.heats;
+                      i++
+                    ) {
+                      res.length > 0
+                        ? (res = res.filter(_res => {
+                            return _res !== Math.min(...res);
+                          }))
+                        : 0;
+                    }
+                  })();
                 return res.length > 0
                   ? Math.round(
                       (acc *
