@@ -59,6 +59,7 @@
     "socket.io-client": "^2.3.1",
     "vue": "^2.5.16",
     "vue-electron": "^1.0.6",
+    "vue-html2pdf": "^1.8.0",
     "vue-router": "^3.0.1",
     "vue-socket.io": "^3.0.10",
     "vuetify": "^2.3.12",
