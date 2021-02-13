@@ -2,7 +2,7 @@
   <v-container
     v-if="competition"
     class="d-flex flex-column"
-    style="height: 100%; width: 100%; min-height: 720px; min-width: 1280px"
+    style="position: relative; height: 100%; width: 100%; min-height: 720px; min-width: 1280px"
     fluid
   >
     <div class="d-flex pa-2">
@@ -18,6 +18,24 @@
         <div style="height: 20%;" class="d-flex pa-2"><logos></logos></div>
       </div>
     </div>
+    <div
+      v-if="showPreview"
+      class="pa-8"
+      style="position: absolute; top: 0; bottom: 0; left: 0; right: 0"
+      :style="{ backgroundColor: `rgba(255,255,255,.2)` }"
+    >
+      <v-btn
+        depressed
+        @click="$store.commit('main/togglePreview', false)"
+        class="font-weight-bold"
+        style="position: absolute; right: 0; top: 0; border-radius: 0"
+        :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
+        v-html="`Закрыть`"
+        :color="$vuetify.theme.themes[appTheme].action_red"
+      >
+      </v-btn>
+      <preview></preview>
+    </div>
   </v-container>
 </template>
 
@@ -28,6 +46,7 @@ import fp_main from "./final_protocols/fp_main";
 import fonts from "./final_protocols/fonts";
 import filters from "./final_protocols/filters";
 import logos from "./final_protocols/logos";
+import preview from "./../components/final_protocols/preview";
 export default {
   name: "final_protocols",
   components: {
@@ -35,10 +54,11 @@ export default {
     fp_main,
     fonts,
     filters,
-    logos
+    logos,
+    preview
   },
   computed: {
-    ...mapGetters("main", ["competition"])
+    ...mapGetters("main", ["competition", "appTheme", "showPreview"])
   }
 };
 </script>

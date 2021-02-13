@@ -4,6 +4,7 @@ export default {
   state: {
     socket: null,
     competition: null,
+    showPreview: false,
     showMenu: false,
     serverStatus: false,
     serverStatusChecker: null,
@@ -49,6 +50,7 @@ export default {
     serverMessages: state => state.serverMessages,
     showMenu: state => state.showMenu,
     competition: state => state.competition,
+    showPreview: state => state.showPreview,
     serverStatus: state => state.serverStatus,
     serverStatusChecker: state => state.serverStatusChecker,
     appTheme: state => state.appTheme,
@@ -160,6 +162,9 @@ export default {
     },
     createCompetition: (state, competition) => {
       state.competition = competition;
+    },
+    togglePreview: (state, toggleState) => {
+      state.showPreview = toggleState
     }
   },
   actions: {

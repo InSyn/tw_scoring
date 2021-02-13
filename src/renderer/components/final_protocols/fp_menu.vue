@@ -10,6 +10,7 @@
     <v-spacer></v-spacer>
     <v-btn
       class="font-weight-bold ml-4"
+      @click="$store.commit('main/togglePreview', true)"
       depressed
       :color="$vuetify.theme.themes[appTheme].cardBackgroundRGBA"
       :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"

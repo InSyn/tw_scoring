@@ -13,7 +13,7 @@ import final_protocols from "../components/final_protocols";
 import videoGraphics from "../components/settings/video_graphics/videoGraphics";
 import sportGraphics from "../components/settings/sport_graphics/sportGraphics";
 import results from "../components/settings/results/results";
-import rules from "../components/settings/rules/rules";
+import rules from "../components/settings/rules/rules"
 
 export default new Router({
   routes: [
