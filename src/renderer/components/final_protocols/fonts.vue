@@ -5,7 +5,6 @@
     :style="{
       backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA
     }"
-    v-html="`FONTS`"
   ></div>
 </template>
 

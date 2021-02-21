@@ -20,7 +20,7 @@
     </div>
     <div
       v-if="showPreview"
-      class="pa-8"
+      class="pa-8 d-flex align-center justify-center"
       style="position: absolute; top: 0; bottom: 0; left: 0; right: 0"
       :style="{ backgroundColor: `rgba(255,255,255,.2)` }"
     >
@@ -34,7 +34,9 @@
         :color="$vuetify.theme.themes[appTheme].action_red"
       >
       </v-btn>
-      <preview></preview>
+      <preview
+        class="d-flex justify-center align-center overflow-y-auto"
+      ></preview>
     </div>
   </v-container>
 </template>
