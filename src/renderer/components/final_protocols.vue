@@ -34,9 +34,7 @@
         :color="$vuetify.theme.themes[appTheme].action_red"
       >
       </v-btn>
-      <preview
-        class="d-flex justify-center align-center overflow-y-auto"
-      ></preview>
+      <preview></preview>
     </div>
   </v-container>
 </template>
