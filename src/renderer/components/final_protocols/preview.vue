@@ -6,13 +6,7 @@
       backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA
     }"
   >
-    <div
-      v-for="(block, b) in competition.mainData"
-      :key="b"
-      class="d-flex justify-center align-center"
-    >
-      <div>{{ block.value !== null ? block.value : block }}</div>
-    </div>
+    preview
   </div>
 </template>
 <script>
