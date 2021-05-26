@@ -248,15 +248,13 @@ export default {
   height: 100vh;
   * {
     &::-webkit-scrollbar {
-      width: 8px;
-      height: 8px;
+      width: 6px;
+      height: 6px;
     }
     &::-webkit-scrollbar-track {
-      border-radius: 6px;
       background: #888;
     }
     &::-webkit-scrollbar-thumb {
-      border-radius: 6px;
       background: #f1f1f1;
     }
     &::-webkit-scrollbar-thumb:hover {
