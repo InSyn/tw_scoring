@@ -118,10 +118,11 @@ export default {
   mounted() {},
   methods: {
     ...mapActions("main", ["serverSetStatus"]),
-    async startServer() {
-      await app.emit("startSocketServer", this.server_config);
-      if (this.serverStatus)
+    startServer() {
+      app.emit("startSocketServer", this.server_config);
+      if (!this.serverStatus) {
         this.connect(this.server_config[0], this.server_config[1]);
+      }
     },
     connect() {
       if (!this.socket) {
