@@ -15,7 +15,7 @@
           width: `${setup.width}`,
           padding: `${setup.padding}`
         }"
-        style="background-color: aliceblue; color: slategrey"
+        style="background-color: aliceblue; color: slategrey; margin: auto"
       >
         <div class="pdf_header">PROTOCOL HEADER</div>
         <div class="pdf_content">
@@ -41,7 +41,7 @@ export default {
       setup: {
         height: "29.7cm",
         width: "21cm",
-        padding: `1in`,
+        padding: `5mm 5mm`,
         orientation: "portrait"
       }
     };
