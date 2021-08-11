@@ -11,9 +11,9 @@
         slot="pdf-item"
         class="pdf_container"
         :style="{
-          height: `${setup.height}px`,
-          width: `${setup.width}px`,
-          padding: `${setup.padding}px`
+          height: `calc(${setup.height} - 1px)`,
+          width: `${setup.width}`,
+          padding: `${setup.padding}`
         }"
         style="background-color: aliceblue; color: slategrey"
       >
@@ -39,24 +39,28 @@ export default {
   data() {
     return {
       setup: {
-        height: 1080,
-        width: 600,
-        padding: 16
+        height: "29.7cm",
+        width: "21cm",
+        padding: `1in`,
+        orientation: "portrait"
       }
     };
   },
   methods: {
     print_pdf() {
       try {
-        let element = document.getElementById("element-pdf_to_print-print");
+        let element = document.getElementById("pdf_to_print");
         const opt = {
-          margin: 1,
-          filename: "F://Downloads/myfile.pdf",
-          image: { type: "jpeg", quality: 0.98 },
+          margin: 0,
+          filename: "myfile.pdf",
+          image: { type: "jpeg", quality: 1 },
           html2canvas: { scale: 2 },
-          jsPDF: { unit: "in", format: "letter", orientation: "portrait" }
+          jsPDF: {
+            unit: "in",
+            format: "a4",
+            orientation: this.setup.orientation
+          }
         };
-        console.log(opt);
         html2pdf()
           .set(opt)
           .from(element)
