@@ -15,13 +15,24 @@
           width: `${setup.width}`,
           padding: `${setup.padding}`
         }"
-        style="background-color: aliceblue; color: slategrey; margin: auto"
+        style="display:flex; flex-direction: column; background-color: aliceblue; color: slategrey; margin: auto;"
       >
-        <div class="pdf_header">PROTOCOL HEADER</div>
+        <div
+          class="pdf_header"
+          style="background-color: #888888; color: aliceblue;display: flex; justify-content: center; align-items: center;height: 160px"
+        >
+          PROTOCOL HEADER
+        </div>
         <div class="pdf_content">
           {{ $store.getters["main/competition"].competitors }}
         </div>
-        <div class="pdf_footer">PDF FOOTER</div>
+        <v-spacer></v-spacer>
+        <div
+          class="pdf_footer"
+          style="background-color: #888888; color: aliceblue;display: flex; justify-content: center; align-items: center; height: 160px"
+        >
+          PDF FOOTER
+        </div>
       </div>
     </section>
     <v-btn
