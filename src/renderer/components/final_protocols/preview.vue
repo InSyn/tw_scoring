@@ -144,7 +144,7 @@
     </section>
     <v-btn
       @click="print_pdf()"
-      style="background-color: slategrey; color: aliceblue"
+      style="background-color: slategrey; color: aliceblue; border-radius: 0"
       >Download</v-btn
     >
   </div>
