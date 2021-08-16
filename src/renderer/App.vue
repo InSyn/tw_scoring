@@ -96,6 +96,7 @@
       >
         <router-link
           v-slot="{ href, route, navigate, isActive, isExactActive }"
+          custom
           class="m_menu_item"
           v-for="(page, p) in appMenu"
           :key="p"

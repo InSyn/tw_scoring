@@ -218,7 +218,6 @@
         </div>
       </div>
       <div class="d-flex flex-column font-weight-bold">
-        <div class="pa-2" v-html="`Подписи`"></div>
         <div class="d-flex flex-nowrap align-center justify-space-between">
           <div class="d-flex flex-column" style="width: 30%;">
             <div class="pa-1" v-html="`Слева`"></div>
