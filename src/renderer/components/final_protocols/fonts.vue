@@ -6,17 +6,21 @@
       backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA
     }"
   >
-    <div ref="container" :key="Math.random()">
+    <div
+      class="pa-2"
+      style="border-radius: 4px; border: 1px solid #c3d9ff"
+      ref="container"
+    >
       <div
         @click="
           () => {
-            blocks++;
+            blocks.push('block');
           }
         "
-        v-for="block in get_blocks"
-        :key="block"
+        v-for="(block, bi) in get_blocks"
+        :key="bi"
       >
-        {{ `block ${block}` }}
+        {{ `${block}` }}
       </div>
     </div>
     {{ height }}
@@ -35,12 +39,13 @@ export default {
   },
   methods: {
     getHeight() {
-      this.height = this.$refs.container.clientHeight;
+      this.height = this.$refs.container.offsetHeight;
+      while (this.height > 128) {}
     }
   },
   data() {
     return {
-      blocks: 1,
+      blocks: ["block"],
       height: null
     };
   },

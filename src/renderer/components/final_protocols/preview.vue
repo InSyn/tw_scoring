@@ -111,7 +111,26 @@
             </div>
           </div>
         </div>
-        <div class="pdf_content">
+        <div class="pdf_content" style="overflow: auto">
+          <div id="table_container" style="width: 100%;padding: 0 64px">
+            <table style="border-collapse: collapse;width: 100%">
+              <tr
+                v-for="(competitor, ci) in $store.getters[
+                  'protocol_settings/testResults'
+                ]"
+                style="background-color: #888888"
+              >
+                <td
+                  v-for="(competitor_data, cdi) in competitor"
+                  v-show="cdi !== 'runs'"
+                  style="border: 1px solid #888888"
+                >
+                  {{ competitor_data }}
+                </td>
+                <td v-for="mark in competitor.runs[0].marks">{{ mark }}</td>
+              </tr>
+            </table>
+          </div>
           <div
             style="display:flex; flex-wrap: nowrap; align-items: center"
             v-for="competitor in $store.getters['main/competition']
