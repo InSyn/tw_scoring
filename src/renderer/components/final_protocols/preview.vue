@@ -1,6 +1,6 @@
 <template>
   <div
-    style="display: flex; flex-direction: column; justify-content: flex-start; height: 100%;width: 100%; position: relative; overflow-y: auto"
+    style="display: flex; flex-direction: column; justify-content: flex-start; height: 100%;width: 100%; position: relative; overflow-y: auto;padding: 32px"
     :style="{
       backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA
     }"
@@ -50,7 +50,6 @@
 
     <section id="pdf_to_print">
       <div
-        slot="pdf-item"
         class="pdf_container"
         :style="{
           height: `calc(${setup.height} - 1px)`,
@@ -61,7 +60,7 @@
       >
         <div
           class="pdf_header d-flex flex-column"
-          style="display: flex; flex-direction: column;  justify-content: center; align-items: flex-start; height: 160px"
+          style="display: flex; flex-direction: column;  justify-content: center; align-items: flex-start; overflow: hidden; height: 160px"
         >
           <div id="header_image" v-if="assets.header_image">
             <img
@@ -111,26 +110,36 @@
             </div>
           </div>
         </div>
-        <div class="pdf_content" style="overflow: auto">
-          <div id="table_container" style="width: 100%;padding: 0 64px">
-            <table style="border-collapse: collapse;width: 100%">
-              <tr
-                v-for="(competitor, ci) in $store.getters[
-                  'protocol_settings/testResults'
-                ]"
-                style="background-color: #888888"
+        <div
+          class="pdf_content"
+          style="display:flex;overflow-y: auto"
+          :style="{ height: `${setup.height - '320px'}` }"
+        >
+          <v-container fluid style="width: 100%;height: 100%">
+            <v-row
+              no-gutters
+              v-for="(competitor, c_idx) in $store.getters[
+                'protocol_settings/testResults'
+              ]"
+              :key="c_idx"
+              style="background-color: #888888"
+            >
+              <v-col
+                v-for="(competitor_data, cdi) in competitor"
+                :key="cdi"
+                v-show="cdi !== 'runs'"
+                style="border: 1px solid #888888"
               >
-                <td
-                  v-for="(competitor_data, cdi) in competitor"
-                  v-show="cdi !== 'runs'"
-                  style="border: 1px solid #888888"
-                >
-                  {{ competitor_data }}
-                </td>
-                <td v-for="mark in competitor.runs[0].marks">{{ mark }}</td>
-              </tr>
-            </table>
-          </div>
+                {{ competitor_data }}
+              </v-col>
+              <v-col
+                v-for="(mark, m_idx) in competitor.runs[0].marks"
+                :key="m_idx"
+                >{{ mark }}</v-col
+              >
+            </v-row>
+          </v-container>
+
           <div
             style="display:flex; flex-wrap: nowrap; align-items: center"
             v-for="competitor in $store.getters['main/competition']
@@ -141,7 +150,6 @@
             <div v-for="(result, res) in 5">{{ res }}</div>
           </div>
         </div>
-        <v-spacer></v-spacer>
         <div
           class="pdf_footer"
           style="background-color: white; color: black;display: flex; align-items: flex-end; height: 160px"
