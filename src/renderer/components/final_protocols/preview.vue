@@ -1,11 +1,11 @@
 <template>
   <div
-    style="display: flex; flex-direction: column; justify-content: flex-start; height: 100%;width: 100%; position: relative; overflow-y: auto;padding: 32px"
+    style="display: flex; flex-direction: column; justify-content: flex-start; height: 100%;width: 100%; position: relative; z-index: 1000; overflow-y: auto;padding: 32px"
     :style="{
       backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA
     }"
   >
-    <!-- <УПРАВВЛЕНИЕ ЛОГО -->
+    <!-- //УПРАВВЛЕНИЕ ЛОГО -->
     <div style="position: absolute; top: 0;left: 0">
       <div
         style="padding: 4px; margin: 8px; background-color: #888888; border-radius: 2px; cursor: pointer"
@@ -46,7 +46,10 @@
         >
       </div>
     </div>
-    <!-- УПРАВВЛЕНИЕ ЛОГО> -->
+
+    <!-- УПРАВВЛЕНИЕ ЛОГО// -->
+
+    <!-- //PDF Body -->
 
     <section id="pdf_to_print">
       <div
@@ -169,6 +172,9 @@
         </div>
       </div>
     </section>
+
+    <!-- PDF Body// -->
+
     <v-btn
       @click="print_pdf()"
       style="background-color: slategrey; color: aliceblue; border-radius: 0"

@@ -29,7 +29,7 @@ export default {
         ]
       },
       {
-        bib: "101",
+        bib: "102",
         year: "1982",
         name: "Иван",
         surname: "Проверочный",
@@ -46,7 +46,7 @@ export default {
         ]
       },
       {
-        bib: "101",
+        bib: "103",
         year: "1982",
         name: "Иван",
         surname: "Проверочный",
@@ -63,7 +63,7 @@ export default {
         ]
       },
       {
-        bib: "101",
+        bib: "104",
         year: "1982",
         name: "Иван",
         surname: "Проверочный",
@@ -80,7 +80,7 @@ export default {
         ]
       },
       {
-        bib: "101",
+        bib: "105",
         year: "1982",
         name: "Иван",
         surname: "Проверочный",
@@ -97,7 +97,7 @@ export default {
         ]
       },
       {
-        bib: "101",
+        bib: "106",
         year: "1982",
         name: "Иван",
         surname: "Проверочный",
@@ -114,7 +114,7 @@ export default {
         ]
       },
       {
-        bib: "101",
+        bib: "107",
         year: "1982",
         name: "Иван",
         surname: "Проверочный",
@@ -131,7 +131,7 @@ export default {
         ]
       },
       {
-        bib: "101",
+        bib: "108",
         year: "1982",
         name: "Иван",
         surname: "Проверочный",
@@ -148,7 +148,7 @@ export default {
         ]
       },
       {
-        bib: "101",
+        bib: "109",
         year: "1982",
         name: "Иван",
         surname: "Проверочный",
@@ -165,7 +165,7 @@ export default {
         ]
       },
       {
-        bib: "101",
+        bib: "110",
         year: "1982",
         name: "Иван",
         surname: "Проверочный",
@@ -182,7 +182,7 @@ export default {
         ]
       },
       {
-        bib: "101",
+        bib: "111",
         year: "1982",
         name: "Иван",
         surname: "Проверочный",
@@ -199,7 +199,7 @@ export default {
         ]
       },
       {
-        bib: "101",
+        bib: "112",
         year: "1982",
         name: "Иван",
         surname: "Проверочный",

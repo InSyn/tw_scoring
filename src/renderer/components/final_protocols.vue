@@ -28,7 +28,7 @@
         depressed
         @click="$store.commit('main/togglePreview', false)"
         class="font-weight-bold"
-        style="position: absolute; z-index: 1; right: 0; top: 0; border-radius: 0"
+        style="position: absolute; z-index: 1001; right: 0; top: 0; border-radius: 0"
         :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
         v-html="`Закрыть`"
         :color="$vuetify.theme.themes[appTheme].action_red"

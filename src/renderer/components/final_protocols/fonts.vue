@@ -1,12 +1,12 @@
 <template>
   <div
-    style="position: relative;border-radius: 6px; width: 100%; height: 100%; padding: 16px; display:flex;justify-content:center;align-items: center;flex-wrap: wrap"
+    style="position: relative;display:flex;justify-content:center;align-items: center;flex-wrap: wrap;border-radius: 6px;width: 100%;height: 100%;padding: 16px;"
     :style="{
       backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA
     }"
   >
     <div
-      v-if="loading"
+      v-if="false"
       style="position: absolute; display: flex;align-items: center;justify-content: center; height: 100%;width: 100%; z-index: 2"
       :style="{
         backgroundColor:
@@ -17,28 +17,49 @@
       <v-progress-circular indeterminate></v-progress-circular>
     </div>
     <div
-      @click="console.log($refs)"
-      v-for="(container, c_id) in results"
-      :key="c_id"
+      v-if="loading"
       ref="container"
       style="position: relative;padding: 4px;border-radius: 4px; border: 1px solid #c3d9ff;max-height: 100%; overflow-y: auto;"
     >
-      {{ container }}
-      <!--      <div v-for="(result, res_id) in container" :key="res_id">-->
-      <!--        <v-row :ref="res_id" no-gutters>-->
-      <!--          <v-col style="padding: 2px 4px">{{ res_id }}</v-col>-->
-      <!--          <v-col-->
-      <!--            v-for="(cell, cell_idx) in result"-->
-      <!--            :key="cell_idx"-->
-      <!--            v-if="cell_idx !== 'runs'"-->
-      <!--            style="padding: 2px 4px"-->
-      <!--            >{{ cell }}</v-col-->
-      <!--          >-->
-      <!--        </v-row>-->
-      <!--      </div>-->
+      <div v-for="(result, res_id) in results" :key="res_id">
+        <v-row :ref="`block_${res_id}`" no-gutters>
+          <v-col style="padding: 2px 4px">{{ res_id }}</v-col>
+          <v-col
+            v-for="(cell, cell_idx) in result"
+            :key="cell_idx"
+            v-if="cell_idx !== 'runs'"
+            style="padding: 2px 4px"
+            >{{ cell }}</v-col
+          >
+        </v-row>
+      </div>
     </div>
-    <div style="padding: 16px">
-      {{ "none" }}
+    <div
+      v-if="!loading"
+      style="display: flex; flex-direction: column; align-items: center; overflow-y: auto; height: 100%"
+    >
+      <div
+        v-for="(pag_container, pc_i) in paginated"
+        :key="pc_i"
+        style="border: 1px solid #f1f1f1; padding: 4px"
+      >
+        <div
+          v-for="(result, res_id) in pag_container"
+          :key="res_id"
+          @click="console.log(result)"
+        >
+          <v-row :ref="`block_${res_id}`" no-gutters>
+            <v-col style="padding: 2px 4px">{{ res_id }}</v-col>
+            <v-col
+              v-for="(cell, cell_idx) in result"
+              :key="cell_idx"
+              v-if="cell_idx !== 'runs'"
+              style="padding: 2px 4px"
+              >{{ cell }}</v-col
+            >
+          </v-row>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -49,46 +70,28 @@ export default {
   name: "fonts",
   mounted() {
     this.results = this.$store.getters["protocol_settings/testResults"];
-    this.$nextTick(() => {
-      let containerHeight = this.$refs["container"].offsetHeight;
-      let resultHeight = this.$refs[0][0].offsetHeight;
-      let sumHeight = 0;
-      for (let i in this.results) {
-        sumHeight += this.$refs[i][0].offsetHeight;
-      }
+    setTimeout(() => {
+      console.log(this.$refs["block_0"][0].offsetHeight);
+      console.log(this.$refs["container"].offsetHeight);
+      let results_overall = this.results.length;
+      let container_height = this.$refs["container"].offsetHeight;
+      let result_height = this.$refs["block_0"][0].offsetHeight;
+      let res_per_page = Math.floor(container_height / result_height);
+      let pages = Math.ceil(results_overall / res_per_page);
       console.log(
-        `${containerHeight} ${sumHeight} / ${Math.floor(
-          sumHeight / containerHeight
-        )}, ${resultHeight}: ${Math.floor(containerHeight / resultHeight)}`
+        `Container-${container_height}, result-${result_height}: results on page-${res_per_page}, pages-${pages} for ${results_overall} results`
       );
-      console.log(this.results);
-      setTimeout(() => {
-        let containerHeight = this.$refs["container"].offsetHeight;
-        let resultHeight = this.$refs[0][0].offsetHeight;
-        let sumHeight = 0;
-        for (let i in this.results) {
-          sumHeight += this.$refs[i][0].offsetHeight;
+      for (let p = 0; p < pages; p++) {
+        this.paginated.push([]);
+        for (let i = 0; i < res_per_page; i++) {
+          if (this.results[p * res_per_page + i])
+            this.paginated[p].push(this.results[p * res_per_page + i]);
         }
-        let pages = sumHeight / containerHeight + 1;
-        let new_results = [];
-        for (let p = 0; p <= pages; p++) {
-          let i = 0;
-          new_results.push([]);
-          for (let res = 0; res <= containerHeight / resultHeight; res++) {
-            if (this.results[i]) new_results[p].push(this.results[i]);
-            i++;
-          }
-        }
-        console.log(new_results);
-        console.log(
-          `${containerHeight} ${sumHeight} / ${Math.floor(
-            sumHeight / containerHeight
-          )}, ${resultHeight}: ${Math.floor(containerHeight / resultHeight)}`
-        );
-        this.results = new_results;
-        this.loading = false;
-      }, 1024);
-    });
+      }
+      this.loading = false;
+    }, 728);
+
+    // console.log(this.paginated);
   },
   updated() {},
   methods: {},
@@ -96,7 +99,8 @@ export default {
     return {
       loading: true,
       height: 0,
-      results: []
+      results: [],
+      paginated: []
     };
   },
   computed: {
