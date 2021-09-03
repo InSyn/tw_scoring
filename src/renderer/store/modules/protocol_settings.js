@@ -21,7 +21,6 @@ export default {
             run: "Заезд 1",
             marks: [43.6, 46, 34, 48, 50.5]
           },
-
           {
             run: "Заезд 2",
             marks: [43.6, 46, 34, 48, 50.5]
@@ -38,7 +37,6 @@ export default {
             run: "Заезд 1",
             marks: [43.6, 46, 34, 48, 50.5]
           },
-
           {
             run: "Заезд 2",
             marks: [43.6, 46, 34, 48, 50.5]
@@ -55,7 +53,6 @@ export default {
             run: "Заезд 1",
             marks: [43.6, 46, 34, 48, 50.5]
           },
-
           {
             run: "Заезд 2",
             marks: [43.6, 46, 34, 48, 50.5]
@@ -72,7 +69,6 @@ export default {
             run: "Заезд 1",
             marks: [43.6, 46, 34, 48, 50.5]
           },
-
           {
             run: "Заезд 2",
             marks: [43.6, 46, 34, 48, 50.5]
@@ -89,7 +85,6 @@ export default {
             run: "Заезд 1",
             marks: [43.6, 46, 34, 48, 50.5]
           },
-
           {
             run: "Заезд 2",
             marks: [43.6, 46, 34, 48, 50.5]
@@ -106,7 +101,6 @@ export default {
             run: "Заезд 1",
             marks: [43.6, 46, 34, 48, 50.5]
           },
-
           {
             run: "Заезд 2",
             marks: [43.6, 46, 34, 48, 50.5]
@@ -123,7 +117,6 @@ export default {
             run: "Заезд 1",
             marks: [43.6, 46, 34, 48, 50.5]
           },
-
           {
             run: "Заезд 2",
             marks: [43.6, 46, 34, 48, 50.5]
@@ -216,7 +209,7 @@ export default {
         ]
       },
       {
-        bib: "101",
+        bib: "113",
         year: "1982",
         name: "Иван",
         surname: "Проверочный",
@@ -233,7 +226,7 @@ export default {
         ]
       },
       {
-        bib: "101",
+        bib: "114",
         year: "1982",
         name: "Иван",
         surname: "Проверочный",
@@ -250,7 +243,7 @@ export default {
         ]
       },
       {
-        bib: "101",
+        bib: "115",
         year: "1982",
         name: "Иван",
         surname: "Проверочный",
@@ -267,7 +260,7 @@ export default {
         ]
       },
       {
-        bib: "101",
+        bib: "116",
         year: "1982",
         name: "Иван",
         surname: "Проверочный",
@@ -284,7 +277,7 @@ export default {
         ]
       },
       {
-        bib: "101",
+        bib: "117",
         year: "1982",
         name: "Иван",
         surname: "Проверочный",
@@ -301,7 +294,7 @@ export default {
         ]
       },
       {
-        bib: "101",
+        bib: "118",
         year: "1982",
         name: "Иван",
         surname: "Проверочный",
@@ -318,7 +311,7 @@ export default {
         ]
       },
       {
-        bib: "101",
+        bib: "119",
         year: "1982",
         name: "Иван",
         surname: "Проверочный",
@@ -335,7 +328,7 @@ export default {
         ]
       },
       {
-        bib: "101",
+        bib: "120",
         year: "1982",
         name: "Иван",
         surname: "Проверочный",
@@ -352,7 +345,7 @@ export default {
         ]
       },
       {
-        bib: "101",
+        bib: "121",
         year: "1982",
         name: "Иван",
         surname: "Проверочный",
@@ -369,7 +362,7 @@ export default {
         ]
       },
       {
-        bib: "101",
+        bib: "122",
         year: "1982",
         name: "Иван",
         surname: "Проверочный",
@@ -386,7 +379,7 @@ export default {
         ]
       },
       {
-        bib: "101",
+        bib: "123",
         year: "1982",
         name: "Иван",
         surname: "Проверочный",
@@ -403,7 +396,7 @@ export default {
         ]
       },
       {
-        bib: "101",
+        bib: "124",
         year: "1982",
         name: "Иван",
         surname: "Проверочный",
@@ -420,7 +413,7 @@ export default {
         ]
       },
       {
-        bib: "101",
+        bib: "125",
         year: "1982",
         name: "Иван",
         surname: "Проверочный",
@@ -437,7 +430,7 @@ export default {
         ]
       },
       {
-        bib: "101",
+        bib: "126",
         year: "1982",
         name: "Иван",
         surname: "Проверочный",
@@ -454,7 +447,7 @@ export default {
         ]
       },
       {
-        bib: "101",
+        bib: "127",
         year: "1982",
         name: "Иван",
         surname: "Проверочный",
@@ -471,7 +464,7 @@ export default {
         ]
       },
       {
-        bib: "101",
+        bib: "128",
         year: "1982",
         name: "Иван",
         surname: "Проверочный",
@@ -488,7 +481,7 @@ export default {
         ]
       },
       {
-        bib: "101",
+        bib: "129",
         year: "1982",
         name: "Иван",
         surname: "Проверочный",
@@ -505,7 +498,7 @@ export default {
         ]
       },
       {
-        bib: "101",
+        bib: "130",
         year: "1982",
         name: "Иван",
         surname: "Проверочный",
@@ -522,7 +515,7 @@ export default {
         ]
       },
       {
-        bib: "101",
+        bib: "131",
         year: "1982",
         name: "Иван",
         surname: "Проверочный",
@@ -539,7 +532,7 @@ export default {
         ]
       },
       {
-        bib: "101",
+        bib: "132",
         year: "1982",
         name: "Иван",
         surname: "Проверочный",
@@ -556,7 +549,7 @@ export default {
         ]
       },
       {
-        bib: "101",
+        bib: "133",
         year: "1982",
         name: "Иван",
         surname: "Проверочный",
@@ -573,7 +566,7 @@ export default {
         ]
       },
       {
-        bib: "101",
+        bib: "134",
         year: "1982",
         name: "Иван",
         surname: "Проверочный",
@@ -590,7 +583,7 @@ export default {
         ]
       },
       {
-        bib: "101",
+        bib: "135",
         year: "1982",
         name: "Иван",
         surname: "Проверочный",
@@ -607,7 +600,7 @@ export default {
         ]
       },
       {
-        bib: "101",
+        bib: "136",
         year: "1982",
         name: "Иван",
         surname: "Проверочный",
@@ -624,7 +617,7 @@ export default {
         ]
       },
       {
-        bib: "101",
+        bib: "137",
         year: "1982",
         name: "Иван",
         surname: "Проверочный",
@@ -641,7 +634,7 @@ export default {
         ]
       },
       {
-        bib: "101",
+        bib: "138",
         year: "1982",
         name: "Иван",
         surname: "Проверочный",
@@ -658,7 +651,7 @@ export default {
         ]
       },
       {
-        bib: "101",
+        bib: "139",
         year: "1982",
         name: "Иван",
         surname: "Проверочный",
@@ -675,7 +668,7 @@ export default {
         ]
       },
       {
-        bib: "101",
+        bib: "140",
         year: "1982",
         name: "Иван",
         surname: "Проверочный",
@@ -692,7 +685,7 @@ export default {
         ]
       },
       {
-        bib: "101",
+        bib: "141",
         year: "1982",
         name: "Иван",
         surname: "Проверочный",
@@ -709,7 +702,7 @@ export default {
         ]
       },
       {
-        bib: "101",
+        bib: "142",
         year: "1982",
         name: "Иван",
         surname: "Проверочный",
@@ -726,7 +719,7 @@ export default {
         ]
       },
       {
-        bib: "101",
+        bib: "143",
         year: "1982",
         name: "Иван",
         surname: "Проверочный",
@@ -743,7 +736,7 @@ export default {
         ]
       },
       {
-        bib: "101",
+        bib: "144",
         year: "1982",
         name: "Иван",
         surname: "Проверочный",
@@ -760,7 +753,7 @@ export default {
         ]
       },
       {
-        bib: "101",
+        bib: "145",
         year: "1982",
         name: "Иван",
         surname: "Проверочный",
@@ -777,7 +770,7 @@ export default {
         ]
       },
       {
-        bib: "101",
+        bib: "146",
         year: "1982",
         name: "Иван",
         surname: "Проверочный",
@@ -794,7 +787,7 @@ export default {
         ]
       },
       {
-        bib: "101",
+        bib: "147",
         year: "1982",
         name: "Иван",
         surname: "Проверочный",
@@ -811,7 +804,7 @@ export default {
         ]
       },
       {
-        bib: "101",
+        bib: "148",
         year: "1982",
         name: "Иван",
         surname: "Проверочный",
@@ -828,7 +821,7 @@ export default {
         ]
       },
       {
-        bib: "101",
+        bib: "149",
         year: "1982",
         name: "Иван",
         surname: "Проверочный",
@@ -845,7 +838,7 @@ export default {
         ]
       },
       {
-        bib: "101",
+        bib: "150",
         year: "1982",
         name: "Иван",
         surname: "Проверочный",
@@ -862,7 +855,7 @@ export default {
         ]
       },
       {
-        bib: "101",
+        bib: "151",
         year: "1982",
         name: "Иван",
         surname: "Проверочный",
@@ -879,7 +872,7 @@ export default {
         ]
       },
       {
-        bib: "101",
+        bib: "152",
         year: "1982",
         name: "Иван",
         surname: "Проверочный",
@@ -896,7 +889,7 @@ export default {
         ]
       },
       {
-        bib: "101",
+        bib: "153",
         year: "1982",
         name: "Иван",
         surname: "Проверочный",
@@ -913,7 +906,7 @@ export default {
         ]
       },
       {
-        bib: "101",
+        bib: "154",
         year: "1982",
         name: "Иван",
         surname: "Проверочный",
@@ -930,7 +923,7 @@ export default {
         ]
       },
       {
-        bib: "101",
+        bib: "155",
         year: "1982",
         name: "Иван",
         surname: "Проверочный",
@@ -947,7 +940,7 @@ export default {
         ]
       },
       {
-        bib: "101",
+        bib: "156",
         year: "1982",
         name: "Иван",
         surname: "Проверочный",
@@ -964,7 +957,7 @@ export default {
         ]
       },
       {
-        bib: "101",
+        bib: "157",
         year: "1982",
         name: "Иван",
         surname: "Проверочный",
@@ -981,7 +974,7 @@ export default {
         ]
       },
       {
-        bib: "101",
+        bib: "158",
         year: "1982",
         name: "Иван",
         surname: "Проверочный",
@@ -998,7 +991,7 @@ export default {
         ]
       },
       {
-        bib: "101",
+        bib: "159",
         year: "1982",
         name: "Иван",
         surname: "Проверочный",

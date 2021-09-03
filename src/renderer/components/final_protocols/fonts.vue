@@ -6,7 +6,7 @@
     }"
   >
     <div
-      v-if="false"
+      v-if="loading"
       style="position: absolute; display: flex;align-items: center;justify-content: center; height: 100%;width: 100%; z-index: 2"
       :style="{
         backgroundColor:
@@ -78,9 +78,10 @@ export default {
       let result_height = this.$refs["block_0"][0].offsetHeight;
       let res_per_page = Math.floor(container_height / result_height);
       let pages = Math.ceil(results_overall / res_per_page);
-      console.log(
-        `Container-${container_height}, result-${result_height}: results on page-${res_per_page}, pages-${pages} for ${results_overall} results`
-      );
+      this.pages = pages;
+      // console.log(
+      //   `Container-${container_height}, result-${result_height}: results on page-${res_per_page}, pages-${pages} for ${results_overall} results`
+      // );
       for (let p = 0; p < pages; p++) {
         this.paginated.push([]);
         for (let i = 0; i < res_per_page; i++) {
@@ -100,7 +101,8 @@ export default {
       loading: true,
       height: 0,
       results: [],
-      paginated: []
+      paginated: [],
+      pages: 0
     };
   },
   computed: {
