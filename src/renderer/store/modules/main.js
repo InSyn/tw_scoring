@@ -14,7 +14,7 @@ export default {
     appMenu: [
       {
         icon: "viewDashboard",
-        title: "Соревнование",
+        title: "Событие",
         link: "competition_settings"
       },
       {
@@ -39,7 +39,7 @@ export default {
       },
       {
         icon: "trophyVariant",
-        title: "Итоговые протоколы",
+        title: "Протоколы",
         link: "final_protocols"
       }
     ]
@@ -164,7 +164,7 @@ export default {
       state.competition = competition;
     },
     togglePreview: (state, toggleState) => {
-      state.showPreview = toggleState
+      state.showPreview = toggleState;
     }
   },
   actions: {

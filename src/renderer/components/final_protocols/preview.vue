@@ -1,333 +1,194 @@
 <template>
   <div
+    id="pdf_preview"
     style="display: flex; flex-direction: column; justify-content: flex-start; height: 100%;width: 100%; position: relative; z-index: 1000; overflow-y: auto;padding: 32px"
     :style="{
       backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA
     }"
   >
-    <!-- //УПРАВВЛЕНИЕ ЛОГО -->
-    <div style="position: absolute; top: 0;left: 0">
-      <div
-        style="padding: 4px; margin: 8px; background-color: #888888; border-radius: 2px; cursor: pointer"
-      >
-        <input
-          id="header_image_input"
-          type="file"
-          ref="header_image"
-          hidden
-          @change="select_header_picture()"
-        />
-        <label
-          for="header_image_input"
-          style="height: 1.4rem;width: 8rem;cursor:pointer;"
-          >{{
-            `${(assets.header_image && assets.header_image[0].name) ||
-              "input header picture"}`
-          }}</label
-        >
-      </div>
-      <div
-        style="padding: 4px; margin: 8px; background-color: #888888; border-radius: 2px; cursor: pointer"
-      >
-        <input
-          id="footer_image_input"
-          type="file"
-          ref="footer_image"
-          hidden
-          @change="select_footer_picture()"
-        />
-        <label
-          for="footer_image_input"
-          style="height: 1.4rem;width: 8rem;cursor:pointer;"
-          >{{
-            `${(assets.footer_image && assets.footer_image[0].name) ||
-              "input footer picture"}`
-          }}</label
-        >
-      </div>
-    </div>
-
-    <!-- УПРАВВЛЕНИЕ ЛОГО// -->
-
     <!-- //PDF Body -->
 
     <!-- OnLoading -->
 
-    <section
-      v-if="loading"
-      id="pdf_to_print_loading"
-      style="position:relative;"
-    >
-      <!--      <div-->
-      <!--        id="loading_overlay_loading"-->
-      <!--        v-if="loading"-->
-      <!--        style="position: absolute;z-index: 1002; top: 0;left: 0;bottom: 0;right: 0; margin: auto;display: flex; align-items: center;justify-content: center"-->
-      <!--        :style="{-->
-      <!--          height: `calc(${setup.height} - 1px)`,-->
-      <!--          width: `${setup.width}`,-->
-      <!--          backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA-->
-      <!--        }"-->
-      <!--      >-->
-      <!--        <v-progress-circular indeterminate></v-progress-circular>-->
-      <!--      </div>-->
-      <div
-        class="pdf_container"
-        :style="{
-          height: `calc(${setup.height} - 1px)`,
-          width: `${setup.width}`,
-          padding: `${setup.padding}`
-        }"
-        style="display:flex; flex-direction: column; background-color: white; color: black; margin: auto;"
+    <div id="pdf_to_print">
+      <section
+        class="pdf_to_print_section"
+        v-if="loading"
+        v-for="(page, p_idx) in (paginated_results.length > 0 &&
+          paginated_results) || [results]"
+        :key="paginated_results.length + p_idx"
+        style="position:relative;"
       >
+        <!--      <div-->
+        <!--        id="loading_overlay_loading"-->
+        <!--        v-if="loading"-->
+        <!--        style="position: absolute;z-index: 1002; top: 0;left: 0;bottom: 0;right: 0; margin: auto;display: flex; align-items: center;justify-content: center"-->
+        <!--        :style="{-->
+        <!--          height: `calc(${setup.height} - 1px)`,-->
+        <!--          width: `${setup.width}`,-->
+        <!--          backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA-->
+        <!--        }"-->
+        <!--      >-->
+        <!--        <v-progress-circular indeterminate></v-progress-circular>-->
+        <!--      </div>-->
         <div
-          class="pdf_header d-flex flex-column"
-          style="display: flex; flex-direction: column;  justify-content: center; align-items: flex-start; overflow: hidden; height: 160px"
-          :style="{ height: `${setup.header_height}px` }"
+          class="pdf_container"
+          :style="{
+            height: `calc(${setup.height}mm - 1px)`,
+            width: `${setup.width}mm`,
+            padding: [`${setup.padding[0]}mm`, `${setup.padding[1]}mm`]
+          }"
+          style="display:flex; flex-direction: column; background-color: white; color: black; margin: auto;"
         >
-          <div id="header_image_loading" v-if="assets.header_image">
-            <img
-              v-if="assets.header_image && assets.header_image[0].path"
-              :src="assets.header_image[0].path"
-              style="width: 100%"
-              alt=""
-            />
-          </div>
-          <div id="header_competition_info_loading" style="width: 100%">
+          <div
+            ref="pdf_header"
+            class="pdf_header"
+            style="display: flex; flex-direction: column; flex-shrink: 0; justify-content: center; align-items: flex-start"
+          >
             <div
-              id="competition_description_loading"
-              style="display: flex; flex-direction: column; align-items: center; margin: auto"
+              class="header_image"
+              v-if="results_protocol.assets.header_logo"
+            >
+              <img
+                v-if="
+                  results_protocol.assets.header_logo &&
+                    results_protocol.assets.header_logo.path
+                "
+                :src="results_protocol.assets.header_logo.path"
+                style="width: 100%"
+                alt=""
+              />
+            </div>
+            <div
+              class="header_competition_info"
+              style="width: 100%;display:flex;"
             >
               <div
-                style="font-size: 1.4rem; font-weight: bold; line-height: 1.2"
+                class="left_asset"
+                style="width: 8rem;height: 8rem;display:flex;align-items: center; justify-content: center"
               >
-                {{ competition.mainData.title.value }}
+                <div
+                  style="display:flex;align-items: center;justify-content:center; height: 100%;width: 100%;background-color: aliceblue"
+                >
+                  LOGO
+                </div>
               </div>
               <div
-                style="font-size: 1.4rem; font-weight: bold; line-height: 1.2"
+                class="competition_description"
+                style="display: flex; flex-direction: column; align-items: center; margin: auto"
               >
-                {{ "Results Type" }}
-              </div>
-              <div
-                style="font-size: 1.4rem; font-weight: bold; line-height: 1.2"
-              >
-                {{ competition.mainData.discipline.value }}
-              </div>
-              <div
-                style="font-size: 1.2rem; font-weight: bold; line-height: 1.2"
-              >
-                {{
-                  `${competition.mainData.location.value} ${competition.mainData
-                    .country.value &&
-                    "(" + competition.mainData.country.value + ")"}`
-                }}
-              </div>
+                <div
+                  style="font-size: 1.4rem; font-weight: bold; line-height: 1.2"
+                >
+                  {{ competition.mainData.title.value }}
+                </div>
+                <div
+                  style="font-size: 1.4rem; font-weight: bold; line-height: 1.2"
+                >
+                  {{ "Results Type" }}
+                </div>
+                <div
+                  style="font-size: 1.4rem; font-weight: bold; line-height: 1.2"
+                >
+                  {{ competition.mainData.discipline.value }}
+                </div>
+                <div style="font-size: 1.2rem; line-height: 1.2">
+                  {{
+                    `${competition.mainData.location.value} ${competition
+                      .mainData.country.value &&
+                      "(" + competition.mainData.country.value + ")"}`
+                  }}
+                </div>
 
+                <div
+                  style="font-size: 1.2rem; font-weight: bold; line-height: 1.2"
+                >
+                  {{
+                    `${competition.mainData.date.value} Start time:${competition.mainData.date.time}`
+                  }}
+                </div>
+              </div>
               <div
-                style="font-size: 1.2rem; font-weight: bold; line-height: 1.2"
+                class="right_asset"
+                style="width: 8rem;height: 8rem;display:flex;align-items: center; justify-content: center"
               >
-                {{
-                  `${competition.mainData.date.value} Start time:${competition.mainData.date.time}`
-                }}
+                <div style="font-weight: bold;font-size: 4rem">
+                  {{ competition.mainData.discipline.min }}
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <div
-          ref="container"
-          class="pdf_content"
-          style="display:flex;overflow-y: auto"
-          :style="{
-            height: `${setup.height -
-              setup.footer_height -
-              setup.header_height}px`
-          }"
-        >
-          <v-container fluid style="width: 100%;height: 100%">
-            <v-row
-              no-gutters
-              v-for="(competitor, c_idx) in $store.getters[
-                'protocol_settings/testResults'
-              ]"
-              :key="c_idx"
-              :ref="`result_${c_idx}`"
-              style="background-color: #888888"
-            >
-              <v-col
-                v-for="(competitor_data, cdi) in competitor"
-                :key="cdi"
-                v-show="cdi !== 'runs'"
-                style="border: 1px solid #888888"
-              >
-                {{ competitor_data }}
-              </v-col>
-              <v-col
-                v-for="(mark, m_idx) in competitor.runs[0].marks"
-                :key="m_idx"
-                >{{ mark }}</v-col
-              >
-            </v-row>
-          </v-container>
-
           <div
-            style="display:flex; flex-wrap: nowrap; align-items: center"
-            v-for="competitor in $store.getters['main/competition']
-              .competitorsSheet.competitors"
-            :key="competitor.id"
+            ref="pdf_container"
+            class="pdf_content"
+            style="display:flex;flex-grow: 1"
           >
-            <div v-for="(data, di) in competitor.info_data">{{ data }}</div>
-            <div v-for="(result, res) in 5">{{ res }}</div>
+            <v-container style="padding: 0; width: 100%; overflow-y: hidden">
+              <v-row
+                style="padding: 2px;margin: 0;line-height: normal"
+                :style="c_idx % 2 !== 0 && { backgroundColor: '#BCBCBC' }"
+                v-for="(competitor, c_idx) in page"
+                :key="c_idx"
+                :ref="`result_${c_idx}`"
+              >
+                <v-col
+                  style="padding: 0;margin: 0;line-height: normal"
+                  v-for="(competitor_data, cdi) in competitor"
+                  :key="cdi"
+                  v-show="cdi !== 'runs'"
+                >
+                  {{ competitor_data }}
+                </v-col>
+                <v-col
+                  style="padding: 0;margin: 0;line-height: normal"
+                  v-for="(mark, m_idx) in competitor.runs[0].marks"
+                  :key="m_idx"
+                  >{{ mark }}</v-col
+                >
+              </v-row>
+            </v-container>
           </div>
-        </div>
-        <div
-          class="pdf_footer"
-          style="background-color: white; color: black;display: flex; align-items: flex-end; height: 160px"
-          :style="{ height: `${setup.footer_height}px` }"
-        >
           <div
-            id="footer_image_loading"
-            v-if="assets.footer_image"
-            style="width: 100%;position: relative"
+            ref="pdf_footer"
+            class="pdf_footer"
+            style="position: relative;background-color: white; color: black;display: flex; flex-direction: column; flex-shrink: 0; align-items: flex-end"
           >
-            <img
-              v-if="assets.footer_image && assets.footer_image[0].path"
-              :src="assets.footer_image[0].path"
-              style="width: 100%;position:absolute;bottom: 0;"
-              alt=""
-            />
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- OnLoading -->
-
-    <section v-if="!loading" id="pdf_to_print" style="position:relative;">
-      <div
-        v-for="(page, p_id) in paginated_results"
-        :key="p_id"
-        class="pdf_container"
-        :style="{
-          height: `calc(${setup.height} - 1px)`,
-          width: `${setup.width}`,
-          padding: `${setup.padding}`
-        }"
-        style="display:flex; flex-direction: column; background-color: white; color: black; margin: auto;"
-      >
-        <div
-          class="pdf_header d-flex flex-column"
-          style="display: flex; flex-direction: column;  justify-content: center; align-items: flex-start; overflow: hidden; height: 160px"
-          :style="{ height: `${setup.header_height}cm` }"
-        >
-          <div id="header_image" v-if="assets.header_image">
-            <img
-              v-if="assets.header_image && assets.header_image[0].path"
-              :src="assets.header_image[0].path"
-              style="width: 100%"
-              alt=""
-            />
-          </div>
-          <div id="header_competition_info" style="width: 100%">
+            <div style="width: 100%;display:flex;">
+              <div
+                class="page_counter"
+                style="margin-left: auto;font-size: 0.75rem;font-weight: bold;"
+              >
+                {{ `Page ${p_idx + 1}/${paginated_results.length}` }}
+              </div>
+            </div>
             <div
-              id="competition_description"
-              style="display: flex; flex-direction: column; align-items: center; margin: auto"
+              class="footer_image"
+              v-if="results_protocol.assets.footer_logo"
+              style="width: 100%;position: relative"
             >
-              <div
-                style="font-size: 1.4rem; font-weight: bold; line-height: 1.2"
-              >
-                {{ competition.mainData.title.value }}
-              </div>
-              <div
-                style="font-size: 1.4rem; font-weight: bold; line-height: 1.2"
-              >
-                {{ "Results Type" }}
-              </div>
-              <div
-                style="font-size: 1.4rem; font-weight: bold; line-height: 1.2"
-              >
-                {{ competition.mainData.discipline.value }}
-              </div>
-              <div
-                style="font-size: 1.2rem; font-weight: bold; line-height: 1.2"
-              >
-                {{
-                  `${competition.mainData.location.value} ${competition.mainData
-                    .country.value &&
-                    "(" + competition.mainData.country.value + ")"}`
-                }}
-              </div>
-
-              <div
-                style="font-size: 1.2rem; font-weight: bold; line-height: 1.2"
-              >
-                {{
-                  `${competition.mainData.date.value} Start time:${competition.mainData.date.time}`
-                }}
-              </div>
+              <img
+                v-if="
+                  results_protocol.assets.footer_logo &&
+                    results_protocol.assets.footer_logo.path
+                "
+                :src="results_protocol.assets.footer_logo.path"
+                style="width: 100%;bottom: 0;"
+                alt=""
+              />
             </div>
           </div>
         </div>
+        <!-- Divider -->
         <div
-          class="pdf_content"
-          style="display:flex;overflow-y: auto"
-          :style="{
-            height: `${setup.height -
-              setup.footer_height -
-              setup.header_height}cm`
-          }"
-        >
-          <v-container fluid style="width: 100%;height: 100%">
-            <v-row
-              no-gutters
-              v-for="(competitor, c_idx) in page"
-              :key="c_idx"
-              style="background-color: #888888"
-            >
-              <v-col
-                v-for="(competitor_data, cdi) in competitor"
-                :key="cdi"
-                v-show="cdi !== 'runs'"
-                style="border: 1px solid #888888"
-              >
-                {{ competitor_data }}
-              </v-col>
-              <v-col
-                v-for="(mark, m_idx) in competitor.runs[0].marks"
-                :key="m_idx"
-                >{{ mark }}</v-col
-              >
-            </v-row>
-          </v-container>
-
-          <div
-            style="display:flex; flex-wrap: nowrap; align-items: center"
-            v-for="competitor in $store.getters['main/competition']
-              .competitorsSheet.competitors"
-            :key="competitor.id"
-          >
-            <div v-for="(data, di) in competitor.info_data">{{ data }}</div>
-            <div v-for="(result, res) in 5">{{ res }}</div>
-          </div>
-        </div>
-        <div
-          class="pdf_footer"
-          style="background-color: white; color: black;display: flex; align-items: flex-end; height: 160px; margin-top: auto"
-          :style="{ height: `${setup.footer_height}cm` }"
-        >
-          <div
-            id="footer_image"
-            v-if="assets.footer_image"
-            style="width: 100%;position: relative"
-          >
-            <img
-              v-if="assets.footer_image && assets.footer_image[0].path"
-              :src="assets.footer_image[0].path"
-              style="width: 100%;position:absolute;bottom: 0;"
-              alt=""
-            />
-          </div>
-        </div>
-      </div>
-    </section>
+          v-if="
+            paginated_results.length > 0 && p_idx < paginated_results.length - 1
+          "
+          data-html2canvas-ignore="true"
+          style="height: 2rem"
+        ></div>
+        <!-- Divider -->
+      </section>
+    </div>
 
     <!-- PDF Body// -->
 
@@ -344,9 +205,11 @@ import html2pdf from "html2pdf.js";
 export default {
   name: "preview",
   mounted() {
+    console.log(this.$refs);
+    this.results = this.competition.competitorsSheet.competitors;
     this.$nextTick(() => {
       setTimeout(() => {
-        let container_height = this.$refs["container"].offsetHeight;
+        let container_height = this.$refs["pdf_container"][0].offsetHeight;
         let result_height = this.$refs["result_0"][0].offsetHeight;
         let results_overall = this.$store.getters[
           "protocol_settings/testResults"
@@ -354,10 +217,10 @@ export default {
         let res_per_page = Math.floor(container_height / result_height);
         let pages = Math.ceil(results_overall / res_per_page);
         for (let p = 0; p < pages; p++) {
-          this.paginated_results.push([]);
+          this.data_paginated_results.push([]);
           for (let i = 0; i < res_per_page; i++) {
             if (this.results[p * res_per_page + i])
-              this.paginated_results[p].push(
+              this.data_paginated_results[p].push(
                 this.results[p * res_per_page + i]
               );
           }
@@ -366,74 +229,57 @@ export default {
         console.log(
           `Container-${container_height}, result-${result_height}: results on page-${res_per_page}, pages-${pages} for ${results_overall} results`
         );
-        console.log(this.paginated_results);
-        this.loading = false;
-      }, 1024);
+        console.log(this.data_paginated_results);
+
+        // this.loading = false;
+      }, 0);
     });
   },
   data() {
     return {
       loading: true,
-      results: this.$store.getters["protocol_settings/testResults"],
-      paginated_results: [],
+      results: null,
+      data_paginated_results: [],
       setup: {
-        height: "29.7cm",
-        width: "21cm",
-        padding: `5mm 5mm`,
-        header_height: 4,
-        footer_height: 4,
+        height: 297,
+        width: 210,
+        padding: [5, 5],
         orientation: "portrait"
-      },
-      assets: {
-        header_image: null,
-        footer_image: null,
-        logos: []
       }
     };
   },
   methods: {
-    select_header_picture() {
-      this.assets.header_image = this.$refs.header_image.files;
-    },
-    select_footer_picture() {
-      this.assets.footer_image = this.$refs.footer_image.files;
-    },
     print_pdf() {
-      try {
-        let element = document.getElementById("pdf_to_print");
-        const opt = {
-          margin: 0,
-          filename: "myfile.pdf",
-          image: { type: "jpeg", quality: 0.98 },
-          html2canvas: {
-            allowTaint: true,
-            scale: 2
-          },
-          jsPDF: {
-            unit: "in",
-            format: "a4",
-            orientation: this.setup.orientation
-          }
-        };
-        html2pdf()
-          .set(opt)
-          .from(element)
-          .save();
-      } catch (e) {
-        throw e;
-      }
+      let element = document.getElementById("pdf_to_print");
+      const opt = {
+        margin: 0,
+        filename: "myfile.pdf",
+        image: { type: "jpeg", quality: 0.98 },
+        html2canvas: {
+          allowTaint: true
+        },
+        jsPDF: {
+          format: "a4",
+          orientation: this.setup.orientation
+        }
+      };
+      html2pdf()
+        .set(opt)
+        .from(element)
+        .save();
     }
   },
   computed: {
-    ...mapGetters("main", ["competition", "appTheme"])
+    ...mapGetters("main", ["competition", "appTheme"]),
+    ...mapGetters("protocol_settings", ["results_protocol"]),
+    paginated_results() {
+      return this.data_paginated_results;
+    }
   }
 };
 </script>
 <style scoped>
 * {
   font-family: Arial, serif;
-}
-.pdf_content {
-  border: 1px solid #888888;
 }
 </style>

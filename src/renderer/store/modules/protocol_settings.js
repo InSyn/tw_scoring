@@ -6,7 +6,17 @@ export default {
         padding: {
           value: 5,
           mu: "mm"
+        },
+        header: {
+          height: 160
+        },
+        footer: {
+          height: 160
         }
+      },
+      assets: {
+        header_logo: null,
+        footer_logo: null
       }
     },
     start_list: {},
@@ -1013,5 +1023,14 @@ export default {
     results_protocol: state => state.results_protocol,
     testResults: state => state.testResults
   },
-  mutations: {}
+  mutations: {
+    setHeader: (state, event) => {
+      state.results_protocol.assets.header_logo = event.target.files[0];
+      console.log(state.results_protocol);
+    },
+    setFooter: (state, event) => {
+      state.results_protocol.assets.footer_logo = event.target.files[0];
+      console.log(state.results_protocol);
+    }
+  }
 };
