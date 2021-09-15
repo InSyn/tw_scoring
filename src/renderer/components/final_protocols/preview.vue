@@ -32,7 +32,7 @@
         <!--        <v-progress-circular indeterminate></v-progress-circular>-->
         <!--      </div>-->
         <div
-          class="pdf_container"
+          class="pdf_table_container"
           :style="{
             height: `calc(${setup.height}mm - 1px)`,
             width: `${setup.width}mm`,
@@ -119,7 +119,7 @@
             </div>
           </div>
           <div
-            ref="pdf_container"
+            ref="pdf_table_container"
             class="pdf_content"
             style="display:flex;flex-grow: 1"
           >
@@ -133,18 +133,12 @@
               >
                 <v-col
                   style="padding: 0;margin: 0;line-height: normal"
-                  v-for="(competitor_data, cdi) in competitor"
+                  v-for="(competitor_data, cdi) in competitor.info_data"
                   :key="cdi"
                   v-show="cdi !== 'runs'"
                 >
                   {{ competitor_data }}
                 </v-col>
-                <v-col
-                  style="padding: 0;margin: 0;line-height: normal"
-                  v-for="(mark, m_idx) in competitor.runs[0].marks"
-                  :key="m_idx"
-                  >{{ mark }}</v-col
-                >
               </v-row>
             </v-container>
           </div>
@@ -158,7 +152,11 @@
                 class="page_counter"
                 style="margin-left: auto;font-size: 0.75rem;font-weight: bold;"
               >
-                {{ `Page ${p_idx + 1}/${paginated_results.length}` }}
+                {{
+                  `Page ${p_idx + 1}/${(paginated_results.length > 0 &&
+                    paginated_results.length) ||
+                    1}`
+                }}
               </div>
             </div>
             <div
@@ -209,11 +207,10 @@ export default {
     this.results = this.competition.competitorsSheet.competitors;
     this.$nextTick(() => {
       setTimeout(() => {
-        let container_height = this.$refs["pdf_container"][0].offsetHeight;
+        let container_height = this.$refs["pdf_table_container"][0]
+          .offsetHeight;
         let result_height = this.$refs["result_0"][0].offsetHeight;
-        let results_overall = this.$store.getters[
-          "protocol_settings/testResults"
-        ].length;
+        let results_overall = this.results.length;
         let res_per_page = Math.floor(container_height / result_height);
         let pages = Math.ceil(results_overall / res_per_page);
         for (let p = 0; p < pages; p++) {
@@ -225,12 +222,10 @@ export default {
               );
           }
         }
-
         console.log(
           `Container-${container_height}, result-${result_height}: results on page-${res_per_page}, pages-${pages} for ${results_overall} results`
         );
         console.log(this.data_paginated_results);
-
         // this.loading = false;
       }, 0);
     });

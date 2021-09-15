@@ -1,16 +1,15 @@
 <template>
   <v-container
+    fluid
     style="border-radius: 6px"
     :style="{
       backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA
     }"
   >
-    <v-row
-      ><v-col
-        style="display:flex; align-items: center; font-weight:bold;"
-        cols="4"
+    <v-row dense style="margin: 0;"
+      ><v-col style="display:flex; align-items: center; font-weight:bold;"
         >Изображение для шапки протокола</v-col
-      ><v-col style="display:flex; align-items: center" cols="6"
+      ><v-col style="display:flex; align-items: center"
         ><input
           type="file"
           id="header_logo"
@@ -20,8 +19,12 @@
           ><label
             style="border-radius: 4px;font-weight: bold; padding: 4px; cursor: pointer;transition: background-color 172ms "
             :style="[
-              hover && { backgroundColor: 'rgba(42,190,106,0.25)' },
-              { color: $vuetify.theme.themes[appTheme].success }
+              {
+                color: $vuetify.theme.themes[appTheme].success,
+                backgroundColor:
+                  $vuetify.theme.themes[appTheme].standardBackgroundRGBA
+              },
+              hover && { backgroundColor: 'rgba(42,190,106,0.25)' }
             ]"
             for="header_logo"
             >{{
@@ -33,12 +36,10 @@
         >
       </v-col></v-row
     >
-    <v-row
-      ><v-col
-        style="display:flex; align-items: center; font-weight:bold;"
-        cols="4"
+    <v-row dense style="margin: 0;"
+      ><v-col style="display:flex; align-items: center; font-weight:bold;"
         >Изображение для подвала протокола</v-col
-      ><v-col style="display:flex; align-items: center" cols="6"
+      ><v-col style="display:flex; align-items: center"
         ><input
           type="file"
           id="footer_logo"
@@ -48,8 +49,12 @@
           ><label
             style="border-radius: 4px;font-weight: bold; padding: 4px; cursor: pointer;transition: background-color 172ms "
             :style="[
-              hover && { backgroundColor: 'rgba(42,190,106,0.25)' },
-              { color: $vuetify.theme.themes[appTheme].success }
+              {
+                color: $vuetify.theme.themes[appTheme].success,
+                backgroundColor:
+                  $vuetify.theme.themes[appTheme].standardBackgroundRGBA
+              },
+              hover && { backgroundColor: 'rgba(42,190,106,0.25)' }
             ]"
             for="footer_logo"
             >{{
