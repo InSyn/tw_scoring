@@ -6,8 +6,10 @@
     }"
   >
     <div
-      class="header_image"
-      style="display: flex;flex-direction: column; padding: 4px; margin: 4px 8px; border-radius: 6px"
+      v-for="(logo, l_key, l_idx) in results_protocol.assets"
+      :key="l_idx"
+      :class="`${l_key}`"
+      style="display: flex;flex-direction: column; padding: 4px; margin: 4px 8px; border-radius: 6px; max-width: 33%; overflow: hidden"
       :style="{
         backgroundColor: $vuetify.theme.themes[appTheme].subjectBackgroundRGBA
       }"
@@ -15,17 +17,18 @@
       <div
         style="display:flex; align-items: center; font-weight:bold;padding: 4px"
       >
-        Изображение для «шапки»
+        {{ logo.title }}
       </div>
       <div style="display:flex; align-items: center;padding: 4px">
         <input
           type="file"
-          id="header_logo"
+          accept="image/jpeg,image/jpg,image/png"
+          :id="l_key"
           hidden
-          @change="$store.commit('protocol_settings/setHeader', $event)"
+          @change="$store.commit('protocol_settings/setImage', [l_key, $event])"
         /><v-hover v-slot:default="{ hover }"
           ><label
-            style="border-radius: 4px;font-weight: bold; padding: 4px 8px; cursor: pointer;transition: 172ms "
+            style="border-radius: 4px;font-weight: bold; padding: 4px 8px; cursor: pointer; white-space: nowrap; max-width: 100%; overflow: hidden; transition: 172ms "
             :style="[
               {
                 color: $vuetify.theme.themes[appTheme].textDefault,
@@ -35,52 +38,11 @@
                 backgroundColor: $vuetify.theme.themes[appTheme].accent_light
               }
             ]"
-            for="header_logo"
+            :for="l_key"
             >{{
-              (results_protocol.assets.header_logo &&
-                results_protocol.assets.header_logo.name) ||
-                "Выбрать..."
-            }}</label
-          ></v-hover
-        >
-      </div>
-    </div>
-
-    <div
-      class="footer_image"
-      style="display: flex;flex-direction: column; padding: 4px; margin: 4px 8px; border-radius: 6px"
-      :style="{
-        backgroundColor: $vuetify.theme.themes[appTheme].subjectBackgroundRGBA
-      }"
-    >
-      <div
-        style="display:flex; align-items: center; font-weight:bold;padding: 4px"
-      >
-        Изображение для «подвала»
-      </div>
-
-      <div style="display:flex; align-items: center;padding: 4px">
-        <input
-          type="file"
-          id="footer_logo"
-          hidden
-          @change="$store.commit('protocol_settings/setFooter', $event)"
-        /><v-hover v-slot:default="{ hover }"
-          ><label
-            style="border-radius: 4px;font-weight: bold; padding: 4px 8px; cursor: pointer;transition: 172ms"
-            :style="[
-              {
-                color: $vuetify.theme.themes[appTheme].textDefault,
-                backgroundColor: $vuetify.theme.themes[appTheme].accent
-              },
-              hover && {
-                backgroundColor: $vuetify.theme.themes[appTheme].accent_light
-              }
-            ]"
-            for="footer_logo"
-            >{{
-              (results_protocol.assets.footer_logo &&
-                results_protocol.assets.footer_logo.name) ||
+              (results_protocol.assets[l_key] &&
+                results_protocol.assets[l_key].file &&
+                results_protocol.assets[l_key].file.name) ||
                 "Выбрать..."
             }}</label
           ></v-hover

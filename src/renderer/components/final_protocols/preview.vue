@@ -122,10 +122,10 @@
             >
               <img
                 v-if="
-                  results_protocol.assets.header_logo &&
-                    results_protocol.assets.header_logo.path
+                  results_protocol.assets.header_logo.file &&
+                    results_protocol.assets.header_logo.file.path
                 "
-                :src="results_protocol.assets.header_logo.path"
+                :src="results_protocol.assets.header_logo.file.path"
                 style="width: 100%"
                 alt=""
               />
@@ -139,9 +139,17 @@
                 style="width: 8rem;height: 8rem;display:flex;align-items: center; justify-content: center"
               >
                 <div
-                  style="display:flex;align-items: center;justify-content:center; height: 100%;width: 100%;background-color: aliceblue"
+                  style="display:flex;align-items: center;justify-content:center; height: 100%;width: 100%"
                 >
-                  LOGO
+                  <img
+                    v-if="
+                      results_protocol.assets.title_logo.file &&
+                        results_protocol.assets.title_logo.file.path
+                    "
+                    :src="results_protocol.assets.title_logo.file.path"
+                    style="max-width: 100%;max-height: 100%"
+                    alt=""
+                  />
                 </div>
               </div>
               <div
@@ -207,7 +215,7 @@
               <!-- Sheet header -->
 
               <v-row
-                style="padding: 8px; border: 1px solid #888888; margin: 0;line-height: normal; font-weight:bold;"
+                style="padding: 8px; border: 1px solid #212121; margin: 0;line-height: normal; font-weight:bold;"
                 ref="sheet_header"
                 ><v-col style="padding: 0;margin: 0;line-height: normal"
                   >Rank</v-col
@@ -236,8 +244,19 @@
               <!-- Competitors -->
 
               <v-row
-                style="padding: 8px;margin: 0;line-height: normal; font-weight:bold;"
-                :style="c_idx % 2 !== 0 && { backgroundColor: '#BCBCBC' }"
+                style="padding: 8px;margin: 0;line-height: normal; font-weight:bold"
+                :style="[
+                  results_protocol.use_string_light &&
+                    c_idx % 2 !== 0 && {
+                      backgroundColor: results_protocol.string_lights.even
+                    },
+                  c_idx % 2 === 0 && {
+                    backgroundColor: results_protocol.string_lights.odd
+                  },
+                  results_protocol.use_grid && {
+                    border: '1px solid #212121'
+                  }
+                ]"
                 v-for="(competitor, c_idx) in page"
                 :key="c_idx"
                 :ref="`result_${c_idx}`"
@@ -245,7 +264,7 @@
                   competitor.rank || "-"
                 }}</v-col>
                 <v-col
-                  style="padding: 0;margin: 0;line-height: normal"
+                  style="padding: 0;margin: 0;overflow: hidden;line-height: normal"
                   v-for="(competitor_data, cdi) in competitor.info_data"
                   :key="cdi"
                   v-show="cdi !== 'runs'"
@@ -253,7 +272,7 @@
                   {{ competitor_data }}
                 </v-col>
                 <v-col
-                  style="padding: 0;margin: 0;line-height: normal"
+                  style="padding: 0;margin: 0;overflow: hidden;line-height: normal"
                   v-for="(judge, j_idx) in competition.stuff.judges"
                   :key="`${competitor.id}_${judge._id}`"
                   >{{ `mark` }}</v-col
@@ -296,10 +315,10 @@
             >
               <img
                 v-if="
-                  results_protocol.assets.footer_logo &&
-                    results_protocol.assets.footer_logo.path
+                  results_protocol.assets.footer_logo.file &&
+                    results_protocol.assets.footer_logo.file.path
                 "
-                :src="results_protocol.assets.footer_logo.path"
+                :src="results_protocol.assets.footer_logo.file.path"
                 style="width: 100%;bottom: 0;"
                 alt=""
               />

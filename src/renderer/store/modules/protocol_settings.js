@@ -2,6 +2,31 @@ export default {
   namespaced: true,
   state: {
     results_protocol: {
+      title: "",
+      print_header: false,
+      strings_at_page: 6,
+      font_size: 12,
+      notations: "",
+      signs: {
+        left: {
+          text: "",
+          img: ""
+        },
+        center: {
+          text: "",
+          img: ""
+        },
+        right: {
+          text: "",
+          img: ""
+        }
+      },
+      use_grid: false,
+      use_string_light: false,
+      string_lights: {
+        odd: "#FFFFFF",
+        even: "#AAAAAA"
+      },
       layout: {
         padding: {
           value_x: 5,
@@ -16,8 +41,18 @@ export default {
         }
       },
       assets: {
-        header_logo: null,
-        footer_logo: null
+        header_logo: {
+          file: null,
+          title: "Изображение для «шапки»"
+        },
+        footer_logo: {
+          file: null,
+          title: "Изображение для «подвала»"
+        },
+        title_logo: {
+          file: null,
+          title: "Логотип"
+        }
       }
     },
     start_list: {},
@@ -1025,13 +1060,9 @@ export default {
     testResults: state => state.testResults
   },
   mutations: {
-    setHeader: (state, event) => {
-      state.results_protocol.assets.header_logo = event.target.files[0];
-      console.log(state.results_protocol);
-    },
-    setFooter: (state, event) => {
-      state.results_protocol.assets.footer_logo = event.target.files[0];
-      console.log(state.results_protocol);
+    setImage: (state, data) => {
+      console.log(data);
+      state.results_protocol.assets[data[0]].file = data[1].target.files[0];
     }
   }
 };

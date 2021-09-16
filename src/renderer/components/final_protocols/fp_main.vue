@@ -16,7 +16,7 @@
         class="flex-grow-1 ml-8 pa-1"
         id="prot_title"
         style="border-radius: 6px"
-        v-model="competition.protocolSettings.title"
+        v-model="results_protocol.title"
         :style="{
           backgroundColor:
             $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
@@ -32,11 +32,11 @@
             hide-details
             class="pa-0 ma-0"
             id="print_header"
-            v-model="competition.protocolSettings.print_header"
+            v-model="results_protocol.print_header"
             :color="$vuetify.theme.themes[appTheme].textDefault"
           ></v-checkbox>
           <label
-            for="print_header"
+            :for="`print_header`"
             class="font-weight-bold"
             style="cursor:pointer;"
             :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
@@ -53,7 +53,7 @@
             :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
             >Кол-во строк на стр.:</label
           ><input
-            v-model="competition.protocolSettings.strings_at_page"
+            v-model="results_protocol.strings_at_page"
             class="ml-2 pa-1"
             style="border-radius: 6px; width: 4rem"
             :style="{
@@ -73,7 +73,7 @@
             :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
             >Размер шрифта:</label
           ><input
-            v-model="competition.protocolSettings.font_size"
+            v-model="results_protocol.font_size"
             class="ml-2 pa-1"
             style="border-radius: 6px; width: 4rem"
             :style="{
@@ -210,7 +210,7 @@
         >
           <textarea
             id="notations"
-            v-model="competition.protocolSettings.notations"
+            v-model="results_protocol.notations"
             class="pa-2"
             style="height: 100%;width: 100%; max-height: 64px; outline: none"
             :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
@@ -231,7 +231,7 @@
                     $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
                   color: $vuetify.theme.themes[appTheme].textDefault
                 }"
-                v-model="competition.protocolSettings.signs.left.text"
+                v-model="results_protocol.signs.left.text"
               />
               <div
                 style="cursor:pointer;;height: 2rem; width: 2rem; border-radius: 6px"
@@ -254,7 +254,7 @@
                     $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
                   color: $vuetify.theme.themes[appTheme].textDefault
                 }"
-                v-model="competition.protocolSettings.signs.center.text"
+                v-model="results_protocol.signs.center.text"
               />
               <div
                 style="cursor:pointer;;height: 2rem; width: 2rem; border-radius: 6px"
@@ -277,7 +277,7 @@
                     $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
                   color: $vuetify.theme.themes[appTheme].textDefault
                 }"
-                v-model="competition.protocolSettings.signs.right.text"
+                v-model="results_protocol.signs.right.text"
               />
               <div
                 style="cursor:pointer;;height: 2rem; width: 2rem; border-radius: 6px"
@@ -296,7 +296,7 @@
             hide-details
             class="pa-0 ma-0"
             id="use_grid"
-            v-model="competition.protocolSettings.use_grid"
+            v-model="results_protocol.use_grid"
             :color="$vuetify.theme.themes[appTheme].textDefault"
           ></v-checkbox>
           <label
@@ -312,7 +312,7 @@
             hide-details
             class="pa-0 ma-0"
             id="use_string_light"
-            v-model="competition.protocolSettings.use_string_light"
+            v-model="results_protocol.use_string_light"
             :color="$vuetify.theme.themes[appTheme].textDefault"
           ></v-checkbox>
           <label
@@ -331,15 +331,14 @@
                 class="ml-1"
                 style="border-radius: 6px; height: 2rem;width: 2rem;cursor:pointer;"
                 :style="{
-                  backgroundColor:
-                    competition.protocolSettings.string_lights.odd,
+                  backgroundColor: results_protocol.string_lights.odd,
                   border: `2px solid ${$vuetify.theme.themes[appTheme].standardBackgroundRGBA}`
                 }"
               ></div> </template
             ><v-card
               ><v-color-picker
                 :dark="appTheme === 'dark'"
-                v-model="competition.protocolSettings.string_lights.odd"
+                v-model="results_protocol.string_lights.odd"
               ></v-color-picker> </v-card
           ></v-dialog>
           <label for="even" class="ml-2" style="cursor:pointer;">Чет.</label>
@@ -351,14 +350,13 @@
                 class="ml-1"
                 style="border-radius: 6px; height: 2rem;width: 2rem;cursor:pointer;"
                 :style="{
-                  backgroundColor:
-                    competition.protocolSettings.string_lights.even,
+                  backgroundColor: results_protocol.string_lights.even,
                   border: `2px solid ${$vuetify.theme.themes[appTheme].standardBackgroundRGBA}`
                 }"
               ></div> </template
             ><v-card
               ><v-color-picker
-                v-model="competition.protocolSettings.string_lights.even"
+                v-model="results_protocol.string_lights.even"
               ></v-color-picker> </v-card
           ></v-dialog>
         </div>
@@ -388,7 +386,8 @@ import { mapGetters } from "vuex";
 export default {
   name: "fp_main",
   computed: {
-    ...mapGetters("main", ["competition", "appTheme"])
+    ...mapGetters("main", ["competition", "appTheme"]),
+    ...mapGetters("protocol_settings", ["results_protocol"])
   }
 };
 </script>
