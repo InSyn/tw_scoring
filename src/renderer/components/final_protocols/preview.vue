@@ -15,48 +15,50 @@
       <v-hover v-slot:default="{ hover }">
         <div
           class="zoom_controls"
-          style="position:relative;padding:8px;display:flex;flex-direction: column;align-items: center; border-radius: 6px; transition: opacity 172ms"
+          style="position:relative;padding:8px;display:flex;flex-direction: column; border-radius: 6px; transition: opacity 172ms"
           :style="[
             { backgroundColor: $vuetify.theme.themes[appTheme].textDefault },
             { opacity: 0.2 },
-            hover && { opacity: 0.8 }
+            hover && { opacity: 0.9 }
           ]"
         >
-          <v-hover v-slot:default="{ hover }">
-            <h3
-              @click="setup.pdf_scale = 1"
-              style="display:flex; font-weight: bold;cursor: pointer"
-              :style="[
-                {
-                  color: $vuetify.theme.themes[appTheme].standardBackgroundRGBA
-                },
-                hover && { color: $vuetify.theme.themes[appTheme].action_red }
-              ]"
-            >
-              {{
-                `${
-                  hover
-                    ? "Сбросить"
-                    : "Масштаб " + Math.round(setup.pdf_scale * 100) + "%"
-                }`
-              }}
-            </h3></v-hover
+          <div
+            style="display:flex; justify-content: center; align-items: center; font-weight: bold; font-size:1.2rem; margin: 0 4px 4px 4px"
+            :style="{
+              color: $vuetify.theme.themes[appTheme].standardBackgroundRGBA
+            }"
           >
+            <div style="margin-right: auto;">Масштаб</div>
+            <v-btn @click="setup.pdf_scale = 1.0" icon small
+              ><v-icon :color="$vuetify.theme.themes[appTheme].accent"
+                >mdi-refresh</v-icon
+              ></v-btn
+            >
+          </div>
           <div
             class="zoom_controls_buttons"
-            style="display:flex;flex-wrap: nowrap"
+            style="display:flex;align-items: center; flex-wrap: nowrap"
           >
             <v-btn
               @click="setPdfScale('-')"
-              style="margin: 8px;"
+              style="margin: auto;"
               :style="
                 hover && { color: $vuetify.theme.themes[appTheme].accent }
               "
               icon
               ><v-icon>mdi-minus</v-icon></v-btn
-            ><v-btn
+            >
+            <div
+              style="margin: auto; font-weight:bold;font-size: 1.2rem"
+              :style="{
+                color: $vuetify.theme.themes[appTheme].standardBackgroundRGBA
+              }"
+            >
+              {{ `${Math.round(setup.pdf_scale * 100)}%` }}
+            </div>
+            <v-btn
               @click="setPdfScale('+')"
-              style="margin: 8px;"
+              style="margin: auto;"
               :style="
                 hover && { color: $vuetify.theme.themes[appTheme].accent }
               "
@@ -64,18 +66,20 @@
               ><v-icon>mdi-plus</v-icon></v-btn
             >
           </div>
+          <v-btn
+            @click="save_pdf()"
+            text
+            style="font-weight: bold;margin-top: 1rem"
+            :style="{ color: $vuetify.theme.themes[appTheme].action_red }"
+            ><v-icon :color="$vuetify.theme.themes[appTheme].action_red"
+              >mdi-file-pdf</v-icon
+            >
+            Сохранить</v-btn
+          >
         </div></v-hover
       >
 
       <!-- //Zoom controls -->
-
-      <v-btn
-        @click="save_pdf()"
-        text
-        style="font-weight: bold;margin-top: 1rem"
-        :color="$vuetify.theme.themes[appTheme].success"
-        >Сохранить PDF</v-btn
-      >
     </div>
 
     <!-- PDF Body -->
@@ -381,7 +385,7 @@ export default {
           .trim()
           .split(" ")
           .join("_")}`,
-        image: { type: "jpeg", quality: 1 },
+        image: { type: "png", quality: 1 },
         html2canvas: {
           allowTaint: true
         },

@@ -79,10 +79,7 @@
         style="z-index: 2; position: relative; min-width: 220px; overflow: hidden"
         :style="[
           {
-            background: `rgba(${$vuetify.theme.themes[appTheme].cardBackground.r},
-      ${$vuetify.theme.themes[appTheme].cardBackground.g},
-      ${$vuetify.theme.themes[appTheme].cardBackground.b},
-      0.9)`,
+            backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
             borderRight: `1px solid ${$vuetify.theme.themes[appTheme].subjectBackgroundRGBA}`
           },
           showMenu

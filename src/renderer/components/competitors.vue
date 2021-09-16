@@ -516,7 +516,13 @@ import fs from "fs";
 import xslx from "read-excel-file/node";
 export default {
   name: "competitors",
-  mounted() {},
+  mounted() {
+    this.load_sheet({
+      target: {
+        files: [{ path: "" }]
+      }
+    });
+  },
   methods: {
     log: data => {
       console.log(data);

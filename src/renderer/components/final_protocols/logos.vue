@@ -1,71 +1,92 @@
 <template>
   <v-container
-    fluid
-    style="border-radius: 6px"
+    style="display:flex;flex-wrap: wrap;align-items: flex-start; margin: 0;padding: 8px; border-radius: 6px; overflow-y: auto"
     :style="{
       backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA
     }"
   >
-    <v-row dense style="margin: 0;"
-      ><v-col style="display:flex; align-items: center; font-weight:bold;"
-        >Изображение для шапки протокола</v-col
-      ><v-col style="display:flex; align-items: center"
-        ><input
+    <div
+      class="header_image"
+      style="display: flex;flex-direction: column; padding: 4px; margin: 4px 8px; border-radius: 6px"
+      :style="{
+        backgroundColor: $vuetify.theme.themes[appTheme].subjectBackgroundRGBA
+      }"
+    >
+      <div
+        style="display:flex; align-items: center; font-weight:bold;padding: 4px"
+      >
+        Изображение для «шапки»
+      </div>
+      <div style="display:flex; align-items: center;padding: 4px">
+        <input
           type="file"
           id="header_logo"
           hidden
           @change="$store.commit('protocol_settings/setHeader', $event)"
         /><v-hover v-slot:default="{ hover }"
           ><label
-            style="border-radius: 4px;font-weight: bold; padding: 4px; cursor: pointer;transition: background-color 172ms "
+            style="border-radius: 4px;font-weight: bold; padding: 4px 8px; cursor: pointer;transition: 172ms "
             :style="[
               {
-                color: $vuetify.theme.themes[appTheme].success,
-                backgroundColor:
-                  $vuetify.theme.themes[appTheme].standardBackgroundRGBA
+                color: $vuetify.theme.themes[appTheme].textDefault,
+                backgroundColor: $vuetify.theme.themes[appTheme].accent
               },
-              hover && { backgroundColor: 'rgba(42,190,106,0.25)' }
+              hover && {
+                backgroundColor: $vuetify.theme.themes[appTheme].accent_light
+              }
             ]"
             for="header_logo"
             >{{
               (results_protocol.assets.header_logo &&
                 results_protocol.assets.header_logo.name) ||
-                "Выберите изображение"
+                "Выбрать..."
             }}</label
           ></v-hover
         >
-      </v-col></v-row
+      </div>
+    </div>
+
+    <div
+      class="footer_image"
+      style="display: flex;flex-direction: column; padding: 4px; margin: 4px 8px; border-radius: 6px"
+      :style="{
+        backgroundColor: $vuetify.theme.themes[appTheme].subjectBackgroundRGBA
+      }"
     >
-    <v-row dense style="margin: 0;"
-      ><v-col style="display:flex; align-items: center; font-weight:bold;"
-        >Изображение для подвала протокола</v-col
-      ><v-col style="display:flex; align-items: center"
-        ><input
+      <div
+        style="display:flex; align-items: center; font-weight:bold;padding: 4px"
+      >
+        Изображение для «подвала»
+      </div>
+
+      <div style="display:flex; align-items: center;padding: 4px">
+        <input
           type="file"
           id="footer_logo"
           hidden
           @change="$store.commit('protocol_settings/setFooter', $event)"
         /><v-hover v-slot:default="{ hover }"
           ><label
-            style="border-radius: 4px;font-weight: bold; padding: 4px; cursor: pointer;transition: background-color 172ms "
+            style="border-radius: 4px;font-weight: bold; padding: 4px 8px; cursor: pointer;transition: 172ms"
             :style="[
               {
-                color: $vuetify.theme.themes[appTheme].success,
-                backgroundColor:
-                  $vuetify.theme.themes[appTheme].standardBackgroundRGBA
+                color: $vuetify.theme.themes[appTheme].textDefault,
+                backgroundColor: $vuetify.theme.themes[appTheme].accent
               },
-              hover && { backgroundColor: 'rgba(42,190,106,0.25)' }
+              hover && {
+                backgroundColor: $vuetify.theme.themes[appTheme].accent_light
+              }
             ]"
             for="footer_logo"
             >{{
               (results_protocol.assets.footer_logo &&
                 results_protocol.assets.footer_logo.name) ||
-                "Выберите изображение"
+                "Выбрать..."
             }}</label
           ></v-hover
         >
-      </v-col></v-row
-    >
+      </div>
+    </div>
   </v-container>
 </template>
 

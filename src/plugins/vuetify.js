@@ -12,21 +12,21 @@ const opts = {
   theme: {
     themes: {
       dark: {
-        standardBackground: { r: 54, g: 54, b: 56, a: 1 },
+        standardBackground: { r: 33, g: 33, b: 36, a: 1 },
         get standardBackgroundRGBA() {
           return `rgba(${this.standardBackground.r},
         ${this.standardBackground.g},
         ${this.standardBackground.b},
         ${this.standardBackground.a})`;
         },
-        cardBackground: { r: 68, g: 68, b: 70, a: 1 },
+        cardBackground: { r: 46, g: 46, b: 49, a: 1 },
         get cardBackgroundRGBA() {
           return `rgba(${this.cardBackground.r},
         ${this.cardBackground.g},
         ${this.cardBackground.b},
         ${this.cardBackground.a})`;
         },
-        subjectBackground: { r: 78, g: 78, b: 80, a: 1 },
+        subjectBackground: { r: 59, g: 59, b: 62, a: 1 },
         get subjectBackgroundRGBA() {
           return `rgba(${this.subjectBackground.r},
         ${this.subjectBackground.g},
@@ -34,9 +34,11 @@ const opts = {
         ${this.subjectBackground.a})`;
         },
         textDefault: "#d2d2d2",
-        accent: "#388FD9",
+        accent: "#3B70A9",
+        accent_light: "#3A82BA",
         accentRgba: { r: 24, g: 190, b: 177, a: 1 },
         success: "#2ABE6A",
+        success_light: "#2CE98F",
         action_green: "#139030",
         action_yellow: "#D9BB23",
         action_darkYellow: "#D98E3D",
@@ -44,31 +46,33 @@ const opts = {
         action_red: "#D9412D"
       },
       light: {
-        standardBackground: { r: 208, g: 208, b: 214, a: 1 },
+        standardBackground: { r: 220, g: 220, b: 228, a: 1 },
         get standardBackgroundRGBA() {
           return `rgba(${this.standardBackground.r},
         ${this.standardBackground.g},
         ${this.standardBackground.b},
         ${this.standardBackground.a})`;
         },
-        cardBackground: { r: 222, g: 222, b: 228, a: 1 },
+        cardBackground: { r: 196, g: 196, b: 206, a: 1 },
         get cardBackgroundRGBA() {
           return `rgba(${this.cardBackground.r},
         ${this.cardBackground.g},
         ${this.cardBackground.b},
         ${this.cardBackground.a})`;
         },
-        subjectBackground: { r: 234, g: 234, b: 240, a: 1 },
+        subjectBackground: { r: 160, g: 160, b: 170, a: 1 },
         get subjectBackgroundRGBA() {
           return `rgba(${this.subjectBackground.r},
         ${this.subjectBackground.g},
         ${this.subjectBackground.b},
         ${this.subjectBackground.a})`;
         },
-        textDefault: "#363638",
-        accent: "#388FD9",
+        textDefault: "#212121",
+        accent: "#345EDA",
+        accent_light: "#547EE7",
         accentRgba: { r: 217, g: 144, b: 27, a: 1 },
         success: "#2ABE6A",
+        success_light: "#2CE98F",
         action_green: "#139030",
         action_yellow: "#D9BB23",
         action_darkYellow: "#D98E3D",
