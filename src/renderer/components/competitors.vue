@@ -519,7 +519,12 @@ export default {
   mounted() {
     this.load_sheet({
       target: {
-        files: [{ path: "" }]
+        files: [
+          {
+            path:
+              "C:\\Users\\InSyn\\Documents\\GitHub\\tw_scoring\\temp_assets\\TestList.xlsx"
+          }
+        ]
       }
     });
   },

@@ -17,9 +17,15 @@
           class="zoom_controls"
           style="position:relative;padding:8px;display:flex;flex-direction: column; border-radius: 6px; transition: opacity 172ms"
           :style="[
-            { backgroundColor: $vuetify.theme.themes[appTheme].textDefault },
-            { opacity: 0.2 },
-            hover && { opacity: 0.9 }
+            {
+              backgroundColor: $vuetify.theme.themes[appTheme].textDefault,
+              opacity: 0.3,
+              boxShadow: `0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23)`
+            },
+            hover && {
+              opacity: 0.9,
+              boxShadow: `0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22)`
+            }
           ]"
         >
           <div
