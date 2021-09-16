@@ -4,7 +4,8 @@ export default {
     results_protocol: {
       layout: {
         padding: {
-          value: 5,
+          value_x: 5,
+          value_y: 5,
           mu: "mm"
         },
         header: {

@@ -15,6 +15,7 @@ export default {
       info_dialog = { state: false };
       race_status = null;
       res_accepted = false;
+      rank = null;
     },
     MarkClass: class {
       constructor(race, race_id, judge_id, value) {

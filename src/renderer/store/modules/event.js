@@ -5,6 +5,10 @@ export default {
       constructor() {
         this.structure.selected.type = 0;
         this.structure.selected.discipline = 0;
+        this.mainData.discipline.value = "DISCIPLINE";
+        this.mainData.discipline.min = "DSC";
+        this.mainData.country.value = "CNTRY";
+        this.mainData.location.value = "Some City";
       }
       weather = [];
       structure = {

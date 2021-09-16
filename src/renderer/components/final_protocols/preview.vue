@@ -1,36 +1,97 @@
 <template>
   <div
     id="pdf_preview"
-    style="display: flex; flex-direction: column; justify-content: flex-start; height: 100%;width: 100%; position: relative; z-index: 1000; overflow-y: auto;padding: 32px"
+    style="position:relative; display: flex; flex-direction: column; justify-content: flex-start; height: 100%;width: 100%; z-index: 1000; overflow-y: auto;padding: 32px"
     :style="{
       backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA
     }"
   >
-    <!-- //PDF Body -->
+    <div
+      class="menu"
+      style="position:fixed;right: 64px;top: 128px;z-index: 1001;"
+    >
+      <!-- Zoom controls -->
 
-    <!-- OnLoading -->
+      <v-hover v-slot:default="{ hover }">
+        <div
+          class="zoom_controls"
+          style="position:relative;padding:8px;display:flex;flex-direction: column;align-items: center; border-radius: 6px; transition: opacity 172ms"
+          :style="[
+            { backgroundColor: $vuetify.theme.themes[appTheme].textDefault },
+            { opacity: 0.2 },
+            hover && { opacity: 0.8 }
+          ]"
+        >
+          <v-hover v-slot:default="{ hover }">
+            <h3
+              @click="setup.pdf_scale = 1"
+              style="display:flex; font-weight: bold;cursor: pointer"
+              :style="[
+                {
+                  color: $vuetify.theme.themes[appTheme].standardBackgroundRGBA
+                },
+                hover && { color: $vuetify.theme.themes[appTheme].action_red }
+              ]"
+            >
+              {{
+                `${
+                  hover
+                    ? "Сбросить"
+                    : "Масштаб " + Math.round(setup.pdf_scale * 100) + "%"
+                }`
+              }}
+            </h3></v-hover
+          >
+          <div
+            class="zoom_controls_buttons"
+            style="display:flex;flex-wrap: nowrap"
+          >
+            <v-btn
+              @click="setPdfScale('-')"
+              style="margin: 8px;"
+              :style="
+                hover && { color: $vuetify.theme.themes[appTheme].accent }
+              "
+              icon
+              ><v-icon>mdi-minus</v-icon></v-btn
+            ><v-btn
+              @click="setPdfScale('+')"
+              style="margin: 8px;"
+              :style="
+                hover && { color: $vuetify.theme.themes[appTheme].accent }
+              "
+              icon
+              ><v-icon>mdi-plus</v-icon></v-btn
+            >
+          </div>
+        </div></v-hover
+      >
 
-    <div id="pdf_to_print">
+      <!-- //Zoom controls -->
+
+      <v-btn
+        @click="save_pdf()"
+        text
+        style="font-weight: bold;margin-top: 1rem"
+        :color="$vuetify.theme.themes[appTheme].success"
+        >Сохранить PDF</v-btn
+      >
+    </div>
+
+    <!-- PDF Body -->
+
+    <div
+      id="pdf_to_print"
+      :style="{ transform: `scale(${setup.pdf_scale})` }"
+      style="transform-origin: top"
+    >
       <section
         class="pdf_to_print_section"
-        v-if="loading"
         v-for="(page, p_idx) in (paginated_results.length > 0 &&
           paginated_results) || [results]"
         :key="paginated_results.length + p_idx"
-        style="position:relative;"
+        style="position:relative"
       >
-        <!--      <div-->
-        <!--        id="loading_overlay_loading"-->
-        <!--        v-if="loading"-->
-        <!--        style="position: absolute;z-index: 1002; top: 0;left: 0;bottom: 0;right: 0; margin: auto;display: flex; align-items: center;justify-content: center"-->
-        <!--        :style="{-->
-        <!--          height: `calc(${setup.height} - 1px)`,-->
-        <!--          width: `${setup.width}`,-->
-        <!--          backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA-->
-        <!--        }"-->
-        <!--      >-->
-        <!--        <v-progress-circular indeterminate></v-progress-circular>-->
-        <!--      </div>-->
         <div
           class="pdf_table_container"
           :style="{
@@ -117,20 +178,62 @@
                 </div>
               </div>
             </div>
+            <div
+              v-if="p_idx === 0"
+              style="display:flex; flex-wrap: wrap; align-items: center; margin: 2px 0"
+            >
+              {{ `Number of competitors: ${results && results.length}` }}
+            </div>
           </div>
+
+          <!-- Sheet -->
+
           <div
             ref="pdf_table_container"
             class="pdf_content"
             style="display:flex;flex-grow: 1"
           >
             <v-container style="padding: 0; width: 100%; overflow-y: hidden">
+              <!-- Sheet header -->
+
               <v-row
-                style="padding: 2px;margin: 0;line-height: normal"
+                style="padding: 8px; border: 1px solid #888888; margin: 0;line-height: normal; font-weight:bold;"
+                ref="sheet_header"
+                ><v-col style="padding: 0;margin: 0;line-height: normal"
+                  >Rank</v-col
+                >
+                <v-col
+                  style="padding: 0;margin: 0;line-height: normal"
+                  v-for="(header, h_idx) in competition.competitorsSheet.header"
+                  :key="h_idx"
+                  >{{ header.title }}</v-col
+                >
+                <v-col
+                  style="padding: 0;margin: 0;line-height: normal"
+                  v-for="(judge, j_idx) in competition.stuff.judges"
+                  :key="judge._id"
+                  >{{ `J${j_idx}` }}</v-col
+                >
+                <v-col style="padding: 0;margin: 0;line-height: normal"
+                  >Score</v-col
+                ><v-col style="padding: 0;margin: 0;line-height: normal"
+                  >Result</v-col
+                >
+              </v-row>
+
+              <!-- //Sheet header -->
+
+              <!-- Competitors -->
+
+              <v-row
+                style="padding: 8px;margin: 0;line-height: normal; font-weight:bold;"
                 :style="c_idx % 2 !== 0 && { backgroundColor: '#BCBCBC' }"
                 v-for="(competitor, c_idx) in page"
                 :key="c_idx"
                 :ref="`result_${c_idx}`"
-              >
+                ><v-col style="padding: 0;margin: 0;line-height: normal">{{
+                  competitor.rank || "-"
+                }}</v-col>
                 <v-col
                   style="padding: 0;margin: 0;line-height: normal"
                   v-for="(competitor_data, cdi) in competitor.info_data"
@@ -139,9 +242,26 @@
                 >
                   {{ competitor_data }}
                 </v-col>
+                <v-col
+                  style="padding: 0;margin: 0;line-height: normal"
+                  v-for="(judge, j_idx) in competition.stuff.judges"
+                  :key="`${competitor.id}_${judge._id}`"
+                  >{{ `mark` }}</v-col
+                >
+                <v-col style="padding: 0;margin: 0;line-height: normal">{{
+                  `scr`
+                }}</v-col
+                ><v-col style="padding: 0;margin: 0;line-height: normal">{{
+                  `res`
+                }}</v-col>
               </v-row>
+
+              <!-- //Competitors -->
             </v-container>
           </div>
+
+          <!-- //Sheet -->
+
           <div
             ref="pdf_footer"
             class="pdf_footer"
@@ -176,7 +296,9 @@
             </div>
           </div>
         </div>
+
         <!-- Divider -->
+
         <div
           v-if="
             paginated_results.length > 0 && p_idx < paginated_results.length - 1
@@ -184,17 +306,12 @@
           data-html2canvas-ignore="true"
           style="height: 2rem"
         ></div>
-        <!-- Divider -->
+
+        <!-- //Divider -->
       </section>
     </div>
 
-    <!-- PDF Body// -->
-
-    <v-btn
-      @click="print_pdf()"
-      style="background-color: slategrey; color: aliceblue; border-radius: 0"
-      >Download</v-btn
-    >
+    <!-- //PDF Body -->
   </div>
 </template>
 <script>
@@ -209,47 +326,62 @@ export default {
       setTimeout(() => {
         let container_height = this.$refs["pdf_table_container"][0]
           .offsetHeight;
-        let result_height = this.$refs["result_0"][0].offsetHeight;
+        let header_height = this.$refs["sheet_header"][0].offsetHeight;
+        let result_height =
+          this.$refs["result_0"] && this.$refs["result_0"][0].offsetHeight;
         let results_overall = this.results.length;
-        let res_per_page = Math.floor(container_height / result_height);
+        let res_per_page = Math.floor(
+          (container_height - header_height) / result_height
+        );
         let pages = Math.ceil(results_overall / res_per_page);
         for (let p = 0; p < pages; p++) {
           this.data_paginated_results.push([]);
           for (let i = 0; i < res_per_page; i++) {
-            if (this.results[p * res_per_page + i])
+            if (this.results[p * res_per_page + i]) {
+              this.results[p * res_per_page + i].rank =
+                p * res_per_page + i + 1;
               this.data_paginated_results[p].push(
                 this.results[p * res_per_page + i]
               );
+            }
           }
         }
         console.log(
           `Container-${container_height}, result-${result_height}: results on page-${res_per_page}, pages-${pages} for ${results_overall} results`
         );
         console.log(this.data_paginated_results);
-        // this.loading = false;
       }, 0);
     });
   },
   data() {
     return {
-      loading: true,
       results: null,
       data_paginated_results: [],
       setup: {
         height: 297,
         width: 210,
         padding: [5, 5],
-        orientation: "portrait"
+        orientation: "portrait",
+        pdf_scale: 1
       }
     };
   },
   methods: {
-    print_pdf() {
+    async save_pdf() {
+      let _scale = this.setup.pdf_scale;
+      this.setup.pdf_scale = 1;
+
       let element = document.getElementById("pdf_to_print");
+
       const opt = {
         margin: 0,
-        filename: "myfile.pdf",
-        image: { type: "jpeg", quality: 0.98 },
+        filename: `${
+          this.competition.mainData.date.value
+        }_${this.competition.mainData.title.value
+          .trim()
+          .split(" ")
+          .join("_")}`,
+        image: { type: "jpeg", quality: 1 },
         html2canvas: {
           allowTaint: true
         },
@@ -258,10 +390,26 @@ export default {
           orientation: this.setup.orientation
         }
       };
-      html2pdf()
+
+      await html2pdf()
         .set(opt)
         .from(element)
         .save();
+
+      this.setup.pdf_scale = _scale;
+    },
+    setPdfScale(operator) {
+      if (operator === "+") {
+        this.setup.pdf_scale < 1.5
+          ? (this.setup.pdf_scale =
+              Math.round((this.setup.pdf_scale + 0.1) * 10) / 10)
+          : console.log(this.setup.pdf_scale < 1.5);
+      } else {
+        this.setup.pdf_scale > 0.1
+          ? (this.setup.pdf_scale =
+              Math.round((this.setup.pdf_scale - 0.1) * 10) / 10)
+          : null;
+      }
     }
   },
   computed: {
