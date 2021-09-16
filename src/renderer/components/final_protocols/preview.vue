@@ -215,27 +215,39 @@
               <!-- Sheet header -->
 
               <v-row
-                style="padding: 8px; border: 1px solid #212121; margin: 0;line-height: normal; font-weight:bold;"
+                style="padding: 0; border: 1px solid #212121; margin: 0;line-height: normal; font-weight:bold;"
                 ref="sheet_header"
-                ><v-col style="padding: 0;margin: 0;line-height: normal"
-                  >Rank</v-col
+                ><v-col
+                  style="padding: 4px;margin: 0;line-height: normal; overflow: hidden;white-space: nowrap"
+                  >Место</v-col
                 >
                 <v-col
-                  style="padding: 0;margin: 0;line-height: normal"
+                  style="padding: 4px;margin: 0;line-height: normal; overflow: hidden;white-space: nowrap"
                   v-for="(header, h_idx) in competition.competitorsSheet.header"
                   :key="h_idx"
                   >{{ header.title }}</v-col
                 >
                 <v-col
-                  style="padding: 0;margin: 0;line-height: normal"
+                  v-if="
+                    competition &&
+                      competition.races &&
+                      competition.races.length > 0
+                  "
+                  style="padding: 4px;margin: 0;line-height: normal; overflow: hidden;white-space: nowrap"
+                  >Заезд</v-col
+                >
+                <v-col
+                  style="padding: 4px;margin: 0;line-height: normal; overflow: hidden;white-space: nowrap"
                   v-for="(judge, j_idx) in competition.stuff.judges"
                   :key="judge._id"
                   >{{ `J${j_idx}` }}</v-col
                 >
-                <v-col style="padding: 0;margin: 0;line-height: normal"
-                  >Score</v-col
-                ><v-col style="padding: 0;margin: 0;line-height: normal"
-                  >Result</v-col
+                <v-col
+                  style="padding: 4px;margin: 0;line-height: normal; overflow: hidden;white-space: nowrap"
+                  >Оценка</v-col
+                ><v-col
+                  style="padding: 4px;margin: 0;line-height: normal; overflow: hidden;white-space: nowrap"
+                  >Рез.</v-col
                 >
               </v-row>
 
@@ -244,7 +256,7 @@
               <!-- Competitors -->
 
               <v-row
-                style="padding: 8px;margin: 0;line-height: normal; font-weight:bold"
+                style="padding: 0;margin: 0;line-height: normal; font-weight:bold"
                 :style="[
                   results_protocol.use_string_light &&
                     c_idx % 2 !== 0 && {
@@ -260,29 +272,109 @@
                 v-for="(competitor, c_idx) in page"
                 :key="c_idx"
                 :ref="`result_${c_idx}`"
-                ><v-col style="padding: 0;margin: 0;line-height: normal">{{
-                  competitor.rank || "-"
-                }}</v-col>
+                ><v-col
+                  style="padding: 4px;margin: 0;overflow: hidden;line-height: normal; white-space: nowrap"
+                  >{{ competitor.rank || "-" }}</v-col
+                >
                 <v-col
-                  style="padding: 0;margin: 0;overflow: hidden;line-height: normal"
+                  style="padding: 4px;margin: 0;overflow: hidden;line-height: normal; white-space: nowrap"
                   v-for="(competitor_data, cdi) in competitor.info_data"
                   :key="cdi"
-                  v-show="cdi !== 'runs'"
                 >
-                  {{ competitor_data }}
-                </v-col>
+                  {{ competitor_data }} </v-col
+                ><v-col
+                  v-if="
+                    competition &&
+                      competition.races &&
+                      competition.races.length > 0
+                  "
+                  style="padding: 4px;margin: 0;overflow: hidden;line-height: normal; white-space: nowrap"
+                  ><div
+                    v-for="(race, race_idx) in competition && competition.races"
+                    :key="`race_${race_idx}`"
+                  >
+                    {{ `Заезд ${++race_idx}` }}
+                  </div></v-col
+                >
                 <v-col
-                  style="padding: 0;margin: 0;overflow: hidden;line-height: normal"
+                  style="padding: 4px;margin: 0;overflow: hidden;line-height: normal; white-space: nowrap"
                   v-for="(judge, j_idx) in competition.stuff.judges"
                   :key="`${competitor.id}_${judge._id}`"
-                  >{{ `mark` }}</v-col
+                  ><div
+                    v-for="(race, r_idx) in competition && competition.races"
+                    :key="
+                      `mark_${(competitor.marks.find(_mark => {
+                        return (
+                          _mark.race_id === race.id &&
+                          _mark.judge_id === judge._id
+                        );
+                      }) &&
+                        competitor.marks.find(_mark => {
+                          return (
+                            _mark.race_id === race.id &&
+                            _mark.judge_id === judge._id
+                          );
+                        }).id) ||
+                        r_idx}`
+                    "
+                  >
+                    {{
+                      (competitor.marks.find(_mark => {
+                        return (
+                          _mark.race_id === race.id &&
+                          _mark.judge_id === judge._id
+                        );
+                      }) &&
+                        competitor.marks.find(_mark => {
+                          return (
+                            _mark.race_id === race.id &&
+                            _mark.judge_id === judge._id
+                          );
+                        }).value) ||
+                        "NaN"
+                    }}
+                  </div></v-col
                 >
-                <v-col style="padding: 0;margin: 0;line-height: normal">{{
-                  `scr`
-                }}</v-col
-                ><v-col style="padding: 0;margin: 0;line-height: normal">{{
-                  `res`
-                }}</v-col>
+                <v-col
+                  style="padding: 4px;margin: 0;overflow: hidden;line-height: normal; white-space: nowrap"
+                  ><div
+                    v-for="(race_res, rr_idx) in competition.races"
+                    :key="rr_idx"
+                  >
+                    {{
+                      competition.result_formula.types[
+                        competition.result_formula.type
+                      ].formulas
+                        .find(_f => {
+                          return (
+                            _f.id ===
+                            competition.result_formula.types[
+                              competition.result_formula.type
+                            ].formula
+                          );
+                        })
+                        .get_result(
+                          competitor.id,
+                          race_res.id,
+                          competition.stuff.judges.map(_j => {
+                            return +_j.id;
+                          })
+                        )
+                    }}
+                  </div></v-col
+                ><v-col
+                  style="padding: 4px;margin: 0;overflow: hidden;line-height: normal; white-space: nowrap"
+                  >{{
+                    competition.result_formula.overall_result.types
+                      .find(_f => {
+                        return (
+                          _f.id ===
+                          competition.result_formula.overall_result.type
+                        );
+                      })
+                      .result(competitor.id)
+                  }}</v-col
+                >
               </v-row>
 
               <!-- //Competitors -->
@@ -349,7 +441,6 @@ import html2pdf from "html2pdf.js";
 export default {
   name: "preview",
   mounted() {
-    console.log(this.$refs);
     this.results = this.competition.competitorsSheet.competitors;
     this.$nextTick(() => {
       setTimeout(() => {
@@ -375,10 +466,6 @@ export default {
             }
           }
         }
-        console.log(
-          `Container-${container_height}, result-${result_height}: results on page-${res_per_page}, pages-${pages} for ${results_overall} results`
-        );
-        console.log(this.data_paginated_results);
       }, 0);
     });
   },
@@ -446,7 +533,8 @@ export default {
     ...mapGetters("protocol_settings", ["results_protocol"]),
     paginated_results() {
       return this.data_paginated_results;
-    }
+    },
+    console: () => console
   }
 };
 </script>

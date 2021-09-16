@@ -18,11 +18,12 @@ export default {
       rank = null;
     },
     MarkClass: class {
-      constructor(race, race_id, judge_id, value) {
+      constructor(race, race_id, judge, judge_id, value) {
         this.value = value || 0;
         this.race = race;
         this.race_id = race_id;
-        this.judge = judge_id;
+        this.judge = judge;
+        this.judge_id = judge_id;
         this.id = Math.random()
           .toString(36)
           .substr(2, 9);

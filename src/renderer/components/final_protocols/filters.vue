@@ -1,12 +1,13 @@
 <template>
   <div
-    class="d-flex justify-center align-center"
-    style="border-radius: 6px; width: 100%; height: 100%;"
+    class="d-flex flex-column justify-start"
+    style="border-radius: 6px; width: 100%; height: 100%; padding: 16px"
     :style="{
       backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA
     }"
-    v-html="`FILTERS`"
-  ></div>
+  >
+    <div style="font-size: 1.2rem; font-weight:bold;">Настройка фильтров</div>
+  </div>
 </template>
 
 <script>

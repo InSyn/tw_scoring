@@ -13,7 +13,7 @@
       <div>
         <v-btn
           @click="competition.technicalInfo.push({ title: '', value: '' })"
-          style="width: 100%; font-size: 0.6rem; height: 0.8rem"
+          style="width: 100%; font-size: 0.8rem; height: 2rem"
           :color="$vuetify.theme.themes[appTheme].accent"
           text
           >{{ `+ добавить строку` }}</v-btn

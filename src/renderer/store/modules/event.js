@@ -37,6 +37,11 @@ export default {
           { id: 3, title: "1/1000", value: 1000 }
         ]
       };
+      set_accuracy(val) {
+        let acc = this.structure.accuracy[this.structure.selected.accuracy]
+          .value;
+        return Math.round(acc * val) / acc;
+      }
       races = [];
       selected_race_id = 0;
       get selected_race() {

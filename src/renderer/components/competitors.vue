@@ -522,7 +522,7 @@ export default {
         files: [
           {
             path:
-              "C:\\Users\\InSyn\\Documents\\GitHub\\tw_scoring\\temp_assets\\TestList.xlsx"
+              "C:\\Users\\syner\\Documents\\GitHub\\tw_scoring\\temp_assets\\TestList.xlsx"
           }
         ]
       }
@@ -555,8 +555,8 @@ export default {
         }
       }
     },
-    load_sheet(e) {
-      xslx(`${e.target.files[0].path}`).then(rows => {
+    async load_sheet(e) {
+      await xslx(`${e.target.files[0].path}`).then(rows => {
         this.competition.competitorsSheet.competitors = [];
 
         rows.map(row => {
@@ -599,7 +599,7 @@ export default {
       this.socket &&
         this.socket.connected &&
         this.socket.emit("set_competition_data", this.competition, res => {
-          console.log(res);
+          return res;
         });
     },
     clearSheet() {
@@ -635,7 +635,7 @@ export default {
       this.socket &&
         this.socket.connected &&
         this.socket.emit("set_competition_data", this.competition, res => {
-          console.log(res);
+          return res;
         });
     },
     createCompetitor(data) {
@@ -652,7 +652,7 @@ export default {
       this.socket &&
         this.socket.connected &&
         this.socket.emit("set_competition_data", this.competition, res => {
-          console.log(res);
+          return res;
         });
       this.createCompetitorDialog.state = false;
       this.createCompetitorDialog.newCompetitor = [];

@@ -111,6 +111,18 @@
                   type="text"
                   v-model="competition.stuff.jury[jr].loc"
               /></v-col>
+              <div
+                v-if="jury.connected !== undefined"
+                style="position:absolute;top: 4px;left: 8px; font-weight:bold;font-size: 0.9rem"
+                :style="[
+                  { color: $vuetify.theme.themes[appTheme].cardBackgroundRGBA },
+                  jury.connected && {
+                    color: $vuetify.theme.themes[appTheme].accent
+                  }
+                ]"
+              >
+                online
+              </div>
               <div style="position:absolute; top: 4px; right: 32px">
                 <v-icon
                   v-if="jury.connected !== undefined"
@@ -212,7 +224,18 @@
               no-gutters
               v-for="(judge, jd) in competition.stuff.judges"
               :key="jd"
-            >
+              ><div
+                v-if="judge.connected !== undefined"
+                style="position:absolute;top: 4px;left: 8px; font-weight:bold;font-size: 0.9rem"
+                :style="[
+                  { color: $vuetify.theme.themes[appTheme].cardBackgroundRGBA },
+                  judge.connected && {
+                    color: $vuetify.theme.themes[appTheme].accent
+                  }
+                ]"
+              >
+                online
+              </div>
               <v-col class="d-flex align-center pa-1" cols="3"
                 ><div class="font-weight-bold">ID:</div>
                 <input

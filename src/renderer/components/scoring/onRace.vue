@@ -467,6 +467,7 @@ export default {
                 this.competition.selected_race_id,
                 this.competition.selected_race.id,
                 _judge.id,
+                _judge._id,
                 Math.round(30 + Math.random() * 70)
               )
             );
@@ -566,7 +567,8 @@ export default {
   },
   computed: {
     ...mapGetters("main", ["competition", "appTheme", "socket"]),
-    ...mapGetters("roles", ["MarkClass"])
+    ...mapGetters("roles", ["MarkClass"]),
+    console: () => console
   }
 };
 </script>
