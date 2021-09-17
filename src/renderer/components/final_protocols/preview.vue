@@ -159,7 +159,11 @@
                 <div
                   style="font-size: 1.4rem; font-weight: bold; line-height: 1.2"
                 >
-                  {{ competition.mainData.title.value }}
+                  {{
+                    results_protocol.title && results_protocol.title.length > 0
+                      ? results_protocol.title
+                      : competition.mainData.title.value
+                  }}
                 </div>
                 <div
                   style="font-size: 1.4rem; font-weight: bold; line-height: 1.2"

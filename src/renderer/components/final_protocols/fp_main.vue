@@ -17,6 +17,7 @@
         id="prot_title"
         style="border-radius: 6px"
         v-model="results_protocol.title"
+        :placeholder="competition.mainData.title.value"
         :style="{
           backgroundColor:
             $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
