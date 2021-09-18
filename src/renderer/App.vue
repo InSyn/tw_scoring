@@ -31,7 +31,11 @@
           :color="$vuetify.theme.themes[appTheme].accent"
           ><v-icon>mdi-content-save</v-icon>
           <v-expand-x-transition
-            ><div class="ml-1" v-if="hover">
+            ><div
+              class="ml-1"
+              :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
+              v-if="hover"
+            >
               сохранить
             </div></v-expand-x-transition
           ></v-btn
@@ -45,7 +49,11 @@
           :color="$vuetify.theme.themes[appTheme].accent"
           ><v-icon>mdi-arrow-down-bold</v-icon>
           <v-expand-x-transition
-            ><div class="ml-1" v-if="hover">
+            ><div
+              class="ml-1"
+              :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
+              v-if="hover"
+            >
               загрузить
             </div></v-expand-x-transition
           ></v-btn
@@ -204,7 +212,22 @@ export default {
       "changeMenuState",
       "changeTheme",
       "createCompetition"
-    ])
+    ]),
+    startServer() {
+      app.emit("startSocketServer", this.server_config);
+      if (!this.serverStatus) {
+        this.connect(this.server_config[0], this.server_config[1]);
+      }
+    },
+    connect() {
+      if (!this.socket) {
+        this.$store.commit("main/connect_socket", [
+          this.server_config[0],
+          this.server_config[1]
+        ]);
+        this.$store.commit("main/createServerChecker");
+      }
+    }
   },
   data() {
     return {
@@ -250,13 +273,13 @@ export default {
       height: 6px;
     }
     &::-webkit-scrollbar-track {
-      background: #888;
+      background: transparent;
     }
     &::-webkit-scrollbar-thumb {
-      background: #f1f1f1;
+      background: #3b70a9;
     }
     &::-webkit-scrollbar-thumb:hover {
-      background: #d1d1d1;
+      background: #3a82ba;
     }
   }
   header {

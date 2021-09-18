@@ -26,68 +26,6 @@
         type="text"
       />
     </div>
-    <div class="pa-2 d-flex flex-nowrap">
-      <div class="d-flex flex-column" style="width: 50%;">
-        <div class="pa-1 d-flex flex-nowrap justify-start align-center">
-          <v-checkbox
-            hide-details
-            class="pa-0 ma-0"
-            id="print_header"
-            v-model="results_protocol.print_header"
-            :color="$vuetify.theme.themes[appTheme].textDefault"
-          ></v-checkbox>
-          <label
-            :for="`print_header`"
-            class="font-weight-bold"
-            style="cursor:pointer;"
-            :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
-            >Печать шапки стр.</label
-          >
-        </div>
-      </div>
-      <div class="d-flex flex-column" style="width: 50%;">
-        <div class="d-flex justify-end align-center pa-1">
-          <label
-            for="strings"
-            class="font-weight-bold"
-            style="cursor:pointer;"
-            :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
-            >Кол-во строк на стр.:</label
-          ><input
-            v-model="results_protocol.strings_at_page"
-            class="ml-2 pa-1"
-            style="border-radius: 6px; width: 4rem"
-            :style="{
-              color: $vuetify.theme.themes[appTheme].textDefault,
-              backgroundColor:
-                $vuetify.theme.themes[appTheme].standardBackgroundRGBA
-            }"
-            id="strings"
-            type="number"
-          />
-        </div>
-        <div class="d-flex justify-end align-center pa-1">
-          <label
-            for="font"
-            class="font-weight-bold"
-            style="cursor:pointer;"
-            :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
-            >Размер шрифта:</label
-          ><input
-            v-model="results_protocol.font_size"
-            class="ml-2 pa-1"
-            style="border-radius: 6px; width: 4rem"
-            :style="{
-              color: $vuetify.theme.themes[appTheme].textDefault,
-              backgroundColor:
-                $vuetify.theme.themes[appTheme].standardBackgroundRGBA
-            }"
-            id="font"
-            type="number"
-          />
-        </div>
-      </div>
-    </div>
     <div class="pa-2 d-flex flex-column flex-grow-1">
       <div class="d-flex flex-nowrap align-content-end">
         <v-btn
@@ -156,7 +94,13 @@
           ></v-col>
         </v-row>
         <div style="height: 120px;overflow-y: auto">
-          <v-row no-gutters v-for="i in 24" :key="i" style="font-size: 0.8rem">
+          <v-row
+            no-gutters
+            v-for="(field, f_idx) in results_protocol.protocol_fields"
+            :key="f_idx"
+            @click="console.log(field)"
+            style="font-size: 0.8rem"
+          >
             <div
               class="d-flex justify-center align-center"
               style="width: 2rem;"
@@ -190,6 +134,7 @@
             <v-col
               v-for="i_c in 4"
               :key="i_c"
+              @click=""
               class="d-flex justify-center pa-1"
               v-html="i_c"
             ></v-col>
@@ -386,9 +331,15 @@
 import { mapGetters } from "vuex";
 export default {
   name: "fp_main",
+  mounted() {
+    this.competition.competitorsSheet.header.forEach(_header => {
+      this.results_protocol.protocol_fields.push(_header);
+    });
+  },
   computed: {
     ...mapGetters("main", ["competition", "appTheme"]),
-    ...mapGetters("protocol_settings", ["results_protocol"])
+    ...mapGetters("protocol_settings", ["results_protocol"]),
+    console: () => console
   }
 };
 </script>

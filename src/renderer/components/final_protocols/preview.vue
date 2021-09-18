@@ -35,7 +35,7 @@
             }"
           >
             <div style="margin-right: auto;">Масштаб</div>
-            <v-btn @click="setup.pdf_scale = 1.0" icon small
+            <v-btn @click="results_protocol.layout.pdf_scale = 1.0" icon small
               ><v-icon :color="$vuetify.theme.themes[appTheme].accent"
                 >mdi-refresh</v-icon
               ></v-btn
@@ -60,7 +60,7 @@
                 color: $vuetify.theme.themes[appTheme].standardBackgroundRGBA
               }"
             >
-              {{ `${Math.round(setup.pdf_scale * 100)}%` }}
+              {{ `${Math.round(results_protocol.layout.pdf_scale * 100)}%` }}
             </div>
             <v-btn
               @click="setPdfScale('+')"
@@ -91,8 +91,9 @@
     <!-- PDF Body -->
 
     <div
+      v-if="!saving_loading"
       id="pdf_to_print"
-      :style="{ transform: `scale(${setup.pdf_scale})` }"
+      :style="{ transform: `scale(${results_protocol.layout.pdf_scale})` }"
       style="transform-origin: top"
     >
       <section
@@ -105,9 +106,12 @@
         <div
           class="pdf_table_container"
           :style="{
-            height: `calc(${setup.height}mm - 1px)`,
-            width: `${setup.width}mm`,
-            padding: [`${setup.padding[0]}mm`, `${setup.padding[1]}mm`]
+            height: `calc(${results_protocol.layout.height}mm - 1px)`,
+            width: `${results_protocol.layout.width}mm`,
+            padding: [
+              `${results_protocol.layout.padding[0]}mm`,
+              `${results_protocol.layout.padding[1]}mm`
+            ]
           }"
           style="display:flex; flex-direction: column; background-color: white; color: black; margin: auto;"
         >
@@ -335,7 +339,7 @@
                             _mark.judge_id === judge._id
                           );
                         }).value) ||
-                        "NaN"
+                        "-"
                     }}
                   </div></v-col
                 >
@@ -369,14 +373,15 @@
                 ><v-col
                   style="padding: 4px;margin: 0;overflow: hidden;line-height: normal; white-space: nowrap"
                   >{{
-                    competition.result_formula.overall_result.types
-                      .find(_f => {
-                        return (
-                          _f.id ===
-                          competition.result_formula.overall_result.type
-                        );
-                      })
-                      .result(competitor.id)
+                    competitor.race_status ||
+                      competition.result_formula.overall_result.types
+                        .find(_f => {
+                          return (
+                            _f.id ===
+                            competition.result_formula.overall_result.type
+                          );
+                        })
+                        .result(competitor.id)
                   }}</v-col
                 >
               </v-row>
@@ -436,6 +441,14 @@
       </section>
     </div>
 
+    <v-progress-circular
+      v-else
+      indeterminate
+      style="margin: auto"
+      size="64"
+      :color="$vuetify.theme.themes[appTheme].accent"
+    ></v-progress-circular>
+
     <!-- //PDF Body -->
   </div>
 </template>
@@ -445,7 +458,40 @@ import html2pdf from "html2pdf.js";
 export default {
   name: "preview",
   mounted() {
-    this.results = this.competition.competitorsSheet.competitors;
+    this.results.push(...this.competition.competitorsSheet.competitors);
+    this.results = this.results.filter(competitor => {
+      return (
+        (competitor.marks &&
+          competitor.marks.length > 0 &&
+          competitor.marks.length ===
+            this.competition.races.length *
+              this.competition.stuff.judges.length) ||
+        competitor.race_status
+      );
+    });
+    this.results = this.results.sort((c1, c2) => {
+      if (c1.race_status) {
+        return 1;
+      } else if (c2.race_status) {
+        return -1;
+      } else
+        return (
+          this.competition.result_formula.overall_result.types
+            .find(_f => {
+              return (
+                _f.id === this.competition.result_formula.overall_result.type
+              );
+            })
+            .result(c2.id) -
+          this.competition.result_formula.overall_result.types
+            .find(_f => {
+              return (
+                _f.id === this.competition.result_formula.overall_result.type
+              );
+            })
+            .result(c1.id)
+        );
+    });
     this.$nextTick(() => {
       setTimeout(() => {
         let container_height = this.$refs["pdf_table_container"][0]
@@ -475,21 +521,17 @@ export default {
   },
   data() {
     return {
-      results: null,
-      data_paginated_results: [],
-      setup: {
-        height: 297,
-        width: 210,
-        padding: [5, 5],
-        orientation: "portrait",
-        pdf_scale: 1
-      }
+      saving_loading: false,
+      results: [],
+      data_paginated_results: []
     };
   },
   methods: {
     async save_pdf() {
-      let _scale = this.setup.pdf_scale;
-      this.setup.pdf_scale = 1;
+      this.saving_loading = true;
+
+      let _scale = this.results_protocol.layout.pdf_scale;
+      this.results_protocol.layout.pdf_scale = 1;
 
       let element = document.getElementById("pdf_to_print");
 
@@ -501,33 +543,41 @@ export default {
           .trim()
           .split(" ")
           .join("_")}`,
-        image: { type: "png", quality: 1 },
+        image: { type: "jpeg", quality: 1 },
         html2canvas: {
+          scale: 4,
+          letterRendering: true,
           allowTaint: true
         },
         jsPDF: {
           format: "a4",
-          orientation: this.setup.orientation
+          orientation: this.results_protocol.layout.orientation
         }
       };
 
       await html2pdf()
-        .set(opt)
+        .set(opt, () => {
+          console.log("set");
+        })
         .from(element)
         .save();
 
-      this.setup.pdf_scale = _scale;
+      this.results_protocol.layout.pdf_scale = _scale;
+
+      this.saving_loading = false;
     },
     setPdfScale(operator) {
       if (operator === "+") {
-        this.setup.pdf_scale < 1.5
-          ? (this.setup.pdf_scale =
-              Math.round((this.setup.pdf_scale + 0.1) * 10) / 10)
-          : console.log(this.setup.pdf_scale < 1.5);
+        this.results_protocol.layout.pdf_scale < 1.5
+          ? (this.results_protocol.layout.pdf_scale =
+              Math.round((this.results_protocol.layout.pdf_scale + 0.1) * 10) /
+              10)
+          : console.log(this.results_protocol.layout.pdf_scale < 1.5);
       } else {
-        this.setup.pdf_scale > 0.1
-          ? (this.setup.pdf_scale =
-              Math.round((this.setup.pdf_scale - 0.1) * 10) / 10)
+        this.results_protocol.layout.pdf_scale > 0.1
+          ? (this.results_protocol.layout.pdf_scale =
+              Math.round((this.results_protocol.layout.pdf_scale - 0.1) * 10) /
+              10)
           : null;
       }
     }
@@ -535,6 +585,7 @@ export default {
   computed: {
     ...mapGetters("main", ["competition", "appTheme"]),
     ...mapGetters("protocol_settings", ["results_protocol"]),
+
     paginated_results() {
       return this.data_paginated_results;
     },

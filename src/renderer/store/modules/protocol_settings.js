@@ -2,6 +2,7 @@ export default {
   namespaced: true,
   state: {
     results_protocol: {
+      protocol_fields: [],
       title: "",
       print_header: false,
       strings_at_page: 6,
@@ -28,17 +29,11 @@ export default {
         even: "#AAAAAA"
       },
       layout: {
-        padding: {
-          value_x: 5,
-          value_y: 5,
-          mu: "mm"
-        },
-        header: {
-          height: 160
-        },
-        footer: {
-          height: 160
-        }
+        height: 297,
+        width: 210,
+        padding: [5, 5],
+        orientation: "portrait",
+        pdf_scale: 1
       },
       assets: {
         header_logo: {
