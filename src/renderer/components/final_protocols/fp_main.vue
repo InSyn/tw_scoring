@@ -81,16 +81,16 @@
             style="height: 100%;"
             class="d-flex pa-1 align-center justify-center"
             v-html="`Ячейка 2`"
+          ></v-col
+          ><v-col
+            style="height: 100%;"
+            class="d-flex pa-1 align-center justify-center"
+            v-html="`Ширина %`"
           ></v-col>
           <v-col
             style="height: 100%;"
             class="d-flex pa-1 align-center justify-center"
             v-html="`Выравнивание`"
-          ></v-col>
-          <v-col
-            style="height: 100%;"
-            class="d-flex pa-1 align-center justify-center"
-            v-html="`Ширина %`"
           ></v-col>
         </v-row>
         <div style="height: 120px;overflow-y: auto">
@@ -132,12 +132,30 @@
               </div>
             </div>
             <v-col
-              v-for="i_c in 4"
-              :key="i_c"
+              v-for="(cell, c_idx) in field['f_cells']"
+              :key="c_idx"
               @click=""
               class="d-flex justify-center pa-1"
-              v-html="i_c"
-            ></v-col>
+              >{{ cell.f_title }}</v-col
+            >
+            <v-col
+              v-if="p_key !== 'f_cells'"
+              v-for="(f_prop, p_key) in field"
+              :key="p_key"
+              @click=""
+              class="d-flex justify-center pa-1"
+            >
+              <input
+                v-if="p_key === 'f_width'"
+                style="font-weight:bold; text-align: center"
+                :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
+                type="number"
+                v-model.lazy="
+                  results_protocol.protocol_fields[f_idx]['f_width']
+                "
+              />
+              <div v-else>{{ f_prop }}</div>
+            </v-col>
           </v-row>
         </div>
       </div>
@@ -333,7 +351,20 @@ export default {
   name: "fp_main",
   mounted() {
     this.competition.competitorsSheet.header.forEach(_header => {
-      this.results_protocol.protocol_fields.push(_header);
+      this.results_protocol.protocol_fields.push({
+        f_cells: [
+          {
+            f_id: _header.id,
+            f_title: _header.title
+          },
+          {
+            f_id: "",
+            f_title: ""
+          }
+        ],
+        f_width: 10,
+        f_align: "flex-start"
+      });
     });
   },
   computed: {
