@@ -1,3 +1,1 @@
-<b>Conditions on course</b>:<br>
-<b>Qualification</b>: CLEAR &nbsp<b>Snow Temperature</b>: -1°C / 30°F &nbsp<b>Air Temperature</b>: -2°C / 28°F<br>
-<b>Final</b>: CLEAR &nbsp<b>Snow Temperature</b>: -3°C / 26°F &nbsp<b>Air Temperature</b>: -5°C / 22°F
+<b>Данные о погоде</b>:<br><b>Квалификация</b>: Ясно &nbsp<b>Температура снега</b>: -1°C / 30°F &nbsp<b>Температура воздуха</b>: -2°C / 28°F<br><b>Финал</b>: Ясно &nbsp<b>Температура снега</b>: -3°C / 26°F &nbsp<b>Температура воздуха</b>: -5°C / 22°F

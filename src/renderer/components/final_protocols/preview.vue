@@ -140,7 +140,7 @@
             >
               <div
                 class="left_asset"
-                style="width: 8rem;height: 8rem;display:flex;align-items: center; justify-content: center"
+                style="width: 8rem;margin-right: 4rem;display:flex;align-items: center; justify-content: center"
               >
                 <div
                   style="display:flex;align-items: center;justify-content:center; height: 100%;width: 100%"
@@ -197,7 +197,7 @@
               </div>
               <div
                 class="right_asset"
-                style="width: 8rem;height: 8rem;display:flex;align-items: center; justify-content: center"
+                style="height: 8rem;margin: 0 2rem; display:flex;align-items: center; justify-content: center"
               >
                 <div style="font-weight: bold;font-size: 4rem">
                   {{ competition.mainData.discipline.min }}
@@ -231,13 +231,8 @@
                     paginated_results[p_idx].length > 0
                 "
                 ref="sheet_header"
-                style="display: flex; flex-wrap: nowrap; flex-shrink: 0; padding: 0;margin: 0; font-weight:bold"
+                style="display: flex; flex-wrap: nowrap; flex-shrink: 0; padding: 0;margin: 0; font-weight:bold;border: 1px solid black"
               >
-                <div
-                  style="width: 8%;padding: 4px;margin: 0;overflow: hidden;white-space: nowrap;line-height: normal"
-                >
-                  Место
-                </div>
                 <div
                   style=" padding: 4px;margin: 0;overflow: hidden;white-space: nowrap;line-height: normal"
                   :style="{
@@ -305,14 +300,10 @@
                 :ref="`result_${c_idx}`"
               >
                 <div
-                  style="width: 8%; padding: 4px;margin: 0;overflow: hidden;white-space: nowrap;line-height: normal"
-                >
-                  {{ competitor.rank || "-" }}
-                </div>
-                <div
                   style="padding: 4px;margin: 0;overflow: hidden;white-space: nowrap;line-height: normal"
                   :style="{
-                    width: `${header.params.width}%`
+                    width: `${header.params.width}%`,
+                    fontSize: `${header.params.font}px`
                   }"
                   v-for="(header, h_idx) in results_protocol.protocol_fields"
                   :key="h_idx"
@@ -324,7 +315,7 @@
                     v-for="(cell, c_idx) in header.params.cells"
                     :key="c_idx"
                   >
-                    {{ competitor.info_data[cell.id] }}
+                    <div v-if="cell.id">{{ header.handler(competitor) }}</div>
                   </div>
                 </div>
                 <div
@@ -428,105 +419,105 @@
                 </div>
               </div>
 
-              <!-- TECHNICAL DATA -->
+              <!-- RACE INFO -->
+              <div ref="technical_data">
+                <div
+                  style="width: 100%;margin-top: 1rem; display:flex;flex-wrap: nowrap; flex-shrink: 0"
+                  :style="
+                    p_idx !== paginated_results.length - 1 && { opacity: 0 }
+                  "
+                >
+                  <!-- JUDGES -->
 
-              <div
-                ref="technical_data"
-                style="width: 100%; display:flex;flex-wrap: nowrap; flex-shrink: 0"
-                :style="
-                  p_idx !== paginated_results.length - 1 && { opacity: 0 }
-                "
-              >
-                <!-- JUDGES -->
-
-                <div style="width: 50%; display:flex;flex-direction: column;">
-                  <div
-                    style="display:flex;flex-direction: column; border-style: solid; border-color: black; border-width: 1px 0 1px 1px;flex: 1 0 auto"
-                  >
+                  <div style="width: 50%; display:flex;flex-direction: column;">
                     <div
-                      style="padding: 2px 4px; border-bottom: 1px solid black; font-weight:bold;"
+                      style="display:flex;flex-direction: column; border-style: solid; border-color: black; border-width: 1px 0 1px 1px;flex: 1 0 auto"
                     >
-                      Судьи
-                    </div>
-                    <div
-                      style="padding: 2px 4px;display: flex; flex-wrap: nowrap;"
-                      v-for="(judge, j_idx) in competition.stuff.judges"
-                      :key="j_idx"
-                    >
-                      <div style="font-weight:bold; width: 35%">
-                        {{ judge.title }}
+                      <div
+                        style="padding: 2px 4px; border-bottom: 1px solid black; font-weight:bold;"
+                      >
+                        Судьи
                       </div>
-                      <div style="font-weight:bold; width: 35%">
-                        {{ `${judge.surName} ${judge.name}` }}
-                      </div>
-                      <div style="width: 30%">
-                        {{ judge.location }}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- //JUDGES -->
-
-                <div style="width: 50%; display:flex;flex-direction: column;">
-                  <!-- TECH DATA -->
-
-                  <div
-                    style="display:flex;flex-direction: column;border: 1px solid black;flex: 0 0 auto"
-                  >
-                    <div
-                      style="padding: 2px 4px; border-bottom: 1px solid black; font-weight:bold;"
-                    >
-                      Техническая информация
-                    </div>
-                    <div
-                      style="display: flex; flex-wrap: nowrap; padding: 2px 4px;"
-                      v-for="(tech_info, ti_idx) in competition.technicalInfo"
-                      :key="ti_idx"
-                    >
-                      <div style="font-weight:bold; width: 40%">
-                        {{ tech_info.title }}
-                      </div>
-                      <div style="width: 60%">
-                        {{ tech_info.value }}
+                      <div
+                        style="padding: 2px 4px;display: flex; flex-wrap: nowrap;"
+                        v-for="(judge, j_idx) in competition.stuff.judges"
+                        :key="j_idx"
+                      >
+                        <div style="font-weight:bold; width: 35%">
+                          {{ judge.title }}
+                        </div>
+                        <div style="font-weight:bold; width: 35%">
+                          {{ `${judge.surName} ${judge.name}` }}
+                        </div>
+                        <div style="width: 30%">
+                          {{ judge.location }}
+                        </div>
                       </div>
                     </div>
                   </div>
 
-                  <!-- //TECH DATA -->
+                  <!-- //JUDGES -->
 
-                  <!-- JURY -->
+                  <div style="width: 50%; display:flex;flex-direction: column;">
+                    <!-- TECH DATA -->
 
-                  <div
-                    style="display:flex;flex-direction: column;border: 1px solid black;flex: 1 0 auto"
-                  >
                     <div
-                      style="padding: 2px 4px; border-bottom: 1px solid black; font-weight:bold;"
+                      style="display:flex;flex-direction: column;border: 1px solid black;flex: 0 0 auto"
                     >
-                      Жюри
-                    </div>
-                    <div
-                      style="display: flex; flex-wrap: nowrap;padding: 2px 4px;"
-                      v-for="(jury, j_idx) in competition.stuff.jury"
-                      :key="j_idx"
-                    >
-                      <div style="font-weight:bold; width: 35%">
-                        {{ jury.title }}
+                      <div
+                        style="padding: 2px 4px; border-bottom: 1px solid black; font-weight:bold;"
+                      >
+                        Техническая информация
                       </div>
-                      <div style="font-weight:bold; width: 35%">
-                        {{ `${jury.surName} ${jury.name}` }}
-                      </div>
-                      <div style="width: 30%">
-                        {{ jury.loc }}
+                      <div
+                        style="display: flex; flex-wrap: nowrap; padding: 2px 4px;"
+                        v-for="(tech_info, ti_idx) in competition.technicalInfo"
+                        :key="ti_idx"
+                      >
+                        <div style="font-weight:bold; width: 40%">
+                          {{ tech_info.title }}
+                        </div>
+                        <div style="width: 60%">
+                          {{ tech_info.value }}
+                        </div>
                       </div>
                     </div>
+
+                    <!-- //TECH DATA -->
+
+                    <!-- JURY -->
+
+                    <div
+                      style="display:flex;flex-direction: column;border: 1px solid black;flex: 1 0 auto"
+                    >
+                      <div
+                        style="padding: 2px 4px; border-bottom: 1px solid black; font-weight:bold;"
+                      >
+                        Жюри
+                      </div>
+                      <div
+                        style="display: flex; flex-wrap: nowrap;padding: 2px 4px;"
+                        v-for="(jury, j_idx) in competition.stuff.jury"
+                        :key="j_idx"
+                      >
+                        <div style="font-weight:bold; width: 35%">
+                          {{ jury.title }}
+                        </div>
+                        <div style="font-weight:bold; width: 35%">
+                          {{ `${jury.surName} ${jury.name}` }}
+                        </div>
+                        <div style="width: 30%">
+                          {{ jury.loc }}
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- //JURY -->
                   </div>
-
-                  <!-- //JURY -->
                 </div>
               </div>
 
-              <!-- TECHNICAL DATA -->
+              <!-- RACE INFO -->
 
               <!-- NOTES -->
               <div ref="notes">
@@ -678,30 +669,28 @@ export default {
           }
         }
 
-        console.log(this.data_paginated_results);
-
-        console.log(
-          `cont.h-${container_height}, res.h-${result_height}, results_length-${
-            this.data_paginated_results[pages - 1].length
-          }, ${tech_data_height}, ${notations_height}`
-        );
-
         if (
+          this.data_paginated_results &&
+          this.data_paginated_results[this.data_paginated_results.length - 1] &&
           container_height <
-          result_height *
-            this.data_paginated_results[this.data_paginated_results.length - 1]
-              .length +
-            tech_data_height
+            result_height *
+              this.data_paginated_results[
+                this.data_paginated_results.length - 1
+              ].length +
+              tech_data_height
         )
           this.data_paginated_results.push([]);
 
         if (
+          this.data_paginated_results &&
+          this.data_paginated_results[this.data_paginated_results.length - 1] &&
           container_height <
-          result_height *
-            this.data_paginated_results[this.data_paginated_results.length - 1]
-              .length +
-            tech_data_height +
-            notations_height
+            result_height *
+              this.data_paginated_results[
+                this.data_paginated_results.length - 1
+              ].length +
+              tech_data_height +
+              notations_height
         )
           this.data_paginated_results.push([]);
       }, 0);

@@ -529,35 +529,6 @@ export default {
           });
         }
       };
-      protocolSettings = {
-        sponsors: [],
-        protocol_headers: [],
-        title: "",
-        print_header: true,
-        strings_at_page: 12,
-        font_size: 16,
-        notations: "",
-        signs: {
-          left: {
-            text: "",
-            img: ""
-          },
-          center: {
-            text: "",
-            img: ""
-          },
-          right: {
-            text: "",
-            img: ""
-          }
-        },
-        use_grid: false,
-        use_string_light: true,
-        string_lights: {
-          odd: "#A2A2A2",
-          even: "#363636"
-        }
-      };
       timer = {
         sec: null,
         min: null,

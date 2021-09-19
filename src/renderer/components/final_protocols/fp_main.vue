@@ -85,7 +85,12 @@
           ><v-col
             style="height: 100%;"
             class="d-flex pa-1 align-center justify-center"
-            v-html="`Ширина %`"
+            v-html="`Ширина(%)`"
+          ></v-col>
+          <v-col
+            style="height: 100%;"
+            class="d-flex pa-1 align-center justify-center"
+            v-html="`Шрифт(px)`"
           ></v-col>
           <v-col
             style="height: 100%;"
@@ -152,12 +157,12 @@
               class="d-flex justify-center pa-1"
             >
               <input
-                v-if="p_key === 'width'"
+                v-if="p_key === 'width' || p_key === 'font'"
                 style="font-weight:bold; text-align: center"
                 :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
                 type="number"
                 v-model.lazy="
-                  results_protocol.protocol_fields[f_idx].params.width
+                  results_protocol.protocol_fields[f_idx].params[p_key]
                 "
               />
               <div v-if="p_key === 'align'">
@@ -204,7 +209,7 @@
             id="notations"
             v-model="results_protocol.notations"
             class="pa-2"
-            style="height: 100%;width: 100%; max-height: 64px; outline: none"
+            style="height: 6rem;width: 100%; max-height: 12rem; outline: none"
             :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
           ></textarea>
         </div>
@@ -272,7 +277,7 @@
                 v-model="results_protocol.signs.right.text"
               />
               <div
-                style="cursor:pointer;;height: 2rem; width: 2rem; border-radius: 6px"
+                style="cursor:pointer;height: 2rem; width: 2rem; border-radius: 6px"
                 :style="{
                   backgroundColor:
                     $vuetify.theme.themes[appTheme].standardBackgroundRGBA
@@ -379,9 +384,31 @@ export default {
   name: "fp_main",
   mounted() {
     const result_fields = [];
+    result_fields.push(
+      new this.fieldClass(
+        { id: "rank", title: "Место" },
+        10,
+        12,
+        {
+          title: "Слева",
+          value: "start"
+        },
+        function(_competitor) {
+          return _competitor.rank;
+        }
+      )
+    );
     this.competition.competitorsSheet.header.forEach(_header => {
       result_fields.push(
-        new this.fieldClass(_header, 10, { title: "Слева", value: "start" })
+        new this.fieldClass(
+          _header,
+          10,
+          12,
+          { title: "Слева", value: "start" },
+          function(_competitor) {
+            return _competitor.info_data[_header.id];
+          }
+        )
       );
     });
     if (this.results_protocol.protocol_fields.length < 1)

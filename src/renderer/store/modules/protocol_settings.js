@@ -12,7 +12,8 @@ export default {
       print_header: false,
       strings_at_page: 6,
       font_size: 12,
-      notations: "",
+      notations:
+        "<b>Данные о погоде</b>:<br><b>Квалификация</b>: Ясно &nbsp<b>Температура снега</b>: -1°C / 30°F &nbsp<b>Температура воздуха</b>: -2°C / 28°F<br><b>Финал</b>: Ясно &nbsp<b>Температура снега</b>: -3°C / 26°F &nbsp<b>Температура воздуха</b>: -5°C / 22°F",
       signs: {
         left: {
           text: "",
@@ -57,11 +58,13 @@ export default {
     },
     start_list: {},
     fieldClass: class {
-      constructor(header, width, align) {
+      constructor(header, width, font, align, handler) {
         this.params.cells[0].id = header.id;
         this.params.cells[0].title = header.title;
         this.params.width = width || 10;
+        this.params.font = font || 12;
         this.params.align = align || { title: "Слева", value: "start" };
+        this.handler = handler;
       }
       params = {
         cells: [
@@ -69,6 +72,7 @@ export default {
           { id: null, title: null }
         ],
         width: null,
+        font: null,
         align: null
       };
     }
