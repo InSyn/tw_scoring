@@ -52,7 +52,7 @@
             @click="startServer()"
             :color="$vuetify.theme.themes[appTheme].textDefault"
             text
-            >Launch server<v-icon
+            >Запустить сервер<v-icon
               :color="$vuetify.theme.themes[appTheme].success"
               >mdi-play</v-icon
             ></v-btn
@@ -65,7 +65,7 @@
         </div>
         <div class="d-flex align-center">
           <div class="d-flex align-center font-weight-bold">
-            Server status
+            Статус сервера
             <div
               class="ml-2"
               v-if="!serverStatus"
@@ -83,7 +83,7 @@
           </div>
           <v-spacer></v-spacer>
           <v-btn @click="close_server()" :color="`red`" text
-            ><v-icon :color="`red`">mdi-power</v-icon>Shut down</v-btn
+            ><v-icon :color="`red`">mdi-power</v-icon>Выключить</v-btn
           >
         </div>
       </div>

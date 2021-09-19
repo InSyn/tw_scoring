@@ -9,6 +9,20 @@ export default {
         this.mainData.discipline.min = "DSC";
         this.mainData.country.value = "CNTRY";
         this.mainData.location.value = "Some City";
+        this.technicalInfo.push(
+          {
+            title: "Название склона",
+            value: "Сопка"
+          },
+          {
+            title: "Длина трассы",
+            value: "240м"
+          },
+          {
+            title: "Ширина трассы",
+            value: "18м"
+          }
+        );
       }
       weather = [];
       structure = {
@@ -112,9 +126,9 @@ export default {
         jury: [
           {
             title: "Старший судья",
-            name: "",
-            surName: "",
-            loc: "",
+            surName: "Подоляк",
+            name: "Ефим",
+            loc: "КРСК",
             connected: false
           }
         ],
@@ -130,8 +144,8 @@ export default {
       competitorsSheet = {
         header: [
           { id: "bib", title: "Bib" },
-          { id: "name", title: "Имя" },
           { id: "surname", title: "Фамилия" },
+          { id: "name", title: "Имя" },
           { id: "gender", title: "Пол" },
           { id: "year", title: "Год" }
         ],

@@ -36,7 +36,7 @@
         ></div>
         <v-spacer></v-spacer>
         <div class="d-flex flex-nowrap align-center">
-          <label for="select_filter"></label>
+          <label :for="`select_filter`"></label>
           <select
             class="pa-1"
             style="width: 120px; outline: none; border-radius: 6px; cursor:pointer;"

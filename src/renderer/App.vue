@@ -198,7 +198,9 @@ export default {
     });
     this.createCompetition(new this.EventClass());
     for (let i = 0; i < 4; i++) {
-      this.competition.stuff.judges.push(new this.JudgeClass(null, i + 1));
+      this.competition.stuff.judges.push(
+        new this.JudgeClass(`Судья ${i + 1}`, i + 1, "Иванов", "Иван", "КРСК")
+      );
     }
     this.serverStatusChecker = setInterval(() => {
       this.socket && this.socket.connected
@@ -206,6 +208,19 @@ export default {
         : this.$store.commit("main/serverSetStatus", false);
     }, 2250);
     this.competition.timer.ticker();
+  },
+  data() {
+    return {
+      serverStatusChecker: null,
+      icons: {
+        cog: mdiCog,
+        viewDashboard: mdiViewDashboard,
+        accountGroup: mdiAccountGroup,
+        clipboardList: mdiClipboardList,
+        numeric10BoxMultiple: mdiNumeric10BoxMultiple,
+        trophyVariant: mdiTrophyVariant
+      }
+    };
   },
   methods: {
     ...mapActions("main", [
@@ -228,19 +243,6 @@ export default {
         this.$store.commit("main/createServerChecker");
       }
     }
-  },
-  data() {
-    return {
-      serverStatusChecker: null,
-      icons: {
-        cog: mdiCog,
-        viewDashboard: mdiViewDashboard,
-        accountGroup: mdiAccountGroup,
-        clipboardList: mdiClipboardList,
-        numeric10BoxMultiple: mdiNumeric10BoxMultiple,
-        trophyVariant: mdiTrophyVariant
-      }
-    };
   },
   computed: {
     ...mapGetters("main", [

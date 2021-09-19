@@ -49,7 +49,7 @@
                     return (
                       _comp.id === competition.selected_race.selectedCompetitor
                     );
-                  }).info_data['name']
+                  }).info_data['surname']
               "
             ></div>
             <div
@@ -61,7 +61,7 @@
                     return (
                       _comp.id === competition.selected_race.selectedCompetitor
                     );
-                  }).info_data['surname']
+                  }).info_data['name']
               "
             ></div>
           </div>
@@ -123,8 +123,8 @@
                     v-for="(data, d) in competitor.info_data"
                     v-if="
                       d === 'bib' ||
-                        d === 'name' ||
                         d === 'surname' ||
+                        d === 'name' ||
                         d === 'year' ||
                         d === 'region'
                     "

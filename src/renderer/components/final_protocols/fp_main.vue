@@ -96,7 +96,9 @@
         <div style="height: 120px;overflow-y: auto">
           <v-row
             no-gutters
-            v-for="(field, f_idx) in results_protocol.protocol_fields"
+            v-for="(field, f_idx) in results_protocol &&
+              results_protocol.protocol_fields &&
+              results_protocol.protocol_fields"
             :key="f_idx"
             @click="console.log(field)"
             style="font-size: 0.8rem"
@@ -106,62 +108,88 @@
               style="width: 2rem;"
             >
               <div
-                style="border-radius: 6px; width: 100%;"
+                style="border-radius: 6px; width: 100%;margin: 2px 0;"
                 :style="{
                   backgroundColor:
                     $vuetify.theme.themes[appTheme].subjectBackgroundRGBA
                 }"
                 class="d-flex align-center justify-center flex-column"
               >
-                <v-icon
-                  class="d-flex justify-center"
-                  :style="{
-                    color: $vuetify.theme.themes[appTheme].textDefault
-                  }"
-                  style="font-size: 12px; height: 10px"
-                  >mdi-chevron-up</v-icon
+                <v-btn icon style="height: 12px;width: 100%;"
+                  ><v-icon
+                    class="d-flex justify-center"
+                    :style="{
+                      color: $vuetify.theme.themes[appTheme].textDefault
+                    }"
+                    style="font-size: 12px; height: 10px"
+                    >mdi-chevron-up</v-icon
+                  ></v-btn
                 >
-                <v-icon
-                  class="d-flex justify-center"
-                  :style="{
-                    color: $vuetify.theme.themes[appTheme].textDefault
-                  }"
-                  style="font-size: 12px; height: 8px"
-                  >mdi-chevron-down</v-icon
+                <v-btn icon style="height: 12px;width: 100%;"
+                  ><v-icon
+                    class="d-flex justify-center"
+                    :style="{
+                      color: $vuetify.theme.themes[appTheme].textDefault
+                    }"
+                    style="font-size: 12px; height: 8px"
+                    >mdi-chevron-down</v-icon
+                  ></v-btn
                 >
               </div>
             </div>
             <v-col
-              v-for="(cell, c_idx) in field['f_cells']"
+              v-for="(cell, c_idx) in field.params.cells"
               :key="c_idx"
               @click=""
               class="d-flex justify-center pa-1"
-              >{{ cell.f_title }}</v-col
+              >{{ cell.title }}</v-col
             >
             <v-col
-              v-if="p_key !== 'f_cells'"
-              v-for="(f_prop, p_key) in field"
+              v-if="p_key !== 'cells'"
+              v-for="(f_prop, p_key) in field.params"
               :key="p_key"
               @click=""
               class="d-flex justify-center pa-1"
             >
               <input
-                v-if="p_key === 'f_width'"
+                v-if="p_key === 'width'"
                 style="font-weight:bold; text-align: center"
                 :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
                 type="number"
                 v-model.lazy="
-                  results_protocol.protocol_fields[f_idx]['f_width']
+                  results_protocol.protocol_fields[f_idx].params.width
                 "
               />
-              <div v-else>{{ f_prop }}</div>
+              <div v-if="p_key === 'align'">
+                <select
+                  style="outline: none"
+                  :style="{
+                    color: $vuetify.theme.themes[appTheme].textDefault
+                  }"
+                  v-model.lazy="
+                    results_protocol.protocol_fields[f_idx].params.align
+                  "
+                >
+                  <option
+                    :style="{
+                      backgroundColor:
+                        $vuetify.theme.themes[appTheme].standardBackgroundRGBA
+                    }"
+                    v-for="(align_type,
+                    at_idx) in results_protocol.standard_aligns"
+                    :key="at_idx"
+                    :value="align_type"
+                    >{{ align_type.title }}</option
+                  >
+                </select>
+              </div>
             </v-col>
           </v-row>
         </div>
       </div>
       <div class="d-flex flex-column">
         <label
-          for="notations"
+          :for="`notations`"
           class="pa-2 font-weight-bold"
           v-html="`Замечания`"
         ></label>
@@ -264,7 +292,7 @@
             :color="$vuetify.theme.themes[appTheme].textDefault"
           ></v-checkbox>
           <label
-            for="use_grid"
+            :for="`use_grid`"
             class="font-weight-bold"
             style="cursor:pointer;"
             :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
@@ -280,7 +308,7 @@
             :color="$vuetify.theme.themes[appTheme].textDefault"
           ></v-checkbox>
           <label
-            for="use_string_light"
+            :for="`use_string_light`"
             class="font-weight-bold"
             style="cursor:pointer;"
             :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
@@ -350,26 +378,18 @@ import { mapGetters } from "vuex";
 export default {
   name: "fp_main",
   mounted() {
+    const result_fields = [];
     this.competition.competitorsSheet.header.forEach(_header => {
-      this.results_protocol.protocol_fields.push({
-        f_cells: [
-          {
-            f_id: _header.id,
-            f_title: _header.title
-          },
-          {
-            f_id: "",
-            f_title: ""
-          }
-        ],
-        f_width: 10,
-        f_align: "flex-start"
-      });
+      result_fields.push(
+        new this.fieldClass(_header, 10, { title: "Слева", value: "start" })
+      );
     });
+    if (this.results_protocol.protocol_fields.length < 1)
+      this.results_protocol.protocol_fields = result_fields;
   },
   computed: {
     ...mapGetters("main", ["competition", "appTheme"]),
-    ...mapGetters("protocol_settings", ["results_protocol"]),
+    ...mapGetters("protocol_settings", ["results_protocol", "fieldClass"]),
     console: () => console
   }
 };

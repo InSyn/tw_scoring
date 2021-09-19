@@ -30,17 +30,20 @@ export default {
       }
     },
     JuryClass: class {
-      constructor(title) {
+      constructor(title, surName, name, loc) {
         this.title = title || "";
+        this.name = name || "";
+        this.surName = surName || "";
+        this.loc = loc || "";
       }
-      name = "";
-      surName = "";
-      loc = "";
     },
     JudgeClass: class {
-      constructor(title, id) {
+      constructor(title, id, surName, name, location) {
         this.title = title || "Судья";
         this.id = id || 0;
+        this.name = name || "";
+        this.surName = surName || "";
+        this.location = location || "";
         this._id = Math.random()
           .toString(36)
           .substr(2, 9);
