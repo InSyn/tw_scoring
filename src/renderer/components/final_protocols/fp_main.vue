@@ -407,7 +407,8 @@ export default {
           { title: "Слева", value: "start" },
           function(_competitor) {
             return _competitor.info_data[_header.id];
-          }
+          },
+          { id: `c2_${_header.id}`, title: `c2_${_header.title}` }
         )
       );
     });

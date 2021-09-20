@@ -58,13 +58,16 @@ export default {
     },
     start_list: {},
     fieldClass: class {
-      constructor(header, width, font, align, handler) {
+      constructor(header, width, font, align, handler, cell2) {
         this.params.cells[0].id = header.id;
         this.params.cells[0].title = header.title;
         this.params.width = width || 10;
         this.params.font = font || 12;
         this.params.align = align || { title: "Слева", value: "start" };
         this.handler = handler;
+
+        this.params.cells[1].id = cell2 ? cell2.id : null;
+        this.params.cells[1].title = cell2 ? cell2.title : null;
       }
       params = {
         cells: [

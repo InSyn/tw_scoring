@@ -144,10 +144,12 @@ export default {
       competitorsSheet = {
         header: [
           { id: "bib", title: "Bib" },
+          { id: "fiscode", title: "FIS код" },
           { id: "surname", title: "Фамилия" },
           { id: "name", title: "Имя" },
-          { id: "gender", title: "Пол" },
-          { id: "year", title: "Год" }
+          { id: "year", title: "Год" },
+          { id: "rang", title: "Разряд" },
+          { id: "location", title: "Регион" }
         ],
         competitors: []
       };
