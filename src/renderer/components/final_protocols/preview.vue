@@ -241,11 +241,13 @@
                   v-for="(header, h_idx) in results_protocol.protocol_fields"
                   :key="h_idx"
                 >
-                  <div
-                    v-for="(cell, c_idx) in header.params.cells"
-                    :key="c_idx"
-                  >
-                    {{ cell.title }}
+                  <div>
+                    {{
+                      header.params &&
+                        header.params.cells &&
+                        header.params.cells[0] &&
+                        header.params.cells[0].title
+                    }}
                   </div>
                 </div>
                 <div

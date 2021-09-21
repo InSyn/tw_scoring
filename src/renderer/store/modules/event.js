@@ -135,12 +135,7 @@ export default {
         judges: [],
         openers: []
       };
-      technicalInfo = [
-        {
-          title: "",
-          value: ""
-        }
-      ];
+      technicalInfo = [];
       competitorsSheet = {
         header: [
           { id: "bib", title: "Bib" },
