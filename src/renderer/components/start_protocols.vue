@@ -755,6 +755,11 @@ export default {
       this.competition.races = this.competition.races.filter(race => {
         return race.id !== race_id;
       });
+      this.competition.competitorsSheet.competitors.forEach(_competitor => {
+        _competitor.marks = _competitor.marks.filter(_mark => {
+          return _mark.race_id !== race_id;
+        });
+      });
       this.competition.selected_race_id = 0;
       this.socket &&
         this.socket.connected &&

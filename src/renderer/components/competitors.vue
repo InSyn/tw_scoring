@@ -517,16 +517,20 @@ import xslx from "read-excel-file/node";
 export default {
   name: "competitors",
   mounted() {
-    this.load_sheet({
-      target: {
-        files: [
-          {
-            path:
-              "C:\\Users\\syner\\Documents\\GitHub\\tw_scoring\\temp_assets\\TestList.xlsx"
-          }
-        ]
-      }
-    });
+    if (
+      this.competition &&
+      this.competition.competitorsSheet.competitors.length < 1
+    )
+      this.load_sheet({
+        target: {
+          files: [
+            {
+              path:
+                "C:\\Users\\InSyn\\Documents\\GitHub\\tw_scoring\\temp_assets\\TestList.xlsx"
+            }
+          ]
+        }
+      });
   },
   methods: {
     log: data => {

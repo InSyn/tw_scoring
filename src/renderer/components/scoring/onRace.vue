@@ -150,10 +150,14 @@
                 ></div>
               </div>
             </div>
+
+            <!-- STATUS BUTTONS  -->
+
             <div class="pl-4">
               <v-row class="pa-1" no-gutters>
-                <v-col class="d-flex align-center" cols="12"
-                  ><v-btn
+                <v-col class="d-flex align-center" cols="12">
+                  <!-- STATUS DSQ  -->
+                  <v-btn
                     @click="
                       competition.selected_race &&
                         competition.selected_race.onTrack &&
@@ -184,7 +188,9 @@
                       color: $vuetify.theme.themes[appTheme].textDefault
                     }"
                     >DSQ</v-btn
-                  ><v-btn
+                  >
+                  <!-- STATUS DNS  -->
+                  <v-btn
                     @click="
                       competition.selected_race &&
                         competition.selected_race.onTrack &&
@@ -213,8 +219,9 @@
                     :style="{
                       color: $vuetify.theme.themes[appTheme].textDefault
                     }"
-                    >DNF</v-btn
+                    >DNS</v-btn
                   >
+                  <!-- STATUS DNF  -->
                   <v-btn
                     @click="
                       competition.selected_race &&
@@ -248,6 +255,7 @@
                   >
                 </v-col>
               </v-row>
+              <!-- CHANGE MARKS -->
               <v-row class="pa-1" no-gutters>
                 <v-col cols="12"
                   ><v-btn
@@ -263,6 +271,8 @@
                 >
               </v-row>
             </div>
+
+            <!-- //STATUS BUTTONS  -->
           </v-row>
           <v-row
             no-gutters

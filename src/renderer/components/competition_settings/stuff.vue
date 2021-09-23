@@ -346,12 +346,7 @@
                 small
                 icon
                 style="position:absolute; top: 2px; right: 4px"
-                @click="
-                  competition.stuff.judges.splice(
-                    competition.stuff.judges.indexOf(judge),
-                    1
-                  )
-                "
+                @click="remove_judge(judge._id)"
                 color="red"
               >
                 <v-icon small>mdi-close</v-icon></v-btn
@@ -387,6 +382,19 @@ export default {
   methods: {
     force_disconnect(socket_id) {
       this.$store.commit("main/force_disconnect", socket_id);
+    },
+    remove_judge(judge_id) {
+      this.competition.stuff.judges = this.competition.stuff.judges.filter(
+        _judge => {
+          return _judge._id !== judge_id;
+        }
+      );
+      this.competition.competitorsSheet.competitors.forEach(_competitor => {
+        _competitor.marks = _competitor.marks.filter(_mark => {
+          return _mark.judge_id !== judge_id;
+        });
+      });
+      console.log(`Judge ${judge_id} removed`);
     },
     log(data) {
       console.log(data);

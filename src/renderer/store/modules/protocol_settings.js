@@ -58,22 +58,44 @@ export default {
     },
     start_list: {},
     fieldClass: class {
-      constructor(header, width, font, align, handler, cell2) {
-        this.params.cells[0].id = header.id;
-        this.params.cells[0].title = header.title;
+      constructor(width, font, align, cell_1, cell_2) {
+        this.id = Math.random()
+          .toString(36)
+          .substr(2, 9);
+        this.select_dialog = false;
         this.params.width = width || 10;
         this.params.font = font || 12;
         this.params.align = align || { title: "Слева", value: "start" };
-        this.handler = handler;
 
-        this.params.cells[1].id = cell2 ? cell2.id : null;
-        this.params.cells[1].title = cell2 ? cell2.title : null;
+        this.params.cell_1.id = cell_1.data.id;
+        this.params.cell_1.title = cell_1.data.title;
+        this.params.cell_1.handler = cell_1.handler;
+
+        this.params.cell_2.id =
+          (cell_2 && cell_2.data && cell_2.data.id) || null;
+        this.params.cell_2.title =
+          (cell_2 && cell_2.data && cell_2.data.title) || null;
+        this.params.cell_2.handler =
+          (cell_2 && cell_2.handler && cell_2.handler) ||
+          function() {
+            return 0;
+          };
       }
       params = {
-        cells: [
-          { id: null, title: null },
-          { id: null, title: null }
-        ],
+        cell_1: {
+          id: null,
+          title: null,
+          handler: function() {
+            return 0;
+          }
+        },
+        cell_2: {
+          id: null,
+          title: null,
+          handler: function() {
+            return 0;
+          }
+        },
         width: null,
         font: null,
         align: null
