@@ -526,7 +526,7 @@ export default {
           files: [
             {
               path:
-                "C:\\Users\\InSyn\\Documents\\GitHub\\tw_scoring\\temp_assets\\TestList.xlsx"
+                "C:\\Users\\syner\\Documents\\GitHub\\tw_scoring\\temp_assets\\TestList.xlsx"
             }
           ]
         }
