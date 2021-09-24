@@ -453,7 +453,12 @@
                 }}
               </div>
               <div style="padding: 2px 4px; margin-left: auto">
-                {{ `Отчёт создан ${date_now}` }}
+                {{
+                  `Отчёт создан ${date_now} / Page ${p_idx +
+                    1}/${(paginated_results.length > 0 &&
+                    paginated_results.length) ||
+                    1}`
+                }}
               </div>
             </div>
             <div
@@ -471,6 +476,12 @@
               </div>
               <div
                 style="display:flex;justify-content: flex-end;align-items: end;flex-shrink: 0;width:20%;"
+              ></div>
+            </div>
+            <div style="width: 100%;display:flex;flex-shrink: 0">
+              <div
+                class="page_counter"
+                style="margin-left: auto;font-size: 0.75rem;font-weight: bold;"
               >
                 <div style="padding: 2px;height: 1.6rem;">
                   <img
@@ -479,18 +490,6 @@
                     style="height: 100%;"
                   />
                 </div>
-              </div>
-            </div>
-            <div style="width: 100%;display:flex;flex-shrink: 0">
-              <div
-                class="page_counter"
-                style="margin-left: auto;font-size: 0.75rem;font-weight: bold;"
-              >
-                {{
-                  `Page ${p_idx + 1}/${(paginated_results.length > 0 &&
-                    paginated_results.length) ||
-                    1}`
-                }}
               </div>
             </div>
             <div
