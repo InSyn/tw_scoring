@@ -277,7 +277,8 @@
                   v-if="p_key === 'align'"
                   style="outline: none; height: 100%;width: 100%; cursor: pointer"
                   :style="{
-                    color: $vuetify.theme.themes[appTheme].textDefault
+                    color: $vuetify.theme.themes[appTheme].textDefault,
+                    textAlignLast: f_prop.value
                   }"
                   v-model.lazy="
                     results_protocol.protocol_fields[f_idx].params.align
