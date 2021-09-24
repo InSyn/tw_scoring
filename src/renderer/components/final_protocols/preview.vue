@@ -314,7 +314,7 @@
               </div>
 
               <!-- RACE INFO -->
-              <div ref="technical_data">
+              <div v-if="results_protocol.print_header" ref="technical_data">
                 <div
                   style="width: 100%;margin-top: 1rem; display:flex;flex-wrap: nowrap; flex-shrink: 0"
                   :style="

@@ -28,33 +28,24 @@
     </div>
     <div class="pa-2 d-flex flex-column flex-grow-1">
       <div class="d-flex flex-nowrap align-content-end">
-        <v-btn
-          class="mx-1"
-          depressed
-          height="20"
-          style="border-bottom-left-radius: 0; border-bottom-right-radius: 0"
-          :color="$vuetify.theme.themes[appTheme].standardBackgroundRGBA"
-          :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
-          >Добавить</v-btn
+        <v-hover
+          v-slot:default="{ hover }"
+          v-for="(button, b_idx) in field_buttons"
+          :key="b_idx"
         >
-        <v-btn
-          class="mx-1"
-          depressed
-          height="20"
-          style="border-bottom-left-radius: 0; border-bottom-right-radius: 0"
-          :color="$vuetify.theme.themes[appTheme].standardBackgroundRGBA"
-          :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
-          >Редакт.</v-btn
-        >
-        <v-btn
-          @click="remove_fields()"
-          class="mx-1"
-          depressed
-          height="20"
-          style="border-bottom-left-radius: 0; border-bottom-right-radius: 0"
-          :color="$vuetify.theme.themes[appTheme].standardBackgroundRGBA"
-          :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
-          >Удалить</v-btn
+          <v-btn
+            @click="button.action()"
+            class="mx-1"
+            depressed
+            height="20"
+            style="border-bottom-left-radius: 0; border-bottom-right-radius: 0"
+            :color="$vuetify.theme.themes[appTheme].standardBackgroundRGBA"
+            :style="[
+              { color: $vuetify.theme.themes[appTheme].textDefault },
+              hover && { color: $vuetify.theme.themes[appTheme][button.color] }
+            ]"
+            >{{ button.title }}</v-btn
+          ></v-hover
         >
       </div>
       <div
@@ -86,7 +77,7 @@
           ><v-col
             style="height: 100%;"
             class="d-flex pa-1 align-center justify-center"
-            v-html="`Ширина(%)`"
+            v-html="`Ширина(%)(${sum_width}%)`"
           ></v-col>
           <v-col
             style="height: 100%;"
@@ -159,7 +150,7 @@
                             return sel_field === field.id;
                           }) && {
                             backgroundColor:
-                              $vuetify.theme.themes[appTheme].accent
+                              $vuetify.theme.themes[appTheme].textDefault
                           }
                         ]"
                         style="width: 100%;height: 100%"
@@ -232,8 +223,18 @@
                     ><div
                       style="display:flex;flex-wrap: nowrap; align-items: flex-end; padding: 4px"
                     >
-                      {{ f_prop
-                      }}<v-btn
+                      <div
+                        style="display:flex;align-items: center;flex-wrap: nowrap; padding: 4px 8px; font-weight:bold;position:relative;"
+                      >
+                        <div
+                          style="display: flex; flex-wrap: nowrap; position: absolute;top: -50%;left: 1rem;font-size: 0.875rem"
+                        >
+                          Текущая ячейка
+                        </div>
+                        <div>{{ `id: ${f_prop.id}` }}</div>
+                        <div>{{ `title: ${f_prop.title}` }}</div>
+                      </div>
+                      <v-btn
                         @click="field.select_dialog = false"
                         style="margin-left: auto"
                         icon
@@ -268,7 +269,7 @@
                     color: $vuetify.theme.themes[appTheme].textDefault
                   }"
                   type="number"
-                  v-model.lazy="
+                  v-model="
                     results_protocol.protocol_fields[f_idx].params[p_key]
                   "
                 />
@@ -409,6 +410,22 @@
             style="cursor:pointer;"
             :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
             >Использовать сетку</label
+          >
+        </div>
+        <div class="pa-1 d-flex flex-nowrap align-center">
+          <v-checkbox
+            hide-details
+            class="pa-0 ma-0"
+            id="print_header"
+            v-model="results_protocol.print_header"
+            :color="$vuetify.theme.themes[appTheme].textDefault"
+          ></v-checkbox>
+          <label
+            :for="`print_header`"
+            class="font-weight-bold"
+            style="cursor:pointer;"
+            :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
+            >Печатать информацию об официальных лицах</label
           >
         </div>
         <div class="pa-1 d-flex flex-nowrap align-center">
@@ -699,13 +716,42 @@ export default {
   },
   data() {
     return {
-      selected_fields: []
+      selected_fields: [],
+      field_buttons: [
+        {
+          title: "Добавить",
+          color: "action_green",
+
+          action: function() {
+            return 0;
+          }
+        },
+        {
+          title: "Редакт.",
+          color: "action_yellow",
+
+          action: function() {
+            return 0;
+          }
+        },
+        { title: "Удалить", color: "action_red", action: this.remove_fields }
+      ]
     };
   },
   computed: {
     ...mapGetters("main", ["competition", "appTheme"]),
     ...mapGetters("protocol_settings", ["results_protocol", "fieldClass"]),
-    console: () => console
+    console: () => console,
+    sum_width() {
+      let sum = 0,
+        arr = this.results_protocol.protocol_fields.map(_field => {
+          return _field.params.width;
+        });
+      for (let i = 0; i < arr.length; i++) {
+        sum += +arr[i];
+      }
+      return sum;
+    }
   }
 };
 </script>
