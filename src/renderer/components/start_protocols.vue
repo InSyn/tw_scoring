@@ -197,27 +197,32 @@
       </v-dialog></v-row
     >
     <v-container fluid>
-      <v-row class="d-flex" style="width: 100%" no-gutters>
+      <v-row style="display:flex; align-items: center; width: 100%;" no-gutters>
         <v-btn
           @click="turn_race('left')"
           icon
           :color="$vuetify.theme.themes[appTheme].accent"
           ><v-icon>mdi-chevron-double-left</v-icon></v-btn
         >
-        <v-row class="flex-grow-1" no-gutters>
+        <v-row
+          class="flex-grow-1"
+          style="margin: 0;padding: 4px;min-height: 64px;border-radius: 6px;flex: 0 1 auto"
+          :style="{
+            backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA
+          }"
+        >
           <v-col
             @click="race_menu.selected = r"
-            style="position:relative;cursor: pointer"
+            style="position:relative;cursor: pointer;margin: 4px;border-radius: 6px"
             class="d-flex justify-center align-center"
             cols="2"
             :style="[
               {
-                backgroundColor:
-                  $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
-                border: `1px solid ${$vuetify.theme.themes[appTheme].standardBackgroundRGBA}`
+                backgroundColor: $vuetify.theme.themes[appTheme].accent
               },
               r === race_menu.selected && {
-                backgroundColor: $vuetify.theme.themes[appTheme].accent
+                backgroundColor: $vuetify.theme.themes[appTheme].accent_light,
+                boxShadow: `inset 0 0 4px 0 ${$vuetify.theme.themes[appTheme].textDefault}`
               }
             ]"
             v-for="(race, r) in competition.races"
@@ -229,7 +234,7 @@
                   <div
                     v-on="on"
                     class="d-flex align-center justify-center"
-                    style="position:absolute;top: 1px;right: 1px;height: 16px;width: 16px;border-radius: 2px"
+                    style="position:absolute;top: 4px;right: 4px;height: 16px;width: 16px;border-radius: 2px"
                     :style="[
                       {
                         backgroundColor:

@@ -511,7 +511,7 @@ export default {
     const result_fields = [];
     result_fields.push(
       new this.fieldClass(
-        7,
+        6,
         12,
         {
           title: "Слева",
@@ -568,7 +568,7 @@ export default {
     this.competition.stuff.judges.forEach((judge, j_idx) => {
       result_fields.push(
         new this.fieldClass(
-          8,
+          6,
           12,
           { title: "Слева", value: "start" },
           {
@@ -590,7 +590,7 @@ export default {
     });
     result_fields.push(
       new this.fieldClass(
-        8,
+        6,
         12,
         {
           title: "Слева",
