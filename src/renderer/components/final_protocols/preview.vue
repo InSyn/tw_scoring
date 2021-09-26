@@ -220,7 +220,7 @@
             style="display:flex;flex-grow: 1"
           >
             <div
-              style="display:flex;flex-direction: column; padding: 0; width: 100%; overflow-y: hidden"
+              style="display:flex;flex-direction: column; padding: 0; width: 100%; overflow: hidden"
             >
               <!-- Sheet header -->
 
@@ -314,12 +314,19 @@
               </div>
 
               <!-- RACE INFO -->
-              <div v-if="results_protocol.print_header" ref="technical_data">
+              <div ref="technical_data">
                 <div
                   style="width: 100%;margin-top: 1rem; display:flex;flex-wrap: nowrap; flex-shrink: 0"
-                  :style="
-                    p_idx !== paginated_results.length - 1 && { opacity: 0 }
-                  "
+                  :style="[
+                    p_idx !== paginated_results.length - 1 && {
+                      opacity: 0,
+                      position: `absolute`
+                    },
+                    !results_protocol.print_header && {
+                      opacity: 0,
+                      position: `absolute`
+                    }
+                  ]"
                 >
                   <!-- JUDGES -->
 
@@ -437,16 +444,52 @@
             class="pdf_footer"
             style="position: relative;background-color: white; color: black;display: flex; flex-direction: column; flex-shrink: 0; align-items: flex-end"
           >
-            <div style="width: 100%;display:flex;">
+            <div
+              style="display:flex;align-items: center;width: 100%;flex-shrink: 0;font-size: 0.75rem;"
+            >
+              <div style="padding: 2px 4px; margin-right: auto;">
+                {{
+                  `${competition.mainData.location.value}(${competition.mainData.country.value})`
+                }}
+              </div>
+              <div style="padding: 2px 4px; margin-left: auto">
+                {{
+                  `Отчёт создан ${date_now} / Page ${p_idx +
+                    1}/${(paginated_results.length > 0 &&
+                    paginated_results.length) ||
+                    1}`
+                }}
+              </div>
+            </div>
+            <div
+              style="width: 100%;flex-shrink: 0;display:flex;align-items: center;border-top:1px solid black;border-bottom:1px solid black;font-size: 0.75rem;"
+            >
+              <div
+                style="display:flex;justify-content: flex-start;align-items: start;flex-shrink: 0;width:20%;font-weight:bold;"
+              >
+                www.timingweb.pro
+              </div>
+              <div
+                style="display:flex;justify-content: center;align-items: center;flex-shrink: 0;width:60%;font-weight:bold;"
+              >
+                Timing/Scoring & data processing by Timing Web
+              </div>
+              <div
+                style="display:flex;justify-content: flex-end;align-items: end;flex-shrink: 0;width:20%;"
+              ></div>
+            </div>
+            <div style="width: 100%;display:flex;flex-shrink: 0">
               <div
                 class="page_counter"
                 style="margin-left: auto;font-size: 0.75rem;font-weight: bold;"
               >
-                {{
-                  `Page ${p_idx + 1}/${(paginated_results.length > 0 &&
-                    paginated_results.length) ||
-                    1}`
-                }}
+                <div style="padding: 2px;height: 1.6rem;">
+                  <img
+                    src="./../../assets/logo/TIMINGWEBLOGO-BLACK.png"
+                    alt=""
+                    style="height: 100%;"
+                  />
+                </div>
               </div>
             </div>
             <div
@@ -667,7 +710,23 @@ export default {
   computed: {
     ...mapGetters("main", ["competition", "appTheme"]),
     ...mapGetters("protocol_settings", ["results_protocol"]),
-
+    date_now() {
+      const date = new Date()
+        .toLocaleString("ru", {
+          year: "numeric",
+          month: "long",
+          day: "numeric"
+        })
+        .toString()
+        .split(" ");
+      const time = new Date()
+        .toString()
+        .split(" ")[4]
+        .toString()
+        .split(":");
+      console.log(`${date} ${time}`);
+      return `${date[0]} ${date[1]} ${date[2]} ${time[0]}:${time[1]}`;
+    },
     paginated_results() {
       return this.data_paginated_results;
     },
