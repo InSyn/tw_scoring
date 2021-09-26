@@ -3,12 +3,15 @@ export default {
   state: {
     EventClass: class {
       constructor() {
+        this.id = Math.random()
+          .toString(36)
+          .substr(2, 9);
         this.structure.selected.type = 0;
         this.structure.selected.discipline = 0;
         this.mainData.discipline.value = "DISCIPLINE";
         this.mainData.discipline.min = "DSC";
-        this.mainData.country.value = "CNTRY";
-        this.mainData.location.value = "Some City";
+        this.mainData.country.value = "RUS";
+        this.mainData.location.value = "Krasnoyarsk";
         this.technicalInfo.push(
           {
             title: "Название склона",
