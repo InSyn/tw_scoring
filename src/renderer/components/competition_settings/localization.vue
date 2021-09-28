@@ -3,7 +3,10 @@
     <div
       class="d-flex flex-column pa-2"
       style="height: 100%;width: 100%;"
-      :style="{ borderRadius: `6px`, backgroundColor: styles.cardBackground }"
+      :style="{
+        borderRadius: `6px`,
+        backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA
+      }"
     >
       <div>
         <div class="d-flex flex-wrap align-center">
@@ -100,7 +103,7 @@
           v-for="(mes, m) in serverMessages"
           :key="m"
           :style="{
-            color: `${styles.messageColor[mes[0]] ||
+            color: `${$vuetify.theme.themes[appTheme].messageColor[mes[0]] ||
               $vuetify.theme.themes[appTheme].textDefault}`
           }"
           v-html="serverMessages[m][1]"
@@ -173,35 +176,6 @@ export default {
     ]),
     server_config() {
       return [this.server.ip, this.server.port];
-    },
-    styles() {
-      return {
-        messageColor: [
-          `${this.$vuetify.theme.themes[this.appTheme].action_red}`,
-          `${this.$vuetify.theme.themes[this.appTheme].success}`,
-          `${this.$vuetify.theme.themes[this.appTheme].action_yellow}`,
-          `${this.$vuetify.theme.themes[this.appTheme].accent}`,
-          `${this.$vuetify.theme.themes[this.appTheme].action_darkYellow}`
-        ],
-        cardBackground: `rgba(${
-          this.$vuetify.theme.themes[this.appTheme].cardBackground.r
-        },
-        ${this.$vuetify.theme.themes[this.appTheme].cardBackground.g},
-        ${this.$vuetify.theme.themes[this.appTheme].cardBackground.b},
-        ${this.$vuetify.theme.themes[this.appTheme].cardBackground.a})`,
-        standardBackground: `rgba(${
-          this.$vuetify.theme.themes[this.appTheme].standardBackground.r
-        },
-        ${this.$vuetify.theme.themes[this.appTheme].standardBackground.g},
-        ${this.$vuetify.theme.themes[this.appTheme].standardBackground.b},
-        ${this.$vuetify.theme.themes[this.appTheme].standardBackground.a})`,
-        subjectBackground: `rgba(${
-          this.$vuetify.theme.themes[this.appTheme].subjectBackground.r
-        },
-        ${this.$vuetify.theme.themes[this.appTheme].subjectBackground.g},
-        ${this.$vuetify.theme.themes[this.appTheme].subjectBackground.b},
-        ${this.$vuetify.theme.themes[this.appTheme].subjectBackground.a})`
-      };
     }
   }
 };

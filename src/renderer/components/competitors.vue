@@ -392,11 +392,7 @@
           style="position: absolute; width: 100%; height: 3rem;bottom: 0; border-bottom-left-radius: 6px; border-bottom-right-radius: 6px"
           :style="{
             border: `1px solid ${$vuetify.theme.themes[appTheme].accent}`,
-            backgroundColor: `
-        rgba(${$vuetify.theme.themes[appTheme].cardBackground.r},
-        ${$vuetify.theme.themes[appTheme].cardBackground.g},
-        ${$vuetify.theme.themes[appTheme].cardBackground.b},
-        0.85)`
+            backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA
           }"
         >
           <v-dialog width="320px" v-model="clearDialog">

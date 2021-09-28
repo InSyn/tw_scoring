@@ -2,7 +2,9 @@
   <div
     class="flex-column pa-1"
     style="border-radius: 6px"
-    :style="{ backgroundColor: styles.cardBackground }"
+    :style="{
+      backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA
+    }"
   >
     <div class="d-flex justify-center align-center">
       <div class="font-weight-bold" style="font-size: 1.2rem">
@@ -23,15 +25,18 @@
         cols="6"
         ><input
           @blur="
-            $event.target.style.backgroundColor = styles.standardBackground
+            $event.target.style.backgroundColor =
+              $vuetify.theme.themes[appTheme].standardBackgroundRGBA
           "
           @focus="
-            $event.target.style.backgroundColor = styles.subjectBackground
+            $event.target.style.backgroundColor =
+              $vuetify.theme.themes[appTheme].subjectBackgroundRGBA
           "
           class="pa-1"
           style="width: 100%; border-radius: 6px; transition: background-color 112ms"
           :style="{
-            backgroundColor: styles.standardBackground,
+            backgroundColor:
+              $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
             color: $vuetify.theme.themes[appTheme].textDefault
           }"
           type="text"
@@ -54,29 +59,7 @@ import { mapGetters } from "vuex";
 export default {
   name: "weather",
   computed: {
-    ...mapGetters("main", ["appTheme", "competition"]),
-    styles() {
-      return {
-        cardBackground: `rgba(${
-          this.$vuetify.theme.themes[this.appTheme].cardBackground.r
-        },
-      ${this.$vuetify.theme.themes[this.appTheme].cardBackground.g},
-      ${this.$vuetify.theme.themes[this.appTheme].cardBackground.b},
-      ${this.$vuetify.theme.themes[this.appTheme].cardBackground.a})`,
-        standardBackground: `rgba(${
-          this.$vuetify.theme.themes[this.appTheme].standardBackground.r
-        },
-      ${this.$vuetify.theme.themes[this.appTheme].standardBackground.g},
-      ${this.$vuetify.theme.themes[this.appTheme].standardBackground.b},
-      ${this.$vuetify.theme.themes[this.appTheme].standardBackground.a})`,
-        subjectBackground: `rgba(${
-          this.$vuetify.theme.themes[this.appTheme].subjectBackground.r
-        },
-        ${this.$vuetify.theme.themes[this.appTheme].subjectBackground.g},
-        ${this.$vuetify.theme.themes[this.appTheme].subjectBackground.b},
-        ${this.$vuetify.theme.themes[this.appTheme].subjectBackground.a})`
-      };
-    }
+    ...mapGetters("main", ["appTheme", "competition"])
   }
 };
 </script>

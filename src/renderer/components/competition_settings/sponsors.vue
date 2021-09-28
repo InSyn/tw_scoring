@@ -3,7 +3,7 @@
     class="wrapper flex-column"
     style="border-radius: 6px"
     :style="{
-      background: styles.cardBackground
+      background: $vuetify.theme.themes[appTheme].cardBackgroundRGBA
     }"
   >
     <div
@@ -68,17 +68,7 @@ export default {
   name: "sponsors",
   computed: {
     ...mapGetters("main", ["competition", "appTheme"]),
-    ...mapGetters("roles", ["SponsorClass"]),
-    styles() {
-      return {
-        cardBackground: `rgba(${
-          this.$vuetify.theme.themes[this.appTheme].cardBackground.r
-        },
-      ${this.$vuetify.theme.themes[this.appTheme].cardBackground.g},
-      ${this.$vuetify.theme.themes[this.appTheme].cardBackground.b},
-      ${this.$vuetify.theme.themes[this.appTheme].cardBackground.a})`
-      };
-    }
+    ...mapGetters("roles", ["SponsorClass"])
   }
 };
 </script>

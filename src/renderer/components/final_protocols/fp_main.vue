@@ -77,6 +77,14 @@
           ><v-col
             style="height: 100%;"
             class="d-flex pa-1 align-center justify-center"
+            :style="[
+              (sum_width < 100 && {
+                color: $vuetify.theme.themes[appTheme].textDefault
+              }) || { color: $vuetify.theme.themes[appTheme].error },
+              sum_width === 100 && {
+                color: $vuetify.theme.themes[appTheme].success
+              }
+            ]"
             v-html="`Ширина(%)(${sum_width}%)`"
           ></v-col>
           <v-col

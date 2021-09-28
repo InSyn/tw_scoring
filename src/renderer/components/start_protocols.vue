@@ -18,7 +18,7 @@
           style="position: relative"
           :style="{
             color: $vuetify.theme.themes[appTheme].textDefault,
-            backgroundColor: styles.card
+            backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA
           }"
         >
           <v-card-title class="mb-8" style="font-size: 2rem"
@@ -43,7 +43,8 @@
                     style="border-radius: 6px"
                     :style="{
                       color: $vuetify.theme.themes[appTheme].textDefault,
-                      backgroundColor: styles.input
+                      backgroundColor:
+                        $vuetify.theme.themes[appTheme].standardBackgroundRGBA
                     }"
                     v-model="dialogs.create_race.title"
                   />
@@ -57,7 +58,8 @@
                     style="border-radius: 6px"
                     :style="{
                       color: $vuetify.theme.themes[appTheme].textDefault,
-                      backgroundColor: styles.input
+                      backgroundColor:
+                        $vuetify.theme.themes[appTheme].standardBackgroundRGBA
                     }"
                     v-html="competition.structure.selected.discipline.title"
                   />
@@ -75,7 +77,9 @@
               <v-col>
                 <v-list
                   :dark="appTheme === 'dark'"
-                  :color="$vuetify.theme.themes[appTheme].cardBackgroundRGBA"
+                  :color="
+                    $vuetify.theme.themes[appTheme].standardBackgroundRGBA
+                  "
                   :key="Math.random()"
                   class="pa-2"
                   style="height: 320px; overflow-y: auto; border-radius: 6px"
@@ -120,7 +124,9 @@
               <v-col>
                 <v-list
                   :dark="appTheme === 'dark'"
-                  :color="$vuetify.theme.themes[appTheme].cardBackgroundRGBA"
+                  :color="
+                    $vuetify.theme.themes[appTheme].standardBackgroundRGBA
+                  "
                   :key="Math.random()"
                   class="pa-2"
                   style="height: 320px; overflow-y: auto; border-radius: 6px"
@@ -222,7 +228,7 @@
               },
               r === race_menu.selected && {
                 backgroundColor: $vuetify.theme.themes[appTheme].accent_light,
-                boxShadow: `inset 0 0 4px 0 ${$vuetify.theme.themes[appTheme].textDefault}`
+                boxShadow: `inset 0 0 3px 1px ${$vuetify.theme.themes[appTheme].cardBackgroundRGBA}`
               }
             ]"
             v-for="(race, r) in competition.races"
@@ -844,22 +850,6 @@ export default {
           return !this.dialogs.create_race.competitors.includes(competitor);
         }
       );
-    },
-    styles() {
-      return {
-        card: `rgba(${
-          this.$vuetify.theme.themes[this.appTheme].cardBackground.r
-        },
-      ${this.$vuetify.theme.themes[this.appTheme].cardBackground.g},
-      ${this.$vuetify.theme.themes[this.appTheme].cardBackground.b},
-      .75)`,
-        input: `rgba(${
-          this.$vuetify.theme.themes[this.appTheme].standardBackground.r
-        },
-      ${this.$vuetify.theme.themes[this.appTheme].standardBackground.g},
-      ${this.$vuetify.theme.themes[this.appTheme].standardBackground.b},
-      .95)`
-      };
     }
   }
 };

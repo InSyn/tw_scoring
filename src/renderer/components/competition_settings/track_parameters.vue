@@ -4,7 +4,7 @@
       class="pa-2"
       style="min-height: 100%; border-radius: 6px"
       :style="{
-        background: styles.cardBackground
+        background: $vuetify.theme.themes[appTheme].cardBackgroundRGBA
       }"
     >
       <div style="text-align: center; font-weight:bold; font-size: 1.2rem">
@@ -29,27 +29,28 @@
         <v-col cols="4">
           <input
             @focus="
-              $event.target.style.backgroundColor = `${styles.subjectBackground}`
+              $event.target.style.backgroundColor = `${$vuetify.theme.themes[appTheme].subjectBackgroundRGBA}`
             "
             @blur="
-              $event.target.style.backgroundColor = `${styles.standardBackground}`
+              $event.target.style.backgroundColor = `${$vuetify.theme.themes[appTheme].standardBackgroundRGBA}`
             "
             style="transition: background-color 112ms; border-radius: 6px; width: 100%;"
             class="flex-grow-1 pa-1 font-weight-bold"
             v-model="competition.technicalInfo[ts].title"
             type="text"
             :style="{
-              backgroundColor: styles.standardBackground,
+              backgroundColor:
+                $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
               color: $vuetify.theme.themes[appTheme].textDefault
             }"
         /></v-col>
         <v-col cols="7" class="pl-1">
           <input
             @focus="
-              $event.target.style.backgroundColor = `${styles.subjectBackground}`
+              $event.target.style.backgroundColor = `${$vuetify.theme.themes[appTheme].subjectBackgroundRGBA}`
             "
             @blur="
-              $event.target.style.backgroundColor = `${styles.standardBackground}`
+              $event.target.style.backgroundColor = `${$vuetify.theme.themes[appTheme].standardBackgroundRGBA}`
             "
             style="transition: background-color 112ms; border-radius: 6px; width: 100%;"
             class="flex-grow-1 pa-1"
@@ -57,7 +58,8 @@
             type="text"
             :style="{
               color: $vuetify.theme.themes[appTheme].textDefault,
-              backgroundColor: styles.standardBackground
+              backgroundColor:
+                $vuetify.theme.themes[appTheme].standardBackgroundRGBA
             }"
         /></v-col>
         <v-col class="d-flex justify-center align-center" cols="1"
@@ -85,29 +87,7 @@ import { mapGetters } from "vuex";
 export default {
   name: "track_parameters",
   computed: {
-    ...mapGetters("main", ["competition", "appTheme"]),
-    styles() {
-      return {
-        cardBackground: `rgba(${
-          this.$vuetify.theme.themes[this.appTheme].cardBackground.r
-        },
-      ${this.$vuetify.theme.themes[this.appTheme].cardBackground.g},
-      ${this.$vuetify.theme.themes[this.appTheme].cardBackground.b},
-      ${this.$vuetify.theme.themes[this.appTheme].cardBackground.a})`,
-        standardBackground: `rgba(${
-          this.$vuetify.theme.themes[this.appTheme].standardBackground.r
-        },
-      ${this.$vuetify.theme.themes[this.appTheme].standardBackground.g},
-      ${this.$vuetify.theme.themes[this.appTheme].standardBackground.b},
-      ${this.$vuetify.theme.themes[this.appTheme].standardBackground.a})`,
-        subjectBackground: `rgba(${
-          this.$vuetify.theme.themes[this.appTheme].subjectBackground.r
-        },
-        ${this.$vuetify.theme.themes[this.appTheme].subjectBackground.g},
-        ${this.$vuetify.theme.themes[this.appTheme].subjectBackground.b},
-        ${this.$vuetify.theme.themes[this.appTheme].subjectBackground.a})`
-      };
-    }
+    ...mapGetters("main", ["competition", "appTheme"])
   }
 };
 </script>

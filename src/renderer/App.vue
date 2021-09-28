@@ -2,10 +2,7 @@
   <v-app
     :style="{
       color: $vuetify.theme.themes[appTheme].textDefault,
-      background: `rgba(${$vuetify.theme.themes[appTheme].standardBackground.r},
-      ${$vuetify.theme.themes[appTheme].standardBackground.g},
-      ${$vuetify.theme.themes[appTheme].standardBackground.b},
-      ${$vuetify.theme.themes[appTheme].standardBackground.a})`
+      background: $vuetify.theme.themes[appTheme].standardBackgroundRGBA
     }"
     id="app"
   >
@@ -65,6 +62,7 @@
         src="./assets/logo/SCORING-DARK.png"
         class="mr-8"
         style="height: 100%;"
+        draggable="false"
         alt=""
       />
       <img
@@ -72,6 +70,7 @@
         src="./assets/logo/SCORING-LIGHT.png"
         class="mr-8"
         style="height: 100%;"
+        draggable="false"
         alt=""
       />
       <v-btn
@@ -139,12 +138,9 @@
     </main>
     <footer
       class="d-flex align-center px-8"
-      style="font-size: 0.8rem"
+      style="font-size: 0.8rem; user-select: none;cursor:default;"
       :style="{
-        background: `rgba(${$vuetify.theme.themes[appTheme].cardBackground.r},
-      ${$vuetify.theme.themes[appTheme].cardBackground.g},
-      ${$vuetify.theme.themes[appTheme].cardBackground.b},
-      ${$vuetify.theme.themes[appTheme].cardBackground.a})`,
+        background: $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
         borderTop: `1px solid ${$vuetify.theme.themes[appTheme].accent}`
       }"
     >
