@@ -12,61 +12,25 @@ const opts = {
   theme: {
     themes: {
       dark: {
-        standardBackground: { r: 33, g: 33, b: 36, a: 1 },
-        get standardBackgroundRGBA() {
-          return `rgba(${this.standardBackground.r},
-        ${this.standardBackground.g},
-        ${this.standardBackground.b},
-        ${this.standardBackground.a})`;
-        },
-        cardBackground: { r: 46, g: 46, b: 49, a: 1 },
-        get cardBackgroundRGBA() {
-          return `rgba(${this.cardBackground.r},
-        ${this.cardBackground.g},
-        ${this.cardBackground.b},
-        ${this.cardBackground.a})`;
-        },
-        subjectBackground: { r: 59, g: 59, b: 62, a: 1 },
-        get subjectBackgroundRGBA() {
-          return `rgba(${this.subjectBackground.r},
-        ${this.subjectBackground.g},
-        ${this.subjectBackground.b},
-        ${this.subjectBackground.a})`;
-        },
+        standardBackgroundRGBA: "#212124",
+        cardBackgroundRGBA: "#2E2E31",
+        subjectBackgroundRGBA: "#3B3B3E",
         textDefault: "#d2d2d2",
         accent: "#3B70A9",
         accent_light: "#3A82BA",
-        accentRgba: { r: 24, g: 190, b: 177, a: 1 },
         success: "#2ABE6A",
         success_light: "#2CE98F",
         action_green: "#139030",
         action_yellow: "#D9BB23",
         action_darkYellow: "#D98E3D",
         action_blue: "#2474D9",
-        action_red: "#D9412D"
+        action_red: "#D9412D",
+        messageColor: ["#B45B28", "#3076B4", "#A9B43A", "#2BB467", "#B43238"]
       },
       light: {
-        standardBackground: { r: 220, g: 220, b: 228, a: 1 },
-        get standardBackgroundRGBA() {
-          return `rgba(${this.standardBackground.r},
-        ${this.standardBackground.g},
-        ${this.standardBackground.b},
-        ${this.standardBackground.a})`;
-        },
-        cardBackground: { r: 196, g: 196, b: 206, a: 1 },
-        get cardBackgroundRGBA() {
-          return `rgba(${this.cardBackground.r},
-        ${this.cardBackground.g},
-        ${this.cardBackground.b},
-        ${this.cardBackground.a})`;
-        },
-        subjectBackground: { r: 160, g: 160, b: 170, a: 1 },
-        get subjectBackgroundRGBA() {
-          return `rgba(${this.subjectBackground.r},
-        ${this.subjectBackground.g},
-        ${this.subjectBackground.b},
-        ${this.subjectBackground.a})`;
-        },
+        standardBackgroundRGBA: "#C4C4CE",
+        cardBackgroundRGBA: "#DCDCE4",
+        subjectBackgroundRGBA: "#B2B2BB",
         textDefault: "#212121",
         accent: "#345EDA",
         accent_light: "#547EE7",
@@ -77,7 +41,8 @@ const opts = {
         action_yellow: "#D9BB23",
         action_darkYellow: "#D98E3D",
         action_blue: "#2474D9",
-        action_red: "#D9412D"
+        action_red: "#D9412D",
+        messageColor: ["#B45B28", "#3076B4", "#A9B43A", "#2BB467", "#B43238"]
       }
     }
   }

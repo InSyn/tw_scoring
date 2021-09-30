@@ -6,7 +6,7 @@
           style="min-height: 100%;"
           :style="{
             borderRadius: `6px`,
-            background: styles.cardBackground
+            background: $vuetify.theme.themes[appTheme].cardBackgroundRGBA
           }"
         >
           <div class="d-flex justify-center align-center">
@@ -29,7 +29,10 @@
               class="align-center px-2 pb-4 pt-6 mb-2"
               style="position: relative; font-size: 0.9rem; border-radius: 6px"
               :style="[
-                { background: styles.subjectBackground },
+                {
+                  background:
+                    $vuetify.theme.themes[appTheme].subjectBackgroundRGBA
+                },
                 jury.connected !== undefined && {
                   border: `1px solid ${$vuetify.theme.themes[appTheme].accent}`
                 }
@@ -51,7 +54,8 @@
                   class="pa-1 ml-1 font-weight-bold"
                   style="width: 100%; border-radius: 6px; border-bottom: 1px solid transparent; transition: border-bottom-color 192ms"
                   :style="{
-                    backgroundColor: styles.cardBackground,
+                    backgroundColor:
+                      $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
                     color: $vuetify.theme.themes[appTheme].textDefault
                   }"
                   type="text"
@@ -69,7 +73,8 @@
                   class="pa-1 ml-1 font-weight-bold"
                   style="width: 100%; border-radius: 6px; border-bottom: 1px solid transparent; transition: border-bottom-color 192ms"
                   :style="{
-                    backgroundColor: styles.cardBackground,
+                    backgroundColor:
+                      $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
                     color: $vuetify.theme.themes[appTheme].textDefault
                   }"
                   type="text"
@@ -87,7 +92,8 @@
                   class="pa-1 ml-1 font-weight-bold"
                   style="width: 100%; border-radius: 6px; border-bottom: 1px solid transparent; transition: border-bottom-color 192ms"
                   :style="{
-                    backgroundColor: styles.cardBackground,
+                    backgroundColor:
+                      $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
                     color: $vuetify.theme.themes[appTheme].textDefault
                   }"
                   type="text"
@@ -105,7 +111,8 @@
                   class="pa-1 ml-1 font-weight-bold"
                   style="width: 100%; border-radius: 6px; border-bottom: 1px solid transparent; transition: border-bottom-color 192ms"
                   :style="{
-                    backgroundColor: styles.cardBackground,
+                    backgroundColor:
+                      $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
                     color: $vuetify.theme.themes[appTheme].textDefault
                   }"
                   type="text"
@@ -163,7 +170,9 @@
                         boxShadow: `0 0 3px 1px ${$vuetify.theme.themes[appTheme].success}`
                       }
                     : {
-                        backgroundColor: styles.standardBackground,
+                        backgroundColor:
+                          $vuetify.theme.themes[appTheme]
+                            .standardBackgroundRGBA,
                         boxShadow: `none`
                       }
                 "
@@ -177,7 +186,7 @@
           style="min-height: 100%;"
           :style="{
             borderRadius: `6px`,
-            background: styles.cardBackground,
+            background: $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
             border: `1px solid ${$vuetify.theme.themes[appTheme].accent}`
           }"
         >
@@ -220,7 +229,10 @@
             <v-row
               class="align-center px-2 pb-4 pt-6 mb-2"
               style="position: relative; font-size: 0.9rem; border-radius: 6px"
-              :style="{ background: styles.subjectBackground }"
+              :style="{
+                background:
+                  $vuetify.theme.themes[appTheme].subjectBackgroundRGBA
+              }"
               no-gutters
               v-for="(judge, jd) in competition.stuff.judges"
               :key="jd"
@@ -248,7 +260,8 @@
                   class="pa-1 ml-1 font-weight-bold"
                   style="width: 100%; border-radius: 6px; border-bottom: 1px solid transparent; transition: border-bottom-color 192ms"
                   :style="{
-                    backgroundColor: styles.cardBackground,
+                    backgroundColor:
+                      $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
                     color: $vuetify.theme.themes[appTheme].textDefault
                   }"
                   type="text"
@@ -265,7 +278,8 @@
                   class="pa-1 ml-1 font-weight-bold"
                   style="width: 100%; border-radius: 6px; border-bottom: 1px solid transparent; transition: border-bottom-color 192ms"
                   :style="{
-                    backgroundColor: styles.cardBackground,
+                    backgroundColor:
+                      $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
                     color: $vuetify.theme.themes[appTheme].textDefault
                   }"
                   type="text"
@@ -283,7 +297,8 @@
                   class="pa-1 ml-1 font-weight-bold"
                   style="width: 100%; border-radius: 6px; border-bottom: 1px solid transparent; transition: border-bottom-color 192ms"
                   :style="{
-                    backgroundColor: styles.cardBackground,
+                    backgroundColor:
+                      $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
                     color: $vuetify.theme.themes[appTheme].textDefault
                   }"
                   type="text"
@@ -300,7 +315,8 @@
                   class="pa-1 ml-1 font-weight-bold"
                   style="width: 100%; border-radius: 6px; border-bottom: 1px solid transparent; transition: border-bottom-color 192ms"
                   :style="{
-                    backgroundColor: styles.cardBackground,
+                    backgroundColor:
+                      $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
                     color: $vuetify.theme.themes[appTheme].textDefault
                   }"
                   type="text"
@@ -318,7 +334,8 @@
                   class="pa-1 ml-1 font-weight-bold"
                   style="width: 100%; border-radius: 6px; border-bottom: 1px solid transparent; transition: border-bottom-color 192ms"
                   :style="{
-                    backgroundColor: styles.cardBackground,
+                    backgroundColor:
+                      $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
                     color: $vuetify.theme.themes[appTheme].textDefault
                   }"
                   type="text"
@@ -336,7 +353,8 @@
                   class="pa-1 ml-1 font-weight-bold"
                   style="width: 100%; border-radius: 6px; border-bottom: 1px solid transparent; transition: border-bottom-color 192ms"
                   :style="{
-                    backgroundColor: styles.cardBackground,
+                    backgroundColor:
+                      $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
                     color: $vuetify.theme.themes[appTheme].textDefault
                   }"
                   type="text"
@@ -362,7 +380,9 @@
                         boxShadow: `0 0 3px 1px ${$vuetify.theme.themes[appTheme].success}`
                       }
                     : {
-                        backgroundColor: styles.standardBackground,
+                        backgroundColor:
+                          $vuetify.theme.themes[appTheme]
+                            .standardBackgroundRGBA,
                         boxShadow: `none`
                       }
                 "
@@ -402,29 +422,7 @@ export default {
   },
   computed: {
     ...mapGetters("main", ["competition", "appTheme"]),
-    ...mapGetters("roles", ["JudgeClass", "JuryClass"]),
-    styles() {
-      return {
-        cardBackground: `rgba(${
-          this.$vuetify.theme.themes[this.appTheme].cardBackground.r
-        },
-        ${this.$vuetify.theme.themes[this.appTheme].cardBackground.g},
-        ${this.$vuetify.theme.themes[this.appTheme].cardBackground.b},
-        ${this.$vuetify.theme.themes[this.appTheme].cardBackground.a})`,
-        standardBackground: `rgba(${
-          this.$vuetify.theme.themes[this.appTheme].standardBackground.r
-        },
-        ${this.$vuetify.theme.themes[this.appTheme].standardBackground.g},
-        ${this.$vuetify.theme.themes[this.appTheme].standardBackground.b},
-        ${this.$vuetify.theme.themes[this.appTheme].standardBackground.a})`,
-        subjectBackground: `rgba(${
-          this.$vuetify.theme.themes[this.appTheme].subjectBackground.r
-        },
-        ${this.$vuetify.theme.themes[this.appTheme].subjectBackground.g},
-        ${this.$vuetify.theme.themes[this.appTheme].subjectBackground.b},
-        ${this.$vuetify.theme.themes[this.appTheme].subjectBackground.a})`
-      };
-    }
+    ...mapGetters("roles", ["JudgeClass", "JuryClass"])
   }
 };
 </script>

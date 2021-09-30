@@ -3,7 +3,10 @@
     <div
       class="d-flex flex-column pa-2"
       style="height: 100%;width: 100%;"
-      :style="{ borderRadius: `6px`, backgroundColor: styles.cardBackground }"
+      :style="{
+        borderRadius: `6px`,
+        backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA
+      }"
     >
       <div>
         <div class="d-flex flex-wrap align-center">
@@ -20,7 +23,8 @@
             }"
             class="pa-1"
             type="text"
-            v-model="server.ip"
+            :value="server_config.ip"
+            @change="$store.commit('main/set_ip', $event.target.value)"
           />
           <label for="port" class="d-inline-block pa-1 font-weight-bold"
             >Port:</label
@@ -35,7 +39,8 @@
             }"
             class="pa-1"
             type="text"
-            v-model="server.port"
+            :value="server_config.port"
+            @change="$store.commit('main/set_port', $event.target.value)"
           />
           <v-spacer></v-spacer>
           <v-btn
@@ -100,7 +105,7 @@
           v-for="(mes, m) in serverMessages"
           :key="m"
           :style="{
-            color: `${styles.messageColor[mes[0]] ||
+            color: `${$vuetify.theme.themes[appTheme].messageColor[mes[0]] ||
               $vuetify.theme.themes[appTheme].textDefault}`
           }"
           v-html="serverMessages[m][1]"
@@ -119,16 +124,19 @@ export default {
   methods: {
     ...mapActions("main", ["serverSetStatus"]),
     startServer() {
-      app.emit("startSocketServer", this.server_config);
+      app.emit("startSocketServer", [
+        this.server_config.ip,
+        +this.server_config.port
+      ]);
       if (!this.serverStatus) {
-        this.connect(this.server_config[0], this.server_config[1]);
+        this.connect(this.server_config.ip, this.server_config.port);
       }
     },
     connect() {
       if (!this.socket) {
         this.$store.commit("main/connect_socket", [
-          this.server_config[0],
-          this.server_config[1]
+          this.server_config.ip,
+          +this.server_config.port
         ]);
         this.$store.commit("main/createServerChecker");
       }
@@ -153,15 +161,11 @@ export default {
     }
   },
   data() {
-    return {
-      server: {
-        ip: "127.0.0.1",
-        port: "3000"
-      }
-    };
+    return {};
   },
   computed: {
     ...mapGetters("main", [
+      "server_config",
       "socket",
       "serverMessages",
       "serverStatusChecker",
@@ -170,39 +174,7 @@ export default {
       "competition",
       "appTheme",
       "serverStatus"
-    ]),
-    server_config() {
-      return [this.server.ip, this.server.port];
-    },
-    styles() {
-      return {
-        messageColor: [
-          `${this.$vuetify.theme.themes[this.appTheme].action_red}`,
-          `${this.$vuetify.theme.themes[this.appTheme].success}`,
-          `${this.$vuetify.theme.themes[this.appTheme].action_yellow}`,
-          `${this.$vuetify.theme.themes[this.appTheme].accent}`,
-          `${this.$vuetify.theme.themes[this.appTheme].action_darkYellow}`
-        ],
-        cardBackground: `rgba(${
-          this.$vuetify.theme.themes[this.appTheme].cardBackground.r
-        },
-        ${this.$vuetify.theme.themes[this.appTheme].cardBackground.g},
-        ${this.$vuetify.theme.themes[this.appTheme].cardBackground.b},
-        ${this.$vuetify.theme.themes[this.appTheme].cardBackground.a})`,
-        standardBackground: `rgba(${
-          this.$vuetify.theme.themes[this.appTheme].standardBackground.r
-        },
-        ${this.$vuetify.theme.themes[this.appTheme].standardBackground.g},
-        ${this.$vuetify.theme.themes[this.appTheme].standardBackground.b},
-        ${this.$vuetify.theme.themes[this.appTheme].standardBackground.a})`,
-        subjectBackground: `rgba(${
-          this.$vuetify.theme.themes[this.appTheme].subjectBackground.r
-        },
-        ${this.$vuetify.theme.themes[this.appTheme].subjectBackground.g},
-        ${this.$vuetify.theme.themes[this.appTheme].subjectBackground.b},
-        ${this.$vuetify.theme.themes[this.appTheme].subjectBackground.a})`
-      };
-    }
+    ])
   }
 };
 </script>

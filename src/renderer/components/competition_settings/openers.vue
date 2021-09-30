@@ -1,7 +1,9 @@
 <template>
   <div
     style="border-radius: 6px"
-    :style="{ backgroundColor: styles.cardBackground }"
+    :style="{
+      backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA
+    }"
   >
     <div class="d-flex justify-center align-center">
       <div
@@ -39,7 +41,9 @@
           <div
             class="pa-2"
             style="position:relative; border-radius: 6px"
-            :style="{ background: styles.subjectBackground }"
+            :style="{
+              background: $vuetify.theme.themes[appTheme].subjectBackgroundRGBA
+            }"
           >
             <v-btn
               icon
@@ -66,7 +70,8 @@
                   class="ml-2 pa-1"
                   style="transition: border-bottom 224ms; border-bottom: 1px solid transparent; width: 100%; border-radius: 6px"
                   :style="{
-                    backgroundColor: styles.cardBackground,
+                    backgroundColor:
+                      $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
                     color: $vuetify.theme.themes[appTheme].textDefault
                   }"
               /></v-col>
@@ -83,7 +88,8 @@
                   class="ml-2 pa-1"
                   style="transition: border-bottom 224ms; border-bottom: 1px solid transparent; width: 100%; border-radius: 6px"
                   :style="{
-                    backgroundColor: styles.cardBackground,
+                    backgroundColor:
+                      $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
                     color: $vuetify.theme.themes[appTheme].textDefault
                   }"
               /></v-col>
@@ -100,7 +106,8 @@
                   class="ml-2 pa-1"
                   style="transition: border-bottom 224ms; border-bottom: 1px solid transparent; width: 100%; border-radius: 6px"
                   :style="{
-                    backgroundColor: styles.cardBackground,
+                    backgroundColor:
+                      $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
                     color: $vuetify.theme.themes[appTheme].textDefault
                   }"
               /></v-col>
@@ -118,34 +125,7 @@ export default {
   name: "openers",
   computed: {
     ...mapGetters("main", ["competition", "appTheme"]),
-    ...mapGetters("roles", ["OpenerClass"]),
-    styles() {
-      return {
-        inputWrapper: {
-          backgroundColor: `rgba(${
-            this.$vuetify.theme.themes[this.appTheme].cardBackground.r
-          },
-          ${this.$vuetify.theme.themes[this.appTheme].cardBackground.g},
-          ${this.$vuetify.theme.themes[this.appTheme].cardBackground.b},
-          ${this.$vuetify.theme.themes[this.appTheme].cardBackground.a}`,
-          border: `1px solid ${
-            this.$vuetify.theme.themes[this.appTheme].accent
-          }`
-        },
-        cardBackground: `rgba(${
-          this.$vuetify.theme.themes[this.appTheme].cardBackground.r
-        },
-          ${this.$vuetify.theme.themes[this.appTheme].cardBackground.g},
-          ${this.$vuetify.theme.themes[this.appTheme].cardBackground.b},
-          ${this.$vuetify.theme.themes[this.appTheme].cardBackground.a}`,
-        subjectBackground: `rgba(${
-          this.$vuetify.theme.themes[this.appTheme].subjectBackground.r
-        },
-          ${this.$vuetify.theme.themes[this.appTheme].subjectBackground.g},
-          ${this.$vuetify.theme.themes[this.appTheme].subjectBackground.b},
-          ${this.$vuetify.theme.themes[this.appTheme].subjectBackground.a}`
-      };
-    }
+    ...mapGetters("roles", ["OpenerClass"])
   }
 };
 </script>

@@ -11,7 +11,12 @@
         <div
           class="d-flex align-center flex-grow-1 px-2 py-1"
           style="position:relative; transition: background-color 128ms; overflow: hidden; border-radius: 6px"
-          :style="[{ backgroundColor: styles.cardBackground }]"
+          :style="[
+            {
+              backgroundColor:
+                $vuetify.theme.themes[appTheme].cardBackgroundRGBA
+            }
+          ]"
         >
           <span class="d-block" style="min-width: 11rem;font-weight: bold">{{
             competition.mainData[md].title
@@ -29,7 +34,10 @@
                   class="d-flex justify-center ml-2 pa-1"
                   style="border-radius: 6px; cursor: pointer; width: 100%; transition: box-shadow 128ms"
                   :style="[
-                    { backgroundColor: styles.standardBackground },
+                    {
+                      backgroundColor:
+                        $vuetify.theme.themes[appTheme].standardBackgroundRGBA
+                    },
                     hover && {
                       boxShadow: `inset 0 -2px 2px ${$vuetify.theme.themes[appTheme].accent}`
                     }
@@ -41,7 +49,7 @@
               locale="ru"
               v-model="competition.mainData[md].value"
               :color="$vuetify.theme.themes[appTheme].accent"
-              :header-color="styles.cardBackground"
+              :header-color="$vuetify.theme.themes[appTheme].cardBackgroundRGBA"
             ></v-date-picker>
             <v-btn
               @click="competition.mainData[md].dialog = false"
@@ -63,7 +71,10 @@
                   class="d-flex justify-center ml-2 pa-1"
                   style="border-radius: 6px; cursor: pointer; width: 100%; transition: box-shadow 128ms"
                   :style="[
-                    { backgroundColor: styles.standardBackground },
+                    {
+                      backgroundColor:
+                        $vuetify.theme.themes[appTheme].standardBackgroundRGBA
+                    },
                     hover && {
                       boxShadow: `inset 0 -2px 2px ${$vuetify.theme.themes[appTheme].accent}`
                     }
@@ -74,7 +85,7 @@
             <v-time-picker
               locale="ru"
               :color="$vuetify.theme.themes[appTheme].accent"
-              :header-color="styles.cardBackground"
+              :header-color="$vuetify.theme.themes[appTheme].cardBackgroundRGBA"
               v-model="competition.mainData[md].time"
               format="24hr"
             ></v-time-picker>
@@ -94,7 +105,8 @@
             :style="[
               {
                 color: $vuetify.theme.themes[appTheme].textDefault,
-                backgroundColor: styles.standardBackground
+                backgroundColor:
+                  $vuetify.theme.themes[appTheme].standardBackgroundRGBA
               }
             ]"
             v-model="competition.mainData[md].value"
@@ -108,7 +120,8 @@
             style="outline: none; border-radius: 6px; width: 6rem"
             :style="{
               color: $vuetify.theme.themes[appTheme].textDefault,
-              backgroundColor: styles.standardBackground
+              backgroundColor:
+                $vuetify.theme.themes[appTheme].standardBackgroundRGBA
             }"
             v-model="competition.mainData[md].min"
             type="text"
