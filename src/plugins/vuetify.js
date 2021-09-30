@@ -24,7 +24,8 @@ const opts = {
         action_yellow: "#D9BB23",
         action_darkYellow: "#D98E3D",
         action_blue: "#2474D9",
-        action_red: "#D9412D"
+        action_red: "#D9412D",
+        messageColor: ["#B45B28", "#3076B4", "#A9B43A", "#2BB467", "#B43238"]
       },
       light: {
         standardBackgroundRGBA: "#C4C4CE",
@@ -40,7 +41,8 @@ const opts = {
         action_yellow: "#D9BB23",
         action_darkYellow: "#D98E3D",
         action_blue: "#2474D9",
-        action_red: "#D9412D"
+        action_red: "#D9412D",
+        messageColor: ["#B45B28", "#3076B4", "#A9B43A", "#2BB467", "#B43238"]
       }
     }
   }

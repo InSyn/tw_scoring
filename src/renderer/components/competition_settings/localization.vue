@@ -23,7 +23,8 @@
             }"
             class="pa-1"
             type="text"
-            v-model="server.ip"
+            :value="server_config.ip"
+            @change="$store.commit('main/set_ip', $event.target.value)"
           />
           <label for="port" class="d-inline-block pa-1 font-weight-bold"
             >Port:</label
@@ -38,7 +39,8 @@
             }"
             class="pa-1"
             type="text"
-            v-model="server.port"
+            :value="server_config.port"
+            @change="$store.commit('main/set_port', $event.target.value)"
           />
           <v-spacer></v-spacer>
           <v-btn
@@ -122,16 +124,19 @@ export default {
   methods: {
     ...mapActions("main", ["serverSetStatus"]),
     startServer() {
-      app.emit("startSocketServer", this.server_config);
+      app.emit("startSocketServer", [
+        this.server_config.ip,
+        +this.server_config.port
+      ]);
       if (!this.serverStatus) {
-        this.connect(this.server_config[0], this.server_config[1]);
+        this.connect(this.server_config.ip, this.server_config.port);
       }
     },
     connect() {
       if (!this.socket) {
         this.$store.commit("main/connect_socket", [
-          this.server_config[0],
-          this.server_config[1]
+          this.server_config.ip,
+          +this.server_config.port
         ]);
         this.$store.commit("main/createServerChecker");
       }
@@ -156,15 +161,11 @@ export default {
     }
   },
   data() {
-    return {
-      server: {
-        ip: "127.0.0.1",
-        port: "3000"
-      }
-    };
+    return {};
   },
   computed: {
     ...mapGetters("main", [
+      "server_config",
       "socket",
       "serverMessages",
       "serverStatusChecker",
@@ -173,10 +174,7 @@ export default {
       "competition",
       "appTheme",
       "serverStatus"
-    ]),
-    server_config() {
-      return [this.server.ip, this.server.port];
-    }
+    ])
   }
 };
 </script>

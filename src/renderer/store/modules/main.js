@@ -2,6 +2,10 @@ import io from "socket.io-client";
 export default {
   namespaced: true,
   state: {
+    server_config: {
+      ip: "127.0.0.1",
+      port: "3000"
+    },
     socket: null,
     competition: null,
     showPreview: false,
@@ -46,6 +50,7 @@ export default {
   },
 
   getters: {
+    server_config: state => state.server_config,
     socket: state => state.socket,
     serverMessages: state => state.serverMessages,
     showMenu: state => state.showMenu,
@@ -58,6 +63,13 @@ export default {
     messages: state => state.messages
   },
   mutations: {
+    set_ip: (state, ip) => {
+      console.log(ip);
+      state.server_config.ip = ip;
+    },
+    set_port: (state, port) => {
+      state.server_config.port = port;
+    },
     changeMenuState: state => {
       state.showMenu = !state.showMenu;
     },

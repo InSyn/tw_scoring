@@ -164,13 +164,23 @@ io.on("connection", socket => {
     } else check(false);
   });
   socket.on("force_disconnect", socket_id => {
-    for (let stuffKey in competition.stuff) {
-      for (let user in competition.stuff[stuffKey]) {
-        competition.stuff[stuffKey][user].socket_id &&
-          competition.stuff[stuffKey][user].socket_id === socket_id &&
-          io.sockets.connected[socket_id].disconnect();
-      }
-    }
+    io.sockets.sockets.forEach(socket => {
+      // If given socket id is exist in list of all sockets, kill it
+      if (socket.id === socket_id) {
+        socket.disconnect(true);
+
+        mainWindow &&
+          mainWindow.webContents.send("server_message", [
+            0,
+            `Судья ID:${socket_id} отключен`
+          ]);
+      } else
+        mainWindow &&
+          mainWindow.webContents.send("server_message", [
+            4,
+            `Невозможно отключить клиент с ID:${socket_id}`
+          ]);
+    });
   });
   /**
    * RACE EVENTS
@@ -300,6 +310,7 @@ io.on("connection", socket => {
   });
 });
 app.on("startSocketServer", config => {
+  console.log(config);
   if (http["_handle"]) {
     mainWindow &&
       mainWindow.webContents.send("server_message", [
