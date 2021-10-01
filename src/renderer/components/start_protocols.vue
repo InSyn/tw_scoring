@@ -203,7 +203,7 @@
       </v-dialog></v-row
     >
     <v-container fluid>
-      <v-row style="display:flex; align-items: center; width: 100%;" no-gutters>
+      <v-row style="display:flex; align-items: center;width: 100%;" no-gutters>
         <v-btn
           @click="turn_race('left')"
           icon
@@ -211,17 +211,22 @@
           ><v-icon>mdi-chevron-double-left</v-icon></v-btn
         >
         <v-row
-          class="flex-grow-1"
-          style="margin: 0;padding: 4px;min-height: 64px;border-radius: 6px;flex: 0 1 auto"
+          class="flex-grow-1 align-center"
+          style="margin: 0;padding: 4px;min-height: 3rem;border-radius: 6px;flex: 0 1 auto"
           :style="{
             backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA
           }"
         >
-          <v-col
+          <div
+            v-if="competition.races.length < 1"
+            style="display:flex;align-items: center;padding: 0 1rem;font-size: 1.2rem;font-weight: bold;"
+          >
+            {{ "Нет созданных заездов" }}
+          </div>
+          <div
             @click="race_menu.selected = r"
-            style="position:relative;cursor: pointer;margin: 4px;border-radius: 6px"
+            style="position:relative;height: 2.4rem;cursor: pointer;margin: 4px;padding: 8px 2.4rem 8px 1rem;border-radius: 6px"
             class="d-flex justify-center align-center"
-            cols="2"
             :style="[
               {
                 backgroundColor: $vuetify.theme.themes[appTheme].accent
@@ -290,7 +295,7 @@
                 </v-card-actions> </v-card
             ></v-dialog>
             {{ race.title }}
-          </v-col></v-row
+          </div></v-row
         >
         <v-btn
           @click="turn_race('right')"

@@ -193,6 +193,7 @@ export default {
       this.$store.commit("main/pushServerMessage", message);
     });
     this.createCompetition(new this.EventClass());
+    this.$store.commit("main/setCompetition", this.competitions[0]);
     for (let i = 0; i < 4; i++) {
       this.competition.stuff.judges.push(
         new this.JudgeClass(`Судья ${i + 1}`, i + 1, "Иванов", "Иван", "КРСК")
@@ -246,6 +247,7 @@ export default {
       "showMenu",
       "appTheme",
       "appMenu",
+      "competitions",
       "competition"
     ]),
     ...mapGetters("event", ["EventClass"]),

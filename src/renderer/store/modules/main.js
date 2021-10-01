@@ -8,6 +8,7 @@ export default {
     },
     socket: null,
     competition: null,
+    competitions: [],
     showPreview: false,
     showMenu: false,
     serverStatus: false,
@@ -54,6 +55,7 @@ export default {
     socket: state => state.socket,
     serverMessages: state => state.serverMessages,
     showMenu: state => state.showMenu,
+    competitions: state => state.competitions,
     competition: state => state.competition,
     showPreview: state => state.showPreview,
     serverStatus: state => state.serverStatus,
@@ -173,7 +175,15 @@ export default {
         : (state.appTheme = "light");
     },
     createCompetition: (state, competition) => {
+      state.competitions.push(competition);
+    },
+    setCompetition: (state, competition) => {
       state.competition = competition;
+      state.socket &&
+        state.socket.connected &&
+        state.socket.emit("set_competition_data", this.competition, res => {
+          console.log(res);
+        });
     },
     togglePreview: (state, toggleState) => {
       state.showPreview = toggleState;

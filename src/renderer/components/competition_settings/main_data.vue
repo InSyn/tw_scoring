@@ -1,5 +1,5 @@
 <template>
-  <div class="flex-column align-center justify-center pa-1">
+  <div class="flex-column align-center justify-center">
     <v-row
       class="py-1"
       style="position:relative"

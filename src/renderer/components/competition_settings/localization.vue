@@ -1,5 +1,5 @@
 <template>
-  <div style="height: 100%;" class="d-flex pa-2">
+  <div style="height: 100%; margin-left: 16px" class="d-flex">
     <div
       class="d-flex flex-column pa-2"
       style="height: 100%;width: 100%;"

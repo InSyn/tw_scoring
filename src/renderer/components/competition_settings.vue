@@ -1,15 +1,76 @@
 <template>
-  <v-container style="min-width: 1024px" fluid v-if="competition">
-    <v-row no-gutters
-      ><v-col class="px-8 pb-4" style="font-size: 1.4rem; font-weight:bold;"
+  <v-container
+    fluid
+    style="min-width: 1024px; margin: 0;padding: 0;"
+    v-if="competition"
+  >
+    <div
+      style="display:flex;align-items:center;width:100%;padding:4px 4px;flex-wrap:nowrap;border-radius: 6px"
+      :style="{
+        backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
+        borderTop: `4px solid ${$vuetify.theme.themes[appTheme].standardBackgroundRGBA}`
+      }"
+    >
+      <v-hover v-slot:default="{ hover }"
+        ><v-btn
+          @click="$store.commit('main/createCompetition', new EventClass())"
+          style="display:flex; align-items: center; flex-shrink: 0; height: 2rem; margin-right: 2rem; padding: 4px 8px; border-radius: 0 6px 6px 0; font-weight:bold; transition: background-color 112ms, color 112ms; cursor:pointer;letter-spacing: .08rem"
+          :style="[
+            {
+              backgroundColor: $vuetify.theme.themes[appTheme].accent,
+              color: $vuetify.theme.themes[appTheme].textDefault
+            },
+            hover && {
+              backgroundColor: $vuetify.theme.themes[appTheme].accent_light
+            }
+          ]"
+        >
+          Добавить соревнование
+        </v-btn></v-hover
+      >
+      <div
+        style="display:flex;align-items:center;flex-wrap: wrap;padding: 6px 8px"
+        :style="{
+          backgroundColor:
+            $vuetify.theme.themes[appTheme].standardBackgroundRGBA
+        }"
+      >
+        <v-hover
+          v-slot:default="{ hover }"
+          v-for="current_competition in competitions"
+          :key="current_competition.id"
+        >
+          <div
+            @click="$store.commit('main/setCompetition', current_competition)"
+            style="flex-shrink: 0;padding: 4px 8px;margin: 2px .4rem;cursor:pointer;transition: color .112s, background-color .112s"
+            :style="[
+              {
+                backgroundColor: $vuetify.theme.themes[appTheme].accent
+              },
+              hover && {
+                backgroundColor: $vuetify.theme.themes[appTheme].accent_light
+              },
+              current_competition.id === competition.id && {
+                backgroundColor: $vuetify.theme.themes[appTheme].success,
+                color: $vuetify.theme.themes[appTheme].standardBackgroundRGBA
+              }
+            ]"
+          >
+            {{ current_competition.mainData.title.value }}
+          </div></v-hover
+        >
+      </div>
+    </div>
+    <v-row style="margin: 16px 16px" no-gutters
+      ><v-col style="font-size: 1.4rem; font-weight:bold;"
         >Настройки соревнования</v-col
       ></v-row
     >
-    <v-row class="my-2" no-gutters>
+    <v-row style="margin: 16px 16px" no-gutters>
       <v-col cols="6"><main_data></main_data></v-col>
       <v-col cols="6"><localization></localization></v-col
     ></v-row>
-    <v-row class="my-4" no-gutters>
+    <v-row style="margin: 16px 16px" no-gutters>
       <v-col style="height: 100%" cols="8">
         <stuff></stuff>
       </v-col>
@@ -17,12 +78,12 @@
         <track_parameters></track_parameters>
       </v-col>
     </v-row>
-    <v-row class="my-4" no-gutters
+    <v-row style="margin: 16px 16px" no-gutters
       ><v-col cols="12"> <openers></openers> </v-col></v-row
-    ><v-row class="my-4" no-gutters
+    ><v-row style="margin: 16px 16px" no-gutters
       ><v-col cols="12"> <weather></weather> </v-col
     ></v-row>
-    <v-row class="my-4" no-gutters
+    <v-row style="margin: 16px 16px" no-gutters
       ><v-col cols="12"> <sponsors></sponsors> </v-col
     ></v-row>
   </v-container>
@@ -49,7 +110,8 @@ export default {
     weather
   },
   computed: {
-    ...mapGetters("main", ["competition"])
+    ...mapGetters("main", ["competition", "competitions", "appTheme"]),
+    ...mapGetters("event", ["EventClass"])
   }
 };
 </script>
