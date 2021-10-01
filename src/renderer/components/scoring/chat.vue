@@ -52,6 +52,12 @@
                   ? $vuetify.theme.themes[appTheme].accent
                   : $vuetify.theme.themes[appTheme].textDefault
               "
+              :style="
+                user.socket_id &&
+                  !user.connected && {
+                    color: $vuetify.theme.themes[appTheme].error
+                  }
+              "
             ></v-icon>
             <div
               class="d-flex justify-center align-center"
@@ -73,7 +79,7 @@
           }"
         >
           <v-row no-gutters v-for="(mes, m) in messages" :key="m">{{
-            `${messages[m][1][0]}:${messages[m][1][1]}  ${messages[m][0]}`
+            `${messages[m][1][0]}:${messages[m][1][1]} ${messages[m][2]}: ${messages[m][0]}`
           }}</v-row>
         </div></v-row
       >
@@ -118,7 +124,7 @@ export default {
     addMessage(m) {
       if (this.socket) {
         const time = [this.competition.timer.hrs, this.competition.timer.min];
-        m !== "" && this.socket.emit("chat_message", [m, time]);
+        m !== "" && this.socket.emit("chat_message", [m, time, "Секретарь"]);
         this.message = "";
       } else console.log("server not started");
     }

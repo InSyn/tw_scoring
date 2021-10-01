@@ -228,7 +228,7 @@
               },
               r === race_menu.selected && {
                 backgroundColor: $vuetify.theme.themes[appTheme].accent_light,
-                boxShadow: `inset 0 0 3px 1px ${$vuetify.theme.themes[appTheme].cardBackgroundRGBA}`
+                fontSize: '1.15rem'
               }
             ]"
             v-for="(race, r) in competition.races"

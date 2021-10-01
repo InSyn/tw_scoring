@@ -174,12 +174,7 @@ io.on("connection", socket => {
             0,
             `Судья ID:${socket_id} отключен`
           ]);
-      } else
-        mainWindow &&
-          mainWindow.webContents.send("server_message", [
-            4,
-            `Невозможно отключить клиент с ID:${socket_id}`
-          ]);
+      }
     });
   });
   /**
@@ -274,6 +269,7 @@ io.on("connection", socket => {
    * RACE EVENTS
    * **/
   socket.on("disconnect", reason => {
+    delete io.sockets.sockets[socket.id];
     competition.stuff.judges.forEach(judge => {
       if (judge.socket_id === socket.id) {
         mainWindow &&
@@ -288,12 +284,12 @@ io.on("connection", socket => {
         ]);
         judge.socket_id = null;
         judge.connected = false;
+        io.sockets.emit("competition_data_updated", competition);
       }
     });
     if (competition.stuff.jury[0].socket_id === socket.id) {
       competition.stuff.jury[0].socket_id = null;
       competition.stuff.jury[0].connected = false;
-
       mainWindow &&
         mainWindow.webContents.send("server_message", [
           4,
