@@ -9,7 +9,9 @@ export default {
       ],
       protocol_fields: [],
       title: "",
-      print_header: false,
+      use_grid: false,
+      use_string_light: true,
+      print_header: true,
       strings_at_page: 6,
       font_size: 12,
       notations:
@@ -28,8 +30,6 @@ export default {
           img: ""
         }
       },
-      use_grid: false,
-      use_string_light: false,
       string_lights: {
         odd: "#FFFFFF",
         even: "#AAAAAA"

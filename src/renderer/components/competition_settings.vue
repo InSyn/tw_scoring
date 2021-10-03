@@ -14,7 +14,7 @@
       <v-hover v-slot:default="{ hover }"
         ><v-btn
           @click="$store.commit('main/createCompetition', new EventClass())"
-          style="display:flex; align-items: center; flex-shrink: 0; height: 2rem; margin-right: 2rem; padding: 4px 8px; border-radius: 0 6px 6px 0; font-weight:bold; transition: background-color 112ms, color 112ms; cursor:pointer;letter-spacing: .08rem"
+          style="display:flex; align-items: center; flex-shrink: 0; height: 1.8rem; margin-right: 2rem; padding: 4px 8px; border-radius: 0 6px 6px 0; font-weight:bold; transition: background-color 112ms, color 112ms; cursor:pointer;letter-spacing: .08rem"
           :style="[
             {
               backgroundColor: $vuetify.theme.themes[appTheme].accent,
@@ -25,15 +25,17 @@
             }
           ]"
         >
+          <div
+            style="height: .5rem;width: .5rem;margin-right: .5rem;"
+            :style="{
+              backgroundColor: $vuetify.theme.themes[appTheme].textDefault
+            }"
+          ></div>
           Добавить соревнование
         </v-btn></v-hover
       >
       <div
         style="display:flex;align-items:center;flex-wrap: wrap;padding: 6px 8px"
-        :style="{
-          backgroundColor:
-            $vuetify.theme.themes[appTheme].standardBackgroundRGBA
-        }"
       >
         <v-hover
           v-slot:default="{ hover }"
@@ -42,7 +44,7 @@
         >
           <div
             @click="$store.commit('main/setCompetition', current_competition)"
-            style="flex-shrink: 0;padding: 4px 8px;margin: 2px .4rem;cursor:pointer;transition: color .112s, background-color .112s"
+            style="flex-shrink: 0;padding: 4px 8px;margin: 2px .4rem;cursor:pointer;border-radius: 6px;transition: color .112s, background-color .112s, transform .172s"
             :style="[
               {
                 backgroundColor: $vuetify.theme.themes[appTheme].accent
@@ -52,7 +54,8 @@
               },
               current_competition.id === competition.id && {
                 backgroundColor: $vuetify.theme.themes[appTheme].success,
-                color: $vuetify.theme.themes[appTheme].standardBackgroundRGBA
+                color: $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
+                transform: `translateY(4px)`
               }
             ]"
           >

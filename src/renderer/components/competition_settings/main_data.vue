@@ -112,6 +112,28 @@
             v-model="competition.mainData[md].value"
             type="text"
           />
+          <div
+            style="display: flex; align-items: center; flex-wrap: nowrap;min-width: 30%;"
+            v-if="md === 'title'"
+          >
+            <span
+              style="display: block;flex-shrink:0;margin-left: 1rem; font-weight:bold;"
+              >{{ competition.mainData[md].stage.title }}</span
+            ><input
+              @focus="competition.mainData[md].focus = true"
+              @blur="competition.mainData[md].focus = false"
+              class="ml-2 pa-1"
+              style="outline: none;flex-shrink: 0;flex-grow: 1; border-radius: 6px; width: 6rem"
+              :style="{
+                color: $vuetify.theme.themes[appTheme].textDefault,
+                backgroundColor:
+                  $vuetify.theme.themes[appTheme].standardBackgroundRGBA
+              }"
+              v-model="competition.mainData[md].stage.value"
+              type="text"
+            />
+          </div>
+
           <input
             v-if="md === 'discipline'"
             @focus="competition.mainData[md].focus = true"
@@ -178,34 +200,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters("main", ["appTheme", "competition", "socket"]),
-    styles() {
-      return {
-        inputWrapper: {
-          backgroundColor: `rgba(${
-            this.$vuetify.theme.themes[this.appTheme].cardBackground.r
-          },
-          ${this.$vuetify.theme.themes[this.appTheme].cardBackground.g},
-          ${this.$vuetify.theme.themes[this.appTheme].cardBackground.b},
-          ${this.$vuetify.theme.themes[this.appTheme].cardBackground.a}`,
-          border: `1px solid ${
-            this.$vuetify.theme.themes[this.appTheme].accent
-          }`
-        },
-        cardBackground: `rgba(${
-          this.$vuetify.theme.themes[this.appTheme].cardBackground.r
-        },
-          ${this.$vuetify.theme.themes[this.appTheme].cardBackground.g},
-          ${this.$vuetify.theme.themes[this.appTheme].cardBackground.b},
-          ${this.$vuetify.theme.themes[this.appTheme].cardBackground.a}`,
-        standardBackground: `rgba(${
-          this.$vuetify.theme.themes[this.appTheme].standardBackground.r
-        },
-          ${this.$vuetify.theme.themes[this.appTheme].standardBackground.g},
-          ${this.$vuetify.theme.themes[this.appTheme].standardBackground.b},
-          ${this.$vuetify.theme.themes[this.appTheme].standardBackground.a}`
-      };
-    }
+    ...mapGetters("main", ["appTheme", "competition", "socket"])
   }
 };
 </script>

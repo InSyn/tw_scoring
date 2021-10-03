@@ -68,7 +68,12 @@ export default {
         title: {
           title: "Название",
           value: "Новое соревнование",
-          focus: false
+          focus: false,
+          stage: {
+            title: "Этап",
+            value: "Квалификация",
+            focus: false
+          }
         },
         discipline: {
           title: "Дисциплина",

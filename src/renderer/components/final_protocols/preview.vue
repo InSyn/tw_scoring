@@ -449,12 +449,15 @@
             >
               <div style="padding: 2px 4px; margin-right: auto;">
                 {{
-                  `${competition.mainData.location.value}(${competition.mainData.country.value})`
+                  `${date_now[0]} / ${competition.mainData.location.value}(${
+                    competition.mainData.country.value
+                  })${competition.mainData.codex.value &&
+                    " / " + competition.mainData.codex.value}`
                 }}
               </div>
-              <div style="padding: 2px 4px; margin-left: auto">
+              <div style="margin-left: auto">
                 {{
-                  `Отчёт создан ${date_now} / Page ${p_idx +
+                  `Отчёт создан ${date_now[0]} ${date_now[1]} / Page ${p_idx +
                     1}/${(paginated_results.length > 0 &&
                     paginated_results.length) ||
                     1}`
@@ -462,12 +465,12 @@
               </div>
             </div>
             <div
-              style="width: 100%;flex-shrink: 0;display:flex;align-items: center;border-top:1px solid black;border-bottom:1px solid black;font-size: 0.75rem;"
+              style="width: 100%;flex-shrink: 0;display:flex;padding: 0 8px;align-items: center;border-top:1px solid black;border-bottom:1px solid black;font-size: 0.75rem;"
             >
               <div
                 style="display:flex;justify-content: flex-start;align-items: start;flex-shrink: 0;width:20%;font-weight:bold;"
               >
-                www.timingweb.pro
+                sample
               </div>
               <div
                 style="display:flex;justify-content: center;align-items: center;flex-shrink: 0;width:60%;font-weight:bold;"
@@ -480,7 +483,11 @@
             </div>
             <div style="width: 100%;display:flex;flex-shrink: 0">
               <div
-                class="page_counter"
+                style="margin-right: auto;font-size: 0.75rem;font-weight: bold;"
+              >
+                www.timingweb.com
+              </div>
+              <div
                 style="margin-left: auto;font-size: 0.75rem;font-weight: bold;"
               >
                 <div style="padding: 2px;height: 1.6rem;">
@@ -725,7 +732,7 @@ export default {
         .toString()
         .split(":");
       console.log(`${date} ${time}`);
-      return `${date[0]} ${date[1]} ${date[2]} ${time[0]}:${time[1]}`;
+      return [`${date[0]} ${date[1]} ${date[2]}`, `${time[0]}:${time[1]}`];
     },
     paginated_results() {
       return this.data_paginated_results;

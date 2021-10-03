@@ -34,7 +34,6 @@ const opts = {
         textDefault: "#212121",
         accent: "#345EDA",
         accent_light: "#547EE7",
-        accentRgba: { r: 217, g: 144, b: 27, a: 1 },
         success: "#2ABE6A",
         success_light: "#2CE98F",
         action_green: "#139030",
