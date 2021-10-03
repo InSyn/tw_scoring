@@ -5,10 +5,10 @@
     v-if="competition"
   >
     <div
-      style="display:flex;align-items:center;width:100%;padding:4px 4px;flex-wrap:nowrap;border-radius: 6px"
+      style="display:flex;align-items:center;width:100%;padding:4px 4px;flex-wrap:nowrap"
       :style="{
         backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
-        borderTop: `4px solid ${$vuetify.theme.themes[appTheme].standardBackgroundRGBA}`
+        borderTop: `2px solid ${$vuetify.theme.themes[appTheme].standardBackgroundRGBA}`
       }"
     >
       <v-hover v-slot:default="{ hover }"
@@ -67,6 +67,13 @@
     <v-row style="margin: 16px 16px" no-gutters
       ><v-col style="font-size: 1.4rem; font-weight:bold;"
         >Настройки соревнования</v-col
+      ><v-spacer></v-spacer
+      ><v-col
+        cols="auto"
+        :style="{
+          color: $vuetify.theme.themes[appTheme].cardBackgroundRGBA
+        }"
+        >Comp_ID: {{ competition.id }}</v-col
       ></v-row
     >
     <v-row style="margin: 16px 16px" no-gutters>
