@@ -59,6 +59,7 @@ export default {
       constructor(num) {
         this.num = num;
       }
+      bib = "";
       name = "";
       surName = "";
       location = "";

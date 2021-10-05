@@ -107,7 +107,7 @@
           :to="{ name: page.link }"
           tag="div"
         >
-          <v-hover v-slot:default="{ hover }" @click="changeMenuState">
+          <v-hover v-slot:default="{ hover }">
             <div
               class="d-flex flex-nowrap align-center pa-2"
               style="cursor: pointer; transition: background-color 256ms"
@@ -144,7 +144,7 @@
         borderTop: `1px solid ${$vuetify.theme.themes[appTheme].accent}`
       }"
     >
-      Created by Timing Web &copy;
+      Created by TimingWeb &copy;
       <span class="ml-2">{{ new Date().getFullYear() }}</span
       ><v-spacer></v-spacer
       ><span
@@ -194,11 +194,7 @@ export default {
     });
     this.createCompetition(new this.EventClass());
     this.$store.commit("main/setCompetition", this.competitions[0]);
-    for (let i = 0; i < 4; i++) {
-      this.competition.stuff.judges.push(
-        new this.JudgeClass(`Судья ${i + 1}`, i + 1, "Иванов", "Иван", "КРСК")
-      );
-    }
+    this.first_competition_setup(this.competition);
     this.serverStatusChecker = setInterval(() => {
       this.socket && this.socket.connected
         ? this.$store.commit("main/serverSetStatus", true)
@@ -238,6 +234,31 @@ export default {
           this.server_config[1]
         ]);
         this.$store.commit("main/createServerChecker");
+      }
+    },
+    first_competition_setup(competition) {
+      competition.mainData.discipline.value = "DISCIPLINE";
+      competition.mainData.discipline.min = "DSC";
+      competition.mainData.country.value = "RUS";
+      competition.mainData.location.value = "Krasnoyarsk";
+      competition.technicalInfo.push(
+        {
+          title: "Название склона",
+          value: "Сопка"
+        },
+        {
+          title: "Длина трассы",
+          value: "240м"
+        },
+        {
+          title: "Ширина трассы",
+          value: "18м"
+        }
+      );
+      for (let i = 0; i < 4; i++) {
+        competition.stuff.judges.push(
+          new this.JudgeClass(`Судья ${i + 1}`, i + 1, "Иванов", "Иван", "КРСК")
+        );
       }
     }
   },

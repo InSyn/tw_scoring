@@ -57,7 +57,25 @@
               <v-col class="font-weight-bold" cols="12"
                 ><span v-html="`Открывающий ${opener.num}`"></span
               ></v-col>
-              <v-col class="d-flex pa-1" cols="12"
+              <v-col class="d-flex align-center pa-2" cols="3"
+                ><div v-html="`Bib: `"></div>
+                <input
+                  @focus="
+                    $event.target.style.borderBottom = `1px solid ${$vuetify.theme.themes[appTheme].accent}`
+                  "
+                  @blur="
+                    $event.target.style.borderBottom = `1px solid transparent`
+                  "
+                  v-model="opener.bib"
+                  class="ml-1 pa-1"
+                  style="transition: border-bottom 224ms; border-bottom: 1px solid transparent; width: 100%; border-radius: 6px"
+                  :style="{
+                    backgroundColor:
+                      $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
+                    color: $vuetify.theme.themes[appTheme].textDefault
+                  }"
+              /></v-col>
+              <v-col class="d-flex align-center pa-2" cols="9"
                 ><div v-html="`Фамилия: `"></div>
                 <input
                   @focus="
@@ -67,7 +85,7 @@
                     $event.target.style.borderBottom = `1px solid transparent`
                   "
                   v-model="opener.name"
-                  class="ml-2 pa-1"
+                  class="ml-1 pa-1"
                   style="transition: border-bottom 224ms; border-bottom: 1px solid transparent; width: 100%; border-radius: 6px"
                   :style="{
                     backgroundColor:
@@ -75,7 +93,7 @@
                     color: $vuetify.theme.themes[appTheme].textDefault
                   }"
               /></v-col>
-              <v-col class="d-flex pa-1" cols="12"
+              <v-col class="d-flex align-center pa-2" cols="6"
                 ><div v-html="`Имя: `"></div>
                 <input
                   @focus="
@@ -85,7 +103,7 @@
                     $event.target.style.borderBottom = `1px solid transparent`
                   "
                   v-model="opener.surName"
-                  class="ml-2 pa-1"
+                  class="ml-1 pa-1"
                   style="transition: border-bottom 224ms; border-bottom: 1px solid transparent; width: 100%; border-radius: 6px"
                   :style="{
                     backgroundColor:
@@ -93,7 +111,7 @@
                     color: $vuetify.theme.themes[appTheme].textDefault
                   }"
               /></v-col>
-              <v-col class="d-flex pa-1" cols="12"
+              <v-col class="d-flex align-center pa-2" cols="6"
                 ><div v-html="`Город: `"></div>
                 <input
                   @focus="
@@ -103,7 +121,7 @@
                     $event.target.style.borderBottom = `1px solid transparent`
                   "
                   v-model="opener.location"
-                  class="ml-2 pa-1"
+                  class="ml-1 pa-1"
                   style="transition: border-bottom 224ms; border-bottom: 1px solid transparent; width: 100%; border-radius: 6px"
                   :style="{
                     backgroundColor:

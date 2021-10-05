@@ -181,7 +181,7 @@ export default {
       state.competition = competition;
       state.socket &&
         state.socket.connected &&
-        state.socket.emit("set_competition_data", this.competition, res => {
+        state.socket.emit("set_competition_data", competition, res => {
           console.log(res);
         });
     },

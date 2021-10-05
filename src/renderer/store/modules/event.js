@@ -8,24 +8,6 @@ export default {
           .substr(2, 9);
         this.structure.selected.type = 0;
         this.structure.selected.discipline = 0;
-        this.mainData.discipline.value = "DISCIPLINE";
-        this.mainData.discipline.min = "DSC";
-        this.mainData.country.value = "RUS";
-        this.mainData.location.value = "Krasnoyarsk";
-        this.technicalInfo.push(
-          {
-            title: "Название склона",
-            value: "Сопка"
-          },
-          {
-            title: "Длина трассы",
-            value: "240м"
-          },
-          {
-            title: "Ширина трассы",
-            value: "18м"
-          }
-        );
       }
       weather = [];
       structure = {
@@ -52,6 +34,15 @@ export default {
           { id: 1, title: "1/10", value: 10 },
           { id: 2, title: "1/100", value: 100 },
           { id: 3, title: "1/1000", value: 1000 }
+        ],
+        stages: [
+          { id: "qual", title: "Квалификация", value: "Квалификация" },
+          { id: "final", title: "Финал", value: "Финал" },
+          { id: "s_fin", title: "Малый Финал", value: "Малый Финал" },
+          { id: "l_fin", title: "Большой Финал", value: "Большой Финал" },
+          { id: "fin_a", title: "Финал A", value: "Финал A" },
+          { id: "fin_b", title: "Финал B", value: "Финал B" },
+          { id: "custom", title: "Пользовательский", value: "" }
         ]
       };
       set_accuracy(val) {
@@ -71,7 +62,7 @@ export default {
           focus: false,
           stage: {
             title: "Этап",
-            value: "Квалификация",
+            value: null,
             focus: false
           }
         },

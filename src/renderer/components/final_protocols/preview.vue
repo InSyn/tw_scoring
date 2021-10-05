@@ -607,9 +607,9 @@ export default {
             Math.ceil(this.$refs.notes && this.$refs.notes[0].offsetHeight)) ||
           0;
 
-        console.log(
-          `Container: ${container_height} header_height: ${header_height} result_height: ${result_height} results_overall:${results_overall} res_per_page: ${res_per_page} pages:${pages}`
-        );
+        // console.log(
+        //   `Container: ${container_height} header_height: ${header_height} result_height: ${result_height} results_overall:${results_overall} res_per_page: ${res_per_page} pages:${pages}`
+        // );
 
         for (let p = 0; p < pages; p++) {
           this.data_paginated_results.push([]);
@@ -688,9 +688,7 @@ export default {
       };
 
       await html2pdf()
-        .set(opt, () => {
-          console.log("set");
-        })
+        .set(opt)
         .from(element)
         .save();
 
@@ -704,7 +702,7 @@ export default {
           ? (this.results_protocol.layout.pdf_scale =
               Math.round((this.results_protocol.layout.pdf_scale + 0.1) * 10) /
               10)
-          : console.log(this.results_protocol.layout.pdf_scale < 1.5);
+          : null;
       } else {
         this.results_protocol.layout.pdf_scale > 0.1
           ? (this.results_protocol.layout.pdf_scale =
@@ -731,7 +729,7 @@ export default {
         .split(" ")[4]
         .toString()
         .split(":");
-      console.log(`${date} ${time}`);
+      // console.log(`${date} ${time}`);
       return [`${date[0]} ${date[1]} ${date[2]}`, `${time[0]}:${time[1]}`];
     },
     paginated_results() {
