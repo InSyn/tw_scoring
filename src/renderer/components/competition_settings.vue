@@ -14,7 +14,7 @@
       <v-hover v-slot:default="{ hover }"
         ><v-btn
           @click="$store.commit('main/createCompetition', new EventClass())"
-          style="display:flex; align-items: center; flex-shrink: 0; height: 1.8rem; margin-right: 2rem; padding: 4px 8px; border-radius: 0 6px 6px 0; font-weight:bold; transition: background-color 112ms, color 112ms; cursor:pointer;letter-spacing: .08rem"
+          style="display:flex; align-items: center; flex-shrink: 0; height: 2rem; margin-right: 2rem; padding: 4px 8px; border-radius: 0 6px 6px 0; font-weight:bold; transition: background-color 112ms, color 112ms; cursor:pointer;letter-spacing: .08rem"
           :style="[
             {
               backgroundColor: $vuetify.theme.themes[appTheme].accent,

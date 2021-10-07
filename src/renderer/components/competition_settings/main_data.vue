@@ -10,7 +10,7 @@
       <v-col cols="12" class="d-flex align-center" style="position:relative;">
         <div
           class="d-flex align-center flex-grow-1 px-2 py-1"
-          style="position:relative; transition: background-color 128ms; overflow: hidden; border-radius: 6px"
+          style="position:relative; transition: background-color 128ms; border-radius: 6px"
           :style="[
             {
               backgroundColor:
@@ -55,6 +55,10 @@
               @click="competition.mainData[md].dialog = false"
               text
               :color="$vuetify.theme.themes[appTheme].textDefault"
+              :style="{
+                backgroundColor:
+                  $vuetify.theme.themes[appTheme].cardBackgroundRGBA
+              }"
               >принять</v-btn
             >
           </v-dialog>
@@ -93,6 +97,10 @@
               @click="competition.mainData[md].time_dialog = false"
               text
               :color="$vuetify.theme.themes[appTheme].textDefault"
+              :style="{
+                backgroundColor:
+                  $vuetify.theme.themes[appTheme].cardBackgroundRGBA
+              }"
               >принять</v-btn
             >
           </v-dialog>
@@ -113,25 +121,77 @@
             type="text"
           />
           <div
-            style="display: flex; align-items: center; flex-wrap: nowrap;min-width: 30%;"
+            style="display: flex; align-items: center; flex-wrap: nowrap;min-width: 30%;overflow-y: visible"
             v-if="md === 'title'"
           >
             <span
               style="display: block;flex-shrink:0;margin-left: 1rem; font-weight:bold;"
               >{{ competition.mainData[md].stage.title }}</span
-            ><input
-              @focus="competition.mainData[md].focus = true"
-              @blur="competition.mainData[md].focus = false"
-              class="ml-2 pa-1"
-              style="outline: none;flex-shrink: 0;flex-grow: 1; border-radius: 6px; width: 6rem"
+            >
+            <div
+              class="pa-1"
+              tabindex="0"
+              @focus="stage_selector = true"
+              @blur="stage_selector = false"
+              style="position:relative;flex: 1 0 auto;height: 100%;border-radius: 6px;margin-left: 1rem;outline: none;cursor:pointer;overflow:visible"
               :style="{
                 color: $vuetify.theme.themes[appTheme].textDefault,
                 backgroundColor:
                   $vuetify.theme.themes[appTheme].standardBackgroundRGBA
               }"
-              v-model="competition.mainData[md].stage.value"
-              type="text"
-            />
+            >
+              <div
+                v-if="stage_selector"
+                style="position:absolute;z-index: 1;top: 0;left: 0;width: 100%;display:flex;flex-direction: column;border-radius: 6px"
+                :style="{
+                  backgroundColor:
+                    $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
+                  border: `1px solid ${$vuetify.theme.themes[appTheme].accent}`
+                }"
+              >
+                <v-hover
+                  v-for="(stage, s_idx) in competition.structure.stages"
+                  :key="stage.id"
+                  v-slot:default="{ hover }"
+                >
+                  <div
+                    @click="selectStage(stage, $event)"
+                    style="flex:0 0 auto;padding: 2px 4px"
+                    :style="[
+                      {
+                        color: $vuetify.theme.themes[appTheme].textDefault
+                      },
+                      s_idx === 0 && { borderRadius: `6px 6px 0 0` },
+                      s_idx === competition.structure.stages.length - 1 && {
+                        borderRadius: `0 0 6px 6px`
+                      },
+                      hover && {
+                        backgroundColor:
+                          $vuetify.theme.themes[appTheme].subjectBackgroundRGBA
+                      }
+                    ]"
+                  >
+                    {{ stage.title }}
+                  </div></v-hover
+                >
+              </div>
+              <div>
+                {{ competition.mainData.title.stage.value.title }}
+              </div>
+            </div>
+            <!--            <input-->
+            <!--              @focus="competition.mainData[md].focus = true"-->
+            <!--              @blur="competition.mainData[md].focus = false"-->
+            <!--              class="ml-2 pa-1"-->
+            <!--              style="outline: none;flex-shrink: 0;flex-grow: 1; border-radius: 6px; width: 6rem"-->
+            <!--              :style="{-->
+            <!--                color: $vuetify.theme.themes[appTheme].textDefault,-->
+            <!--                backgroundColor:-->
+            <!--                  $vuetify.theme.themes[appTheme].standardBackgroundRGBA-->
+            <!--              }"-->
+            <!--              v-model="competition.mainData[md].stage.value"-->
+            <!--              type="text"-->
+            <!--            />-->
           </div>
 
           <input
@@ -190,14 +250,22 @@ export default {
   name: "main_data",
   methods: {
     ...mapActions("main", ["input_focus", "input_blur"]),
-
     set_competition_data() {
       this.socket &&
         this.socket.connected &&
         this.socket.emit("set_competition_data", this.competition, res => {
           console.log(res);
         });
+    },
+    selectStage(stage, event) {
+      this.competition.mainData.title.stage.value = stage;
+      event.target.parentNode.parentNode.blur();
     }
+  },
+  data() {
+    return {
+      stage_selector: false
+    };
   },
   computed: {
     ...mapGetters("main", ["appTheme", "competition", "socket"])

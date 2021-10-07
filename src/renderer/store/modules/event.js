@@ -2,12 +2,13 @@ export default {
   namespaced: true,
   state: {
     EventClass: class {
-      constructor() {
+      constructor(stage) {
         this.id = Math.random()
           .toString(36)
           .substr(2, 9);
         this.structure.selected.type = 0;
         this.structure.selected.discipline = 0;
+        this.mainData.title.stage.value = stage || this.structure.stages[0];
       }
       weather = [];
       structure = {

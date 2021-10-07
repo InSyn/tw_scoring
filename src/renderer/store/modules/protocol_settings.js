@@ -109,7 +109,6 @@ export default {
   },
   mutations: {
     setImage: (state, data) => {
-      console.log(data);
       state.results_protocol.assets[data[0]].file = data[1].target.files[0];
     }
   }
