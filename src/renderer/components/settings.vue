@@ -9,6 +9,7 @@
         <router-link
           v-slot="{ href, route, navigate, isActive, isExactActive }"
           :to="{ name: page.link.name }"
+          custom
           tag="div"
         >
           <v-hover v-slot:default="{ hover }">
