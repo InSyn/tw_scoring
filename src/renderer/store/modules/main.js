@@ -185,6 +185,12 @@ export default {
           console.log(res);
         });
     },
+    delete_competition: (state, id) => {
+      state.competitions = state.competitions.filter(_comp => {
+        return _comp.id !== id;
+      });
+      state.competition = state.competitions[0];
+    },
     togglePreview: (state, toggleState) => {
       state.showPreview = toggleState;
     }

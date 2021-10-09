@@ -77,8 +77,8 @@
         @click="changeTheme()"
         :color="$vuetify.theme.themes[appTheme].accent"
         icon
-        ><v-icon v-html="'mdi-brightness-6'"></v-icon
-      ></v-btn>
+        ><v-icon>mdi-brightness-6</v-icon></v-btn
+      >
     </header>
     <main style="position:relative;">
       <div

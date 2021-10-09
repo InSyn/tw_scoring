@@ -73,7 +73,16 @@
         :style="{
           color: $vuetify.theme.themes[appTheme].cardBackgroundRGBA
         }"
-        >Comp_ID: {{ competition.id }}</v-col
+        >Comp_ID: {{ competition.id
+        }}<v-btn
+          @click="$store.commit('main/delete_competition', competition.id)"
+          style="margin-left: 1rem"
+          :disabled="competitions.length < 2"
+          text
+          small
+          :color="$vuetify.theme.themes[appTheme].error"
+          >Удалить</v-btn
+        ></v-col
       ></v-row
     >
     <v-row style="margin: 16px 16px" no-gutters>
