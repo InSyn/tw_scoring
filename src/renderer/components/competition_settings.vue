@@ -70,11 +70,12 @@
       ><v-spacer></v-spacer
       ><v-col
         cols="auto"
+        style="display:flex;;align-items: center"
         :style="{
           color: $vuetify.theme.themes[appTheme].cardBackgroundRGBA
         }"
-        >Comp_ID: {{ competition.id
-        }}<v-btn
+        ><div>Comp_ID: {{ competition.id }}</div>
+        <v-btn
           @click="$store.commit('main/delete_competition', competition.id)"
           style="margin-left: 1rem"
           :disabled="competitions.length < 2"
