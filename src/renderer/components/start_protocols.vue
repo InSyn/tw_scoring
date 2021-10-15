@@ -31,7 +31,7 @@
           </div>
           <div
             @click="race_menu.selected = r"
-            style="position:relative;height: 2.4rem;cursor: pointer;margin: 4px;padding: 8px 2.4rem 8px 1rem;border-radius: 6px;transition: background-color .212s, box-shadow .212s"
+            style="position:relative;height: 2.4rem;cursor: pointer;margin: 4px;padding: 8px 2.4rem 8px 1rem;border-radius: 6px;transition: background-color .112s, box-shadow .112s, transform .112s"
             class="d-flex justify-center align-center"
             :style="[
               {
@@ -39,8 +39,8 @@
               },
               r === race_menu.selected && {
                 backgroundColor: $vuetify.theme.themes[appTheme].accent_light,
-                fontSize: '1.15rem',
-                boxShadow: `inset 0 0 6px 0 ${$vuetify.theme.themes[appTheme].success}`
+                transform: 'scale(1.08)',
+                boxShadow: `inset 0 0 4px 0 ${$vuetify.theme.themes[appTheme].textDefault}`
               }
             ]"
             v-for="(race, r) in competition.races"

@@ -172,7 +172,11 @@
                 <div
                   style="font-size: 1.4rem; font-weight: bold; line-height: 1.2"
                 >
-                  {{ "Results Type" }}
+                  {{
+                    (competition.mainData.title.stage.value &&
+                      competition.mainData.title.stage.value.value) ||
+                      ""
+                  }}
                 </div>
                 <div
                   style="font-size: 1.4rem; font-weight: bold; line-height: 1.2"

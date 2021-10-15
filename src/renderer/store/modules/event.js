@@ -51,6 +51,7 @@ export default {
           .value;
         return Math.round(acc * val) / acc;
       }
+      prev_stages = [];
       races = [];
       selected_race_id = 0;
       get selected_race() {

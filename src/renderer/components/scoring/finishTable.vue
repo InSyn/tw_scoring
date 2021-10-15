@@ -176,39 +176,7 @@ export default {
     }
   },
   data() {
-    return {
-      competitor: {
-        name: "Name",
-        surname: "Surname",
-        year: "1990",
-        bib: "11",
-        city: "Krasnoyarsk",
-        marks: [
-          ["21", "32"],
-          ["48", "67"],
-          ["76", "45"],
-          ["34", "74"],
-          ["68", "64"]
-        ]
-      },
-      sheet: {
-        place: {
-          title: "Место"
-        },
-        bib: {
-          title: "Ст.№"
-        },
-        name: {
-          title: "Фамилия, имя"
-        },
-        races: {
-          title: "Заезд"
-        },
-        res: {
-          title: "Результат"
-        }
-      }
-    };
+    return {};
   },
   computed: {
     ...mapGetters("main", ["competition", "appTheme"]),

@@ -7,73 +7,166 @@
         color: $vuetify.theme.themes[appTheme].textDefault
       }"
     >
-      <div class="d-flex flex-nowrap">
-        <div class="pa-2" style="width: 50%;">
-          <v-card-title>Вид соревнования</v-card-title>
-          <v-radio-group
-            row
-            hide-details
-            class="ma-0 pa-0"
-            style="border-radius: 6px"
-            :style="{
-              backgroundColor:
-                $vuetify.theme.themes[appTheme].standardBackgroundRGBA
-            }"
-            :key="Math.random()"
-            v-model="competition.structure.selected.type"
-          >
-            <v-radio
-              class="pa-2 ma-1"
-              v-for="(type, t) in competition.structure.types"
-              :key="t"
-              :style="{
+      <v-card
+        elevation="0"
+        style="padding: 8px"
+        :style="{
+          backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
+          color: $vuetify.theme.themes[appTheme].textDefault
+        }"
+      >
+        <v-card-title>
+          Управление этапами
+        </v-card-title>
+        <v-container
+          style="display:flex;flex-wrap: wrap;align-items: center;border-radius: 6px;padding: 0;"
+          :style="{
+            backgroundColor:
+              $vuetify.theme.themes[appTheme].standardBackgroundRGBA
+          }"
+        >
+          <div
+            v-for="_competition in competitions"
+            :key="_competition.id"
+            style="margin: 4px 0 4px 4px;padding: 4px;border-radius: 6px"
+            :style="[
+              {
+                border: `1px solid ${$vuetify.theme.themes[appTheme].standardBackgroundRGBA}`,
                 backgroundColor:
                   $vuetify.theme.themes[appTheme].cardBackgroundRGBA
-              }"
-              style="border-radius: 6px"
-              :dark="appTheme === 'dark'"
-              :color="$vuetify.theme.themes[appTheme].accent"
-              :value="type.id"
-              :label="type.title"
-            ></v-radio>
-          </v-radio-group>
-        </div>
-        <div class="pa-2" style="width: 50%;">
-          <v-card-title>Дисциплина</v-card-title>
-          <v-radio-group
-            row
-            hide-details
-            class="ma-0 pa-0"
-            style="border-radius: 6px"
-            :style="{
-              backgroundColor:
-                $vuetify.theme.themes[appTheme].standardBackgroundRGBA
-            }"
-            :key="Math.random()"
-            v-model="competition.structure.selected.discipline"
+              },
+              competition.prev_stages.some(
+                _comp => _comp === _competition.id
+              ) && {
+                border: `1px solid ${$vuetify.theme.themes[appTheme].accent}`
+              }
+            ]"
           >
-            <v-radio
-              class="pa-2 ma-1"
-              v-for="(discipline,
-              d) in competition.structure.disciplines.filter(type => {
-                return competition.structure.types[
-                  competition.structure.selected.type
-                ].disciplines.includes(type.id);
-              })"
-              :key="d"
-              :style="{
-                backgroundColor:
-                  $vuetify.theme.themes[appTheme].cardBackgroundRGBA
-              }"
-              style="border-radius: 6px"
-              :dark="appTheme === 'dark'"
-              :color="$vuetify.theme.themes[appTheme].accent"
-              :value="discipline.id"
-              :label="discipline.title"
-            ></v-radio>
-          </v-radio-group>
-        </div>
-      </div>
+            <div class="title" style="display:flex;align-items: center;">
+              <div style="font-weight: bold">
+                {{ competition.mainData.title.value || "" }}
+              </div>
+              <div
+                style="margin-left: 1rem; padding: 4px 1rem;border-radius: 6px"
+                :style="{
+                  backgroundColor:
+                    $vuetify.theme.themes[appTheme].subjectBackgroundRGBA
+                }"
+              >
+                Этап:&nbsp
+                {{
+                  (_competition.mainData.title.stage.value &&
+                    _competition.mainData.title.stage.value.value) ||
+                    ""
+                }}
+              </div>
+            </div>
+            <div style="display:flex;align-items: center">
+              <div
+                style="font-weight: bold;"
+                :style="{
+                  color: $vuetify.theme.themes[appTheme].standardBackgroundRGBA
+                }"
+              >
+                Comp_id:&nbsp{{ _competition.id }}
+              </div>
+              <v-hover v-slot:default="{ hover }">
+                <v-btn
+                  @click="add_prev_stage(_competition.id)"
+                  icon
+                  style="margin-left: auto"
+                  ><v-icon
+                    v-if="
+                      !competition.prev_stages.some(
+                        _comp => _competition.id === _comp
+                      )
+                    "
+                    :color="
+                      (hover && $vuetify.theme.themes[appTheme].success) ||
+                        $vuetify.theme.themes[appTheme].textDefault
+                    "
+                    >mdi-radiobox-blank</v-icon
+                  ><v-icon
+                    v-else
+                    :color="
+                      (hover && $vuetify.theme.themes[appTheme].textDefault) ||
+                        $vuetify.theme.themes[appTheme].accent
+                    "
+                    >mdi-radiobox-marked</v-icon
+                  ></v-btn
+                ></v-hover
+              >
+            </div>
+          </div>
+        </v-container>
+      </v-card>
+      <!--      <div class="d-flex flex-nowrap">-->
+      <!--        <div class="pa-2" style="width: 50%;">-->
+      <!--          <v-card-title>Вид соревнования</v-card-title>-->
+      <!--          <v-radio-group-->
+      <!--            row-->
+      <!--            hide-details-->
+      <!--            class="ma-0 pa-0"-->
+      <!--            style="border-radius: 6px"-->
+      <!--            :style="{-->
+      <!--              backgroundColor:-->
+      <!--                $vuetify.theme.themes[appTheme].standardBackgroundRGBA-->
+      <!--            }"-->
+      <!--            :key="Math.random()"-->
+      <!--            v-model="competition.structure.selected.type"-->
+      <!--          >-->
+      <!--            <v-radio-->
+      <!--              class="pa-2 ma-1"-->
+      <!--              v-for="(type, t) in competition.structure.types"-->
+      <!--              :key="t"-->
+      <!--              :style="{-->
+      <!--                backgroundColor:-->
+      <!--                  $vuetify.theme.themes[appTheme].cardBackgroundRGBA-->
+      <!--              }"-->
+      <!--              style="border-radius: 6px"-->
+      <!--              :dark="appTheme === 'dark'"-->
+      <!--              :color="$vuetify.theme.themes[appTheme].accent"-->
+      <!--              :value="type.id"-->
+      <!--              :label="type.title"-->
+      <!--            ></v-radio>-->
+      <!--          </v-radio-group>-->
+      <!--        </div>-->
+      <!--        <div class="pa-2" style="width: 50%;">-->
+      <!--          <v-card-title>Дисциплина</v-card-title>-->
+      <!--          <v-radio-group-->
+      <!--            row-->
+      <!--            hide-details-->
+      <!--            class="ma-0 pa-0"-->
+      <!--            style="border-radius: 6px"-->
+      <!--            :style="{-->
+      <!--              backgroundColor:-->
+      <!--                $vuetify.theme.themes[appTheme].standardBackgroundRGBA-->
+      <!--            }"-->
+      <!--            :key="Math.random()"-->
+      <!--            v-model="competition.structure.selected.discipline"-->
+      <!--          >-->
+      <!--            <v-radio-->
+      <!--              class="pa-2 ma-1"-->
+      <!--              v-for="(discipline,-->
+      <!--              d) in competition.structure.disciplines.filter(type => {-->
+      <!--                return competition.structure.types[-->
+      <!--                  competition.structure.selected.type-->
+      <!--                ].disciplines.includes(type.id);-->
+      <!--              })"-->
+      <!--              :key="d"-->
+      <!--              :style="{-->
+      <!--                backgroundColor:-->
+      <!--                  $vuetify.theme.themes[appTheme].cardBackgroundRGBA-->
+      <!--              }"-->
+      <!--              style="border-radius: 6px"-->
+      <!--              :dark="appTheme === 'dark'"-->
+      <!--              :color="$vuetify.theme.themes[appTheme].accent"-->
+      <!--              :value="discipline.id"-->
+      <!--              :label="discipline.title"-->
+      <!--            ></v-radio>-->
+      <!--          </v-radio-group>-->
+      <!--        </div>-->
+      <!--      </div>-->
       <div class="pa-2 d-flex flex-column">
         <v-card-title>Точность результа</v-card-title>
         <div style="width: 100%;">
@@ -112,8 +205,8 @@
               competition.result_formula.type
             ].get_result(competition.stuff.judges)
           "
-          >Формула подстчёта заезда</v-card-title
-        >
+          >Формула подстчёта заезда
+        </v-card-title>
         <div class="d-flex flex-column" style="border-radius: 6px">
           <div class="d-flex flex-nowrap">
             <div class="mr-2 d-flex" style="width: 50%;min-height: 100px">
@@ -156,8 +249,9 @@
                               $vuetify.theme.themes[appTheme].accent
                           }
                         ]"
-                      ></div></div
-                  ></v-hover>
+                      ></div>
+                    </div>
+                  </v-hover>
                 </div>
                 <div class="mt-1 d-flex flex-nowrap flex-grow-1">
                   <div class="d-flex flex-column flex-grow-1">
@@ -226,8 +320,9 @@
                           <div
                             class="ml-1 font-weight-bold"
                             v-html="formula.title"
-                          ></div></div
-                      ></v-hover>
+                          ></div>
+                        </div>
+                      </v-hover>
                     </div>
                   </div>
                   <div
@@ -333,21 +428,22 @@
                               $vuetify.theme.themes[appTheme].accent
                           }
                         ]"
-                      ></div
-                    ></v-hover>
+                      ></div>
+                    </v-hover>
                   </div>
                 </div>
                 <div class="pa-1 d-flex flex-column" style="min-height: 100px">
-                  <v-dialog v-model="section_dialog.state" width="420px"
-                    ><template v-slot:activator="{ on }"
-                      ><v-btn
+                  <v-dialog v-model="section_dialog.state" width="420px">
+                    <template v-slot:activator="{ on }">
+                      <v-btn
                         v-on="on"
                         text
                         small
                         :color="$vuetify.theme.themes[appTheme].success"
                         v-html="`Добавить секцию`"
-                      ></v-btn></template
-                    ><v-card
+                      ></v-btn>
+                    </template>
+                    <v-card
                       :style="{
                         color: $vuetify.theme.themes[appTheme].textDefault,
                         backgroundColor:
@@ -355,8 +451,8 @@
                       }"
                       class="d-flex flex-column"
                     >
-                      <v-card-title class="pa-2 d-flex align-center"
-                        ><div v-html="`Создание секции`"></div>
+                      <v-card-title class="pa-2 d-flex align-center">
+                        <div v-html="`Создание секции`"></div>
                         <v-spacer></v-spacer>
                         <v-btn
                           icon
@@ -367,9 +463,10 @@
                             }
                           "
                           :color="$vuetify.theme.themes[appTheme].action_red"
-                          ><v-icon>mdi-close</v-icon></v-btn
-                        ></v-card-title
-                      >
+                        >
+                          <v-icon>mdi-close</v-icon>
+                        </v-btn>
+                      </v-card-title>
                       <div class="pa-2 d-flex flex-column">
                         <div class="pa-1 d-flex align-center">
                           <div class="pa-2 d-flex align-center">
@@ -492,11 +589,11 @@
                               })()
                           "
                           :color="$vuetify.theme.themes[appTheme].success"
-                          >Создать</v-btn
-                        >
+                          >Создать
+                        </v-btn>
                       </v-card-actions>
-                    </v-card></v-dialog
-                  >
+                    </v-card>
+                  </v-dialog>
                   <div class="d-flex align-center align-start">
                     <div
                       class="pa-1"
@@ -527,8 +624,8 @@
                             "
                             small
                             :color="$vuetify.theme.themes[appTheme].action_red"
-                            >mdi-close</v-icon
-                          >
+                            >mdi-close
+                          </v-icon>
                         </div>
                         <div class="d-flex align-center flex-nowrap">
                           <div class="font-weight-bold" v-html="`Kоэф`"></div>
@@ -664,8 +761,8 @@
                       competition.result_formula.overall_result.select_heats
                         .heats--
                   "
-                  >mdi-chevron-left</v-icon
-                >
+                  >mdi-chevron-left
+                </v-icon>
                 <div
                   class="pa-1 font-weight-bold"
                   style="font-size: 1.2rem;"
@@ -683,8 +780,8 @@
                     competition.result_formula.overall_result.select_heats
                       .heats++
                   "
-                  >mdi-chevron-right</v-icon
-                >
+                  >mdi-chevron-right
+                </v-icon>
               </div>
               <v-spacer></v-spacer>
               <div
@@ -716,10 +813,19 @@
 
 <script>
 import { mapGetters } from "vuex";
+
 export default {
   name: "results",
   methods: {
-    log: data => console.log(data)
+    log: data => console.log(data),
+    add_prev_stage(stage) {
+      if (!this.competition.prev_stages.some(_comp => _comp === stage))
+        this.competition.prev_stages.push(stage);
+      else
+        this.competition.prev_stages = this.competition.prev_stages.filter(
+          _stage => _stage !== stage
+        );
+    }
   },
   data() {
     return {
@@ -733,7 +839,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters("main", ["competition", "appTheme"])
+    ...mapGetters("main", ["competition", "competitions", "appTheme"])
   }
 };
 </script>
