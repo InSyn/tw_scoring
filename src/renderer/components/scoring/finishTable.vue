@@ -48,11 +48,6 @@
             ></v-col>
             <v-col
               class="d-flex justify-center align-center"
-              style="max-width: 8rem"
-              v-html="`Пол`"
-            ></v-col>
-            <v-col
-              class="d-flex justify-center align-center"
               style="max-width: 5rem"
               v-for="(race, r) in competition.races"
               :key="r"
@@ -70,20 +65,14 @@
             style="position: absolute; left: 0;right: 0;top: 32px;height: calc(100% - 32px); overflow-y: auto"
           >
             <v-hover
-              v-for="competitor in competition.selected_race.finished.map(
-                _comp => {
-                  return competition.competitorsSheet.competitors.find(comp => {
-                    return comp.id === _comp;
-                  });
-                }
-              )"
-              :key="competitor.id"
+              v-for="competitor in sortedFinishedList"
+              :key="`finished_${competitor.id}`"
               v-slot:default="{ hover }"
             >
               <v-row
                 no-gutters
                 class="pa-1"
-                style="height: 32px"
+                style="height: 2rem;border-radius: 6px "
                 :style="[
                   hover
                     ? appTheme === 'dark'
@@ -98,8 +87,8 @@
                 <v-col
                   class="d-flex justify-center align-center"
                   style="max-width: 5rem"
-                  v-html="`#`"
-                ></v-col>
+                  >{{ (competitor.rank && competitor.rank) || 0 }}</v-col
+                >
                 <v-col
                   class="d-flex justify-center align-center"
                   style="max-width: 5rem"
@@ -111,11 +100,6 @@
                   v-html="
                     `${competitor.info_data.surname} ${competitor.info_data.name}`
                   "
-                ></v-col>
-                <v-col
-                  class="d-flex justify-center align-center"
-                  style="max-width: 8rem"
-                  v-html="`${competitor.info_data.gender}`"
                 ></v-col>
                 <v-col
                   class="d-flex justify-center align-center"
@@ -227,7 +211,37 @@ export default {
     };
   },
   computed: {
-    ...mapGetters("main", ["competition", "appTheme"])
+    ...mapGetters("main", ["competition", "appTheme"]),
+    sortedFinishedList() {
+      let list = this.competition.selected_race.finished
+        .map(_comp => {
+          return this.competition.competitorsSheet.competitors.find(comp => {
+            return comp.id === _comp;
+          });
+        })
+        .sort((c1, c2) => {
+          return (
+            this.competition.result_formula.overall_result.types
+              .find(_f => {
+                return (
+                  _f.id === this.competition.result_formula.overall_result.type
+                );
+              })
+              .result(c2.id) -
+            this.competition.result_formula.overall_result.types
+              .find(_f => {
+                return (
+                  _f.id === this.competition.result_formula.overall_result.type
+                );
+              })
+              .result(c1.id)
+          );
+        });
+      list.forEach((_comp, c_idx) => {
+        _comp.rank = c_idx + 1;
+      });
+      return list;
+    }
   }
 };
 </script>

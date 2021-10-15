@@ -481,8 +481,15 @@ export default {
                 Math.round(30 + Math.random() * 70)
               )
             );
+          if (
+            !this.competition.selected_race.finished.some(f_comp => {
+              return f_comp === _comp.id;
+            })
+          )
+            this.publishResult(_comp.id);
         });
       });
+      this.competition.selected_race.selectedCompetitor = null;
       this.socket &&
         this.socket.connected &&
         this.socket.emit("set_competition_data", this.competition, res => {
@@ -498,7 +505,7 @@ export default {
         (() => {
           this.socket.emit("set_selected_competitor", [
             [
-              this.competition.selected_race.onStart[competitor].id,
+              this.competition.selected_race.startList[competitor].id,
               this.competition.selected_race_id
             ],
             this.competition
@@ -511,6 +518,17 @@ export default {
         return _comp.id === competitor;
       }).res_accepted = false;
       this.competition.selected_race.onTrack = null;
+      if (
+        this.competition.selected_race.startList.some(_comp => {
+          return _comp === competitor;
+        })
+      ) {
+        this.competition.selected_race.startList = this.competition.selected_race.startList.filter(
+          _comp => {
+            return _comp !== competitor;
+          }
+        );
+      }
       this.socket &&
         this.socket.connected &&
         (() => {

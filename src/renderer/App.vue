@@ -19,7 +19,7 @@
         icon
         ><v-icon
           v-html="showMenu ? 'mdi-backburger' : 'mdi-menu'"
-        ></v-icon> </v-btn
+        ></v-icon></v-btn
       ><v-hover v-slot:default="{ hover }">
         <v-btn
           class="d-flex justify-start align-center ml-4"

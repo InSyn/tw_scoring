@@ -193,7 +193,6 @@
             <!--              type="text"-->
             <!--            />-->
           </div>
-
           <input
             v-if="md === 'discipline'"
             @focus="competition.mainData[md].focus = true"
@@ -210,7 +209,7 @@
           />
           <span
             class="d-block"
-            style="position:absolute; bottom: 0;left: 0; width: 100%; height: 2px; transform-origin: left; transition: transform 192ms"
+            style="position:absolute; bottom: 0;left: 2px; width: calc(100% - 4px);border-bottom-left-radius: 50%; border-bottom-right-radius: 50%;height: 2px; transform-origin: left; transition: transform 192ms"
             :style="[
               { backgroundColor: $vuetify.theme.themes[appTheme].accent },
               competition.mainData[md].focus
