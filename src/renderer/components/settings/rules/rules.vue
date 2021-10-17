@@ -28,7 +28,7 @@
           <div
             v-for="_competition in competitions"
             :key="_competition.id"
-            style="margin: 4px 0 4px 4px;padding: 4px;border-radius: 6px"
+            style="margin: 4px 0 4px 4px;padding: 4px;border-radius: 6px;transition: border .172s"
             :style="[
               {
                 border: `1px solid ${$vuetify.theme.themes[appTheme].standardBackgroundRGBA}`,
@@ -47,11 +47,18 @@
                 {{ competition.mainData.title.value || "" }}
               </div>
               <div
-                style="margin-left: 1rem; padding: 4px 1rem;border-radius: 6px"
-                :style="{
-                  backgroundColor:
-                    $vuetify.theme.themes[appTheme].subjectBackgroundRGBA
-                }"
+                style="margin-left: 1rem; padding: 4px 1rem;border-radius: 6px;transition: background-color .172s"
+                :style="[
+                  {
+                    backgroundColor:
+                      $vuetify.theme.themes[appTheme].subjectBackgroundRGBA
+                  },
+                  competition.prev_stages.some(
+                    _comp => _comp === _competition.id
+                  ) && {
+                    backgroundColor: $vuetify.theme.themes[appTheme].accent
+                  }
+                ]"
               >
                 Этап:&nbsp
                 {{
