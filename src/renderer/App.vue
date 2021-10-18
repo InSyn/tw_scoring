@@ -61,7 +61,7 @@
         v-if="appTheme === 'light'"
         src="./assets/logo/SCORING-DARK.png"
         class="mr-8"
-        style="height: 100%;"
+        style="height: 100%;user-select: none"
         draggable="false"
         alt=""
       />
@@ -69,7 +69,7 @@
         v-else
         src="./assets/logo/SCORING-LIGHT.png"
         class="mr-8"
-        style="height: 100%;"
+        style="height: 100%;user-select: none"
         draggable="false"
         alt=""
       />

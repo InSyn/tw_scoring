@@ -39,10 +39,6 @@ export default {
         stages: [
           { id: "qual", title: "Квалификация", value: "Квалификация" },
           { id: "final", title: "Финал", value: "Финал" },
-          { id: "s_fin", title: "Малый Финал", value: "Малый Финал" },
-          { id: "l_fin", title: "Большой Финал", value: "Большой Финал" },
-          { id: "fin_a", title: "Финал A", value: "Финал A" },
-          { id: "fin_b", title: "Финал B", value: "Финал B" },
           { id: "custom", title: "Пользовательский", value: "" }
         ]
       };
@@ -52,6 +48,7 @@ export default {
         return Math.round(acc * val) / acc;
       }
       prev_stages = [];
+      passed_competitors = 0;
       races = [];
       selected_race_id = 0;
       get selected_race() {
@@ -149,6 +146,36 @@ export default {
         ],
         competitors: []
       };
+      getSortedByRank(competitors) {
+        return competitors.sort((c1, c2) => {
+          return (
+            this.result_formula.overall_result.types
+              .find(_f => {
+                return _f.id === this.result_formula.overall_result.type;
+              })
+              .result(c2.id) -
+            this.result_formula.overall_result.types
+              .find(_f => {
+                return _f.id === this.result_formula.overall_result.type;
+              })
+              .result(c1.id)
+          );
+        });
+      }
+      get passedCompetitors() {
+        if (this.races && this.races[this.races.length - 1]) {
+          return this.races[this.races.length - 1].finished.length >=
+            this.passed_competitors && this.passed_competitors > 0
+            ? this.getSortedByRank(
+                this.races[this.races.length - 1].finished.map(_comp =>
+                  this.competitorsSheet.competitors.find(
+                    _competitor => _competitor.id === _comp
+                  )
+                )
+              ).splice(0, this.passed_competitors)
+            : [];
+        } else return [];
+      }
       media_settings = {
         display: {
           modes: [

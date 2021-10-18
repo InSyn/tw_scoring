@@ -526,9 +526,7 @@
             </div>
           </div>
         </div>
-
         <!-- Divider -->
-
         <div
           v-if="
             paginated_results.length > 0 && p_idx < paginated_results.length - 1

@@ -21,16 +21,16 @@
                 }
               ]"
             >
-              <div>Загрузить из файла</div>
               <v-icon
                 :style="[
-                  { color: $vuetify.theme.themes[appTheme].success },
+                  { color: $vuetify.theme.themes[appTheme].textDefault },
                   hover && {
                     color: $vuetify.theme.themes[appTheme].textDefault
                   }
                 ]"
                 >mdi-arrow-down-bold</v-icon
               >
+              <div>Загрузить из файла</div>
             </div></v-hover
           >
         </label>
@@ -42,11 +42,22 @@
           @change="load_sheet($event)"
         />
 
-        <v-btn :color="$vuetify.theme.themes[appTheme].action_blue" text
-          >Загрузить из соревования<v-icon>mdi-view-list</v-icon></v-btn
+        <v-btn
+          @click="load_prev_stages()"
+          :color="$vuetify.theme.themes[appTheme].action_blue"
+          text
+          ><v-icon
+            :color="$vuetify.theme.themes[appTheme].textDefault"
+            style="margin-right: .4rem"
+            >mdi-page-previous</v-icon
+          >Из предыдущего этапа</v-btn
         >
         <v-btn :color="$vuetify.theme.themes[appTheme].action_yellow" text
-          >Экспорт<v-icon>mdi-arrow-right-bold</v-icon></v-btn
+          ><v-icon
+            :color="$vuetify.theme.themes[appTheme].textDefault"
+            style="margin-right: .4rem"
+            >mdi-arrow-right-bold</v-icon
+          >Экспорт</v-btn
         ></v-row
       >
       <div style="position:relative; border-radius: 6px; overflow: hidden">
@@ -503,6 +514,25 @@
         </div>
       </div>
     </div>
+    <div
+      v-for="prev_stage in competition.prev_stages &&
+        competition.prev_stages.map(_comp => {
+          return competitions.find(_competition => _competition.id === _comp);
+        })"
+      :key="prev_stage.id"
+    >
+      <div v-for="passed in prev_stage.passedCompetitors" :key="passed.id">
+        {{
+          `${passed.rank} ${
+            passed.info_data.bib
+          }: ${prev_stage.result_formula.overall_result.types
+            .find(_f => {
+              return _f.id === prev_stage.result_formula.overall_result.type;
+            })
+            .result(passed.id)}`
+        }}
+      </div>
+    </div>
   </v-container>
 </template>
 
@@ -513,20 +543,20 @@ import xslx from "read-excel-file/node";
 export default {
   name: "competitors",
   mounted() {
-    if (
-      this.competition &&
-      this.competition.competitorsSheet.competitors.length < 1
-    )
-      this.load_sheet({
-        target: {
-          files: [
-            {
-              path:
-                "C:\\Users\\insyn\\Documents\\GitHub\\tw_scoring\\temp_assets\\TestList.xlsx"
-            }
-          ]
-        }
-      });
+    // if (
+    //   this.competition &&
+    //   this.competition.competitorsSheet.competitors.length < 1
+    // )
+    //   this.load_sheet({
+    //     target: {
+    //       files: [
+    //         {
+    //           path:
+    //             "C:\\Users\\insyn\\Documents\\GitHub\\tw_scoring\\temp_assets\\TestList.xlsx"
+    //         }
+    //       ]
+    //     }
+    //   });
   },
   methods: {
     log: data => {
@@ -601,6 +631,20 @@ export default {
         this.socket.emit("set_competition_data", this.competition, res => {
           return res;
         });
+    },
+    load_prev_stages() {
+      let compArr = [];
+      compArr.push(
+        ...this.competition.prev_stages
+          .map(_comp =>
+            this.competitions.find(_competition => _competition.id === _comp)
+          )
+          .map(_stage => _stage.passedCompetitors)
+      );
+      this.competition.competitorsSheet.competitors = [];
+      compArr.forEach(arr =>
+        this.competition.competitorsSheet.competitors.push(...arr)
+      );
     },
     clearSheet() {
       this.competition.competitorsSheet.competitors = this.competition.competitorsSheet.competitors.filter(
@@ -743,7 +787,12 @@ export default {
     };
   },
   computed: {
-    ...mapGetters("main", ["appTheme", "competition", "socket"]),
+    ...mapGetters("main", [
+      "appTheme",
+      "competitions",
+      "competition",
+      "socket"
+    ]),
     ...mapGetters("roles", ["CompetitorClass", "MarkClass"])
   }
 };

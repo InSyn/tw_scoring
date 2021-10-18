@@ -1,5 +1,5 @@
 <template>
-  <v-container style="" v-if="competition">
+  <v-container style="min-width: 760px" v-if="competition">
     <v-card
       class="pa-2"
       :style="{
@@ -19,14 +19,16 @@
           Управление этапами
         </v-card-title>
         <v-container
-          style="display:flex;flex-wrap: wrap;align-items: center;border-radius: 6px;padding: 0;"
+          style="display:flex;flex-wrap: wrap;align-items: center;min-height: 4rem;border-radius: 6px;padding: 0;"
           :style="{
             backgroundColor:
               $vuetify.theme.themes[appTheme].standardBackgroundRGBA
           }"
         >
           <div
-            v-for="_competition in competitions"
+            v-for="_competition in competitions.filter(
+              _comp => _comp.id !== competition.id
+            )"
             :key="_competition.id"
             style="margin: 4px 0 4px 4px;padding: 4px;border-radius: 6px;transition: border .172s"
             :style="[
@@ -47,7 +49,7 @@
                 {{ competition.mainData.title.value || "" }}
               </div>
               <div
-                style="margin-left: 1rem; padding: 4px 1rem;border-radius: 6px;transition: background-color .172s"
+                style="margin-left: 1rem; padding: 2px;border-radius: 6px;transition: background-color .172s"
                 :style="[
                   {
                     backgroundColor:
@@ -60,46 +62,79 @@
                   }
                 ]"
               >
-                Этап:&nbsp
-                {{
-                  (_competition.mainData.title.stage.value &&
-                    _competition.mainData.title.stage.value.value) ||
-                    ""
-                }}
+                <div style="padding: 2px 1rem">
+                  Этап:&nbsp
+                  {{
+                    (_competition.mainData.title.stage.value &&
+                      _competition.mainData.title.stage.value.value) ||
+                      ""
+                  }}
+                </div>
               </div>
             </div>
-            <div style="display:flex;align-items: center">
+            <div style="display:flex;flex-wrap: nowrap;align-items: center">
               <div
-                style="font-weight: bold;"
+                style="display: flex;align-items: center;flex-wrap: nowrap;overflow:hidden;transform: scaleX(0);border-radius: 6px;transform-origin:left;transition: background-color .172s, color .172s,transform .112s"
+                :style="[
+                  {
+                    backgroundColor:
+                      $vuetify.theme.themes[appTheme].subjectBackgroundRGBA
+                  },
+                  competition.prev_stages.some(
+                    _comp => _comp === _competition.id
+                  ) && {
+                    transform: 'scaleX(1)',
+                    padding: `4px .5rem`,
+                    backgroundColor: $vuetify.theme.themes[appTheme].accent
+                  }
+                ]"
+              >
+                <div style="overflow:hidden;white-space: nowrap">
+                  Кол-во прошедших
+                </div>
+                <input
+                  type="number"
+                  style="padding: 2px 4px;margin-left: .4rem; width: 4rem;font-weight: bold;border-radius: 6px"
+                  :style="{
+                    backgroundColor:
+                      $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
+                    color: $vuetify.theme.themes[appTheme].textDefault
+                  }"
+                  v-model="
+                    competitions.find(_comp => _comp.id === _competition.id)
+                      .passed_competitors
+                  "
+                />
+              </div>
+              <div
+                style="font-weight: bold;margin-left: auto;"
                 :style="{
                   color: $vuetify.theme.themes[appTheme].standardBackgroundRGBA
                 }"
               >
                 Comp_id:&nbsp{{ _competition.id }}
               </div>
+
               <v-hover v-slot:default="{ hover }">
-                <v-btn
-                  @click="add_prev_stage(_competition.id)"
-                  icon
-                  style="margin-left: auto"
+                <v-btn @click="add_prev_stage(_competition.id)" icon
                   ><v-icon
                     v-if="
-                      !competition.prev_stages.some(
+                      competition.prev_stages.some(
                         _comp => _competition.id === _comp
                       )
                     "
-                    :color="
-                      (hover && $vuetify.theme.themes[appTheme].success) ||
-                        $vuetify.theme.themes[appTheme].textDefault
-                    "
-                    >mdi-radiobox-blank</v-icon
-                  ><v-icon
-                    v-else
                     :color="
                       (hover && $vuetify.theme.themes[appTheme].textDefault) ||
                         $vuetify.theme.themes[appTheme].accent
                     "
                     >mdi-radiobox-marked</v-icon
+                  ><v-icon
+                    v-else
+                    :color="
+                      (hover && $vuetify.theme.themes[appTheme].accent) ||
+                        $vuetify.theme.themes[appTheme].textDefault
+                    "
+                    >mdi-radiobox-blank</v-icon
                   ></v-btn
                 ></v-hover
               >

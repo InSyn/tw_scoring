@@ -465,29 +465,35 @@ export default {
   methods: {
     pushMarks() {
       this.competition.stuff.judges.forEach(_judge => {
-        this.competition.competitorsSheet.competitors.forEach(_comp => {
-          !_comp.marks.some(_mark => {
-            return (
-              _mark.judge === _judge.id &&
-              _mark.race_id === this.competition.selected_race.id
-            );
-          }) &&
-            _comp.marks.push(
-              new this.MarkClass(
-                this.competition.selected_race_id,
-                this.competition.selected_race.id,
-                _judge.id,
-                _judge._id,
-                Math.round(30 + Math.random() * 70)
-              )
-            );
-          if (
-            !this.competition.selected_race.finished.some(f_comp => {
-              return f_comp === _comp.id;
-            })
+        this.competition.selected_race.startList
+          .map(_comp =>
+            this.competition.competitorsSheet.competitors.find(
+              _competitor => _competitor.id === _comp
+            )
           )
-            this.publishResult(_comp.id);
-        });
+          .forEach(_comp => {
+            !_comp.marks.some(_mark => {
+              return (
+                _mark.judge === _judge.id &&
+                _mark.race_id === this.competition.selected_race.id
+              );
+            }) &&
+              _comp.marks.push(
+                new this.MarkClass(
+                  this.competition.selected_race_id,
+                  this.competition.selected_race.id,
+                  _judge.id,
+                  _judge._id,
+                  Math.round(30 + Math.random() * 70)
+                )
+              );
+            if (
+              !this.competition.selected_race.finished.some(f_comp => {
+                return f_comp === _comp.id;
+              })
+            )
+              this.publishResult(_comp.id);
+          });
       });
       this.competition.selected_race.selectedCompetitor = null;
       this.socket &&

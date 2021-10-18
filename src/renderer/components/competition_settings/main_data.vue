@@ -133,7 +133,7 @@
               tabindex="0"
               @focus="stage_selector = true"
               @blur="stage_selector = false"
-              style="position:relative;flex: 1 0 auto;height: 100%;border-radius: 6px;margin-left: 1rem;outline: none;cursor:pointer;overflow:visible"
+              style="position:relative;flex: 1 0 auto;height: 100%;border-radius: 6px;margin-left: .5rem;outline: none;cursor:pointer;overflow:visible"
               :style="{
                 color: $vuetify.theme.themes[appTheme].textDefault,
                 backgroundColor:

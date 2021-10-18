@@ -5,37 +5,16 @@
     v-if="competition"
   >
     <div
-      style="display:flex;align-items:center;width:100%;padding:4px 4px;flex-wrap:nowrap"
+      style="display:flex;width:100%;flex-wrap:nowrap"
       :style="{
-        backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
-        borderTop: `2px solid ${$vuetify.theme.themes[appTheme].standardBackgroundRGBA}`
+        backgroundColor: $vuetify.theme.themes[appTheme].standardBackgroundRGBA
       }"
     >
-      <v-hover v-slot:default="{ hover }"
-        ><v-btn
-          @click="$store.commit('main/createCompetition', new EventClass())"
-          style="display:flex; align-items: center; flex-shrink: 0; height: 2rem; margin-right: 2rem; padding: 4px 8px; border-radius: 0 6px 6px 0; font-weight:bold; transition: background-color 112ms, color 112ms; cursor:pointer;letter-spacing: .08rem"
-          :style="[
-            {
-              backgroundColor: $vuetify.theme.themes[appTheme].accent,
-              color: $vuetify.theme.themes[appTheme].textDefault
-            },
-            hover && {
-              backgroundColor: $vuetify.theme.themes[appTheme].accent_light
-            }
-          ]"
-        >
-          <div
-            style="height: .5rem;width: .5rem;margin-right: .5rem;"
-            :style="{
-              backgroundColor: $vuetify.theme.themes[appTheme].textDefault
-            }"
-          ></div>
-          Добавить соревнование
-        </v-btn></v-hover
-      >
       <div
         style="display:flex;align-items:center;flex-wrap: wrap;padding: 6px 8px"
+        :style="{
+          backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA
+        }"
       >
         <v-hover
           v-slot:default="{ hover }"
@@ -44,7 +23,7 @@
         >
           <div
             @click="$store.commit('main/setCompetition', current_competition)"
-            style="flex-shrink: 0;padding: 4px 8px;margin: 2px .4rem;cursor:pointer;border-radius: 6px;transition: color .112s, background-color .112s, transform .172s"
+            style="flex-shrink: 0;padding: 2px .8rem;margin: 2px .4rem;cursor:pointer;border-radius: 6px;transition: color .112s, background-color .112s, transform .172s"
             :style="[
               {
                 backgroundColor: $vuetify.theme.themes[appTheme].accent
@@ -54,13 +33,75 @@
               },
               current_competition.id === competition.id && {
                 backgroundColor: $vuetify.theme.themes[appTheme].success,
-                color: $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
-                transform: `translateY(4px)`
+                color: $vuetify.theme.themes[appTheme].standardBackgroundRGBA
               }
             ]"
           >
-            {{ current_competition.mainData.title.value }}
+            <div style="display:flex;flex-direction: column">
+              <div style="flex: 0 0 auto;font-weight: bold;font-size: .9rem">
+                {{ current_competition.mainData.title.value }}
+              </div>
+              <div style="flex: 0 0 auto;margin-left: auto; font-size: .8rem">
+                {{ current_competition.mainData.title.stage.value.value }}
+              </div>
+            </div>
           </div></v-hover
+        >
+      </div>
+      <div
+        style="display:flex;flex-wrap: nowrap;min-height: 100%;margin-left: auto"
+      >
+        <v-dialog
+          width="760"
+          v-model="create_competition_dialog.state"
+          @keydown.enter="createCompetition()"
+          :overlay-color="$vuetify.theme.themes[appTheme].accent"
+          :overlay-opacity="0.1"
+          ><template v-slot:activator="{ on, attrs }"
+            ><v-hover v-slot:default="{ hover }"
+              ><div
+                v-on="on"
+                style="position:relative;display:flex;align-items: center;padding: 4px .5rem;height: 100%;cursor: pointer;user-select: none;font-weight: bold"
+                :style="{
+                  backgroundColor: $vuetify.theme.themes[appTheme].success,
+                  color: $vuetify.theme.themes[appTheme].textDefault
+                }"
+              >
+                <div
+                  style="white-space: nowrap;padding: 4px .5rem;font-size: 1.2rem;transition: background-color 96ms, color 96ms"
+                  :style="
+                    hover && {
+                      color: $vuetify.theme.themes[appTheme].cardBackgroundRGBA
+                    }
+                  "
+                >
+                  Создать соревнование
+                </div>
+              </div></v-hover
+            ></template
+          >
+          <div
+            :style="{
+              backgroundColor:
+                $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
+              color: $vuetify.theme.themes[appTheme].textDefault
+            }"
+          >
+            <v-card-title>Создание соревнования</v-card-title>
+            <v-card-actions
+              style="display:flex;align-items: center;justify-content: flex-end;flex-wrap: nowrap"
+              ><v-btn
+                text
+                @click="create_competition_dialog.state = false"
+                :color="$vuetify.theme.themes[appTheme].error"
+                >Отмена</v-btn
+              ><v-btn
+                @click="createCompetition()"
+                :color="$vuetify.theme.themes[appTheme].success"
+                >Создать</v-btn
+              ></v-card-actions
+            >
+          </div></v-dialog
         >
       </div>
     </div>
@@ -128,6 +169,23 @@ export default {
     track_parameters,
     sponsors,
     weather
+  },
+  methods: {
+    createCompetition() {
+      this.$store.commit("main/createCompetition", new this.EventClass());
+      this.create_competition_dialog.state = false;
+    }
+  },
+  data() {
+    return {
+      create_competition_dialog: {
+        state: false,
+        data: {
+          title: "Новое соревнование",
+          stage: ""
+        }
+      }
+    };
   },
   computed: {
     ...mapGetters("main", ["competition", "competitions", "appTheme"]),
