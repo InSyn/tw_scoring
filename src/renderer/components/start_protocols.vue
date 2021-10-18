@@ -47,7 +47,7 @@
             :key="r"
           >
             <v-dialog v-model="race.del_dialog" width="320px"
-              ><template v-slot:activator="{ on }">
+              ><template v-slot:activator="{ on, attrs }">
                 <v-hover v-slot:default="{ hover }">
                   <div
                     v-on="on"
@@ -105,7 +105,21 @@
           icon
           :color="$vuetify.theme.themes[appTheme].accent"
           ><v-icon>mdi-chevron-double-right</v-icon></v-btn
-        ><v-dialog width="720" persistent v-model="dialogs.create_race.state">
+        ><v-dialog
+          width="720"
+          v-model="dialogs.create_race.state"
+          @keydown.enter="
+            create_race(
+              dialogs.create_race.title,
+              competition.structure.types[competition.structure.selected.type],
+              competition.structure.disciplines[
+                competition.structure.selected.discipline
+              ],
+              dialogs.create_race.competitors
+            )
+          "
+          persistent
+        >
           <template v-slot:activator="{ on }">
             <v-btn
               v-on="on"

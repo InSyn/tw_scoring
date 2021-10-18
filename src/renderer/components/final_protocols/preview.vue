@@ -567,6 +567,7 @@ export default {
         competitor.race_status
       );
     });
+    console.log(this.results);
     this.results = this.results.sort((c1, c2) => {
       if (c1.race_status) {
         return 1;

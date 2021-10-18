@@ -23,7 +23,7 @@
         >
           <div
             @click="$store.commit('main/setCompetition', current_competition)"
-            style="flex-shrink: 0;padding: 2px .8rem;margin: 2px .4rem;cursor:pointer;border-radius: 6px;transition: color .112s, background-color .112s, transform .172s"
+            style="flex-shrink: 0;padding: 2px .8rem;margin: 2px .4rem;cursor:pointer;border-radius: 6px;transition:background-color .112s, box-shadow .256s, color .112s"
             :style="[
               {
                 backgroundColor: $vuetify.theme.themes[appTheme].accent
@@ -33,12 +33,16 @@
               },
               current_competition.id === competition.id && {
                 backgroundColor: $vuetify.theme.themes[appTheme].success,
-                color: $vuetify.theme.themes[appTheme].standardBackgroundRGBA
+                color: $vuetify.theme.themes[appTheme].subjectBackgroundRGBA,
+                boxShadow: `0 0 4px 1px ${$vuetify.theme.themes[appTheme].success}`
               }
             ]"
           >
             <div style="display:flex;flex-direction: column">
-              <div style="flex: 0 0 auto;font-weight: bold;font-size: .9rem">
+              <div
+                style="flex: 0 0 auto;font-weight: bold;font-size: .9rem"
+                :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
+              >
                 {{ current_competition.mainData.title.value }}
               </div>
               <div style="flex: 0 0 auto;margin-left: auto; font-size: .8rem">
@@ -68,7 +72,7 @@
                 }"
               >
                 <div
-                  style="white-space: nowrap;padding: 4px .5rem;font-size: 1.2rem;transition: background-color 96ms, color 96ms"
+                  style="white-space: nowrap;padding: 4px .5rem;font-size: 1.2rem;transition: background-color 72ms, color 72ms"
                   :style="
                     hover && {
                       color: $vuetify.theme.themes[appTheme].cardBackgroundRGBA

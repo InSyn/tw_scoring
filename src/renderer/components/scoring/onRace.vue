@@ -315,7 +315,7 @@
                           })
                           .marks.find(mark => {
                             return (
-                              mark.judge === judge.id &&
+                              mark.judge_id === judge._id &&
                               mark.race === competition.selected_race_id
                             );
                           }) &&
@@ -328,7 +328,7 @@
                           })
                           .marks.find(mark => {
                             return (
-                              mark.judge === judge.id &&
+                              mark._id === judge._id &&
                               mark.race === competition.selected_race_id
                             );
                           }).value) ||
@@ -464,7 +464,7 @@ export default {
   name: "onRace",
   methods: {
     pushMarks() {
-      this.competition.stuff.judges.forEach(_judge => {
+      this.competition.stuff.judges.forEach((_judge, j_idx) => {
         this.competition.selected_race.startList
           .map(_comp =>
             this.competition.competitorsSheet.competitors.find(
@@ -472,12 +472,13 @@ export default {
             )
           )
           .forEach(_comp => {
-            !_comp.marks.some(_mark => {
-              return (
-                _mark.judge === _judge.id &&
-                _mark.race_id === this.competition.selected_race.id
-              );
-            }) &&
+            if (
+              !_comp.marks.some(
+                _mark =>
+                  _mark.race_id === this.competition.selected_race.id &&
+                  _mark.judge_id === _judge._id
+              )
+            )
               _comp.marks.push(
                 new this.MarkClass(
                   this.competition.selected_race_id,
@@ -490,12 +491,15 @@ export default {
             if (
               !this.competition.selected_race.finished.some(f_comp => {
                 return f_comp === _comp.id;
-              })
-            )
+              }) &&
+              this.competition.stuff.judges.length - 1 === j_idx
+            ) {
               this.publishResult(_comp.id);
+            }
           });
       });
       this.competition.selected_race.selectedCompetitor = null;
+      console.log(this.competition.competitorsSheet.competitors);
       this.socket &&
         this.socket.connected &&
         this.socket.emit("set_competition_data", this.competition, res => {
