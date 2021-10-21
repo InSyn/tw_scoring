@@ -23,7 +23,7 @@
         >
           <div
             @click="$store.commit('main/setCompetition', current_competition)"
-            style="flex-shrink: 0;padding: 2px .8rem;margin: 2px .4rem;cursor:pointer;border-radius: 6px;transition:background-color .112s, box-shadow .256s, color .112s"
+            style="flex-shrink: 0;padding: 2px .8rem;margin: 2px .4rem;cursor:pointer;border-radius: 6px;transition:background-color .112s, color .112s"
             :style="[
               {
                 backgroundColor: $vuetify.theme.themes[appTheme].accent
@@ -33,8 +33,7 @@
               },
               current_competition.id === competition.id && {
                 backgroundColor: $vuetify.theme.themes[appTheme].success,
-                color: $vuetify.theme.themes[appTheme].subjectBackgroundRGBA,
-                boxShadow: `0 0 4px 1px ${$vuetify.theme.themes[appTheme].success}`
+                color: $vuetify.theme.themes[appTheme].subjectBackgroundRGBA
               }
             ]"
           >

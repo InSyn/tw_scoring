@@ -46,7 +46,7 @@ export default {
   name: "settings",
   computed: {
     ...mapGetters("main", ["competition", "appTheme"]),
-    ...mapGetters("settings", ["settingsMenu"])
+    ...mapGetters("settings", { settingsMenu: "settingsMenu" })
   }
 };
 </script>

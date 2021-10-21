@@ -722,8 +722,10 @@ export default {
     }
   },
   computed: {
-    ...mapGetters("main", ["competition", "appTheme"]),
-    ...mapGetters("protocol_settings", ["results_protocol"]),
+    ...mapGetters("main", { competition: "competition", appTheme: "appTheme" }),
+    ...mapGetters("protocol_settings", {
+      results_protocol: "results_protocol"
+    }),
     date_now() {
       const date = new Date()
         .toLocaleString("ru", {

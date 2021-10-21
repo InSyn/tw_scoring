@@ -298,105 +298,104 @@
             backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA
           }"
         >
-          <v-hover
-            v-slot:default="{ hover }"
-            v-for="(row, r) in this.competition.competitorsSheet.competitors"
+          <v-dialog
+            v-for="(row, r) in competition.competitorsSheet.competitors"
             :key="r"
-          >
-            <v-row
-              no-gutters
-              style="position:relative;"
-              :style="[
-                r % 2 === 1 && {
-                  backgroundColor:
-                    $vuetify.theme.themes[appTheme].cardBackgroundRGBA
-                },
-                hover && { backgroundColor: 'rgba(11,110,271,.1)' }
-              ]"
-            >
-              <v-col
-                class="d-flex align-center"
-                v-for="(col, c, indx) in row.info_data"
-                :key="c"
-              >
-                <div
-                  v-if="indx === 0"
-                  style="height: 100%"
-                  class="flex-column align-center justify-center mr-2"
+            v-model="row.info_dialog.state"
+            width="640px"
+            ><template v-slot:activator="{ on }"
+              ><v-hover v-slot:default="{ hover }">
+                <v-row
+                  no-gutters
+                  v-on="on"
+                  style="position:relative;cursor:pointer;outline: none"
+                  tabindex="0"
+                  :style="[
+                    (r % 2 === 1 && {
+                      border: `1px solid ${$vuetify.theme.themes[appTheme].standardBackgroundRGBA}`,
+                      backgroundColor:
+                        $vuetify.theme.themes[appTheme].standardBackgroundRGBA
+                    }) || {
+                      border: `1px solid ${$vuetify.theme.themes[appTheme].cardBackgroundRGBA}`
+                    },
+                    hover && {
+                      backgroundColor:
+                        $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
+                      border: `1px solid ${$vuetify.theme.themes[appTheme].accent}`
+                    }
+                  ]"
                 >
-                  <v-hover v-slot:default="{ hover }">
-                    <div
-                      @click="switchAthlete(r, 'up')"
-                      class="d-flex justify-center"
-                      style="cursor:pointer; height: 50%;"
-                    >
-                      <v-icon
-                        :color="
-                          hover
-                            ? $vuetify.theme.themes[appTheme].accent
-                            : $vuetify.theme.themes[appTheme]
-                                .subjectBackgroundRGBA
-                        "
-                        small
-                        >mdi-chevron-up</v-icon
-                      >
-                    </div></v-hover
-                  ><v-hover v-slot:default="{ hover }">
-                    <div
-                      @click="switchAthlete(r, 'down')"
-                      class="d-flex justify-center"
-                      style="cursor:pointer; height: 50%;"
-                    >
-                      <v-icon
-                        :color="
-                          hover
-                            ? $vuetify.theme.themes[appTheme].accent
-                            : $vuetify.theme.themes[appTheme]
-                                .subjectBackgroundRGBA
-                        "
-                        small
-                        >mdi-chevron-down</v-icon
-                      >
-                    </div></v-hover
+                  <v-col
+                    class="d-flex align-center"
+                    v-for="(col, c, idx) in row.info_data"
+                    :key="c"
                   >
-                </div>
-                <div
-                  class="d-flex align-center"
-                  style="width: 100%;height: 100%;position:relative; transition: background-color 112ms"
-                >
-                  <input
-                    class="pa-1"
-                    @focus="
-                      $event.target.parentNode.childNodes[2].style.transform =
-                        'scaleX(1)'
-                    "
-                    @blur="
-                      $event.target.parentNode.childNodes[2].style.transform =
-                        'scaleX(0)'
-                    "
-                    type="text"
-                    v-model="
-                      competition.competitorsSheet.competitors[r]['info_data'][
-                        c
-                      ]
-                    "
-                    :style="[
-                      { color: $vuetify.theme.themes[appTheme].textDefault }
-                    ]"
-                    style="width: 100%;"
-                  />
-                  <span
-                    class="d-block"
-                    style="position: absolute; bottom: 0; width: 100%; height: 1px; transform-origin: left; transform: scaleX(0)"
-                    :style="[
-                      {
-                        backgroundColor: $vuetify.theme.themes[appTheme].accent
-                      }
-                    ]"
-                  ></span>
-                </div>
-              </v-col> </v-row
-          ></v-hover>
+                    <div
+                      v-if="idx === 0"
+                      style="height: 100%"
+                      class="flex-column align-center justify-center mr-2"
+                    >
+                      <v-hover v-slot:default="{ hover }">
+                        <div
+                          @click.prevent.stop="switchAthlete(r, 'up')"
+                          class="d-flex justify-center"
+                          style="cursor:pointer; height: 50%;"
+                        >
+                          <v-icon
+                            :color="
+                              hover
+                                ? $vuetify.theme.themes[appTheme].accent
+                                : $vuetify.theme.themes[appTheme].textDefault
+                            "
+                            small
+                            >mdi-chevron-up</v-icon
+                          >
+                        </div></v-hover
+                      ><v-hover v-slot:default="{ hover }">
+                        <div
+                          @click.prevent.stop="switchAthlete(r, 'down')"
+                          class="d-flex justify-center"
+                          style="cursor:pointer; height: 50%;"
+                        >
+                          <v-icon
+                            :color="
+                              hover
+                                ? $vuetify.theme.themes[appTheme].accent
+                                : $vuetify.theme.themes[appTheme].textDefault
+                            "
+                            small
+                            >mdi-chevron-down</v-icon
+                          >
+                        </div></v-hover
+                      >
+                    </div>
+                    <div
+                      class="d-flex align-center pa-1"
+                      style="width: 100%;height: 100%;transition: background-color 112ms"
+                    >
+                      {{ col }}
+                    </div>
+                  </v-col>
+                </v-row></v-hover
+              ></template
+            ><v-card
+              :style="{
+                backgroundColor:
+                  $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
+                color: $vuetify.theme.themes[appTheme].textDefault
+              }"
+              ><v-card-title>{{
+                `Данные участника ${(row.info_data["bib"] &&
+                  row.info_data["bib"]) ||
+                  ""} ${(row.info_data["surname"] &&
+                  row.info_data["surname"]) ||
+                  ""} ${(row.info_data["name"] && row.info_data["name"]) || ""}`
+              }}</v-card-title>
+              <div></div>
+              <v-card-actions
+                class="d-flex align-center"
+              ></v-card-actions></v-card
+          ></v-dialog>
         </div>
         <div
           class="pa-2 d-flex align-center justify-center"
@@ -763,7 +762,9 @@ export default {
       }
     },
     deleteCompetitor(id) {
-      this.competition.competitorsSheet.competitors.splice(id, 1);
+      this.competition.competitorsSheet.competitors = this.competition.competitorsSheet.competitors.filter(
+        _comp => _comp.id !== id
+      );
     }
   },
   data() {

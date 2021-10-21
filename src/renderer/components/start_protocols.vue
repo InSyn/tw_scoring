@@ -31,16 +31,15 @@
           </div>
           <div
             @click="race_menu.selected = r"
-            style="position:relative;height: 2.4rem;cursor: pointer;margin: 4px;padding: 8px 2.4rem 8px 1rem;border-radius: 6px;transition: background-color .112s, box-shadow .112s, transform .112s"
+            style="position:relative;height: 2.4rem;font-weight:bold;cursor: pointer;margin: 4px;padding: 8px 2.4rem 8px 1rem;border-radius: 6px;transition: background-color .112s, color .112s"
             class="d-flex justify-center align-center"
             :style="[
               {
                 backgroundColor: $vuetify.theme.themes[appTheme].accent
               },
               r === race_menu.selected && {
-                backgroundColor: $vuetify.theme.themes[appTheme].accent_light,
-                transform: 'scale(1.08)',
-                boxShadow: `inset 0 0 4px 0 ${$vuetify.theme.themes[appTheme].textDefault}`
+                backgroundColor: $vuetify.theme.themes[appTheme].success,
+                color: $vuetify.theme.themes[appTheme].cardBackgroundRGBA
               }
             ]"
             v-for="(race, r) in competition.races"
@@ -601,13 +600,7 @@
                   </div>
                   <div v-html="comp_n + 1"></div>
                 </div>
-                <v-dialog
-                  v-model="
-                    competition.competitorsSheet.competitors.find(_comp => {
-                      return _comp.id === competitor.id;
-                    }).info_dialog.state
-                  "
-                  width="320px"
+                <v-dialog v-model="competitor.info_dialog.state" width="320px"
                   ><template v-slot:activator="{ on }">
                     <v-row
                       v-on="on"
