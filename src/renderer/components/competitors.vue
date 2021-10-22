@@ -292,8 +292,7 @@
           ></v-dialog
         >
         <div
-          class="pb-8"
-          style="position:relative; overflow-y: auto; overflow-x:hidden; height: 70vh"
+          style="position:relative; overflow-y: auto; overflow-x:hidden; height: 70vh; padding-bottom: 3rem"
           :style="{
             backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA
           }"
@@ -473,22 +472,21 @@
                 color: $vuetify.theme.themes[appTheme].textDefault
               }"
             >
-              <v-card-title
-                class="ma-0 pa-0"
-                v-html="'Удаление участников'"
-              ></v-card-title>
-              <div class="d-flex align-center">
-                <div v-html="`Удалить всех участников?`"></div>
+              <v-card-title style="padding: .2rem 1rem"
+                >Очистка таблицы</v-card-title
+              >
+              <div class="d-flex align-center" style="padding: .5rem .5rem">
+                <div style="margin-right: auto;">Удалить всех участников?</div>
                 <v-btn
-                  small
                   @click="clearSheet(), (clearDialog = false)"
+                  small
                   text
                   :color="$vuetify.theme.themes[appTheme].accent"
                   v-html="`Да`"
                 ></v-btn
                 ><v-btn
-                  small
                   @click="clearDialog = false"
+                  small
                   text
                   :color="$vuetify.theme.themes[appTheme].action_red"
                   v-html="`Нет`"

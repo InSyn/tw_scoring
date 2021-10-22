@@ -11,10 +11,7 @@
       }"
     >
       <div
-        style="display:flex;align-items:center;flex-wrap: wrap;padding: 6px 8px"
-        :style="{
-          backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA
-        }"
+        style="display:flex;flex-grow: 1;align-items:center;flex-wrap: wrap;padding: 6px 8px"
       >
         <v-hover
           v-slot:default="{ hover }"

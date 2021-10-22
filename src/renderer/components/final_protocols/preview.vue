@@ -226,7 +226,7 @@
 
           <div
             ref="pdf_table_container"
-            class="pdf_content"
+            class="pdf_table_container"
             style="display:flex;flex-grow: 1"
           >
             <div
@@ -236,6 +236,7 @@
 
               <div
                 ref="sheet_header"
+                class="sheet_header"
                 style="display: flex; flex-wrap: nowrap; flex-shrink: 0; padding: 0;margin: 0; font-weight:bold;border: 1px solid black"
                 :style="
                   paginated_results &&
@@ -268,7 +269,8 @@
               <div
                 v-for="(competitor, c_idx) in page"
                 :key="c_idx"
-                :ref="`result_${c_idx}`"
+                ref="result"
+                :class="`result_${c_idx}-page_${p_idx}`"
                 style="display: flex; flex-wrap: nowrap; flex-shrink: 0; padding: 0;margin: 0;font-weight:bold"
                 :style="[
                   results_protocol.use_string_light &&
@@ -324,7 +326,7 @@
               </div>
 
               <!-- RACE INFO -->
-              <div ref="technical_data">
+              <div ref="technical_data" class="technical_data">
                 <div
                   style="width: 100%;margin-top: 1rem; display:flex;flex-wrap: nowrap; flex-shrink: 0"
                   :style="[
@@ -431,7 +433,7 @@
               <!-- RACE INFO -->
 
               <!-- NOTES -->
-              <div ref="notes">
+              <div ref="notes" class="notes">
                 <div
                   style="flex:0 1 auto; border: 1px solid black; padding: 2px 4px; margin-top: 1rem;"
                   :style="[
@@ -553,6 +555,7 @@
 <script>
 import { mapGetters } from "vuex";
 import html2pdf from "html2pdf.js";
+import logos from "./logos";
 export default {
   name: "preview",
   mounted() {
@@ -567,29 +570,23 @@ export default {
         competitor.race_status
       );
     });
-    console.log(this.results);
     this.results = this.results.sort((c1, c2) => {
-      if (c1.race_status) {
-        return 1;
-      } else if (c2.race_status) {
-        return -1;
-      } else
-        return (
-          this.competition.result_formula.overall_result.types
-            .find(_f => {
-              return (
-                _f.id === this.competition.result_formula.overall_result.type
-              );
-            })
-            .result(c2.id) -
-          this.competition.result_formula.overall_result.types
-            .find(_f => {
-              return (
-                _f.id === this.competition.result_formula.overall_result.type
-              );
-            })
-            .result(c1.id)
-        );
+      return (
+        this.competition.result_formula.overall_result.types
+          .find(_f => {
+            return (
+              _f.id === this.competition.result_formula.overall_result.type
+            );
+          })
+          .result(c2.id) -
+        this.competition.result_formula.overall_result.types
+          .find(_f => {
+            return (
+              _f.id === this.competition.result_formula.overall_result.type
+            );
+          })
+          .result(c1.id)
+      );
     });
     this.$nextTick(() => {
       setTimeout(() => {
@@ -600,7 +597,7 @@ export default {
           this.$refs["sheet_header"][0].offsetHeight
         );
         let result_height = Math.ceil(
-          this.$refs["result_0"] && this.$refs["result_0"][0].offsetHeight
+          this.$refs["result"] && this.$refs["result"][0].offsetHeight
         );
         let results_overall = this.results.length;
         let res_per_page = Math.floor(
@@ -632,7 +629,6 @@ export default {
             }
           }
         }
-
         if (
           this.data_paginated_results &&
           this.data_paginated_results[this.data_paginated_results.length - 1] &&
@@ -644,7 +640,6 @@ export default {
               tech_data_height
         )
           this.data_paginated_results.push([]);
-
         if (
           this.data_paginated_results &&
           this.data_paginated_results[this.data_paginated_results.length - 1] &&
@@ -657,6 +652,16 @@ export default {
               notations_height
         )
           this.data_paginated_results.push([]);
+
+        console.log(this.$refs);
+        setTimeout(() => {
+          for (let _ref in this.$refs) {
+            if (_ref === "pdf_table_container") {
+              console.log(this.$refs[_ref][1]);
+              // console.log(this.$refs[_ref].children);
+            }
+          }
+        }, 0);
       }, 0);
     });
   },
@@ -668,6 +673,7 @@ export default {
     };
   },
   methods: {
+    check_height() {},
     async save_pdf() {
       this.saving_loading = true;
 
@@ -740,7 +746,6 @@ export default {
         .split(" ")[4]
         .toString()
         .split(":");
-      // console.log(`${date} ${time}`);
       return [`${date[0]} ${date[1]} ${date[2]}`, `${time[0]}:${time[1]}`];
     },
     paginated_results() {

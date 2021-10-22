@@ -16,7 +16,7 @@
         }"
       >
         <v-card-title>
-          Управление этапами
+          Предыдущий этап
         </v-card-title>
         <v-container
           style="display:flex;flex-wrap: wrap;align-items: center;min-height: 4rem;border-radius: 6px;padding: 0;"
@@ -30,7 +30,7 @@
               _comp => _comp.id !== competition.id
             )"
             :key="_competition.id"
-            style="margin: 4px 0 4px 4px;padding: 4px;border-radius: 6px;transition: border .172s"
+            style="margin: 4px 0 4px 4px;border-radius: 6px;overflow:hidden;transition: border .172s"
             :style="[
               {
                 border: `1px solid ${$vuetify.theme.themes[appTheme].standardBackgroundRGBA}`,
@@ -44,7 +44,10 @@
               }
             ]"
           >
-            <div class="title" style="display:flex;align-items: center;">
+            <div
+              class="title"
+              style="display:flex;align-items: center;padding: 4px 8px"
+            >
               <div style="font-weight: bold">
                 {{ competition.mainData.title.value || "" }}
               </div>
@@ -72,24 +75,26 @@
                 </div>
               </div>
             </div>
-            <div style="display:flex;flex-wrap: nowrap;align-items: center">
+            <div style="display:flex;flex-wrap: nowrap;align-items: center;">
               <div
-                style="display: flex;align-items: center;flex-wrap: nowrap;overflow:hidden;transform: scaleX(0);border-radius: 6px;transform-origin:left;transition: background-color .172s, color .172s,transform .112s"
+                style="display: flex;align-items: center;flex-wrap: nowrap;margin-top: auto;overflow:hidden;transform: scaleX(0);border-top-right-radius: 6px;transform-origin:left;transition: transform .112s"
                 :style="[
                   {
                     backgroundColor:
-                      $vuetify.theme.themes[appTheme].subjectBackgroundRGBA
+                      $vuetify.theme.themes[appTheme].subjectBackgroundRGBA,
+                    padding: `4px .5rem`,
+                    backgroundColor: $vuetify.theme.themes[appTheme].accent
                   },
                   competition.prev_stages.some(
                     _comp => _comp === _competition.id
                   ) && {
-                    transform: 'scaleX(1)',
-                    padding: `4px .5rem`,
-                    backgroundColor: $vuetify.theme.themes[appTheme].accent
+                    transform: 'scaleX(1)'
                   }
                 ]"
               >
-                <div style="overflow:hidden;white-space: nowrap">
+                <div
+                  style="overflow:hidden;white-space: nowrap;font-weight:bold;"
+                >
                   Кол-во прошедших
                 </div>
                 <input
@@ -97,7 +102,7 @@
                   style="padding: 2px 4px;margin-left: .4rem; width: 4rem;font-weight: bold;border-radius: 6px"
                   :style="{
                     backgroundColor:
-                      $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
+                      $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
                     color: $vuetify.theme.themes[appTheme].textDefault
                   }"
                   v-model="
@@ -881,7 +886,11 @@ export default {
     };
   },
   computed: {
-    ...mapGetters("main", ["competition", "competitions", "appTheme"])
+    ...mapGetters("main", {
+      competition: "competition",
+      competitions: "competitions",
+      appTheme: "appTheme"
+    })
   }
 };
 </script>

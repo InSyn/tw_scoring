@@ -499,7 +499,6 @@ export default {
           });
       });
       this.competition.selected_race.selectedCompetitor = null;
-      console.log(this.competition.competitorsSheet.competitors);
       this.socket &&
         this.socket.connected &&
         this.socket.emit("set_competition_data", this.competition, res => {
@@ -613,6 +612,7 @@ export default {
 
 <style scoped>
 * {
+  user-select: none;
   /*border: 1px solid #c3d9ff;*/
 }
 </style>
