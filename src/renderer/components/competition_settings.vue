@@ -39,12 +39,14 @@
           >
             <div style="display:flex;flex-direction: column">
               <div
-                style="flex: 0 0 auto;font-weight: bold;font-size: .9rem"
+                style="flex: 0 0 auto;font-weight: bold;font-size: .9rem;line-height: 1.2"
                 :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
               >
                 {{ current_competition.mainData.title.value }}
               </div>
-              <div style="flex: 0 0 auto;margin-left: auto; font-size: .8rem">
+              <div
+                style="flex: 0 0 auto;margin-left: auto; font-size: .8rem;line-height: 1"
+              >
                 {{ current_competition.mainData.title.stage.value.value }}
               </div>
             </div>
@@ -64,19 +66,20 @@
             ><v-hover v-slot:default="{ hover }"
               ><div
                 v-on="on"
-                style="position:relative;display:flex;align-items: center;padding: 4px .5rem;height: 100%;cursor: pointer;user-select: none;font-weight: bold"
-                :style="{
-                  backgroundColor: $vuetify.theme.themes[appTheme].success,
-                  color: $vuetify.theme.themes[appTheme].textDefault
-                }"
+                style="position:relative;display:flex;align-items: center;padding: 4px .5rem;height: 100%;cursor: pointer;user-select: none;font-weight: bold;transition: background-color .112s"
+                :style="[
+                  {
+                    backgroundColor: $vuetify.theme.themes[appTheme].accent,
+                    color: $vuetify.theme.themes[appTheme].textDefault
+                  },
+                  hover && {
+                    backgroundColor:
+                      $vuetify.theme.themes[appTheme].accent_light
+                  }
+                ]"
               >
                 <div
-                  style="white-space: nowrap;padding: 4px .5rem;font-size: 1.2rem;transition: background-color 72ms, color 72ms"
-                  :style="
-                    hover && {
-                      color: $vuetify.theme.themes[appTheme].cardBackgroundRGBA
-                    }
-                  "
+                  style="white-space: nowrap;padding: 4px .5rem;font-size: 1.2rem"
                 >
                   Создать соревнование
                 </div>

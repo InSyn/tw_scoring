@@ -302,7 +302,7 @@
             v-for="(row, r) in competition.competitorsSheet.competitors"
             :key="r"
             v-model="row.info_dialog.state"
-            width="640px"
+            width="480px"
             ><template v-slot:activator="{ on }"
               ><v-hover v-slot:default="{ hover }">
                 <v-row
@@ -384,18 +384,69 @@
                   $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
                 color: $vuetify.theme.themes[appTheme].textDefault
               }"
-              ><v-card-title>{{
-                `Данные участника ${(row.info_data["bib"] &&
-                  row.info_data["bib"]) ||
-                  ""} ${(row.info_data["surname"] &&
-                  row.info_data["surname"]) ||
-                  ""} ${(row.info_data["name"] && row.info_data["name"]) || ""}`
-              }}</v-card-title>
-              <div></div>
-              <v-card-actions
-                class="d-flex align-center"
-              ></v-card-actions></v-card
-          ></v-dialog>
+              ><v-card-title>
+                Данные участника
+                <div
+                  class="pa-1"
+                  style="border-radius: 6px;margin-left: auto;"
+                  :style="{
+                    backgroundColor: $vuetify.theme.themes[appTheme].accent
+                  }"
+                >
+                  {{
+                    `${(row.info_data["bib"] && row.info_data["bib"]) ||
+                      ""} ${(row.info_data["surname"] &&
+                      row.info_data["surname"]) ||
+                      ""} ${(row.info_data["name"] && row.info_data["name"]) ||
+                      ""}`
+                  }}
+                </div>
+              </v-card-title>
+              <div
+                style="display:flex;flex-direction: column;padding: 1rem 2rem"
+              >
+                <div
+                  v-for="(field, f_key) in row.info_data"
+                  :key="f_key"
+                  style="display:flex;align-items: center;flex-wrap:nowrap;padding: 0;margin: 0;border-radius: 6px"
+                  :style="{
+                    color: $vuetify.theme.themes[appTheme].textDefault
+                  }"
+                >
+                  <div class="pa-1" style="flex: 0 0 8rem;font-weight: bold">
+                    {{ f_key }}
+                  </div>
+                  <div class="pa-1" style="flex: 1 0 auto">
+                    <input
+                      type="text"
+                      class="pa-1"
+                      v-model.lazy="row.info_data[f_key]"
+                      :style="{
+                        backgroundColor:
+                          $vuetify.theme.themes[appTheme]
+                            .standardBackgroundRGBA,
+                        color: $vuetify.theme.themes[appTheme].textDefault
+                      }"
+                      style="border-radius: 6px"
+                    />
+                  </div>
+                </div>
+              </div>
+              <v-card-actions class="d-flex align-center justify-end"
+                ><v-btn
+                  :color="$vuetify.theme.themes[appTheme].accent"
+                  :style="{
+                    color: $vuetify.theme.themes[appTheme].textDefault
+                  }"
+                  >Принять</v-btn
+                ><v-btn
+                  text
+                  :color="$vuetify.theme.themes[appTheme].textDefault"
+                  >Отмена</v-btn
+                ></v-card-actions
+              ></v-card
+            ></v-dialog
+          >
         </div>
         <div
           class="pa-2 d-flex align-center justify-center"
