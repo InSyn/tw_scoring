@@ -10,17 +10,86 @@
       :style="{
         background: `${$vuetify.theme.themes[appTheme].cardBackgroundRGBA}`
       }"
-      style="z-index: 1; "
+      style="z-index: 3; position: relative"
       class="d-flex align-center px-4"
     >
       <v-btn
         :color="$vuetify.theme.themes[appTheme].accent"
         @click="changeMenuState"
         icon
-        ><v-icon
-          v-html="showMenu ? 'mdi-backburger' : 'mdi-menu'"
-        ></v-icon></v-btn
-      ><v-hover v-slot:default="{ hover }">
+        ><v-icon v-html="showMenu ? 'mdi-backburger' : 'mdi-menu'"></v-icon>
+      </v-btn>
+      <div
+        tabindex="0"
+        @focus="competition_select = true"
+        @blur="competition_select = false"
+        class="ml-8"
+        style="position:relative;outline: none;border-radius:6px"
+        :style="{
+          backgroundColor:
+            $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
+          color: $vuetify.theme.themes[appTheme].textDefault
+        }"
+      >
+        <v-hover v-slot:default="{ hover }">
+          <div
+            style="font-weight:bold;padding:.5rem 1rem;border-radius:6px;white-space: nowrap;cursor: pointer;transition: background-color .122s"
+            :style="
+              hover && {
+                backgroundColor:
+                  $vuetify.theme.themes[appTheme].subjectBackgroundRGBA
+              }
+            "
+          >
+            {{ competition && competition.mainData.title.value }}
+          </div></v-hover
+        >
+        <div
+          v-if="competitions.some(_comp => _comp.id !== competition.id)"
+          style="position:absolute;z-index: 3;border-radius: 6px;white-space: nowrap;top: 0;left: 0;overflow:hidden;transform: scaleY(0);transform-origin:top;transition: transform .122s, border .122s, background-color .122s"
+          :style="[
+            {
+              boxShadow: `0 2px 4px 0 ${$vuetify.theme.themes[appTheme].standardBackgroundRGBA}`
+            },
+            competition_select && {
+              transform: 'scaleY(1)',
+              backgroundColor:
+                $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
+              border: `1px solid ${$vuetify.theme.themes[appTheme].accent}`
+            }
+          ]"
+        >
+          <v-hover
+            v-for="(_competition, c_id) in competitions.filter(
+              _comp => _comp.id !== competition.id
+            )"
+            :key="_competition.id"
+            v-slot:default="{ hover }"
+          >
+            <div
+              @click="select_competition($event, _competition)"
+              style="padding: .5rem 1rem;cursor:pointer;user-select: none;transition: border .122s, background-color .122s"
+              :style="[
+                {
+                  borderTop: `1px solid ${$vuetify.theme.themes[appTheme].cardBackgroundRGBA}`,
+                  borderBottom: `1px solid ${$vuetify.theme.themes[appTheme].cardBackgroundRGBA}`
+                },
+                hover && {
+                  borderTop: `1px solid ${$vuetify.theme.themes[appTheme].accent}`,
+                  borderBottom: `1px solid ${$vuetify.theme.themes[appTheme].accent}`,
+                  backgroundColor:
+                    $vuetify.theme.themes[appTheme].subjectBackgroundRGBA
+                },
+                c_id < 1 && { borderTop: `null` },
+                c_id >= competitions.length - 2 && { borderBottom: `null` }
+              ]"
+            >
+              {{ _competition && _competition.mainData.title.value }}
+            </div></v-hover
+          >
+        </div>
+      </div>
+      <v-hover v-slot:default="{ hover }">
         <v-btn
           class="d-flex justify-start align-center ml-4"
           style="min-width: 0"
@@ -56,6 +125,7 @@
           ></v-btn
         >
       </v-hover>
+
       <v-spacer></v-spacer>
       <img
         v-if="appTheme === 'light'"
@@ -205,6 +275,7 @@ export default {
   data() {
     return {
       serverStatusChecker: null,
+      competition_select: false,
       icons: {
         cog: mdiCog,
         viewDashboard: mdiViewDashboard,
@@ -260,6 +331,10 @@ export default {
           new this.JudgeClass(`Судья ${i + 1}`, i + 1, "Иванов", "Иван", "КРСК")
         );
       }
+    },
+    select_competition(e, competition) {
+      this.$store.commit("main/setCompetition", competition);
+      e.target.parentNode.parentNode.blur();
     }
   },
   computed: {
