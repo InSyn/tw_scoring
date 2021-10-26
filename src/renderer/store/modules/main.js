@@ -176,6 +176,12 @@ export default {
     },
     createCompetition: (state, competition) => {
       state.competitions.push(competition);
+      state.competition = state.competitions[state.competitions.length - 1];
+      state.socket &&
+        state.socket.connected &&
+        state.socket.emit("set_competition_data", state.competition, res => {
+          console.log(res);
+        });
     },
     setCompetition: (state, competition) => {
       state.competition = competition;
@@ -191,6 +197,11 @@ export default {
         return _comp.id !== id;
       });
       state.competition = state.competitions[0];
+      state.socket &&
+        state.socket.connected &&
+        state.socket.emit("set_competition_data", state.competition, res => {
+          console.log(res);
+        });
     },
     togglePreview: (state, toggleState) => {
       state.showPreview = toggleState;

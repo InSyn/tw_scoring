@@ -12,9 +12,9 @@ const opts = {
   theme: {
     themes: {
       dark: {
-        standardBackgroundRGBA: "#212124",
-        cardBackgroundRGBA: "#2E2E31",
-        subjectBackgroundRGBA: "#3B3B3E",
+        standardBackgroundRGBA: "#1B1B1D",
+        cardBackgroundRGBA: "#28282A",
+        subjectBackgroundRGBA: "#323234",
         textDefault: "#d2d2d2",
         accent: "#3B70A9",
         accent_light: "#3A82BA",

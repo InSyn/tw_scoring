@@ -696,20 +696,13 @@ export default {
             console.log("<--->");
             console.log(this.$refs[$refsKey]);
             console.log("<--->");
-            for (let $refKey in this.$refs[$refsKey]) {
-              console.log(this.$refs[$refsKey][$refKey]);
+            for (let $refKey of this.$refs[$refsKey]) {
+              console.log($refKey);
             }
           } else if ($refsKey === "pdf_table_container") {
-            for (const $childKey in this.$refs[$refsKey][0].children[0]
+            for (const $childKey of this.$refs[$refsKey][0].children[0]
               .children) {
-              if (
-                typeof this.$refs[$refsKey][0].children[0].children[
-                  $childKey
-                ] === "object"
-              )
-                console.log(
-                  this.$refs[$refsKey][0].children[0].children[$childKey]
-                );
+              if (typeof $childKey === "object") console.log($childKey);
             }
           }
         }

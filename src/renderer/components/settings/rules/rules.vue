@@ -49,7 +49,7 @@
               style="display:flex;align-items: center;padding: 4px 8px"
             >
               <div style="font-weight: bold">
-                {{ competition.mainData.title.value || "" }}
+                {{ _competition.mainData.title.value || "" }}
               </div>
               <div
                 style="margin-left: 1rem; padding: 2px;border-radius: 6px;transition: background-color .172s"
@@ -866,12 +866,21 @@ export default {
   methods: {
     log: data => console.log(data),
     add_prev_stage(stage) {
-      if (!this.competition.prev_stages.some(_comp => _comp === stage))
+      if (!this.competition.prev_stages.some(_comp => _comp === stage)) {
+        if (
+          this.competitions.find(_competition => _competition.id === stage)
+            .prev_stages.length > 0
+        )
+          this.competition.prev_stages.push(
+            ...this.competitions.find(_competition => _competition.id === stage)
+              .prev_stages
+          );
         this.competition.prev_stages.push(stage);
-      else
+      } else {
         this.competition.prev_stages = this.competition.prev_stages.filter(
           _stage => _stage !== stage
         );
+      }
     }
   },
   data() {

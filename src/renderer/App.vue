@@ -45,13 +45,25 @@
               }
             ]"
           >
-            <div style="white-space: nowrap">
-              {{
-                `${competition &&
-                  competition.mainData.title.value}. ${competition &&
-                  competition.mainData.title.stage.value &&
-                  competition.mainData.title.stage.value.value}`
-              }}
+            <div
+              style="display:flex;flex-direction: column;white-space: nowrap"
+            >
+              <div
+                style="font-size: .75rem;flex: 0 0 auto;align-self: flex-end;line-height: 0.8;"
+                :style="{
+                  color: $vuetify.theme.themes[appTheme].accent
+                }"
+              >
+                {{ `ID: ${competition && competition.id}` }}
+              </div>
+              <div style="flex: 0 0 auto">
+                {{
+                  `${competition &&
+                    competition.mainData.title.value}. ${competition &&
+                    competition.mainData.title.stage.value &&
+                    competition.mainData.title.stage.value.value}`
+                }}
+              </div>
             </div>
           </div></v-hover
         >
@@ -65,7 +77,7 @@
             competition_select && {
               transform: 'scaleY(1)',
               backgroundColor:
-                $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
+                $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
               border: `1px solid ${$vuetify.theme.themes[appTheme].accent}`
             }
           ]"
@@ -74,6 +86,8 @@
             @click="select_competition($event, competition)"
             style="padding: .4rem .8rem;font-weight:bold;cursor: default;user-select: none"
             :style="{
+              backgroundColor:
+                $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
               borderBottom: `1px solid ${$vuetify.theme.themes[appTheme].accent}`
             }"
           >

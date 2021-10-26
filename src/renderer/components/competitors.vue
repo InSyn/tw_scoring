@@ -682,13 +682,25 @@ export default {
     },
     load_prev_stages() {
       let compArr = [];
-      compArr.push(
-        ...this.competition.prev_stages
-          .map(_comp =>
-            this.competitions.find(_competition => _competition.id === _comp)
-          )
-          .map(_stage => _stage.passedCompetitors)
-      );
+      if (this.competition.prev_stages.length > 1)
+        compArr.push(
+          ...this.competition.prev_stages
+            .map(_comp =>
+              this.competitions.find(_competition => _competition.id === _comp)
+            )
+            .map(_stage => _stage.passedCompetitors)
+        );
+      else
+        compArr.push(
+          ...this.competition.prev_stages[
+            this.competition.prev_stages.length - 1
+          ]
+            .map(_comp =>
+              this.competitions.find(_competition => _competition.id === _comp)
+            )
+            .map(_stage => _stage.passedCompetitors)
+        );
+
       this.competition.competitorsSheet.competitors = [];
       compArr.forEach(arr =>
         this.competition.competitorsSheet.competitors.push(...arr)

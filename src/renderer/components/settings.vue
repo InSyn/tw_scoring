@@ -32,10 +32,14 @@
               <div
                 style="font-size: 1rem"
                 class="font-weight-bold text-no-wrap px-12"
-                v-html="`${page.name}`"
-              ></div></div
-          ></v-hover> </router-link></v-col
-    ></v-row>
+              >
+                {{ page.name }}
+              </div>
+            </div></v-hover
+          >
+        </router-link></v-col
+      ></v-row
+    >
     <router-view></router-view>
   </v-container>
 </template>
@@ -51,4 +55,8 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+* {
+  user-select: none;
+}
+</style>
