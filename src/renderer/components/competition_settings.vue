@@ -15,15 +15,56 @@
           color: $vuetify.theme.themes[appTheme].cardBackgroundRGBA
         }"
         ><div>Comp_ID: {{ competition.id }}</div>
-        <v-btn
-          @click="$store.commit('main/delete_competition', competition.id)"
-          style="margin-left: 1rem"
-          :disabled="competitions.length < 2"
-          text
-          small
-          :color="$vuetify.theme.themes[appTheme].error"
-          >Удалить</v-btn
-        ><v-dialog
+        <v-dialog
+          width="480"
+          v-model="delete_competition_dialog.state"
+          :overlay-color="$vuetify.theme.themes[appTheme].error"
+          overlay-opacity=".05"
+          ><template v-slot:activator="{ on }"
+            ><v-btn
+              v-on="on"
+              style="margin-left: 1rem"
+              :disabled="competitions.length < 2"
+              text
+              small
+              :color="$vuetify.theme.themes[appTheme].error"
+              >Удалить</v-btn
+            ></template
+          ><v-card
+            :style="{
+              backgroundColor:
+                $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
+              color: $vuetify.theme.themes[appTheme].textDefault
+            }"
+            ><div style="font-size: 1.2rem;padding: .5rem 1rem">
+              Удалить соревнование<b>
+                {{
+                  ` ${competition &&
+                    competition.mainData.title.value} ${competition &&
+                    competition.mainData.title.stage.value.value}?`
+                }}</b
+              >
+            </div>
+            <v-card-actions class="d-flex align-center justify-end"
+              ><v-btn
+                @click="
+                  $store.commit('main/delete_competition', competition.id),
+                    (delete_competition_dialog.state = false)
+                "
+                :color="$vuetify.theme.themes[appTheme].error"
+                small
+                >Удалить</v-btn
+              ><v-btn
+                @click="delete_competition_dialog.state = false"
+                :color="$vuetify.theme.themes[appTheme].accent"
+                small
+                text
+                >Отмена</v-btn
+              ></v-card-actions
+            ></v-card
+          ></v-dialog
+        >
+        <v-dialog
           width="760"
           v-model="create_competition_dialog.state"
           @keydown.enter="createCompetition()"
@@ -118,6 +159,9 @@ export default {
   },
   data() {
     return {
+      delete_competition_dialog: {
+        state: false
+      },
       create_competition_dialog: {
         state: false,
         data: {

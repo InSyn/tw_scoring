@@ -257,16 +257,56 @@
               </v-row>
               <!-- CHANGE MARKS -->
               <v-row class="pa-1" no-gutters>
-                <v-col cols="12"
-                  ><v-btn
-                    depressed
-                    style="width: 100%;font-weight: bold"
-                    height="2rem"
-                    :color="$vuetify.theme.themes[appTheme].action_blue"
-                    :style="{
-                      color: $vuetify.theme.themes[appTheme].textDefault
-                    }"
-                    >Изменить оценки</v-btn
+                <v-col cols="12">
+                  <v-dialog width="720" v-model="change_marks_dialog.state"
+                    ><template v-slot:activator="{ on }"
+                      ><v-btn
+                        depressed
+                        v-on="on"
+                        style="width: 100%;font-weight: bold"
+                        height="2rem"
+                        :color="$vuetify.theme.themes[appTheme].accent"
+                        :style="{
+                          color: $vuetify.theme.themes[appTheme].textDefault
+                        }"
+                        >Изменить оценки</v-btn
+                      ></template
+                    ><v-card
+                      :style="{
+                        backgroundColor:
+                          $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
+                        color: $vuetify.theme.themes[appTheme].textDefault
+                      }"
+                    >
+                      <div style="padding: 1rem 2rem">
+                        <div
+                          style="padding: .5rem 1rem"
+                          v-for="(mark, m_idx) in competition &&
+                            competition.selected_race &&
+                            competition.selected_race.onTrack &&
+                            competition.competitorsSheet.competitors.find(
+                              _competitor =>
+                                _competitor.id ===
+                                competition.selected_race.onTrack
+                            ).marks"
+                        >
+                          {{ mark }}
+                        </div>
+                      </div>
+                      <v-card-actions class="d-flex align-center justify-end"
+                        ><v-btn
+                          small
+                          :color="$vuetify.theme.themes[appTheme].success"
+                          >Подтвердить</v-btn
+                        ><v-btn
+                          text
+                          small
+                          :color="$vuetify.theme.themes[appTheme].textDefault"
+                          @click="change_marks_dialog.state = false"
+                          >Отмена</v-btn
+                        ></v-card-actions
+                      ></v-card
+                    ></v-dialog
                   ></v-col
                 >
               </v-row>
@@ -599,6 +639,9 @@ export default {
         blinker: null,
         red: true,
         green: false
+      },
+      change_marks_dialog: {
+        state: false
       }
     };
   },

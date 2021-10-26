@@ -33,20 +33,31 @@
       >
         <v-hover v-slot:default="{ hover }">
           <div
-            style="font-weight:bold;padding:.5rem 1rem;border-radius:6px;white-space: nowrap;cursor: pointer;transition: background-color .122s"
-            :style="
+            style="display:flex;align-items: center;flex-wrap: nowrap;padding: .4rem .8rem;font-weight:bold;border-radius:6px;white-space: nowrap;cursor: pointer;user-select: none;transition: background-color .122s,border .122s"
+            :style="[
+              {
+                border: `1px solid ${$vuetify.theme.themes[appTheme].standardBackgroundRGBA}`
+              },
               hover && {
                 backgroundColor:
-                  $vuetify.theme.themes[appTheme].subjectBackgroundRGBA
+                  $vuetify.theme.themes[appTheme].subjectBackgroundRGBA,
+                border: `1px solid ${$vuetify.theme.themes[appTheme].subjectBackgroundRGBA}`
               }
-            "
+            ]"
           >
-            {{ competition && competition.mainData.title.value }}
+            <div style="white-space: nowrap">
+              {{
+                `${competition &&
+                  competition.mainData.title.value}. ${competition &&
+                  competition.mainData.title.stage.value &&
+                  competition.mainData.title.stage.value.value}`
+              }}
+            </div>
           </div></v-hover
         >
         <div
           v-if="competitions.some(_comp => _comp.id !== competition.id)"
-          style="position:absolute;z-index: 3;border-radius: 6px;white-space: nowrap;top: 0;left: 0;overflow:hidden;transform: scaleY(0);transform-origin:top;transition: transform .122s, border .122s, background-color .122s"
+          style="position:absolute;z-index: 3;border-radius: 6px;white-space: nowrap;top: 0;left: 0;overflow:hidden;min-width: 100%;transform: scaleY(0);transform-origin:top"
           :style="[
             {
               boxShadow: `0 2px 4px 0 ${$vuetify.theme.themes[appTheme].standardBackgroundRGBA}`
@@ -59,6 +70,20 @@
             }
           ]"
         >
+          <div
+            @click="select_competition($event, competition)"
+            style="padding: .4rem .8rem;font-weight:bold;cursor: default;user-select: none"
+            :style="{
+              borderBottom: `1px solid ${$vuetify.theme.themes[appTheme].accent}`
+            }"
+          >
+            {{
+              `${competition &&
+                competition.mainData.title.value}. ${competition &&
+                competition.mainData.title.stage.value &&
+                competition.mainData.title.stage.value.value}`
+            }}
+          </div>
           <v-hover
             v-for="(_competition, c_id) in competitions.filter(
               _comp => _comp.id !== competition.id
@@ -68,7 +93,7 @@
           >
             <div
               @click="select_competition($event, _competition)"
-              style="padding: .5rem 1rem;cursor:pointer;user-select: none;transition: border .122s, background-color .122s"
+              style="padding: .4rem .8rem;cursor:pointer;user-select: none;transition: border .122s, background-color .122s"
               :style="[
                 {
                   borderTop: `1px solid ${$vuetify.theme.themes[appTheme].cardBackgroundRGBA}`,
@@ -84,7 +109,12 @@
                 c_id >= competitions.length - 2 && { borderBottom: `null` }
               ]"
             >
-              {{ _competition && _competition.mainData.title.value }}
+              {{
+                `${_competition &&
+                  _competition.mainData.title.value}. ${_competition.mainData
+                  .title.stage.value &&
+                  _competition.mainData.title.stage.value.value}`
+              }}
             </div></v-hover
           >
         </div>

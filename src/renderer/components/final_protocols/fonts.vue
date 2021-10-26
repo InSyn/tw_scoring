@@ -1,17 +1,24 @@
 <template>
   <div
-    style="position: relative;display:flex;flex-wrap: wrap;border-radius: 6px;width: 100%;height: 100%;padding: 16px;overflow-y: auto"
+    style="display:flex;flex-wrap: wrap;border-radius: 6px;width: 100%;height: 100%;padding: 16px;overflow-y: auto"
     :style="{
       backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA
     }"
   >
     <div
-      v-for="stage in stages"
+      v-for="stage in competition.prev_stages.map(_stage =>
+        competitions.find(_competition => _competition.id === _stage)
+      )"
       style="overflow-y: auto;border-radius: 6px;padding: .4rem 1rem"
       :style="{ border: `1px solid ${$vuetify.theme.themes[appTheme].accent}` }"
     >
-      <div></div>
-      {{ (stage.passedCompetitors && stage.passedCompetitors) || [] }}
+      <div
+        v-for="competitor in stage"
+        :key="competitor.id"
+        style="padding: .5rem 1rem"
+      >
+        {{ competitor }}
+      </div>
     </div>
   </div>
 </template>
@@ -29,12 +36,7 @@ export default {
       appTheme: "appTheme",
       competition: "competition",
       competitions: "competitions"
-    }),
-    stages() {
-      return this.competitions.filter(
-        _competition => _competition.id !== this.competition.id
-      );
-    }
+    })
   }
 };
 </script>
