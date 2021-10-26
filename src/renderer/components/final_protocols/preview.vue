@@ -330,13 +330,13 @@
                 <div
                   style="width: 100%;margin-top: 1rem; display:flex;flex-wrap: nowrap; flex-shrink: 0"
                   :style="[
-                    p_idx !== paginated_results.length - 1 && {
-                      opacity: 0,
-                      position: `absolute`
-                    },
                     !results_protocol.print_header && {
                       opacity: 0,
-                      position: `absolute`
+                      position: 'absolute'
+                    },
+                    p_idx < paginated_results.length - 1 && {
+                      opacity: 0,
+                      position: 'absolute'
                     }
                   ]"
                 >
@@ -437,8 +437,14 @@
                 <div
                   style="flex:0 1 auto; border: 1px solid black; padding: 2px 4px; margin-top: 1rem;"
                   :style="[
-                    !results_protocol.notations && { opacity: 0 },
-                    p_idx !== paginated_results.length - 1 && { opacity: 0 }
+                    !results_protocol.notations && {
+                      opacity: 0,
+                      position: 'absolute'
+                    },
+                    p_idx < paginated_results.length - 1 && {
+                      opacity: 0,
+                      position: 'absolute'
+                    }
                   ]"
                   v-html="results_protocol.notations"
                 ></div>
@@ -632,12 +638,15 @@ export default {
         if (
           this.data_paginated_results &&
           this.data_paginated_results[this.data_paginated_results.length - 1] &&
+          this.results_protocol.print_header &&
           container_height <
             result_height *
               this.data_paginated_results[
                 this.data_paginated_results.length - 1
               ].length +
               tech_data_height
+            ? tech_data_height
+            : 0
         )
           this.data_paginated_results.push([]);
         if (
@@ -648,10 +657,17 @@ export default {
               this.data_paginated_results[
                 this.data_paginated_results.length - 1
               ].length +
-              tech_data_height +
-              notations_height
-        )
+              tech_data_height
+            ? tech_data_height
+            : 0 + notations_height
+            ? notations_height
+            : 0
+        ) {
+          console.log(
+            `Container: ${container_height} header_height: ${header_height} result_height: ${result_height} results_overall:${results_overall} res_per_page: ${res_per_page} pages:${pages}`
+          );
           this.data_paginated_results.push([]);
+        }
 
         console.log(this.$refs);
         setTimeout(() => {

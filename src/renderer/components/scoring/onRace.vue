@@ -504,41 +504,45 @@ export default {
   name: "onRace",
   methods: {
     pushMarks() {
-      this.competition.stuff.judges.forEach((_judge, j_idx) => {
-        this.competition.selected_race.startList
-          .map(_comp =>
-            this.competition.competitorsSheet.competitors.find(
-              _competitor => _competitor.id === _comp
-            )
-          )
-          .forEach(_comp => {
-            if (
-              !_comp.marks.some(
-                _mark =>
-                  _mark.race_id === this.competition.selected_race.id &&
-                  _mark.judge_id === _judge._id
+      this.competition &&
+        this.competition.selected_race &&
+        this.competition.selected_race.startList &&
+        this.competition.stuff.judges.forEach((_judge, j_idx) => {
+          this.competition.selected_race.startList
+            .map(_comp =>
+              this.competition.competitorsSheet.competitors.find(
+                _competitor => _competitor.id === _comp
               )
             )
-              _comp.marks.push(
-                new this.MarkClass(
-                  this.competition.selected_race_id,
-                  this.competition.selected_race.id,
-                  _judge.id,
-                  _judge._id,
-                  Math.round(30 + Math.random() * 70)
+            .forEach(_comp => {
+              if (
+                !_comp.marks.some(
+                  _mark =>
+                    _mark.race_id === this.competition.selected_race.id &&
+                    _mark.judge_id === _judge._id
                 )
-              );
-            if (
-              !this.competition.selected_race.finished.some(f_comp => {
-                return f_comp === _comp.id;
-              }) &&
-              this.competition.stuff.judges.length - 1 === j_idx
-            ) {
-              this.publishResult(_comp.id);
-            }
-          });
-      });
-      this.competition.selected_race.selectedCompetitor = null;
+              )
+                _comp.marks.push(
+                  new this.MarkClass(
+                    this.competition.selected_race_id,
+                    this.competition.selected_race.id,
+                    _judge.id,
+                    _judge._id,
+                    Math.round(30 + Math.random() * 70)
+                  )
+                );
+              if (
+                !this.competition.selected_race.finished.some(f_comp => {
+                  return f_comp === _comp.id;
+                }) &&
+                this.competition.stuff.judges.length - 1 === j_idx
+              ) {
+                this.publishResult(_comp.id);
+              }
+            });
+        });
+      if (this.competition.selected_race)
+        this.competition.selected_race.selectedCompetitor = null;
       this.socket &&
         this.socket.connected &&
         this.socket.emit("set_competition_data", this.competition, res => {
