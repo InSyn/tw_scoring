@@ -97,7 +97,7 @@
       style="transform-origin: top"
     >
       <section
-        class="pdf_to_print_section"
+        class="pdf_to_print_section "
         v-for="(page, p_idx) in (paginated_results.length > 0 &&
           paginated_results) || [results]"
         :key="paginated_results.length + p_idx"
@@ -230,7 +230,7 @@
             style="display:flex;flex-grow: 1"
           >
             <div
-              style="display:flex;flex-direction: column; padding: 0; width: 100%; overflow: hidden"
+              style="display:flex;flex-direction: column; padding: 0; width: 100%;overflow: hidden"
             >
               <!-- Sheet header -->
 
@@ -330,11 +330,11 @@
                 <div
                   style="width: 100%;margin-top: 1rem; display:flex;flex-wrap: nowrap; flex-shrink: 0"
                   :style="[
-                    !results_protocol.print_header && {
+                    p_idx < paginated_results.length - 1 && {
                       opacity: 0,
                       position: 'absolute'
                     },
-                    p_idx < paginated_results.length - 1 && {
+                    !results_protocol.print_header && {
                       opacity: 0,
                       position: 'absolute'
                     }
@@ -645,10 +645,15 @@ export default {
                 this.data_paginated_results.length - 1
               ].length +
               tech_data_height
-            ? tech_data_height
-            : 0
-        )
+        ) {
+          // console.log(
+          //   `cont: ${container_height}, res: ${result_height *
+          //     this.data_paginated_results[
+          //       this.data_paginated_results.length - 1
+          //     ].length}, td: ${tech_data_height}, not: ${notations_height}`
+          // );
           this.data_paginated_results.push([]);
+        }
         if (
           this.data_paginated_results &&
           this.data_paginated_results[this.data_paginated_results.length - 1] &&
@@ -657,27 +662,18 @@ export default {
               this.data_paginated_results[
                 this.data_paginated_results.length - 1
               ].length +
-              tech_data_height
-            ? tech_data_height
-            : 0 + notations_height
-            ? notations_height
-            : 0
+              tech_data_height +
+              notations_height
         ) {
-          console.log(
-            `Container: ${container_height} header_height: ${header_height} result_height: ${result_height} results_overall:${results_overall} res_per_page: ${res_per_page} pages:${pages}`
-          );
+          // console.log(
+          //   `cont: ${container_height}, res: ${result_height *
+          //     this.data_paginated_results[
+          //       this.data_paginated_results.length - 1
+          //     ].length}, td: ${tech_data_height}, not: ${notations_height}`
+          // );
           this.data_paginated_results.push([]);
         }
-
-        console.log(this.$refs);
-        setTimeout(() => {
-          for (let _ref in this.$refs) {
-            if (_ref === "pdf_table_container") {
-              console.log(this.$refs[_ref][1]);
-              // console.log(this.$refs[_ref].children);
-            }
-          }
-        }, 0);
+        this.check_height();
       }, 0);
     });
   },
@@ -689,7 +685,37 @@ export default {
     };
   },
   methods: {
-    check_height() {},
+    check_height() {
+      setTimeout(() => {
+        for (let $refsKey in this.$refs) {
+          if (
+            Array.isArray(this.$refs[$refsKey]) &&
+            this.$refs[$refsKey].length > 1 &&
+            $refsKey === "pdf_table_container"
+          ) {
+            console.log("<--->");
+            console.log(this.$refs[$refsKey]);
+            console.log("<--->");
+            for (let $refKey in this.$refs[$refsKey]) {
+              console.log(this.$refs[$refsKey][$refKey]);
+            }
+          } else if ($refsKey === "pdf_table_container") {
+            for (const $childKey in this.$refs[$refsKey][0].children[0]
+              .children) {
+              if (
+                typeof this.$refs[$refsKey][0].children[0].children[
+                  $childKey
+                ] === "object"
+              )
+                console.log(
+                  this.$refs[$refsKey][0].children[0].children[$childKey]
+                );
+            }
+          }
+        }
+        console.log("@@----------------------@@");
+      }, 0);
+    },
     async save_pdf() {
       this.saving_loading = true;
 

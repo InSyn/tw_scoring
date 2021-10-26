@@ -67,7 +67,7 @@
         <v-dialog
           width="760"
           v-model="create_competition_dialog.state"
-          @keydown.enter="createCompetition()"
+          @keydown.enter.prevent="createCompetition()"
           :overlay-color="$vuetify.theme.themes[appTheme].accent"
           :overlay-opacity="0.1"
           ><template v-slot:activator="{ on, attrs }"

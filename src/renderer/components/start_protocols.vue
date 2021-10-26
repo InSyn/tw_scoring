@@ -107,7 +107,7 @@
         ><v-dialog
           width="720"
           v-model="dialogs.create_race.state"
-          @keydown.enter="
+          @keydown.prevent="
             create_race(
               dialogs.create_race.title,
               competition.structure.types[competition.structure.selected.type],
@@ -188,6 +188,7 @@
                   text
                   :color="$vuetify.theme.themes[appTheme].success"
                   @click="addAll()"
+                  retain-focus-on-click
                   >Добавить всех&nbsp;<v-icon>mdi-arrow-right</v-icon></v-btn
                 ></v-card-actions
               >
