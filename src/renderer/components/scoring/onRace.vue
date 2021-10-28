@@ -319,7 +319,10 @@
             class="d-flex justify-center align-center"
             style="height: 50%;"
           >
-            <div class="d-flex align-center" style="width: 100%;">
+            <div
+              class="d-flex flex-wrap align-center"
+              style="width: 100%;height: 100%;overflow-y: auto"
+            >
               <div
                 class="flex-column align-center px-2"
                 v-for="(judge, j) in competition.stuff.judges"

@@ -121,19 +121,17 @@
             type="text"
           />
           <div
-            style="display: flex; align-items: center; flex-wrap: nowrap;min-width: 30%;overflow-y: visible"
+            style="display: flex; align-items: center; flex-wrap: nowrap;min-width: 30%"
             v-if="md === 'title'"
           >
-            <span
-              style="display: block;flex-shrink:0;margin-left: 1rem; font-weight:bold;"
-              >{{ competition.mainData[md].stage.title }}</span
-            >
+            <div style="flex-shrink:0;margin-left: 1rem; font-weight:bold">
+              {{ competition.mainData[md].stage.title }}
+            </div>
             <div
-              class="pa-1"
               tabindex="0"
               @focus="stage_selector = true"
               @blur="stage_selector = false"
-              style="position:relative;flex: 1 0 auto;height: 100%;border-radius: 6px;margin-left: .5rem;outline: none;cursor:pointer;overflow:visible"
+              style="position:relative;display:flex;align-items: center;flex:1 0 auto;height: 100%;border-radius: 6px;margin-left: .5rem;outline: none;cursor:pointer"
               :style="{
                 color: $vuetify.theme.themes[appTheme].textDefault,
                 backgroundColor:
@@ -142,7 +140,7 @@
             >
               <div
                 v-if="stage_selector"
-                style="position:absolute;z-index: 1;top: 0;left: 0;width: 100%;display:flex;flex-direction: column;border-radius: 6px"
+                style="position:absolute;z-index: 1;top: 0;left: 0;min-width: 100%;display:flex;flex-direction: column;border-radius: 6px"
                 :style="{
                   backgroundColor:
                     $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
@@ -175,23 +173,34 @@
                   </div></v-hover
                 >
               </div>
-              <div>
-                {{ competition.mainData.title.stage.value.title }}
+              <div style="padding: 4px 8px;flex: 0 0 auto">
+                {{
+                  competition.mainData.title.stage.value.id === "custom"
+                    ? competition.mainData.title.stage.value.title[0]
+                    : competition.mainData.title.stage.value.title
+                }}
               </div>
             </div>
-            <!--            <input-->
-            <!--              @focus="competition.mainData[md].focus = true"-->
-            <!--              @blur="competition.mainData[md].focus = false"-->
-            <!--              class="ml-2 pa-1"-->
-            <!--              style="outline: none;flex-shrink: 0;flex-grow: 1; border-radius: 6px; width: 6rem"-->
-            <!--              :style="{-->
-            <!--                color: $vuetify.theme.themes[appTheme].textDefault,-->
-            <!--                backgroundColor:-->
-            <!--                  $vuetify.theme.themes[appTheme].standardBackgroundRGBA-->
-            <!--              }"-->
-            <!--              v-model="competition.mainData[md].stage.value"-->
-            <!--              type="text"-->
-            <!--            />-->
+            <div
+              style="display:flex;flex-grow: 1;margin-left: .4rem;overflow:hidden;"
+            >
+              <input
+                type="text"
+                v-if="
+                  competition.mainData.title.stage &&
+                    competition.mainData.title.stage.value.id === 'custom'
+                "
+                @focus="competition.mainData[md].focus = true"
+                @blur="competition.mainData[md].focus = false"
+                v-model="competition.mainData.title.stage.value.value"
+                style="flex: 1 0 auto;padding: 4px 8px;border-radius: 6px;max-width: 100%"
+                :style="{
+                  backgroundColor:
+                    $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
+                  color: $vuetify.theme.themes[appTheme].textDefault
+                }"
+              />
+            </div>
           </div>
           <input
             v-if="md === 'discipline'"

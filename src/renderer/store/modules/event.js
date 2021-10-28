@@ -1,14 +1,32 @@
+import competitors from "../../components/competitors";
+
 export default {
   namespaced: true,
   state: {
     EventClass: class {
-      constructor(stage) {
+      constructor(...args) {
         this.id = Math.random()
           .toString(36)
           .substr(2, 9);
         this.structure.selected.type = 0;
         this.structure.selected.discipline = 0;
-        this.mainData.title.stage.value = stage || this.structure.stages[0];
+        this.mainData.title.stage.value = this.structure.stages[0];
+        args.forEach(arg => {
+          if (typeof arg === "object") {
+            if (arg.id === "competitors")
+              this.competitorsSheet.competitors.push(...arg.competitors);
+            if (arg.id === "judges") this.stuff.judges.push(...arg.judges);
+            if (arg.id === "stage")
+              this.mainData.title.stage.value = JSON.parse(
+                JSON.stringify(arg.value)
+              );
+            else if (arg.hasOwnProperty("min"))
+              this.mainData.discipline.min = arg.min;
+            this.mainData[arg.id]
+              ? (this.mainData[arg.id].value = arg.value)
+              : 0;
+          }
+        });
       }
       weather = [];
       structure = {
