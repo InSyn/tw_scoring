@@ -386,8 +386,7 @@
               ><v-card-title>
                 Данные участника
                 <div
-                  class="pa-1"
-                  style="border-radius: 6px;margin-left: auto;"
+                  style="border-radius: 6px;margin-left: auto;padding: 4px 8px"
                   :style="{
                     backgroundColor: $vuetify.theme.themes[appTheme].accent
                   }"
