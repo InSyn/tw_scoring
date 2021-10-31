@@ -38,11 +38,12 @@
                 backgroundColor:
                   $vuetify.theme.themes[appTheme].cardBackgroundRGBA
               },
-              competition.prev_stages.some(
-                _comp => _comp === _competition.id
-              ) && {
-                border: `1px solid ${$vuetify.theme.themes[appTheme].accent}`
-              }
+              competition &&
+                competition.stages.prev_stages.some(
+                  _comp => _comp === _competition.id
+                ) && {
+                  border: `1px solid ${$vuetify.theme.themes[appTheme].accent}`
+                }
             ]"
           >
             <div
@@ -59,11 +60,12 @@
                     backgroundColor:
                       $vuetify.theme.themes[appTheme].subjectBackgroundRGBA
                   },
-                  competition.prev_stages.some(
-                    _comp => _comp === _competition.id
-                  ) && {
-                    backgroundColor: $vuetify.theme.themes[appTheme].accent
-                  }
+                  competition &&
+                    competition.stages.prev_stages.some(
+                      _comp => _comp === _competition.id
+                    ) && {
+                      backgroundColor: $vuetify.theme.themes[appTheme].accent
+                    }
                 ]"
               >
                 <div style="padding: 2px 1rem">
@@ -86,11 +88,12 @@
                     padding: `4px .5rem`,
                     backgroundColor: $vuetify.theme.themes[appTheme].accent
                   },
-                  competition.prev_stages.some(
-                    _comp => _comp === _competition.id
-                  ) && {
-                    transform: 'scaleX(1)'
-                  }
+                  competition &&
+                    competition.stages.prev_stages.some(
+                      _comp => _comp === _competition.id
+                    ) && {
+                      transform: 'scaleX(1)'
+                    }
                 ]"
               >
                 <div
@@ -125,9 +128,10 @@
                 <v-btn @click="add_prev_stage(_competition.id)" icon
                   ><v-icon
                     v-if="
-                      competition.prev_stages.some(
-                        _comp => _competition.id === _comp
-                      )
+                      competition &&
+                        competition.stages.prev_stages.some(
+                          _comp => _competition.id === _comp
+                        )
                     "
                     :color="
                       (hover && $vuetify.theme.themes[appTheme].textDefault) ||
@@ -147,20 +151,38 @@
             </div>
           </div>
         </v-container>
-        <div
-          style="display:flex;align-items: center;padding: 8px 16px;border-radius: 6px"
-          :style="{ backgroundColor: $vuetify.theme.themes[appTheme].accent }"
-        >
+        <v-container style="display:flex;flex-wrap: nowrap; padding: 0">
           <div
-            v-for="(stage, s_idx) in competition.stage_grid"
+            v-for="(stage, s_idx) in competition.stages.stage_grid"
             :key="s_idx"
-            style="display:flex;flex-direction: column"
+            style="display:flex;flex-wrap: nowrap;align-items: center"
           >
-            <div v-for="_stage in stage" :key="_stage" style="flex: 0 0 auto">
-              {{ _stage }}
+            <div
+              v-if="s_idx > 0"
+              style="margin: auto 0;height: 2px;width: 3rem"
+              :style="{
+                backgroundColor: $vuetify.theme.themes[appTheme].accent
+              }"
+            ></div>
+            <div
+              style="display:flex;flex-direction: column;padding: .5rem .1rem"
+              :style="{
+                border: `1px solid ${$vuetify.theme.themes[appTheme].accent}`
+              }"
+            >
+              <div
+                v-for="_stage in stage"
+                :key="_stage"
+                style="flex: 0 0 auto; border-radius: 6px;margin: .2rem .5rem; padding: .2rem .5rem"
+                :style="{
+                  backgroundColor: $vuetify.theme.themes[appTheme].success
+                }"
+              >
+                {{ _stage }}
+              </div>
             </div>
-          </div>
-        </div>
+          </div></v-container
+        >
       </v-card>
       <!-- НАСТРОЙКА ЭТАПОВ //-->
 
@@ -824,24 +846,42 @@ export default {
   methods: {
     log: data => console.log(data),
     add_prev_stage(stage) {
-      if (this.competition.prev_stages.some(_prev => _prev === stage)) {
-        if (
-          this.competitions.find(_competition => _competition.id === stage)
-            .stage_grid.length > 0
-        )
-          this.competition.stage_grid.unshift(
-            ...this.competitions.find(_competition => _competition.id === stage)
+      if (this.competition.stages.prev_stages.some(_prev => _prev === stage)) {
+        if (this.competition.stages.lastStageSize > 1) {
+          this.competition.stages.stage_grid[
+            this.competition.stages.stage_grid.length - 2
+          ] = this.competition.stages.stage_grid[
+            this.competition.stages.stage_grid.length - 2
+          ].filter(_stage => _stage !== stage);
+        } else {
+          this.competition.stages.stage_grid.splice(
+            this.competition.stages.stage_grid.indexOf(
+              this.competition.stages.stage_grid.find(_stage =>
+                _stage.includes(stage)
+              )
+            ),
+            1
+          );
+        }
+        this.competition.stages.prev_stages = this.competition.stages.prev_stages.filter(
+          _stage => _stage !== stage
+        );
+        this.competition.stages.lastStageSize--;
+      } else {
+        if (this.competition.stages.lastStageSize < 1) {
+          this.competition.stages.lastStageSize += 1;
+          this.competition.stages.prev_stages.push(stage);
+          this.competition.stages.stage_grid.unshift(
+            ...this.competitions.find(_comp => _comp.id === stage).stages
               .stage_grid
           );
-        this.competition.prev_stages = [...this.competition.prev_stages, stage];
-      } else {
-        this.prev_stages = this.prev_stages.filter(_stage => _stage !== stage);
-        this.competition.stage_grid = this.competition.stage_grid.filter(
-          _grid =>
-            _grid !==
-            this.competitions.find(_competition => _competition.id === stage)
-              .stage_grid
-        );
+        } else {
+          this.competition.stages.lastStageSize += 1;
+          this.competition.stages.prev_stages.push(stage);
+          this.competition.stages.stage_grid[
+            this.competition.stages.stage_grid.length - 2
+          ].push(stage);
+        }
       }
     }
   },
