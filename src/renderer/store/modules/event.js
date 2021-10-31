@@ -11,6 +11,7 @@ export default {
         this.structure.selected.type = 0;
         this.structure.selected.discipline = 0;
         this.mainData.title.stage.value = this.structure.stages[0];
+        this.stage_grid.push([this.id]);
         args.forEach(arg => {
           if (typeof arg === "object") {
             if (arg.id === "competitors")
@@ -66,6 +67,7 @@ export default {
         return Math.round(acc * val) / acc;
       }
       prev_stages = [];
+      stage_grid = [];
       passed_competitors = 0;
       races = [];
       selected_race_id = 0;

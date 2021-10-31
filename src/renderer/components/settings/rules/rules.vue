@@ -7,6 +7,7 @@
         color: $vuetify.theme.themes[appTheme].textDefault
       }"
     >
+      <!--// НАСТРОЙКА ЭТАПОВ -->
       <v-card
         elevation="0"
         style="padding: 8px"
@@ -146,74 +147,24 @@
             </div>
           </div>
         </v-container>
+        <div
+          style="display:flex;align-items: center;padding: 8px 16px;border-radius: 6px"
+          :style="{ backgroundColor: $vuetify.theme.themes[appTheme].accent }"
+        >
+          <div
+            v-for="(stage, s_idx) in competition.stage_grid"
+            :key="s_idx"
+            style="display:flex;flex-direction: column"
+          >
+            <div v-for="_stage in stage" :key="_stage" style="flex: 0 0 auto">
+              {{ _stage }}
+            </div>
+          </div>
+        </div>
       </v-card>
-      <!--      <div class="d-flex flex-nowrap">-->
-      <!--        <div class="pa-2" style="width: 50%;">-->
-      <!--          <v-card-title>Вид соревнования</v-card-title>-->
-      <!--          <v-radio-group-->
-      <!--            row-->
-      <!--            hide-details-->
-      <!--            class="ma-0 pa-0"-->
-      <!--            style="border-radius: 6px"-->
-      <!--            :style="{-->
-      <!--              backgroundColor:-->
-      <!--                $vuetify.theme.themes[appTheme].standardBackgroundRGBA-->
-      <!--            }"-->
-      <!--            :key="Math.random()"-->
-      <!--            v-model="competition.structure.selected.type"-->
-      <!--          >-->
-      <!--            <v-radio-->
-      <!--              class="pa-2 ma-1"-->
-      <!--              v-for="(type, t) in competition.structure.types"-->
-      <!--              :key="t"-->
-      <!--              :style="{-->
-      <!--                backgroundColor:-->
-      <!--                  $vuetify.theme.themes[appTheme].cardBackgroundRGBA-->
-      <!--              }"-->
-      <!--              style="border-radius: 6px"-->
-      <!--              :dark="appTheme === 'dark'"-->
-      <!--              :color="$vuetify.theme.themes[appTheme].accent"-->
-      <!--              :value="type.id"-->
-      <!--              :label="type.title"-->
-      <!--            ></v-radio>-->
-      <!--          </v-radio-group>-->
-      <!--        </div>-->
-      <!--        <div class="pa-2" style="width: 50%;">-->
-      <!--          <v-card-title>Дисциплина</v-card-title>-->
-      <!--          <v-radio-group-->
-      <!--            row-->
-      <!--            hide-details-->
-      <!--            class="ma-0 pa-0"-->
-      <!--            style="border-radius: 6px"-->
-      <!--            :style="{-->
-      <!--              backgroundColor:-->
-      <!--                $vuetify.theme.themes[appTheme].standardBackgroundRGBA-->
-      <!--            }"-->
-      <!--            :key="Math.random()"-->
-      <!--            v-model="competition.structure.selected.discipline"-->
-      <!--          >-->
-      <!--            <v-radio-->
-      <!--              class="pa-2 ma-1"-->
-      <!--              v-for="(discipline,-->
-      <!--              d) in competition.structure.disciplines.filter(type => {-->
-      <!--                return competition.structure.types[-->
-      <!--                  competition.structure.selected.type-->
-      <!--                ].disciplines.includes(type.id);-->
-      <!--              })"-->
-      <!--              :key="d"-->
-      <!--              :style="{-->
-      <!--                backgroundColor:-->
-      <!--                  $vuetify.theme.themes[appTheme].cardBackgroundRGBA-->
-      <!--              }"-->
-      <!--              style="border-radius: 6px"-->
-      <!--              :dark="appTheme === 'dark'"-->
-      <!--              :color="$vuetify.theme.themes[appTheme].accent"-->
-      <!--              :value="discipline.id"-->
-      <!--              :label="discipline.title"-->
-      <!--            ></v-radio>-->
-      <!--          </v-radio-group>-->
-      <!--        </div>-->
-      <!--      </div>-->
+      <!-- НАСТРОЙКА ЭТАПОВ //-->
+
+      <!--//НАСТРОЙКА ТОЧНОСТИ -->
       <div class="pa-2 d-flex flex-column">
         <v-card-title>Точность результа</v-card-title>
         <div style="width: 100%;">
@@ -245,6 +196,9 @@
           </v-radio-group>
         </div>
       </div>
+      <!-- НАСТРОЙКА ТОЧНОСТИ //-->
+
+      <!--// НАСТРОЙКА ФОРМУЛЫ ЗАЕЗДА -->
       <div class="pa-2 d-flex flex-column">
         <v-card-title
           @click="
@@ -726,8 +680,11 @@
           </div>
         </div>
       </div>
+      <!-- НАСТРОЙКА ФОРМУЛЫ ЗАЕЗДА //-->
+
+      <!--// НАСТРОЙКА ФОРМУЛЫ ЭТАПА -->
       <div class="pa-2 d-flex flex-column">
-        <v-card-title>Формула подстчёта заезда</v-card-title>
+        <v-card-title>Формула подстчёта этапа</v-card-title>
         <div
           class="pa-1 d-flex flex-nowrap align-center"
           style="border-radius: 6px"
@@ -854,6 +811,7 @@
           </div>
         </div>
       </div>
+      <!-- НАСТРОЙКА ФОРМУЛЫ ЭТАПА //-->
     </v-card>
   </v-container>
 </template>
@@ -866,19 +824,23 @@ export default {
   methods: {
     log: data => console.log(data),
     add_prev_stage(stage) {
-      if (!this.competition.prev_stages.some(_comp => _comp === stage)) {
+      if (this.competition.prev_stages.some(_prev => _prev === stage)) {
         if (
           this.competitions.find(_competition => _competition.id === stage)
-            .prev_stages.length > 0
+            .stage_grid.length > 0
         )
-          this.competition.prev_stages.push(
+          this.competition.stage_grid.unshift(
             ...this.competitions.find(_competition => _competition.id === stage)
-              .prev_stages
+              .stage_grid
           );
-        this.competition.prev_stages.push(stage);
+        this.competition.prev_stages = [...this.competition.prev_stages, stage];
       } else {
-        this.competition.prev_stages = this.competition.prev_stages.filter(
-          _stage => _stage !== stage
+        this.prev_stages = this.prev_stages.filter(_stage => _stage !== stage);
+        this.competition.stage_grid = this.competition.stage_grid.filter(
+          _grid =>
+            _grid !==
+            this.competitions.find(_competition => _competition.id === stage)
+              .stage_grid
         );
       }
     }
