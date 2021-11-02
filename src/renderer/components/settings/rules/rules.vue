@@ -181,9 +181,12 @@
                 {{ _stage }}
               </div>
             </div>
-          </div></v-container
-        >
+          </div>
+        </v-container>
       </v-card>
+      <div>
+        {{ competition && competition.stages.stage_grid }}
+      </div>
       <!-- НАСТРОЙКА ЭТАПОВ //-->
 
       <!--//НАСТРОЙКА ТОЧНОСТИ -->
@@ -854,6 +857,32 @@ export default {
             this.competition.stages.stage_grid.length - 2
           ].filter(_stage => _stage !== stage);
         } else {
+          this.competitions
+            .find(_competition => _competition.id === stage)
+            .stages.stage_grid.forEach(_prevGridStage =>
+              _prevGridStage.forEach(_prevGridStageComp => {
+                if (
+                  this.competition.stages.stage_grid.find(_stage =>
+                    _stage.includes(_prevGridStageComp)
+                  )
+                ) {
+                  console.log("@-----------");
+                  console.log(this.competition.stages.stage_grid);
+                  console.log(_prevGridStage);
+                  console.log(_prevGridStageComp);
+                  this.competition.stages.stage_grid.splice(
+                    this.competition.stages.stage_grid.indexOf(
+                      this.competition.stages.stage_grid.find(_stage =>
+                        _stage.includes(_prevGridStageComp)
+                      )
+                    ),
+                    1
+                  );
+                  console.log(this.competition.stages.stage_grid);
+                  console.log("-----------@");
+                }
+              })
+            );
           this.competition.stages.stage_grid.splice(
             this.competition.stages.stage_grid.indexOf(
               this.competition.stages.stage_grid.find(_stage =>
@@ -869,19 +898,17 @@ export default {
         this.competition.stages.lastStageSize--;
       } else {
         if (this.competition.stages.lastStageSize < 1) {
-          this.competition.stages.lastStageSize += 1;
-          this.competition.stages.prev_stages.push(stage);
           this.competition.stages.stage_grid.unshift(
             ...this.competitions.find(_comp => _comp.id === stage).stages
               .stage_grid
           );
         } else {
-          this.competition.stages.lastStageSize += 1;
-          this.competition.stages.prev_stages.push(stage);
           this.competition.stages.stage_grid[
             this.competition.stages.stage_grid.length - 2
           ].push(stage);
         }
+        this.competition.stages.prev_stages.push(stage);
+        this.competition.stages.lastStageSize += 1;
       }
     }
   },
