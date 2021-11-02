@@ -6,7 +6,7 @@
     }"
   >
     <div
-      v-for="stage in competition.prev_stages.map(_stage =>
+      v-for="stage in competition.stages.prev_stages.map(_stage =>
         competitions.find(_competition => _competition.id === _stage)
       )"
       style="overflow-y: auto;border-radius: 6px;padding: .4rem 1rem"

@@ -577,32 +577,6 @@ export default {
           });
         }
       };
-      timer = {
-        sec: null,
-        min: null,
-        hrs: null,
-        ticker: () => {
-          const date = new Date();
-          this.timer.sec = `${
-            date.getSeconds().toString().length < 2
-              ? "0" + date.getSeconds()
-              : date.getSeconds()
-          }`;
-          this.timer.min = `${
-            date.getMinutes().toString().length < 2
-              ? "0" + date.getMinutes()
-              : date.getMinutes()
-          }`;
-          this.timer.hrs = `${
-            date.getHours().toString().length < 2
-              ? "0" + date.getHours()
-              : date.getHours()
-          }`;
-          setTimeout(() => {
-            this.timer.ticker();
-          }, 1000);
-        }
-      };
     },
     RaceClass: class {
       constructor(title, type, discipline, competitors) {

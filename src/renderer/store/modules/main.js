@@ -47,7 +47,33 @@ export default {
         title: "Протоколы",
         link: "final_protocols"
       }
-    ]
+    ],
+    timer: {
+      sec: null,
+      min: null,
+      hrs: null,
+      ticker() {
+        const date = new Date();
+        this.sec = `${
+          date.getSeconds().toString().length < 2
+            ? "0" + date.getSeconds()
+            : date.getSeconds()
+        }`;
+        this.min = `${
+          date.getMinutes().toString().length < 2
+            ? "0" + date.getMinutes()
+            : date.getMinutes()
+        }`;
+        this.hrs = `${
+          date.getHours().toString().length < 2
+            ? "0" + date.getHours()
+            : date.getHours()
+        }`;
+        setTimeout(() => {
+          this.ticker();
+        }, 1000);
+      }
+    }
   },
 
   getters: {
@@ -62,7 +88,8 @@ export default {
     serverStatusChecker: state => state.serverStatusChecker,
     appTheme: state => state.appTheme,
     appMenu: state => state.appMenu,
-    messages: state => state.messages
+    messages: state => state.messages,
+    timer: state => state.timer
   },
   mutations: {
     set_ip: (state, ip) => {
@@ -185,7 +212,6 @@ export default {
     },
     setCompetition: (state, competition) => {
       state.competition = competition;
-      console.log(state.competition);
       state.socket &&
         state.socket.connected &&
         state.socket.emit("set_competition_data", competition, res => {

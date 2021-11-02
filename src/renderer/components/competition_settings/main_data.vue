@@ -182,14 +182,14 @@
               </div>
             </div>
             <div
+              v-if="
+                competition.mainData.title.stage &&
+                  competition.mainData.title.stage.value.id === 'custom'
+              "
               style="display:flex;flex-grow: 1;margin-left: .4rem;overflow:hidden;"
             >
               <input
                 type="text"
-                v-if="
-                  competition.mainData.title.stage &&
-                    competition.mainData.title.stage.value.id === 'custom'
-                "
                 @focus="competition.mainData[md].focus = true"
                 @blur="competition.mainData[md].focus = false"
                 v-model="competition.mainData.title.stage.value.value"

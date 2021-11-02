@@ -16,8 +16,8 @@
           color: $vuetify.theme.themes[appTheme].textDefault
         }"
       >
-        <v-card-title>
-          Предыдущий этап
+        <v-card-title style="padding: .5rem 1rem">
+          Настройка этапов
         </v-card-title>
         <v-container
           style="display:flex;flex-wrap: wrap;align-items: center;min-height: 4rem;border-radius: 6px;padding: 0;"
@@ -31,7 +31,7 @@
               _comp => _comp.id !== competition.id
             )"
             :key="_competition.id"
-            style="margin: 4px 0 4px 4px;border-radius: 6px;overflow:hidden;transition: border .172s"
+            style="margin: .5rem 0 .5rem .5rem;border-radius: 6px;overflow:hidden;transition: border .172s"
             :style="[
               {
                 border: `1px solid ${$vuetify.theme.themes[appTheme].standardBackgroundRGBA}`,
@@ -43,18 +43,21 @@
                   _comp => _comp === _competition.id
                 ) && {
                   border: `1px solid ${$vuetify.theme.themes[appTheme].accent}`
-                }
+                },
+              stageUsed(_competition) && {
+                border: `1px solid ${$vuetify.theme.themes[appTheme].action_darkYellow}`
+              }
             ]"
           >
             <div
               class="title"
               style="display:flex;align-items: center;padding: 4px 8px"
             >
-              <div style="font-weight: bold">
+              <div style="margin-right: 1rem;font-weight: bold">
                 {{ _competition.mainData.title.value || "" }}
               </div>
               <div
-                style="margin-left: 1rem; padding: 2px;border-radius: 6px;transition: background-color .172s"
+                style="margin-left: auto; padding: 2px;border-radius: 6px;transition: background-color .172s"
                 :style="[
                   {
                     backgroundColor:
@@ -65,7 +68,11 @@
                       _comp => _comp === _competition.id
                     ) && {
                       backgroundColor: $vuetify.theme.themes[appTheme].accent
-                    }
+                    },
+                  stageUsed(_competition) && {
+                    backgroundColor:
+                      $vuetify.theme.themes[appTheme].action_darkYellow
+                  }
                 ]"
               >
                 <div style="padding: 2px 1rem">
@@ -80,7 +87,7 @@
             </div>
             <div style="display:flex;flex-wrap: nowrap;align-items: center;">
               <div
-                style="display: flex;align-items: center;flex-wrap: nowrap;margin-top: auto;overflow:hidden;transform: scaleX(0);border-top-right-radius: 6px;transform-origin:left;transition: transform .112s"
+                style="display: flex;align-items: center;flex-wrap: nowrap;margin-top: auto;margin-right: 1rem;overflow:hidden;transform: scaleX(0);border-top-right-radius: 6px;transform-origin:left;transition: transform .112s"
                 :style="[
                   {
                     backgroundColor:
@@ -93,16 +100,23 @@
                       _comp => _comp === _competition.id
                     ) && {
                       transform: 'scaleX(1)'
-                    }
+                    },
+                  stageUsed(_competition) && {
+                    transform: 'scaleX(1)',
+                    backgroundColor:
+                      $vuetify.theme.themes[appTheme].action_darkYellow
+                  }
                 ]"
               >
                 <div
+                  v-if="!stageUsed(_competition)"
                   style="overflow:hidden;white-space: nowrap;font-weight:bold;"
                 >
                   Кол-во прошедших
                 </div>
                 <input
                   type="number"
+                  v-if="!stageUsed(_competition)"
                   style="padding: 2px 4px;margin-left: .4rem; width: 4rem;font-weight: bold;border-radius: 6px"
                   :style="{
                     backgroundColor:
@@ -114,18 +128,41 @@
                       .passed_competitors
                   "
                 />
+                <div
+                  v-else
+                  style="display:flex;align-items: center;padding: 2px 4px; font-weight:bold;"
+                >
+                  {{
+                    competitions.find(_comp => _comp.id === _competition.id)
+                      .passed_competitors
+                  }}<v-icon
+                    small
+                    :color="$vuetify.theme.themes[appTheme].textDefault"
+                    >mdi-arrow-right</v-icon
+                  >
+                </div>
               </div>
               <div
                 style="font-weight: bold;margin-left: auto;"
-                :style="{
-                  color: $vuetify.theme.themes[appTheme].standardBackgroundRGBA
-                }"
+                :style="[
+                  {
+                    color:
+                      $vuetify.theme.themes[appTheme].standardBackgroundRGBA
+                  },
+                  competition &&
+                    competition.stages.prev_stages.some(
+                      _comp => _comp === _competition.id
+                    ) && { color: $vuetify.theme.themes[appTheme].accent }
+                ]"
               >
                 Comp_id:&nbsp{{ _competition.id }}
               </div>
 
               <v-hover v-slot:default="{ hover }">
-                <v-btn @click="add_prev_stage(_competition.id)" icon
+                <v-btn
+                  @click="add_prev_stage(_competition.id)"
+                  :disabled="stageUsed(_competition)"
+                  icon
                   ><v-icon
                     v-if="
                       competition &&
@@ -150,48 +187,83 @@
               >
             </div>
           </div>
-        </v-container>
-        <v-container style="display:flex;flex-wrap: nowrap; padding: 0">
-          <div
-            v-for="(stage, s_idx) in competition.stages.stage_grid"
-            :key="s_idx"
-            style="display:flex;flex-wrap: nowrap;align-items: center"
+          <v-container
+            style="display:flex;flex-direction: column; padding: .5rem 1rem;margin: .5rem .5rem;border-radius: 6px"
+            :style="{
+              backgroundColor:
+                $vuetify.theme.themes[appTheme].cardBackgroundRGBA
+            }"
           >
             <div
-              v-if="s_idx > 0"
-              style="margin: auto 0;height: 2px;width: 3rem"
-              :style="{
-                backgroundColor: $vuetify.theme.themes[appTheme].accent
-              }"
-            ></div>
-            <div
-              style="display:flex;flex-direction: column;padding: .5rem .1rem"
-              :style="{
-                border: `1px solid ${$vuetify.theme.themes[appTheme].accent}`
-              }"
+              style="flex: 0 0 auto;font-weight: bold;font-size: 1.2rem;margin: 0 0 .5rem 0"
             >
+              Сетка соревнований
+            </div>
+            <div style="display:flex;align-items: center;flex-wrap: wrap">
               <div
-                v-for="_stage in stage"
-                :key="_stage"
-                style="flex: 0 0 auto; border-radius: 6px;margin: .2rem .5rem; padding: .2rem .5rem"
-                :style="{
-                  backgroundColor: $vuetify.theme.themes[appTheme].success
-                }"
+                v-for="(stage, s_idx) in competition.stages.stage_grid"
+                :key="s_idx"
+                style="display:flex;flex-wrap: nowrap;flex: 0 0 auto;align-items: center;margin: .5rem 0"
               >
-                {{ _stage }}
+                <div
+                  v-if="s_idx > 0"
+                  style="margin: auto 0;height: 2px;width: 3rem"
+                  :style="{
+                    backgroundColor: $vuetify.theme.themes[appTheme].accent
+                  }"
+                ></div>
+                <div
+                  style="display:flex;flex-direction: column;padding: .5rem .1rem;border-radius: 6px"
+                  :style="{
+                    backgroundColor:
+                      $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
+                    border: `1px solid ${$vuetify.theme.themes[appTheme].accent}`
+                  }"
+                >
+                  <div
+                    v-for="_stage in stage"
+                    :key="_stage"
+                    style="flex: 0 0 auto; border-radius: 6px;margin: .2rem .5rem; padding: .2rem .5rem"
+                    :style="{
+                      backgroundColor:
+                        $vuetify.theme.themes[appTheme].cardBackgroundRGBA
+                    }"
+                  >
+                    <div
+                      v-for="comp in [
+                        competitions.find(
+                          _competition => _competition.id === _stage
+                        )
+                      ]"
+                      :key="comp.id"
+                      style="display:flex;flex-direction: column"
+                      :style="{
+                        color: $vuetify.theme.themes[appTheme].textDefault
+                      }"
+                    >
+                      <div style="font-size: .9rem;margin-left: auto">
+                        {{ comp.mainData.title.stage.value.value }}
+                      </div>
+                      <div
+                        style="flex: 0 0 auto;font-size: .95rem;font-weight: bold"
+                      >
+                        {{ comp.mainData.title.value }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
+          </v-container>
         </v-container>
       </v-card>
-      <div>
-        {{ competition && competition.stages.stage_grid }}
-      </div>
       <!-- НАСТРОЙКА ЭТАПОВ //-->
 
       <!--//НАСТРОЙКА ТОЧНОСТИ -->
       <div class="pa-2 d-flex flex-column">
-        <v-card-title>Точность результа</v-card-title>
+        <v-card-title style="padding: .5rem 1rem"
+          >Точность результа</v-card-title
+        >
         <div style="width: 100%;">
           <v-radio-group
             row
@@ -226,6 +298,7 @@
       <!--// НАСТРОЙКА ФОРМУЛЫ ЗАЕЗДА -->
       <div class="pa-2 d-flex flex-column">
         <v-card-title
+          style="padding: .5rem 1rem"
           @click="
             competition.result_formula.types[
               competition.result_formula.type
@@ -244,23 +317,19 @@
                 }"
                 style="border-radius: 6px; height: 100%; width: 100%;"
               >
-                <div
-                  class="pa-1 d-flex flex-nowrap align-center"
-                  style="font-weight:bold; font-size: 1.4rem; border-radius: 6px"
-                  :style="{
-                    backgroundColor:
-                      $vuetify.theme.themes[appTheme].cardBackgroundRGBA
-                  }"
-                >
+                <v-hover v-slot:default="{ hover }">
                   <div
-                    v-html="`${competition.result_formula.types[0].title}`"
-                  ></div>
-                  <v-spacer></v-spacer>
-                  <v-hover v-slot:default="{ hover }">
+                    @click="competition.result_formula.type = 0"
+                    class="pa-1 d-flex flex-nowrap align-center"
+                    style="font-weight:bold; font-size: 1.4rem;border-radius: 6px 6px 0 0;cursor:pointer;"
+                    :style="{
+                      backgroundColor:
+                        $vuetify.theme.themes[appTheme].cardBackgroundRGBA
+                    }"
+                  >
                     <div class="d-flex justify-center align-center">
                       <div
-                        style="height: 1.4rem;width: 1.4rem;border-radius: 50%; cursor:pointer; transition: background-color 132ms, box-shadow 92ms"
-                        @click="competition.result_formula.type = 0"
+                        style="height: 1.4rem;width: 1.4rem;border-radius: 50%; transition: background-color 132ms, box-shadow 92ms"
                         :style="[
                           {
                             border: `2px solid ${$vuetify.theme.themes[appTheme].standardBackgroundRGBA}`,
@@ -277,28 +346,31 @@
                         ]"
                       ></div>
                     </div>
-                  </v-hover>
-                </div>
+                    <div
+                      style="margin-left: 1rem;"
+                      v-html="`${competition.result_formula.types[0].title}`"
+                    ></div>
+                  </div>
+                </v-hover>
                 <div class="mt-1 d-flex flex-nowrap flex-grow-1">
                   <div class="d-flex flex-column flex-grow-1">
                     <div
                       class="d-flex flex-wrap justify-start align-start flex-grow-1"
                     >
                       <div
-                        class="pa-1"
                         v-for="(judge, jd) in competition.stuff.judges"
                         :key="jd"
                       >
                         <div
-                          class="pa-1 d-flex flex-column"
-                          style="border-radius: 6px; min-height: 3rem;"
+                          class="d-flex flex-column"
+                          style="min-height: 3rem;padding: .25rem .5rem;margin: 0 .5rem .5rem 0"
                           :style="{
                             backgroundColor:
                               $vuetify.theme.themes[appTheme].cardBackgroundRGBA
                           }"
                         >
                           <div
-                            class="pa-1 font-weight-bold"
+                            class="font-weight-bold"
                             v-html="`Судья ${judge.id}`"
                           ></div>
                           <div v-html="`${judge.surName} ${judge.name}`"></div>
@@ -306,12 +378,12 @@
                       </div>
                     </div>
                     <div
-                      class="pa-1 mr-1 d-flex flex-wrap align-center"
-                      style="border-radius: 6px"
+                      class="pa-2 mr-1 d-flex flex-wrap align-center"
                       :style="{
                         backgroundColor:
                           $vuetify.theme.themes[appTheme].cardBackgroundRGBA
                       }"
+                      style="border-radius: 0 0 0 6px"
                     >
                       <v-hover
                         v-for="formula in competition.result_formula.types[0]
@@ -353,7 +425,7 @@
                   </div>
                   <div
                     class="d-flex flex-column"
-                    style="min-width: 150px;min-height: 100%; border-radius: 6px"
+                    style="min-width: 150px;min-height: 100%;border-radius: 0 0 6px 0"
                     :style="{
                       backgroundColor:
                         $vuetify.theme.themes[appTheme].cardBackgroundRGBA
@@ -431,15 +503,14 @@
                       $vuetify.theme.themes[appTheme].cardBackgroundRGBA
                   }"
                 >
-                  <div
-                    v-html="`${competition.result_formula.types[1].title}`"
-                  ></div>
-                  <v-spacer></v-spacer>
-                  <div class="d-flex justify-center align-center">
-                    <v-hover v-slot:default="{ hover }">
+                  <v-hover v-slot:default="{ hover }">
+                    <div
+                      @click="competition.result_formula.type = 1"
+                      class="d-flex align-center"
+                      style="flex: 1 0 auto;cursor:pointer"
+                    >
                       <div
-                        style="height: 1.4rem;width: 1.4rem;border-radius: 50%; cursor:pointer; transition: background-color 132ms, box-shadow 92ms"
-                        @click="competition.result_formula.type = 1"
+                        style="height: 1.4rem;width: 1.4rem;border-radius: 50%; transition: background-color 132ms, box-shadow 92ms"
                         :style="[
                           {
                             border: `2px solid ${$vuetify.theme.themes[appTheme].standardBackgroundRGBA}`,
@@ -455,30 +526,33 @@
                           }
                         ]"
                       ></div>
-                    </v-hover>
-                  </div>
-                </div>
-                <div class="pa-1 d-flex flex-column" style="min-height: 100px">
+                      <div
+                        style="margin-left: 1rem;"
+                        v-html="`${competition.result_formula.types[1].title}`"
+                      ></div>
+                    </div>
+                  </v-hover>
                   <v-dialog v-model="section_dialog.state" width="420px">
                     <template v-slot:activator="{ on }">
                       <v-btn
                         v-on="on"
                         text
                         small
+                        style="flex: 0 0 auto"
                         :color="$vuetify.theme.themes[appTheme].success"
-                        v-html="`Добавить секцию`"
-                      ></v-btn>
+                        >Добавить секцию</v-btn
+                      >
                     </template>
                     <v-card
+                      class="d-flex flex-column"
                       :style="{
                         color: $vuetify.theme.themes[appTheme].textDefault,
                         backgroundColor:
                           $vuetify.theme.themes[appTheme].cardBackgroundRGBA
                       }"
-                      class="d-flex flex-column"
                     >
                       <v-card-title class="pa-2 d-flex align-center">
-                        <div v-html="`Создание секции`"></div>
+                        <div>Создание секции</div>
                         <v-spacer></v-spacer>
                         <v-btn
                           icon
@@ -620,9 +694,14 @@
                       </v-card-actions>
                     </v-card>
                   </v-dialog>
+                </div>
+                <div
+                  class="d-flex flex-column"
+                  style="min-height: 100px; margin-top: .5rem"
+                >
                   <div class="d-flex align-center align-start">
                     <div
-                      class="pa-1"
+                      style="margin: 0 .5rem .5rem 0"
                       v-for="(section, sc) in competition.result_formula
                         .types[1].sections"
                       :key="sc"
@@ -709,7 +788,9 @@
 
       <!--// НАСТРОЙКА ФОРМУЛЫ ЭТАПА -->
       <div class="pa-2 d-flex flex-column">
-        <v-card-title>Формула подстчёта этапа</v-card-title>
+        <v-card-title style="padding: .5rem 1rem"
+          >Формула подстчёта этапа</v-card-title
+        >
         <div
           class="pa-1 d-flex flex-nowrap align-center"
           style="border-radius: 6px"
@@ -853,9 +934,13 @@ export default {
         if (this.competition.stages.lastStageSize > 1) {
           this.competition.stages.stage_grid[
             this.competition.stages.stage_grid.length - 2
-          ] = this.competition.stages.stage_grid[
-            this.competition.stages.stage_grid.length - 2
-          ].filter(_stage => _stage !== stage);
+          ] = JSON.parse(
+            JSON.stringify(
+              this.competition.stages.stage_grid[
+                this.competition.stages.stage_grid.length - 2
+              ].filter(_stage => _stage !== stage)
+            )
+          );
         } else {
           this.competitions
             .find(_competition => _competition.id === stage)
@@ -865,11 +950,7 @@ export default {
                   this.competition.stages.stage_grid.find(_stage =>
                     _stage.includes(_prevGridStageComp)
                   )
-                ) {
-                  console.log("@-----------");
-                  console.log(this.competition.stages.stage_grid);
-                  console.log(_prevGridStage);
-                  console.log(_prevGridStageComp);
+                )
                   this.competition.stages.stage_grid.splice(
                     this.competition.stages.stage_grid.indexOf(
                       this.competition.stages.stage_grid.find(_stage =>
@@ -878,19 +959,8 @@ export default {
                     ),
                     1
                   );
-                  console.log(this.competition.stages.stage_grid);
-                  console.log("-----------@");
-                }
               })
             );
-          this.competition.stages.stage_grid.splice(
-            this.competition.stages.stage_grid.indexOf(
-              this.competition.stages.stage_grid.find(_stage =>
-                _stage.includes(stage)
-              )
-            ),
-            1
-          );
         }
         this.competition.stages.prev_stages = this.competition.stages.prev_stages.filter(
           _stage => _stage !== stage
@@ -899,8 +969,12 @@ export default {
       } else {
         if (this.competition.stages.lastStageSize < 1) {
           this.competition.stages.stage_grid.unshift(
-            ...this.competitions.find(_comp => _comp.id === stage).stages
-              .stage_grid
+            ...JSON.parse(
+              JSON.stringify(
+                this.competitions.find(_comp => _comp.id === stage).stages
+                  .stage_grid
+              )
+            )
           );
         } else {
           this.competition.stages.stage_grid[
@@ -910,6 +984,21 @@ export default {
         this.competition.stages.prev_stages.push(stage);
         this.competition.stages.lastStageSize += 1;
       }
+    },
+    stageUsed(stage) {
+      return (
+        this.competition &&
+        this.competition.stages.stage_grid
+          .filter(_prevGrid => {
+            return (
+              this.competition.stages.stage_grid.indexOf(_prevGrid) !==
+              this.competition.stages.stage_grid.length - 2
+            );
+          })
+          .some(_grid => {
+            return _grid.includes(stage.id);
+          })
+      );
     }
   },
   data() {

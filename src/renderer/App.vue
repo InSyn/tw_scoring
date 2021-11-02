@@ -33,7 +33,7 @@
       >
         <v-hover v-slot:default="{ hover }">
           <div
-            style="display:flex;align-items: center;flex-wrap: nowrap;padding: .4rem .8rem;font-weight:bold;border-radius:6px;white-space: nowrap;cursor: pointer;user-select: none;transition: background-color .122s,border .122s"
+            style="display:flex;align-items: center;flex-wrap: nowrap;font-weight:bold;border-radius:6px;white-space: nowrap;cursor: pointer;user-select: none;transition: background-color .122s,border .122s"
             :style="[
               {
                 border: `1px solid ${$vuetify.theme.themes[appTheme].standardBackgroundRGBA}`
@@ -46,17 +46,20 @@
             ]"
           >
             <div
-              style="display:flex;flex-direction: column;white-space: nowrap"
+              style="display:flex;flex-direction: column;white-space: nowrap;padding: .4rem"
             >
               <div
-                style="font-size: .75rem;flex: 0 0 auto;align-self: flex-end;line-height: 0.8;"
+                style="display:flex;align-items: center;font-size: .75rem;flex: 0 0 auto;line-height: 1"
                 :style="{
                   color: $vuetify.theme.themes[appTheme].accent
                 }"
               >
-                {{ `ID: ${competition && competition.id}` }}
+                <div style="margin-right: auto;font-weight: bold">
+                  {{ competitions.indexOf(competition) + 1 }}
+                </div>
+                <div>{{ `ID: ${competition && competition.id}` }}</div>
               </div>
-              <div style="flex: 0 0 auto">
+              <div style="flex: 0 0 auto;margin-top: .2rem">
                 {{
                   `${competition &&
                     competition.mainData.title.value}. ${competition &&
@@ -92,7 +95,7 @@
             }"
           >
             {{
-              `${competition &&
+              `${competitions.indexOf(competition) + 1} ${competition &&
                 competition.mainData.title.value}. ${competition &&
                 competition.mainData.title.stage.value &&
                 competition.mainData.title.stage.value.value}`
@@ -124,7 +127,7 @@
               ]"
             >
               {{
-                `${_competition &&
+                `${competitions.indexOf(_competition) + 1} ${_competition &&
                   _competition.mainData.title.value}. ${_competition.mainData
                   .title.stage.value &&
                   _competition.mainData.title.stage.value.value}`
@@ -262,11 +265,9 @@
       <span class="ml-2">{{ new Date().getFullYear() }}</span
       ><v-spacer></v-spacer
       ><span
-        v-if="competition"
+        v-if="timer"
         :style="{ color: `${$vuetify.theme.themes[appTheme].accent}` }"
-        v-html="
-          `${competition.timer.hrs}:${competition.timer.min}:${competition.timer.sec}`
-        "
+        v-html="`${timer.hrs}:${timer.min}:${timer.sec}`"
       >
       </span>
     </footer>
@@ -294,14 +295,11 @@ export default {
       e.key === "Home" && this.changeMenuState();
     });
     fs.readdir("./StartList", (err, res) => {
-      err &&
-        fs.mkdir("./StartList", err => {
-          return err;
-        });
-      res &&
-        (() => {
-          return 0;
-        })();
+      err
+        ? fs.mkdir("./StartList", err => {
+            return err;
+          })
+        : res;
     });
     ipcRenderer.on("server_message", (e, message) => {
       this.$store.commit("main/pushServerMessage", message);
@@ -314,7 +312,7 @@ export default {
         ? this.$store.commit("main/serverSetStatus", true)
         : this.$store.commit("main/serverSetStatus", false);
     }, 2250);
-    this.competition.timer.ticker();
+    this.timer.ticker();
   },
   data() {
     return {
@@ -336,6 +334,9 @@ export default {
       "changeTheme",
       "createCompetition"
     ]),
+    log(data) {
+      console.log(data);
+    },
     startServer() {
       app.emit("startSocketServer", this.server_config);
       if (!this.serverStatus) {
@@ -388,7 +389,8 @@ export default {
       "appTheme",
       "appMenu",
       "competitions",
-      "competition"
+      "competition",
+      "timer"
     ]),
     ...mapGetters("event", ["EventClass"]),
     ...mapGetters("roles", ["JudgeClass"])

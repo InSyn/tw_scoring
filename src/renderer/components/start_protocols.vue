@@ -624,8 +624,8 @@
                     class="d-flex flex-column"
                   >
                     <v-card-title
-                      class="px-4 ma-0 d-flex align-center justify-space-between"
-                      style="font-weight:bold; font-size: 1.2rem"
+                      class="d-flex align-center"
+                      style="font-weight:bold; font-size: 1.2rem;padding: .5rem 1rem"
                       ><div>Изменить данные участника</div>
                       <v-btn
                         @click="
@@ -636,11 +636,12 @@
                           ).info_dialog.state = false
                         "
                         icon
+                        style="margin-left: auto;"
                         :color="$vuetify.theme.themes[appTheme].action_red"
                         ><v-icon>mdi-close</v-icon></v-btn
                       ></v-card-title
                     >
-                    <v-card-text class="pa-2 ma-0" style="font-size: 1rem"
+                    <v-card-text style="font-size: 1rem; padding: 1rem 2rem"
                       ><div
                         class="pa-1 d-flex align-center flex-nowrap"
                         v-for="(info, i) in competitor.info_data"
@@ -674,7 +675,9 @@
                           }"
                         /></div
                     ></v-card-text>
-                    <v-card-actions class="d-flex align-center flex-nowrap"
+                    <v-card-actions
+                      class="d-flex align-center flex-nowrap"
+                      style="padding: .5rem 1rem"
                       ><v-btn
                         :disabled="section !== 'startList'"
                         @click="
@@ -684,16 +687,20 @@
                           )
                         "
                         text
+                        style="margin-left: auto"
                         :color="$vuetify.theme.themes[appTheme].action_red"
-                        v-html="`Удалить участника`"
-                      ></v-btn
-                    ></v-card-actions> </v-card
-                ></v-dialog></div
-            ></v-hover>
+                        >Удалить из заезда</v-btn
+                      ></v-card-actions
+                    >
+                  </v-card></v-dialog
+                >
+              </div></v-hover
+            >
           </div>
         </div>
-      </div> </v-container
-  ></v-container>
+      </div>
+    </v-container></v-container
+  >
 </template>
 
 <script>

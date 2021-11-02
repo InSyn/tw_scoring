@@ -1,12 +1,14 @@
 <template>
   <v-container fluid v-if="competition"
-    ><div class="px-4">
-      <v-row class="px-4 pb-4" no-gutters
-        ><v-col style="font-size: 1.4rem; font-weight:bold;">Участники</v-col
-        ><v-spacer></v-spacer>
+    ><div style="display:flex;flex-direction: column">
+      <div
+        class="pa-2"
+        style="display:flex;align-items: center;flex: 0 0 auto;user-select: none"
+      >
+        <div style="font-size: 1.4rem; font-weight:bold;">Участники</div>
         <label
           class="d-flex align-center"
-          style="cursor:pointer;"
+          style="cursor:pointer;margin-left: auto"
           for="startListInput"
         >
           <v-hover v-slot:default="{ hover }">
@@ -58,9 +60,12 @@
             style="margin-right: .4rem"
             >mdi-arrow-right-bold</v-icon
           >Экспорт</v-btn
-        ></v-row
+        >
+      </div>
+      <div
+        class="ma-2"
+        style="position:relative; flex: 0 0 auto;border-radius: 6px; overflow: hidden"
       >
-      <div style="position:relative; border-radius: 6px; overflow: hidden">
         <v-row
           no-gutters
           style="border-top-left-radius: 6px; border-top-right-radius: 6px"
@@ -383,10 +388,9 @@
                   $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
                 color: $vuetify.theme.themes[appTheme].textDefault
               }"
-              ><v-card-title>
-                Данные участника
-                <div
-                  style="border-radius: 6px;margin-left: auto;padding: 4px 8px"
+              ><v-card-title style="padding: 0"
+                ><div
+                  style="border-radius: 0 0 6px 0;padding: 4px 8px"
                   :style="{
                     backgroundColor: $vuetify.theme.themes[appTheme].accent
                   }"
@@ -398,6 +402,9 @@
                       ""} ${(row.info_data["name"] && row.info_data["name"]) ||
                       ""}`
                   }}
+                </div>
+                <div style="margin-left: auto;padding: .5rem 1rem">
+                  Данные участника
                 </div>
               </v-card-title>
               <div
@@ -681,9 +688,9 @@ export default {
     },
     load_prev_stages() {
       let compArr = [];
-      if (this.competition.prev_stages.length > 1)
+      if (this.competition.stages.prev_stages.length > 1)
         compArr.push(
-          ...this.competition.prev_stages
+          ...this.competition.stages.prev_stages
             .map(_comp =>
               this.competitions.find(_competition => _competition.id === _comp)
             )
@@ -691,15 +698,14 @@ export default {
         );
       else
         compArr.push(
-          ...this.competition.prev_stages[
-            this.competition.prev_stages.length - 1
+          ...this.competition.stages.prev_stages[
+            this.competition.stages.prev_stages.length - 1
           ]
             .map(_comp =>
               this.competitions.find(_competition => _competition.id === _comp)
             )
             .map(_stage => _stage.passedCompetitors)
         );
-
       this.competition.competitorsSheet.competitors = [];
       compArr.forEach(arr =>
         this.competition.competitorsSheet.competitors.push(...arr)
