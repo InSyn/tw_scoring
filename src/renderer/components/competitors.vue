@@ -688,23 +688,31 @@ export default {
     },
     load_prev_stages() {
       let compArr = [];
-      if (this.competition.stages.prev_stages.length > 1)
+      if (
+        this.competition.stages.stage_grid[
+          this.competition.stages.stage_grid.length - 2
+        ] &&
+        this.competition.stages.stage_grid[
+          this.competition.stages.stage_grid.length - 2
+        ].s_competitions.length > 0
+      )
         compArr.push(
-          ...this.competition.stages.prev_stages
+          ...this.competition.stages.stage_grid[
+            this.competition.stages.stage_grid.length - 2
+          ].s_competitions
             .map(_comp =>
               this.competitions.find(_competition => _competition.id === _comp)
             )
-            .map(_stage => _stage.passedCompetitors)
-        );
-      else
-        compArr.push(
-          ...this.competition.stages.prev_stages[
-            this.competition.stages.prev_stages.length - 1
-          ]
-            .map(_comp =>
-              this.competitions.find(_competition => _competition.id === _comp)
+            .map(_stage =>
+              JSON.parse(JSON.stringify(_stage.passedCompetitors)).map(
+                _competitor => {
+                  _competitor.rank = null;
+                  _competitor.marks = [];
+                  _competitor.race_status = null;
+                  return _competitor;
+                }
+              )
             )
-            .map(_stage => _stage.passedCompetitors)
         );
       this.competition.competitorsSheet.competitors = [];
       compArr.forEach(arr =>

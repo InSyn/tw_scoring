@@ -31,7 +31,7 @@
               _comp => _comp.id !== competition.id
             )"
             :key="_competition.id"
-            style="margin: .5rem 0 .5rem .5rem;border-radius: 6px;overflow:hidden;transition: border .172s"
+            style="margin: .5rem 0 0 .5rem;border-radius: 6px;overflow:hidden;transition: border .172s"
             :style="[
               {
                 border: `1px solid ${$vuetify.theme.themes[appTheme].standardBackgroundRGBA}`,

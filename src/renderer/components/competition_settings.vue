@@ -509,7 +509,7 @@ export default {
             }
           },
           competitorsFromPrevStage: {
-            state: true,
+            state: false,
             title: "Перенести участников",
             check: () => {
               for (let $competitor of this.competition.competitorsSheet

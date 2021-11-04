@@ -618,11 +618,9 @@ export default {
           (this.$refs.notes &&
             Math.ceil(this.$refs.notes && this.$refs.notes[0].offsetHeight)) ||
           0;
-
         // console.log(
         //   `Container: ${container_height} header_height: ${header_height} result_height: ${result_height} results_overall:${results_overall} res_per_page: ${res_per_page} pages:${pages}`
         // );
-
         for (let p = 0; p < pages; p++) {
           this.data_paginated_results.push([]);
           for (let i = 0; i < res_per_page; i++) {

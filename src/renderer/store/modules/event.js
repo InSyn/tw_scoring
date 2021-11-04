@@ -229,6 +229,23 @@ export default {
           selected: 1
         }
       };
+      getResult(competitor_id) {
+        const competitor = this.competitorsSheet.competitors.find(
+          _competitor => _competitor.id === competitor_id
+        );
+        return competitor
+          ? competitor.race_status ||
+              this.set_accuracy(
+                this.result_formula.overall_result.types
+                  .find(_f => {
+                    return _f.id === this.result_formula.overall_result.type;
+                  })
+                  .result(competitor_id)
+              )
+          : 0;
+      }
+      getRaceResult(competitor_id, race_id) {}
+      getResultAllRaces(competitor_id) {}
       result_formula = {
         overall_result: {
           type: 1,
@@ -385,20 +402,25 @@ export default {
                 get_result: (comp_id, race_id, judges) => {
                   let marks = [];
                   judges.forEach(_j => {
-                    marks.push(
-                      ...this.competitorsSheet.competitors
-                        .find(_comp => {
-                          return _comp.id === comp_id;
-                        })
-                        .marks.filter(_mark => {
-                          return (
-                            +_mark.judge === +_j && _mark.race_id === race_id
-                          );
-                        })
-                        .map(_mark => {
-                          return +_mark.value;
-                        })
-                    );
+                    this.competitorsSheet.competitors.find(_comp => {
+                      return _comp.id === comp_id;
+                    })
+                      ? marks.push(
+                          ...this.competitorsSheet.competitors
+                            .find(_comp => {
+                              return _comp.id === comp_id;
+                            })
+                            .marks.filter(_mark => {
+                              return (
+                                +_mark.judge === +_j &&
+                                _mark.race_id === race_id
+                              );
+                            })
+                            .map(_mark => {
+                              return +_mark.value;
+                            })
+                        )
+                      : marks.push(0);
                   });
                   let _marks = marks;
                   for (

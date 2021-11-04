@@ -21,7 +21,11 @@
           style="padding: 4px 6px;border: #3b70a9"
         >
           {{
-            `${competitor.rank} ${competitor.info_data.bib} ${competitor.info_data.surname} ${competitor.info_data.name}`
+            `${competitor[0].getResult(competitor[1].id)}: ${
+              competitor[1].rank
+            } ${competitor[1].info_data.bib} ${
+              competitor[1].info_data.surname
+            } ${competitor[1].info_data.name}`
           }}
         </div>
       </div>
@@ -62,7 +66,10 @@ export default {
                             this.competitions.find(
                               competition => competition.id === _competition
                             ).races.length - 1
-                          ].finished.map(c_id =>
+                          ].finished.map(c_id => [
+                            this.competitions.find(
+                              comp => comp.id === _competition
+                            ),
                             this.competitions
                               .find(
                                 competition => competition.id === _competition
@@ -70,7 +77,7 @@ export default {
                               .competitorsSheet.competitors.find(
                                 _competitor => _competitor.id === c_id
                               )
-                          )
+                          ])
                       )
                   : []
               )

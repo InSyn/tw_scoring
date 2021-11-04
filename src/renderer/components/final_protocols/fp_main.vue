@@ -35,12 +35,12 @@
         >
           <v-btn
             @click="button.action()"
-            class="mx-1"
             depressed
             height="20"
-            style="border-bottom-left-radius: 0; border-bottom-right-radius: 0"
+            style="border-radius: 6px 6px 0 0"
             :color="$vuetify.theme.themes[appTheme].standardBackgroundRGBA"
             :style="[
+              b_idx > 0 && { marginLeft: `1rem` },
               { color: $vuetify.theme.themes[appTheme].textDefault },
               hover && { color: $vuetify.theme.themes[appTheme][button.color] }
             ]"
@@ -50,7 +50,7 @@
       </div>
       <div
         class="d-flex pa-2 flex-column"
-        style="border-radius: 6px"
+        style="border-radius: 0 6px 6px 6px"
         :style="{
           backgroundColor:
             $vuetify.theme.themes[appTheme].standardBackgroundRGBA
