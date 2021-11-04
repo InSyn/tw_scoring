@@ -613,24 +613,26 @@ export default {
           data: { id: "race_res", title: "Оценка" },
           handler: function(competitor, competition) {
             return competition.races.map(_race => {
-              return competition.result_formula.types[
-                competition.result_formula.type
-              ].formulas
-                .find(_f => {
-                  return (
-                    _f.id ===
-                    competition.result_formula.types[
-                      competition.result_formula.type
-                    ].formula
-                  );
-                })
-                .get_result(
-                  competitor.id,
-                  _race.id,
-                  competition.stuff.judges.map(_j => {
-                    return +_j.id;
+              return competition.set_accuracy(
+                competition.result_formula.types[
+                  competition.result_formula.type
+                ].formulas
+                  .find(_f => {
+                    return (
+                      _f.id ===
+                      competition.result_formula.types[
+                        competition.result_formula.type
+                      ].formula
+                    );
                   })
-                );
+                  .get_result(
+                    competitor.id,
+                    _race.id,
+                    competition.stuff.judges.map(_j => {
+                      return +_j.id;
+                    })
+                  )
+              );
             });
           }
         }
@@ -649,13 +651,15 @@ export default {
           handler: function(competitor, competition) {
             return [
               competitor.race_status ||
-                competition.result_formula.overall_result.types
-                  .find(_f => {
-                    return (
-                      _f.id === competition.result_formula.overall_result.type
-                    );
-                  })
-                  .result(competitor.id)
+                competition.set_accuracy(
+                  competition.result_formula.overall_result.types
+                    .find(_f => {
+                      return (
+                        _f.id === competition.result_formula.overall_result.type
+                      );
+                    })
+                    .result(competitor.id)
+                )
             ];
           }
         }

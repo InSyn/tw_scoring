@@ -359,7 +359,7 @@
                           .marks.find(mark => {
                             return (
                               mark.judge_id === judge._id &&
-                              mark.race === competition.selected_race_id
+                              mark.race_id === competition.selected_race.id
                             );
                           }) &&
                         competition.competitorsSheet.competitors
@@ -372,7 +372,7 @@
                           .marks.find(mark => {
                             return (
                               mark._id === judge._id &&
-                              mark.race === competition.selected_race_id
+                              mark.race_id === competition.selected_race.id
                             );
                           }).value) ||
                         '0'}`
@@ -600,33 +600,6 @@ export default {
       this.socket &&
         this.socket.connected &&
         this.socket.emit("accept_res", data);
-    },
-    get_res(competitor) {
-      return competitor.race_status
-        ? competitor.race_status
-        : Math.round(
-            (this.competition.stuff.judges
-              .map(judge => {
-                let mark;
-                competitor.marks.find(_mark => {
-                  return (
-                    _mark.judge === judge.id &&
-                    _mark.race === this.competition.selected_race_id
-                  );
-                })
-                  ? (mark = competitor.marks.find(_mark => {
-                      return (
-                        _mark.judge === judge.id &&
-                        _mark.race === this.competition.selected_race_id
-                      );
-                    }).value)
-                  : (mark = 0);
-                return mark;
-              })
-              .reduce((m1, m2) => +m1 + +m2, 0) /
-              this.competition.stuff.judges.length) *
-              10 || 0
-          ) / 10;
     },
     setBlinker(val) {
       if (this.indicators.blinker === null) {

@@ -401,7 +401,7 @@
                     <!-- JURY -->
 
                     <div
-                      style="display:flex;flex-direction: column;border: 1px solid black;flex: 1 0 auto"
+                      style="display:flex;flex-direction: column;border: 1px solid black;border-top: none;flex: 1 0 auto"
                     >
                       <div
                         style="padding: 2px 4px; border-bottom: 1px solid black; font-weight:bold;"

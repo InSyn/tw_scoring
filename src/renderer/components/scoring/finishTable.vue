@@ -106,40 +106,41 @@
                   style="max-width: 5rem"
                   v-for="(race_res, rr) in competition.races"
                   :key="rr"
-                  v-html="
-                    competition.result_formula.types[
-                      competition.result_formula.type
-                    ].formulas
-                      .find(_f => {
-                        return (
-                          _f.id ===
-                          competition.result_formula.types[
-                            competition.result_formula.type
-                          ].formula
-                        );
-                      })
-                      .get_result(
-                        competitor.id,
-                        race_res.id,
-                        competition.stuff.judges.map(_j => {
-                          return +_j.id;
-                        })
-                      )
-                  "
-                ></v-col
+                  >{{
+                    competition.set_accuracy(
+                      competition.result_formula.types[
+                        competition.result_formula.type
+                      ].formulas
+                        .find(
+                          _f =>
+                            _f.id ===
+                            competition.result_formula.types[
+                              competition.result_formula.type
+                            ].formula
+                        )
+                        .get_result(
+                          competitor.id,
+                          race_res.id,
+                          competition.stuff.judges.map(_j => {
+                            return +_j.id;
+                          })
+                        )
+                    )
+                  }}</v-col
                 ><v-spacer></v-spacer
                 ><v-col
                   class="d-flex justify-end align-center"
                   style="max-width: 5rem"
                   v-html="
-                    competition.result_formula.overall_result.types
-                      .find(_f => {
-                        return (
-                          _f.id ===
-                          competition.result_formula.overall_result.type
-                        );
-                      })
-                      .result(competitor.id)
+                    competition.set_accuracy(
+                      competition.result_formula.overall_result.types
+                        .find(
+                          _f =>
+                            _f.id ===
+                            competition.result_formula.overall_result.type
+                        )
+                        .result(competitor.id)
+                    )
                   "
                 ></v-col></v-row
             ></v-hover>

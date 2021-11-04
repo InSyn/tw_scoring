@@ -11,7 +11,6 @@ export default {
         this.structure.selected.type = 0;
         this.structure.selected.discipline = 0;
         this.mainData.title.stage.value = this.structure.stages[0];
-        this.stages.stage_grid.push([this.id]);
         args.forEach(arg => {
           if (typeof arg === "object") {
             if (arg.id === "competitors")
@@ -27,6 +26,10 @@ export default {
               ? (this.mainData[arg.id].value = arg.value)
               : 0;
           }
+        });
+        this.stages.stage_grid.push({
+          title: this.mainData.title.stage.value.value,
+          s_competitions: [this.id]
         });
       }
       weather = [];
@@ -50,10 +53,10 @@ export default {
           { id: 100, title: "Пользовательский", res_formula: [100] }
         ],
         accuracy: [
-          { id: 0, title: "1", value: 1 },
-          { id: 1, title: "1/10", value: 10 },
-          { id: 2, title: "1/100", value: 100 },
-          { id: 3, title: "1/1000", value: 1000 }
+          { id: 0, title: "1", value: 1, digits: 0 },
+          { id: 1, title: "1/10", value: 10, digits: 1 },
+          { id: 2, title: "1/100", value: 100, digits: 2 },
+          { id: 3, title: "1/1000", value: 1000, digits: 3 }
         ],
         stages: [
           { id: "qual", title: "Квалификация", value: "Квалификация" },
@@ -62,9 +65,24 @@ export default {
         ]
       };
       set_accuracy(val) {
-        let acc = this.structure.accuracy[this.structure.selected.accuracy]
-          .value;
-        return Math.round(acc * val) / acc;
+        const acc = this.structure.accuracy[this.structure.selected.accuracy];
+        let res = (Math.round(acc.value * +val) / acc.value)
+          .toString()
+          .split(".");
+        if (acc.digits > 0) {
+          if (res[1]) {
+            for (let i = 0; i < acc.digits - res[1].length; i++) {
+              res[1] += "0";
+            }
+          } else {
+            res.push([]);
+            for (let i = 0; i < acc.digits; i++) {
+              res[1] += "0";
+            }
+          }
+        } else res = res[0];
+        res = res.join(".");
+        return res;
       }
       stages = {
         lastStageSize: 0,
@@ -227,10 +245,7 @@ export default {
               id: 0,
               title: "Лучший",
               result: comp_id => {
-                let res = [],
-                  acc = this.structure.accuracy[
-                    this.structure.selected.accuracy
-                  ].value;
+                let res = [];
                 this.races.forEach(_race => {
                   res.push(
                     this.result_formula.types[this.result_formula.type].formulas
@@ -250,19 +265,14 @@ export default {
                       )
                   );
                 });
-                return res.length > 0
-                  ? Math.round(acc * Math.max(...res)) / acc
-                  : 0;
+                return res.length > 0 ? Math.max(...res) : 0;
               }
             },
             {
               id: 1,
               title: "Сумма",
               result: comp_id => {
-                let res = [],
-                  acc = this.structure.accuracy[
-                    this.structure.selected.accuracy
-                  ].value;
+                let res = [];
                 this.races.forEach(_race => {
                   res.push(
                     this.result_formula.types[this.result_formula.type].formulas
@@ -300,12 +310,9 @@ export default {
                     }
                   })();
                 return res.length > 0
-                  ? Math.round(
-                      acc *
-                        res.reduce((a, b) => {
-                          return +a + +b;
-                        })
-                    ) / acc
+                  ? res.reduce((a, b) => {
+                      return +a + +b;
+                    })
                   : 0;
               }
             },
@@ -313,10 +320,7 @@ export default {
               id: 2,
               title: "Среднее",
               result: comp_id => {
-                let res = [],
-                  acc = this.structure.accuracy[
-                    this.structure.selected.accuracy
-                  ].value;
+                let res = [];
                 this.races.forEach(_race => {
                   res.push(
                     this.result_formula.types[this.result_formula.type].formulas
@@ -354,13 +358,9 @@ export default {
                     }
                   })();
                 return res.length > 0
-                  ? Math.round(
-                      (acc *
-                        res.reduce((a, b) => {
-                          return +a + +b;
-                        })) /
-                        res.length
-                    ) / acc
+                  ? res.reduce((a, b) => {
+                      return +a + +b;
+                    }) / res.length
                   : 0;
               }
             },
@@ -383,9 +383,6 @@ export default {
                 id: 0,
                 title: "Среднее",
                 get_result: (comp_id, race_id, judges) => {
-                  let acc = this.structure.accuracy[
-                    this.structure.selected.accuracy
-                  ].value;
                   let marks = [];
                   judges.forEach(_j => {
                     marks.push(
@@ -426,13 +423,9 @@ export default {
                     (+this.result_formula.types[0].lower_marks +
                       +this.result_formula.types[0].higher_marks <
                       marks.length &&
-                      Math.round(
-                        acc *
-                          (_marks.reduce((a, b) => {
-                            return +a + +b;
-                          }) /
-                            _marks.length)
-                      ) / acc) ||
+                      _marks.reduce((a, b) => {
+                        return +a + +b;
+                      }) / _marks.length) ||
                     0
                   );
                 }
@@ -441,9 +434,6 @@ export default {
                 id: 1,
                 title: "Сумма",
                 get_result: (comp_id, race_id, judges) => {
-                  let acc = this.structure.accuracy[
-                    this.structure.selected.accuracy
-                  ].value;
                   let marks = [];
                   judges.forEach(_j => {
                     marks.push(
@@ -483,12 +473,9 @@ export default {
                     (+this.result_formula.types[0].lower_marks +
                       +this.result_formula.types[0].higher_marks <
                       marks.length &&
-                      Math.round(
-                        acc *
-                          marks.reduce((a, b) => {
-                            return +a + +b;
-                          })
-                      ) / acc) ||
+                      marks.reduce((a, b) => {
+                        return +a + +b;
+                      })) ||
                     0
                   );
                 }
@@ -504,9 +491,6 @@ export default {
               {
                 id: 0,
                 get_result: (comp_id, race_id) => {
-                  let acc = this.structure.accuracy[
-                    this.structure.selected.accuracy
-                  ].value;
                   let s_results = [];
                   this.result_formula.types[1].sections.forEach(_section => {
                     let section = [];
@@ -546,36 +530,15 @@ export default {
                     );
                   });
                   return s_results.length > 0
-                    ? Math.round(
-                        acc *
-                          s_results.reduce((a, b) => {
-                            return +a + +b;
-                          })
-                      ) / acc
+                    ? s_results.reduce((a, b) => {
+                        return +a + +b;
+                      })
                     : 0;
                 }
               }
             ]
           }
-        ],
-        get_race_result: data => {
-          let marks = (data.length > 0 && data) || [0, 0];
-          let sections_res = [];
-          let race_res = 0;
-          let _marks = marks.map(mark => {
-            return +mark.value;
-          });
-          race_res =
-            _marks.reduce((acc, cur) => {
-              return acc + cur;
-            }) / (_marks.length > 0 && _marks.length) || 0;
-          return race_res;
-        },
-        get_result: marks => {
-          return marks.reduce((acc, cur) => {
-            return acc + cur;
-          });
-        }
+        ]
       };
     },
     RaceClass: class {

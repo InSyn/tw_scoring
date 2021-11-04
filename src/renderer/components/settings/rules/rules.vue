@@ -142,48 +142,53 @@
                   >
                 </div>
               </div>
-              <div
-                style="font-weight: bold;margin-left: auto;"
-                :style="[
-                  {
-                    color:
-                      $vuetify.theme.themes[appTheme].standardBackgroundRGBA
-                  },
-                  competition &&
-                    competition.stages.prev_stages.some(
-                      _comp => _comp === _competition.id
-                    ) && { color: $vuetify.theme.themes[appTheme].accent }
-                ]"
-              >
-                Comp_id:&nbsp{{ _competition.id }}
-              </div>
-
-              <v-hover v-slot:default="{ hover }">
-                <v-btn
-                  @click="add_prev_stage(_competition.id)"
-                  :disabled="stageUsed(_competition)"
-                  icon
-                  ><v-icon
-                    v-if="
+              <v-hover v-slot:default="{ hover }"
+                ><div
+                  @click="
+                    !stageUsed(_competition) && add_prev_stage(_competition.id)
+                  "
+                  style="display:flex;align-items: center;margin-left: auto;cursor: pointer"
+                >
+                  <div
+                    style="font-weight: bold;font-size: .95rem"
+                    :style="[
+                      {
+                        color:
+                          $vuetify.theme.themes[appTheme].standardBackgroundRGBA
+                      },
                       competition &&
                         competition.stages.prev_stages.some(
-                          _comp => _competition.id === _comp
-                        )
-                    "
-                    :color="
-                      (hover && $vuetify.theme.themes[appTheme].textDefault) ||
-                        $vuetify.theme.themes[appTheme].accent
-                    "
-                    >mdi-radiobox-marked</v-icon
-                  ><v-icon
-                    v-else
-                    :color="
-                      (hover && $vuetify.theme.themes[appTheme].accent) ||
-                        $vuetify.theme.themes[appTheme].textDefault
-                    "
-                    >mdi-radiobox-blank</v-icon
-                  ></v-btn
-                ></v-hover
+                          _comp => _comp === _competition.id
+                        ) && { color: $vuetify.theme.themes[appTheme].accent }
+                    ]"
+                  >
+                    Comp_id:&nbsp{{ _competition.id }}
+                  </div>
+
+                  <v-btn :disabled="stageUsed(_competition)" icon
+                    ><v-icon
+                      v-if="
+                        competition &&
+                          competition.stages.prev_stages.some(
+                            _comp => _competition.id === _comp
+                          )
+                      "
+                      :color="
+                        (hover &&
+                          $vuetify.theme.themes[appTheme].textDefault) ||
+                          $vuetify.theme.themes[appTheme].accent
+                      "
+                      >mdi-radiobox-marked</v-icon
+                    ><v-icon
+                      v-else
+                      :color="
+                        (hover && $vuetify.theme.themes[appTheme].accent) ||
+                          $vuetify.theme.themes[appTheme].textDefault
+                      "
+                      >mdi-radiobox-blank</v-icon
+                    ></v-btn
+                  >
+                </div></v-hover
               >
             </div>
           </div>
@@ -195,9 +200,16 @@
             }"
           >
             <div
-              style="flex: 0 0 auto;font-weight: bold;font-size: 1.2rem;margin: 0 0 .5rem 0"
+              style="display:flex;align-items: center;flex: 0 0 auto;width: 100%;font-weight: bold;font-size: 1.2rem;margin: 0 0 .5rem 0"
             >
               Сетка соревнований
+              <v-btn
+                @click="defaultGrid()"
+                icon
+                style="margin-left: auto;"
+                :color="$vuetify.theme.themes[appTheme].action_darkYellow"
+                ><v-icon>mdi-backup-restore</v-icon></v-btn
+              >
             </div>
             <div style="display:flex;align-items: center;flex-wrap: wrap">
               <div
@@ -213,7 +225,7 @@
                   }"
                 ></div>
                 <div
-                  style="display:flex;flex-direction: column;padding: .5rem .1rem;border-radius: 6px"
+                  style="display:flex;flex-direction: column;border-radius: 6px;overflow:hidden;"
                   :style="{
                     backgroundColor:
                       $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
@@ -221,9 +233,34 @@
                   }"
                 >
                   <div
-                    v-for="_stage in stage"
+                    style="display:flex;align-items: center;padding: 2px 4px;margin-bottom: .4rem;width: 100%;"
+                    :style="{
+                      backgroundColor: $vuetify.theme.themes[appTheme].accent
+                    }"
+                  >
+                    <input
+                      type="text"
+                      v-model="stage.title"
+                      @focus="
+                        $event.target.style.backgroundColor =
+                          $vuetify.theme.themes[appTheme].subjectBackgroundRGBA
+                      "
+                      @blur="
+                        $event.target.style.backgroundColor =
+                          $vuetify.theme.themes[appTheme].cardBackgroundRGBA
+                      "
+                      style="flex: 1 0 auto;padding: 2px 8px;border-radius: 6px;font-size: .9rem;transition: background-color .122s"
+                      :style="{
+                        color: $vuetify.theme.themes[appTheme].textDefault,
+                        backgroundColor:
+                          $vuetify.theme.themes[appTheme].cardBackgroundRGBA
+                      }"
+                    />
+                  </div>
+                  <div
+                    v-for="_stage in stage.s_competitions"
                     :key="_stage"
-                    style="flex: 0 0 auto; border-radius: 6px;margin: .2rem .5rem; padding: .2rem .5rem"
+                    style="flex: 0 0 auto; border-radius: 6px;margin: 0 .8rem .4rem .8rem; padding: .2rem .5rem"
                     :style="{
                       backgroundColor:
                         $vuetify.theme.themes[appTheme].cardBackgroundRGBA
@@ -297,14 +334,8 @@
 
       <!--// НАСТРОЙКА ФОРМУЛЫ ЗАЕЗДА -->
       <div class="pa-2 d-flex flex-column">
-        <v-card-title
-          style="padding: .5rem 1rem"
-          @click="
-            competition.result_formula.types[
-              competition.result_formula.type
-            ].get_result(competition.stuff.judges)
-          "
-          >Формула подстчёта заезда
+        <v-card-title style="padding: .5rem 1rem"
+          >Формула подстчёта результата заезда
         </v-card-title>
         <div class="d-flex flex-column" style="border-radius: 6px">
           <div class="d-flex flex-nowrap">
@@ -789,7 +820,7 @@
       <!--// НАСТРОЙКА ФОРМУЛЫ ЭТАПА -->
       <div class="pa-2 d-flex flex-column">
         <v-card-title style="padding: .5rem 1rem"
-          >Формула подстчёта этапа</v-card-title
+          >Формула подстчёта результата этапа</v-card-title
         >
         <div
           class="pa-1 d-flex flex-nowrap align-center"
@@ -934,27 +965,44 @@ export default {
         if (this.competition.stages.lastStageSize > 1) {
           this.competition.stages.stage_grid[
             this.competition.stages.stage_grid.length - 2
-          ] = JSON.parse(
+          ].s_competitions = JSON.parse(
             JSON.stringify(
               this.competition.stages.stage_grid[
                 this.competition.stages.stage_grid.length - 2
-              ].filter(_stage => _stage !== stage)
+              ].s_competitions.filter(_stage => _stage !== stage)
             )
           );
+          this.competitions
+            .find(_comp => _comp.id === stage)
+            .stages.stage_grid.filter(
+              _stage => !_stage.s_competitions.includes(stage)
+            )
+            .forEach(_stage =>
+              _stage.s_competitions.forEach(_comp =>
+                this.competition.stages.stage_grid.forEach((_grid, g_idx) => {
+                  if (_grid.s_competitions.includes(_comp))
+                    this.competition.stages.stage_grid[
+                      g_idx
+                    ].s_competitions = _grid.s_competitions.filter(
+                      _competition => _competition !== _comp
+                    );
+                })
+              )
+            );
         } else {
           this.competitions
             .find(_competition => _competition.id === stage)
             .stages.stage_grid.forEach(_prevGridStage =>
-              _prevGridStage.forEach(_prevGridStageComp => {
+              _prevGridStage.s_competitions.forEach(_prevGridStageComp => {
                 if (
                   this.competition.stages.stage_grid.find(_stage =>
-                    _stage.includes(_prevGridStageComp)
+                    _stage.s_competitions.includes(_prevGridStageComp)
                   )
                 )
                   this.competition.stages.stage_grid.splice(
                     this.competition.stages.stage_grid.indexOf(
                       this.competition.stages.stage_grid.find(_stage =>
-                        _stage.includes(_prevGridStageComp)
+                        _stage.s_competitions.includes(_prevGridStageComp)
                       )
                     ),
                     1
@@ -977,9 +1025,34 @@ export default {
             )
           );
         } else {
+          this.competitions
+            .find(_competition => _competition.id === stage)
+            .stages.stage_grid.filter(
+              _stage => !_stage.s_competitions.includes(stage)
+            )
+            .forEach(_stage => {
+              _stage.s_competitions.forEach(_comp => {
+                if (
+                  !this.competition.stages.stage_grid[
+                    this.competition.stages.stage_grid.indexOf(
+                      this.competition.stages.stage_grid.find(
+                        _stage => _stage.s_competitions.includes(stage) - 1
+                      )
+                    )
+                  ].s_competitions.includes(_comp)
+                )
+                  this.competition.stages.stage_grid[
+                    this.competition.stages.stage_grid.indexOf(
+                      this.competition.stages.stage_grid.find(
+                        _stage => _stage.s_competitions.includes(stage) - 1
+                      )
+                    )
+                  ].s_competitions.push(_comp);
+              });
+            });
           this.competition.stages.stage_grid[
             this.competition.stages.stage_grid.length - 2
-          ].push(stage);
+          ].s_competitions.push(stage);
         }
         this.competition.stages.prev_stages.push(stage);
         this.competition.stages.lastStageSize += 1;
@@ -996,9 +1069,19 @@ export default {
             );
           })
           .some(_grid => {
-            return _grid.includes(stage.id);
+            return _grid.s_competitions.includes(stage.id);
           })
       );
+    },
+    defaultGrid() {
+      this.competition.stages.stage_grid = [
+        {
+          title: this.competition.mainData.title.stage.value.value,
+          s_competitions: [this.competition.id]
+        }
+      ];
+      this.competition.stages.prev_stages = [this.competition.id];
+      this.competition.stages.lastStageSize = 0;
     }
   },
   data() {
