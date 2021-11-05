@@ -211,7 +211,13 @@
                 ><v-icon>mdi-backup-restore</v-icon></v-btn
               >
             </div>
-            <div style="display:flex;align-items: center;flex-wrap: wrap">
+            <div
+              style="display:flex;align-items: center;flex-wrap: wrap;padding: .4rem .8rem;border-radius: 6px"
+              :style="{
+                backgroundColor:
+                  $vuetify.theme.themes[appTheme].standardBackgroundRGBA
+              }"
+            >
               <div
                 v-for="(stage, s_idx) in competition.stages.stage_grid"
                 :key="s_idx"
@@ -225,15 +231,13 @@
                   }"
                 ></div>
                 <div
-                  style="display:flex;flex-direction: column;border-radius: 6px;overflow:hidden;"
+                  style="display:flex;flex-direction: column"
                   :style="{
-                    backgroundColor:
-                      $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
                     border: `1px solid ${$vuetify.theme.themes[appTheme].accent}`
                   }"
                 >
                   <div
-                    style="display:flex;align-items: center;padding: 2px 4px;margin-bottom: .4rem;width: 100%;"
+                    style="display:flex;align-items: center;padding: 4px 4px;width: 100%;"
                     :style="{
                       backgroundColor: $vuetify.theme.themes[appTheme].accent
                     }"
@@ -249,7 +253,7 @@
                         $event.target.style.backgroundColor =
                           $vuetify.theme.themes[appTheme].cardBackgroundRGBA
                       "
-                      style="flex: 1 0 auto;padding: 2px 8px;border-radius: 6px;font-size: .9rem;transition: background-color .122s"
+                      style="flex: 1 0 auto;padding: 2px 4px;font-size: .9rem;transition: background-color .122s"
                       :style="{
                         color: $vuetify.theme.themes[appTheme].textDefault,
                         backgroundColor:
@@ -258,13 +262,18 @@
                     />
                   </div>
                   <div
-                    v-for="_stage in stage.s_competitions"
+                    v-for="(_stage, s_idx) in stage.s_competitions"
                     :key="_stage"
-                    style="flex: 0 0 auto; border-radius: 6px;margin: 0 .8rem .4rem .8rem; padding: .2rem .5rem"
-                    :style="{
-                      backgroundColor:
-                        $vuetify.theme.themes[appTheme].cardBackgroundRGBA
-                    }"
+                    style="flex: 0 0 auto;padding: .2rem .5rem"
+                    :style="[
+                      {
+                        backgroundColor:
+                          $vuetify.theme.themes[appTheme].cardBackgroundRGBA
+                      },
+                      s_idx > 0 && {
+                        borderTop: `1px solid ${$vuetify.theme.themes[appTheme].accent}`
+                      }
+                    ]"
                   >
                     <div
                       v-for="comp in [
@@ -278,13 +287,13 @@
                         color: $vuetify.theme.themes[appTheme].textDefault
                       }"
                     >
-                      <div style="font-size: .9rem;margin-left: auto">
-                        {{ comp.mainData.title.stage.value.value }}
-                      </div>
                       <div
                         style="flex: 0 0 auto;font-size: .95rem;font-weight: bold"
                       >
                         {{ comp.mainData.title.value }}
+                      </div>
+                      <div style="font-size: .9rem;margin-left: auto">
+                        {{ comp.mainData.title.stage.value.value }}
                       </div>
                     </div>
                   </div>
