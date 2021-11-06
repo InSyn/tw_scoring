@@ -6,29 +6,19 @@
     }"
   >
     <div
+      @click="log(flatGrid)"
       v-for="(stage, s_idx) in stageGrid"
       :key="s_idx"
-      style="flex: 0 0 auto;border-radius: 6px;padding: .4rem 1rem"
+      style="flex: 0 0 auto;padding: 0 1rem"
       :style="{
         backgroundColor: $vuetify.theme.themes[appTheme].standardBackgroundRGBA
       }"
     >
-      <div style="padding: 2px 4px">{{ stage.title }}</div>
-      <div
-        v-for="competition in stage.s_competitors"
-        :style="{
-          border: `1px solid ${$vuetify.theme.themes[appTheme].textDefault}`
-        }"
-      >
-        <div v-for="competitor in competition" style="padding: 4px 6px">
-          {{
-            `${competitor[1].rank} ${competitor[1].info_data.bib} ${
-              competitor[1].info_data.surname
-            } ${competitor[1].info_data.name}: ${competitions
-              .find(_competition => _competition.id === competitor[0])
-              .getResult(competitor[1].id)}`
-          }}
-        </div>
+      <div style="padding: 4px">{{ stage.title }}</div>
+      <div v-for="competitor in stage.s_competitors">
+        {{
+          `${competitor.s_rank} ${competitor.competitor.info_data.bib} ${competitor.competitor.info_data.surname} ${competitor.competitor.info_data.name}: ${competitor.result}`
+        }}
       </div>
     </div>
     <div></div>
@@ -39,7 +29,11 @@
 import { mapGetters } from "vuex";
 export default {
   name: "fonts",
-  methods: {},
+  methods: {
+    log(data) {
+      console.log(data);
+    }
+  },
   data() {
     return {};
   },
@@ -47,53 +41,13 @@ export default {
     ...mapGetters("main", {
       appTheme: "appTheme",
       competition: "competition",
-      competitions: "competitions"
+      competitions: "competitions",
+      stageGrid: "stageGrid"
     }),
-    stageGrid() {
-      return this.competition.stages.stage_grid
-        ? this.competition.stages.stage_grid
-            .map(stage => {
-              return {
-                title: stage.title,
-                s_competitors: [
-                  ...stage.s_competitions.map(_competition =>
-                    this.competitions.find(
-                      competition => competition.id === _competition
-                    ).races.length > 0
-                      ? this.competitions
-                          .find(competition => competition.id === _competition)
-                          .getSortedByRank(
-                            this.competitions
-                              .find(
-                                competition => competition.id === _competition
-                              )
-                              .races[
-                                this.competitions.find(
-                                  competition => competition.id === _competition
-                                ).races.length - 1
-                              ].finished.map(c_id =>
-                                this.competitions
-                                  .find(
-                                    competition =>
-                                      competition.id === _competition
-                                  )
-                                  .competitorsSheet.competitors.find(
-                                    _competitor => _competitor.id === c_id
-                                  )
-                              )
-                          )
-                          .map(competitor => [_competition, competitor])
-                      : []
-                  )
-                ]
-              };
-            })
-            .map((_stage, s_idx, grid) => {
-              console.log(grid, s_idx, _stage);
-              return _stage;
-            })
-            .reverse()
-        : [];
+    flatGrid() {
+      return [].concat(
+        ...this.stageGrid.map(stage => [stage.title, ...stage.s_competitors])
+      );
     }
   }
 };

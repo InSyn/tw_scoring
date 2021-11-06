@@ -89,7 +89,115 @@ export default {
     appTheme: state => state.appTheme,
     appMenu: state => state.appMenu,
     messages: state => state.messages,
-    timer: state => state.timer
+    timer: state => state.timer,
+    stageGrid: state => {
+      function flatten(arr) {
+        return arr.reduce((flat, toFlatten) => {
+          return flat.concat(
+            Array.isArray(toFlatten) ? flatten(toFlatten) : toFlatten
+          );
+        }, []);
+      }
+      return state.competition.stages.stage_grid
+        ? state.competition.stages.stage_grid
+            .map(stage => {
+              return {
+                title: stage.title,
+                s_competitors: stage.s_competitions.map(_competition =>
+                  state.competitions.find(
+                    competition => competition.id === _competition
+                  ).races.length > 0
+                    ? state.competitions
+                        .find(competition => competition.id === _competition)
+                        .getSortedByRank(
+                          state.competitions
+                            .find(
+                              competition => competition.id === _competition
+                            )
+                            .races[
+                              state.competitions.find(
+                                competition => competition.id === _competition
+                              ).races.length - 1
+                            ].finished.map(c_id =>
+                              state.competitions
+                                .find(
+                                  competition => competition.id === _competition
+                                )
+                                .competitorsSheet.competitors.find(
+                                  _competitor => _competitor.id === c_id
+                                )
+                            )
+                        )
+                        .map(competitor => {
+                          return {
+                            comp_id: _competition,
+                            competitor: competitor,
+                            s_rank: null,
+                            result: state.competitions
+                              .find(
+                                competition => competition.id === _competition
+                              )
+                              .getResult(competitor.id)
+                          };
+                        })
+                    : []
+                )
+              };
+            })
+            .map(_stage => {
+              _stage.s_competitors = flatten(_stage.s_competitors).sort(
+                (c1, c2) => {
+                  return c2.result - c1.result;
+                }
+              );
+              return _stage;
+            })
+            .map((_stage, s_idx, grid) => {
+              _stage.s_competitors = _stage.s_competitors.filter(_competitor =>
+                grid[s_idx + 1]
+                  ? !grid[s_idx + 1].s_competitors.some(
+                      _competitor_to_compare => {
+                        if (
+                          _competitor.competitor.info_data["bib"] &&
+                          _competitor_to_compare.competitor.info_data["bib"]
+                        ) {
+                          return (
+                            _competitor_to_compare.competitor.info_data[
+                              "bib"
+                            ] === _competitor.competitor.info_data["bib"] ||
+                            _competitor_to_compare.competitor.id ===
+                              _competitor.competitor.id
+                          );
+                        } else {
+                          return (
+                            _competitor_to_compare.competitor.id ===
+                            _competitor.competitor.id
+                          );
+                        }
+                      }
+                    )
+                  : true
+              );
+              return _stage;
+            })
+            .reverse()
+            .map((_stage, s_idx, grid) => {
+              _stage.s_competitors.forEach(_competitor => {
+                _competitor.s_rank =
+                  _stage.s_competitors.indexOf(_competitor) +
+                  1 +
+                  (grid[s_idx - 1]
+                    ? grid[s_idx - 1].s_competitors.length > 0
+                      ? grid[s_idx - 1].s_competitors[
+                          grid[s_idx - 1].s_competitors.length - 1
+                        ].s_rank
+                      : 0
+                    : 0);
+              });
+              return _stage;
+            })
+        : [];
+    }
   },
   mutations: {
     set_ip: (state, ip) => {

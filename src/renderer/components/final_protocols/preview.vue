@@ -267,7 +267,7 @@
               <!-- Competitors -->
 
               <div
-                v-for="(competitor, c_idx) in page"
+                v-for="(competitor, c_idx) in flatGrid"
                 :key="c_idx"
                 ref="result"
                 :class="`result_${c_idx}-page_${p_idx}`"
@@ -288,6 +288,13 @@
                 ]"
               >
                 <div
+                  v-if="typeof competitor === 'string'"
+                  style="width: 100%;background-color: #ffffff"
+                >
+                  {{ competitor }}
+                </div>
+                <div
+                  v-else
                   v-for="(header, h_idx) in results_protocol.protocol_fields"
                   :key="h_idx"
                   style="flex-shrink: 0; margin: 0; padding: 0; line-height: normal"
@@ -299,7 +306,13 @@
                   <div style="width: 100%;" v-if="header.params.cell_1.id">
                     <div
                       v-for="(value, v_idx) in header &&
-                        header.params.cell_1.handler(competitor, competition)"
+                        header.params.cell_1.handler(
+                          competitor,
+                          competitions.find(
+                            _competition =>
+                              _competition.id === competitor.comp_id
+                          )
+                        )"
                       :key="`cell_1_${v_idx}`"
                       style="width: 100%;white-space: nowrap;overflow: hidden;padding: 4px"
                       :style="{
@@ -312,7 +325,13 @@
                   <div style="width: 100%;" v-if="header.params.cell_2.id">
                     <div
                       v-for="(value, v_idx) in header &&
-                        header.params.cell_2.handler(competitor, competition)"
+                        header.params.cell_2.handler(
+                          competitor,
+                          competitions.find(
+                            _competition =>
+                              _competition.id === competitor.comp_id
+                          )
+                        )"
                       :key="`cell_2_${v_idx}`"
                       style="width: 100%;white-space: nowrap;overflow: visible;padding: 4px"
                       :style="{
@@ -566,34 +585,35 @@ export default {
   name: "preview",
   mounted() {
     this.results.push(...this.competition.competitorsSheet.competitors);
-    this.results = this.results.filter(competitor => {
-      return (
-        (competitor.marks &&
-          competitor.marks.length > 0 &&
-          competitor.marks.length >=
-            this.competition.races.length *
-              this.competition.stuff.judges.length) ||
-        competitor.race_status
-      );
-    });
-    this.results = this.results.sort((c1, c2) => {
-      return (
-        this.competition.result_formula.overall_result.types
-          .find(_f => {
-            return (
-              _f.id === this.competition.result_formula.overall_result.type
-            );
-          })
-          .result(c2.id) -
-        this.competition.result_formula.overall_result.types
-          .find(_f => {
-            return (
-              _f.id === this.competition.result_formula.overall_result.type
-            );
-          })
-          .result(c1.id)
-      );
-    });
+    this.results = this.results
+      .filter(competitor => {
+        return (
+          (competitor.marks &&
+            competitor.marks.length > 0 &&
+            competitor.marks.length >=
+              this.competition.races.length *
+                this.competition.stuff.judges.length) ||
+          competitor.race_status
+        );
+      })
+      .sort((c1, c2) => {
+        return (
+          this.competition.result_formula.overall_result.types
+            .find(_f => {
+              return (
+                _f.id === this.competition.result_formula.overall_result.type
+              );
+            })
+            .result(c2.id) -
+          this.competition.result_formula.overall_result.types
+            .find(_f => {
+              return (
+                _f.id === this.competition.result_formula.overall_result.type
+              );
+            })
+            .result(c1.id)
+        );
+      });
     this.$nextTick(() => {
       setTimeout(() => {
         let container_height = Math.floor(
@@ -761,10 +781,20 @@ export default {
     }
   },
   computed: {
-    ...mapGetters("main", { competition: "competition", appTheme: "appTheme" }),
+    ...mapGetters("main", {
+      competition: "competition",
+      competitions: "competitions",
+      appTheme: "appTheme",
+      stageGrid: "stageGrid"
+    }),
     ...mapGetters("protocol_settings", {
       results_protocol: "results_protocol"
     }),
+    flatGrid() {
+      return [].concat(
+        ...this.stageGrid.map(stage => [stage.title, ...stage.s_competitors])
+      );
+    },
     date_now() {
       const date = new Date()
         .toLocaleString("ru", {

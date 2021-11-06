@@ -189,18 +189,7 @@ export default {
       };
       getSortedByRank(competitors) {
         return competitors.sort((c1, c2) => {
-          return (
-            this.result_formula.overall_result.types
-              .find(_f => {
-                return _f.id === this.result_formula.overall_result.type;
-              })
-              .result(c2.id) -
-            this.result_formula.overall_result.types
-              .find(_f => {
-                return _f.id === this.result_formula.overall_result.type;
-              })
-              .result(c1.id)
-          );
+          return this.getResult(c2.id) - this.getResult(c1.id);
         });
       }
       get passedCompetitors() {

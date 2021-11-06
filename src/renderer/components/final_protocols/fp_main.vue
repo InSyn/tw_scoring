@@ -533,7 +533,7 @@ export default {
         {
           data: { id: "rank", title: "Место" },
           handler: function(_competitor) {
-            return [_competitor.rank];
+            return [_competitor.s_rank];
           }
         }
       )
@@ -547,7 +547,7 @@ export default {
           {
             data: _header,
             handler: function(_competitor) {
-              return [_competitor.info_data[_header.id]];
+              return [_competitor.competitor.info_data[_header.id]];
             }
           }
         )
@@ -564,7 +564,7 @@ export default {
         {
           data: { id: "race", title: "Заезд" },
           handler: function(competitor) {
-            return competitor.marks
+            return competitor.competitor.marks
               .map(mark => {
                 return mark.race_id;
               })
@@ -588,7 +588,7 @@ export default {
             data: { id: `Судья ${j_idx + 1}`, title: `С${j_idx + 1}` },
             handler: function(_competitor) {
               return (
-                _competitor.marks
+                _competitor.competitor.marks
                   .filter((_mark, m_idx, _marks) => {
                     return _mark.judge_id === judge._id;
                   })
@@ -626,7 +626,7 @@ export default {
                     );
                   })
                   .get_result(
-                    competitor.id,
+                    competitor.competitor.id,
                     _race.id,
                     competition.stuff.judges.map(_j => {
                       return +_j.id;
@@ -650,15 +650,9 @@ export default {
           data: { id: "result", title: "Рез-т" },
           handler: function(competitor, competition) {
             return [
-              competitor.race_status ||
+              competitor.competitor.race_status ||
                 competition.set_accuracy(
-                  competition.result_formula.overall_result.types
-                    .find(_f => {
-                      return (
-                        _f.id === competition.result_formula.overall_result.type
-                      );
-                    })
-                    .result(competitor.id)
+                  competition.getResult(competitor.competitor.id)
                 )
             ];
           }
