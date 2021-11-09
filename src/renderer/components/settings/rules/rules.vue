@@ -192,6 +192,18 @@
               >
             </div>
           </div>
+          <div
+            style="margin: .5rem 0 0 1rem;font-size: 1.2rem;font-weight: bold"
+            v-if="
+              competitions.filter(_comp => _comp.id !== competition.id).length <
+                1
+            "
+          >
+            <v-icon :color="$vuetify.theme.themes[appTheme].textDefault"
+              >mdi-dots-horizontal</v-icon
+            >
+            Отсутствуют другие этапы
+          </div>
           <v-container
             style="display:flex;flex-direction: column; padding: .5rem 1rem;margin: .5rem .5rem;border-radius: 6px"
             :style="{
@@ -221,7 +233,7 @@
               <div
                 v-for="(stage, s_idx) in competition.stages.stage_grid"
                 :key="s_idx"
-                style="display:flex;flex-wrap: nowrap;flex: 0 0 auto;align-items: center;margin: .5rem 0"
+                style="display:flex;flex-wrap: nowrap;flex: 0 0 auto;align-items: center;margin: .5rem 0;border-radius: 6px"
               >
                 <div
                   v-if="s_idx > 0"
@@ -231,13 +243,13 @@
                   }"
                 ></div>
                 <div
-                  style="display:flex;flex-direction: column"
+                  style="display:flex;flex-direction: column;border-radius: 6px;overflow:hidden;"
                   :style="{
-                    border: `1px solid ${$vuetify.theme.themes[appTheme].accent}`
+                    border: `2px solid ${$vuetify.theme.themes[appTheme].accent}`
                   }"
                 >
                   <div
-                    style="display:flex;align-items: center;padding: 4px 4px;width: 100%;"
+                    style="display:flex;align-items: center;padding: 2px 2px;width: 100%;"
                     :style="{
                       backgroundColor: $vuetify.theme.themes[appTheme].accent
                     }"
@@ -251,13 +263,13 @@
                       "
                       @blur="
                         $event.target.style.backgroundColor =
-                          $vuetify.theme.themes[appTheme].cardBackgroundRGBA
+                          $vuetify.theme.themes[appTheme].standardBackgroundRGBA
                       "
-                      style="flex: 1 0 auto;padding: 2px 4px;font-size: .9rem;transition: background-color .122s"
+                      style="flex: 1 0 auto;padding: 2px 4px;font-size: .9rem;transition: background-color 92ms"
                       :style="{
                         color: $vuetify.theme.themes[appTheme].textDefault,
                         backgroundColor:
-                          $vuetify.theme.themes[appTheme].cardBackgroundRGBA
+                          $vuetify.theme.themes[appTheme].standardBackgroundRGBA
                       }"
                     />
                   </div>
@@ -292,8 +304,23 @@
                       >
                         {{ comp.mainData.title.value }}
                       </div>
-                      <div style="font-size: .9rem;margin-left: auto">
-                        {{ comp.mainData.title.stage.value.value }}
+                      <div
+                        style="display:flex;align-items: center;font-size: .9rem"
+                      >
+                        <div style="flex: 0 0 auto;">
+                          {{ comp.mainData.title.stage.value.value }}
+                        </div>
+                        <div
+                          v-if="comp.passed_competitors > 0"
+                          style="flex: 0 0 auto;margin-left: auto;"
+                        >
+                          {{ comp.passed_competitors
+                          }}<v-icon
+                            x-small
+                            :color="$vuetify.theme.themes[appTheme].textDefault"
+                            >mdi-arrow-right</v-icon
+                          >
+                        </div>
                       </div>
                     </div>
                   </div>

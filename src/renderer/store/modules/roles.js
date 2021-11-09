@@ -64,12 +64,6 @@ export default {
       surName = "";
       location = "";
       num = null;
-    },
-    SponsorClass: class {
-      constructor(id) {
-        this.id = id;
-      }
-      logoLink = null;
     }
   },
   getters: {

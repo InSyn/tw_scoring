@@ -427,7 +427,7 @@
                       <!-- JURY -->
 
                       <div
-                        style="display:flex;flex-direction: column;border: 1px solid black;border-top: none;flex: 1 0 auto"
+                        style="display:flex;flex-direction: column;border-width: 0 1px 1px 1px; border-color: black black black black;border-style: solid solid solid solid;flex: 1 0 auto"
                       >
                         <div
                           style="padding: 2px 4px; border-bottom: 1px solid black; font-weight:bold;"
@@ -619,7 +619,6 @@ export default {
           } else {
             sumHeight = 0;
             this.data_paginated_results.push([]);
-
             if (gridRow.type === "competitorResult")
               this.data_paginated_results[
                 this.data_paginated_results.length - 1
@@ -631,99 +630,8 @@ export default {
           }
         });
         this.results = this.paginated_results;
-        console.log(this.results);
-
-        // this.results.forEach(page => {
-        //   let sumHeight = 0;
-        //   page.forEach(gridRow => {
-        //     sumHeight += this.$refs[gridRow.type][0].offsetHeight;
-        //     console.log(
-        //       `${this.$refs["pdf_table_container"][0].offsetHeight} -> ${sumHeight}`
-        //     );
-        //   });
-        // });
       }, 0);
     });
-    // this.$nextTick(() => {
-    //   setTimeout(() => {
-    //     let container_height = Math.floor(
-    //       this.$refs["pdf_table_container"][0].offsetHeight
-    //     );
-    //     let header_height = Math.floor(
-    //       this.$refs["sheet_header"][0].offsetHeight
-    //     );
-    //     let result_height = Math.ceil(
-    //       this.$refs["result"] && this.$refs["result"][0].offsetHeight
-    //     );
-    //     let results_overall = this.results.length;
-    //     let res_per_page = Math.floor(
-    //       (container_height - header_height) / result_height
-    //     );
-    //     let pages = Math.ceil(results_overall / res_per_page);
-    //     let tech_data_height =
-    //       (this.$refs.technical_data &&
-    //         Math.ceil(this.$refs.technical_data[0].offsetHeight)) ||
-    //       0;
-    //     let notations_height =
-    //       (this.$refs.notes &&
-    //         Math.ceil(this.$refs.notes && this.$refs.notes[0].offsetHeight)) ||
-    //       0;
-    //     // console.log(
-    //     //   `Container: ${container_height} header_height: ${header_height} result_height: ${result_height} results_overall:${results_overall} res_per_page: ${res_per_page} pages:${pages}`
-    //     // );
-    //     for (let p = 0; p < pages; p++) {
-    //       this.data_paginated_results.push([]);
-    //       for (let i = 0; i < res_per_page; i++) {
-    //         if (this.results[p * res_per_page + i]) {
-    //           this.results[p * res_per_page + i].rank =
-    //             p * res_per_page + i + 1;
-    //           this.data_paginated_results[p].push(
-    //             this.results[p * res_per_page + i]
-    //           );
-    //         }
-    //       }
-    //     }
-    //     if (
-    //       this.data_paginated_results &&
-    //       this.data_paginated_results[this.data_paginated_results.length - 1] &&
-    //       this.results_protocol.print_header &&
-    //       container_height <
-    //         result_height *
-    //           this.data_paginated_results[
-    //             this.data_paginated_results.length - 1
-    //           ].length +
-    //           tech_data_height
-    //     ) {
-    //       // console.log(
-    //       //   `cont: ${container_height}, res: ${result_height *
-    //       //     this.data_paginated_results[
-    //       //       this.data_paginated_results.length - 1
-    //       //     ].length}, td: ${tech_data_height}, not: ${notations_height}`
-    //       // );
-    //       this.data_paginated_results.push([]);
-    //     }
-    //     if (
-    //       this.data_paginated_results &&
-    //       this.data_paginated_results[this.data_paginated_results.length - 1] &&
-    //       container_height <
-    //         result_height *
-    //           this.data_paginated_results[
-    //             this.data_paginated_results.length - 1
-    //           ].length +
-    //           tech_data_height +
-    //           notations_height
-    //     ) {
-    //       // console.log(
-    //       //   `cont: ${container_height}, res: ${result_height *
-    //       //     this.data_paginated_results[
-    //       //       this.data_paginated_results.length - 1
-    //       //     ].length}, td: ${tech_data_height}, not: ${notations_height}`
-    //       // );
-    //       this.data_paginated_results.push([]);
-    //     }
-    //     this.check_height();
-    //   }, 0);
-    // });
   },
   data() {
     return {

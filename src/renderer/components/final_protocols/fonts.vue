@@ -6,7 +6,6 @@
     }"
   >
     <div
-      @click="log(flatGrid)"
       v-for="(stage, s_idx) in stageGrid"
       :key="s_idx"
       style="flex: 0 0 auto;padding: 0 1rem"
@@ -14,7 +13,7 @@
         backgroundColor: $vuetify.theme.themes[appTheme].standardBackgroundRGBA
       }"
     >
-      <div style="padding: 4px">{{ stage.title }}</div>
+      <div style="padding: 4px">{{ stage.title.title }}</div>
       <div v-for="competitor in stage.s_competitors">
         {{
           `${competitor.s_rank} ${competitor.competitor.info_data.bib} ${competitor.competitor.info_data.surname} ${competitor.competitor.info_data.name}: ${competitor.result}`
