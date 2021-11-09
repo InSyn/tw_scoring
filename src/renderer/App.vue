@@ -409,6 +409,8 @@ export default {
   flex-wrap: nowrap;
   width: 100%;
   height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   * {
     &::-webkit-scrollbar {
       width: 6px;

@@ -107,7 +107,7 @@
         ><v-dialog
           width="720"
           v-model="dialogs.create_race.state"
-          @keydown.prevent="
+          @keydown.enter.prevent="
             create_race(
               dialogs.create_race.title,
               competition.structure.types[competition.structure.selected.type],
@@ -117,7 +117,6 @@
               dialogs.create_race.competitors
             )
           "
-          persistent
         >
           <template v-slot:activator="{ on }">
             <v-btn
@@ -344,7 +343,6 @@
           }}<v-spacer></v-spacer
           ><v-dialog
             v-model="dialogs.add_competitor_to_race.state"
-            persistent
             width="640px"
             ><template v-slot:activator="{ on }"
               ><v-btn

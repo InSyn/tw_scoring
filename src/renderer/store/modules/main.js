@@ -102,7 +102,7 @@ export default {
         ? state.competition.stages.stage_grid
             .map(stage => {
               return {
-                title: stage.title,
+                title: { type: "stageTitle", title: stage.title },
                 s_competitors: stage.s_competitions.map(_competition =>
                   state.competitions.find(
                     competition => competition.id === _competition
@@ -130,6 +130,7 @@ export default {
                         )
                         .map(competitor => {
                           return {
+                            type: "competitorResult",
                             comp_id: _competition,
                             competitor: competitor,
                             s_rank: null,
