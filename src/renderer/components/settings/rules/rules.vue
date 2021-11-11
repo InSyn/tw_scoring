@@ -859,18 +859,19 @@
           >Формула подстчёта результата этапа</v-card-title
         >
         <div
-          class="pa-1 d-flex flex-nowrap align-center"
+          class="pa-1 d-flex flex-nowrap"
           style="border-radius: 6px"
           :style="{
             backgroundColor:
               $vuetify.theme.themes[appTheme].standardBackgroundRGBA
           }"
         >
-          <div class="d-flex flex-wrap align-center">
+          <div class="d-flex flex-wrap align-stretch">
             <v-btn
               class="mr-2"
               v-for="overall_type in competition.result_formula.overall_result
                 .types"
+              :key="overall_type.id"
               @click="
                 competition.result_formula.overall_result.type = +overall_type.id
               "
@@ -879,7 +880,6 @@
                 overall_type.id ===
                   competition.result_formula.overall_result.type
               "
-              :key="overall_type.id"
               :style="[
                 {
                   color: $vuetify.theme.themes[appTheme].textDefault,
@@ -892,8 +892,8 @@
                   backgroundColor: $vuetify.theme.themes[appTheme].success
                 }
               ]"
-              v-html="overall_type.title"
-            ></v-btn>
+              >{{ overall_type.title }}</v-btn
+            >
           </div>
           <v-spacer></v-spacer>
           <div

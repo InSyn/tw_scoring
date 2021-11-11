@@ -104,23 +104,26 @@
               results_protocol.protocol_fields &&
               results_protocol.protocol_fields"
             :key="f_idx"
-            style="font-size: 0.8rem;padding: 0;margin: 0;border-radius: 6px"
-            :style="
+            style="font-size: 0.8rem;padding: 0;margin: 0"
+            :style="[
+              {
+                border: `1px solid ${$vuetify.theme.themes[appTheme].standardBackgroundRGBA}`
+              },
               selected_fields.some(sel_field => {
                 return sel_field === field.id;
               }) && {
                 backgroundColor:
                   $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
-                boxShadow: `inset 0 0 2px 0 ${$vuetify.theme.themes[appTheme].accent}`
+                border: `1px solid ${$vuetify.theme.themes[appTheme].accent}`
               }
-            "
+            ]"
           >
             <div
               class="d-flex justify-center align-center"
-              style="width: 2rem;"
+              style="width: 2rem;padding: 0 1px"
             >
               <div
-                style="border-radius: 6px; width: 100%;margin: 2px 0;position:relative;"
+                style="width: 100%;position:relative"
                 :style="{
                   backgroundColor:
                     $vuetify.theme.themes[appTheme].subjectBackgroundRGBA
@@ -169,7 +172,7 @@
                 <v-btn
                   @click="shift(field, 'up')"
                   icon
-                  style="height: 12px;width: 100%;"
+                  style="height: 12px;width: 100%;border-radius: 0"
                   ><v-icon
                     class="d-flex justify-center"
                     :style="{
@@ -182,7 +185,7 @@
                 <v-btn
                   @click="shift(field, 'down')"
                   icon
-                  style="height: 12px;width: 100%;"
+                  style="height: 12px;width: 100%;border-radius: 0"
                   ><v-icon
                     class="d-flex justify-center"
                     :style="{
@@ -200,12 +203,12 @@
               v-slot:default="{ hover }"
             >
               <v-col
-                class="pa-1 d-flex justify-center"
-                style="align-items: center; font-weight:bold; border-radius: 6px; cursor: pointer"
+                class="pa-0 d-flex justify-start"
+                style="align-items: center; font-weight:bold; cursor: pointer"
                 :style="
                   hover && {
                     backgroundColor:
-                      $vuetify.theme.themes[appTheme].cardBackgroundRGBA
+                      $vuetify.theme.themes[appTheme].subjectBackgroundRGBA
                   }
                 "
               >
@@ -218,7 +221,11 @@
                     v-slot:activator="{ on, attrs }"
                     style="border: 1px solid #232323"
                   >
-                    <div v-on="on" v-bind="attrs" style="cursor: pointer">
+                    <div
+                      v-on="on"
+                      v-bind="attrs"
+                      style="display:flex;align-items: center;cursor: pointer;width: 100%;height: 100%;padding-left: 36px"
+                    >
                       {{ `${field.params[p_key].title || "пусто"}` }}
                     </div></template
                   ><v-card

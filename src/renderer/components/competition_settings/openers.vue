@@ -31,12 +31,11 @@
       >
     </div>
     <div class="d-flex align-center">
-      <v-row no-gutters style="">
-        <v-col
-          class="pa-2"
-          cols="3"
+      <div style="display:flex;align-items: center;flex-wrap: wrap">
+        <div
           v-for="(opener, o) in competition.stuff.openers"
           :key="o"
+          style="flex: 0 0 300px;margin: 8px;font-size: .9rem"
         >
           <div
             class="pa-2"
@@ -67,8 +66,7 @@
                     $event.target.style.borderBottom = `1px solid transparent`
                   "
                   v-model="opener.bib"
-                  class="ml-1 pa-1"
-                  style="transition: border-bottom 224ms; border-bottom: 1px solid transparent; width: 100%; border-radius: 6px"
+                  style="width:100%;margin-left: .5rem;padding: 2px 4px;border-radius:6px;transition:border-bottom 224ms;border-bottom:1px solid transparent"
                   :style="{
                     backgroundColor:
                       $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
@@ -85,8 +83,7 @@
                     $event.target.style.borderBottom = `1px solid transparent`
                   "
                   v-model="opener.name"
-                  class="ml-1 pa-1"
-                  style="transition: border-bottom 224ms; border-bottom: 1px solid transparent; width: 100%; border-radius: 6px"
+                  style="margin-left: .5rem;padding: 2px 4px;transition: border-bottom 224ms; border-bottom: 1px solid transparent; width: 100%; border-radius: 6px"
                   :style="{
                     backgroundColor:
                       $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
@@ -103,8 +100,7 @@
                     $event.target.style.borderBottom = `1px solid transparent`
                   "
                   v-model="opener.surName"
-                  class="ml-1 pa-1"
-                  style="transition: border-bottom 224ms; border-bottom: 1px solid transparent; width: 100%; border-radius: 6px"
+                  style="margin-left: .5rem;padding: 2px 4px;transition: border-bottom 224ms; border-bottom: 1px solid transparent; width: 100%; border-radius: 6px"
                   :style="{
                     backgroundColor:
                       $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
@@ -121,8 +117,7 @@
                     $event.target.style.borderBottom = `1px solid transparent`
                   "
                   v-model="opener.location"
-                  class="ml-1 pa-1"
-                  style="transition: border-bottom 224ms; border-bottom: 1px solid transparent; width: 100%; border-radius: 6px"
+                  style="margin-left: .5rem;padding: 2px 4px;transition: border-bottom 224ms; border-bottom: 1px solid transparent; width: 100%; border-radius: 6px"
                   :style="{
                     backgroundColor:
                       $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
@@ -131,8 +126,8 @@
               /></v-col>
             </v-row>
           </div>
-        </v-col>
-      </v-row>
+        </div>
+      </div>
     </div>
   </div>
 </template>

@@ -7,13 +7,13 @@ import Main from "../components/Main";
 import settings from "../components/settings";
 import competition_settings from "../components/competition_settings";
 import competitors from "../components/competitors";
-import start_protocols from "../components/start_protocols";
+import start_protocols from "../components/race_list";
 import scoring from "../components/scoring";
 import final_protocols from "../components/final_protocols";
 import videoGraphics from "../components/settings/video_graphics/videoGraphics";
 import sportGraphics from "../components/settings/sport_graphics/sportGraphics";
 import results from "../components/settings/results/results";
-import rules from "../components/settings/rules/rules"
+import rules from "../components/settings/rules/rules";
 
 export default new Router({
   routes: [

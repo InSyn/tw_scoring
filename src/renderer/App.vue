@@ -11,38 +11,44 @@
       :style="{
         background: `${$vuetify.theme.themes[appTheme].cardBackgroundRGBA}`
       }"
-      style="position:relative;z-index: 3"
+      style="position:relative;z-index: 1001"
       class="d-flex align-center px-4"
     >
       <v-btn
         :color="$vuetify.theme.themes[appTheme].accent"
         @click="changeMenuState"
+        style="margin-right: 1rem"
         icon
         ><v-icon v-html="showMenu ? 'mdi-backburger' : 'mdi-menu'"></v-icon>
       </v-btn>
       <v-btn
-        icon
-        style="margin-left: 12px"
+        text
+        style="padding:0"
+        min-width="0"
+        width="48"
         :color="$vuetify.theme.themes[appTheme].accent"
         ><v-icon>mdi-content-save</v-icon>
       </v-btn>
       <v-btn
-        icon
-        style="margin-left: 12px"
+        text
+        style="padding:0"
+        min-width="0"
+        width="48"
         :color="$vuetify.theme.themes[appTheme].accent"
         ><v-icon>mdi-download</v-icon> </v-btn
       ><v-dialog
         width="540"
         v-if="competition"
         v-model="create_competition_dialog.state"
-        @keydown.enter.prevent="createCompetition()"
+        @keydown.enter.prevent="createNewCompetition()"
+        style="position:relative; z-index: 1001"
         :overlay-color="$vuetify.theme.themes[appTheme].accent"
         :overlay-opacity="0.1"
         ><template v-slot:activator="{ on, attrs }"
           ><v-btn
             v-on="on"
             @click="initCreateDialog()"
-            style="margin-left:36px"
+            style="margin-left:2rem"
             icon
             :color="$vuetify.theme.themes[appTheme].accent"
           >
@@ -348,7 +354,7 @@
         tabindex="0"
         @focus="competition_select = true"
         @blur="competition_select = false"
-        style="position:relative;outline: none;border-radius:6px;margin-left: .5rem"
+        style="position:relative;z-index: 1001;outline: none;border-radius:6px;margin-left: .5rem"
         :style="{
           backgroundColor:
             $vuetify.theme.themes[appTheme].standardBackgroundRGBA,

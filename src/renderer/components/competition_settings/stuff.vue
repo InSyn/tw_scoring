@@ -21,7 +21,8 @@
               class="mr-4"
               icon
               :color="$vuetify.theme.themes[appTheme].accent"
-              ><v-icon>mdi-plus</v-icon></v-btn
+              style="margin-left: 1rem;"
+              ><v-icon>mdi-account-plus</v-icon></v-btn
             >
           </div>
           <div class="flex-column pa-2">
@@ -213,10 +214,10 @@
                   )
                 )
               "
-              class="mr-4"
               icon
               :color="$vuetify.theme.themes[appTheme].accent"
-              ><v-icon>mdi-plus</v-icon></v-btn
+              style="margin-left: 1rem;"
+              ><v-icon>mdi-account-plus</v-icon></v-btn
             >
             <v-icon
               class="pa-2"

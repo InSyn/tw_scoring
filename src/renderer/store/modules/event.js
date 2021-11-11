@@ -54,9 +54,9 @@ export default {
         ],
         accuracy: [
           { id: 0, title: "1", value: 1, digits: 0 },
-          { id: 1, title: "1/10", value: 10, digits: 1 },
-          { id: 2, title: "1/100", value: 100, digits: 2 },
-          { id: 3, title: "1/1000", value: 1000, digits: 3 }
+          { id: 1, title: "1:10", value: 10, digits: 1 },
+          { id: 2, title: "1:100", value: 100, digits: 2 },
+          { id: 3, title: "1:1000", value: 1000, digits: 3 }
         ],
         stages: [
           { id: "qual", title: "Квалификация", value: "Квалификация" },

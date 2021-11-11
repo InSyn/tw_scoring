@@ -7,16 +7,16 @@
         background: $vuetify.theme.themes[appTheme].cardBackgroundRGBA
       }"
     >
-      <div style="text-align: center; font-weight:bold; font-size: 1.2rem">
-        Техническая информация
-      </div>
-      <div>
+      <div
+        style="display:flex;align-items:center;justify-content:center;font-weight:bold; font-size: 1.2rem"
+      >
+        <div>Техническая информация</div>
         <v-btn
           @click="competition.technicalInfo.push({ title: '', value: '' })"
-          style="width: 100%; font-size: 0.8rem; height: 2rem"
           :color="$vuetify.theme.themes[appTheme].accent"
+          style="margin-left: .5rem"
           text
-          >{{ `+ добавить строку` }}</v-btn
+          ><v-icon>mdi-playlist-plus</v-icon></v-btn
         >
       </div>
       <v-row

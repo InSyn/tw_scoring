@@ -6,58 +6,42 @@
         style="display:flex;align-items: center;flex: 0 0 auto;user-select: none"
       >
         <div style="font-size: 1.4rem; font-weight:bold;">Участники</div>
-        <label
-          class="d-flex align-center"
-          style="cursor:pointer;margin-left: auto"
-          for="startListInput"
-        >
-          <v-hover v-slot:default="{ hover }">
-            <div
-              class="d-flex align-center font-weight-bold pa-1"
-              style="transition: background-color 128ms, color 128ms; border-radius: 4px"
-              :style="[
-                { color: $vuetify.theme.themes[appTheme].success },
-                hover && {
-                  backgroundColor: $vuetify.theme.themes[appTheme].success,
-                  color: $vuetify.theme.themes[appTheme].textDefault
-                }
-              ]"
-            >
-              <v-icon
-                :style="[
-                  { color: $vuetify.theme.themes[appTheme].textDefault },
-                  hover && {
-                    color: $vuetify.theme.themes[appTheme].textDefault
-                  }
-                ]"
-                >mdi-arrow-down-bold</v-icon
-              >
-              <div>Загрузить из файла</div>
-            </div></v-hover
+        <v-btn
+          @click="load_prev_stages()"
+          :color="$vuetify.theme.themes[appTheme].action_blue"
+          style="margin-left: auto"
+          text
+          ><v-icon
+            :color="$vuetify.theme.themes[appTheme].textDefault"
+            style="margin-right: .5rem"
+            >mdi-page-previous</v-icon
+          >Из предыдущего этапа</v-btn
+        ><v-btn text :color="$vuetify.theme.themes[appTheme].success">
+          <label
+            class="d-flex align-center"
+            style="cursor:pointer"
+            for="startListInput"
           >
-        </label>
+            <v-icon
+              :color="$vuetify.theme.themes[appTheme].textDefault"
+              style="margin-right: .5rem"
+              >mdi-file-excel</v-icon
+            >
+            Загрузить из файла
+          </label></v-btn
+        >
         <input
           type="file"
           id="startListInput"
-          :key="Math.round(Math.random() * 100)"
+          :key="Math.random()"
           hidden
           @change="load_sheet($event)"
         />
 
-        <v-btn
-          @click="load_prev_stages()"
-          :color="$vuetify.theme.themes[appTheme].action_blue"
-          text
-          ><v-icon
-            :color="$vuetify.theme.themes[appTheme].textDefault"
-            style="margin-right: .4rem"
-            >mdi-page-previous</v-icon
-          >Из предыдущего этапа</v-btn
-        >
         <v-btn :color="$vuetify.theme.themes[appTheme].action_yellow" text
           ><v-icon
             :color="$vuetify.theme.themes[appTheme].textDefault"
-            style="margin-right: .4rem"
+            style="margin-right: .5rem"
             >mdi-arrow-right-bold</v-icon
           >Экспорт</v-btn
         >
@@ -97,205 +81,7 @@
             ></v-col
           >
         </v-row>
-        <v-dialog width="720px" scrollable v-model="addColumnDialog.state">
-          <template v-slot:activator="{ on }">
-            <v-btn
-              v-on="on"
-              icon
-              small
-              style="position:absolute; right: 0; top: 0"
-              :color="$vuetify.theme.themes[appTheme].accent"
-              ><v-icon>mdi-settings</v-icon></v-btn
-            ></template
-          ><v-card
-            :style="{
-              backgroundColor:
-                $vuetify.theme.themes[appTheme].cardBackgroundRGBA
-            }"
-            ><v-card-title
-              :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
-              >Настройка столбцов<v-spacer></v-spacer
-              ><v-btn
-                small
-                icon
-                @click="closeColsDialog()"
-                :color="$vuetify.theme.themes[appTheme].action_red"
-                ><v-icon>mdi-close</v-icon></v-btn
-              ></v-card-title
-            >
-            <v-card-text
-              class="d-flex flex-wrap"
-              style="max-height: 320px; overflow-y: auto"
-              :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
-            >
-              <v-hover
-                v-slot:default="{ hover }"
-                v-for="(col, c) in competition.competitorsSheet.header"
-                :key="c"
-              >
-                <div
-                  class="d-flex flex-column pa-2 pt-4"
-                  style="cursor: pointer; position: relative; border-radius: 6px"
-                  :style="[
-                    hover && {
-                      backgroundColor:
-                        $vuetify.theme.themes[appTheme].subjectBackgroundRGBA
-                    }
-                  ]"
-                >
-                  <div class="d-flex align-center pa-1">
-                    <label for="ID" style="width: 2rem;" v-html="`ID: `"></label
-                    ><input
-                      id="ID"
-                      class="ml-2 pa-1"
-                      style="border-radius: 4px"
-                      :style="{
-                        color: $vuetify.theme.themes[appTheme].textDefault,
-                        backgroundColor:
-                          $vuetify.theme.themes[appTheme].standardBackgroundRGBA
-                      }"
-                      v-model="competition.competitorsSheet.header[c].id"
-                    />
-                  </div>
-                  <div
-                    v-if="addColumnDialog.colToDel.includes(col)"
-                    class="d-flex justify-center align-center"
-                    style="position: absolute; z-index: 2; left: 0;right: 0;top: 0;bottom: 0;border-radius: 6px"
-                    :style="{ backgroundColor: `rgba(225, 32,38, 0.4)` }"
-                  >
-                    <v-btn
-                      text
-                      small
-                      @click="
-                        addColumnDialog.colToDel = addColumnDialog.colToDel.filter(
-                          colToDel => {
-                            return colToDel.id !== col.id;
-                          }
-                        )
-                      "
-                      v-html="`Отменить`"
-                      style="font-weight: bold"
-                      :style="{
-                        color: $vuetify.theme.themes[appTheme].textDefault
-                      }"
-                    ></v-btn>
-                  </div>
-                  <div class="d-flex align-center pa-1">
-                    <label
-                      for="Title"
-                      style="width: 2rem;"
-                      v-html="`Title: `"
-                    ></label
-                    ><input
-                      id="Title"
-                      class="ml-2 pa-1"
-                      style="border-radius: 4px"
-                      :style="{
-                        color: $vuetify.theme.themes[appTheme].textDefault,
-                        backgroundColor:
-                          $vuetify.theme.themes[appTheme].standardBackgroundRGBA
-                      }"
-                      v-model="competition.competitorsSheet.header[c].title"
-                    />
-                  </div>
-                  <v-btn
-                    text
-                    :disabled="
-                      col.id === 'bib' ||
-                        col.id === 'name' ||
-                        col.id === 'surname'
-                    "
-                    @click.prevent="
-                      addColumnDialog.colToDel.push(
-                        competition.competitorsSheet.header[c]
-                      )
-                    "
-                    style="position: absolute; z-index: 1; top: 0; right: 0; font-size: 0.6rem; height: 1rem; width: 3rem"
-                    :color="$vuetify.theme.themes[appTheme].action_red"
-                    >удалить</v-btn
-                  >
-                </div></v-hover
-              >
-              <div
-                v-for="(colToAdd, ctd) in addColumnDialog.colToAdd"
-                :key="3 * ctd + 100"
-                class="d-flex flex-column pa-2 pt-4"
-                style="cursor: pointer; position: relative; border-radius: 6px"
-                :style="{ backgroundColor: `rgba(34,212,38, 0.2)` }"
-              >
-                <div class="d-flex align-center pa-1">
-                  <label
-                    for="ctdID"
-                    style="width: 2rem;"
-                    v-html="`ID: `"
-                  ></label>
-                  <input
-                    id="ctdID"
-                    type="text"
-                    class="ml-2 pa-1"
-                    style="border-radius: 4px"
-                    :style="{
-                      color: $vuetify.theme.themes[appTheme].textDefault,
-                      backgroundColor:
-                        $vuetify.theme.themes[appTheme].cardBackgroundRGBA
-                    }"
-                    v-model="addColumnDialog.colToAdd[ctd].id"
-                  />
-                </div>
-                <div class="d-flex align-center pa-1">
-                  <label
-                    for="ctdTitle"
-                    style="width: 2rem;"
-                    v-html="`Title: `"
-                  ></label>
-                  <input
-                    id="ctdTitle"
-                    type="text"
-                    class="ml-2 pa-1"
-                    style="border-radius: 4px"
-                    :style="{
-                      color: $vuetify.theme.themes[appTheme].textDefault,
-                      backgroundColor:
-                        $vuetify.theme.themes[appTheme].cardBackgroundRGBA
-                    }"
-                    v-model="addColumnDialog.colToAdd[ctd].title"
-                  />
-                </div>
-                <v-btn
-                  text
-                  @click.prevent="
-                    addColumnDialog.colToAdd = addColumnDialog.colToAdd.filter(
-                      cta => {
-                        return cta.id !== colToAdd.id;
-                      }
-                    )
-                  "
-                  style="position: absolute; z-index: 1; top: 0; right: 0; font-size: 0.6rem; height: 1rem; width: 3rem"
-                  :color="$vuetify.theme.themes[appTheme].textDefault"
-                  >Отменить</v-btn
-                >
-              </div></v-card-text
-            ><v-card-actions class="d-flex"
-              ><v-btn
-                text
-                @click="
-                  addColumnDialog.colToAdd.push({
-                    id: '',
-                    title: ''
-                  })
-                "
-                :color="$vuetify.theme.themes[appTheme].accent"
-                >Добавить столбец</v-btn
-              ><v-spacer></v-spacer
-              ><v-btn
-                @click="acceptCols()"
-                :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
-                :color="$vuetify.theme.themes[appTheme].success"
-                >Применить</v-btn
-              ></v-card-actions
-            ></v-card
-          ></v-dialog
-        >
+
         <div
           style="position:relative; overflow-y: auto; overflow-x:hidden; height: 70vh; padding-bottom: 3rem"
           :style="{
@@ -461,52 +247,21 @@
             backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA
           }"
         >
-          <v-dialog width="320px" v-model="clearDialog">
-            <template v-slot:activator="{ on }">
-              <v-btn
-                v-on="on"
-                text
-                small
-                :color="$vuetify.theme.themes[appTheme].action_red"
-                >Очистить таблицу</v-btn
-              ></template
-            ><v-card
-              class="pa-2"
-              :style="{
-                backgroundColor:
-                  $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
-                color: $vuetify.theme.themes[appTheme].textDefault
-              }"
-            >
-              <v-card-title style="padding: .2rem 1rem"
-                >Очистка таблицы</v-card-title
-              >
-              <div class="d-flex align-center" style="padding: .5rem .5rem">
-                <div style="margin-right: auto;">Удалить всех участников?</div>
-                <v-btn
-                  @click="clearSheet(), (clearDialog = false)"
-                  small
-                  text
-                  :color="$vuetify.theme.themes[appTheme].accent"
-                  v-html="`Да`"
-                ></v-btn
-                ><v-btn
-                  @click="clearDialog = false"
-                  small
-                  text
-                  :color="$vuetify.theme.themes[appTheme].action_red"
-                  v-html="`Нет`"
-                ></v-btn></div></v-card
-          ></v-dialog>
-          <v-spacer></v-spacer>
           <v-dialog width="fit-content" v-model="createCompetitorDialog.state"
             ><template v-slot:activator="{ on }">
               <v-btn
                 v-on="on"
                 text
                 small
+                style="margin-right: 1rem"
                 :color="$vuetify.theme.themes[appTheme].accent"
-                >Создать участника</v-btn
+                ><v-icon
+                  small
+                  style="margin-right: .5rem"
+                  :color="$vuetify.theme.themes[appTheme].textDefault"
+                  >mdi-account-plus</v-icon
+                >
+                Создать участника</v-btn
               ></template
             ><v-card
               :style="{
@@ -565,6 +320,255 @@
               ></v-card
             >
           </v-dialog>
+          <v-dialog width="720px" scrollable v-model="addColumnDialog.state">
+            <template v-slot:activator="{ on }">
+              <v-btn
+                v-on="on"
+                text
+                small
+                :color="$vuetify.theme.themes[appTheme].accent"
+                ><v-icon
+                  small
+                  style="margin-right: .5rem"
+                  :color="$vuetify.theme.themes[appTheme].textDefault"
+                  >mdi-settings</v-icon
+                >Настройка столбцов</v-btn
+              ></template
+            ><v-card
+              :style="{
+                backgroundColor:
+                  $vuetify.theme.themes[appTheme].cardBackgroundRGBA
+              }"
+              ><v-card-title
+                :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
+                >Настройка столбцов<v-spacer></v-spacer
+                ><v-btn
+                  small
+                  icon
+                  @click="closeColsDialog()"
+                  :color="$vuetify.theme.themes[appTheme].action_red"
+                  ><v-icon>mdi-close</v-icon></v-btn
+                ></v-card-title
+              >
+              <v-card-text
+                class="d-flex flex-wrap"
+                style="max-height: 320px; overflow-y: auto"
+                :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
+              >
+                <v-hover
+                  v-slot:default="{ hover }"
+                  v-for="(col, c) in competition.competitorsSheet.header"
+                  :key="c"
+                >
+                  <div
+                    class="d-flex flex-column pa-2 pt-4"
+                    style="cursor: pointer; position: relative; border-radius: 6px"
+                    :style="[
+                      hover && {
+                        backgroundColor:
+                          $vuetify.theme.themes[appTheme].subjectBackgroundRGBA
+                      }
+                    ]"
+                  >
+                    <div class="d-flex align-center pa-1">
+                      <label
+                        for="ID"
+                        style="width: 2rem;"
+                        v-html="`ID: `"
+                      ></label
+                      ><input
+                        id="ID"
+                        class="ml-2 pa-1"
+                        style="border-radius: 4px"
+                        :style="{
+                          color: $vuetify.theme.themes[appTheme].textDefault,
+                          backgroundColor:
+                            $vuetify.theme.themes[appTheme]
+                              .standardBackgroundRGBA
+                        }"
+                        v-model="competition.competitorsSheet.header[c].id"
+                      />
+                    </div>
+                    <div
+                      v-if="addColumnDialog.colToDel.includes(col)"
+                      class="d-flex justify-center align-center"
+                      style="position: absolute; z-index: 2; left: 0;right: 0;top: 0;bottom: 0;border-radius: 6px"
+                      :style="{ backgroundColor: `rgba(225, 32,38, 0.4)` }"
+                    >
+                      <v-btn
+                        text
+                        small
+                        @click="
+                          addColumnDialog.colToDel = addColumnDialog.colToDel.filter(
+                            colToDel => {
+                              return colToDel.id !== col.id;
+                            }
+                          )
+                        "
+                        v-html="`Отменить`"
+                        style="font-weight: bold"
+                        :style="{
+                          color: $vuetify.theme.themes[appTheme].textDefault
+                        }"
+                      ></v-btn>
+                    </div>
+                    <div class="d-flex align-center pa-1">
+                      <label
+                        for="Title"
+                        style="width: 2rem;"
+                        v-html="`Title: `"
+                      ></label
+                      ><input
+                        id="Title"
+                        class="ml-2 pa-1"
+                        style="border-radius: 4px"
+                        :style="{
+                          color: $vuetify.theme.themes[appTheme].textDefault,
+                          backgroundColor:
+                            $vuetify.theme.themes[appTheme]
+                              .standardBackgroundRGBA
+                        }"
+                        v-model="competition.competitorsSheet.header[c].title"
+                      />
+                    </div>
+                    <v-btn
+                      text
+                      :disabled="
+                        col.id === 'bib' ||
+                          col.id === 'name' ||
+                          col.id === 'surname'
+                      "
+                      @click.prevent="
+                        addColumnDialog.colToDel.push(
+                          competition.competitorsSheet.header[c]
+                        )
+                      "
+                      style="position: absolute; z-index: 1; top: 0; right: 0; font-size: 0.6rem; height: 1rem; width: 3rem"
+                      :color="$vuetify.theme.themes[appTheme].action_red"
+                      >удалить</v-btn
+                    >
+                  </div></v-hover
+                >
+                <div
+                  v-for="(colToAdd, ctd) in addColumnDialog.colToAdd"
+                  :key="3 * ctd + 100"
+                  class="d-flex flex-column pa-2 pt-4"
+                  style="cursor: pointer; position: relative; border-radius: 6px"
+                  :style="{ backgroundColor: `rgba(34,212,38, 0.2)` }"
+                >
+                  <div class="d-flex align-center pa-1">
+                    <label
+                      for="ctdID"
+                      style="width: 2rem;"
+                      v-html="`ID: `"
+                    ></label>
+                    <input
+                      id="ctdID"
+                      type="text"
+                      class="ml-2 pa-1"
+                      style="border-radius: 4px"
+                      :style="{
+                        color: $vuetify.theme.themes[appTheme].textDefault,
+                        backgroundColor:
+                          $vuetify.theme.themes[appTheme].cardBackgroundRGBA
+                      }"
+                      v-model="addColumnDialog.colToAdd[ctd].id"
+                    />
+                  </div>
+                  <div class="d-flex align-center pa-1">
+                    <label
+                      for="ctdTitle"
+                      style="width: 2rem;"
+                      v-html="`Title: `"
+                    ></label>
+                    <input
+                      id="ctdTitle"
+                      type="text"
+                      class="ml-2 pa-1"
+                      style="border-radius: 4px"
+                      :style="{
+                        color: $vuetify.theme.themes[appTheme].textDefault,
+                        backgroundColor:
+                          $vuetify.theme.themes[appTheme].cardBackgroundRGBA
+                      }"
+                      v-model="addColumnDialog.colToAdd[ctd].title"
+                    />
+                  </div>
+                  <v-btn
+                    text
+                    @click.prevent="
+                      addColumnDialog.colToAdd = addColumnDialog.colToAdd.filter(
+                        cta => {
+                          return cta.id !== colToAdd.id;
+                        }
+                      )
+                    "
+                    style="position: absolute; z-index: 1; top: 0; right: 0; font-size: 0.6rem; height: 1rem; width: 3rem"
+                    :color="$vuetify.theme.themes[appTheme].textDefault"
+                    >Отменить</v-btn
+                  >
+                </div></v-card-text
+              ><v-card-actions class="d-flex"
+                ><v-btn
+                  text
+                  @click="
+                    addColumnDialog.colToAdd.push({
+                      id: '',
+                      title: ''
+                    })
+                  "
+                  :color="$vuetify.theme.themes[appTheme].accent"
+                  >Добавить столбец</v-btn
+                ><v-spacer></v-spacer
+                ><v-btn
+                  @click="acceptCols()"
+                  :style="{
+                    color: $vuetify.theme.themes[appTheme].textDefault
+                  }"
+                  :color="$vuetify.theme.themes[appTheme].success"
+                  >Применить</v-btn
+                ></v-card-actions
+              ></v-card
+            ></v-dialog
+          >
+          <v-spacer></v-spacer>
+          <v-dialog width="320px" v-model="clearDialog">
+            <template v-slot:activator="{ on }">
+              <v-btn
+                v-on="on"
+                text
+                small
+                :color="$vuetify.theme.themes[appTheme].action_red"
+                >Очистить таблицу</v-btn
+              ></template
+            ><v-card
+              class="pa-2"
+              :style="{
+                backgroundColor:
+                  $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
+                color: $vuetify.theme.themes[appTheme].textDefault
+              }"
+            >
+              <v-card-title style="padding: .2rem 1rem"
+                >Очистка таблицы</v-card-title
+              >
+              <div class="d-flex align-center" style="padding: .5rem .5rem">
+                <div style="margin-right: auto;">Удалить всех участников?</div>
+                <v-btn
+                  @click="clearSheet(), (clearDialog = false)"
+                  small
+                  text
+                  :color="$vuetify.theme.themes[appTheme].accent"
+                  v-html="`Да`"
+                ></v-btn
+                ><v-btn
+                  @click="clearDialog = false"
+                  small
+                  text
+                  :color="$vuetify.theme.themes[appTheme].action_red"
+                  v-html="`Нет`"
+                ></v-btn></div></v-card
+          ></v-dialog>
         </div>
       </div>
     </div>

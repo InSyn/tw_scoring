@@ -57,7 +57,11 @@ export default {
     preview
   },
   computed: {
-    ...mapGetters("main", ["competition", "appTheme", "showPreview"])
+    ...mapGetters("main", {
+      competition: "competition",
+      appTheme: "appTheme",
+      showPreview: "showPreview"
+    })
   }
 };
 </script>
