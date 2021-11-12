@@ -332,7 +332,7 @@
                   style="margin-right: .5rem"
                   :color="$vuetify.theme.themes[appTheme].textDefault"
                   >mdi-settings</v-icon
-                >Настройка столбцов</v-btn
+                >Настройка таблицы</v-btn
               ></template
             ><v-card
               :style="{
@@ -341,7 +341,7 @@
               }"
               ><v-card-title
                 :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
-                >Настройка столбцов<v-spacer></v-spacer
+                >Настройка таблицы<v-spacer></v-spacer
                 ><v-btn
                   small
                   icon
