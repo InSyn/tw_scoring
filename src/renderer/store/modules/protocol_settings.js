@@ -7,11 +7,11 @@ export default {
         { title: "Центр", value: "center" },
         { title: "Справа", value: "end" }
       ],
-      protocol_fields: [],
       title: "",
       use_grid: false,
       use_string_light: true,
       print_header: true,
+      print_notations: true,
       strings_at_page: 6,
       font_size: 12,
       notations:
@@ -110,6 +110,147 @@ export default {
   mutations: {
     setImage: (state, data) => {
       state.results_protocol.assets[data[0]].file = data[1].target.files[0];
+    },
+    initResultProtocolFields: (state, data) => {
+      const result_fields = [];
+      result_fields.push(
+        new data.fieldClass(
+          6,
+          12,
+          {
+            title: "Слева",
+            value: "start"
+          },
+          {
+            data: { id: "rank", title: "Место" },
+            handler: function(_competitor) {
+              return [_competitor.s_rank];
+            }
+          }
+        )
+      );
+      data.competition.competitorsSheet.header.forEach(_header => {
+        result_fields.push(
+          new data.fieldClass(
+            8,
+            12,
+            { title: "Слева", value: "start" },
+            {
+              data: _header,
+              handler: function(_competitor) {
+                return [_competitor.competitor.info_data[_header.id]];
+              }
+            }
+          )
+        );
+      });
+      result_fields.push(
+        new data.fieldClass(
+          8,
+          12,
+          {
+            title: "Слева",
+            value: "start"
+          },
+          {
+            data: { id: "race", title: "Заезд" },
+            handler: function(competitor) {
+              return competitor.competitor.marks
+                .map(mark => {
+                  return mark.race_id;
+                })
+                .filter((value, index, self) => {
+                  return self.indexOf(value) === index;
+                })
+                .map((race, index) => {
+                  return `Заезд ${index + 1}`;
+                });
+            }
+          }
+        )
+      );
+      data.competition.stuff.judges.forEach((judge, j_idx) => {
+        result_fields.push(
+          new data.fieldClass(
+            6,
+            12,
+            { title: "Слева", value: "start" },
+            {
+              data: { id: `Судья ${j_idx + 1}`, title: `С${j_idx + 1}` },
+              handler: function(_competitor) {
+                return (
+                  _competitor.competitor.marks
+                    .filter((_mark, m_idx, _marks) => {
+                      return _mark.judge === judge.id;
+                    })
+                    .map(_mark => {
+                      return _mark.value;
+                    }) || "-"
+                );
+              }
+            }
+          )
+        );
+      });
+      result_fields.push(
+        new data.fieldClass(
+          6,
+          12,
+          {
+            title: "Слева",
+            value: "start"
+          },
+          {
+            data: { id: "race_res", title: "Оценка" },
+            handler: function(competitor, competition) {
+              return competition.races.map(_race => {
+                return competition.set_accuracy(
+                  competition.result_formula.types[
+                    competition.result_formula.type
+                  ].formulas
+                    .find(_f => {
+                      return (
+                        _f.id ===
+                        competition.result_formula.types[
+                          competition.result_formula.type
+                        ].formula
+                      );
+                    })
+                    .get_result(
+                      competitor.competitor.id,
+                      _race.id,
+                      competition.stuff.judges.map(_j => {
+                        return +_j.id;
+                      })
+                    )
+                );
+              });
+            }
+          }
+        )
+      );
+      result_fields.push(
+        new data.fieldClass(
+          8,
+          12,
+          {
+            title: "Слева",
+            value: "start"
+          },
+          {
+            data: { id: "result", title: "Рез-т" },
+            handler: function(competitor, competition) {
+              return [
+                competitor.competitor.race_status ||
+                  competition.set_accuracy(
+                    competition.getResult(competitor.competitor.id)
+                  )
+              ];
+            }
+          }
+        )
+      );
+      data.competition.protocol_fields = result_fields;
     }
   }
 };

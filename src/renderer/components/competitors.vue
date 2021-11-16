@@ -240,7 +240,7 @@
           >
         </div>
         <div
-          class="pa-2 d-flex align-center justify-center"
+          class="d-flex align-center justify-center"
           style="position: absolute; width: 100%; height: 3rem;bottom: 0; border-bottom-left-radius: 6px; border-bottom-right-radius: 6px"
           :style="{
             border: `1px solid ${$vuetify.theme.themes[appTheme].accent}`,
@@ -253,7 +253,8 @@
                 v-on="on"
                 text
                 small
-                style="margin-right: 1rem"
+                tile
+                height="100%"
                 :color="$vuetify.theme.themes[appTheme].accent"
                 ><v-icon
                   small
@@ -325,7 +326,9 @@
               <v-btn
                 v-on="on"
                 text
+                tile
                 small
+                height="100%"
                 :color="$vuetify.theme.themes[appTheme].accent"
                 ><v-icon
                   small
@@ -538,6 +541,8 @@
                 v-on="on"
                 text
                 small
+                tile
+                height="100%"
                 :color="$vuetify.theme.themes[appTheme].action_red"
                 >Очистить таблицу</v-btn
               ></template

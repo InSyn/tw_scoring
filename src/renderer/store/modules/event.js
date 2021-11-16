@@ -165,16 +165,29 @@ export default {
         jury: [
           {
             title: "Старший судья",
-            surName: "Подоляк",
-            name: "Ефим",
-            loc: "КРСК",
+            surName: "Фамилия",
+            name: "Имя",
+            loc: "Город",
             connected: false
           }
         ],
         judges: [],
         openers: []
       };
-      technicalInfo = [];
+      technicalInfo = [
+        {
+          title: "Название склона",
+          value: ""
+        },
+        {
+          title: "Длина трассы",
+          value: ""
+        },
+        {
+          title: "Ширина трассы",
+          value: ""
+        }
+      ];
       competitorsSheet = {
         header: [
           { id: "bib", title: "Bib" },
@@ -235,6 +248,7 @@ export default {
       }
       getRaceResult(competitor_id, race_id) {}
       getResultAllRaces(competitor_id) {}
+      protocol_fields = [];
       result_formula = {
         overall_result: {
           type: 1,

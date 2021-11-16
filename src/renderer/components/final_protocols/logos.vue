@@ -5,12 +5,15 @@
       backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA
     }"
   >
-    <div style="font-size: 1.2rem; font-weight:bold;margin: 4px 8px">
+    <div
+      style="flex: 0 0 auto;font-size: 1.2rem; font-weight:bold;margin: 4px 8px"
+    >
       Логотипы
     </div>
+    <v-spacer></v-spacer>
     <div
       class="items_wrapper"
-      style="display:flex;flex-wrap: wrap;align-items: flex-start;"
+      style="flex: 0 0 auto;display:flex;flex-wrap: wrap;align-items: flex-start;"
     >
       <div
         v-for="(logo, l_key, l_idx) in results_protocol.assets"

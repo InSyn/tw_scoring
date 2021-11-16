@@ -265,7 +265,7 @@
                         $event.target.style.backgroundColor =
                           $vuetify.theme.themes[appTheme].standardBackgroundRGBA
                       "
-                      style="flex: 1 0 auto;padding: 2px 4px;font-size: .9rem;transition: background-color 92ms"
+                      style="flex: 1 0 auto;padding: 2px 4px;font-size: .9rem;border-radius: 6px 6px 0 0;transition: background-color 92ms"
                       :style="{
                         color: $vuetify.theme.themes[appTheme].textDefault,
                         backgroundColor:
@@ -430,7 +430,7 @@
                       >
                         <div
                           class="d-flex flex-column"
-                          style="min-height: 3rem;padding: .25rem .5rem;margin: 0 .5rem .5rem 0"
+                          style="min-height: 3rem;padding: .25rem .5rem;margin: 0 4px 4px 0"
                           :style="{
                             backgroundColor:
                               $vuetify.theme.themes[appTheme].cardBackgroundRGBA

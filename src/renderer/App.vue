@@ -61,7 +61,9 @@
             color: $vuetify.theme.themes[appTheme].textDefault
           }"
         >
-          <v-card-title>Создание соревнования</v-card-title>
+          <v-card-title class="ma-0 pt-2 pb-0 px-4"
+            >Создание соревнования</v-card-title
+          >
           <div
             style="display:flex; flex-direction: column; border-radius: 6px;margin: 1rem"
             :style="{
@@ -339,10 +341,12 @@
             style="display:flex;align-items: center;justify-content: flex-end;flex-wrap: nowrap"
             ><v-btn
               text
+              small
               @click="create_competition_dialog.state = false"
               :color="$vuetify.theme.themes[appTheme].error"
               >Отмена</v-btn
             ><v-btn
+              small
               @click="createNewCompetition()"
               :color="$vuetify.theme.themes[appTheme].success"
               >Создать</v-btn
@@ -655,23 +659,15 @@ export default {
       competition.mainData.discipline.min = "DSC";
       competition.mainData.country.value = "RUS";
       competition.mainData.location.value = "Krasnoyarsk";
-      competition.technicalInfo.push(
-        {
-          title: "Название склона",
-          value: "Сопка"
-        },
-        {
-          title: "Длина трассы",
-          value: "240м"
-        },
-        {
-          title: "Ширина трассы",
-          value: "18м"
-        }
-      );
       for (let i = 0; i < 4; i++) {
         competition.stuff.judges.push(
-          new this.JudgeClass(`Судья ${i + 1}`, i + 1, "Иванов", "Иван", "КРСК")
+          new this.JudgeClass(
+            `Судья ${i + 1}`,
+            i + 1,
+            "Фамилия",
+            "Имя",
+            "Город"
+          )
         );
       }
     },

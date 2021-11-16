@@ -27,7 +27,7 @@
       />
     </div>
     <div class="pa-2 d-flex flex-column flex-grow-1">
-      <div class="d-flex flex-nowrap align-content-end">
+      <div class="d-flex flex-nowrap align-end">
         <v-hover
           v-slot:default="{ hover }"
           v-for="(button, b_idx) in field_buttons"
@@ -36,7 +36,7 @@
           <v-btn
             @click="button.action()"
             depressed
-            height="20"
+            small
             style="border-radius: 6px 6px 0 0"
             :color="$vuetify.theme.themes[appTheme].standardBackgroundRGBA"
             :style="[
@@ -47,6 +47,19 @@
             >{{ button.title }}</v-btn
           ></v-hover
         >
+        <v-btn
+          text
+          small
+          :color="this.$vuetify.theme.themes[appTheme].accent"
+          style="margin-left: auto"
+          @click="
+            $store.commit('protocol_settings/initResultProtocolFields', {
+              competition: competition,
+              fieldClass: fieldClass
+            })
+          "
+          ><v-icon>mdi-refresh</v-icon>
+        </v-btn>
       </div>
       <div
         class="d-flex pa-2 flex-column"
@@ -100,9 +113,8 @@
         </v-row>
         <div style="max-height: 20vh;overflow-y: auto">
           <v-row
-            v-for="(field, f_idx) in results_protocol &&
-              results_protocol.protocol_fields &&
-              results_protocol.protocol_fields"
+            v-for="(field, f_idx) in competition.protocol_fields &&
+              competition.protocol_fields"
             :key="f_idx"
             style="font-size: 0.8rem;padding: 0;margin: 0"
             :style="[
@@ -261,7 +273,7 @@
                     >
                       <div
                         v-for="(standard_header,
-                        sh_idx) in results_protocol.protocol_fields"
+                        sh_idx) in competition.protocol_fields"
                         :key="sh_idx"
                         @click="setField(field, standard_header)"
                         style="flex-shrink: 0; padding: 4px; margin: 2px; cursor: pointer"
@@ -284,9 +296,7 @@
                     color: $vuetify.theme.themes[appTheme].textDefault
                   }"
                   type="number"
-                  v-model="
-                    results_protocol.protocol_fields[f_idx].params[p_key]
-                  "
+                  v-model="competition.protocol_fields[f_idx].params[p_key]"
                 />
                 <select
                   v-if="p_key === 'align'"
@@ -295,9 +305,7 @@
                     color: $vuetify.theme.themes[appTheme].textDefault,
                     textAlignLast: f_prop.value
                   }"
-                  v-model.lazy="
-                    results_protocol.protocol_fields[f_idx].params.align
-                  "
+                  v-model.lazy="competition.protocol_fields[f_idx].params.align"
                 >
                   <option
                     :style="{
@@ -320,6 +328,7 @@
         <label
           :for="`notations`"
           class="pa-2 font-weight-bold"
+          style="flex: 0 0 auto"
           v-html="`Замечания`"
         ></label>
         <div
@@ -449,6 +458,23 @@
           <v-checkbox
             hide-details
             class="pa-0 ma-0"
+            id="print_notations"
+            v-model="results_protocol.print_notations"
+            :color="$vuetify.theme.themes[appTheme].textDefault"
+          ></v-checkbox>
+          <label
+            :for="`print_notations`"
+            class="font-weight-bold"
+            style="cursor:pointer;"
+            :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
+            >Печатать замечания</label
+          >
+        </div>
+
+        <div class="d-flex flex-nowrap align-center py-1">
+          <v-checkbox
+            hide-details
+            class="pa-0 ma-0"
             id="use_string_light"
             v-model="results_protocol.use_string_light"
             :color="$vuetify.theme.themes[appTheme].textDefault"
@@ -528,146 +554,11 @@ import { mapGetters } from "vuex";
 export default {
   name: "fp_main",
   mounted() {
-    const result_fields = [];
-    result_fields.push(
-      new this.fieldClass(
-        6,
-        12,
-        {
-          title: "Слева",
-          value: "start"
-        },
-        {
-          data: { id: "rank", title: "Место" },
-          handler: function(_competitor) {
-            return [_competitor.s_rank];
-          }
-        }
-      )
-    );
-    this.competition.competitorsSheet.header.forEach(_header => {
-      result_fields.push(
-        new this.fieldClass(
-          8,
-          12,
-          { title: "Слева", value: "start" },
-          {
-            data: _header,
-            handler: function(_competitor) {
-              return [_competitor.competitor.info_data[_header.id]];
-            }
-          }
-        )
-      );
-    });
-    result_fields.push(
-      new this.fieldClass(
-        8,
-        12,
-        {
-          title: "Слева",
-          value: "start"
-        },
-        {
-          data: { id: "race", title: "Заезд" },
-          handler: function(competitor) {
-            return competitor.competitor.marks
-              .map(mark => {
-                return mark.race_id;
-              })
-              .filter((value, index, self) => {
-                return self.indexOf(value) === index;
-              })
-              .map((race, index) => {
-                return `Заезд ${index + 1}`;
-              });
-          }
-        }
-      )
-    );
-    this.competition.stuff.judges.forEach((judge, j_idx) => {
-      result_fields.push(
-        new this.fieldClass(
-          6,
-          12,
-          { title: "Слева", value: "start" },
-          {
-            data: { id: `Судья ${j_idx + 1}`, title: `С${j_idx + 1}` },
-            handler: function(_competitor) {
-              return (
-                _competitor.competitor.marks
-                  .filter((_mark, m_idx, _marks) => {
-                    return _mark.judge === judge.id;
-                  })
-                  .map(_mark => {
-                    return _mark.value;
-                  }) || "-"
-              );
-            }
-          }
-        )
-      );
-    });
-    result_fields.push(
-      new this.fieldClass(
-        6,
-        12,
-        {
-          title: "Слева",
-          value: "start"
-        },
-        {
-          data: { id: "race_res", title: "Оценка" },
-          handler: function(competitor, competition) {
-            return competition.races.map(_race => {
-              return competition.set_accuracy(
-                competition.result_formula.types[
-                  competition.result_formula.type
-                ].formulas
-                  .find(_f => {
-                    return (
-                      _f.id ===
-                      competition.result_formula.types[
-                        competition.result_formula.type
-                      ].formula
-                    );
-                  })
-                  .get_result(
-                    competitor.competitor.id,
-                    _race.id,
-                    competition.stuff.judges.map(_j => {
-                      return +_j.id;
-                    })
-                  )
-              );
-            });
-          }
-        }
-      )
-    );
-    result_fields.push(
-      new this.fieldClass(
-        8,
-        12,
-        {
-          title: "Слева",
-          value: "start"
-        },
-        {
-          data: { id: "result", title: "Рез-т" },
-          handler: function(competitor, competition) {
-            return [
-              competitor.competitor.race_status ||
-                competition.set_accuracy(
-                  competition.getResult(competitor.competitor.id)
-                )
-            ];
-          }
-        }
-      )
-    );
-    if (this.results_protocol.protocol_fields.length < 1)
-      this.results_protocol.protocol_fields = result_fields;
+    if (this.competition.protocol_fields.length < 1)
+      this.$store.commit("protocol_settings/initResultProtocolFields", {
+        competition: this.competition,
+        fieldClass: this.fieldClass
+      });
   },
   methods: {
     select_field(field_id) {
@@ -685,7 +576,7 @@ export default {
       field.params.cell_2 = header.params.cell_1;
     },
     remove_fields() {
-      this.results_protocol.protocol_fields = this.results_protocol.protocol_fields.filter(
+      this.competition.protocol_fields = this.competition.protocol_fields.filter(
         protocol_field => {
           return !this.selected_fields.some(selected_field => {
             return selected_field === protocol_field.id;
@@ -696,37 +587,37 @@ export default {
     shift(field, to) {
       let next_field;
       if (to === "up") {
-        if (this.results_protocol.protocol_fields.indexOf(field) > 0) {
-          next_field = this.results_protocol.protocol_fields[
-            this.results_protocol.protocol_fields.indexOf(field) - 1
+        if (this.competition.protocol_fields.indexOf(field) > 0) {
+          next_field = this.competition.protocol_fields[
+            this.competition.protocol_fields.indexOf(field) - 1
           ];
           this.$set(
-            this.results_protocol.protocol_fields,
-            this.results_protocol.protocol_fields.indexOf(field) - 1,
+            this.competition.protocol_fields,
+            this.competition.protocol_fields.indexOf(field) - 1,
             field
           );
           this.$set(
-            this.results_protocol.protocol_fields,
-            this.results_protocol.protocol_fields.indexOf(field) + 1,
+            this.competition.protocol_fields,
+            this.competition.protocol_fields.indexOf(field) + 1,
             next_field
           );
         }
       } else if (to === "down") {
         if (
-          this.results_protocol.protocol_fields.indexOf(field) <
-          this.results_protocol.protocol_fields.length - 1
+          this.competition.protocol_fields.indexOf(field) <
+          this.competition.protocol_fields.length - 1
         ) {
-          next_field = this.results_protocol.protocol_fields[
-            this.results_protocol.protocol_fields.indexOf(field) + 1
+          next_field = this.competition.protocol_fields[
+            this.competition.protocol_fields.indexOf(field) + 1
           ];
           this.$set(
-            this.results_protocol.protocol_fields,
-            this.results_protocol.protocol_fields.indexOf(field) + 1,
+            this.competition.protocol_fields,
+            this.competition.protocol_fields.indexOf(field) + 1,
             field
           );
           this.$set(
-            this.results_protocol.protocol_fields,
-            this.results_protocol.protocol_fields.indexOf(field),
+            this.competition.protocol_fields,
+            this.competition.protocol_fields.indexOf(field),
             next_field
           );
         }
@@ -763,7 +654,7 @@ export default {
     console: () => console,
     sum_width() {
       let sum = 0,
-        arr = this.results_protocol.protocol_fields.map(_field => {
+        arr = this.competition.protocol_fields.map(_field => {
           return _field.params.width;
         });
       for (let i = 0; i < arr.length; i++) {

@@ -259,14 +259,14 @@
                   v-if="gridRow.type && gridRow.type === 'sheetHeader'"
                   ref="sheetHeader"
                   class="sheet_header"
-                  style="flex: 0 0 auto;width: 100%;display: flex; flex-wrap: nowrap; padding: 0;margin: 0; font-weight:bold;border: 1px solid black"
+                  style="flex: 0 0 auto;width: 100%;display: flex; flex-wrap: nowrap; padding: 0;margin: 0; font-weight:bold;background-color: #ffffff;color: #000000;border: 1px solid black;"
                 >
                   <div
                     style=" padding: 0;margin: 0;overflow: hidden;flex-shrink: 0; white-space: nowrap;line-height: normal"
                     :style="{
                       width: `${header.params.width}%`
                     }"
-                    v-for="(header, h_idx) in results_protocol.protocol_fields"
+                    v-for="(header, h_idx) in competition.protocol_fields"
                     :key="h_idx"
                   >
                     <div style="padding: 4px;width: 100%;overflow: hidden;">
@@ -294,7 +294,7 @@
                 </div>
                 <div
                   v-if="gridRow.type && gridRow.type === 'competitorResult'"
-                  v-for="(header, h_idx) in results_protocol.protocol_fields"
+                  v-for="(header, h_idx) in competition.protocol_fields"
                   ref="competitorResult"
                   :key="h_idx"
                   style="flex-shrink: 0; margin: 0; padding: 0; line-height: normal"
@@ -350,16 +350,6 @@
                 >
                   <div
                     style="width: 100%;margin-top: 1rem; display:flex;flex-wrap: nowrap"
-                    :style="[
-                      p_idx < paginated_results.length - 1 && {
-                        opacity: 0,
-                        height: '0'
-                      },
-                      !results_protocol.print_header && {
-                        opacity: 0,
-                        height: '0'
-                      }
-                    ]"
                   >
                     <!-- JUDGES -->
 
@@ -427,7 +417,7 @@
                       <!-- JURY -->
 
                       <div
-                        style="display:flex;flex-direction: column;border-width: 0 1px 1px 1px; border-color: black black black black;border-style: solid solid solid solid;flex: 1 0 auto"
+                        style="display:flex;flex-direction: column;flex: 1 0 auto;border-width: 0 1px 1px 1px; border-color: black black black black;border-style: solid solid solid solid"
                       >
                         <div
                           style="padding: 2px 4px; border-bottom: 1px solid black; font-weight:bold;"
@@ -467,16 +457,6 @@
                 >
                   <div
                     style="border: 1px solid black; padding: 2px 4px; margin-top: 1rem"
-                    :style="[
-                      !results_protocol.notations && {
-                        opacity: 0,
-                        position: 'absolute'
-                      },
-                      p_idx < paginated_results.length - 1 && {
-                        opacity: 0,
-                        position: 'absolute'
-                      }
-                    ]"
                     v-html="results_protocol.notations"
                   ></div>
                 </div>
@@ -601,7 +581,8 @@ export default {
     this.results[this.results.length - 1].unshift({ type: "sheetHeader" });
     if (this.results_protocol.print_header)
       this.results[this.results.length - 1].push({ type: "officialsData" });
-    this.results[this.results.length - 1].push({ type: "raceNotes" });
+    if (this.results_protocol.print_notations)
+      this.results[this.results.length - 1].push({ type: "raceNotes" });
     this.$nextTick(() => {
       setTimeout(() => {
         this.data_paginated_results.push([]);
