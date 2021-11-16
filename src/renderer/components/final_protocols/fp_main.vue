@@ -597,7 +597,7 @@ export default {
               return (
                 _competitor.competitor.marks
                   .filter((_mark, m_idx, _marks) => {
-                    return _mark.judge_id === judge._id;
+                    return _mark.judge === judge.id;
                   })
                   .map(_mark => {
                     return _mark.value;
