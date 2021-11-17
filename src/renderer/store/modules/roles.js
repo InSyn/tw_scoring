@@ -71,7 +71,6 @@ export default {
     JudgeClass: state => state.JudgeClass,
     OpenerClass: state => state.OpenerClass,
     JuryClass: state => state.JuryClass,
-    SponsorClass: state => state.SponsorClass,
     MarkClass: state => state.MarkClass
   }
 };

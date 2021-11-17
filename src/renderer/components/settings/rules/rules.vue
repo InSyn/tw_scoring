@@ -245,11 +245,11 @@
                 <div
                   style="display:flex;flex-direction: column;border-radius: 6px;overflow:hidden;"
                   :style="{
-                    border: `2px solid ${$vuetify.theme.themes[appTheme].accent}`
+                    border: `1px solid ${$vuetify.theme.themes[appTheme].accent}`
                   }"
                 >
                   <div
-                    style="display:flex;align-items: center;padding: 2px 2px;width: 100%;"
+                    style="display:flex;align-items: center;padding: 1px 1px;width: 100%;"
                     :style="{
                       backgroundColor: $vuetify.theme.themes[appTheme].accent
                     }"

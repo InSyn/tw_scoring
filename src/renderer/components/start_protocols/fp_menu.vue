@@ -3,7 +3,7 @@
     class="d-flex justify-center align-center pa-2"
     style="width: 100%; height: 100%;"
   >
-    <div style="font-weight:bold; font-size: 1.8rem">Протокол результатов</div>
+    <div style="font-weight:bold; font-size: 1.8rem">Стартовый протокол</div>
     <v-spacer></v-spacer>
     <v-btn
       class="font-weight-bold ml-4"
