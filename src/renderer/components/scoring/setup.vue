@@ -8,11 +8,8 @@
       }"
       no-gutters
     >
-      <v-col
-        cols="12"
-        style="font-weight: bold; font-size: 1.2rem"
-        v-html="`Секретарь хронометрист`"
-      ></v-col
+      <v-col cols="12" style="font-weight: bold; font-size: 1.2rem"
+        >Секретарь хронометрист</v-col
       ><v-col class="d-flex align-center" style="font-weight: bold">
         <span class="mr-2">Фамилия</span>
         <input

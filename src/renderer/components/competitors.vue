@@ -81,7 +81,6 @@
             ></v-col
           >
         </v-row>
-
         <div
           style="position:relative; overflow-y: auto; overflow-x:hidden; height: 70vh; padding-bottom: 3rem"
           :style="{

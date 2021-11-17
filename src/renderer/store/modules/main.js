@@ -45,7 +45,7 @@ export default {
       {
         icon: "trophyVariant",
         title: "Протоколы",
-        link: "final_protocols"
+        link: "protocols"
       }
     ],
     timer: {

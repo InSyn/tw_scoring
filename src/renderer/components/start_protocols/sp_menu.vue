@@ -29,7 +29,7 @@
       >Результаты</v-btn
     >
     <div style="font-weight:bold; font-size: 1.6rem;margin-left: 1rem">
-      Протокол результатов
+      Стартовый протокол
     </div>
     <v-spacer></v-spacer>
     <v-btn

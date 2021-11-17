@@ -1,7 +1,7 @@
 <template>
   <v-col class="pa-2" cols="4"
     ><div
-      style="height: 100%; border-radius: 6px"
+      style="height: 100%; border-radius: 6px;user-select: none"
       :style="{
         backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA
       }"
@@ -88,15 +88,19 @@
             <div class="pa-1" v-if="competition.selected_race">
               <v-hover
                 v-slot:default="{ hover }"
-                v-for="competitor in competition.selected_race.startList.map(
-                  _comp => {
+                v-for="competitor in competition.selected_race.startList
+                  .map(_comp => {
                     return competition.competitorsSheet.competitors.find(
                       comp => {
                         return comp.id === _comp;
                       }
                     );
-                  }
-                )"
+                  })
+                  .filter(
+                    _competitor =>
+                      _competitor.id !==
+                      competition.selected_race.selectedCompetitor
+                  )"
                 :key="competitor.id"
               >
                 <div

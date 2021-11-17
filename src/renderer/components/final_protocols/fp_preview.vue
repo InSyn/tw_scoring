@@ -172,9 +172,9 @@
                   style="font-size: 1.4rem; font-weight: bold; line-height: 1.2"
                 >
                   {{
-                    (competition.mainData.title.stage.value &&
+                    `Результаты ${(competition.mainData.title.stage.value &&
                       competition.mainData.title.stage.value.value) ||
-                      ""
+                      ""}`
                   }}
                 </div>
                 <div
@@ -266,7 +266,8 @@
                     :style="{
                       width: `${header.params.width}%`
                     }"
-                    v-for="(header, h_idx) in competition.protocol_fields"
+                    v-for="(header, h_idx) in competition.protocol_settings
+                      .result_protocols.fields"
                     :key="h_idx"
                   >
                     <div style="padding: 4px;width: 100%;overflow: hidden;">
@@ -294,7 +295,8 @@
                 </div>
                 <div
                   v-if="gridRow.type && gridRow.type === 'competitorResult'"
-                  v-for="(header, h_idx) in competition.protocol_fields"
+                  v-for="(header, h_idx) in competition.protocol_settings
+                    .result_protocols.fields"
                   ref="competitorResult"
                   :key="h_idx"
                   style="flex-shrink: 0; margin: 0; padding: 0; line-height: normal"
@@ -573,7 +575,7 @@
 <script>
 import { mapGetters } from "vuex";
 import html2pdf from "html2pdf.js";
-import logos from "./logos";
+import logos from "./fp_logos";
 export default {
   name: "preview",
   mounted() {

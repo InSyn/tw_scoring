@@ -7,13 +7,15 @@ import Main from "../components/Main";
 import settings from "../components/settings";
 import competition_settings from "../components/competition_settings";
 import competitors from "../components/competitors";
-import start_protocols from "../components/race_list";
+import race_list from "../components/race_list";
 import scoring from "../components/scoring";
-import final_protocols from "../components/final_protocols";
 import videoGraphics from "../components/settings/video_graphics/videoGraphics";
 import sportGraphics from "../components/settings/sport_graphics/sportGraphics";
 import results from "../components/settings/results/results";
 import rules from "../components/settings/rules/rules";
+import protocols from "../components/protocols";
+import final_protocols from "../components/final_protocols";
+import start_protocols from "../components/start_protocols";
 
 export default new Router({
   routes: [
@@ -63,7 +65,7 @@ export default new Router({
     {
       path: "/start_protocols",
       name: "start_protocols",
-      component: start_protocols
+      component: race_list
     },
     {
       path: "/scoring",
@@ -71,9 +73,21 @@ export default new Router({
       component: scoring
     },
     {
-      path: "/final_protocols",
-      name: "final_protocols",
-      component: final_protocols
+      path: "/protocols",
+      name: "protocols",
+      component: protocols,
+      children: [
+        {
+          name: "startProtocols",
+          path: "start_protocols",
+          component: start_protocols
+        },
+        {
+          name: "finalProtocols",
+          path: "final_protocols",
+          component: final_protocols
+        }
+      ]
     },
     {
       path: "*",

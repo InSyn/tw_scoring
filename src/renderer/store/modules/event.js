@@ -247,8 +247,17 @@ export default {
           : 0;
       }
       getRaceResult(competitor_id, race_id) {}
-      getResultAllRaces(competitor_id) {}
       protocol_fields = [];
+      protocol_settings = {
+        protocol_type: 1,
+        show_preview: false,
+        start_protocols: {
+          fields: []
+        },
+        result_protocols: {
+          fields: []
+        }
+      };
       result_formula = {
         overall_result: {
           type: 1,

@@ -347,10 +347,10 @@
             ><template v-slot:activator="{ on }"
               ><v-btn
                 v-on="on"
-                v-html="`Добавить участника`"
                 text
                 :color="$vuetify.theme.themes[appTheme].success"
-              ></v-btn></template
+                >Добавить участников</v-btn
+              ></template
             ><v-card
               class="pa-2 ma-0"
               :style="{
@@ -696,6 +696,18 @@
             >
           </div>
         </div>
+        <div class="race_menu pt-1" style="flex: 0 0 auto">
+          <v-btn
+            @click="
+              competition.races[race_menu.selected].startList = shuffle(
+                competition.races[race_menu.selected].startList
+              )
+            "
+            text
+            :color="$vuetify.theme.themes[appTheme].accent"
+            >Перемешать</v-btn
+          >
+        </div>
       </div>
     </v-container></v-container
   >
@@ -838,6 +850,40 @@ export default {
         if (list.hasOwnProperty(i))
           this.dialogs.create_race.competitors.push(list[i]);
       }
+    },
+    shuffle(list) {
+      let m = list.length,
+        t,
+        i;
+
+      while (m) {
+        i = Math.floor(Math.random() * m--);
+        t = list[m];
+        this.$set(list, m, list[i]);
+        this.$set(list, i, t);
+        // list[m] = list[i];
+        // list[i] = t;
+      }
+      this.competition.races.find(
+        _race => _race.id === this.competition.selected_race.id
+      )
+        ? this.competition.races.find(
+            _race => _race.id === this.competition.selected_race.id
+          ).startList[0]
+          ? (this.competition.races.find(
+              _race => _race.id === this.competition.selected_race.id
+            ).selectedCompetitor = this.competition.races.find(
+              _race => _race.id === this.competition.selected_race.id
+            ).startList[0])
+          : null
+        : null;
+
+      this.socket &&
+        this.socket.connected &&
+        this.socket.emit("set_competition_data", this.competition, res => {
+          console.log(res);
+        });
+      return list;
     },
     closeRaceDialog() {
       this.dialogs.create_race.competitors = [];

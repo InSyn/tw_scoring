@@ -109,8 +109,9 @@
         </v-row>
         <div style="max-height: 20vh;overflow-y: auto">
           <v-row
-            v-for="(field, f_idx) in competition.protocol_fields &&
-              competition.protocol_fields"
+            v-for="(field, f_idx) in competition.protocol_settings
+              .start_protocols.fields &&
+              competition.protocol_settings.start_protocols.fields"
             :key="f_idx"
             style="font-size: 0.8rem;padding: 0;margin: 0"
             :style="[
@@ -268,8 +269,8 @@
                       style="display:flex;flex-direction: column; align-items: flex-start; max-height: 600px; overflow-y: auto"
                     >
                       <div
-                        v-for="(standard_header,
-                        sh_idx) in competition.protocol_fields"
+                        v-for="(standard_header, sh_idx) in competition
+                          .protocol_settings.start_protocols.fields"
                         :key="sh_idx"
                         @click="setField(field, standard_header)"
                         style="flex-shrink: 0; padding: 4px; margin: 2px; cursor: pointer"
@@ -292,7 +293,10 @@
                     color: $vuetify.theme.themes[appTheme].textDefault
                   }"
                   type="number"
-                  v-model="competition.protocol_fields[f_idx].params[p_key]"
+                  v-model="
+                    competition.protocol_settings.start_protocols.fields[f_idx]
+                      .params[p_key]
+                  "
                 />
                 <select
                   v-if="p_key === 'align'"
@@ -301,7 +305,10 @@
                     color: $vuetify.theme.themes[appTheme].textDefault,
                     textAlignLast: f_prop.value
                   }"
-                  v-model.lazy="competition.protocol_fields[f_idx].params.align"
+                  v-model.lazy="
+                    competition.protocol_settings.start_protocols.fields[f_idx]
+                      .params.align
+                  "
                 >
                   <option
                     :style="{
@@ -550,8 +557,8 @@ import { mapGetters } from "vuex";
 export default {
   name: "fp_main",
   mounted() {
-    if (this.competition.protocol_fields.length < 1)
-      this.$store.commit("protocol_settings/initResultProtocolFields", {
+    if (this.competition.protocol_settings.start_protocols.fields.length < 1)
+      this.$store.commit("protocol_settings/initStartProtocolFields", {
         competition: this.competition,
         fieldClass: this.fieldClass
       });
@@ -572,7 +579,7 @@ export default {
       field.params.cell_2 = header.params.cell_1;
     },
     remove_fields() {
-      this.competition.protocol_fields = this.competition.protocol_fields.filter(
+      this.competition.protocol_settings.start_protocols.fields = this.competition.protocol_settings.start_protocols.fields.filter(
         protocol_field => {
           return !this.selected_fields.some(selected_field => {
             return selected_field === protocol_field.id;
@@ -583,37 +590,57 @@ export default {
     shift(field, to) {
       let next_field;
       if (to === "up") {
-        if (this.competition.protocol_fields.indexOf(field) > 0) {
-          next_field = this.competition.protocol_fields[
-            this.competition.protocol_fields.indexOf(field) - 1
+        if (
+          this.competition.protocol_settings.start_protocols.fields.indexOf(
+            field
+          ) > 0
+        ) {
+          next_field = this.competition.protocol_settings.start_protocols
+            .fields[
+            this.competition.protocol_settings.start_protocols.fields.indexOf(
+              field
+            ) - 1
           ];
           this.$set(
-            this.competition.protocol_fields,
-            this.competition.protocol_fields.indexOf(field) - 1,
+            this.competition.protocol_settings.start_protocols.fields,
+            this.competition.protocol_settings.start_protocols.fields.indexOf(
+              field
+            ) - 1,
             field
           );
           this.$set(
-            this.competition.protocol_fields,
-            this.competition.protocol_fields.indexOf(field) + 1,
+            this.competition.protocol_settings.start_protocols.fields,
+            this.competition.protocol_settings.start_protocols.fields.indexOf(
+              field
+            ) + 1,
             next_field
           );
         }
       } else if (to === "down") {
         if (
-          this.competition.protocol_fields.indexOf(field) <
-          this.competition.protocol_fields.length - 1
+          this.competition.protocol_settings.start_protocols.fields.indexOf(
+            field
+          ) <
+          this.competition.protocol_settings.start_protocols.fields.length - 1
         ) {
-          next_field = this.competition.protocol_fields[
-            this.competition.protocol_fields.indexOf(field) + 1
+          next_field = this.competition.protocol_settings.start_protocols
+            .fields[
+            this.competition.protocol_settings.start_protocols.fields.indexOf(
+              field
+            ) + 1
           ];
           this.$set(
-            this.competition.protocol_fields,
-            this.competition.protocol_fields.indexOf(field) + 1,
+            this.competition.protocol_settings.start_protocols.fields,
+            this.competition.protocol_settings.start_protocols.fields.indexOf(
+              field
+            ) + 1,
             field
           );
           this.$set(
-            this.competition.protocol_fields,
-            this.competition.protocol_fields.indexOf(field),
+            this.competition.protocol_settings.start_protocols.fields,
+            this.competition.protocol_settings.start_protocols.fields.indexOf(
+              field
+            ),
             next_field
           );
         }
@@ -650,9 +677,11 @@ export default {
     console: () => console,
     sum_width() {
       let sum = 0,
-        arr = this.competition.protocol_fields.map(_field => {
-          return _field.params.width;
-        });
+        arr = this.competition.protocol_settings.start_protocols.fields.map(
+          _field => {
+            return _field.params.width;
+          }
+        );
       for (let i = 0; i < arr.length; i++) {
         sum += +arr[i];
       }

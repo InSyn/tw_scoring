@@ -111,6 +111,41 @@ export default {
     setImage: (state, data) => {
       state.results_protocol.assets[data[0]].file = data[1].target.files[0];
     },
+    initStartProtocolFields: (state, data) => {
+      const result_fields = [];
+      result_fields.push(
+        new data.fieldClass(
+          6,
+          12,
+          {
+            title: "Слева",
+            value: "start"
+          },
+          {
+            data: { id: "rank", title: "Ст №" },
+            handler: function(_competitor) {
+              return [_competitor.s_rank];
+            }
+          }
+        )
+      );
+      data.competition.competitorsSheet.header.forEach(_header => {
+        result_fields.push(
+          new data.fieldClass(
+            8,
+            12,
+            { title: "Слева", value: "start" },
+            {
+              data: _header,
+              handler: function(_competitor) {
+                return [_competitor.competitor.info_data[_header.id]];
+              }
+            }
+          )
+        );
+      });
+      data.competition.protocol_settings.start_protocols.fields = result_fields;
+    },
     initResultProtocolFields: (state, data) => {
       const result_fields = [];
       result_fields.push(
@@ -250,7 +285,7 @@ export default {
           }
         )
       );
-      data.competition.protocol_fields = result_fields;
+      data.competition.protocol_settings.result_protocols.fields = result_fields;
     }
   }
 };

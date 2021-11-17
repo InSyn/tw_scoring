@@ -371,7 +371,7 @@
                           })
                           .marks.find(mark => {
                             return (
-                              mark._id === judge._id &&
+                              mark.judge_id === judge._id &&
                               mark.race_id === competition.selected_race.id
                             );
                           }).value) ||
