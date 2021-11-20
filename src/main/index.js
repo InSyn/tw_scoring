@@ -6,6 +6,19 @@ import { app, ipcMain, BrowserWindow } from "electron";
 const socketApp = require("express")();
 const http = require("http").Server(socketApp);
 const io = require("socket.io")(http);
+
+const mongoose = require("mongoose");
+
+main().catch(err => console.log(err));
+
+async function main() {
+  await mongoose.connect("mongodb://82.148.19.186:27017/twdbase", {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  });
+}
+mongoose.connection.once("open", async function() {});
+
 let competition = {
   mainData: {
     title: {
@@ -342,6 +355,7 @@ app.on("close_server", () => {
     console.log(`No started server`);
   }
 });
+
 /**
  * SOCKET SERVER
  * **/

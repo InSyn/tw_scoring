@@ -252,9 +252,11 @@ export default {
         protocol_type: 1,
         show_preview: false,
         start_protocols: {
+          result_races: [],
           fields: []
         },
         result_protocols: {
+          result_races: [],
           fields: []
         }
       };

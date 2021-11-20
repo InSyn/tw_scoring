@@ -579,7 +579,7 @@ import logos from "./sp_logos";
 export default {
   name: "preview",
   mounted() {
-    this.results.push(this.flatGrid);
+    this.results.push(this.getStartList);
     this.results[this.results.length - 1].unshift({ type: "sheetHeader" });
     if (this.results_protocol.print_header)
       this.results[this.results.length - 1].push({ type: "officialsData" });
@@ -682,11 +682,25 @@ export default {
       competition: "competition",
       competitions: "competitions",
       appTheme: "appTheme",
-      stageGrid: "stageGrid"
+      stageGrid: "stageGrid",
+      startList: "startList"
     }),
     ...mapGetters("protocol_settings", {
       results_protocol: "results_protocol"
     }),
+    getStartList() {
+      return this.startList.map(_competitor => {
+        return {
+          type: "competitorResult",
+          comp_id: this.competition.id,
+          competitor: this.competition.competitorsSheet.competitors.find(
+            _comp => _comp.id === _competitor
+          ),
+          s_rank: null,
+          result: 0
+        };
+      });
+    },
     flatGrid() {
       return [].concat(
         ...this.stageGrid.map(stage => [stage.title, ...stage.s_competitors])

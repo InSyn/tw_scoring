@@ -13,6 +13,7 @@
 import { mapGetters } from "vuex";
 export default {
   name: "fonts",
+  mounted() {},
   methods: {
     log(data) {
       console.log(data);

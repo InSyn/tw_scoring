@@ -90,6 +90,12 @@ export default {
     appMenu: state => state.appMenu,
     messages: state => state.messages,
     timer: state => state.timer,
+    startList: state => {
+      return (
+        state.competition.protocol_settings.start_protocols.result_races[0]
+          .startList || []
+      );
+    },
     stageGrid: state => {
       function flatten(arr) {
         return arr.reduce((flat, toFlatten) => {
