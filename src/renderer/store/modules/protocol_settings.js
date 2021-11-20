@@ -123,8 +123,12 @@ export default {
           },
           {
             data: { id: "rank", title: "Ст №" },
-            handler: function(_competitor) {
-              return [_competitor.s_rank];
+            handler: function(_competitor, competition) {
+              return [
+                competition.protocol_settings.start_protocols.result_race._startList.indexOf(
+                  _competitor.competitor.id
+                ) + 1
+              ];
             }
           }
         )
@@ -132,7 +136,7 @@ export default {
       data.competition.competitorsSheet.header.forEach(_header => {
         result_fields.push(
           new data.fieldClass(
-            8,
+            12,
             12,
             { title: "Слева", value: "start" },
             {

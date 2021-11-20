@@ -699,9 +699,12 @@
         <div class="race_menu pt-1" style="flex: 0 0 auto">
           <v-btn
             @click="
-              competition.races[race_menu.selected].startList = shuffle(
+              (competition.races[race_menu.selected].startList = shuffle(
                 competition.races[race_menu.selected].startList
-              )
+              )),
+                (competition.races[race_menu.selected]._startList = shuffle(
+                  competition.races[race_menu.selected]._startList
+                ))
             "
             text
             :color="$vuetify.theme.themes[appTheme].accent"

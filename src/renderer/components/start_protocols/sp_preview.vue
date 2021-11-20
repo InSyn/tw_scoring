@@ -139,7 +139,7 @@
             >
               <div
                 class="left_asset"
-                style="width: 8rem;margin-right: 4rem;display:flex;align-items: center; justify-content: center"
+                style="width: 8rem;margin: 0 2rem;display:flex;align-items: center; justify-content: center"
               >
                 <div
                   style="display:flex;align-items: center;justify-content:center; height: 100%;width: 100%"
@@ -576,6 +576,7 @@
 import { mapGetters } from "vuex";
 import html2pdf from "html2pdf.js";
 import logos from "./sp_logos";
+import startList from "../scoring/startList";
 export default {
   name: "preview",
   mounted() {

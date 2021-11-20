@@ -92,8 +92,11 @@ export default {
     timer: state => state.timer,
     startList: state => {
       return (
-        state.competition.protocol_settings.start_protocols.result_races[0]
-          .startList || []
+        (state.competition.protocol_settings.start_protocols.result_race &&
+          (state.competition.protocol_settings.start_protocols.result_race
+            ._startList ||
+            [])) ||
+        []
       );
     },
     stageGrid: state => {

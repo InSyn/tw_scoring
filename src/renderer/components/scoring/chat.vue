@@ -118,12 +118,18 @@ export default {
     };
   },
   computed: {
-    ...mapGetters("main", ["appTheme", "socket", "messages", "competition"])
+    ...mapGetters("main", [
+      "appTheme",
+      "socket",
+      "messages",
+      "competition",
+      "timer"
+    ])
   },
   methods: {
     addMessage(m) {
       if (this.socket) {
-        const time = [this.competition.timer.hrs, this.competition.timer.min];
+        const time = [this.timer.hrs, this.timer.min];
         m !== "" && this.socket.emit("chat_message", [m, time, "Секретарь"]);
         this.message = "";
       } else console.log("server not started");

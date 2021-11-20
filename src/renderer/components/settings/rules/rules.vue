@@ -875,7 +875,7 @@
               @click="
                 competition.result_formula.overall_result.type = +overall_type.id
               "
-              :disabled="+overall_type.id === 3"
+              :disabled="+overall_type.id === 9999"
               :depressed="
                 overall_type.id ===
                   competition.result_formula.overall_result.type

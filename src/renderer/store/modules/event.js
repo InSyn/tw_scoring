@@ -249,14 +249,14 @@ export default {
       getRaceResult(competitor_id, race_id) {}
       protocol_fields = [];
       protocol_settings = {
-        protocol_type: 1,
+        protocol_type: 0,
         show_preview: false,
         start_protocols: {
-          result_races: [],
+          result_race: null,
           fields: []
         },
         result_protocols: {
-          result_races: [],
+          result_race: null,
           fields: []
         }
       };
@@ -586,6 +586,7 @@ export default {
         this.type = type;
         this.discipline = discipline;
         this.startList = competitors || [];
+        this._startList = competitors || [];
         this.selectedCompetitor = competitors[0] || null;
       }
       del_dialog = false;

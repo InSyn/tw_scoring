@@ -17,23 +17,16 @@
           style="display:flex;align-items: center;padding: 4px 8px;margin: 0 4px 4px 0;border-radius: 6px;cursor:pointer;transition: background-color .112s"
           :style="hover && { backgroundColor: `rgba(255,255,255,.2)` }"
           @click="
-            competition.protocol_settings.result_protocols.result_races.includes(
-              race
-            )
-              ? (competition.protocol_settings.result_protocols.result_races = competition.protocol_settings.result_protocols.result_races.filter(
-                  _race => _race.id !== race.id
-                ))
-              : competition.protocol_settings.result_protocols.result_races.push(
-                  race
-                )
+            competition.protocol_settings.result_protocols.result_race === race
+              ? (competition.protocol_settings.result_protocols.result_race = null)
+              : (competition.protocol_settings.result_protocols.result_race = race)
           "
         >
           <div
             style="border-radius: 50%;height: 12px;width: 12px;transition: background-color .112s"
             :style="
-              (competition.protocol_settings.result_protocols.result_races.includes(
-                race
-              ) && {
+              (competition.protocol_settings.result_protocols.result_race ===
+                race && {
                 border: `2px solid ${$vuetify.theme.themes[appTheme].accent}`,
                 backgroundColor: $vuetify.theme.themes[appTheme].accent
               }) || {
