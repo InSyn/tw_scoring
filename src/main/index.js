@@ -17,7 +17,10 @@ async function main() {
     useUnifiedTopology: true
   });
 }
-mongoose.connection.once("open", async function() {});
+mongoose.connection.once("open", async function() {
+  mainWindow &&
+    mainWindow.webContents.send("server_message", [3, `MongoDB connected`]);
+});
 
 let competition = {
   mainData: {
