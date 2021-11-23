@@ -1,16 +1,29 @@
 <template>
-  <v-container v-if="competition" fluid style="min-width: 1220px"
-    ><v-row no-gutters style="height: 35%; min-height: 240px">
+  <v-container v-if="competition" fluid style="min-width: 1220px">
+    <v-row
+      v-if="!mode_timing"
+      no-gutters
+      style="height: 35%; min-height: 240px"
+    >
       <setup></setup>
       <chat></chat>
       <marks-list></marks-list> </v-row
-    ><v-row no-gutters style="height: 30%; min-height: 200px">
+    ><v-row
+      v-if="!mode_timing"
+      no-gutters
+      style="height: 30%; min-height: 200px"
+    >
       <start-list></start-list>
       <on-race></on-race> </v-row
-    ><v-row no-gutters style="height: 35%; min-height: 240px">
+    ><v-row
+      v-if="!mode_timing"
+      no-gutters
+      style="height: 35%; min-height: 240px"
+    >
       <display-control-panel></display-control-panel>
       <finish-table></finish-table>
     </v-row>
+    <timing v-if="mode_timing"> </timing>
   </v-container>
 </template>
 
@@ -23,6 +36,7 @@ import startList from "./scoring/startList";
 import onRace from "./scoring/onRace";
 import displayControlPanel from "./scoring/displayControlPanel";
 import finishTable from "./scoring/finishTable";
+import timing from "./timing";
 
 export default {
   name: "scoring",
@@ -33,10 +47,11 @@ export default {
     startList,
     onRace,
     displayControlPanel,
-    finishTable
+    finishTable,
+    timing
   },
   computed: {
-    ...mapGetters("main", ["competition", "appTheme"])
+    ...mapGetters("main", ["competition", "appTheme", "mode_timing"])
   }
 };
 </script>

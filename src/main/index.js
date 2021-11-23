@@ -12,14 +12,17 @@ const mongoose = require("mongoose");
 main().catch(err => console.log(err));
 
 async function main() {
-  await mongoose.connect("mongodb://82.148.19.186:27017/twdbase", {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-  });
+  try {
+    await mongoose.connect("mongodb://127.0.0.1:27017/twdbase", {
+      useNewUrlParser: true,
+      useUnifiedTopology: true
+    });
+  } catch (e) {
+    console.log(e);
+  }
 }
 mongoose.connection.once("open", async function() {
-  mainWindow &&
-    mainWindow.webContents.send("server_message", [3, `MongoDB connected`]);
+  console.log(mongoose.connection);
 });
 
 let competition = {

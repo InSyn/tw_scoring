@@ -2,6 +2,7 @@ import io from "socket.io-client";
 export default {
   namespaced: true,
   state: {
+    mode_timing: true,
     server_config: {
       ip: "127.0.0.1",
       port: "3000"
@@ -77,6 +78,7 @@ export default {
   },
 
   getters: {
+    mode_timing: state => state.mode_timing,
     server_config: state => state.server_config,
     socket: state => state.socket,
     serverMessages: state => state.serverMessages,
@@ -210,6 +212,9 @@ export default {
     }
   },
   mutations: {
+    toggle_mode: state => {
+      state.mode_timing = !state.mode_timing;
+    },
     set_ip: (state, ip) => {
       console.log(ip);
       state.server_config.ip = ip;
