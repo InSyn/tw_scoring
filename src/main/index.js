@@ -12,14 +12,10 @@ const mongoose = require("mongoose");
 main().catch(err => console.log(err));
 
 async function main() {
-  try {
-    await mongoose.connect("mongodb://127.0.0.1:27017/twdbase", {
-      useNewUrlParser: true,
-      useUnifiedTopology: true
-    });
-  } catch (e) {
-    console.log(e);
-  }
+  await mongoose.connect("mongodb://127.0.0.1:27017/twdbase", {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  });
 }
 mongoose.connection.once("open", async function() {
   console.log(mongoose.connection);

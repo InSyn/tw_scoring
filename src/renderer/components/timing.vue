@@ -1,15 +1,17 @@
 <template>
-  <div class="timing_wrapper" style="height: 100%">
+  <div
+    class="timing_wrapper"
+    style="height: 100%;display:flex;flex-wrap: nowrap"
+  >
     <div
       class="intermediates"
-      style="display:flex;flex-direction: column;flex-wrap: wrap;height: 100%;"
-      :style="{ width: `${Math.ceil(intermediates.length / 2) * 350}px` }"
+      style="flex: 0 0 auto;display:flex;flex-direction: column;flex-wrap: wrap;height: 100%;"
     >
       <div
         class="intermediate_wrapper"
         v-for="int in intermediates"
         :key="int.id"
-        style="flex: 1 0 50%;display:flex;flex-direction: column"
+        style="flex: 0 0 auto;min-height: 200px;height: 50%;max-height: 100%;width: 240px;display:flex;flex-direction: column;resize: vertical;overflow-y:auto"
         :style="{
           backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
           borderWidth: '2px 2px 0 0',
@@ -18,7 +20,7 @@
         }"
       >
         <div
-          @click="times.push({ id: int.id, time: new Date(Date.now()) })"
+          @click="times.push(new TimeClass('', int.id, new Date(Date.now())))"
           class="int_title"
           style="font-weight: bold;font-size: 1.05rem;padding: 4px 8px;height: 2rem;"
           :style="{
@@ -74,12 +76,37 @@
             style="flex: 0 0 auto;height:calc(100% - 1.8rem);overflow-y:auto;"
           >
             <div
-              v-for="time in times.filter(_time => _time.id === int.id)"
+              @dblclick="time.isValid = !time.isValid"
+              v-for="(time, t_idx) in times.filter(
+                _time => _time.int_id === int.id
+              )"
+              :key="t_idx"
               style="flex: 0 0 auto;display:flex;flex-wrap: nowrap"
             >
-              <div style="width: 2rem;padding: 2px 4px"></div>
+              <div
+                style="display:flex;align-items: center;width: 2rem;padding: 2px 4px"
+              >
+                <div
+                  style="height: 1rem;width: 1rem;border-radius: 50%"
+                  :style="[
+                    !time.isValid && {
+                      backgroundColor: $vuetify.theme.themes[appTheme].error
+                    },
+                    time.isValid &&
+                      !time.bib && {
+                        backgroundColor:
+                          $vuetify.theme.themes[appTheme].action_yellow
+                      },
+                    time.isValid &&
+                      time.bib && {
+                        backgroundColor: $vuetify.theme.themes[appTheme].success
+                      }
+                  ]"
+                ></div>
+              </div>
               <div style="width: 4rem;padding: 2px 4px">
                 <input
+                  v-model.lazy="time.bib"
                   style="width: 100%;height: 100%;font-weight: bold;"
                   :style="{
                     color: $vuetify.theme.themes[appTheme].textDefault
@@ -104,8 +131,103 @@
                 style="padding: 2px 4px"
                 :style="{ width: 'calc(100% - 50% - 6rem)' }"
               >
-                {{ getDiff() }}
+                {{ getDiff(time.time, time.time + 7243) }}
               </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="result_info_wrapper"
+      style="display:flex;flex-direction: column;flex-wrap: nowrap;margin-left: auto;width: 240px;height: 100%;overflow-y: auto"
+    >
+      <div
+        class="history_wrapper"
+        style="flex: 0 0 auto;width: 100%;height: 35%;overflow-y: auto;resize: vertical"
+        :style="{
+          backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA
+        }"
+      >
+        <div
+          style="height: 2rem;padding: 2px 4px;font-weight: bold;"
+          :style="{
+            backgroundColor:
+              $vuetify.theme.themes[appTheme].subjectBackgroundRGBA
+          }"
+        >
+          История
+        </div>
+        <div style="height:calc(100% - 2rem);">
+          <div
+            style="flex: 0 0 auto;display:flex;flex-wrap: nowrap;height: 1.8rem;"
+          >
+            <div
+              style="width: 2rem"
+              :style="{
+                backgroundColor: $vuetify.theme.themes[appTheme].accent
+              }"
+            ></div>
+            <div
+              style="width: 4rem"
+              :style="{
+                backgroundColor: $vuetify.theme.themes[appTheme].accent
+              }"
+            >
+              bib
+            </div>
+            <div
+              :style="[
+                { width: 'calc(100% - 6rem)' },
+                { backgroundColor: $vuetify.theme.themes[appTheme].accent }
+              ]"
+            >
+              result
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="results_wrapper"
+        style="flex: 0 0 auto;width: 100%;height: 35%;overflow-y: auto;resize: vertical"
+        :style="{
+          backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA
+        }"
+      >
+        <div
+          style="height: 2rem;padding: 2px 4px;font-weight: bold;"
+          :style="{
+            backgroundColor:
+              $vuetify.theme.themes[appTheme].subjectBackgroundRGBA
+          }"
+        >
+          Результаты
+        </div>
+        <div style="height:calc(100% - 2rem);">
+          <div
+            style="flex: 0 0 auto;display:flex;flex-wrap: nowrap;height: 1.8rem;"
+          >
+            <div
+              style="width: 2rem"
+              :style="{
+                backgroundColor: $vuetify.theme.themes[appTheme].accent
+              }"
+            ></div>
+            <div
+              style="width: 4rem"
+              :style="{
+                backgroundColor: $vuetify.theme.themes[appTheme].accent
+              }"
+            >
+              bib
+            </div>
+            <div
+              :style="[
+                { width: 'calc(100% - 6rem)' },
+                { backgroundColor: $vuetify.theme.themes[appTheme].accent }
+              ]"
+            >
+              result
             </div>
           </div>
         </div>
@@ -119,8 +241,10 @@ import { mapGetters } from "vuex";
 
 export default {
   name: "timing",
-  getDiff(time_Start, time_Finish) {
-    return (time_Finish - time_Start) / 1000;
+  methods: {
+    getDiff(time_Start, time_Finish) {
+      return (time_Finish - time_Start) / 1000;
+    }
   },
   data() {
     return {
@@ -130,19 +254,15 @@ export default {
         { id: 3, title: "Int2" },
         { id: 1, title: "Finish" }
       ],
-      times: [
-        { id: 0, time: new Date(Date.now()), bib: "101" },
-        { id: 0, time: new Date(Date.now()), bib: "102" },
-        { id: 1, time: new Date(Date.now()), bib: "101" },
-        { id: 1, time: new Date(Date.now()), bib: "102" },
-        { id: 2, time: new Date(Date.now()), bib: "101" },
-        { id: 2, time: new Date(Date.now()), bib: "102" }
-      ]
+      times: []
     };
   },
   computed: {
     ...mapGetters("main", {
       appTheme: "appTheme"
+    }),
+    ...mapGetters("timing", {
+      TimeClass: "TimeClass"
     })
   }
 };
