@@ -1,11 +1,19 @@
 export default {
   namespaced: true,
   state: {
+    intermediates: [
+      { id: "st", title: "Start" },
+      { id: "i1", title: "Int1" },
+      { id: "i2", title: "Int2" },
+      { id: "fin", title: "Finish" }
+    ],
+    times: [],
     TimeClass: class {
-      constructor(bib, int_id, time) {
+      constructor(competition_id, bib, int_id, time) {
         this._id = Math.random()
           .toString(36)
           .substr(2, 9);
+        this.competition_id = competition_id || null;
         this.bib = bib || null;
         this.int_id = int_id || null;
         this.time = time || null;
@@ -14,6 +22,14 @@ export default {
     }
   },
   getters: {
-    TimeClass: state => state.TimeClass
+    intermediates: state => state.intermediates,
+    times: state => state.times,
+    TimeClass: state => state.TimeClass,
+    getResults: state => {
+      const intersMap = state.intermediates.map(int => int.id);
+      return state.times.map(time => {
+        time.id;
+      });
+    }
   }
 };

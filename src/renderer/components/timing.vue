@@ -5,13 +5,13 @@
   >
     <div
       class="intermediates"
-      style="flex: 0 0 auto;display:flex;flex-direction: column;flex-wrap: wrap;height: 100%;"
+      style="flex: 1 0 auto;display:flex;flex-direction: column;align-content: flex-start; overflow-x: auto;flex-wrap: wrap;height: 100%;border: 1px solid #3a82ba"
     >
       <div
         class="intermediate_wrapper"
         v-for="int in intermediates"
         :key="int.id"
-        style="flex: 0 0 auto;min-height: 200px;height: 50%;max-height: 100%;width: 240px;display:flex;flex-direction: column;resize: vertical;overflow-y:auto"
+        style="flex: 0 0 auto;min-height: 200px;height: 50%;max-height: 100%;width: 240px;display:flex;flex-direction: column;padding-bottom: 12px;resize: vertical;overflow-y: auto"
         :style="{
           backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
           borderWidth: '2px 2px 0 0',
@@ -20,7 +20,11 @@
         }"
       >
         <div
-          @click="times.push(new TimeClass('', int.id, new Date(Date.now())))"
+          @click="
+            times.push(
+              new TimeClass(competition.id, '', int.id, new Date(Date.now()))
+            )
+          "
           class="int_title"
           style="font-weight: bold;font-size: 1.05rem;padding: 4px 8px;height: 2rem;"
           :style="{
@@ -76,37 +80,51 @@
             style="flex: 0 0 auto;height:calc(100% - 1.8rem);overflow-y:auto;"
           >
             <div
-              @dblclick="time.isValid = !time.isValid"
               v-for="(time, t_idx) in times.filter(
-                _time => _time.int_id === int.id
+                _time =>
+                  _time.int_id === int.id &&
+                  _time.competition_id === competition.id
               )"
               :key="t_idx"
               style="flex: 0 0 auto;display:flex;flex-wrap: nowrap"
             >
-              <div
-                style="display:flex;align-items: center;width: 2rem;padding: 2px 4px"
-              >
+              <v-hover v-slot:default="{ hover }">
                 <div
-                  style="height: 1rem;width: 1rem;border-radius: 50%"
-                  :style="[
-                    !time.isValid && {
-                      backgroundColor: $vuetify.theme.themes[appTheme].error
-                    },
-                    time.isValid &&
-                      !time.bib && {
-                        backgroundColor:
-                          $vuetify.theme.themes[appTheme].action_yellow
+                  @dblclick="time.isValid = !time.isValid"
+                  style="display:flex;align-items: center;width: 2rem;padding: 2px 4px"
+                >
+                  <div
+                    style="height: 1rem;width: 1rem;border-radius: 50%;cursor: pointer;overflow: hidden;transition: transform 92ms"
+                    :style="[
+                      !time.isValid && {
+                        backgroundColor: $vuetify.theme.themes[appTheme].error
                       },
-                    time.isValid &&
-                      time.bib && {
-                        backgroundColor: $vuetify.theme.themes[appTheme].success
-                      }
-                  ]"
-                ></div>
-              </div>
+                      time.isValid &&
+                        !time.bib && {
+                          backgroundColor:
+                            $vuetify.theme.themes[appTheme].action_yellow
+                        },
+                      time.isValid &&
+                        time.bib && {
+                          backgroundColor:
+                            $vuetify.theme.themes[appTheme].success
+                        },
+                      hover && { transform: 'scale(1.1)' }
+                    ]"
+                  >
+                    <div
+                      style="width: 100%;height: 100%;transition: background-color 92ms"
+                      :style="
+                        hover && { backgroundColor: 'rgba(255,255,255,0.2)' }
+                      "
+                    ></div>
+                  </div></div
+              ></v-hover>
               <div style="width: 4rem;padding: 2px 4px">
                 <input
                   v-model.lazy="time.bib"
+                  min="1"
+                  max="999"
                   style="width: 100%;height: 100%;font-weight: bold;"
                   :style="{
                     color: $vuetify.theme.themes[appTheme].textDefault
@@ -138,6 +156,8 @@
         </div>
       </div>
     </div>
+    <div>{{ $store.getters["timing/getResults"] }}</div>
+
     <div
       class="result_info_wrapper"
       style="display:flex;flex-direction: column;flex-wrap: nowrap;margin-left: auto;width: 240px;height: 100%;overflow-y: auto"
@@ -146,7 +166,8 @@
         class="history_wrapper"
         style="flex: 0 0 auto;width: 100%;height: 35%;overflow-y: auto;resize: vertical"
         :style="{
-          backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA
+          backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
+          borderBottom: `2px solid ${$vuetify.theme.themes[appTheme].standardBackgroundRGBA}`
         }"
       >
         <div
@@ -195,6 +216,11 @@
         }"
       >
         <div
+          @click="
+            times.push(
+              new TimeClass(competition.id, '', 0, new Date(Date.now()))
+            )
+          "
           style="height: 2rem;padding: 2px 4px;font-weight: bold;"
           :style="{
             backgroundColor:
@@ -247,21 +273,16 @@ export default {
     }
   },
   data() {
-    return {
-      intermediates: [
-        { id: 0, title: "Start" },
-        { id: 2, title: "Int1" },
-        { id: 3, title: "Int2" },
-        { id: 1, title: "Finish" }
-      ],
-      times: []
-    };
+    return {};
   },
   computed: {
     ...mapGetters("main", {
+      competition: "competition",
       appTheme: "appTheme"
     }),
     ...mapGetters("timing", {
+      intermediates: "intermediates",
+      times: "times",
       TimeClass: "TimeClass"
     })
   }
