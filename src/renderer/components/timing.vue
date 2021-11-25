@@ -160,7 +160,7 @@
 
     <div
       class="result_info_wrapper"
-      style="display:flex;flex-direction: column;flex-wrap: nowrap;margin-left: auto;width: 240px;height: 100%;overflow-y: auto"
+      style="flex: 0 0 auto;display:flex;flex-direction: column;flex-wrap: nowrap;margin-left: auto;width: 240px;height: 100%;overflow-y: auto"
     >
       <div
         class="history_wrapper"

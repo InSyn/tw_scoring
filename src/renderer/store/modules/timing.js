@@ -13,6 +13,7 @@ export default {
         this._id = Math.random()
           .toString(36)
           .substr(2, 9);
+        this.created_at = Date.now();
         this.competition_id = competition_id || null;
         this.bib = bib || null;
         this.int_id = int_id || null;
@@ -25,11 +26,13 @@ export default {
     intermediates: state => state.intermediates,
     times: state => state.times,
     TimeClass: state => state.TimeClass,
-    getResults: state => {
-      const intersMap = state.intermediates.map(int => int.id);
-      return state.times.map(time => {
-        time.id;
-      });
-    }
+    getResults: state =>
+      state.times
+        .filter(_time => {
+          return _time.int_id === "fin";
+        })
+        .map(_time => {
+          return { bib: _time.bib, created: _time.created, time: _time.time };
+        })
   }
 };
