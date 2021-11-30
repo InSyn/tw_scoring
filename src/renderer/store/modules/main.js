@@ -2,7 +2,7 @@ import io from "socket.io-client";
 export default {
   namespaced: true,
   state: {
-    mode_timing: true,
+    mode_timing: false,
     server_config: {
       ip: "127.0.0.1",
       port: "3000"

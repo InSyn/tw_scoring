@@ -69,6 +69,17 @@
             ></option>
           </select>
           <v-btn
+            @click="
+              saveEvent({
+                id: competition.id,
+                title: competition.mainData.title.value,
+                discipline: competition.mainData.discipline.value,
+                date: competition.mainData.date.value,
+                country: competition.mainData.country.value,
+                region: competition.mainData.location.value,
+                codex: competition.mainData.codex.value
+              })
+            "
             class="ml-2"
             depressed
             style="font-size: 1rem;height: 2rem; border-radius: 2px"
@@ -123,10 +134,14 @@
 
 <script>
 import { mapGetters } from "vuex";
+const { app } = require("electron").remote;
 export default {
   name: "displayControlPanel",
   methods: {
-    log: data => console.log(data)
+    log: data => console.log(data),
+    saveEvent(event) {
+      app.emit("save_event", event);
+    }
   },
   data() {
     return {

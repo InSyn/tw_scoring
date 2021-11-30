@@ -51,7 +51,11 @@ export default {
     timing
   },
   computed: {
-    ...mapGetters("main", ["competition", "appTheme", "mode_timing"])
+    ...mapGetters("main", {
+      competition: "competition",
+      appTheme: "appTheme",
+      mode_timing: "mode_timing"
+    })
   }
 };
 </script>

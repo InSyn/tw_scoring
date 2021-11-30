@@ -156,7 +156,12 @@
         </div>
       </div>
     </div>
-    <div>{{ $store.getters["timing/getResults"] }}</div>
+
+    <div>
+      <div v-for="_time in $store.getters['timing/getResults']">
+        {{ _time }}
+      </div>
+    </div>
 
     <div
       class="result_info_wrapper"
@@ -216,11 +221,6 @@
         }"
       >
         <div
-          @click="
-            times.push(
-              new TimeClass(competition.id, '', 0, new Date(Date.now()))
-            )
-          "
           style="height: 2rem;padding: 2px 4px;font-weight: bold;"
           :style="{
             backgroundColor:

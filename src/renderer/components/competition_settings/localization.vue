@@ -123,7 +123,7 @@ export default {
   mounted() {},
   methods: {
     ...mapActions("main", ["serverSetStatus"]),
-    startServer() {
+    async startServer() {
       app.emit("startSocketServer", [
         this.server_config.ip,
         +this.server_config.port
@@ -131,6 +131,9 @@ export default {
       if (!this.serverStatus) {
         this.connect(this.server_config.ip, this.server_config.port);
       }
+      await this.socket.emit("set_competition_data", this.competition, res => {
+        console.log(res);
+      });
     },
     connect() {
       if (!this.socket) {

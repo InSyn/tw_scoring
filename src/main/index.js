@@ -1,4 +1,5 @@
 import { app, ipcMain, BrowserWindow } from "electron";
+import EventModel from "../database/db_models";
 
 /**
  * SOCKET SERVER
@@ -9,16 +10,22 @@ const io = require("socket.io")(http);
 
 const mongoose = require("mongoose");
 
-main().catch(err => console.log(err));
-
-async function main() {
+app.on("save_event", async event_data => {
   await mongoose.connect("mongodb://127.0.0.1:27017/twdbase", {
     useNewUrlParser: true,
     useUnifiedTopology: true
   });
-}
-mongoose.connection.once("open", async function() {
-  console.log(mongoose.connection);
+  console.log(event_data);
+  const Event = new EventModel({
+    id: event_data["id"],
+    title: event_data["title"],
+    discipline: event_data["discipline"],
+    date: event_data["date"],
+    country: event_data["country"],
+    region: event_data["region"],
+    codex: event_data["codex"]
+  });
+  await Event.save();
 });
 
 let competition = {
@@ -117,6 +124,7 @@ io.on("connection", socket => {
     competition.changedMarks !== data.changedMarks
       ? (competition.changedMarks = data.changedMarks)
       : null;
+
     io.sockets.emit("competition_data_updated", competition);
     cb(competition);
   });

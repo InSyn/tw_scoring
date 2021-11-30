@@ -258,12 +258,16 @@ export default {
   name: "main_data",
   methods: {
     ...mapActions("main", ["input_focus", "input_blur"]),
-    set_competition_data() {
+    async set_competition_data() {
       this.socket &&
         this.socket.connected &&
-        this.socket.emit("set_competition_data", this.competition, res => {
-          console.log(res);
-        });
+        (await this.socket.emit(
+          "set_competition_data",
+          this.competition,
+          res => {
+            console.log(res);
+          }
+        ));
     },
     selectStage(stage, event) {
       this.competition.mainData.title.stage.value = stage;
