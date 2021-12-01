@@ -23,9 +23,14 @@ app.on("save_event", async event_data => {
     date: event_data["date"],
     country: event_data["country"],
     region: event_data["region"],
-    codex: event_data["codex"]
+    codex: event_data["codex"],
+    races: event_data["races"]
   });
-  await Event.save();
+  try {
+    await Event.update(Event, { upsert: true });
+  } catch (e) {
+    console.log(e);
+  }
 });
 
 let competition = {

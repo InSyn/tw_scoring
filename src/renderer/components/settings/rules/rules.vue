@@ -215,12 +215,18 @@
               style="display:flex;align-items: center;flex: 0 0 auto;width: 100%;font-weight: bold;font-size: 1.2rem;margin: 0 0 .5rem 0"
             >
               Сетка соревнований
-              <v-btn
-                @click="defaultGrid()"
-                icon
-                style="margin-left: auto;"
-                :color="$vuetify.theme.themes[appTheme].action_darkYellow"
-                ><v-icon>mdi-backup-restore</v-icon></v-btn
+              <v-tooltip right open-delay="512">
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn
+                    @click="defaultGrid()"
+                    icon
+                    style="margin-left: auto;"
+                    v-bind="attrs"
+                    v-on="on"
+                    :color="$vuetify.theme.themes[appTheme].action_darkYellow"
+                    ><v-icon>mdi-backup-restore</v-icon></v-btn
+                  ></template
+                ><span>Восстановить</span></v-tooltip
               >
             </div>
             <div

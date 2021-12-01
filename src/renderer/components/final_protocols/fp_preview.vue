@@ -139,7 +139,7 @@
             >
               <div
                 class="left_asset"
-                style="width: 8rem;margin-right: 4rem;display:flex;align-items: center; justify-content: center"
+                style="width: 8rem;margin: 0 2rem;display:flex;align-items: center; justify-content: center"
               >
                 <div
                   style="display:flex;align-items: center;justify-content:center; height: 100%;width: 100%"
