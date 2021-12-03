@@ -217,7 +217,7 @@
               v-if="p_idx === 0"
               style="display:flex; flex-wrap: wrap; align-items: center; margin: 2px 0"
             >
-              {{ `Number of competitors: ${results && results.length}` }}
+              {{ `Количество участников: ${results && results.length}` }}
             </div>
           </div>
 

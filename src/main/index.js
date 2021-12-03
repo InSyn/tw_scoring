@@ -27,7 +27,13 @@ app.on("save_event", async event_data => {
     races: event_data["races"]
   });
   try {
-    await Event.update(Event, { upsert: true });
+    await Event.save()
+      .then(doc => {
+        log(doc);
+      })
+      .catch(err => {
+        log(`ERR: ${err}`);
+      });
   } catch (e) {
     console.log(e);
   }
@@ -70,6 +76,53 @@ let competition = {
       value: "0000"
     }
   },
+  result_formula: {
+    overall_result: {
+      type: 1,
+      select_heats: {
+        heats: 0,
+        mode: 0,
+        modes: [
+          { id: 0, title: "Подсчёт из всех" },
+          { id: 1, title: "Подсчёт из N лучших" }
+        ]
+      },
+      types: [
+        {
+          id: 0,
+          title: "Лучший"
+        },
+        {
+          id: 1,
+          title: "Сумма"
+        },
+        {
+          id: 2,
+          title: "Среднее"
+        },
+        {
+          id: 3,
+          title: "ABC"
+        }
+      ]
+    },
+    type: 0,
+    types: [
+      {
+        id: 0,
+        title: "По судьям",
+        lower_marks: 0,
+        higher_marks: 0,
+        formula: 0
+      },
+      {
+        id: 1,
+        title: "По секциям",
+        sections: [],
+        formula: 0
+      }
+    ]
+  },
   secretary: {
     name: "",
     surName: "",
@@ -111,24 +164,38 @@ io.on("connection", socket => {
     io.sockets.emit("chat_message", m);
   });
   socket.on("set_competition_data", (data, cb) => {
-    competition.mainData !== data.mainData
-      ? (competition.mainData = data.mainData)
-      : null;
-    competition.stuff.judges !== data.stuff.judges
-      ? (competition.stuff.judges = data.stuff.judges)
-      : null;
-    competition.stuff.jury !== data.stuff.jury
-      ? (competition.stuff.jury = data.stuff.jury)
-      : null;
-    competition.races !== data.races ? (competition.races = data.races) : null;
+    competition.mainData !== data.mainData &&
+      (competition.mainData = data.mainData);
+
+    competition.result_formula.overall_result.type =
+      data.result_formula.overall_result.type;
+    competition.result_formula.type = data.result_formula.type;
+    competition.result_formula.types[0].formula =
+      data.result_formula.types[0].formula;
+    competition.result_formula.types[1].sections =
+      data.result_formula.types[1].sections;
+    competition.result_formula.overall_result.select_heats.heats =
+      data.result_formula.overall_result.select_heats.heats;
+    competition.result_formula.overall_result.select_heats.mode =
+      data.result_formula.overall_result.select_heats.mode;
+
+    competition.stuff.judges !== data.stuff.judges &&
+      (competition.stuff.judges = data.stuff.judges);
+
+    competition.stuff.jury !== data.stuff.jury &&
+      (competition.stuff.jury = data.stuff.jury);
+
+    competition.races !== data.races && (competition.races = data.races);
+    competition.selected_race_id !== data.selected_race_id &&
+      (competition.selected_race_id = data.selected_race_id);
+
     competition.competitorsSheet.competitors !==
-    data.competitorsSheet.competitors
-      ? (competition.competitorsSheet.competitors =
-          data.competitorsSheet.competitors)
-      : null;
-    competition.changedMarks !== data.changedMarks
-      ? (competition.changedMarks = data.changedMarks)
-      : null;
+      data.competitorsSheet.competitors &&
+      (competition.competitorsSheet.competitors =
+        data.competitorsSheet.competitors);
+
+    competition.changedMarks !== data.changedMarks &&
+      (competition.changedMarks = data.changedMarks);
 
     io.sockets.emit("competition_data_updated", competition);
     cb(competition);

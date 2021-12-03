@@ -377,7 +377,7 @@
       <!--// НАСТРОЙКА ФОРМУЛЫ ЗАЕЗДА -->
       <div class="pa-2 d-flex flex-column">
         <v-card-title style="padding: .5rem 1rem"
-          >Формула подстчёта результата заезда
+          >Формула подсчёта результата заезда
         </v-card-title>
         <div class="d-flex flex-column" style="border-radius: 6px">
           <div class="d-flex flex-nowrap">
@@ -392,7 +392,7 @@
               >
                 <v-hover v-slot:default="{ hover }">
                   <div
-                    @click="competition.result_formula.type = 0"
+                    @click="setRaceResultFormula(0)"
                     class="pa-1 d-flex flex-nowrap align-center"
                     style="font-weight:bold; font-size: 1.4rem;border-radius: 6px 6px 0 0;cursor:pointer;"
                     :style="{
@@ -467,7 +467,8 @@
                         <div
                           @click="
                             competition.result_formula.types[0].formula =
-                              formula.id
+                              formula.id;
+                            updateEvent();
                           "
                           class="mr-2 d-flex flex-nowrap align-center"
                           style="cursor:pointer;"
@@ -578,7 +579,7 @@
                 >
                   <v-hover v-slot:default="{ hover }">
                     <div
-                      @click="competition.result_formula.type = 1"
+                      @click="setRaceResultFormula(1)"
                       class="d-flex align-center"
                       style="flex: 1 0 auto;cursor:pointer"
                     >
@@ -798,7 +799,8 @@
                                 _section => {
                                   return _section.id !== section.id;
                                 }
-                              )
+                              );
+                              updateEvent();
                             "
                             small
                             :color="$vuetify.theme.themes[appTheme].action_red"
@@ -862,7 +864,7 @@
       <!--// НАСТРОЙКА ФОРМУЛЫ ЭТАПА -->
       <div class="pa-2 d-flex flex-column">
         <v-card-title style="padding: .5rem 1rem"
-          >Формула подстчёта результата этапа</v-card-title
+          >Формула подсчёта результата этапа</v-card-title
         >
         <div
           class="pa-1 d-flex flex-nowrap"
@@ -878,9 +880,7 @@
               v-for="overall_type in competition.result_formula.overall_result
                 .types"
               :key="overall_type.id"
-              @click="
-                competition.result_formula.overall_result.type = +overall_type.id
-              "
+              @click="setOverallResultFormula(+overall_type.id)"
               :disabled="+overall_type.id === 9999"
               :depressed="
                 overall_type.id ===
@@ -942,7 +942,8 @@
                     competition.result_formula.overall_result.select_heats
                       .heats > 0 &&
                       competition.result_formula.overall_result.select_heats
-                        .heats--
+                        .heats--;
+                    updateEvent();
                   "
                   >mdi-chevron-left
                 </v-icon>
@@ -961,7 +962,8 @@
                   small
                   @click="
                     competition.result_formula.overall_result.select_heats
-                      .heats++
+                      .heats++;
+                    updateEvent();
                   "
                   >mdi-chevron-right
                 </v-icon>
@@ -970,7 +972,8 @@
               <div
                 @click="
                   competition.result_formula.overall_result.select_heats.mode =
-                    mode.id
+                    mode.id;
+                  updateEvent();
                 "
                 style="border-radius: 50%; height: 1rem;width: 1rem; cursor:pointer;"
                 :style="[
@@ -1002,6 +1005,13 @@ export default {
   name: "results",
   methods: {
     log: data => console.log(data),
+    updateEvent() {
+      this.socket &&
+        this.socket.connected &&
+        this.socket.emit("set_competition_data", this.competition, res => {
+          console.log(res);
+        });
+    },
     add_prev_stage(stage) {
       if (this.competition.stages.prev_stages.some(_prev => _prev === stage)) {
         if (this.competition.stages.lastStageSize > 1) {
@@ -1124,6 +1134,14 @@ export default {
       ];
       this.competition.stages.prev_stages = [this.competition.id];
       this.competition.stages.lastStageSize = 0;
+    },
+    setRaceResultFormula(type) {
+      this.competition.result_formula.type = type;
+      this.updateEvent();
+    },
+    setOverallResultFormula(type) {
+      this.competition.result_formula.overall_result.type = type;
+      this.updateEvent();
     }
   },
   data() {
@@ -1139,6 +1157,7 @@ export default {
   },
   computed: {
     ...mapGetters("main", {
+      socket: "socket",
       competition: "competition",
       competitions: "competitions",
       appTheme: "appTheme"
