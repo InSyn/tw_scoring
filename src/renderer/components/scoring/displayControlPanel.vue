@@ -69,7 +69,6 @@
             ></option>
           </select>
           <v-btn
-            @click="saveEvent()"
             class="ml-2"
             depressed
             style="font-size: 1rem;height: 2rem; border-radius: 2px"
@@ -124,39 +123,10 @@
 
 <script>
 import { mapGetters } from "vuex";
-const { app } = require("electron").remote;
 export default {
   name: "displayControlPanel",
   methods: {
-    log: data => console.log(data),
-    saveEvent() {
-      const EvModel = {
-        id: this.competition.id,
-        title: this.competition.mainData.title.value,
-        discipline: this.competition.mainData.discipline.value,
-        date: this.competition.mainData.date.value,
-        country: this.competition.mainData.country.value,
-        region: this.competition.mainData.location.value,
-        codex: this.competition.mainData.codex.value,
-        races: [
-          {
-            race_num: 1,
-            results: [
-              {
-                rank: 101,
-                bib: 7,
-                name: "Alexey",
-                surName: "Pidrilych",
-                nation: "rus",
-                region: "krsk",
-                result: "11.99"
-              }
-            ]
-          }
-        ]
-      };
-      app.emit("save_event", EvModel);
-    }
+    log: data => console.log(data)
   },
   data() {
     return {

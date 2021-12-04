@@ -1,5 +1,4 @@
 import { app, ipcMain, BrowserWindow } from "electron";
-import EventModel from "../database/db_models";
 
 /**
  * SOCKET SERVER
@@ -7,37 +6,6 @@ import EventModel from "../database/db_models";
 const socketApp = require("express")();
 const http = require("http").Server(socketApp);
 const io = require("socket.io")(http);
-
-const mongoose = require("mongoose");
-
-app.on("save_event", async event_data => {
-  await mongoose.connect("mongodb://127.0.0.1:27017/twdbase", {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-  });
-  console.log(event_data);
-  const Event = new EventModel({
-    id: event_data["id"],
-    title: event_data["title"],
-    discipline: event_data["discipline"],
-    date: event_data["date"],
-    country: event_data["country"],
-    region: event_data["region"],
-    codex: event_data["codex"],
-    races: event_data["races"]
-  });
-  try {
-    await Event.save()
-      .then(doc => {
-        log(doc);
-      })
-      .catch(err => {
-        log(`ERR: ${err}`);
-      });
-  } catch (e) {
-    console.log(e);
-  }
-});
 
 let competition = {
   mainData: {

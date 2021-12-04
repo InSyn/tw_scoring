@@ -342,7 +342,7 @@
                   type="text"
                   v-model="competition.stuff.judges[jd].surName"
               /></v-col>
-              <v-col class="d-flex align-center pa-1" cols="12"
+              <v-col class="d-flex align-center pa-1" cols="8"
                 ><div>Город:</div>
                 <input
                   @focus="
@@ -360,6 +360,30 @@
                   }"
                   type="text"
                   v-model="competition.stuff.judges[jd].location"
+              /></v-col>
+              <v-col class="d-flex align-center pa-1" cols="4"
+                ><div style="display:flex;align-items: center">
+                  <v-icon small :color="$vuetify.theme.themes[appTheme].accent"
+                    >mdi-remote</v-icon
+                  >
+                  ID:
+                </div>
+                <input
+                  @focus="
+                    $event.target.style.borderBottom = `1px solid ${$vuetify.theme.themes[appTheme].accent}`
+                  "
+                  @blur="
+                    $event.target.style.borderBottom = `1px solid transparent`
+                  "
+                  class="pa-1 ml-1 font-weight-bold"
+                  style="width: 100%; border-radius: 6px; border-bottom: 1px solid transparent; transition: border-bottom-color 192ms"
+                  :style="{
+                    backgroundColor:
+                      $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
+                    color: $vuetify.theme.themes[appTheme].textDefault
+                  }"
+                  type="text"
+                  v-model="competition.stuff.judges[jd].remoteId"
               /></v-col>
               <v-btn
                 small
@@ -422,8 +446,8 @@ export default {
     }
   },
   computed: {
-    ...mapGetters("main", ["competition", "appTheme"]),
-    ...mapGetters("roles", ["JudgeClass", "JuryClass"])
+    ...mapGetters("main", { competition: "competition", appTheme: "appTheme" }),
+    ...mapGetters("roles", { JudgeClass: "JudgeClass", JuryClass: "JuryClass" })
   }
 };
 </script>

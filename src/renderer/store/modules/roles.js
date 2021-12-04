@@ -39,31 +39,28 @@ export default {
     },
     JudgeClass: class {
       constructor(title, id, surName, name, location) {
+        this._id = Math.random()
+          .toString(36)
+          .substr(2, 9);
         this.title = title || "Судья";
+        this.remoteId = null;
         this.id = id || 0;
         this.name = name || "";
         this.surName = surName || "";
         this.location = location || "";
-        this._id = Math.random()
-          .toString(36)
-          .substr(2, 9);
       }
-      name = "";
-      surName = "";
-      location = "";
       category = "";
       socket_id = null;
       connected = false;
     },
     OpenerClass: class {
       constructor(num) {
-        this.num = num;
+        this.num = num || null;
       }
       bib = "";
       name = "";
       surName = "";
       location = "";
-      num = null;
     }
   },
   getters: {

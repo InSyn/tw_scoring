@@ -156,6 +156,7 @@
 ></template>
 
 <script>
+import axios from "axios";
 import { mapGetters } from "vuex";
 export default {
   name: "startList",
@@ -171,31 +172,36 @@ export default {
         })();
     },
     setToTrack(competitor_id) {
-      (() => {
-        this.competition.selected_race.onTrack !== null &&
-          (() => {
-            this.competition.selected_race.startList.unshift(
-              this.competition.selected_race.onTrack
-            );
-          })();
-        this.competition.selected_race.onTrack = competitor_id;
-        this.competition.selected_race.startList = this.competition.selected_race.startList.filter(
-          _competitor => {
-            return _competitor !== competitor_id;
-          }
+      this.competition.selected_race.onTrack !== null &&
+        (() => {
+          this.competition.selected_race.startList.unshift(
+            this.competition.selected_race.onTrack
+          );
+        })();
+      this.competition.selected_race.onTrack = competitor_id;
+      this.competition.selected_race.startList = this.competition.selected_race.startList.filter(
+        _competitor => {
+          return _competitor !== competitor_id;
+        }
+      );
+      this.competition.selected_race.selectedCompetitor = this.competition
+        .selected_race.startList[0]
+        ? this.competition.selected_race.startList[0]
+        : null;
+      this.socket &&
+        this.socket.connected &&
+        this.socket.emit("set_competition_data", this.competition, res => {
+          console.log(res);
+        });
+      try {
+        this.setCompetitorToTerminals(
+          this.competition.competitorsSheet.competitors.find(
+            _comp => _comp.id === competitor_id
+          )
         );
-        this.competition.selected_race.selectedCompetitor = this.competition
-          .selected_race.startList[0]
-          ? this.competition.selected_race.startList[0]
-          : null;
-        this.socket &&
-          this.socket.connected &&
-          (() => {
-            this.socket.emit("set_competition_data", this.competition, res => {
-              console.log(res);
-            });
-          })();
-      })();
+      } catch (e) {
+        log(e);
+      }
     },
     setFocused(e) {
       e.target.style.backgroundColor = `${
@@ -206,6 +212,101 @@ export default {
       e.target.style.backgroundColor = `${
         this.$vuetify.theme.themes[this.appTheme].standardBackgroundRGBA
       }`;
+    },
+    async setCompetitorToTerminals(competitor) {
+      const compToSend = {
+        name: `${this.transliterate(competitor.info_data.name)}`,
+        bip: `${competitor.info_data.bib}`,
+        short_name: this.transliterate(
+          `${competitor.info_data.surname} ${competitor.info_data.name[0]}.`
+        ),
+        id_fis: "test",
+        status: "1"
+      };
+      let res = await axios.post("http://79.104.192.118:8888/ags", compToSend);
+      console.log(res);
+    },
+    transliterate(text) {
+      let answer = "",
+        a = {};
+
+      a["Ё"] = "YO";
+      a["Й"] = "I";
+      a["Ц"] = "TS";
+      a["У"] = "U";
+      a["К"] = "K";
+      a["Е"] = "E";
+      a["Н"] = "N";
+      a["Г"] = "G";
+      a["Ш"] = "SH";
+      a["Щ"] = "SCH";
+      a["З"] = "Z";
+      a["Х"] = "H";
+      a["Ъ"] = "'";
+      a["ё"] = "yo";
+      a["й"] = "i";
+      a["ц"] = "ts";
+      a["у"] = "u";
+      a["к"] = "k";
+      a["е"] = "e";
+      a["н"] = "n";
+      a["г"] = "g";
+      a["ш"] = "sh";
+      a["щ"] = "sch";
+      a["з"] = "z";
+      a["х"] = "h";
+      a["ъ"] = "'";
+      a["Ф"] = "F";
+      a["Ы"] = "I";
+      a["В"] = "V";
+      a["А"] = "A";
+      a["П"] = "P";
+      a["Р"] = "R";
+      a["О"] = "O";
+      a["Л"] = "L";
+      a["Д"] = "D";
+      a["Ж"] = "ZH";
+      a["Э"] = "E";
+      a["ф"] = "f";
+      a["ы"] = "i";
+      a["в"] = "v";
+      a["а"] = "a";
+      a["п"] = "p";
+      a["р"] = "r";
+      a["о"] = "o";
+      a["л"] = "l";
+      a["д"] = "d";
+      a["ж"] = "zh";
+      a["э"] = "e";
+      a["Я"] = "YA";
+      a["Ч"] = "CH";
+      a["С"] = "S";
+      a["М"] = "M";
+      a["И"] = "I";
+      a["Т"] = "T";
+      a["Ь"] = "'";
+      a["Б"] = "B";
+      a["Ю"] = "YU";
+      a["я"] = "ya";
+      a["ч"] = "ch";
+      a["с"] = "s";
+      a["м"] = "m";
+      a["и"] = "i";
+      a["т"] = "t";
+      a["ь"] = "'";
+      a["б"] = "b";
+      a["ю"] = "yu";
+
+      for (let i in text) {
+        if (text.hasOwnProperty(i)) {
+          if (a[text[i]] === undefined) {
+            answer += text[i];
+          } else {
+            answer += a[text[i]];
+          }
+        }
+      }
+      return answer;
     }
   },
   computed: {
