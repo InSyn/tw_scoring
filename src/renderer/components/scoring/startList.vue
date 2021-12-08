@@ -221,7 +221,8 @@ export default {
           `${competitor.info_data.surname} ${competitor.info_data.name[0]}.`
         ),
         id_fis: "test",
-        status: "1"
+        status: "1",
+        temp1: this.competition.selected_race.id
       };
       let res = await axios.post("http://79.104.192.118:8888/ags", compToSend);
       console.log(res);

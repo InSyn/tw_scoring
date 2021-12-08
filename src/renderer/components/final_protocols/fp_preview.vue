@@ -214,10 +214,16 @@
               </div>
             </div>
             <div
-              v-if="p_idx === 0"
+              :style="p_idx !== 0 && { opacity: 0 }"
               style="display:flex; flex-wrap: wrap; align-items: center; margin: 2px 0"
             >
-              {{ `Количество участников: ${results && results.length}` }}
+              {{
+                `Количество участников: ${(stageGrid &&
+                  stageGrid[0] &&
+                  stageGrid[0].s_competitors &&
+                  stageGrid[0].s_competitors.length) ||
+                  0}`
+              }}
             </div>
           </div>
 
@@ -591,6 +597,7 @@ export default {
         let sumHeight = 0;
         let containerHeight = this.$refs["pdf_table_container"][0].offsetHeight;
         this.results[0].forEach(gridRow => {
+          // this.protDebug({ gridRow, sumHeight, containerHeight });
           if (
             sumHeight + this.$refs[gridRow.type][0].offsetHeight <
             containerHeight
@@ -610,6 +617,7 @@ export default {
             this.data_paginated_results[
               this.data_paginated_results.length - 1
             ].push(gridRow);
+            sumHeight += this.$refs[gridRow.type][0].offsetHeight;
           }
         });
         this.results = this.paginated_results;
@@ -675,6 +683,28 @@ export default {
               10)
           : null;
       }
+    },
+    protDebug(data) {
+      console.log(`<------------------------------>`);
+      console.log(this.$refs["pdf_table_container"]);
+      console.log(
+        this.$refs["pdf_table_container"][
+          `${this.data_paginated_results.length - 1}`
+        ]
+      );
+      console.log(`P: ${this.data_paginated_results.length}`);
+      console.log(
+        `${
+          data.gridRow.competitor
+            ? "Bib: " + data.gridRow.competitor.info_data.bib
+            : data.gridRow.type
+        }`
+      );
+      console.log(
+        data.sumHeight + this.$refs[data.gridRow.type][0].offsetHeight
+      );
+      console.log(data.containerHeight);
+      console.log(`<------------------------------>`);
     }
   },
   computed: {

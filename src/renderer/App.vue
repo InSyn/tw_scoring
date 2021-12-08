@@ -23,19 +23,32 @@
       </v-btn>
       <v-btn
         text
+        @click="
+          $store.commit('main/event_save', {
+            name: `${competition.mainData.date.value} ${competition.mainData.title.value}. ${competition.mainData.title.stage.value.value}`
+          })
+        "
         style="padding:0"
         min-width="0"
         width="48"
         :color="$vuetify.theme.themes[appTheme].accent"
         ><v-icon>mdi-content-save</v-icon>
       </v-btn>
+
       <v-btn
         text
         style="padding:0"
         min-width="0"
         width="48"
         :color="$vuetify.theme.themes[appTheme].accent"
-        ><v-icon>mdi-download</v-icon> </v-btn
+        ><label style="display: block;height: 100%;width: 100%; cursor:pointer;"
+          ><v-icon>mdi-download</v-icon>
+          <input
+            @change="load_event($event.target.files[0].path)"
+            type="file"
+            accept="application/json"
+            hidden
+        /></label> </v-btn
       ><v-dialog
         width="540"
         v-if="competition"
@@ -610,9 +623,9 @@ export default {
     document.addEventListener("keyup", e => {
       e.key === "Home" && this.changeMenuState();
     });
-    fs.readdir("./StartList", (err, res) => {
+    fs.readdir("./events", (err, res) => {
       err
-        ? fs.mkdir("./StartList", err => {
+        ? fs.mkdir("./events", err => {
             return err;
           })
         : res;
@@ -679,6 +692,45 @@ export default {
           )
         );
       }
+    },
+    load_event(path) {
+      let evData = JSON.parse(fs.readFileSync(`${path}`, "utf-8"));
+
+      this.competition.id = evData.id;
+
+      this.competition.stages.lastStageSize = evData.stages.lastStageSize;
+      this.competition.stages.prev_stages = [];
+      evData.stages.prev_stages.forEach(_stage =>
+        this.competition.stages.prev_stages.push(_stage)
+      );
+      this.competition.stages.stage_grid = [];
+      evData.stages.stage_grid.forEach(_stage =>
+        this.competition.stages.stage_grid.push(_stage)
+      );
+
+      this.competition.mainData = evData.mainData;
+
+      this.competition.stuff.judges = [];
+      evData.stuff.judges.forEach(_judge => {
+        this.competition.stuff.judges.push(_judge);
+      });
+
+      this.competition.stuff.jury = [];
+      evData.stuff.jury.forEach(_judge => {
+        this.competition.stuff.jury.push(_judge);
+      });
+
+      this.competition.technicalInfo = [];
+      evData.technicalInfo.forEach(_tInf =>
+        this.competition.technicalInfo.push(_tInf)
+      );
+
+      this.competition.competitorsSheet.header = evData.competitorsSheet.header;
+
+      this.competition.competitorsSheet.competitors = [];
+      evData.competitorsSheet.competitors.forEach(_competitor => {
+        this.competition.competitorsSheet.competitors.push(_competitor);
+      });
     },
     initCreateDialog() {
       this.create_competition_dialog.data.forEach(_field => {

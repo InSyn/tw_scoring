@@ -11,6 +11,7 @@ export default {
         this.live_id = null;
         this.structure.selected.type = 0;
         this.structure.selected.discipline = 0;
+        this.mainData.title.stage.group = "All";
         this.mainData.title.stage.value = this.structure.stages[0];
         args.forEach(arg => {
           if (typeof arg === "object") {

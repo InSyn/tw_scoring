@@ -1,0 +1,356 @@
+{
+  "weather": [],
+  "structure": {
+    "selected": { "type": 0, "discipline": 0, "accuracy": 1 },
+    "types": [
+      { "id": 0, "title": "Сноуборд", "disciplines": [0, 1, 2, 100] },
+      { "id": 1, "title": "Фристайл", "disciplines": [0, 1, 2, 3, 4, 100] },
+      { "id": 2, "title": "Пользовательский", "disciplines": [100] }
+    ],
+    "disciplines": [
+      { "id": 0, "title": "Слоуп-Стайл", "res_formula": [1] },
+      { "id": 1, "title": "Биг-Эйр", "res_formula": [2] },
+      { "id": 2, "title": "Хаф-Пайп", "res_formula": [3] },
+      { "id": 3, "title": "Акробатика", "res_formula": [4] },
+      { "id": 4, "title": "Могул", "res_formula": [5] },
+      { "id": 100, "title": "Пользовательский", "res_formula": [100] }
+    ],
+    "accuracy": [
+      { "id": 0, "title": "1", "value": 1, "digits": 0 },
+      { "id": 1, "title": "1:10", "value": 10, "digits": 1 },
+      { "id": 2, "title": "1:100", "value": 100, "digits": 2 },
+      { "id": 3, "title": "1:1000", "value": 1000, "digits": 3 }
+    ],
+    "stages": [
+      { "id": "qual", "title": "Квалификация", "value": "Квалификация" },
+      { "id": "final", "title": "Финал", "value": "Финал" },
+      { "id": "custom", "title": "Пользовательский", "value": "Финал Ж" }
+    ]
+  },
+  "stages": {
+    "lastStageSize": 0,
+    "prev_stages": [],
+    "stage_grid": [{ "title": "Квалификация", "s_competitions": ["rzdneb8ce"] }]
+  },
+  "passed_competitors": 0,
+  "races": [],
+  "selected_race_id": 0,
+  "mainData": {
+    "title": {
+      "title": "Название",
+      "value": "II Этап кубка России по Сноуборду (FIS) (2021-2022)",
+      "focus": false,
+      "stage": {
+        "title": "Этап",
+        "value": {
+          "id": "custom",
+          "title": "Пользовательский",
+          "value": "Финал Ж"
+        },
+        "focus": false,
+        "group": "Ж"
+      }
+    },
+    "discipline": {
+      "title": "Дисциплина",
+      "value": "Слоуп-Стайл",
+      "min": "SS",
+      "focus": false
+    },
+    "date": {
+      "title": "Дата проведения",
+      "dialog": false,
+      "value": "2021-12-08",
+      "time_dialog": false,
+      "time": "12:00",
+      "focus": false
+    },
+    "country": { "title": "Страна", "value": "RUS", "focus": false },
+    "location": {
+      "title": "Место проведения",
+      "value": "горная Саланга",
+      "focus": false
+    },
+    "provider": { "title": "Организатор", "value": "", "focus": false },
+    "providerTiming": {
+      "title": "Timing provider",
+      "value": "",
+      "focus": false
+    },
+    "codex": { "title": "Codex", "value": "0000", "focus": false }
+  },
+  "stuff": {
+    "secretary": { "name": "", "surName": "" },
+    "jury": [
+      {
+        "title": "Старший судья",
+        "surName": "Знаменский",
+        "name": "Иван",
+        "loc": "г. Москва",
+        "connected": false
+      },
+      {
+        "title": "Тех. делегат",
+        "name": "Иван",
+        "surName": "Знаменский",
+        "loc": "г. Москва"
+      },
+      {
+        "title": "Главный секретарь",
+        "name": "Дарья",
+        "surName": "Белоус",
+        "loc": "Челябинская область"
+      },
+      {
+        "title": "Ст. тех. судья",
+        "name": "Дмитрий",
+        "surName": "Воскресенский",
+        "loc": "г. Москва"
+      }
+    ],
+    "judges": [
+      {
+        "category": "1",
+        "socket_id": null,
+        "connected": false,
+        "_id": "1n6j5l3el",
+        "title": "Судья 1",
+        "remoteId": "6",
+        "id": 1,
+        "name": "Камиль",
+        "surName": "Мазитов",
+        "location": "г. Можга"
+      },
+      {
+        "category": "2",
+        "socket_id": null,
+        "connected": false,
+        "_id": "ryh23hrhk",
+        "title": "Судья 2",
+        "remoteId": "2",
+        "id": 2,
+        "name": "Игорь",
+        "surName": "Белоус",
+        "location": "Красноярский край"
+      },
+      {
+        "category": "1",
+        "socket_id": null,
+        "connected": false,
+        "_id": "5smb9dnw0",
+        "title": "Судья 3",
+        "remoteId": "3",
+        "id": 3,
+        "name": "Алексей",
+        "surName": "Липатов",
+        "location": "г. Казань"
+      },
+      {
+        "category": "1",
+        "socket_id": null,
+        "connected": false,
+        "_id": "xtqrci2ms",
+        "title": "Судья 4",
+        "remoteId": "4",
+        "id": 4,
+        "name": "Андрей",
+        "surName": "Соловьев",
+        "location": "Красноярский край"
+      },
+      {
+        "category": "1",
+        "socket_id": null,
+        "connected": false,
+        "_id": "pk80r87bv",
+        "title": "Судья 5",
+        "remoteId": "5",
+        "id": 5,
+        "name": "Семён",
+        "surName": "Искаков",
+        "location": "г. Екатеринбург"
+      }
+    ],
+    "openers": []
+  },
+  "technicalInfo": [
+    { "title": "Название склона", "value": "" },
+    { "title": "Длина трассы", "value": "" },
+    { "title": "Ширина трассы", "value": "" }
+  ],
+  "competitorsSheet": {
+    "header": [
+      { "id": "bib", "title": "Bib" },
+      { "id": "fiscode", "title": "FIS код" },
+      { "id": "surname", "title": "Фамилия" },
+      { "id": "name", "title": "Имя" },
+      { "id": "year", "title": "Год" },
+      { "id": "rang", "title": "Разряд" },
+      { "id": "location", "title": "Регион" }
+    ],
+    "competitors": [
+      {
+        "id": "44el9itp3",
+        "info_data": {
+          "bib": 19,
+          "fiscode": "G",
+          "surname": "Степанова",
+          "name": "Есения",
+          "year": 2004,
+          "rang": "МС",
+          "location": "г. Москва"
+        },
+        "info_dialog": { "state": false },
+        "race_status": null,
+        "res_accepted": false,
+        "rank": null,
+        "marks": []
+      },
+      {
+        "id": "w0e81yzs0",
+        "info_data": {
+          "bib": 20,
+          "fiscode": "G",
+          "surname": "Терентьева",
+          "name": "Софья",
+          "year": 2005,
+          "rang": "КМС",
+          "location": "г. Москва"
+        },
+        "info_dialog": { "state": false },
+        "race_status": null,
+        "res_accepted": false,
+        "rank": null,
+        "marks": []
+      },
+      {
+        "id": "aqxwas3bm",
+        "info_data": {
+          "bib": 16,
+          "fiscode": "G",
+          "surname": "Федченко",
+          "name": "Диана",
+          "year": 2004,
+          "rang": "КМС",
+          "location": "г. Санкт-Петербург"
+        },
+        "info_dialog": { "state": false },
+        "race_status": null,
+        "res_accepted": false,
+        "rank": null,
+        "marks": []
+      },
+      {
+        "id": "n02uh3w3u",
+        "info_data": {
+          "bib": 9,
+          "fiscode": "G",
+          "surname": "Горшенина",
+          "name": "Анастасия",
+          "year": 2002,
+          "rang": "КМС",
+          "location": "Новосибирская область"
+        },
+        "info_dialog": { "state": false },
+        "race_status": null,
+        "res_accepted": false,
+        "rank": null,
+        "marks": []
+      },
+      {
+        "id": "66s331qvc",
+        "info_data": {
+          "bib": 21,
+          "fiscode": "G",
+          "surname": "Богданова",
+          "name": "Елизавета",
+          "year": 2000,
+          "rang": "МС",
+          "location": "г. Москва"
+        },
+        "info_dialog": { "state": false },
+        "race_status": null,
+        "res_accepted": false,
+        "rank": null,
+        "marks": []
+      },
+      {
+        "id": "eaqxwencq",
+        "info_data": {
+          "bib": 49,
+          "fiscode": "G",
+          "surname": "Тихонова",
+          "name": "Дарья",
+          "year": 2001,
+          "rang": "КМС",
+          "location": "Челябинская область"
+        },
+        "info_dialog": { "state": false },
+        "race_status": null,
+        "res_accepted": false,
+        "rank": null,
+        "marks": []
+      }
+    ]
+  },
+  "media_settings": {
+    "display": {
+      "modes": [
+        { "id": 0, "title": "Результаты" },
+        { "id": 1, "title": "Стартовый" },
+        { "id": 2, "title": "Результат последнего на финише" },
+        { "id": 3, "title": "Участник на старте" },
+        { "id": 4, "title": "Награждение" }
+      ],
+      "selected": 1
+    }
+  },
+  "protocol_fields": [],
+  "protocol_settings": {
+    "protocol_type": 0,
+    "show_preview": false,
+    "start_protocols": { "result_race": null, "fields": [] },
+    "result_protocols": { "result_race": null, "fields": [] }
+  },
+  "result_formula": {
+    "overall_result": {
+      "type": 1,
+      "select_heats": {
+        "heats": 0,
+        "mode": 0,
+        "modes": [
+          { "id": 0, "title": "Подсчёт из всех" },
+          { "id": 1, "title": "Подсчёт из N лучших" }
+        ]
+      },
+      "types": [
+        { "id": 0, "title": "Лучший" },
+        { "id": 1, "title": "Сумма" },
+        { "id": 2, "title": "Среднее" },
+        { "id": 3, "title": "ABC" }
+      ]
+    },
+    "type": 0,
+    "types": [
+      {
+        "id": 0,
+        "title": "По судьям",
+        "lower_marks": 0,
+        "higher_marks": 0,
+        "formula": 0,
+        "formulas": [
+          { "id": 0, "title": "Среднее" },
+          { "id": 1, "title": "Сумма" }
+        ]
+      },
+      {
+        "id": 1,
+        "title": "По секциям",
+        "sections": [],
+        "formula": 0,
+        "formulas": [{ "id": 0 }]
+      }
+    ]
+  },
+  "id": "rzdneb8ce",
+  "live_id": null
+}

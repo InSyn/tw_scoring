@@ -215,6 +215,19 @@
             }"
             v-model="competition.mainData[md].min"
             type="text"
+          /><input
+            v-if="md === 'discipline'"
+            @focus="competition.mainData[md].focus = true"
+            @blur="competition.mainData[md].focus = false"
+            class="ml-2 pa-1"
+            style="outline: none; border-radius: 6px; width: 6rem"
+            :style="{
+              color: $vuetify.theme.themes[appTheme].textDefault,
+              backgroundColor:
+                $vuetify.theme.themes[appTheme].standardBackgroundRGBA
+            }"
+            v-model="competition.mainData.title.stage.group"
+            type="text"
           />
           <span
             class="d-block"

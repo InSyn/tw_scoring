@@ -20,6 +20,7 @@ export default {
     MarkClass: class {
       constructor(race, race_id, judge, judge_id, value) {
         this.value = value || 0;
+        this.new_value = null;
         this.race = race;
         this.race_id = race_id;
         this.judge = judge;

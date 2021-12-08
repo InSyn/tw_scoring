@@ -217,7 +217,12 @@
               v-if="p_idx === 0"
               style="display:flex; flex-wrap: wrap; align-items: center; margin: 2px 0"
             >
-              {{ `Количество участников: ${results && results.length}` }}
+              {{
+                `Количество участников: ${(getStartList &&
+                  getStartList.filter(_row => _row.type === "competitorResult")
+                    .length) ||
+                  0}`
+              }}
             </div>
           </div>
 
@@ -611,6 +616,7 @@ export default {
             this.data_paginated_results[
               this.data_paginated_results.length - 1
             ].push(gridRow);
+            sumHeight += this.$refs[gridRow.type][0].offsetHeight;
           }
         });
         this.results = this.paginated_results;

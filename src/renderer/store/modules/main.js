@@ -1,4 +1,5 @@
 import io from "socket.io-client";
+import fs from "fs";
 export default {
   namespaced: true,
   state: {
@@ -354,6 +355,41 @@ export default {
     },
     togglePreview: (state, toggleState) => {
       state.showPreview = toggleState;
+    },
+    updateEvent: state => {
+      state.socket &&
+        state.socket.connected &&
+        state.socket.emit("set_competition_data", state.competition, res => {
+          console.log(res);
+        });
+    },
+    event_save: async (state, conf) => {
+      await fs.readdir("./events", (err, res) => {
+        if (err) {
+          fs.mkdir("./events", err => {
+            return err;
+          });
+          fs.writeFile(
+            `./events/${conf.name}.json`,
+            JSON.stringify(state.competition),
+            "utf-8",
+            err => {
+              if (err) console.log(err);
+              else console.log("file saved");
+            }
+          );
+        } else {
+          fs.writeFile(
+            `./events/${conf.name}.json`,
+            JSON.stringify(state.competition),
+            "utf-8",
+            err => {
+              if (err) console.log(err);
+              else console.log("file saved");
+            }
+          );
+        }
+      });
     }
   },
   actions: {
@@ -375,5 +411,13 @@ export default {
     input_blur: (s, e) => {
       e.target.parentNode.style.boxShadow = "inset 0 0 0 0 transparent";
     }
+    // updateEvent: state => {
+    //   console.log(`upd`);
+    //   state.socket &&
+    //     state.socket.connected &&
+    //     state.socket.emit("set_competition_data", state.competition, res => {
+    //       console.log(res);
+    //     });
+    // }
   }
 };
