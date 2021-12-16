@@ -44,7 +44,9 @@
         ><label style="display: block;height: 100%;width: 100%; cursor:pointer;"
           ><v-icon>mdi-download</v-icon>
           <input
-            @change="load_event($event.target.files[0].path)"
+            @change="
+              $event.target.files[0] && load_event($event.target.files[0].path)
+            "
             type="file"
             accept="application/json"
             hidden
@@ -731,6 +733,9 @@ export default {
       evData.competitorsSheet.competitors.forEach(_competitor => {
         this.competition.competitorsSheet.competitors.push(_competitor);
       });
+
+      this.competition.races = [];
+      evData.races.forEach(_race => this.competition.races.push(_race));
     },
     initCreateDialog() {
       this.create_competition_dialog.data.forEach(_field => {
