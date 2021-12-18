@@ -43,7 +43,7 @@
         ></div>
         <v-spacer></v-spacer>
         <div class="d-flex flex-nowrap align-center">
-          <label :for="`select_filter`"></label>
+          <label for="select_filter"></label>
           <select
             class="pa-1"
             style="width: 120px; outline: none; border-radius: 6px; cursor:pointer;"
@@ -90,7 +90,7 @@
       <div class="px-1 py-2 d-flex flex-wrap">
         <v-hover
           v-slot:default="{ hover }"
-          v-for="(d_mode, dm) in competition.media_settings.display.modes"
+          v-for="d_mode in competition.media_settings.display.modes"
           :key="d_mode.id"
         >
           <div
@@ -269,7 +269,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters("main", ["competition", "appTheme"])
+    ...mapGetters("main", { competition: "competition", appTheme: "appTheme" })
   }
 };
 </script>

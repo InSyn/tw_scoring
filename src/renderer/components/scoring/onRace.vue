@@ -1,7 +1,7 @@
 <template
   ><v-col class="pa-2" cols="8"
     ><div
-      style="height: 100%; border-radius: 6px"
+      style="height: 100%; border-radius: 6px;overflow: hidden"
       :style="{
         backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA
       }"
@@ -31,7 +31,7 @@
                 }).info_data.bib ||
                   ''} ${competition.competitorsSheet.competitors.find(_comp => {
                   return _comp.id === competition.selected_race.onTrack;
-                }).info_data.surname ||
+                }).info_data['surname'] ||
                   ''} ${competition.competitorsSheet.competitors.find(_comp => {
                   return _comp.id === competition.selected_race.onTrack;
                 }).info_data.name || ''}`
@@ -290,7 +290,7 @@
                       <div style="padding: 1rem 2rem">
                         <div
                           style="padding: .5rem 1rem"
-                          v-for="(judge, j_idx) in competition &&
+                          v-for="judge in competition &&
                             competition.selected_race &&
                             competition.selected_race.onTrack &&
                             competition.stuff.judges"
@@ -348,13 +348,25 @@
             >
               <v-btn
                 icon
+                tile
                 @click="setTerminalsListener()"
                 :color="
                   listenTerminals
                     ? $vuetify.theme.themes[appTheme].accent
-                    : $vuetify.theme.themes[appTheme].textDefault
+                    : $vuetify.theme.themes[appTheme].standardBackgroundRGBA
                 "
-                style="margin: 0 .5rem;align-self: flex-end"
+                style="align-self: flex-end;border-top-right-radius: 6px;transition: background-color 172ms"
+                :style="[
+                  {
+                    backgroundColor: $vuetify.theme.themes[appTheme].textDefault
+                  },
+                  terminalsListener.indicator === 'ok' && {
+                    backgroundColor: $vuetify.theme.themes[appTheme].success
+                  },
+                  terminalsListener.indicator === 'err' && {
+                    backgroundColor: $vuetify.theme.themes[appTheme].error
+                  }
+                ]"
                 ><v-icon>mdi-remote</v-icon>
               </v-btn>
               <div
@@ -706,12 +718,14 @@ export default {
       this.$store.commit("main/updateEvent");
     },
     getMarksFromTerminal() {
-      clearTimeout(this.terminalsListener);
-      this.terminalsListener = setTimeout(() => {
+      clearTimeout(this.terminalsListener.listener);
+      this.terminalsListener.listener = setTimeout(() => {
+        let judges_check = [];
         this.competition.stuff.judges.forEach(_judge => {
           axios
             .get(`http://79.104.192.118:8888/scs?id=${_judge.remoteId}`)
             .then(response => {
+              judges_check.push(_judge["remoteID"]);
               if (response.data[response.data.length - 1]) {
                 if (
                   !this.competition.competitorsSheet.competitors
@@ -746,7 +760,7 @@ export default {
                           this.competition.selected_race.id,
                           _judge.id,
                           _judge._id,
-                          response.data[response.data.length - 1].scor
+                          response.data[response.data.length - 1]["scor"]
                         )
                       );
                 } else {
@@ -768,17 +782,38 @@ export default {
                           mark.race_id === this.competition.selected_race.id &&
                           mark.judge_id === _judge._id
                         );
-                      }).value = response.data[response.data.length - 1].scor;
+                      }).value =
+                      response.data[response.data.length - 1]["scor"];
                 }
               }
+              if (
+                judges_check.length === this.competition.stuff.judges.length
+              ) {
+                this.terminalsListener.indicator = "ok";
+                judges_check = [];
+                setTimeout(() => {
+                  this.terminalsListener.indicator = null;
+                }, 172);
+              }
               this.listenTerminals && this.getMarksFromTerminal();
+            })
+            .catch(err => {
+              this.terminalsListener.indicator = "err";
+              judges_check = [];
+              setTimeout(() => {
+                this.terminalsListener.indicator = null;
+              }, 172);
+
+              throw err;
             });
         });
+
         this.$store.commit("main/updateEvent");
-      }, 900);
+      }, 1333);
     },
     setTerminalsListener() {
       if (this.listenTerminals) {
+        clearTimeout(this.terminalsListener.listener);
         this.listenTerminals = false;
       } else {
         this.getMarksFromTerminal();
@@ -799,12 +834,19 @@ export default {
       },
       scoresToChange: {},
       listenTerminals: false,
-      terminalsListener: null
+      terminalsListener: {
+        listener: null,
+        indicator: null
+      }
     };
   },
   computed: {
-    ...mapGetters("main", ["competition", "appTheme", "socket"]),
-    ...mapGetters("roles", ["MarkClass"]),
+    ...mapGetters("main", {
+      competition: "competition",
+      appTheme: "appTheme",
+      socket: "socket"
+    }),
+    ...mapGetters("roles", { MarkClass: "MarkClass" }),
     console: () => console
   }
 };
