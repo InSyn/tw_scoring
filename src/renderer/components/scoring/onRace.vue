@@ -346,29 +346,36 @@
               class="d-flex flex-wrap align-center"
               style="width: 100%;height: 100%;overflow-y: auto"
             >
-              <v-btn
-                icon
-                tile
-                @click="setTerminalsListener()"
-                :color="
-                  listenTerminals
-                    ? $vuetify.theme.themes[appTheme].accent
-                    : $vuetify.theme.themes[appTheme].standardBackgroundRGBA
-                "
-                style="align-self: flex-end;border-top-right-radius: 6px;transition: background-color 172ms"
-                :style="[
-                  {
-                    backgroundColor: $vuetify.theme.themes[appTheme].textDefault
-                  },
-                  terminalsListener.indicator === 'ok' && {
-                    backgroundColor: $vuetify.theme.themes[appTheme].success
-                  },
-                  terminalsListener.indicator === 'err' && {
-                    backgroundColor: $vuetify.theme.themes[appTheme].error
-                  }
-                ]"
-                ><v-icon>mdi-remote</v-icon>
-              </v-btn>
+              <v-tooltip bottom open-delay="322" :disabled="listenTerminals"
+                ><template v-slot:activator="{ on, attrs }">
+                  <v-btn
+                    icon
+                    tile
+                    v-bind="attrs"
+                    v-on="on"
+                    @click="setTerminalsListener()"
+                    :color="
+                      listenTerminals
+                        ? $vuetify.theme.themes[appTheme].accent
+                        : $vuetify.theme.themes[appTheme].standardBackgroundRGBA
+                    "
+                    style="align-self: flex-end;border-top-right-radius: 6px;transition: background-color 172ms"
+                    :style="[
+                      {
+                        backgroundColor:
+                          $vuetify.theme.themes[appTheme].textDefault
+                      },
+                      terminalsListener.indicator === 'ok' && {
+                        backgroundColor: $vuetify.theme.themes[appTheme].success
+                      },
+                      terminalsListener.indicator === 'err' && {
+                        backgroundColor: $vuetify.theme.themes[appTheme].error
+                      }
+                    ]"
+                    ><v-icon>mdi-remote</v-icon>
+                  </v-btn></template
+                ><span>Включить прослушивание терминалов</span></v-tooltip
+              >
               <div
                 class="flex-column align-center px-2"
                 v-for="(judge, j) in competition.stuff.judges"
