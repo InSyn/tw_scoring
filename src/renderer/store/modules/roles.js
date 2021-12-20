@@ -3,15 +3,16 @@ export default {
   state: {
     CompetitorClass: class {
       constructor(fields, marks) {
+        this.id = Math.random()
+          .toString(36)
+          .substr(2, 9);
+        this.info_data = {};
         fields.map(field => {
           this.info_data[field[0]] = field[1];
         });
         this.marks = marks || [];
+        this.results = [];
       }
-      id = Math.random()
-        .toString(36)
-        .substr(2, 9);
-      info_data = {};
       info_dialog = { state: false };
       race_status = null;
       res_accepted = false;
@@ -19,15 +20,15 @@ export default {
     },
     MarkClass: class {
       constructor(race, race_id, judge, judge_id, value) {
+        this.id = Math.random()
+          .toString(36)
+          .substr(2, 9);
         this.value = value || 0;
         this.new_value = null;
         this.race = race;
         this.race_id = race_id;
         this.judge = judge;
         this.judge_id = judge_id;
-        this.id = Math.random()
-          .toString(36)
-          .substr(2, 9);
       }
     },
     JuryClass: class {

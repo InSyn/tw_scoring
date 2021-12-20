@@ -264,7 +264,7 @@ export default {
       };
       result_formula = {
         overall_result: {
-          type: 1,
+          type: 3,
           select_heats: {
             heats: 0,
             mode: 0,
@@ -399,7 +399,11 @@ export default {
             },
             {
               id: 3,
-              title: "ABC"
+              title: "ABC",
+              result: comp_id => {
+                let res = [];
+                return 0;
+              }
             }
           ]
         },

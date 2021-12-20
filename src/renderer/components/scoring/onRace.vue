@@ -51,8 +51,9 @@
               <div class="d-flex align-center pa-2" v-html="`Ожидание`"></div>
             </div>
             <v-spacer></v-spacer>
+
             <div
-              class="d-flex align-center ml-6 py-1 px-2"
+              class="d-flex align-center mx-2 py-1 px-2"
               style="font-size: 2rem; font-weight: bold; border-radius: 6px"
               :style="
                 (competition.selected_race &&
@@ -148,6 +149,31 @@
                         )
                   "
                 ></div>
+              </div>
+            </div>
+            <div
+              v-if="competition.result_formula.overall_result.type == 3"
+              style="display:flex;flex-direction: column"
+            >
+              <div
+                v-for="i in ['A', 'B', 'C']"
+                :key="i"
+                @click="score_repeat = i"
+                style="flex: 0 0 auto;display:flex;align-items: center;justify-content:center;height: 33%;font-size: 1rem;cursor:pointer;border-radius: 2px"
+                :style="[
+                  {
+                    backgroundColor:
+                      $vuetify.theme.themes[appTheme].standardBackgroundRGBA
+                  },
+                  i == score_repeat && {
+                    backgroundColor:
+                      $vuetify.theme.themes[appTheme].textDefault,
+                    color: $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
+                    fontWeight: 'bold'
+                  }
+                ]"
+              >
+                <span style="margin: auto 16px">{{ i }}</span>
               </div>
             </div>
 
@@ -343,8 +369,8 @@
             style="height: 50%;"
           >
             <div
-              class="d-flex flex-wrap align-center"
-              style="width: 100%;height: 100%;overflow-y: auto"
+              class="d-flex flex-wrap align-end"
+              style="width: 100%;height: 100%;padding-bottom: .5rem;overflow-y: auto"
             >
               <v-tooltip bottom open-delay="322" :disabled="listenTerminals"
                 ><template v-slot:activator="{ on, attrs }">
@@ -359,17 +385,27 @@
                         ? $vuetify.theme.themes[appTheme].accent
                         : $vuetify.theme.themes[appTheme].standardBackgroundRGBA
                     "
-                    style="align-self: flex-end;border-top-right-radius: 6px;transition: background-color 172ms"
+                    style="align-self: flex-end;border-radius: 6px;margin:0 .5rem;transition: background-color 172ms"
                     :style="[
                       {
                         backgroundColor:
-                          $vuetify.theme.themes[appTheme].textDefault
+                          $vuetify.theme.themes[appTheme]
+                            .standardBackgroundRGBA,
+                        color: $vuetify.theme.themes[appTheme].textDefault
+                      },
+                      listenTerminals && {
+                        backgroundColor:
+                          $vuetify.theme.themes[appTheme].textDefault,
+                        color: $vuetify.theme.themes[appTheme].accent
                       },
                       terminalsListener.indicator === 'ok' && {
-                        backgroundColor: $vuetify.theme.themes[appTheme].success
+                        backgroundColor:
+                          $vuetify.theme.themes[appTheme].success,
+                        color: $vuetify.theme.themes[appTheme].accent_light
                       },
                       terminalsListener.indicator === 'err' && {
-                        backgroundColor: $vuetify.theme.themes[appTheme].error
+                        backgroundColor: $vuetify.theme.themes[appTheme].error,
+                        color: $vuetify.theme.themes[appTheme].accent_light
                       }
                     ]"
                     ><v-icon>mdi-remote</v-icon>
@@ -437,10 +473,10 @@
           </v-row>
         </v-col>
         <v-col
-          style="height: 100%; display: flex; flex-direction: column; justify-content: space-evenly; align-items: center"
+          style="height: 100%; display: flex; flex-direction: column; align-items: flex-end;padding: .5rem"
           cols="3"
         >
-          <div class="pa-2">
+          <div style="flex: 0 0 auto;padding: 1rem 0">
             <div class="d-flex justify-center" style="font-size: 1.2rem">
               Время на оценку
             </div>
@@ -491,8 +527,8 @@
             </div>
           </div>
           <div
-            class="d-flex justify-center align-center flex-nowrap pa-2"
-            style="font-size: 1.2rem"
+            class="d-flex justify-center align-center flex-nowrap"
+            style="flex: 0 0 auto;font-size: 1.2rem;margin-top: auto;padding: 1rem 0"
           >
             <div>Старший судья</div>
             <div
@@ -532,7 +568,7 @@
 
           <div
             class="d-flex justify-center align-center"
-            style="font-size: 1.2rem; font-weight:bold;"
+            style="flex: 0 0 auto;font-size: 1.2rem; font-weight:bold;"
           >
             <v-btn
               @click="
@@ -844,7 +880,8 @@ export default {
       terminalsListener: {
         listener: null,
         indicator: null
-      }
+      },
+      score_repeat: "A"
     };
   },
   computed: {
