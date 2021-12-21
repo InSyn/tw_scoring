@@ -259,7 +259,6 @@ io.on("connection", socket => {
     io.sockets.emit("competition_data_updated", competition);
   });
   socket.on("set_mark", mark => {
-    console.log(mark);
     competition.races[mark.race].onTrack &&
     !competition.competitorsSheet.competitors
       .find(_comp => {
@@ -369,7 +368,6 @@ io.on("connection", socket => {
   });
 });
 app.on("startSocketServer", config => {
-  console.log(config);
   if (http["_handle"]) {
     mainWindow &&
       mainWindow.webContents.send("server_message", [

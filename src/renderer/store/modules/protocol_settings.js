@@ -243,26 +243,22 @@ export default {
             data: { id: "race_res", title: "Оценка" },
             handler: function(competitor, competition) {
               return competition.races.map(_race => {
-                return competition.set_accuracy(
-                  competition.result_formula.types[
-                    competition.result_formula.type
-                  ].formulas
-                    .find(_f => {
-                      return (
-                        _f.id ===
-                        competition.result_formula.types[
-                          competition.result_formula.type
-                        ].formula
-                      );
-                    })
-                    .get_result(
-                      competitor.competitor.id,
-                      _race.id,
-                      competition.stuff.judges.map(_j => {
-                        return +_j.id;
-                      })
-                    )
-                );
+                return `${competition.set_accuracy(
+                  (competitor.competitor.results.find(
+                    _res => _res.race_id === _race.id
+                  ) &&
+                    competitor.competitor.results.find(
+                      _res => _res.race_id === _race.id
+                    ).value) ||
+                    0
+                )} ${(competition.result_formula.overall_result.type === 3 &&
+                  competitor.competitor.results.find(
+                    _res => _res.race_id === _race.id
+                  ) &&
+                  competitor.competitor.results.find(
+                    _res => _res.race_id === _race.id
+                  ).repeat) ||
+                  ""}`;
               });
             }
           }

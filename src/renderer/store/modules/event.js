@@ -249,6 +249,37 @@ export default {
           : 0;
       }
       getRaceResult(competitor_id, race_id) {}
+      publish_result(competitor, race_id, rep) {
+        const res = {
+          id: Math.random()
+            .toString(36)
+            .substr(2, 9),
+          value: this.result_formula.types[this.result_formula.type].formulas
+            .find(
+              _f =>
+                _f.id ===
+                this.result_formula.types[this.result_formula.type].formula
+            )
+            .get_result(
+              competitor.id,
+              race_id,
+              this.stuff.judges.map(_j => {
+                return +_j.id;
+              })
+            ),
+          race_id: race_id,
+          repeat: rep || "A"
+        };
+        if (!competitor.results.some(_res => _res.race_id === race_id)) {
+          competitor.results.push(res);
+        } else {
+          let _res = competitor.results.find(_res => _res.race_id === race_id);
+          _res.value = res.value;
+          _res.repeat = res.repeat;
+        }
+        console.log(competitor);
+        return competitor.results;
+      }
       protocol_fields = [];
       protocol_settings = {
         protocol_type: 0,
@@ -401,8 +432,41 @@ export default {
               id: 3,
               title: "ABC",
               result: comp_id => {
-                let res = [];
-                return 0;
+                const competitor = this.competitorsSheet.competitors.find(
+                  _comp => _comp.id === comp_id
+                );
+                let sorted_res = [[], [], []];
+                this.races.forEach(_race => {
+                  if (
+                    competitor.results.find(_res => _res.race_id === _race.id)
+                  ) {
+                    const result = competitor.results.find(
+                      _res => _res.race_id === _race.id
+                    );
+                    if (result.repeat === "A") {
+                      sorted_res[0].push(result);
+                    } else if (result.repeat === "B") {
+                      sorted_res[1].push(result);
+                    } else {
+                      sorted_res[2].push(result);
+                    }
+                  }
+                });
+                let res_arr = sorted_res
+                  .map(_results =>
+                    _results.length > 0
+                      ? _results.map(_res => (_res.value ? _res.value : 0))
+                      : [0]
+                  )
+                  .map(_repeated => Math.max(..._repeated));
+                if (res_arr.length > 2)
+                  res_arr = res_arr.filter(
+                    _result_to_filter =>
+                      _result_to_filter !== Math.min(...res_arr)
+                  );
+                return res_arr.reduce((r1, r2) => {
+                  return +r1 + +r2;
+                });
               }
             }
           ]
@@ -448,18 +512,14 @@ export default {
                     high < +this.result_formula.types[0].higher_marks;
                     high++
                   ) {
-                    _marks = _marks.filter(_mark => {
-                      return _mark !== Math.max(..._marks);
-                    });
+                    _marks.splice(_marks.indexOf(Math.max(..._marks)), 1);
                   }
                   for (
                     let low = 0;
                     low < +this.result_formula.types[0].lower_marks;
                     low++
                   ) {
-                    _marks = _marks.filter(_mark => {
-                      return _mark !== Math.min(..._marks);
-                    });
+                    _marks.splice(_marks.indexOf(Math.min(..._marks)), 1);
                   }
                   return (
                     (+this.result_formula.types[0].lower_marks +
@@ -498,18 +558,14 @@ export default {
                     high < +this.result_formula.types[0].higher_marks;
                     high++
                   ) {
-                    marks = marks.filter(_mark => {
-                      return _mark !== Math.max(...marks);
-                    });
+                    marks.splice(marks.indexOf(Math.max(...marks)), 1);
                   }
                   for (
                     let low = 0;
                     low < +this.result_formula.types[0].lower_marks;
                     low++
                   ) {
-                    marks = marks.filter(_mark => {
-                      return _mark !== Math.min(...marks);
-                    });
+                    marks.splice(marks.indexOf(Math.min(...marks)), 1);
                   }
                   return (
                     (+this.result_formula.types[0].lower_marks +

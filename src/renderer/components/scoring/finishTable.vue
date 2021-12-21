@@ -110,25 +110,23 @@
                       v-for="(race_res, rr) in competition.races"
                       :key="rr"
                       >{{
-                        competition.set_accuracy(
-                          competition.result_formula.types[
-                            competition.result_formula.type
-                          ].formulas
-                            .find(
-                              _f =>
-                                _f.id ===
-                                competition.result_formula.types[
-                                  competition.result_formula.type
-                                ].formula
-                            )
-                            .get_result(
-                              competitor.id,
-                              race_res.id,
-                              competition.stuff.judges.map(_j => {
-                                return +_j.id;
-                              })
-                            )
-                        )
+                        `${competition.set_accuracy(
+                          (competitor.results.find(
+                            _res => _res.race_id === race_res.id
+                          ) &&
+                            competitor.results.find(
+                              _res => _res.race_id === race_res.id
+                            ).value) ||
+                            0
+                        )} ${(competition.result_formula.overall_result.type ===
+                          3 &&
+                          competitor.results.find(
+                            _res => _res.race_id === race_res.id
+                          ) &&
+                          competitor.results.find(
+                            _res => _res.race_id === race_res.id
+                          ).repeat) ||
+                          ""}`
                       }}</v-col
                     ><v-spacer></v-spacer
                     ><v-col

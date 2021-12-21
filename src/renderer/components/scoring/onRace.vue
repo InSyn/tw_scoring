@@ -125,30 +125,34 @@
                   :style="{
                     color: $vuetify.theme.themes[appTheme].textDefault
                   }"
-                  style="min-height: 3rem; min-width: 4rem; overflow-y: auto; cursor: pointer"
-                  v-html="
-                    competition.selected_race &&
-                      competition.selected_race.onTrack &&
-                      competition.result_formula.types[
-                        competition.result_formula.type
-                      ].formulas
-                        .find(_f => {
-                          return (
-                            _f.id ===
-                            competition.result_formula.types[
-                              competition.result_formula.type
-                            ].formula
-                          );
-                        })
-                        .get_result(
-                          competition.selected_race.onTrack,
-                          competition.races[competition.selected_race_id].id,
-                          competition.stuff.judges.map(_j => {
-                            return +_j.id;
+                  style="height: 3rem; min-width: 4rem; cursor: pointer"
+                >
+                  {{
+                    competition.set_accuracy(
+                      (competition.selected_race &&
+                        competition.selected_race.onTrack &&
+                        competition.result_formula.types[
+                          competition.result_formula.type
+                        ].formulas
+                          .find(_f => {
+                            return (
+                              _f.id ===
+                              competition.result_formula.types[
+                                competition.result_formula.type
+                              ].formula
+                            );
                           })
-                        )
-                  "
-                ></div>
+                          .get_result(
+                            competition.selected_race.onTrack,
+                            competition.races[competition.selected_race_id].id,
+                            competition.stuff.judges.map(_j => {
+                              return +_j.id;
+                            })
+                          )) ||
+                        0
+                    )
+                  }}
+                </div>
               </div>
             </div>
             <div
@@ -476,7 +480,13 @@
           style="height: 100%; display: flex; flex-direction: column; align-items: flex-end;padding: .5rem"
           cols="3"
         >
-          <div style="flex: 0 0 auto;padding: 1rem 0">
+          <div
+            style="flex: 0 0 auto;padding: .5rem;border-radius: 6px"
+            :style="{
+              backgroundColor:
+                $vuetify.theme.themes[appTheme].standardBackgroundRGBA
+            }"
+          >
             <div class="d-flex justify-center" style="font-size: 1.2rem">
               Время на оценку
             </div>
@@ -574,9 +584,6 @@
               @click="
                 competition.selected_race &&
                   competition.selected_race.onTrack &&
-                  competition.competitorsSheet.competitors.find(_comp => {
-                    return _comp.id === competition.selected_race.onTrack;
-                  }).res_accepted &&
                   publishResult(competition.selected_race.onTrack)
               "
               :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
@@ -678,6 +685,13 @@ export default {
             );
         }
       });
+      this.competition.publish_result(
+        this.competition.competitorsSheet.competitors.find(
+          _competitor => _competitor.id === competitor
+        ),
+        this.competition.selected_race.id,
+        this.score_repeat
+      );
       this.competition.selected_race.finished.push(competitor);
       this.competition.competitorsSheet.competitors.find(_comp => {
         return _comp.id === competitor;
