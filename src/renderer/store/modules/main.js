@@ -410,6 +410,21 @@ export default {
     },
     input_blur: (s, e) => {
       e.target.parentNode.style.boxShadow = "inset 0 0 0 0 transparent";
+    },
+    xml_export: async (s, object) => {
+      const xmlConverter = require("xml-js");
+      const options = {
+        compact: true,
+        ignoreComment: true,
+        spaces: 4
+      };
+      let xml = xmlConverter.js2xml(object, options);
+
+      await require("fs").writeFile("./test.xml", xml, () => {
+        console.log("ok");
+      });
+      console.log(object);
+      console.log(xml);
     }
     // updateEvent: state => {
     //   console.log(`upd`);

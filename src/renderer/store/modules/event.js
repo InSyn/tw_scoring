@@ -11,7 +11,7 @@ export default {
         this.live_id = null;
         this.structure.selected.type = 0;
         this.structure.selected.discipline = 0;
-        this.mainData.title.stage.group = "All";
+        this.mainData.title.stage.group = "M";
         this.mainData.title.stage.value = this.structure.stages[0];
         args.forEach(arg => {
           if (typeof arg === "object") {
@@ -282,7 +282,7 @@ export default {
       }
       protocol_fields = [];
       protocol_settings = {
-        protocol_type: 0,
+        protocol_type: 1,
         show_preview: false,
         start_protocols: {
           result_race: null,

@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Fisresults>
+    <Raceheader Sector="FS" Sex="M">
+        <Season>2022</Season>
+        <Codex>0000</Codex>
+        <Nation>RUS</Nation>
+        <Discipline>DISCIPLINE</Discipline>
+        <Category>FIS</Category>
+        <Racedate>
+            <day>25</day>
+            <month>12</month>
+            <year>2021</year>
+        </Racedate>
+        <Eventname>Новое соревнование</Eventname>
+        <Place>Krasnoyarsk</Place>
+    </Raceheader>
+    <FS_race>
+        <FS_raceinfo/>
+        <FS_classified>
+            <0 status="FS_classified">
+                <Bib>9</Bib>
+                <Lastname>КУДРЯВЦЕВ</Lastname>
+                <Firstname>Максим</Firstname>
+            </0>
+            <1 status="FS_classified">
+                <Bib>37</Bib>
+                <Lastname>ГОРЯЕВ</Lastname>
+                <Firstname>Владимир</Firstname>
+            </1>
+            <2 status="FS_classified">
+                <Bib>29</Bib>
+                <Lastname>ФАЛОМКИН</Lastname>
+                <Firstname>Владислав</Firstname>
+            </2>
+            <3 status="FS_classified">
+                <Bib>26</Bib>
+                <Lastname>SHVAREV</Lastname>
+                <Firstname>Dmitriy</Firstname>
+            </3>
+            <4 status="FS_classified">
+                <Bib>1</Bib>
+                <Lastname>НОВИЦКИЙ</Lastname>
+                <Firstname>Никита</Firstname>
+            </4>
+            <5 status="FS_classified">
+                <Bib>30</Bib>
+                <Lastname>ГЛУЩЕНКО</Lastname>
+                <Firstname>Артем</Firstname>
+            </5>
+            <6 status="FS_classified">
+                <Bib>33</Bib>
+                <Lastname>ВИХАРЕВ</Lastname>
+                <Firstname>Даниил</Firstname>
+            </6>
+            <7 status="FS_classified">
+                <Bib>34</Bib>
+                <Lastname>BISSIMBAYEV</Lastname>
+                <Firstname>Olzhas</Firstname>
+            </7>
+            <8 status="FS_classified">
+                <Bib>14</Bib>
+                <Lastname>GORLACHEV</Lastname>
+                <Firstname>Konstantin</Firstname>
+            </8>
+            <9 status="FS_classified">
+                <Bib>32</Bib>
+                <Lastname>OLEGULY</Lastname>
+                <Firstname>Roman</Firstname>
+            </9>
+            <10 status="FS_classified">
+                <Bib>23</Bib>
+                <Lastname>ЛАТЫШЕВ</Lastname>
+                <Firstname>Максим</Firstname>
+            </10>
+            <11 status="FS_classified">
+                <Bib>17</Bib>
+                <Lastname>ЖОГОЛЕВ</Lastname>
+                <Firstname>Семен</Firstname>
+            </11>
+            <12 status="FS_classified">
+                <Bib>25</Bib>
+                <Lastname>КУЗНЕЦОВ</Lastname>
+                <Firstname>Артём</Firstname>
+            </12>
+            <13 status="FS_classified">
+                <Bib>5</Bib>
+                <Lastname>УГЛОВСКИЙ</Lastname>
+                <Firstname>Андрей</Firstname>
+            </13>
+            <14 status="FS_classified">
+                <Bib>38</Bib>
+                <Lastname>MUKHATAYEV</Lastname>
+                <Firstname>Orynkhan</Firstname>
+            </14>
+            <15 status="FS_classified">
+                <Bib>35</Bib>
+                <Lastname>ЗАМНИУС</Lastname>
+                <Firstname>Никита</Firstname>
+            </15>
+            <16 status="FS_classified">
+                <Bib>24</Bib>
+                <Lastname>НОВИКОВ</Lastname>
+                <Firstname>Вячеслав</Firstname>
+            </16>
+            <17 status="FS_classified">
+                <Bib>13</Bib>
+                <Lastname>КОЛЕСНИКОВ</Lastname>
+                <Firstname>Дмитрий</Firstname>
+            </17>
+            <18 status="FS_classified">
+                <Bib>28</Bib>
+                <Lastname>MIKHALEV</Lastname>
+                <Firstname>Ivan</Firstname>
+            </18>
+            <19 status="FS_classified">
+                <Bib>8</Bib>
+                <Lastname>ЛЫЖИН</Lastname>
+                <Firstname>Алексей</Firstname>
+            </19>
+            <20 status="FS_classified">
+                <Bib>2</Bib>
+                <Lastname>МАХНЁВ</Lastname>
+                <Firstname>Андрей</Firstname>
+            </20>
+            <21 status="FS_classified">
+                <Bib>7</Bib>
+                <Lastname>ПАРКАЧЁВ</Lastname>
+                <Firstname>Никита</Firstname>
+            </21>
+            <22 status="FS_classified">
+                <Bib>19</Bib>
+                <Lastname>СВЕТЛАКОВ</Lastname>
+                <Firstname>Никита</Firstname>
+            </22>
+            <23 status="FS_classified">
+                <Bib>16</Bib>
+                <Lastname>ПРОНИН</Lastname>
+                <Firstname>Даниил</Firstname>
+            </23>
+            <24 status="FS_classified">
+                <Bib>10</Bib>
+                <Lastname>ДОЛМАТОВ</Lastname>
+                <Firstname>Михаил</Firstname>
+            </24>
+            <25 status="FS_classified">
+                <Bib>11</Bib>
+                <Lastname>ШУЛЬДЯКОВ</Lastname>
+                <Firstname>Артём</Firstname>
+            </25>
+            <26 status="FS_classified">
+                <Bib>36</Bib>
+                <Lastname>СОЛУСЕНКО</Lastname>
+                <Firstname>Роман</Firstname>
+            </26>
+            <27 status="FS_classified">
+                <Bib>3</Bib>
+                <Lastname>КАПИТОНОВ</Lastname>
+                <Firstname>Никита</Firstname>
+            </27>
+            <28 status="FS_classified">
+                <Bib>31</Bib>
+                <Lastname>YEMELYANOV</Lastname>
+                <Firstname>Maxim</Firstname>
+            </28>
+            <29 status="FS_classified">
+                <Bib>4</Bib>
+                <Lastname>ЧЕВСКИЙ</Lastname>
+                <Firstname>Илья</Firstname>
+            </29>
+            <30 status="FS_classified">
+                <Bib>27</Bib>
+                <Lastname>СЫЧЕВ</Lastname>
+                <Firstname>Семен</Firstname>
+            </30>
+            <31 status="FS_classified">
+                <Bib>20</Bib>
+                <Lastname>СЕРГЕЕВ</Lastname>
+                <Firstname>Никита</Firstname>
+            </31>
+            <32 status="FS_classified">
+                <Bib>22</Bib>
+                <Lastname>BONDAREV</Lastname>
+                <Firstname>Anton</Firstname>
+            </32>
+            <33 status="FS_classified">
+                <Bib>18</Bib>
+                <Lastname>ШИМБУЕВ</Lastname>
+                <Firstname>Семен</Firstname>
+            </33>
+            <34 status="FS_classified">
+                <Bib>12</Bib>
+                <Lastname>ЛАТЫШЕВ</Lastname>
+                <Firstname>Антон</Firstname>
+            </34>
+            <35 status="FS_classified">
+                <Bib>21</Bib>
+                <Lastname>ЛЕОНТЬЕВ</Lastname>
+                <Firstname>Сергей</Firstname>
+            </35>
+            <36 status="FS_classified">
+                <Bib>15</Bib>
+                <Lastname>АЛЕЙНИКОВ</Lastname>
+                <Firstname>Михаил</Firstname>
+            </36>
+            <37 status="FS_classified">
+                <Bib>6</Bib>
+                <Lastname>ЦВЕТКОВ</Lastname>
+                <Firstname>Вячеслав</Firstname>
+            </37>
+        </FS_classified>
+    </FS_race>
+</Fisresults>

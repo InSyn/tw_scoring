@@ -35,25 +35,17 @@
     <v-btn
       class="ml-4"
       depressed
+      style="font-size: 1rem"
       @click="competition.protocol_settings.show_preview = true"
       :color="$vuetify.theme.themes[appTheme].cardBackgroundRGBA"
       :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
-      >Просмотр</v-btn
-    >
-    <v-btn
-      class="ml-4"
-      depressed
-      :color="$vuetify.theme.themes[appTheme].cardBackgroundRGBA"
-      :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
-      >Сохранить PDF</v-btn
-    >
-    <v-btn
-      class="ml-4"
-      depressed
-      :color="$vuetify.theme.themes[appTheme].cardBackgroundRGBA"
-      :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
-      >Экспорт</v-btn
-    >
+      ><v-icon
+        style="position:relative;"
+        :color="$vuetify.theme.themes[appTheme].action_red"
+        >mdi-file-pdf</v-icon
+      >
+      <div>&nbsp;PDF</div>
+    </v-btn>
   </div>
 </template>
 
