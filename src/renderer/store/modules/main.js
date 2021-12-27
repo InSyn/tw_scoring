@@ -416,6 +416,7 @@ export default {
       const options = {
         compact: true,
         ignoreComment: true,
+        fullTagEmptyElement: true,
         spaces: 4
       };
       let xml = xmlConverter.js2xml(object, options);

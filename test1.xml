@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Fisresults>
-    <Raceheader Sector="SB" Sex="M">
+    <Raceheader Sector="FS" Sex="M">
         <Season>2022</Season>
         <Codex>0000</Codex>
         <Nation>RUS</Nation>
@@ -14,10 +14,10 @@
         <Eventname>Новое соревнование</Eventname>
         <Place>Krasnoyarsk</Place>
     </Raceheader>
-    <SB_race>
-        <SB_raceinfo></SB_raceinfo>
-        <SB_classified>
-            <SB_ranked status="QLF">
+    <FS_race>
+        <FS_raceinfo></FS_raceinfo>
+        <FS_classified>
+            <FS_ranked status="QLF">
                 <Rank></Rank>
                 <Bib>9</Bib>
                 <Competitor>
@@ -28,11 +28,11 @@
                     <Nation></Nation>
                     <Yearofbirth>1999</Yearofbirth>
                 </Competitor>
-                <SB_result>
+                <FS_result>
                     <TotalScore>0.0</TotalScore>
-                </SB_result>
-            </SB_ranked>
-            <SB_ranked status="QLF">
+                </FS_result>
+            </FS_ranked>
+            <FS_ranked status="QLF">
                 <Rank></Rank>
                 <Bib>37</Bib>
                 <Competitor>
@@ -43,11 +43,11 @@
                     <Nation></Nation>
                     <Yearofbirth>2002</Yearofbirth>
                 </Competitor>
-                <SB_result>
+                <FS_result>
                     <TotalScore>0.0</TotalScore>
-                </SB_result>
-            </SB_ranked>
-            <SB_ranked status="QLF">
+                </FS_result>
+            </FS_ranked>
+            <FS_ranked status="QLF">
                 <Rank></Rank>
                 <Bib>29</Bib>
                 <Competitor>
@@ -58,11 +58,11 @@
                     <Nation></Nation>
                     <Yearofbirth>2003</Yearofbirth>
                 </Competitor>
-                <SB_result>
+                <FS_result>
                     <TotalScore>0.0</TotalScore>
-                </SB_result>
-            </SB_ranked>
-            <SB_ranked status="QLF">
+                </FS_result>
+            </FS_ranked>
+            <FS_ranked status="QLF">
                 <Rank></Rank>
                 <Bib>26</Bib>
                 <Competitor>
@@ -73,11 +73,11 @@
                     <Nation></Nation>
                     <Yearofbirth>2002</Yearofbirth>
                 </Competitor>
-                <SB_result>
+                <FS_result>
                     <TotalScore>0.0</TotalScore>
-                </SB_result>
-            </SB_ranked>
-            <SB_ranked status="QLF">
+                </FS_result>
+            </FS_ranked>
+            <FS_ranked status="QLF">
                 <Rank></Rank>
                 <Bib>1</Bib>
                 <Competitor>
@@ -88,11 +88,11 @@
                     <Nation></Nation>
                     <Yearofbirth>2000</Yearofbirth>
                 </Competitor>
-                <SB_result>
+                <FS_result>
                     <TotalScore>0.0</TotalScore>
-                </SB_result>
-            </SB_ranked>
-            <SB_ranked status="QLF">
+                </FS_result>
+            </FS_ranked>
+            <FS_ranked status="QLF">
                 <Rank></Rank>
                 <Bib>30</Bib>
                 <Competitor>
@@ -103,11 +103,11 @@
                     <Nation></Nation>
                     <Yearofbirth>2004</Yearofbirth>
                 </Competitor>
-                <SB_result>
+                <FS_result>
                     <TotalScore>0.0</TotalScore>
-                </SB_result>
-            </SB_ranked>
-            <SB_ranked status="QLF">
+                </FS_result>
+            </FS_ranked>
+            <FS_ranked status="QLF">
                 <Rank></Rank>
                 <Bib>33</Bib>
                 <Competitor>
@@ -118,11 +118,11 @@
                     <Nation></Nation>
                     <Yearofbirth>2004</Yearofbirth>
                 </Competitor>
-                <SB_result>
+                <FS_result>
                     <TotalScore>0.0</TotalScore>
-                </SB_result>
-            </SB_ranked>
-            <SB_ranked status="QLF">
+                </FS_result>
+            </FS_ranked>
+            <FS_ranked status="QLF">
                 <Rank></Rank>
                 <Bib>34</Bib>
                 <Competitor>
@@ -133,11 +133,11 @@
                     <Nation></Nation>
                     <Yearofbirth>2000</Yearofbirth>
                 </Competitor>
-                <SB_result>
+                <FS_result>
                     <TotalScore>0.0</TotalScore>
-                </SB_result>
-            </SB_ranked>
-            <SB_ranked status="QLF">
+                </FS_result>
+            </FS_ranked>
+            <FS_ranked status="QLF">
                 <Rank></Rank>
                 <Bib>14</Bib>
                 <Competitor>
@@ -148,11 +148,11 @@
                     <Nation></Nation>
                     <Yearofbirth>2003</Yearofbirth>
                 </Competitor>
-                <SB_result>
+                <FS_result>
                     <TotalScore>0.0</TotalScore>
-                </SB_result>
-            </SB_ranked>
-            <SB_ranked status="QLF">
+                </FS_result>
+            </FS_ranked>
+            <FS_ranked status="QLF">
                 <Rank></Rank>
                 <Bib>32</Bib>
                 <Competitor>
@@ -163,11 +163,11 @@
                     <Nation></Nation>
                     <Yearofbirth>2001</Yearofbirth>
                 </Competitor>
-                <SB_result>
+                <FS_result>
                     <TotalScore>0.0</TotalScore>
-                </SB_result>
-            </SB_ranked>
-            <SB_ranked status="QLF">
+                </FS_result>
+            </FS_ranked>
+            <FS_ranked status="QLF">
                 <Rank></Rank>
                 <Bib>23</Bib>
                 <Competitor>
@@ -178,11 +178,11 @@
                     <Nation></Nation>
                     <Yearofbirth>1998</Yearofbirth>
                 </Competitor>
-                <SB_result>
+                <FS_result>
                     <TotalScore>0.0</TotalScore>
-                </SB_result>
-            </SB_ranked>
-            <SB_ranked status="QLF">
+                </FS_result>
+            </FS_ranked>
+            <FS_ranked status="QLF">
                 <Rank></Rank>
                 <Bib>17</Bib>
                 <Competitor>
@@ -193,11 +193,11 @@
                     <Nation></Nation>
                     <Yearofbirth>1997</Yearofbirth>
                 </Competitor>
-                <SB_result>
+                <FS_result>
                     <TotalScore>0.0</TotalScore>
-                </SB_result>
-            </SB_ranked>
-            <SB_ranked status="QLF">
+                </FS_result>
+            </FS_ranked>
+            <FS_ranked status="QLF">
                 <Rank></Rank>
                 <Bib>25</Bib>
                 <Competitor>
@@ -208,11 +208,11 @@
                     <Nation></Nation>
                     <Yearofbirth>2001</Yearofbirth>
                 </Competitor>
-                <SB_result>
+                <FS_result>
                     <TotalScore>0.0</TotalScore>
-                </SB_result>
-            </SB_ranked>
-            <SB_ranked status="QLF">
+                </FS_result>
+            </FS_ranked>
+            <FS_ranked status="QLF">
                 <Rank></Rank>
                 <Bib>5</Bib>
                 <Competitor>
@@ -223,11 +223,11 @@
                     <Nation></Nation>
                     <Yearofbirth>1995</Yearofbirth>
                 </Competitor>
-                <SB_result>
+                <FS_result>
                     <TotalScore>0.0</TotalScore>
-                </SB_result>
-            </SB_ranked>
-            <SB_ranked status="QLF">
+                </FS_result>
+            </FS_ranked>
+            <FS_ranked status="QLF">
                 <Rank></Rank>
                 <Bib>38</Bib>
                 <Competitor>
@@ -238,11 +238,11 @@
                     <Nation></Nation>
                     <Yearofbirth>2004</Yearofbirth>
                 </Competitor>
-                <SB_result>
+                <FS_result>
                     <TotalScore>0.0</TotalScore>
-                </SB_result>
-            </SB_ranked>
-            <SB_ranked status="QLF">
+                </FS_result>
+            </FS_ranked>
+            <FS_ranked status="QLF">
                 <Rank></Rank>
                 <Bib>35</Bib>
                 <Competitor>
@@ -253,11 +253,11 @@
                     <Nation></Nation>
                     <Yearofbirth>2004</Yearofbirth>
                 </Competitor>
-                <SB_result>
+                <FS_result>
                     <TotalScore>0.0</TotalScore>
-                </SB_result>
-            </SB_ranked>
-            <SB_ranked status="QLF">
+                </FS_result>
+            </FS_ranked>
+            <FS_ranked status="QLF">
                 <Rank></Rank>
                 <Bib>24</Bib>
                 <Competitor>
@@ -268,11 +268,11 @@
                     <Nation></Nation>
                     <Yearofbirth>2003</Yearofbirth>
                 </Competitor>
-                <SB_result>
+                <FS_result>
                     <TotalScore>0.0</TotalScore>
-                </SB_result>
-            </SB_ranked>
-            <SB_ranked status="QLF">
+                </FS_result>
+            </FS_ranked>
+            <FS_ranked status="QLF">
                 <Rank></Rank>
                 <Bib>13</Bib>
                 <Competitor>
@@ -283,11 +283,11 @@
                     <Nation></Nation>
                     <Yearofbirth>1999</Yearofbirth>
                 </Competitor>
-                <SB_result>
+                <FS_result>
                     <TotalScore>0.0</TotalScore>
-                </SB_result>
-            </SB_ranked>
-            <SB_ranked status="QLF">
+                </FS_result>
+            </FS_ranked>
+            <FS_ranked status="QLF">
                 <Rank></Rank>
                 <Bib>28</Bib>
                 <Competitor>
@@ -298,11 +298,11 @@
                     <Nation></Nation>
                     <Yearofbirth>2002</Yearofbirth>
                 </Competitor>
-                <SB_result>
+                <FS_result>
                     <TotalScore>0.0</TotalScore>
-                </SB_result>
-            </SB_ranked>
-            <SB_ranked status="QLF">
+                </FS_result>
+            </FS_ranked>
+            <FS_ranked status="QLF">
                 <Rank></Rank>
                 <Bib>8</Bib>
                 <Competitor>
@@ -313,11 +313,11 @@
                     <Nation></Nation>
                     <Yearofbirth>2000</Yearofbirth>
                 </Competitor>
-                <SB_result>
+                <FS_result>
                     <TotalScore>0.0</TotalScore>
-                </SB_result>
-            </SB_ranked>
-            <SB_ranked status="QLF">
+                </FS_result>
+            </FS_ranked>
+            <FS_ranked status="QLF">
                 <Rank></Rank>
                 <Bib>2</Bib>
                 <Competitor>
@@ -328,11 +328,11 @@
                     <Nation></Nation>
                     <Yearofbirth>1997</Yearofbirth>
                 </Competitor>
-                <SB_result>
+                <FS_result>
                     <TotalScore>0.0</TotalScore>
-                </SB_result>
-            </SB_ranked>
-            <SB_ranked status="QLF">
+                </FS_result>
+            </FS_ranked>
+            <FS_ranked status="QLF">
                 <Rank></Rank>
                 <Bib>7</Bib>
                 <Competitor>
@@ -343,11 +343,11 @@
                     <Nation></Nation>
                     <Yearofbirth>1999</Yearofbirth>
                 </Competitor>
-                <SB_result>
+                <FS_result>
                     <TotalScore>0.0</TotalScore>
-                </SB_result>
-            </SB_ranked>
-            <SB_ranked status="QLF">
+                </FS_result>
+            </FS_ranked>
+            <FS_ranked status="QLF">
                 <Rank></Rank>
                 <Bib>19</Bib>
                 <Competitor>
@@ -358,11 +358,11 @@
                     <Nation></Nation>
                     <Yearofbirth>1997</Yearofbirth>
                 </Competitor>
-                <SB_result>
+                <FS_result>
                     <TotalScore>0.0</TotalScore>
-                </SB_result>
-            </SB_ranked>
-            <SB_ranked status="QLF">
+                </FS_result>
+            </FS_ranked>
+            <FS_ranked status="QLF">
                 <Rank></Rank>
                 <Bib>16</Bib>
                 <Competitor>
@@ -373,11 +373,11 @@
                     <Nation></Nation>
                     <Yearofbirth>1997</Yearofbirth>
                 </Competitor>
-                <SB_result>
+                <FS_result>
                     <TotalScore>0.0</TotalScore>
-                </SB_result>
-            </SB_ranked>
-            <SB_ranked status="QLF">
+                </FS_result>
+            </FS_ranked>
+            <FS_ranked status="QLF">
                 <Rank></Rank>
                 <Bib>10</Bib>
                 <Competitor>
@@ -388,11 +388,11 @@
                     <Nation></Nation>
                     <Yearofbirth>1998</Yearofbirth>
                 </Competitor>
-                <SB_result>
+                <FS_result>
                     <TotalScore>0.0</TotalScore>
-                </SB_result>
-            </SB_ranked>
-            <SB_ranked status="QLF">
+                </FS_result>
+            </FS_ranked>
+            <FS_ranked status="QLF">
                 <Rank></Rank>
                 <Bib>11</Bib>
                 <Competitor>
@@ -403,11 +403,11 @@
                     <Nation></Nation>
                     <Yearofbirth>2002</Yearofbirth>
                 </Competitor>
-                <SB_result>
+                <FS_result>
                     <TotalScore>0.0</TotalScore>
-                </SB_result>
-            </SB_ranked>
-            <SB_ranked status="QLF">
+                </FS_result>
+            </FS_ranked>
+            <FS_ranked status="QLF">
                 <Rank></Rank>
                 <Bib>36</Bib>
                 <Competitor>
@@ -418,11 +418,11 @@
                     <Nation></Nation>
                     <Yearofbirth>2004</Yearofbirth>
                 </Competitor>
-                <SB_result>
+                <FS_result>
                     <TotalScore>0.0</TotalScore>
-                </SB_result>
-            </SB_ranked>
-            <SB_ranked status="QLF">
+                </FS_result>
+            </FS_ranked>
+            <FS_ranked status="QLF">
                 <Rank></Rank>
                 <Bib>3</Bib>
                 <Competitor>
@@ -433,11 +433,11 @@
                     <Nation></Nation>
                     <Yearofbirth>1995</Yearofbirth>
                 </Competitor>
-                <SB_result>
+                <FS_result>
                     <TotalScore>0.0</TotalScore>
-                </SB_result>
-            </SB_ranked>
-            <SB_ranked status="QLF">
+                </FS_result>
+            </FS_ranked>
+            <FS_ranked status="QLF">
                 <Rank></Rank>
                 <Bib>31</Bib>
                 <Competitor>
@@ -448,11 +448,11 @@
                     <Nation></Nation>
                     <Yearofbirth>2004</Yearofbirth>
                 </Competitor>
-                <SB_result>
+                <FS_result>
                     <TotalScore>0.0</TotalScore>
-                </SB_result>
-            </SB_ranked>
-            <SB_ranked status="QLF">
+                </FS_result>
+            </FS_ranked>
+            <FS_ranked status="QLF">
                 <Rank></Rank>
                 <Bib>4</Bib>
                 <Competitor>
@@ -463,11 +463,11 @@
                     <Nation></Nation>
                     <Yearofbirth>1998</Yearofbirth>
                 </Competitor>
-                <SB_result>
+                <FS_result>
                     <TotalScore>0.0</TotalScore>
-                </SB_result>
-            </SB_ranked>
-            <SB_ranked status="QLF">
+                </FS_result>
+            </FS_ranked>
+            <FS_ranked status="QLF">
                 <Rank></Rank>
                 <Bib>27</Bib>
                 <Competitor>
@@ -478,11 +478,11 @@
                     <Nation></Nation>
                     <Yearofbirth>2002</Yearofbirth>
                 </Competitor>
-                <SB_result>
+                <FS_result>
                     <TotalScore>0.0</TotalScore>
-                </SB_result>
-            </SB_ranked>
-            <SB_ranked status="QLF">
+                </FS_result>
+            </FS_ranked>
+            <FS_ranked status="QLF">
                 <Rank></Rank>
                 <Bib>20</Bib>
                 <Competitor>
@@ -493,11 +493,11 @@
                     <Nation></Nation>
                     <Yearofbirth>2002</Yearofbirth>
                 </Competitor>
-                <SB_result>
+                <FS_result>
                     <TotalScore>0.0</TotalScore>
-                </SB_result>
-            </SB_ranked>
-            <SB_ranked status="QLF">
+                </FS_result>
+            </FS_ranked>
+            <FS_ranked status="QLF">
                 <Rank></Rank>
                 <Bib>22</Bib>
                 <Competitor>
@@ -508,11 +508,11 @@
                     <Nation></Nation>
                     <Yearofbirth>2000</Yearofbirth>
                 </Competitor>
-                <SB_result>
+                <FS_result>
                     <TotalScore>0.0</TotalScore>
-                </SB_result>
-            </SB_ranked>
-            <SB_ranked status="QLF">
+                </FS_result>
+            </FS_ranked>
+            <FS_ranked status="QLF">
                 <Rank></Rank>
                 <Bib>18</Bib>
                 <Competitor>
@@ -523,11 +523,11 @@
                     <Nation></Nation>
                     <Yearofbirth>2001</Yearofbirth>
                 </Competitor>
-                <SB_result>
+                <FS_result>
                     <TotalScore>0.0</TotalScore>
-                </SB_result>
-            </SB_ranked>
-            <SB_ranked status="QLF">
+                </FS_result>
+            </FS_ranked>
+            <FS_ranked status="QLF">
                 <Rank></Rank>
                 <Bib>12</Bib>
                 <Competitor>
@@ -538,11 +538,11 @@
                     <Nation></Nation>
                     <Yearofbirth>1997</Yearofbirth>
                 </Competitor>
-                <SB_result>
+                <FS_result>
                     <TotalScore>0.0</TotalScore>
-                </SB_result>
-            </SB_ranked>
-            <SB_ranked status="QLF">
+                </FS_result>
+            </FS_ranked>
+            <FS_ranked status="QLF">
                 <Rank></Rank>
                 <Bib>21</Bib>
                 <Competitor>
@@ -553,11 +553,11 @@
                     <Nation></Nation>
                     <Yearofbirth>2001</Yearofbirth>
                 </Competitor>
-                <SB_result>
+                <FS_result>
                     <TotalScore>0.0</TotalScore>
-                </SB_result>
-            </SB_ranked>
-            <SB_ranked status="QLF">
+                </FS_result>
+            </FS_ranked>
+            <FS_ranked status="QLF">
                 <Rank></Rank>
                 <Bib>15</Bib>
                 <Competitor>
@@ -568,11 +568,11 @@
                     <Nation></Nation>
                     <Yearofbirth>2002</Yearofbirth>
                 </Competitor>
-                <SB_result>
+                <FS_result>
                     <TotalScore>0.0</TotalScore>
-                </SB_result>
-            </SB_ranked>
-            <SB_ranked status="QLF">
+                </FS_result>
+            </FS_ranked>
+            <FS_ranked status="QLF">
                 <Rank></Rank>
                 <Bib>6</Bib>
                 <Competitor>
@@ -583,10 +583,10 @@
                     <Nation></Nation>
                     <Yearofbirth>2000</Yearofbirth>
                 </Competitor>
-                <SB_result>
+                <FS_result>
                     <TotalScore>0.0</TotalScore>
-                </SB_result>
-            </SB_ranked>
-        </SB_classified>
-    </SB_race>
+                </FS_result>
+            </FS_ranked>
+        </FS_classified>
+    </FS_race>
 </Fisresults>

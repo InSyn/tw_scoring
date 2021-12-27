@@ -11,7 +11,17 @@
     </div>
     <div class="xml_export_settings">
       <div style="display:flex;align-items: center">
-        <span>Вид соревнования</span><v-select></v-select>
+        <span>Вид соревнования</span
+        ><select
+          style="margin-left: 1rem; padding: 4px .5rem;font-weight:bold;border-radius: 6px;outline: none"
+          :style="{
+            color: $vuetify.theme.themes[appTheme].textDefault,
+            backgroundColor:
+              $vuetify.theme.themes[appTheme].standardBackgroundRGBA
+          }"
+          v-model="type"
+          ><option v-for="type in types" :key="type">{{ type }}</option>
+        </select>
       </div>
     </div>
     <div
@@ -46,6 +56,7 @@ export default {
   },
   data() {
     return {
+      type: "FS",
       types: ["SB", "FS"]
     };
   },
@@ -62,6 +73,11 @@ export default {
       );
     },
     objectToXML() {
+      const date = {
+        day: this.competition.mainData.date.value.split("-")[2],
+        month: this.competition.mainData.date.value.split("-")[1],
+        year: this.competition.mainData.date.value.split("-")[0]
+      };
       return {
         _declaration: {
           _attributes: {
@@ -72,35 +88,47 @@ export default {
         Fisresults: {
           Raceheader: {
             _attributes: {
-              Sector: "FS",
+              Sector: this.type,
               Sex: this.competition.mainData.title.stage.group
             },
-            Season: "2022",
+            Season: +date.month >= 7 ? +date.year + 1 : date.year,
             Codex: this.competition.mainData.codex.value,
             Nation: this.competition.mainData.country.value,
             Discipline: this.competition.mainData.discipline.value,
             Category: "FIS",
             Racedate: {
-              day: this.competition.mainData.date.value.split("-")[2],
-              month: this.competition.mainData.date.value.split("-")[1],
-              year: this.competition.mainData.date.value.split("-")[0]
+              day: date.day,
+              month: date.month,
+              year: date.year
             },
             Eventname: this.competition.mainData.title.value,
             Place: this.competition.mainData.location.value
           },
-          FS_race: {
-            FS_raceinfo: {},
-            FS_classified: {
-              ...this.competition.competitorsSheet.competitors.map(
-                _competitor => {
-                  return {
-                    _attributes: { status: "FS_classified" },
-                    Bib: _competitor.info_data["bib"],
-                    Lastname: _competitor.info_data["surname"],
-                    Firstname: _competitor.info_data["name"]
-                  };
-                }
-              )
+          [`${this.type}_race`]: {
+            [`${this.type}_raceinfo`]: {},
+            [`${this.type}_classified`]: {
+              [`${this.type}_ranked`]: [
+                ...this.competition.competitorsSheet.competitors.map(
+                  _competitor => {
+                    return {
+                      _attributes: { status: "QLF" },
+                      Rank: "",
+                      Bib: _competitor.info_data["bib"],
+                      Competitor: {
+                        Fiscode: _competitor.info_data["fiscode"] || "",
+                        Lastname: _competitor.info_data["surname"] || "",
+                        Firstname: _competitor.info_data["name"] || "",
+                        Sex: _competitor.info_data["gender"] || "",
+                        Nation: _competitor.info_data["nation"] || "",
+                        Yearofbirth: _competitor.info_data["year"] || ""
+                      },
+                      [`${this.type}_result`]: {
+                        TotalScore: "0.0"
+                      }
+                    };
+                  }
+                )
+              ]
             }
           }
         }
