@@ -277,7 +277,6 @@ export default {
           _res.value = res.value;
           _res.repeat = res.repeat;
         }
-        console.log(competitor);
         return competitor.results;
       }
       protocol_fields = [];
@@ -295,7 +294,7 @@ export default {
       };
       result_formula = {
         overall_result: {
-          type: 3,
+          type: 1,
           select_heats: {
             heats: 0,
             mode: 0,

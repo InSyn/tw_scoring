@@ -712,16 +712,12 @@ export default {
       competition: "competition",
       competitions: "competitions",
       appTheme: "appTheme",
-      stageGrid: "stageGrid"
+      stageGrid: "stageGrid",
+      flatGrid: "flatGrid"
     }),
     ...mapGetters("protocol_settings", {
       results_protocol: "results_protocol"
     }),
-    flatGrid() {
-      return [].concat(
-        ...this.stageGrid.map(stage => [stage.title, ...stage.s_competitors])
-      );
-    },
     date_now() {
       const date = new Date()
         .toLocaleString("ru", {

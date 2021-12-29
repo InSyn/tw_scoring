@@ -210,6 +210,11 @@ export default {
               return _stage;
             })
         : [];
+    },
+    flatGrid: (state, getters) => {
+      return [].concat(
+        ...getters.stageGrid.map(stage => [stage.title, ...stage.s_competitors])
+      );
     }
   },
   mutations: {
@@ -424,7 +429,6 @@ export default {
       await require("fs").writeFile("./test.xml", xml, () => {
         console.log("ok");
       });
-      console.log(object);
       console.log(xml);
     }
     // updateEvent: state => {

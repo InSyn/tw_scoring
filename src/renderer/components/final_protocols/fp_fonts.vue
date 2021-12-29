@@ -67,12 +67,14 @@ export default {
       competitions: "competitions",
       stageGrid: "stageGrid"
     }),
-    flatGrid() {
-      return [].concat(
-        ...this.stageGrid.map(stage => [stage.title, ...stage.s_competitors])
-      );
-    },
     objectToXML() {
+      console.log("<!--");
+      console.log(
+        this.$store.getters["main/flatGrid"].filter(
+          val => val.type === "competitorResult"
+        )
+      );
+      console.log("--!>");
       const date = {
         day: this.competition.mainData.date.value.split("-")[2],
         month: this.competition.mainData.date.value.split("-")[1],
@@ -108,26 +110,31 @@ export default {
             [`${this.type}_raceinfo`]: {},
             [`${this.type}_classified`]: {
               [`${this.type}_ranked`]: [
-                ...this.competition.competitorsSheet.competitors.map(
-                  _competitor => {
+                ...this.$store.getters["main/flatGrid"]
+                  .filter(val => val.type === "competitorResult")
+                  .map(_competitor => {
                     return {
                       _attributes: { status: "QLF" },
-                      Rank: "",
-                      Bib: _competitor.info_data["bib"],
+                      Rank: _competitor.s_rank,
+                      Bib: _competitor.competitor.info_data["bib"],
                       Competitor: {
-                        Fiscode: _competitor.info_data["fiscode"] || "",
-                        Lastname: _competitor.info_data["surname"] || "",
-                        Firstname: _competitor.info_data["name"] || "",
-                        Sex: _competitor.info_data["gender"] || "",
-                        Nation: _competitor.info_data["nation"] || "",
-                        Yearofbirth: _competitor.info_data["year"] || ""
+                        Fiscode:
+                          _competitor.competitor.info_data["fiscode"] || "",
+                        Lastname:
+                          _competitor.competitor.info_data["surname"] || "",
+                        Firstname:
+                          _competitor.competitor.info_data["name"] || "",
+                        Sex: this.competition.mainData.title.stage.group,
+                        Nation:
+                          _competitor.competitor.info_data["nation"] || "",
+                        Yearofbirth:
+                          _competitor.competitor.info_data["year"] || ""
                       },
                       [`${this.type}_result`]: {
-                        TotalScore: "0.0"
+                        TotalScore: _competitor.result
                       }
                     };
-                  }
-                )
+                  })
               ]
             }
           }
