@@ -104,7 +104,6 @@ export default {
   },
   getters: {
     results_protocol: state => state.results_protocol,
-    testResults: state => state.testResults,
     fieldClass: state => state.fieldClass
   },
   mutations: {
@@ -113,6 +112,8 @@ export default {
     },
     initStartProtocolFields: (state, data) => {
       const result_fields = [];
+
+      //add start number
       result_fields.push(
         new data.fieldClass(
           6,
@@ -133,6 +134,8 @@ export default {
           }
         )
       );
+
+      //add competitors table headers
       data.competition.competitorsSheet.header.forEach(_header => {
         result_fields.push(
           new data.fieldClass(
@@ -152,6 +155,8 @@ export default {
     },
     initResultProtocolFields: (state, data) => {
       const result_fields = [];
+
+      //add rank
       result_fields.push(
         new data.fieldClass(
           6,
@@ -168,6 +173,8 @@ export default {
           }
         )
       );
+
+      //add competitors table headers
       data.competition.competitorsSheet.header.forEach(_header => {
         result_fields.push(
           new data.fieldClass(
@@ -183,6 +190,8 @@ export default {
           )
         );
       });
+
+      //add race number
       result_fields.push(
         new data.fieldClass(
           8,
@@ -208,6 +217,8 @@ export default {
           }
         )
       );
+
+      //add judges scores
       data.competition.stuff.judges.forEach((judge, j_idx) => {
         result_fields.push(
           new data.fieldClass(
@@ -231,6 +242,8 @@ export default {
           )
         );
       });
+
+      //add races scores
       result_fields.push(
         new data.fieldClass(
           6,
@@ -264,6 +277,8 @@ export default {
           }
         )
       );
+
+      //add overall result
       result_fields.push(
         new data.fieldClass(
           8,
@@ -285,6 +300,7 @@ export default {
           }
         )
       );
+
       data.competition.protocol_settings.result_protocols.fields = result_fields;
     }
   }
