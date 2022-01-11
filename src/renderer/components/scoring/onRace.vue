@@ -324,6 +324,7 @@
                             competition.selected_race &&
                             competition.selected_race.onTrack &&
                             competition.stuff.judges"
+                          :key="judge._id"
                         >
                           <div>
                             <span style="font-weight: bold;">{{
@@ -419,6 +420,7 @@
               <div
                 class="flex-column align-center px-2"
                 v-for="(judge, j) in competition.stuff.judges"
+                :key="judge._id"
               >
                 <div
                   class="d-flex justify-center align-center"
