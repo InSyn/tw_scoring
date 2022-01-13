@@ -120,11 +120,20 @@ let competition = {
 io.on("connection", socket => {
   socket.emit("serverConnected");
   console.log(`Connected ${socket.id}`);
+
   mainWindow &&
     mainWindow.webContents.send("server_message", [
       3,
       `Connected ${socket.id}`
     ]);
+
+  socket.on("checkSockets", () => {
+    let sockets = [];
+    io.sockets.sockets.forEach(socket => {
+      console.log(sockets.push(socket.id));
+    });
+    socket.emit("sockets_checked", sockets);
+  });
   socket.on("checkServer", () => {
     socket.emit("checkOk", true);
   });

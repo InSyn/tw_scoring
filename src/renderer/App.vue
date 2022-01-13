@@ -652,7 +652,8 @@ export default {
       if (map["Alt"] && map["t"]) {
         this.$store.commit("main/toggle_mode");
       }
-    }; //shortcuts handler
+    };
+    //shortcuts handler
   },
   methods: {
     ...mapActions("main", [

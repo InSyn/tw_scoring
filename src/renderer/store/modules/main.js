@@ -1,5 +1,6 @@
 import io from "socket.io-client";
 import fs from "fs";
+
 export default {
   namespaced: true,
   state: {
@@ -9,6 +10,7 @@ export default {
       port: "3000"
     },
     socket: null,
+    opened_sockets: [],
     competition: null,
     competitions: [],
     showPreview: false,
@@ -82,6 +84,7 @@ export default {
     mode_timing: state => state.mode_timing,
     server_config: state => state.server_config,
     socket: state => state.socket,
+    opened_sockets: state => state.opened_sockets,
     serverMessages: state => state.serverMessages,
     showMenu: state => state.showMenu,
     competitions: state => state.competitions,
@@ -251,6 +254,12 @@ export default {
 
         state.socket.on("serverConnected", () => {
           state.serverStatus = true;
+        });
+        state.socket.on("sockets_checked", sockets => {
+          state.opened_sockets = [];
+          sockets.forEach(socket => {
+            state.opened_sockets.push(socket);
+          });
         });
         state.socket.on("chat_message", message => {
           state.messages.push(message);

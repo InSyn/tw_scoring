@@ -67,6 +67,13 @@
             icon
             ><v-icon>mdi-refresh</v-icon></v-btn
           >
+          <!--          sockets checker-->
+          <!--          <v-btn-->
+          <!--            @click="check_sockets()"-->
+          <!--            :color="$vuetify.theme.themes[appTheme].action_blue"-->
+          <!--            icon-->
+          <!--            ><v-icon>mdi-lan</v-icon></v-btn-->
+          <!--          >-->
         </div>
         <div class="d-flex align-center">
           <div class="d-flex align-center font-weight-bold">
@@ -111,6 +118,16 @@
           v-html="serverMessages[m][1]"
         ></v-row>
       </div>
+      <!--      <div style="display:flex;align-items: center;flex-wrap: wrap">-->
+      <!--        <div-->
+      <!--          v-for="socket in $store.getters['main/opened_sockets']"-->
+      <!--          :key="socket"-->
+      <!--          style="display:flex;flex-direction: column; font-size: .8rem;padding: 2px 4px"-->
+      <!--        >-->
+      <!--          <div>socket_id:</div>-->
+      <!--          <div>{{ socket }}</div>-->
+      <!--        </div>-->
+      <!--      </div>-->
     </div>
   </div>
 </template>
@@ -161,6 +178,9 @@ export default {
             console.log(res);
           }
         );
+    },
+    async check_sockets() {
+      this.socket && this.socket.connected && this.socket.emit("checkSockets");
     }
   },
   data() {
