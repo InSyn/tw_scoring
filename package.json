@@ -44,7 +44,18 @@
       "icon": "build/icons/icon.icns"
     },
     "win": {
+      "target": [
+        "nsis"
+      ],
       "icon": "build/icons/icon.ico"
+    },
+    "nsis": {
+      "installerIcon": "build/icons/icon.ico",
+      "uninstallerIcon": "build/icons/icon.ico",
+      "uninstallDisplayName": "TW Display App",
+      "oneClick": false,
+      "perMachine": true,
+      "allowToChangeInstallationDirectory": true
     },
     "linux": {
       "icon": "build/icons"
