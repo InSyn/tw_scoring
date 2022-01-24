@@ -585,7 +585,7 @@ import logos from "./fp_logos";
 export default {
   name: "preview",
   mounted() {
-    this.results.push(this.flatGrid);
+    this.results.push([...this.flatGrid]);
     this.results[this.results.length - 1].unshift({ type: "sheetHeader" });
     if (this.results_protocol.print_header)
       this.results[this.results.length - 1].push({ type: "officialsData" });
