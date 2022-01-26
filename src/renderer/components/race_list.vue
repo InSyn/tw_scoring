@@ -696,20 +696,37 @@
             >
           </div>
         </div>
-        <div class="race_menu pt-1" style="flex: 0 0 auto">
+        <div
+          class="race_menu pt-1"
+          style="display:flex;flex-wrap: nowrap;flex: 0 0 auto"
+        >
           <v-btn
-            @click="
-              (competition.races[race_menu.selected].startList = shuffle(
-                competition.races[race_menu.selected].startList
-              )),
-                (competition.races[race_menu.selected]._startList = shuffle(
-                  competition.races[race_menu.selected]._startList
-                ))
-            "
+            @click="shuffle(race_menu.selected)"
             text
             :color="$vuetify.theme.themes[appTheme].accent"
             >Перемешать</v-btn
           >
+
+          <v-btn
+            @click="arrangeByResults(race_menu.selected)"
+            text
+            :color="$vuetify.theme.themes[appTheme].accent"
+            >Ранжировать по рез-ту</v-btn
+          >
+          <v-btn
+            @click="turnAround(race_menu.selected)"
+            text
+            :color="$vuetify.theme.themes[appTheme].accent"
+            >Перевернуть</v-btn
+          >
+          <v-btn
+            @click="listUndo(race_menu.selected)"
+            :disabled="listPrev.length < 1"
+            icon
+            style="margin-left: auto"
+            :color="$vuetify.theme.themes[appTheme].action_red"
+            ><v-icon>mdi-undo</v-icon>
+          </v-btn>
         </div>
       </div>
     </v-container></v-container
@@ -844,7 +861,7 @@ export default {
       this.socket &&
         this.socket.connected &&
         this.socket.emit("set_competition_data", this.competition, res => {
-          console.log(res);
+          return res;
         });
     },
     addAll() {
@@ -854,7 +871,11 @@ export default {
           this.dialogs.create_race.competitors.push(list[i]);
       }
     },
-    shuffle(list) {
+    shuffle(race) {
+      if (this.competition.races[race].startList.length > 0)
+        this.listPrev.push([...this.competition.races[race].startList]);
+
+      let list = this.competition.races[race].startList;
       let m = list.length,
         t,
         i;
@@ -867,6 +888,9 @@ export default {
         // list[m] = list[i];
         // list[i] = t;
       }
+
+      this.competition.races[race].startList = list;
+
       this.competition.races.find(
         _race => _race.id === this.competition.selected_race.id
       )
@@ -884,9 +908,111 @@ export default {
       this.socket &&
         this.socket.connected &&
         this.socket.emit("set_competition_data", this.competition, res => {
-          console.log(res);
+          return res;
         });
       return list;
+    },
+    turnAround(race) {
+      if (this.competition.races[race].startList.length > 0)
+        this.listPrev.push([...this.competition.races[race].startList]);
+
+      this.competition.races[race].startList = [
+        ...this.competition.races[race].startList.reverse()
+      ];
+
+      this.competition.races.find(
+        _race => _race.id === this.competition.selected_race.id
+      )
+        ? this.competition.races.find(
+            _race => _race.id === this.competition.selected_race.id
+          ).startList[0]
+          ? (this.competition.races.find(
+              _race => _race.id === this.competition.selected_race.id
+            ).selectedCompetitor = this.competition.races.find(
+              _race => _race.id === this.competition.selected_race.id
+            ).startList[0])
+          : null
+        : null;
+
+      this.socket &&
+        this.socket.connected &&
+        this.socket.emit("set_competition_data", this.competition, res => {
+          return res;
+        });
+
+      return this.competition.races[race].startList;
+    },
+    arrangeByResults(race) {
+      if (this.competition.races[race].startList.length > 0)
+        this.listPrev.push([...this.competition.races[race].startList]);
+
+      let resList = this.competition.races[race].startList.map(_comp => {
+        const comp = this.competition.competitorsSheet.competitors.find(
+          comp => comp.id === _comp
+        );
+        return {
+          id: comp.id,
+          res: comp.results_overall[comp.results_overall.length - 1]
+        };
+      });
+      this.competition.races[race].startList = [
+        ...resList
+          .sort((a, b) => {
+            return b.res.value - a.res.value;
+          })
+          .map(_comp => _comp.id)
+      ];
+
+      this.competition.races.find(
+        _race => _race.id === this.competition.selected_race.id
+      )
+        ? this.competition.races.find(
+            _race => _race.id === this.competition.selected_race.id
+          ).startList[0]
+          ? (this.competition.races.find(
+              _race => _race.id === this.competition.selected_race.id
+            ).selectedCompetitor = this.competition.races.find(
+              _race => _race.id === this.competition.selected_race.id
+            ).startList[0])
+          : null
+        : null;
+
+      this.socket &&
+        this.socket.connected &&
+        this.socket.emit("set_competition_data", this.competition, res => {
+          return res;
+        });
+
+      return this.competition.races[race].startList;
+    },
+    listUndo(race) {
+      this.competition.races[race].startList = [
+        ...this.listPrev[this.listPrev.length - 1]
+      ];
+      this.listPrev.length > 0 &&
+        this.listPrev.splice(this.listPrev.length - 1, 1);
+
+      this.competition.races.find(
+        _race => _race.id === this.competition.selected_race.id
+      )
+        ? this.competition.races.find(
+            _race => _race.id === this.competition.selected_race.id
+          ).startList[0]
+          ? (this.competition.races.find(
+              _race => _race.id === this.competition.selected_race.id
+            ).selectedCompetitor = this.competition.races.find(
+              _race => _race.id === this.competition.selected_race.id
+            ).startList[0])
+          : null
+        : null;
+
+      this.socket &&
+        this.socket.connected &&
+        this.socket.emit("set_competition_data", this.competition, res => {
+          return res;
+        });
+
+      return this.competition.races[race].startList;
     },
     closeRaceDialog() {
       this.dialogs.create_race.competitors = [];
@@ -912,7 +1038,8 @@ export default {
           title: "",
           competitors: []
         }
-      }
+      },
+      listPrev: []
     };
   },
   computed: {

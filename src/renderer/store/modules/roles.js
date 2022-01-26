@@ -12,6 +12,7 @@ export default {
         });
         this.marks = marks || [];
         this.results = [];
+        this.results_overall = [];
       }
       info_dialog = { state: false };
       race_status = null;

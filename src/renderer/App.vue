@@ -754,15 +754,21 @@ export default {
       for (let $check in this.create_competition_dialog.checks)
         if (this.create_competition_dialog.checks[$check].state)
           this.create_competition_dialog.checks[$check].check();
+
       this.$store.commit(
         "main/createCompetition",
         new this.EventClass(...this.create_competition_dialog.data)
       );
+
       this.create_competition_dialog.data.forEach(_field => {
         if (_field.id === "judges" || _field.id === "competitors")
           _field[_field.id] = [];
       });
+
       this.create_competition_dialog.state = false;
+
+      if (this.$route.name !== "competition_settings")
+        this.$router.push("/competition_settings");
     },
     select_competition(e, competition) {
       this.$store.commit("main/setCompetition", competition);

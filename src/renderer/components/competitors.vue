@@ -712,16 +712,27 @@ export default {
             .map(_comp =>
               this.competitions.find(_competition => _competition.id === _comp)
             )
-            .map(_stage =>
-              JSON.parse(JSON.stringify(_stage.passedCompetitors)).map(
-                _competitor => {
-                  _competitor.rank = null;
-                  _competitor.marks = [];
-                  _competitor.race_status = null;
-                  return _competitor;
-                }
-              )
-            )
+            .map(_stage => {
+              let _competitors = JSON.parse(
+                JSON.stringify(_stage.passedCompetitors)
+              );
+              _competitors.map(_competitor => {
+                _competitor.rank = null;
+                _competitor.results_overall.push({
+                  id_comp: _stage.id,
+                  value: _stage.result_formula.overall_result.types
+                    .find(
+                      _f => _f.id === _stage.result_formula.overall_result.type
+                    )
+                    .result(_competitor.id)
+                });
+                _competitor.marks = [];
+                _competitor.race_status = null;
+
+                return _competitor;
+              });
+              return _competitors;
+            })
         );
       this.competition.competitorsSheet.competitors = [];
       compArr.forEach(arr =>
