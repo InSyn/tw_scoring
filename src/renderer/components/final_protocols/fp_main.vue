@@ -465,6 +465,22 @@
           <v-checkbox
             hide-details
             class="pa-0 ma-0"
+            id="print_weather"
+            v-model="results_protocol.print_weather"
+            :color="$vuetify.theme.themes[appTheme].textDefault"
+          ></v-checkbox>
+          <label
+            :for="`print_weather`"
+            class="font-weight-bold"
+            style="cursor:pointer;"
+            :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
+            >Печатать погодные условия</label
+          >
+        </div>
+        <div class="d-flex flex-nowrap align-center py-1">
+          <v-checkbox
+            hide-details
+            class="pa-0 ma-0"
             id="print_notations"
             v-model="results_protocol.print_notations"
             :color="$vuetify.theme.themes[appTheme].textDefault"
@@ -676,8 +692,11 @@ export default {
     };
   },
   computed: {
-    ...mapGetters("main", ["competition", "appTheme"]),
-    ...mapGetters("protocol_settings", ["results_protocol", "fieldClass"]),
+    ...mapGetters("main", { competition: "competition", appTheme: "appTheme" }),
+    ...mapGetters("protocol_settings", {
+      results_protocol: "results_protocol",
+      fieldClass: "fieldClass"
+    }),
     console: () => console,
     sum_width() {
       let sum = 0,

@@ -11,11 +11,12 @@ export default {
       use_grid: false,
       use_string_light: true,
       print_header: true,
+      print_weather: true,
       print_notations: true,
       strings_at_page: 6,
       font_size: 12,
       notations:
-        "<b>Данные о погоде</b>:<br><b>Квалификация</b>: Ясно &nbsp<b>Температура снега</b>: -1°C / 30°F &nbsp<b>Температура воздуха</b>: -2°C / 28°F<br><b>Финал</b>: Ясно &nbsp<b>Температура снега</b>: -3°C / 26°F &nbsp<b>Температура воздуха</b>: -5°C / 22°F",
+        "<b>Легенда</b>:<br><b>DNS</b>: Did Not Start &nbsp <b>DSQ</b>: Disqualified &nbsp <b>DNF</b>: Did Not Finish",
       signs: {
         left: {
           text: "",

@@ -582,6 +582,7 @@ import { mapGetters } from "vuex";
 import html2pdf from "html2pdf.js";
 import logos from "./sp_logos";
 import startList from "../scoring/startList";
+
 export default {
   name: "preview",
   mounted() {

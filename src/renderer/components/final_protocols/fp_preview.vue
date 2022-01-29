@@ -243,7 +243,7 @@
                 v-for="(gridRow, c_idx) in page"
                 :key="c_idx"
                 :class="`result_${c_idx}-page_${p_idx}`"
-                style="display: flex; flex-wrap: nowrap; flex-shrink: 0; padding: 0;margin: 0;font-weight:bold"
+                style="display: flex; flex-wrap: nowrap; flex-shrink: 0; padding: 0;margin: 0"
                 :style="[
                   results_protocol.use_string_light &&
                     c_idx % 2 !== 0 && {
@@ -256,6 +256,9 @@
                     borderRight: '1px solid #212121',
                     borderBottom: '1px solid #212121',
                     borderLeft: '1px solid #212121'
+                  },
+                  gridRow.type === 'raceNotes' && {
+                    marginTop: 'auto'
                   }
                 ]"
               >
@@ -357,7 +360,7 @@
                   style="flex: 0 0 auto; width: 100%;background-color: #ffffff"
                 >
                   <div
-                    style="width: 100%;margin-top: 1rem; display:flex;flex-wrap: nowrap"
+                    style="width: 100%;padding-top: 1rem; display:flex;flex-wrap: nowrap"
                   >
                     <!-- JUDGES -->
 
@@ -458,19 +461,50 @@
 
                 <!-- NOTES -->
                 <div
+                  v-if="gridRow.type && gridRow.type === 'weatherData'"
+                  ref="weatherData"
+                  class="weatherData"
+                  style="flex:0 0 auto;width: 100%;background-color: #ffffff; padding: .5rem 0"
+                >
+                  <div
+                    style="display:flex;flex-wrap: wrap;width: 100%;border: 1px solid #000000; padding: 2px 4px;"
+                  >
+                    <div style="width: 100%;font-weight:bold;">
+                      Погодные условия
+                    </div>
+                    <div
+                      v-for="wData in competition.weather"
+                      style="min-width: 25%;max-width: 50%;display:flex;flex-wrap: nowrap;align-items: center;padding-right: 1rem;margin-right: auto"
+                    >
+                      <div
+                        style="font-weight: bold"
+                        v-html="wData.descr1"
+                      ></div>
+                      <div
+                        style="margin-left: .5rem;display:flex;flex-wrap: nowrap"
+                        v-html="wData.descr2"
+                      >
+                        {{ wData.descr2 }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- //NOTES -->
+
+                <!-- WEATHER -->
+                <div
                   v-if="gridRow.type && gridRow.type === 'raceNotes'"
                   ref="raceNotes"
                   class="notes"
-                  style="flex:0 0 auto;width: 100%;background-color: #ffffff"
+                  style="flex:0 0 auto;width: 100%;background-color: #ffffff;padding: .5rem 0"
                 >
                   <div
-                    style="border: 1px solid black; padding: 2px 4px; margin-top: 1rem"
+                    style="border: 1px solid black; padding: 2px 4px"
                     v-html="results_protocol.notations"
                   ></div>
                 </div>
-                <!-- //NOTES -->
+                <!-- //WEATHER -->
               </div>
-
               <!-- //Competitors -->
             </div>
           </div>
@@ -589,6 +623,8 @@ export default {
     this.results[this.results.length - 1].unshift({ type: "sheetHeader" });
     if (this.results_protocol.print_header)
       this.results[this.results.length - 1].push({ type: "officialsData" });
+    if (this.results_protocol.print_weather)
+      this.results[this.results.length - 1].push({ type: "weatherData" });
     if (this.results_protocol.print_notations)
       this.results[this.results.length - 1].push({ type: "raceNotes" });
     this.$nextTick(() => {
