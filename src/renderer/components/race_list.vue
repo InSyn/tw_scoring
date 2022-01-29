@@ -953,6 +953,8 @@ export default {
         return {
           id: comp.id,
           res: comp.results_overall[comp.results_overall.length - 1]
+            ? comp.results_overall[comp.results_overall.length - 1]
+            : { id_comp: 0, value: 0 }
         };
       });
       this.competition.races[race].startList = [

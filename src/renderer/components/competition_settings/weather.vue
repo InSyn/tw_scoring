@@ -13,16 +13,12 @@
       <v-btn
         text
         :color="$vuetify.theme.themes[appTheme].accent"
-        @click="competition.weather.push('')"
+        @click="addWeather()"
         >добавить</v-btn
       >
     </div>
-    <v-row no-gutters>
-      <v-col
-        class="d-flex align-center px-2 py-1"
-        v-for="(w_row, i) in competition.weather"
-        :key="i"
-        cols="6"
+    <v-row v-for="(w_row, i) in competition.weather" :key="i" no-gutters>
+      <v-col class="d-flex align-center px-2 py-1" cols="6"
         ><input
           @blur="
             $event.target.style.backgroundColor =
@@ -40,15 +36,33 @@
             color: $vuetify.theme.themes[appTheme].textDefault
           }"
           type="text"
-          v-model="competition.weather[i]"
-        />
-        <v-icon
-          small
-          style="margin-left: -24px"
-          @click="competition.weather.splice(i, 1)"
-          color="red"
-          >mdi-close</v-icon
-        ></v-col
+          v-model="competition.weather[i].descr1"/></v-col
+      ><v-col class="d-flex align-center px-2 py-1" cols="6"
+        ><input
+          @blur="
+            $event.target.style.backgroundColor =
+              $vuetify.theme.themes[appTheme].standardBackgroundRGBA
+          "
+          @focus="
+            $event.target.style.backgroundColor =
+              $vuetify.theme.themes[appTheme].subjectBackgroundRGBA
+          "
+          class="pa-1"
+          style="width: 100%; border-radius: 6px; transition: background-color 112ms"
+          :style="{
+            backgroundColor:
+              $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
+            color: $vuetify.theme.themes[appTheme].textDefault
+          }"
+          type="text"
+          v-model="competition.weather[i].descr2"
+        /> </v-col
+      ><v-icon
+        small
+        style="margin-left: -24px"
+        @click="removeWeather(i)"
+        color="red"
+        >mdi-close</v-icon
       >
     </v-row>
   </div>
@@ -58,8 +72,16 @@
 import { mapGetters } from "vuex";
 export default {
   name: "weather",
+  methods: {
+    addWeather() {
+      this.competition.weather.push({ descr1: "", descr2: "" });
+    },
+    removeWeather(idx) {
+      this.competition.weather.splice(idx, 1);
+    }
+  },
   computed: {
-    ...mapGetters("main", ["appTheme", "competition"])
+    ...mapGetters("main", { appTheme: "appTheme", competition: "competition" })
   }
 };
 </script>
