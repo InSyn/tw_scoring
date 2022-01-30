@@ -137,8 +137,8 @@ import { mapGetters } from "vuex";
 export default {
   name: "openers",
   computed: {
-    ...mapGetters("main", ["competition", "appTheme"]),
-    ...mapGetters("roles", ["OpenerClass"])
+    ...mapGetters("main", { competition: "competition", appTheme: "appTheme" }),
+    ...mapGetters("roles", { OpenerClass: "OpenerClass" })
   }
 };
 </script>

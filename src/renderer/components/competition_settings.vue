@@ -80,9 +80,8 @@
       </v-col>
     </v-row>
     <v-row style="margin: 16px 16px" no-gutters
-      ><v-col cols="12"> <openers></openers> </v-col></v-row
-    ><v-row style="margin: 16px 16px" no-gutters
-      ><v-col cols="12"> <weather></weather> </v-col
+      ><v-col cols="6"> <openers style="margin-right: 4px "></openers> </v-col
+      ><v-col cols="6"> <weather style="margin-left: 4px "></weather> </v-col
     ></v-row>
   </v-container>
 </template>

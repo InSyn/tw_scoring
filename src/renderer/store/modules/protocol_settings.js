@@ -63,7 +63,6 @@ export default {
         this.id = Math.random()
           .toString(36)
           .substr(2, 9);
-        this.select_dialog = false;
         this.params.width = width || 10;
         this.params.font = font || 12;
         this.params.align = align || { title: "Слева", value: "start" };
@@ -84,6 +83,7 @@ export default {
       }
       params = {
         cell_1: {
+          select_dialog: false,
           id: null,
           title: null,
           handler: function() {
@@ -91,6 +91,7 @@ export default {
           }
         },
         cell_2: {
+          select_dialog: false,
           id: null,
           title: null,
           handler: function() {

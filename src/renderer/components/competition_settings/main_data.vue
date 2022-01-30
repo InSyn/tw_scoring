@@ -293,7 +293,11 @@ export default {
     };
   },
   computed: {
-    ...mapGetters("main", ["appTheme", "competition", "socket"])
+    ...mapGetters("main", {
+      appTheme: "appTheme",
+      competition: "competition",
+      socket: "socket"
+    })
   }
 };
 </script>

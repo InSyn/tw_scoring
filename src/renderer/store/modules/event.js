@@ -37,15 +37,15 @@ export default {
       weather = [
         {
           descr1: "Температура Снега:",
-          descr2: "-2°"
+          descr2: "-"
         },
         {
           descr1: "Температура Воздуха:",
-          descr2: "-15°"
+          descr2: "-"
         },
         {
           descr1: "Скорость ветра:",
-          descr2: "6 м/с°"
+          descr2: "-"
         }
       ];
       structure = {

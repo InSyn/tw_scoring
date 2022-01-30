@@ -18,7 +18,7 @@
       >
     </div>
     <v-row v-for="(w_row, i) in competition.weather" :key="i" no-gutters>
-      <v-col class="d-flex align-center px-2 py-1" cols="6"
+      <v-col class="d-flex align-center px-2 py-1" cols="5"
         ><input
           @blur="
             $event.target.style.backgroundColor =
@@ -57,12 +57,10 @@
           type="text"
           v-model="competition.weather[i].descr2"
         /> </v-col
-      ><v-icon
-        small
-        style="margin-left: -24px"
-        @click="removeWeather(i)"
-        color="red"
-        >mdi-close</v-icon
+      ><v-col cols="1" style="display:flex;align-items: center"
+        ><v-btn small icon @click="removeWeather(i)" color="red"
+          ><v-icon small>mdi-minus</v-icon></v-btn
+        ></v-col
       >
     </v-row>
   </div>

@@ -227,7 +227,7 @@
               >
                 <v-dialog
                   v-if="p_key.split('_')[0] === 'cell'"
-                  v-model="field.select_dialog"
+                  v-model="f_prop.select_dialog"
                   width="500"
                 >
                   <template
@@ -242,50 +242,78 @@
                       {{ `${field.params[p_key].title || "пусто"}` }}
                     </div></template
                   ><v-card
-                    style="padding: 16px"
                     :style="{
                       color: $vuetify.theme.themes[appTheme].textDefault,
                       backgroundColor:
                         $vuetify.theme.themes[appTheme].cardBackgroundRGBA
                     }"
-                    ><div
-                      style="display:flex;flex-wrap: nowrap; align-items: flex-end; padding: 4px"
-                    >
-                      <div
-                        style="display:flex;align-items: center;flex-wrap: nowrap; padding: 4px 8px; font-weight:bold;position:relative;"
-                      >
-                        <div
-                          style="display: flex; flex-wrap: nowrap; position: absolute;top: -50%;left: 1rem;font-size: 0.875rem"
-                        >
-                          Текущая ячейка
-                        </div>
-                        <div>{{ `id: ${f_prop.id}` }}</div>
-                        <div>{{ `title: ${f_prop.title}` }}</div>
-                      </div>
-                      <v-btn
-                        @click="field.select_dialog = false"
+                    ><v-card-title style="padding: 8px 16px"
+                      >Настройка второй ячейки<v-btn
+                        @click="f_prop.select_dialog = false"
                         style="margin-left: auto"
                         icon
                         ><v-icon color="red">mdi-close</v-icon></v-btn
+                      ></v-card-title
+                    >
+                    <div style="display:flex;flex-wrap: wrap;padding: 0 16px">
+                      <div style="width: 100%;">
+                        Текущее значение
+                        <v-btn
+                          @click="clearField(f_prop)"
+                          text
+                          small
+                          :color="$vuetify.theme.themes[appTheme].accent"
+                          style="margin-left: 1rem"
+                          >очистить</v-btn
+                        >
+                      </div>
+
+                      <div
+                        v-if="f_prop.id"
+                        style="width: 100%;display: flex;font-weight: bold"
                       >
+                        <div>{{ `ID: ${f_prop.id}` }}</div>
+                        <div style="margin-left: 1rem">
+                          {{ `Title: ${f_prop.title}` }}
+                        </div>
+                      </div>
+                      <div v-else>Ячейка пуста</div>
                     </div>
                     <div
-                      style="display:flex;flex-direction: column; align-items: flex-start; max-height: 600px; overflow-y: auto"
+                      style="display:flex;flex-wrap: wrap; max-height: 600px; padding: 8px 16px; overflow-y: auto"
                     >
                       <div
                         v-for="(standard_header, sh_idx) in competition
                           .protocol_settings.result_protocols.fields"
                         :key="sh_idx"
-                        @click="setField(field, standard_header)"
-                        style="flex-shrink: 0; padding: 4px; margin: 2px; cursor: pointer"
+                        @click="setField(f_prop, standard_header)"
+                        style="display:flex;flex-wrap: nowrap;flex: 0 0 auto; width: 12rem; margin: 0 .5rem .5rem 0; cursor: pointer"
                         :style="{
                           backgroundColor:
                             $vuetify.theme.themes[appTheme].accent
                         }"
                       >
-                        {{
-                          `${standard_header.params.cell_1.id}: ${standard_header.params.cell_1.title}`
-                        }}
+                        <div
+                          style="flex: 0 0 auto;font-weight:bold;padding: 4px .5rem"
+                          :style="{
+                            backgroundColor:
+                              $vuetify.theme.themes[appTheme].accent,
+                            color: $vuetify.theme.themes[appTheme].textDefault
+                          }"
+                        >
+                          {{ `${standard_header.params.cell_1.id}:` }}
+                        </div>
+                        <div
+                          style="flex: 1 0 auto;padding: 4px .5rem"
+                          :style="{
+                            backgroundColor:
+                              $vuetify.theme.themes[appTheme].textDefault,
+                            color:
+                              $vuetify.theme.themes[appTheme].cardBackgroundRGBA
+                          }"
+                        >
+                          {{ `${standard_header.params.cell_1.title}` }}
+                        </div>
                       </div>
                     </div>
                   </v-card></v-dialog
@@ -596,7 +624,9 @@ export default {
       else this.selected_fields.push(field_id);
     },
     setField(field, header) {
-      field.params.cell_2 = header.params.cell_1;
+      field.id = header.params.cell_1.id;
+      field.title = header.params.cell_1.title;
+      field.handler = header.params.cell_1.handler;
     },
     remove_fields() {
       this.competition.protocol_settings.result_protocols.fields = this.competition.protocol_settings.result_protocols.fields.filter(
@@ -665,6 +695,15 @@ export default {
           );
         }
       }
+    },
+    clearField(field) {
+      field.id = null;
+      field.title = null;
+      field.handler = function() {
+        return 0;
+      };
+
+      return field;
     }
   },
   data() {

@@ -633,7 +633,6 @@ export default {
         let sumHeight = 0;
         let containerHeight = this.$refs["pdf_table_container"][0].offsetHeight;
         this.results[0].forEach(gridRow => {
-          // this.protDebug({ gridRow, sumHeight, containerHeight });
           if (
             sumHeight + this.$refs[gridRow.type][0].offsetHeight <
             containerHeight
@@ -655,6 +654,7 @@ export default {
             ].push(gridRow);
             sumHeight += this.$refs[gridRow.type][0].offsetHeight;
           }
+          // this.protDebug({ gridRow, sumHeight, containerHeight });
         });
         this.results = this.paginated_results;
       }, 0);
@@ -721,7 +721,7 @@ export default {
       }
     },
     protDebug(data) {
-      console.log(`<------------------------------>`);
+      console.log(`<-----`);
       console.log(this.$refs["pdf_table_container"]);
       console.log(
         this.$refs["pdf_table_container"][
@@ -740,7 +740,7 @@ export default {
         data.sumHeight + this.$refs[data.gridRow.type][0].offsetHeight
       );
       console.log(data.containerHeight);
-      console.log(`<------------------------------>`);
+      console.log(`----->`);
     }
   },
   computed: {
