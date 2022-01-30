@@ -287,14 +287,14 @@
                           .protocol_settings.result_protocols.fields"
                         :key="sh_idx"
                         @click="setField(f_prop, standard_header)"
-                        style="display:flex;flex-wrap: nowrap;flex: 0 0 auto; width: 12rem; margin: 0 .5rem .5rem 0; cursor: pointer"
+                        style="display:flex;flex-wrap: nowrap;flex: 0 0 auto; width: 18rem; margin: 0 .5rem .5rem 0; cursor: pointer"
                         :style="{
                           backgroundColor:
                             $vuetify.theme.themes[appTheme].accent
                         }"
                       >
                         <div
-                          style="flex: 0 0 auto;font-weight:bold;padding: 4px .5rem"
+                          style="flex: 0 0 auto;width: 8rem;font-weight:bold;padding: 4px .5rem"
                           :style="{
                             backgroundColor:
                               $vuetify.theme.themes[appTheme].accent,
