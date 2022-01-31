@@ -890,55 +890,23 @@ export default {
       }
 
       this.competition.races[race].startList = list;
+      this.competition.races[race]._startList = list;
 
-      this.competition.races.find(
-        _race => _race.id === this.competition.selected_race.id
-      )
-        ? this.competition.races.find(
-            _race => _race.id === this.competition.selected_race.id
-          ).startList[0]
-          ? (this.competition.races.find(
-              _race => _race.id === this.competition.selected_race.id
-            ).selectedCompetitor = this.competition.races.find(
-              _race => _race.id === this.competition.selected_race.id
-            ).startList[0])
-          : null
-        : null;
+      this.refreshStartList(race);
 
-      this.socket &&
-        this.socket.connected &&
-        this.socket.emit("set_competition_data", this.competition, res => {
-          return res;
-        });
       return list;
     },
     turnAround(race) {
       if (this.competition.races[race].startList.length > 0)
         this.listPrev.push([...this.competition.races[race].startList]);
 
-      this.competition.races[race].startList = [
-        ...this.competition.races[race].startList.reverse()
-      ];
+      const startList = [...this.competition.races[race].startList];
+      const reversed = startList.reverse();
 
-      this.competition.races.find(
-        _race => _race.id === this.competition.selected_race.id
-      )
-        ? this.competition.races.find(
-            _race => _race.id === this.competition.selected_race.id
-          ).startList[0]
-          ? (this.competition.races.find(
-              _race => _race.id === this.competition.selected_race.id
-            ).selectedCompetitor = this.competition.races.find(
-              _race => _race.id === this.competition.selected_race.id
-            ).startList[0])
-          : null
-        : null;
+      this.competition.races[race].startList = [...reversed];
+      this.competition.races[race]._startList = [...reversed];
 
-      this.socket &&
-        this.socket.connected &&
-        this.socket.emit("set_competition_data", this.competition, res => {
-          return res;
-        });
+      this.refreshStartList(race);
 
       return this.competition.races[race].startList;
     },
@@ -964,26 +932,15 @@ export default {
           })
           .map(_comp => _comp.id)
       ];
+      this.competition.races[race]._startList = [
+        ...resList
+          .sort((a, b) => {
+            return b.res.value - a.res.value;
+          })
+          .map(_comp => _comp.id)
+      ];
 
-      this.competition.races.find(
-        _race => _race.id === this.competition.selected_race.id
-      )
-        ? this.competition.races.find(
-            _race => _race.id === this.competition.selected_race.id
-          ).startList[0]
-          ? (this.competition.races.find(
-              _race => _race.id === this.competition.selected_race.id
-            ).selectedCompetitor = this.competition.races.find(
-              _race => _race.id === this.competition.selected_race.id
-            ).startList[0])
-          : null
-        : null;
-
-      this.socket &&
-        this.socket.connected &&
-        this.socket.emit("set_competition_data", this.competition, res => {
-          return res;
-        });
+      this.refreshStartList(race);
 
       return this.competition.races[race].startList;
     },
@@ -991,21 +948,22 @@ export default {
       this.competition.races[race].startList = [
         ...this.listPrev[this.listPrev.length - 1]
       ];
+      this.competition.races[race]._startList = [
+        ...this.listPrev[this.listPrev.length - 1]
+      ];
+
       this.listPrev.length > 0 &&
         this.listPrev.splice(this.listPrev.length - 1, 1);
 
-      this.competition.races.find(
-        _race => _race.id === this.competition.selected_race.id
-      )
-        ? this.competition.races.find(
-            _race => _race.id === this.competition.selected_race.id
-          ).startList[0]
-          ? (this.competition.races.find(
-              _race => _race.id === this.competition.selected_race.id
-            ).selectedCompetitor = this.competition.races.find(
-              _race => _race.id === this.competition.selected_race.id
-            ).startList[0])
-          : null
+      this.refreshStartList(race);
+
+      return this.competition.races[race].startList;
+    },
+    refreshStartList(race) {
+      this.competition.races[race].startList[0]
+        ? (this.competition.races[
+            race
+          ].selectedCompetitor = this.competition.races[race].startList[0])
         : null;
 
       this.socket &&
@@ -1013,8 +971,6 @@ export default {
         this.socket.emit("set_competition_data", this.competition, res => {
           return res;
         });
-
-      return this.competition.races[race].startList;
     },
     closeRaceDialog() {
       this.dialogs.create_race.competitors = [];

@@ -242,7 +242,7 @@
                 v-for="(gridRow, c_idx) in page"
                 :key="c_idx"
                 :class="`result_${c_idx}-page_${p_idx}`"
-                style="display: flex; flex-wrap: nowrap; flex-shrink: 0; padding: 0;margin: 0;font-weight:bold"
+                style="display: flex; flex-wrap: nowrap; flex-shrink: 0; padding: 0;margin: 0"
                 :style="[
                   results_protocol.use_string_light &&
                     c_idx % 2 !== 0 && {
@@ -455,6 +455,75 @@
 
                 <!-- RACE INFO -->
 
+                <!-- OPENERS -->
+                <div
+                  v-if="gridRow.type && gridRow.type === 'openers'"
+                  ref="openers"
+                  class="openers"
+                  style="flex:0 0 auto;width: 100%;background-color: #ffffff"
+                >
+                  <div style="border: 1px solid black;margin-top: 1rem">
+                    <div
+                      style="width: 100%;padding: 2px 4px;font-weight:bold;border-bottom: 1px solid #000000"
+                    >
+                      Открывающие
+                    </div>
+                    <div style="display:flex;flex-wrap: wrap;padding: 2px 0">
+                      <div
+                        v-for="opener in competition.stuff.openers"
+                        :key="`${opener.num}_${opener.bib}`"
+                        style="display:flex;flex-wrap: nowrap;padding-right: 1rem;width: 50%;"
+                      >
+                        <div style="font-weight:bold;;padding: 2px 4px">
+                          {{ opener.bib }}
+                        </div>
+                        <div style="margin-left: .5rem;padding: 2px 4px">
+                          {{ opener.surName }}
+                        </div>
+                        <div style="margin-left: .5rem;padding: 2px 4px">
+                          {{ opener.name }}
+                        </div>
+                        <div style="margin-left: auto;padding: 2px 4px">
+                          {{ opener.location }}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- //OPENERS -->
+
+                <!-- WEATHER -->
+                <div
+                  v-if="gridRow.type && gridRow.type === 'weatherData'"
+                  ref="weatherData"
+                  class="weatherData"
+                  style="flex:0 0 auto;width: 100%;background-color: #ffffff"
+                >
+                  <div
+                    style="display:flex;flex-wrap: wrap;width: 100%;border: 1px solid #000000; padding: 2px 4px;margin-top: 1rem"
+                  >
+                    <div style="width: 100%;font-weight:bold;">
+                      Погодные условия
+                    </div>
+                    <div
+                      v-for="wData in competition.weather"
+                      style="min-width: 25%;max-width: 50%;display:flex;flex-wrap: nowrap;align-items: center;padding-right: 1rem;margin-right: auto"
+                    >
+                      <div
+                        style="font-weight: bold"
+                        v-html="wData.descr1"
+                      ></div>
+                      <div
+                        style="margin-left: .5rem;display:flex;flex-wrap: nowrap"
+                        v-html="wData.descr2"
+                      >
+                        {{ wData.descr2 }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- //WEATHER -->
+
                 <!-- NOTES -->
                 <div
                   v-if="gridRow.type && gridRow.type === 'raceNotes'"
@@ -587,37 +656,45 @@ export default {
   name: "preview",
   mounted() {
     this.results.push([...this.getStartList]);
+
     this.results[this.results.length - 1].unshift({ type: "sheetHeader" });
     if (this.results_protocol.print_header)
       this.results[this.results.length - 1].push({ type: "officialsData" });
+    if (this.results_protocol.print_openers)
+      this.results[this.results.length - 1].push({ type: "openers" });
+    if (this.results_protocol.print_weather)
+      this.results[this.results.length - 1].push({ type: "weatherData" });
     if (this.results_protocol.print_notations)
       this.results[this.results.length - 1].push({ type: "raceNotes" });
+
     this.$nextTick(() => {
       setTimeout(() => {
         this.data_paginated_results.push([]);
         let sumHeight = 0;
         let containerHeight = this.$refs["pdf_table_container"][0].offsetHeight;
         this.results[0].forEach(gridRow => {
-          if (
-            sumHeight + this.$refs[gridRow.type][0].offsetHeight <
-            containerHeight
-          ) {
+          let elemHeight = this.$refs[gridRow.type][0].offsetHeight;
+
+          if (sumHeight + elemHeight < containerHeight) {
             this.data_paginated_results[
               this.data_paginated_results.length - 1
             ].push(gridRow);
-            sumHeight += this.$refs[gridRow.type][0].offsetHeight;
+
+            sumHeight += elemHeight;
           } else {
             sumHeight = 0;
             this.data_paginated_results.push([]);
+
             if (gridRow.type === "competitorResult")
               this.data_paginated_results[
                 this.data_paginated_results.length - 1
               ].push({ type: "sheetHeader" });
+            sumHeight = sumHeight + this.$refs["sheetHeader"][0].offsetHeight;
 
             this.data_paginated_results[
               this.data_paginated_results.length - 1
             ].push(gridRow);
-            sumHeight += this.$refs[gridRow.type][0].offsetHeight;
+            sumHeight += sumHeight + elemHeight;
           }
         });
         this.results = this.paginated_results;

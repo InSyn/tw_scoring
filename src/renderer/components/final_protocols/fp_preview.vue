@@ -662,6 +662,7 @@ export default {
   name: "preview",
   mounted() {
     this.results.push([...this.flatGrid]);
+
     this.results[this.results.length - 1].unshift({ type: "sheetHeader" });
     if (this.results_protocol.print_header)
       this.results[this.results.length - 1].push({ type: "officialsData" });
@@ -671,6 +672,7 @@ export default {
       this.results[this.results.length - 1].push({ type: "weatherData" });
     if (this.results_protocol.print_notations)
       this.results[this.results.length - 1].push({ type: "raceNotes" });
+
     this.$nextTick(() => {
       setTimeout(() => {
         this.data_paginated_results.push([]);
@@ -687,7 +689,7 @@ export default {
             this.data_paginated_results[
               this.data_paginated_results.length - 1
             ].push(gridRow);
-            sumHeight = sumHeight + elemHeight;
+            sumHeight += elemHeight;
           } else {
             sumHeight = 0;
             this.data_paginated_results.push([]);
@@ -695,12 +697,12 @@ export default {
               this.data_paginated_results[
                 this.data_paginated_results.length - 1
               ].push({ type: "sheetHeader" });
-            sumHeight = sumHeight + this.$refs["sheetHeader"][0].offsetHeight;
+            sumHeight += this.$refs["sheetHeader"][0].offsetHeight;
 
             this.data_paginated_results[
               this.data_paginated_results.length - 1
             ].push(gridRow);
-            sumHeight = sumHeight + elemHeight;
+            sumHeight += elemHeight;
           }
           // this.protDebug({ gridRow, sumHeight, containerHeight });
         });
