@@ -187,7 +187,29 @@ export default {
           }
         ],
         judges: [],
-        openers: []
+        openers: [
+          {
+            bib: "F1",
+            location: "RUS",
+            name: "Popa",
+            num: "1",
+            surName: "ZALUPKA"
+          },
+          {
+            bib: "F2",
+            location: "UZB",
+            name: "Vasiliy",
+            num: "2",
+            surName: "ZHOPAGORIT-STRASHOSRAT"
+          },
+          {
+            bib: "F3",
+            location: "KYZ",
+            name: "Pisyukanych",
+            num: "3",
+            surName: "PISYULKOZHOPIN"
+          }
+        ]
       };
       technicalInfo = [
         {

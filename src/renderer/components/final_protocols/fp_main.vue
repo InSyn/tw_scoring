@@ -248,7 +248,7 @@
                         $vuetify.theme.themes[appTheme].cardBackgroundRGBA
                     }"
                     ><v-card-title style="padding: 8px 16px"
-                      >Настройка второй ячейки<v-btn
+                      >Настройка ячейки<v-btn
                         @click="f_prop.select_dialog = false"
                         style="margin-left: auto"
                         icon
@@ -476,6 +476,25 @@
             style="cursor:pointer;"
             :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
             >Печатать информацию об официальных лицах</label
+          >
+        </div>
+        <div
+          class="d-flex flex-nowrap align-center py-1"
+          style="min-width: 50%"
+        >
+          <v-checkbox
+            hide-details
+            class="pa-0 ma-0"
+            id="print_openers"
+            v-model="results_protocol.print_openers"
+            :color="$vuetify.theme.themes[appTheme].textDefault"
+          ></v-checkbox>
+          <label
+            :for="`print_openers`"
+            class="font-weight-bold"
+            style="cursor:pointer;"
+            :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
+            >Печатать открывающих</label
           >
         </div>
         <div

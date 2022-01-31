@@ -7,6 +7,7 @@
   >
     <div class="d-flex justify-center align-center">
       <div
+        @click="console.log(competition.stuff.openers)"
         :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
         style="font-weight: bold; font-size: 1.2rem"
       >
@@ -138,7 +139,8 @@ export default {
   name: "openers",
   computed: {
     ...mapGetters("main", { competition: "competition", appTheme: "appTheme" }),
-    ...mapGetters("roles", { OpenerClass: "OpenerClass" })
+    ...mapGetters("roles", { OpenerClass: "OpenerClass" }),
+    console: () => console
   }
 };
 </script>

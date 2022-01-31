@@ -362,7 +362,7 @@
                   style="flex: 0 0 auto; width: 100%;background-color: #ffffff"
                 >
                   <div
-                    style="width: 100%;padding-top: 1rem; display:flex;flex-wrap: nowrap"
+                    style="width: 100%;margin-top: 1rem; display:flex;flex-wrap: nowrap"
                   >
                     <!-- JUDGES -->
 
@@ -461,15 +461,52 @@
 
                 <!-- RACE INFO -->
 
-                <!-- NOTES -->
+                <!-- OPENERS -->
+                <div
+                  v-if="gridRow.type && gridRow.type === 'openers'"
+                  ref="openers"
+                  class="openers"
+                  style="flex:0 0 auto;width: 100%;background-color: #ffffff"
+                >
+                  <div style="border: 1px solid black;margin-top: 1rem">
+                    <div
+                      style="width: 100%;padding: 2px 4px;font-weight:bold;border-bottom: 1px solid #000000"
+                    >
+                      Открывающие
+                    </div>
+                    <div style="display:flex;flex-wrap: wrap;padding: 2px 0">
+                      <div
+                        v-for="opener in competition.stuff.openers"
+                        :key="`${opener.num}_${opener.bib}`"
+                        style="display:flex;flex-wrap: nowrap;padding-right: 1rem;width: 50%;"
+                      >
+                        <div style="font-weight:bold;;padding: 2px 4px">
+                          {{ opener.bib }}
+                        </div>
+                        <div style="margin-left: .5rem;padding: 2px 4px">
+                          {{ opener.surName }}
+                        </div>
+                        <div style="margin-left: .5rem;padding: 2px 4px">
+                          {{ opener.name }}
+                        </div>
+                        <div style="margin-left: auto;padding: 2px 4px">
+                          {{ opener.location }}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- //OPENERS -->
+
+                <!-- WEATHER -->
                 <div
                   v-if="gridRow.type && gridRow.type === 'weatherData'"
                   ref="weatherData"
                   class="weatherData"
-                  style="flex:0 0 auto;width: 100%;background-color: #ffffff; padding: .5rem 0"
+                  style="flex:0 0 auto;width: 100%;background-color: #ffffff"
                 >
                   <div
-                    style="display:flex;flex-wrap: wrap;width: 100%;border: 1px solid #000000; padding: 2px 4px;"
+                    style="display:flex;flex-wrap: wrap;width: 100%;border: 1px solid #000000; padding: 2px 4px;margin-top: 1rem"
                   >
                     <div style="width: 100%;font-weight:bold;">
                       Погодные условия
@@ -491,21 +528,21 @@
                     </div>
                   </div>
                 </div>
-                <!-- //NOTES -->
+                <!-- //WEATHER -->
 
-                <!-- WEATHER -->
+                <!-- NOTES -->
                 <div
                   v-if="gridRow.type && gridRow.type === 'raceNotes'"
                   ref="raceNotes"
                   class="notes"
-                  style="flex:0 0 auto;width: 100%;background-color: #ffffff;padding: .5rem 0"
+                  style="flex:0 0 auto;width: 100%;background-color: #ffffff"
                 >
                   <div
-                    style="border: 1px solid black; padding: 2px 4px"
+                    style="border: 1px solid black; padding: 2px 4px; margin-top: 1rem"
                     v-html="results_protocol.notations"
                   ></div>
                 </div>
-                <!-- //WEATHER -->
+                <!-- //NOTES -->
               </div>
               <!-- //Competitors -->
             </div>
@@ -531,29 +568,32 @@
               </div>
               <div style="margin-left: auto">
                 {{
-                  `Отчёт создан ${date_now[0]} ${date_now[1]} / Page ${p_idx +
-                    1}/${(paginated_results.length > 0 &&
+                  `Отчёт создан ${date_now[0]} ${
+                    date_now[1]
+                  } / Страница ${p_idx + 1}/${(paginated_results.length > 0 &&
                     paginated_results.length) ||
                     1}`
                 }}
               </div>
             </div>
             <div
-              style="width: 100%;flex-shrink: 0;display:flex;padding: 0 8px;align-items: center;border-top:1px solid black;border-bottom:1px solid black;font-size: 0.75rem;"
+              style="width: 100%;flex-shrink: 0;display:flex;padding: 2px; align-items: center;border-top:1px solid black;border-bottom:1px solid black;font-size: 0.75rem;"
             >
               <div
-                style="display:flex;justify-content: flex-start;align-items: start;flex-shrink: 0;width:20%;font-weight:bold;"
+                style="display:flex;justify-content: flex-start;align-items: start;flex-shrink: 0;width:35%;font-weight:bold;"
               >
-                sample
+                {{ competition.mainData.provider.value }}
               </div>
               <div
-                style="display:flex;justify-content: center;align-items: center;flex-shrink: 0;width:60%;font-weight:bold;"
+                style="display:flex;justify-content: center;align-items: center;flex-shrink: 0;width:30%;font-weight:bold;"
               >
                 Timing/Scoring & data processing by Timing Web
               </div>
               <div
-                style="display:flex;justify-content: flex-end;align-items: end;flex-shrink: 0;width:20%;"
-              ></div>
+                style="display:flex;justify-content: flex-end;align-items: end;flex-shrink: 0;width:35%;"
+              >
+                {{ competition.mainData.providerTiming.value }}
+              </div>
             </div>
             <div style="width: 100%;display:flex;flex-shrink: 0">
               <div
@@ -625,6 +665,8 @@ export default {
     this.results[this.results.length - 1].unshift({ type: "sheetHeader" });
     if (this.results_protocol.print_header)
       this.results[this.results.length - 1].push({ type: "officialsData" });
+    if (this.results_protocol.print_openers)
+      this.results[this.results.length - 1].push({ type: "openers" });
     if (this.results_protocol.print_weather)
       this.results[this.results.length - 1].push({ type: "weatherData" });
     if (this.results_protocol.print_notations)
@@ -645,7 +687,7 @@ export default {
             this.data_paginated_results[
               this.data_paginated_results.length - 1
             ].push(gridRow);
-            sumHeight += elemHeight;
+            sumHeight = sumHeight + elemHeight;
           } else {
             sumHeight = 0;
             this.data_paginated_results.push([]);
@@ -653,11 +695,12 @@ export default {
               this.data_paginated_results[
                 this.data_paginated_results.length - 1
               ].push({ type: "sheetHeader" });
+            sumHeight = sumHeight + this.$refs["sheetHeader"][0].offsetHeight;
 
             this.data_paginated_results[
               this.data_paginated_results.length - 1
             ].push(gridRow);
-            sumHeight += elemHeight;
+            sumHeight = sumHeight + elemHeight;
           }
           // this.protDebug({ gridRow, sumHeight, containerHeight });
         });
@@ -741,9 +784,18 @@ export default {
             : data.gridRow.type
         }`
       );
-      console.log(
-        data.sumHeight + this.$refs[data.gridRow.type][0].offsetHeight
-      );
+      data.gridRow.type === "competitorResult"
+        ? console.log(
+            data.sumHeight +
+              this.$refs[
+                `${data.gridRow.type}_${
+                  data.gridRow.s_rank ? data.gridRow.s_rank : 0
+                }`
+              ][0].offsetHeight
+          )
+        : console.log(
+            data.sumHeight + this.$refs[data.gridRow.type][0].offsetHeight
+          );
       console.log(data.containerHeight);
       console.log(`----->`);
     }

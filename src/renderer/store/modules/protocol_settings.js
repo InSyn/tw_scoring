@@ -11,6 +11,7 @@ export default {
       use_grid: false,
       use_string_light: true,
       print_header: true,
+      print_openers: true,
       print_weather: true,
       print_notations: true,
       strings_at_page: 6,

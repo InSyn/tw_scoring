@@ -20,7 +20,7 @@
     </div>
     <div
       v-if="competition.protocol_settings.show_preview"
-      class="pa-8 d-flex align-center justify-center"
+      class="d-flex align-center justify-center"
       style="position: absolute; top: 0; bottom: 0; left: 0; right: 0"
       :style="{ backgroundColor: `rgba(255,255,255,.2)` }"
     >
