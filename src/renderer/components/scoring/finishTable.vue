@@ -295,7 +295,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters("main", ["competition", "appTheme"]),
+    ...mapGetters("main", { competition: "competition", appTheme: "appTheme" }),
     sortedFinishedList() {
       let list = this.competition.selected_race.finished
         .map(_comp => {

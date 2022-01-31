@@ -475,7 +475,7 @@
             class="font-weight-bold"
             style="cursor:pointer;"
             :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
-            >Печатать информацию об официальных лицах</label
+            >Печатать информацию о жюри</label
           >
         </div>
         <div

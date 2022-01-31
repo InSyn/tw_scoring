@@ -563,29 +563,32 @@
               </div>
               <div style="margin-left: auto">
                 {{
-                  `Отчёт создан ${date_now[0]} ${date_now[1]} / Page ${p_idx +
-                    1}/${(paginated_results.length > 0 &&
+                  `Отчёт создан ${date_now[0]} ${
+                    date_now[1]
+                  } / Страница ${p_idx + 1}/${(paginated_results.length > 0 &&
                     paginated_results.length) ||
                     1}`
                 }}
               </div>
             </div>
             <div
-              style="width: 100%;flex-shrink: 0;display:flex;padding: 0 8px;align-items: center;border-top:1px solid black;border-bottom:1px solid black;font-size: 0.75rem;"
+              style="width: 100%;flex-shrink: 0;display:flex;padding: 2px; align-items: center;border-top:1px solid black;border-bottom:1px solid black;font-size: 0.75rem;"
             >
               <div
-                style="display:flex;justify-content: flex-start;align-items: start;flex-shrink: 0;width:20%;font-weight:bold;"
+                style="display:flex;justify-content: flex-start;align-items: start;flex-shrink: 0;width:35%;font-weight:bold;"
               >
-                sample
+                {{ competition.mainData.provider.value }}
               </div>
               <div
-                style="display:flex;justify-content: center;align-items: center;flex-shrink: 0;width:60%;font-weight:bold;"
+                style="display:flex;justify-content: center;align-items: center;flex-shrink: 0;width:30%;font-weight:bold;"
               >
                 Timing/Scoring & data processing by Timing Web
               </div>
               <div
-                style="display:flex;justify-content: flex-end;align-items: end;flex-shrink: 0;width:20%;"
-              ></div>
+                style="display:flex;justify-content: flex-end;align-items: end;flex-shrink: 0;width:35%;"
+              >
+                {{ competition.mainData.providerTiming.value }}
+              </div>
             </div>
             <div style="width: 100%;display:flex;flex-shrink: 0">
               <div
