@@ -455,25 +455,14 @@
           </div>
         </div>
       </div>
-      <v-spacer></v-spacer>
-      <div class="d-flex flex-column">
-        <div class="d-flex flex-nowrap align-center py-1">
-          <v-checkbox
-            hide-details
-            class="pa-0 ma-0"
-            id="use_grid"
-            v-model="results_protocol.use_grid"
-            :color="$vuetify.theme.themes[appTheme].textDefault"
-          ></v-checkbox>
-          <label
-            :for="`use_grid`"
-            class="font-weight-bold"
-            style="cursor:pointer;"
-            :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
-            >Использовать сетку</label
-          >
-        </div>
-        <div class="d-flex flex-nowrap align-center py-1">
+      <div
+        class="infoBlocks"
+        style="display:flex;flex-wrap: wrap;margin-top: .5rem;"
+      >
+        <div
+          class="d-flex flex-nowrap align-center py-1"
+          style="min-width: 50%"
+        >
           <v-checkbox
             hide-details
             class="pa-0 ma-0"
@@ -482,14 +471,17 @@
             :color="$vuetify.theme.themes[appTheme].textDefault"
           ></v-checkbox>
           <label
-            :for="`print_header`"
+            :for="'print_header'"
             class="font-weight-bold"
             style="cursor:pointer;"
             :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
             >Печатать информацию об официальных лицах</label
           >
         </div>
-        <div class="d-flex flex-nowrap align-center py-1">
+        <div
+          class="d-flex flex-nowrap align-center py-1"
+          style="min-width: 50%"
+        >
           <v-checkbox
             hide-details
             class="pa-0 ma-0"
@@ -505,7 +497,10 @@
             >Печатать погодные условия</label
           >
         </div>
-        <div class="d-flex flex-nowrap align-center py-1">
+        <div
+          class="d-flex flex-nowrap align-center py-1"
+          style="min-width: 50%"
+        >
           <v-checkbox
             hide-details
             class="pa-0 ma-0"
@@ -521,8 +516,34 @@
             >Печатать замечания</label
           >
         </div>
-
-        <div class="d-flex flex-nowrap align-center py-1">
+      </div>
+      <div
+        class="styling"
+        style="display:flex;flex-direction: column;margin-top: auto"
+      >
+        <div
+          class="d-flex flex-nowrap align-center py-1"
+          style="flex: 0 0 auto"
+        >
+          <v-checkbox
+            hide-details
+            class="pa-0 ma-0"
+            id="use_grid"
+            v-model="results_protocol.use_grid"
+            :color="$vuetify.theme.themes[appTheme].textDefault"
+          ></v-checkbox>
+          <label
+            :for="`use_grid`"
+            class="font-weight-bold"
+            style="cursor:pointer;"
+            :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
+            >Использовать сетку</label
+          >
+        </div>
+        <div
+          class="d-flex flex-nowrap align-center py-1"
+          style="flex: 0 0 auto"
+        >
           <v-checkbox
             hide-details
             class="pa-0 ma-0"

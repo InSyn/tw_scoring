@@ -306,7 +306,9 @@
                   v-if="gridRow.type && gridRow.type === 'competitorResult'"
                   v-for="(header, h_idx) in competition.protocol_settings
                     .result_protocols.fields"
-                  ref="competitorResult"
+                  :ref="
+                    `competitorResult_${gridRow.s_rank ? gridRow.s_rank : 0}`
+                  "
                   :key="h_idx"
                   style="flex-shrink: 0; margin: 0; padding: 0; line-height: normal"
                   :style="{
@@ -633,14 +635,17 @@ export default {
         let sumHeight = 0;
         let containerHeight = this.$refs["pdf_table_container"][0].offsetHeight;
         this.results[0].forEach(gridRow => {
-          if (
-            sumHeight + this.$refs[gridRow.type][0].offsetHeight <
-            containerHeight
-          ) {
+          let elemHeight =
+            gridRow.type === "competitorResult"
+              ? this.$refs[
+                  `${gridRow.type}_${gridRow.s_rank ? gridRow.s_rank : 0}`
+                ][0].offsetHeight
+              : this.$refs[gridRow.type][0].offsetHeight;
+          if (sumHeight + elemHeight < containerHeight) {
             this.data_paginated_results[
               this.data_paginated_results.length - 1
             ].push(gridRow);
-            sumHeight += this.$refs[gridRow.type][0].offsetHeight;
+            sumHeight += elemHeight;
           } else {
             sumHeight = 0;
             this.data_paginated_results.push([]);
@@ -652,7 +657,7 @@ export default {
             this.data_paginated_results[
               this.data_paginated_results.length - 1
             ].push(gridRow);
-            sumHeight += this.$refs[gridRow.type][0].offsetHeight;
+            sumHeight += elemHeight;
           }
           // this.protDebug({ gridRow, sumHeight, containerHeight });
         });
