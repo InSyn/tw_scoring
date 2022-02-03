@@ -33,15 +33,15 @@ export default {
       }
     },
     JuryClass: class {
-      constructor(title, surName, name, loc) {
+      constructor(title, lastName, name, loc) {
         this.title = title || "";
         this.name = name || "";
-        this.surName = surName || "";
+        this.lastName = lastName || "";
         this.loc = loc || "";
       }
     },
     JudgeClass: class {
-      constructor(title, id, surName, name, location) {
+      constructor(title, id, lastName, name, location) {
         this._id = Math.random()
           .toString(36)
           .substr(2, 9);
@@ -49,7 +49,7 @@ export default {
         this.remoteId = null;
         this.id = id || 0;
         this.name = name || "";
-        this.surName = surName || "";
+        this.lastName = lastName || "";
         this.location = location || "";
       }
       category = "";
@@ -62,7 +62,7 @@ export default {
       }
       bib = "";
       name = "";
-      surName = "";
+      lastName = "";
       location = "";
     }
   },

@@ -380,7 +380,7 @@
                             {{ judge.title }}
                           </div>
                           <div style="font-weight:bold; width: 35%">
-                            {{ `${judge.surName} ${judge.name}` }}
+                            {{ `${judge.lastName} ${judge.name}` }}
                           </div>
                           <div style="width: 30%">
                             {{ judge.location }}
@@ -440,7 +440,7 @@
                             {{ jury.title }}
                           </div>
                           <div style="font-weight:bold; width: 35%">
-                            {{ `${jury.surName} ${jury.name}` }}
+                            {{ `${jury.lastName} ${jury.name}` }}
                           </div>
                           <div style="width: 30%">
                             {{ jury.loc }}
@@ -478,7 +478,7 @@
                           {{ opener.bib }}
                         </div>
                         <div style="margin-left: .5rem;padding: 2px 4px">
-                          {{ opener.surName }}
+                          {{ opener.lastName }}
                         </div>
                         <div style="margin-left: .5rem;padding: 2px 4px">
                           {{ opener.name }}

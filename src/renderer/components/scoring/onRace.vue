@@ -31,7 +31,7 @@
                 }).info_data.bib ||
                   ''} ${competition.competitorsSheet.competitors.find(_comp => {
                   return _comp.id === competition.selected_race.onTrack;
-                }).info_data['surname'] ||
+                }).info_data['lastname'] ||
                   ''} ${competition.competitorsSheet.competitors.find(_comp => {
                   return _comp.id === competition.selected_race.onTrack;
                 }).info_data.name || ''}`
@@ -781,7 +781,7 @@ export default {
         let judges_check = [];
         this.competition.stuff.judges.forEach(_judge => {
           axios
-            .get(`http://79.104.192.118:8888/scs?id=${_judge.remoteId}`)
+            .get(`http://79.104.192.118:8080/scs?id=${_judge.remoteId}`)
             .then(response => {
               judges_check.push(_judge["remoteID"]);
               if (response.data[response.data.length - 1]) {

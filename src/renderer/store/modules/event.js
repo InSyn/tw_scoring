@@ -175,12 +175,12 @@ export default {
       stuff = {
         secretary: {
           name: "",
-          surName: ""
+          lastName: ""
         },
         jury: [
           {
             title: "Старший судья",
-            surName: "Фамилия",
+            lastName: "Фамилия",
             name: "Имя",
             loc: "Город",
             connected: false
@@ -207,7 +207,7 @@ export default {
         header: [
           { id: "bib", title: "Bib" },
           { id: "fiscode", title: "FIS код" },
-          { id: "surname", title: "Фамилия" },
+          { id: "lastname", title: "Фамилия" },
           { id: "name", title: "Имя" },
           { id: "year", title: "Год" },
           { id: "rang", title: "Разряд" },

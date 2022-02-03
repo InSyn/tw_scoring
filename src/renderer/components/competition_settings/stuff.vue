@@ -98,7 +98,7 @@
                     color: $vuetify.theme.themes[appTheme].textDefault
                   }"
                   type="text"
-                  v-model="competition.stuff.jury[jr].surName"
+                  v-model="competition.stuff.jury[jr].lastName"
               /></v-col>
               <v-col class="d-flex align-center pa-1" cols="12"
                 ><div>Город:</div>
@@ -340,7 +340,7 @@
                     color: $vuetify.theme.themes[appTheme].textDefault
                   }"
                   type="text"
-                  v-model="competition.stuff.judges[jd].surName"
+                  v-model="competition.stuff.judges[jd].lastName"
               /></v-col>
               <v-col class="d-flex align-center pa-1" cols="8"
                 ><div>Город:</div>

@@ -135,63 +135,163 @@
                 $vuetify.theme.themes[appTheme].cardBackgroundRGBA
             }"
           >
-            <v-card-title class="mb-8" style="font-size: 2rem"
-              >{{
-                `${competition.mainData.discipline.value &&
-                  competition.mainData.discipline.value + "."} ${competition
-                  .mainData.title.value &&
-                  competition.mainData.title.value + "."} Новый заезд`
-              }}
+            <v-card-title style="margin: 0 0 2rem 0; padding: 0 1rem;">
+              <div
+                style="display: flex;align-items: center;padding: 8px;width: 100%;font-size: 2rem"
+              >
+                {{
+                  `${competition.mainData.title.value &&
+                    competition.mainData.title.value} ${competition.mainData
+                    .discipline.value &&
+                    competition.mainData.discipline.value}`
+                }}<v-btn
+                  icon
+                  style="margin-left: auto"
+                  @click="closeRaceDialog()"
+                  :color="$vuetify.theme.themes[appTheme].action_red"
+                  ><v-icon>mdi-close</v-icon></v-btn
+                >
+              </div>
+              <div
+                style="display:flex;flex-wrap: nowrap;align-items: center;margin-top: 1rem;padding: 0 2rem;"
+              >
+                <div style="font-weight:bold;font-size: 1.6rem">
+                  Новый заезд
+                </div>
+                <div style="margin-left: 2rem;font-size: 1.4rem">
+                  <label for="title">Название</label>
+                  <input
+                    id="title"
+                    class="ml-2 pa-1"
+                    type="text"
+                    style="border-radius: 6px"
+                    :style="{
+                      color: $vuetify.theme.themes[appTheme].textDefault,
+                      backgroundColor:
+                        $vuetify.theme.themes[appTheme].standardBackgroundRGBA
+                    }"
+                    v-model="dialogs.create_race.title"
+                  />
+                </div>
+              </div>
             </v-card-title>
             <v-card-text
+              style="margin-top: 1rem"
               :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
             >
-              <v-row no-gutters
-                ><v-col class="d-flex">
-                  <div class="ma-1">
-                    <label class="font-weight-bold" for="title">Название</label>
-                    <input
-                      id="title"
-                      class="ml-2 pa-1"
-                      type="text"
-                      style="border-radius: 6px"
+              <v-card-actions
+                class="dialog_action_bar d-flex align-center"
+                style="padding: .5rem 1rem;margin-bottom: 1rem;border-radius: 6px"
+              >
+                <div style="display:flex;align-items: center">
+                  <v-btn
+                    text
+                    small
+                    :color="$vuetify.theme.themes[appTheme].accent_light"
+                    @click="
+                      addStartListFromRace(
+                        dialogs.create_race.raceStartListFrom
+                      )
+                    "
+                    retain-focus-on-click
+                    >Стартовый порядок из
+                    <v-icon size="24" style="margin-left: .5rem"
+                      >mdi-arrow-down</v-icon
+                    ></v-btn
+                  >
+                  <div
+                    tabindex="0"
+                    @focus="
+                      dialogs.create_race.raceStartListFromSelector = true
+                    "
+                    @blur="
+                      dialogs.create_race.raceStartListFromSelector = false
+                    "
+                    style="position:relative;display:flex;align-items: center;flex:1 0 auto;height: 100%;border-radius: 6px;margin-left: .5rem;outline: none;cursor:pointer"
+                    :style="{
+                      color: $vuetify.theme.themes[appTheme].textDefault,
+                      backgroundColor:
+                        $vuetify.theme.themes[appTheme].standardBackgroundRGBA
+                    }"
+                  >
+                    <div
+                      v-if="dialogs.create_race.raceStartListFromSelector"
+                      style="position:absolute;z-index: 1;top: 0;left: 0;min-width: 100%;display:flex;flex-direction: column;border-radius: 6px;padding: 1px"
                       :style="{
-                        color: $vuetify.theme.themes[appTheme].textDefault,
                         backgroundColor:
-                          $vuetify.theme.themes[appTheme].standardBackgroundRGBA
+                          $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
+                        border: `1px solid ${$vuetify.theme.themes[appTheme].accent}`
                       }"
-                      v-model="dialogs.create_race.title"
-                    />
-                  </div>
-                  <div class="ma-1">
-                    <label class="font-weight-bold" for="title"
-                      >Дисциплина</label
                     >
-                    <input
-                      id="discipline"
-                      class="ml-2 pa-1"
-                      type="text"
-                      style="border-radius: 6px"
-                      :style="{
-                        color: $vuetify.theme.themes[appTheme].textDefault,
-                        backgroundColor:
-                          $vuetify.theme.themes[appTheme].standardBackgroundRGBA
-                      }"
-                      v-html="competition.structure.selected.discipline.title"
-                    />
-                  </div> </v-col
-              ></v-row>
-              <v-card-actions class="dialog_action_bar d-flex justify-center"
-                ><v-btn
+                      <div
+                        v-if="competition.races.length < 1"
+                        style="flex:0 0 auto;padding: 4px 8px"
+                        :style="[
+                          {
+                            color: $vuetify.theme.themes[appTheme].textDefault
+                          }
+                        ]"
+                      >
+                        Нет доступных заездов
+                      </div>
+                      <v-hover
+                        v-for="(race, r_idx) in competition.races"
+                        :key="race.id"
+                        v-slot:default="{ hover }"
+                      >
+                        <div
+                          @click="selectRaceStartListFrom(race, $event)"
+                          style="flex:0 0 auto;padding: 4px 8px;font-size: 1.2rem"
+                          :style="[
+                            {
+                              color: $vuetify.theme.themes[appTheme].textDefault
+                            },
+                            r_idx === 0 && { borderRadius: `6px 6px 0 0` },
+                            r_idx ===
+                              competition.structure.stages.length - 1 && {
+                              borderRadius: `0 0 6px 6px`
+                            },
+                            hover && {
+                              backgroundColor:
+                                $vuetify.theme.themes[appTheme]
+                                  .subjectBackgroundRGBA
+                            }
+                          ]"
+                        >
+                          {{ race.title }}
+                        </div>
+                      </v-hover>
+                    </div>
+                    <div
+                      style="padding: 4px 8px;flex: 0 0 auto;font-size: 1.2rem"
+                    >
+                      {{
+                        dialogs.create_race.raceStartListFrom
+                          ? dialogs.create_race.raceStartListFrom.title
+                          : "Выбрать..."
+                      }}
+                    </div>
+                  </div>
+                </div>
+                <v-btn
                   text
+                  small
                   :color="$vuetify.theme.themes[appTheme].success"
                   @click="addAll()"
+                  style="margin-left: auto"
                   retain-focus-on-click
-                  >Добавить всех&nbsp;<v-icon>mdi-arrow-right</v-icon></v-btn
+                  ><v-icon size="24" style="margin-right: .5rem"
+                    >mdi-playlist-check</v-icon
+                  >Добавить всех</v-btn
                 ></v-card-actions
               >
               <v-row class="sheet">
                 <v-col>
+                  <div
+                    style="width: 100%; font-size: 1.4rem;font-weight:bold;padding: 0 0 1rem 1rem"
+                  >
+                    Доступные участники
+                  </div>
                   <v-list
                     :dark="appTheme === 'dark'"
                     :color="
@@ -213,8 +313,8 @@
                                 ? competitor.info_data["bib"]
                                 : " "
                             } ${
-                              competitor.info_data["surname"]
-                                ? competitor.info_data["surname"]
+                              competitor.info_data["lastname"]
+                                ? competitor.info_data["lastname"]
                                 : " "
                             } ${
                               competitor.info_data["name"]
@@ -240,6 +340,11 @@
                   </v-list></v-col
                 >
                 <v-col>
+                  <div
+                    style="width: 100%; font-size: 1.4rem;font-weight:bold;padding: 0 0 1rem 1rem"
+                  >
+                    Стартовый порядок
+                  </div>
                   <v-list
                     :dark="appTheme === 'dark'"
                     :color="
@@ -279,8 +384,8 @@
                                 ? competitorToRace.info_data["bib"]
                                 : " "
                             } ${
-                              competitorToRace.info_data["surname"]
-                                ? competitorToRace.info_data["surname"]
+                              competitorToRace.info_data["lastname"]
+                                ? competitorToRace.info_data["lastname"]
                                 : " "
                             } ${
                               competitorToRace.info_data["name"]
@@ -295,7 +400,7 @@
                 ></v-row
               >
             </v-card-text>
-            <v-card-actions class="d-flex justify-center"
+            <v-card-actions class="d-flex justify-end"
               ><v-btn
                 @click="
                   create_race(
@@ -313,13 +418,6 @@
                 :color="$vuetify.theme.themes[appTheme].success"
                 >Создать</v-btn
               ></v-card-actions
-            >
-            <v-btn
-              icon
-              style="position: absolute; top: 0;right: 0;"
-              @click="closeRaceDialog()"
-              :color="$vuetify.theme.themes[appTheme].action_red"
-              ><v-icon>mdi-close</v-icon></v-btn
             >
           </v-card>
         </v-dialog>
@@ -415,8 +513,9 @@
                       "
                       v-html="
                         `${competitor.info_data.bib &&
-                          competitor.info_data.bib} ${competitor.info_data
-                          .surname && competitor.info_data.surname} ${competitor
+                          competitor.info_data.bib} ${competitor.info_data[
+                          'lastname'
+                        ] && competitor.info_data['lastname']} ${competitor
                           .info_data.name && competitor.info_data.name}`
                       "
                     ></div>
@@ -458,8 +557,9 @@
                       "
                       v-html="
                         `${competitor.info_data.bib &&
-                          competitor.info_data.bib} ${competitor.info_data
-                          .surname && competitor.info_data.surname} ${competitor
+                          competitor.info_data.bib} ${competitor.info_data[
+                          'lastname'
+                        ] && competitor.info_data['lastname']} ${competitor
                           .info_data.name && competitor.info_data.name}`
                       "
                     ></div>
@@ -613,7 +713,7 @@
                         {{ competitor.info_data["bib"] }}
                       </div>
                       <div style="margin-left: 1rem">
-                        {{ `${competitor.info_data["surname"] || ""}` }}
+                        {{ `${competitor.info_data["lastname"] || ""}` }}
                       </div>
                       <div style="margin-left: 1rem">
                         {{ `${competitor.info_data["name"] || ""}` }}
@@ -835,6 +935,19 @@ export default {
         }
       }
     },
+    selectRaceStartListFrom(race, event) {
+      this.dialogs.create_race.raceStartListFrom = race;
+      event.target.parentNode.parentNode.blur();
+    },
+    addStartListFromRace(race) {
+      if (race)
+        this.dialogs.create_race.competitors = race._startList.map(
+          _competitor =>
+            this.competition.competitorsSheet.competitors.find(
+              competitor => competitor.id === _competitor
+            )
+        );
+    },
     create_race(title, type, discipline, competitors) {
       const race = new this.RaceClass(
         title ||
@@ -1054,7 +1167,9 @@ export default {
         create_race: {
           state: false,
           title: "",
-          competitors: []
+          competitors: [],
+          raceStartListFrom: null,
+          raceStartListFromSelector: false
         }
       },
       listPrev: []

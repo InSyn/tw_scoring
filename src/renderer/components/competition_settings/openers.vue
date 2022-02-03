@@ -100,7 +100,7 @@
                   @blur="
                     $event.target.style.borderBottom = `1px solid transparent`
                   "
-                  v-model="opener.surName"
+                  v-model="opener.lastName"
                   style="margin-left: .5rem;padding: 2px 4px;transition: border-bottom 224ms; border-bottom: 1px solid transparent; width: 100%; border-radius: 6px"
                   :style="{
                     backgroundColor:

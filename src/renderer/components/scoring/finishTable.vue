@@ -101,7 +101,7 @@
                       class="d-flex align-center"
                       style="max-width: 16rem"
                       v-html="
-                        `${competitor.info_data.surname} ${competitor.info_data.name}`
+                        `${competitor.info_data.lastname} ${competitor.info_data.name}`
                       "
                     ></v-col>
                     <v-col
@@ -156,7 +156,7 @@
                   style="padding: 8px 16px; font-weight: bold;font-size: 1.2rem"
                 >
                   {{
-                    `Участник ${competitor.info_data.bib} ${competitor.info_data.surname} ${competitor.info_data.name}`
+                    `Участник ${competitor.info_data.bib} ${competitor.info_data.lastname} ${competitor.info_data.name}`
                   }}
                 </div>
 

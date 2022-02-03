@@ -121,7 +121,7 @@ export default {
                         Fiscode:
                           _competitor.competitor.info_data["fiscode"] || "",
                         Lastname:
-                          _competitor.competitor.info_data["surname"] || "",
+                          _competitor.competitor.info_data["lastname"] || "",
                         Firstname:
                           _competitor.competitor.info_data["name"] || "",
                         Sex: this.competition.mainData.title.stage.group,

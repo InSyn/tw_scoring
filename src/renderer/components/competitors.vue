@@ -183,8 +183,8 @@
                 >
                   {{
                     `${(row.info_data["bib"] && row.info_data["bib"]) ||
-                      ""} ${(row.info_data["surname"] &&
-                      row.info_data["surname"]) ||
+                      ""} ${(row.info_data["lastname"] &&
+                      row.info_data["lastname"]) ||
                       ""} ${(row.info_data["name"] && row.info_data["name"]) ||
                       ""}`
                   }}
@@ -439,7 +439,7 @@
                       :disabled="
                         col.id === 'bib' ||
                           col.id === 'name' ||
-                          col.id === 'surname'
+                          col.id === 'lastname'
                       "
                       @click.prevent="
                         addColumnDialog.colToDel.push(

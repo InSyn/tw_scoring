@@ -161,7 +161,7 @@ export default {
                   return {
                     bib: _competitor.info_data["bib"].toString(),
                     name: _competitor.info_data["name"].toString(),
-                    surName: _competitor.info_data["surname"].toString(),
+                    lastName: _competitor.info_data["lastname"].toString(),
                     result: competition.set_accuracy(
                       competition.result_formula.types[
                         competition.result_formula.type
@@ -223,7 +223,7 @@ export default {
                   return {
                     bib: _competitor.info_data["bib"].toString(),
                     name: _competitor.info_data["name"].toString(),
-                    surName: _competitor.info_data["surname"].toString(),
+                    lastName: _competitor.info_data["lastname"].toString(),
                     result: competition.set_accuracy(
                       competition.result_formula.types[
                         competition.result_formula.type

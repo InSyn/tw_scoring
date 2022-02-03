@@ -7,63 +7,57 @@
       }"
     >
       <div class="pa-2" style="height: 100%;">
-        <v-row
-          no-gutters
-          class="d-flex align-center pa-2"
+        <div
           :style="{
             backgroundColor:
               $vuetify.theme.themes[appTheme].standardBackgroundRGBA
           }"
-          style="height: 3.6rem; font-size: 1.2rem; font-weight: bold; border-radius: 6px"
+          style="display:flex;align-items: stretch;padding: 4px;font-size: 1.2rem; font-weight: bold; border-radius: 6px"
         >
-          <div class="d-flex align-center">
-            <div
-              class="d-flex justify-center align-center pa-1"
-              style="font-weight: bold"
-            >
-              <div
-                class="pa-1"
-                :style="{
-                  backgroundColor: $vuetify.theme.themes[appTheme].textDefault,
-                  color: $vuetify.theme.themes[appTheme].cardBackgroundRGBA
-                }"
-                style="border-radius: 2px"
-                v-html="
-                  competition.selected_race &&
-                    competition.selected_race.selectedCompetitor &&
-                    competition.competitorsSheet.competitors.find(_comp => {
-                      return (
-                        _comp.id ===
-                        competition.selected_race.selectedCompetitor
-                      );
-                    }).info_data['bib']
-                "
-              ></div>
-            </div>
-            <div
-              class="d-flex justify-center align-center pa-1"
-              v-html="
-                competition.selected_race &&
-                  competition.selected_race.selectedCompetitor &&
-                  competition.competitorsSheet.competitors.find(_comp => {
-                    return (
-                      _comp.id === competition.selected_race.selectedCompetitor
-                    );
-                  }).info_data['surname']
-              "
-            ></div>
-            <div
-              class="d-flex justify-center align-center pa-1"
-              v-html="
-                competition.selected_race &&
-                  competition.selected_race.selectedCompetitor &&
-                  competition.competitorsSheet.competitors.find(_comp => {
-                    return (
-                      _comp.id === competition.selected_race.selectedCompetitor
-                    );
-                  }).info_data['name']
-              "
-            ></div>
+          <div
+            :style="{
+              backgroundColor: $vuetify.theme.themes[appTheme].textDefault,
+              color: $vuetify.theme.themes[appTheme].cardBackgroundRGBA
+            }"
+            style="display:flex;align-items: center;justify-content: center;font-size: 1.4rem;font-weight:bold;border-radius: 6px; min-width: 3rem;text-align:center;"
+          >
+            {{
+              competition.selected_race &&
+                competition.selected_race.selectedCompetitor &&
+                competition.competitorsSheet.competitors.find(_comp => {
+                  return (
+                    _comp.id === competition.selected_race.selectedCompetitor
+                  );
+                }).info_data["bib"]
+            }}
+          </div>
+          <div
+            class="d-flex justify-center align-center"
+            style="margin-left: 1rem"
+          >
+            {{
+              competition.selected_race &&
+                competition.selected_race.selectedCompetitor &&
+                competition.competitorsSheet.competitors.find(_comp => {
+                  return (
+                    _comp.id === competition.selected_race.selectedCompetitor
+                  );
+                }).info_data["lastname"]
+            }}
+          </div>
+          <div
+            class="d-flex justify-center align-center"
+            style="margin-left: .5rem"
+          >
+            {{
+              competition.selected_race &&
+                competition.selected_race.selectedCompetitor &&
+                competition.competitorsSheet.competitors.find(_comp => {
+                  return (
+                    _comp.id === competition.selected_race.selectedCompetitor
+                  );
+                }).info_data["name"]
+            }}
           </div>
           <v-spacer></v-spacer>
           <v-btn
@@ -73,10 +67,11 @@
                 setToTrack(competition.selected_race.selectedCompetitor)
             "
             icon
+            small
             :color="$vuetify.theme.themes[appTheme].success"
             ><v-icon>mdi-play</v-icon></v-btn
           >
-        </v-row>
+        </div>
         <v-row no-gutters class="pt-2" style="height: calc(100% - 3.6rem)">
           <div
             style="height: 100%; width: 100%; overflow: auto; border-radius: 6px"
@@ -127,7 +122,7 @@
                     v-for="(data, d) in competitor.info_data"
                     v-if="
                       d === 'bib' ||
-                        d === 'surname' ||
+                        d === 'lastname' ||
                         d === 'name' ||
                         d === 'year' ||
                         d === 'region'
@@ -216,7 +211,7 @@ export default {
         name: `${this.transliterate(competitor.info_data.name)}`,
         bip: `${competitor.info_data.bib}`,
         short_name: this.transliterate(
-          `${competitor.info_data.surname} ${competitor.info_data.name[0]}.`
+          `${competitor.info_data["lastname"]} ${competitor.info_data.name[0]}.`
         ),
         id_fis: "test",
         status: "1",
@@ -224,7 +219,7 @@ export default {
       };
 
       axios
-        .post("http://79.104.192.118:8888/ags", compToSend)
+        .post("http://79.104.192.118:8080/ags", compToSend)
         .then(res => {
           return res;
         })

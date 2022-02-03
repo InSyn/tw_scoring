@@ -354,6 +354,7 @@
                 $vuetify.theme.themes[appTheme].standardBackgroundRGBA
             }"
             v-model="competition.structure.selected.accuracy"
+            @change="this.$store.dispatch('main/updateEvent')"
           >
             <v-radio
               class="pa-2 ma-1"
@@ -446,7 +447,7 @@
                             class="font-weight-bold"
                             v-html="`Судья ${judge.id}`"
                           ></div>
-                          <div v-html="`${judge.surName} ${judge.name}`"></div>
+                          <div v-html="`${judge.lastName} ${judge.name}`"></div>
                         </div>
                       </div>
                     </div>
@@ -468,7 +469,7 @@
                           @click="
                             competition.result_formula.types[0].formula =
                               formula.id;
-                            updateEvent();
+                            this.$store.dispatch('main/updateEvent');
                           "
                           class="mr-2 d-flex flex-nowrap align-center"
                           style="cursor:pointer;"
@@ -800,7 +801,7 @@
                                   return _section.id !== section.id;
                                 }
                               );
-                              updateEvent();
+                              this.$store.dispatch('main/updateEvent');
                             "
                             small
                             :color="$vuetify.theme.themes[appTheme].action_red"
@@ -943,7 +944,7 @@
                       .heats > 0 &&
                       competition.result_formula.overall_result.select_heats
                         .heats--;
-                    updateEvent();
+                    this.$store.dispatch('main/updateEvent');
                   "
                   >mdi-chevron-left
                 </v-icon>
@@ -963,7 +964,7 @@
                   @click="
                     competition.result_formula.overall_result.select_heats
                       .heats++;
-                    updateEvent();
+                    this.$store.dispatch('main/updateEvent');
                   "
                   >mdi-chevron-right
                 </v-icon>
@@ -973,7 +974,7 @@
                 @click="
                   competition.result_formula.overall_result.select_heats.mode =
                     mode.id;
-                  updateEvent();
+                  this.$store.dispatch('main/updateEvent');
                 "
                 style="border-radius: 50%; height: 1rem;width: 1rem; cursor:pointer;"
                 :style="[
@@ -1005,13 +1006,6 @@ export default {
   name: "results",
   methods: {
     log: data => console.log(data),
-    updateEvent() {
-      this.socket &&
-        this.socket.connected &&
-        this.socket.emit("set_competition_data", this.competition, res => {
-          console.log(res);
-        });
-    },
     add_prev_stage(stage) {
       if (this.competition.stages.prev_stages.some(_prev => _prev === stage)) {
         if (this.competition.stages.lastStageSize > 1) {
@@ -1137,11 +1131,11 @@ export default {
     },
     setRaceResultFormula(type) {
       this.competition.result_formula.type = type;
-      this.updateEvent();
+      this.$store.dispatch("main/updateEvent");
     },
     setOverallResultFormula(type) {
       this.competition.result_formula.overall_result.type = type;
-      this.updateEvent();
+      this.$store.dispatch("main/updateEvent");
     }
   },
   data() {

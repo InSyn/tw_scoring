@@ -13,7 +13,7 @@
       ><v-col class="d-flex align-center" style="font-weight: bold">
         <span class="mr-2">Фамилия</span>
         <input
-          v-model="competition.stuff.secretary.surName"
+          v-model="competition.stuff.secretary.lastName"
           type="text"
           class="pa-1"
           style="border-radius: 4px; width: 12rem"
