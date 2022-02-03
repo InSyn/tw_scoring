@@ -100,6 +100,7 @@
             @click="addMessage(message)"
             :color="$vuetify.theme.themes[appTheme].accent"
             text
+            small
             >отправить</v-btn
           ></v-col
         ></v-row

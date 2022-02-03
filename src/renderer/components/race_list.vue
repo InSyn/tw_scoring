@@ -1,10 +1,8 @@
 <template>
-  <v-container v-if="competition" fluid
-    ><v-row no-gutters
-      ><v-col class="px-8 pb-4" style="font-size: 1.4rem; font-weight:bold;"
-        >Стартовые списки</v-col
-      ></v-row
-    >
+  <v-container v-if="competition" fluid>
+    <div style="width: 100%;font-size: 1.4rem; font-weight:bold;" class="pa-2">
+      Стартовые списки
+    </div>
     <v-container fluid>
       <v-row
         style="display:flex;flex-wrap: nowrap;align-items: center;width: 100%;"
@@ -30,20 +28,21 @@
             {{ "Нет созданных заездов" }}
           </div>
           <div
-            @click="race_menu.selected = r"
-            style="position:relative;height: 2.4rem;font-weight:bold;cursor: pointer;margin: 4px;padding: 8px 2.4rem 8px 1rem;border-radius: 6px;transition: background-color .112s, color .112s"
+            @click="selectRace(race)"
+            style="position:relative;height: 2.4rem;font-weight:bold;cursor: pointer;margin: 4px;padding: 4px 2rem 4px 1rem;border-radius: 6px;transition: background-color .112s, color .112s"
             class="d-flex justify-center align-center"
             :style="[
               {
                 backgroundColor: $vuetify.theme.themes[appTheme].accent
               },
-              r === race_menu.selected && {
-                backgroundColor: $vuetify.theme.themes[appTheme].success,
-                color: $vuetify.theme.themes[appTheme].cardBackgroundRGBA
-              }
+              selectedRace &&
+                race.id === selectedRace.id && {
+                  backgroundColor: $vuetify.theme.themes[appTheme].success,
+                  color: $vuetify.theme.themes[appTheme].cardBackgroundRGBA
+                }
             ]"
-            v-for="(race, r) in competition.races"
-            :key="r"
+            v-for="race in competition.races"
+            :key="race.id"
           >
             <v-dialog v-model="race.del_dialog" width="320px"
               ><template v-slot:activator="{ on, attrs }">
@@ -51,7 +50,7 @@
                   <div
                     v-on="on"
                     class="d-flex align-center justify-center"
-                    style="position:absolute;top: 4px;right: 4px;height: 16px;width: 16px;border-radius: 2px"
+                    style="position:absolute;top: 2px;right: 2px;height: 14px;width: 14px;border-radius: 4px"
                     :style="[
                       {
                         backgroundColor:
@@ -64,7 +63,7 @@
                     ]"
                   >
                     <v-icon
-                      style="font-size: 12px"
+                      x-small
                       :color="$vuetify.theme.themes[appTheme].textDefault"
                       >mdi-close</v-icon
                     >
@@ -89,7 +88,7 @@
                 >
                   <v-btn
                     text
-                    @click="del_race(race.id)"
+                    @click="del_race(race)"
                     :color="$vuetify.theme.themes[appTheme].action_red"
                     >Удалить</v-btn
                   ><v-btn @click="race.del_dialog = false">Отмена</v-btn>
@@ -198,7 +197,6 @@
                     :color="
                       $vuetify.theme.themes[appTheme].standardBackgroundRGBA
                     "
-                    :key="Math.random()"
                     class="pa-2"
                     style="height: 320px; overflow-y: auto; border-radius: 6px"
                   >
@@ -208,23 +206,23 @@
                         v-for="(competitor, c) in filtered_list"
                         :key="c"
                       >
-                        <div
-                          v-html="
+                        <div>
+                          {{
                             `${
-                              competitor.info_data.bib
-                                ? competitor.info_data.bib
-                                : ' '
+                              competitor.info_data["bib"]
+                                ? competitor.info_data["bib"]
+                                : " "
                             } ${
-                              competitor.info_data.surname
-                                ? competitor.info_data.surname
-                                : ' '
+                              competitor.info_data["surname"]
+                                ? competitor.info_data["surname"]
+                                : " "
                             } ${
-                              competitor.info_data.name
-                                ? competitor.info_data.name
-                                : ' '
+                              competitor.info_data["name"]
+                                ? competitor.info_data["name"]
+                                : " "
                             }`
-                          "
-                        ></div>
+                          }}
+                        </div>
                         <v-spacer></v-spacer>
                         <v-btn
                           icon
@@ -247,7 +245,6 @@
                     :color="
                       $vuetify.theme.themes[appTheme].standardBackgroundRGBA
                     "
-                    :key="Math.random()"
                     class="pa-2"
                     style="height: 320px; overflow-y: auto; border-radius: 6px"
                   >
@@ -275,25 +272,28 @@
                             >mdi-arrow-left</v-icon
                           >
                         </v-btn>
-                        <div
-                          v-html="
+                        <div>
+                          {{
                             `${
-                              competitorToRace.info_data.bib
-                                ? competitorToRace.info_data.bib
-                                : ' '
+                              competitorToRace.info_data["bib"]
+                                ? competitorToRace.info_data["bib"]
+                                : " "
                             } ${
-                              competitorToRace.info_data.surname
-                                ? competitorToRace.info_data.surname
-                                : ' '
+                              competitorToRace.info_data["surname"]
+                                ? competitorToRace.info_data["surname"]
+                                : " "
                             } ${
-                              competitorToRace.info_data.name
-                                ? competitorToRace.info_data.name
-                                : ' '
+                              competitorToRace.info_data["name"]
+                                ? competitorToRace.info_data["name"]
+                                : " "
                             }`
-                          "
-                        ></div></v-list-item
-                    ></v-list-item-group> </v-list></v-col
-              ></v-row>
+                          }}
+                        </div></v-list-item
+                      ></v-list-item-group
+                    >
+                  </v-list></v-col
+                ></v-row
+              >
             </v-card-text>
             <v-card-actions class="d-flex justify-center"
               ><v-btn
@@ -326,7 +326,8 @@
       </v-row>
       <div
         class="mt-2 pa-2"
-        v-if="competition.races[race_menu.selected]"
+        v-if="selectedRace"
+        :key="selectedRace.id"
         style="border-radius: 6px"
         :style="{
           backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA
@@ -337,9 +338,7 @@
           style="font-size: 1.4rem"
         >
           {{
-            `${competition.races[race_menu.selected].type.title} / ${
-              competition.races[race_menu.selected].discipline.title
-            } / ${competition.races[race_menu.selected].title}`
+            `${selectedRace.type.title} / ${selectedRace.discipline.title} / ${selectedRace.title}`
           }}<v-spacer></v-spacer
           ><v-dialog
             v-model="dialogs.add_competitor_to_race.state"
@@ -364,11 +363,7 @@
               >
                 <v-card-title
                   class="pa-2 ma-0"
-                  v-html="
-                    `Добавить участника в ${
-                      competition.races[race_menu.selected].title
-                    }`
-                  "
+                  v-html="`Добавить участника в ${selectedRace.title}`"
                 ></v-card-title
                 ><v-btn
                   @click="
@@ -397,14 +392,9 @@
                           !dialogs.add_competitor_to_race.competitors.includes(
                             _comp.id
                           ) &&
-                          !competition.races[
-                            race_menu.selected
-                          ].startList.includes(_comp.id) &&
-                          !competition.races[
-                            race_menu.selected
-                          ].finished.includes(_comp.id) &&
-                          competition.races[race_menu.selected].onTrack !==
-                            _comp.id
+                          !selectedRace.startList.includes(_comp.id) &&
+                          !selectedRace.finished.includes(_comp.id) &&
+                          selectedRace.onTrack !== _comp.id
                         );
                       }
                     )"
@@ -480,7 +470,7 @@
                 ><v-btn
                   style="font-size: 1.2rem"
                   @click="
-                    competition.races[race_menu.selected].startList.push(
+                    selectedRace.startList.push(
                       ...dialogs.add_competitor_to_race.competitors
                     ),
                       (dialogs.add_competitor_to_race.state = false),
@@ -513,18 +503,13 @@
               v-slot:default="{ hover }"
               v-for="(competitor, comp_n) in section === 'onTrack'
                 ? competition.competitorsSheet.competitors.find(_comp => {
-                    return (
-                      _comp.id === competition.races[race_menu.selected].onTrack
-                    );
+                    return _comp.id === selectedRace.onTrack;
                   }) && [
                     competition.competitorsSheet.competitors.find(_comp => {
-                      return (
-                        _comp.id ===
-                        competition.races[race_menu.selected].onTrack
-                      );
+                      return _comp.id === selectedRace.onTrack;
                     })
                   ]
-                : competition.races[race_menu.selected][section].map(comp => {
+                : selectedRace[section].map(comp => {
                     return competition.competitorsSheet.competitors.find(
                       _comp => {
                         return _comp.id === comp;
@@ -558,11 +543,7 @@
                       <v-icon
                         style="height: 50%"
                         @click.prevent="
-                          shift(
-                            competitor.id,
-                            competition.races[race_menu.selected].id,
-                            'up'
-                          )
+                          shift(competitor.id, selectedRace, 'up')
                         "
                         :color="$vuetify.theme.themes[appTheme].textDefault"
                         :style="
@@ -579,11 +560,7 @@
                       <v-icon
                         style="height: 50%"
                         @click.prevent="
-                          shift(
-                            competitor.id,
-                            competition.races[race_menu.selected].id,
-                            'down'
-                          )
+                          shift(competitor.id, selectedRace, 'down')
                         "
                         :color="$vuetify.theme.themes[appTheme].textDefault"
                         :style="
@@ -599,7 +576,7 @@
                   </div>
                   <div v-html="comp_n + 1"></div>
                 </div>
-                <v-dialog v-model="competitor.info_dialog.state" width="320px"
+                <v-dialog v-model="competitor.info_dialog.state" width="380px"
                   ><template v-slot:activator="{ on }">
                     <v-row
                       v-on="on"
@@ -614,82 +591,121 @@
                         v-html="field"
                       ></v-col> </v-row></template
                   ><v-card
+                    style="padding: 0;margin: 0;width: 100%;"
                     :style="{
                       backgroundColor:
                         $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
                       color: $vuetify.theme.themes[appTheme].textDefault
                     }"
-                    class="d-flex flex-column"
                   >
                     <v-card-title
-                      class="d-flex align-center"
-                      style="font-weight:bold; font-size: 1.2rem;padding: .5rem 1rem"
-                      ><div>Изменить данные участника</div>
-                      <v-btn
-                        @click="
-                          competition.competitorsSheet.competitors.find(
-                            _comp => {
-                              return _comp.id === competitor.id;
-                            }
-                          ).info_dialog.state = false
-                        "
-                        icon
-                        style="margin-left: auto;"
-                        :color="$vuetify.theme.themes[appTheme].action_red"
-                        ><v-icon>mdi-close</v-icon></v-btn
-                      ></v-card-title
+                      class="d-flex align-center pa-0 ma-0"
+                      style="margin: 0;padding: 0;"
                     >
-                    <v-card-text style="font-size: 1rem; padding: 1rem 2rem"
-                      ><div
-                        class="pa-1 d-flex align-center flex-nowrap"
-                        v-for="(info, i) in competitor.info_data"
-                        :key="i"
+                      <div
+                        style="font-weight:bold;padding: 2px 0;width: 3rem; border-bottom-right-radius: 6px;text-align:center;"
                         :style="{
+                          backgroundColor:
+                            $vuetify.theme.themes[appTheme].accent,
                           color: $vuetify.theme.themes[appTheme].textDefault
                         }"
                       >
-                        <label
-                          :for="competitor.id"
-                          v-html="`${i}`"
-                          style="width: 4rem; font-weight: bold;"
-                        ></label
-                        ><input
-                          :id="competitor.id"
-                          v-model="
-                            competition.competitorsSheet.competitors.find(
-                              _comp => {
-                                return _comp.id === competitor.id;
-                              }
-                            ).info_data[i]
-                          "
-                          type="text"
-                          class="ml-2 pa-1"
-                          style="border-radius: 2px"
-                          :style="{
-                            color: $vuetify.theme.themes[appTheme].textDefault,
-                            backgroundColor:
-                              $vuetify.theme.themes[appTheme]
-                                .standardBackgroundRGBA
-                          }"
-                        /></div
-                    ></v-card-text>
+                        {{ competitor.info_data["bib"] }}
+                      </div>
+                      <div style="margin-left: 1rem">
+                        {{ `${competitor.info_data["surname"] || ""}` }}
+                      </div>
+                      <div style="margin-left: 1rem">
+                        {{ `${competitor.info_data["name"] || ""}` }}
+                      </div>
+                      <v-btn
+                        @click="competitor.info_dialog.state = false"
+                        icon
+                        small
+                        :color="$vuetify.theme.themes[appTheme].action_red"
+                        style="margin: 0 2px 0 auto"
+                        ><v-icon small>mdi-close</v-icon></v-btn
+                      >
+                    </v-card-title>
+                    <div
+                      class="competitor_data_container"
+                      style="display:flex;flex-direction: column;width: 100%;min-height: 160px;margin-top: 1rem"
+                    >
+                      <div
+                        v-for="race in competition.races"
+                        :key="race.id"
+                        style="flex:0 0 auto;display:flex;flex-wrap: wrap;margin-top: 1.2rem"
+                      >
+                        <div
+                          style="font-weight:bold;padding: 0 1rem;border-top-right-radius: 6px;border-bottom-right-radius: 6px"
+                          :style="[
+                            {
+                              backgroundColor:
+                                $vuetify.theme.themes[appTheme].accent,
+                              color: $vuetify.theme.themes[appTheme].textDefault
+                            },
+                            race.id === selectedRace.id && {
+                              backgroundColor:
+                                $vuetify.theme.themes[appTheme].accent_light,
+                              paddingLeft: '2rem'
+                            }
+                          ]"
+                        >
+                          {{ `${race.title}` }}
+                        </div>
+                        <div
+                          style="flex:0 0 auto; display:flex;flex-wrap: wrap; width: 100%;padding: .5rem 4px 0 4px"
+                        >
+                          <div
+                            v-if="
+                              competitor.marks.filter(
+                                _mark => _mark.race_id === race.id
+                              ).length < 1
+                            "
+                            style="font-weight:bold;text-align:center;flex-grow: 1"
+                          >
+                            Нет оценок
+                          </div>
+                          <div
+                            v-else
+                            v-for="mark in competitor.marks.filter(
+                              _mark => _mark.race_id === race.id
+                            )"
+                            :key="mark.id"
+                            style="display:flex;align-items: center;width: 25%;"
+                          >
+                            <div style="margin-right: .5rem">
+                              {{ `Судья ${mark.judge}:` }}
+                            </div>
+                            <div style="font-weight:bold">
+                              {{ mark.value }}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                     <v-card-actions
                       class="d-flex align-center flex-nowrap"
-                      style="padding: .5rem 1rem"
+                      style="padding: 1rem 4px 2px 4px;margin-top: 1rem"
+                    >
+                      <v-btn
+                        @click="clearCompetitorRace(competitor, selectedRace)"
+                        text
+                        small
+                        :color="$vuetify.theme.themes[appTheme].accent_light"
+                        >Очистить результаты заезда</v-btn
                       ><v-btn
                         :disabled="section !== 'startList'"
-                        @click="
-                          remove_competitor(
-                            competitor.id,
-                            competition.races[race_menu.selected].id
-                          )
-                        "
-                        text
+                        @click="removeCompetitor(competitor.id, selectedRace)"
+                        x-small
                         style="margin-left: auto"
                         :color="$vuetify.theme.themes[appTheme].action_red"
+                        :style="{
+                          color: $vuetify.theme.themes[appTheme].textDefault
+                        }"
                         >Удалить из заезда</v-btn
-                      ></v-card-actions
-                    >
+                      >
+                    </v-card-actions>
                   </v-card></v-dialog
                 >
               </div></v-hover
@@ -697,35 +713,47 @@
           </div>
         </div>
         <div
-          class="race_menu pt-1"
-          style="display:flex;flex-wrap: nowrap;flex: 0 0 auto"
+          class="race_menu"
+          style="display:flex;flex-wrap: wrap;flex: 0 0 auto; padding-top: 1rem"
         >
           <v-btn
-            @click="shuffle(race_menu.selected)"
+            @click="arrangeByResults(selectedRace)"
             text
-            :color="$vuetify.theme.themes[appTheme].accent"
-            >Перемешать</v-btn
-          >
-
-          <v-btn
-            @click="arrangeByResults(race_menu.selected)"
-            text
-            :color="$vuetify.theme.themes[appTheme].accent"
+            small
+            :color="$vuetify.theme.themes[appTheme].accent_light"
             >Ранжировать по рез-ту</v-btn
           >
           <v-btn
-            @click="turnAround(race_menu.selected)"
+            @click="turnAround(selectedRace)"
             text
-            :color="$vuetify.theme.themes[appTheme].accent"
+            small
+            :color="$vuetify.theme.themes[appTheme].accent_light"
             >Перевернуть</v-btn
           >
           <v-btn
-            @click="listUndo(race_menu.selected)"
+            @click="shuffle(selectedRace)"
+            text
+            small
+            :color="$vuetify.theme.themes[appTheme].accent_light"
+            >Перемешать</v-btn
+          >
+          <v-btn
+            @click="listUndo(selectedRace)"
             :disabled="listPrev.length < 1"
             icon
-            style="margin-left: auto"
+            small
+            style="margin-left: 1rem"
             :color="$vuetify.theme.themes[appTheme].action_red"
             ><v-icon>mdi-undo</v-icon>
+          </v-btn>
+          <v-btn
+            @click="clearRaceResults(selectedRace)"
+            style="margin-left: auto"
+            small
+            elevation="0"
+            :color="$vuetify.theme.themes[appTheme].action_red"
+            :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
+            >Очистить результаты
           </v-btn>
         </div>
       </div>
@@ -735,17 +763,27 @@
 
 <script>
 import { mapGetters } from "vuex";
+
 export default {
   name: "start_protocols",
+  mounted() {
+    if (this.competition && this.competition.races[0])
+      this.selectRace(this.competition.races[0]);
+  },
   methods: {
     log(data) {
       console.log(data);
     },
-    shift(comp_id, race_id, to) {
-      let _compToShift,
-        race = this.competition.races.find(_race => {
-          return _race.id === race_id;
-        });
+    selectRace(race) {
+      if (this.selectedRace && race.id !== this.selectedRace.id)
+        this.listPrev = [];
+
+      this.selectedRace = this.competition.races.find(
+        _race => _race.id === race.id
+      );
+    },
+    shift(comp_id, race, to) {
+      let _compToShift;
       if (to === "up") {
         if (race.startList.indexOf(comp_id) > 0) {
           _compToShift = race.startList[race.startList.indexOf(comp_id) - 1];
@@ -775,94 +813,133 @@ export default {
           );
         }
       }
+
+      this.rebuildStartList(race);
+      this.refreshStartList(race);
     },
     turn_race(to) {
+      let race_idx = this.competition.races.indexOf(this.selectedRace);
       if (to === "right")
-        if (this.race_menu.selected + 1 < this.competition.races.length) {
-          this.race_menu.selected += 1;
+        if (race_idx + 1 < this.competition.races.length) {
+          this.selectedRace = this.competition.races[race_idx + 1];
         } else {
-          this.race_menu.selected = 0;
+          this.selectedRace = this.competition.races[0];
         }
       else {
-        if (this.race_menu.selected - 1 >= 0) {
-          this.race_menu.selected -= 1;
+        if (race_idx - 1 >= 0) {
+          this.selectedRace = this.competition.races[race_idx - 1];
         } else {
-          this.race_menu.selected = this.competition.races.length - 1;
+          this.selectedRace = this.competition.races[
+            this.competition.races.length - 1
+          ];
         }
       }
     },
     create_race(title, type, discipline, competitors) {
-      this.competition.races.push(
-        new this.RaceClass(
-          title ||
-            `Заезд ${
-              this.competition.races.length < 1
-                ? "1"
-                : this.competition.races.length + 1
-            }`,
-          type,
-          discipline,
-          competitors.map(competitor => {
-            return competitor.id;
-          })
-        )
+      const race = new this.RaceClass(
+        title ||
+          `Заезд ${
+            this.competition.races.length < 1
+              ? "1"
+              : this.competition.races.length + 1
+          }`,
+        type,
+        discipline,
+        competitors.map(competitor => {
+          return competitor.id;
+        })
       );
+
+      this.competition.races.push(race);
+      this.selectRace(race);
+
       this.dialogs.create_race.state = false;
       this.dialogs.create_race.competitors = [];
 
-      this.socket &&
-        this.socket.connected &&
-        this.socket.emit("set_competition_data", this.competition, res => {
-          console.log(res);
-        });
+      this.$store.dispatch("main/updateEvent");
+
+      return race;
     },
-    del_race(race_id) {
-      this.competition.races.find(race => {
-        return race.id === race_id;
-      }).del_dialog = false;
+    del_race(_race) {
+      _race.del_dialog = false;
+
       this.competition.races = this.competition.races.filter(race => {
-        return race.id !== race_id;
+        return race.id !== _race.id;
       });
+
       this.competition.competitorsSheet.competitors.forEach(_competitor => {
         _competitor.marks = _competitor.marks.filter(_mark => {
-          return _mark.race_id !== race_id;
+          return _mark.race_id !== _race.id;
+        });
+        _competitor.results = _competitor.results.filter(result => {
+          return result.race_id !== _race.id;
         });
       });
+
+      this.competition.races[0]
+        ? (this.selectedRace = this.competition.races[0])
+        : (this.selectedRace = null);
       this.competition.selected_race_id = 0;
-      this.socket &&
-        this.socket.connected &&
-        this.socket.emit("set_competition_data", this.competition, res => {
-          console.log(res);
-        });
+
+      this.$store.dispatch("main/updateEvent");
     },
-    remove_competitor(competitor_id, race_id) {
+    clearRaceResults(_race) {
+      this.competition.competitorsSheet.competitors.forEach(competitor => {
+        competitor.marks = competitor.marks.filter(
+          mark => mark.race_id !== _race.id
+        );
+        competitor.results = competitor.results.filter(
+          result => result.race_id !== _race.id
+        );
+      });
+
+      _race.finished = [];
+      _race.startList = _race._startList;
+      _race.onTrack = null;
+      _race.selectedCompetitor = _race.startList[0] || null;
+
+      this.$store.dispatch("main/updateEvent");
+
+      return _race;
+    },
+    removeCompetitor(competitor_id, _race) {
       this.competition.competitorsSheet.competitors.find(_comp => {
         return _comp.id === competitor_id;
       }).info_dialog.state = false;
 
-      this.competition.races.find(_race => {
-        return _race.id === race_id;
-      }).startList = this.competition.races
-        .find(_race => {
-          return _race.id === race_id;
-        })
-        .startList.filter(_comp => {
-          return !(_comp === competitor_id);
-        });
+      _race.startList = _race.startList.filter(_comp => {
+        return !(_comp === competitor_id);
+      });
 
-      this.competition.races.find(_race => {
-        return _race.id === race_id;
-      }).selectedCompetitor === competitor_id
-        ? (this.competition.races.find(_race => {
-            return _race.id === race_id;
-          }).selectedCompetitor = null)
+      _race.selectedCompetitor === competitor_id
+        ? (_race.selectedCompetitor = null)
         : null;
 
-      this.socket &&
-        this.socket.connected &&
-        this.socket.emit("set_competition_data", this.competition, res => {
-          return res;
-        });
+      this.rebuildStartList(_race);
+      this.refreshStartList(_race);
+    },
+    clearCompetitorRace(competitor, race) {
+      competitor.marks = competitor.marks.filter(
+        mark => mark.race_id !== race.id
+      );
+      competitor.results = competitor.results.filter(
+        result => result.race_id !== race.id
+      );
+
+      race.finished = race.finished.filter(
+        _competitor => _competitor !== competitor.id
+      );
+
+      if (race.selectedCompetitor === competitor.id)
+        race.selectedCompetitor = null;
+
+      if (race.onTrack === competitor.id) race.onTrack = null;
+
+      if (!race.startList.includes(competitor.id))
+        race.startList.unshift(competitor.id);
+
+      this.rebuildStartList(race);
+      this.refreshStartList(race);
     },
     addAll() {
       const list = this.filtered_list;
@@ -871,11 +948,10 @@ export default {
           this.dialogs.create_race.competitors.push(list[i]);
       }
     },
-    shuffle(race) {
-      if (this.competition.races[race].startList.length > 0)
-        this.listPrev.push([...this.competition.races[race].startList]);
+    shuffle(_race) {
+      if (_race.startList.length > 0) this.listPrev.push([..._race.startList]);
 
-      let list = this.competition.races[race].startList;
+      let list = _race.startList;
       let m = list.length,
         t,
         i;
@@ -889,32 +965,30 @@ export default {
         // list[i] = t;
       }
 
-      this.competition.races[race].startList = list;
-      this.competition.races[race]._startList = list;
+      _race.startList = list;
 
-      this.refreshStartList(race);
+      this.rebuildStartList(_race);
+      this.refreshStartList(_race);
 
       return list;
     },
-    turnAround(race) {
-      if (this.competition.races[race].startList.length > 0)
-        this.listPrev.push([...this.competition.races[race].startList]);
+    turnAround(_race) {
+      if (_race.startList.length > 0) this.listPrev.push([..._race.startList]);
 
-      const startList = [...this.competition.races[race].startList];
+      const startList = [..._race.startList];
       const reversed = startList.reverse();
 
-      this.competition.races[race].startList = [...reversed];
-      this.competition.races[race]._startList = [...reversed];
+      _race.startList = [...reversed];
 
-      this.refreshStartList(race);
+      this.rebuildStartList(_race);
+      this.refreshStartList(_race);
 
-      return this.competition.races[race].startList;
+      return _race;
     },
-    arrangeByResults(race) {
-      if (this.competition.races[race].startList.length > 0)
-        this.listPrev.push([...this.competition.races[race].startList]);
+    arrangeByResults(_race) {
+      if (_race.startList.length > 0) this.listPrev.push([..._race.startList]);
 
-      let resList = this.competition.races[race].startList.map(_comp => {
+      let resList = _race.startList.map(_comp => {
         const comp = this.competition.competitorsSheet.competitors.find(
           comp => comp.id === _comp
         );
@@ -925,14 +999,7 @@ export default {
             : { id_comp: 0, value: 0 }
         };
       });
-      this.competition.races[race].startList = [
-        ...resList
-          .sort((a, b) => {
-            return b.res.value - a.res.value;
-          })
-          .map(_comp => _comp.id)
-      ];
-      this.competition.races[race]._startList = [
+      _race.startList = [
         ...resList
           .sort((a, b) => {
             return b.res.value - a.res.value;
@@ -940,37 +1007,32 @@ export default {
           .map(_comp => _comp.id)
       ];
 
-      this.refreshStartList(race);
+      this.rebuildStartList(_race);
+      this.refreshStartList(_race);
 
-      return this.competition.races[race].startList;
+      return _race;
     },
-    listUndo(race) {
-      this.competition.races[race].startList = [
-        ...this.listPrev[this.listPrev.length - 1]
-      ];
-      this.competition.races[race]._startList = [
-        ...this.listPrev[this.listPrev.length - 1]
-      ];
+    listUndo(_race) {
+      _race.startList = [...this.listPrev[this.listPrev.length - 1]];
+      this.rebuildStartList(_race);
 
       this.listPrev.length > 0 &&
         this.listPrev.splice(this.listPrev.length - 1, 1);
 
-      this.refreshStartList(race);
+      this.refreshStartList(_race);
 
-      return this.competition.races[race].startList;
+      return _race.startList;
     },
     refreshStartList(race) {
-      this.competition.races[race].startList[0]
-        ? (this.competition.races[
-            race
-          ].selectedCompetitor = this.competition.races[race].startList[0])
-        : null;
+      race.startList[0] ? (race.selectedCompetitor = race.startList[0]) : null;
 
-      this.socket &&
-        this.socket.connected &&
-        this.socket.emit("set_competition_data", this.competition, res => {
-          return res;
-        });
+      this.$store.dispatch("main/updateEvent");
+    },
+    rebuildStartList(race) {
+      race._startList = [...race.startList];
+      race.onTrack && race._startList.unshift(race.onTrack);
+      race.finished.length > 0 &&
+        race._startList.unshift(...[...race.finished]);
     },
     closeRaceDialog() {
       this.dialogs.create_race.competitors = [];
@@ -980,9 +1042,7 @@ export default {
   },
   data() {
     return {
-      race_menu: {
-        selected: 0
-      },
+      selectedRace: null,
       dialogs: {
         del_dialog: {
           state: false
@@ -1001,8 +1061,12 @@ export default {
     };
   },
   computed: {
-    ...mapGetters("main", ["competition", "appTheme", "socket"]),
-    ...mapGetters("event", ["RaceClass"]),
+    ...mapGetters("main", {
+      competition: "competition",
+      appTheme: "appTheme",
+      socket: "socket"
+    }),
+    ...mapGetters("event", { RaceClass: "RaceClass" }),
     filtered_list() {
       return this.competition.competitorsSheet.competitors.filter(
         competitor => {

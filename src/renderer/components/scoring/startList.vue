@@ -157,6 +157,7 @@
 
 <script>
 import axios from "axios";
+
 import { mapGetters } from "vuex";
 export default {
   name: "startList",
@@ -193,15 +194,12 @@ export default {
         this.socket.emit("set_competition_data", this.competition, res => {
           console.log(res);
         });
-      try {
-        this.setCompetitorToTerminals(
-          this.competition.competitorsSheet.competitors.find(
-            _comp => _comp.id === competitor_id
-          )
-        );
-      } catch (e) {
-        log(e);
-      }
+
+      this.setCompetitorToTerminals(
+        this.competition.competitorsSheet.competitors.find(
+          _comp => _comp.id === competitor_id
+        )
+      );
     },
     setFocused(e) {
       e.target.style.backgroundColor = `${
@@ -213,7 +211,7 @@ export default {
         this.$vuetify.theme.themes[this.appTheme].standardBackgroundRGBA
       }`;
     },
-    async setCompetitorToTerminals(competitor) {
+    setCompetitorToTerminals(competitor) {
       const compToSend = {
         name: `${this.transliterate(competitor.info_data.name)}`,
         bip: `${competitor.info_data.bib}`,
@@ -224,8 +222,15 @@ export default {
         status: "1",
         temp1: this.competition.selected_race.id
       };
-      let res = await axios.post("http://79.104.192.118:8888/ags", compToSend);
-      console.log(res);
+
+      axios
+        .post("http://79.104.192.118:8888/ags", compToSend)
+        .then(res => {
+          return res;
+        })
+        .catch(error => {
+          return error;
+        });
     },
     transliterate(text) {
       let answer = "",
@@ -311,7 +316,11 @@ export default {
     }
   },
   computed: {
-    ...mapGetters("main", ["competition", "appTheme", "socket"])
+    ...mapGetters("main", {
+      competition: "competition",
+      appTheme: "appTheme",
+      socket: "socket"
+    })
   }
 };
 </script>

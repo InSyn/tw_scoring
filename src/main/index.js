@@ -141,41 +141,69 @@ io.on("connection", socket => {
     io.sockets.emit("chat_message", m);
   });
   socket.on("set_competition_data", (data, cb) => {
-    competition.mainData !== data.mainData &&
-      (competition.mainData = data.mainData);
+    function compareData(obj1, obj2) {
+      Object.keys(obj1).forEach(compKey => {
+        if (obj2[compKey]) {
+          if (
+            typeof obj1[compKey] === "object" &&
+            !Array.isArray(obj1[compKey]) &&
+            obj1[compKey] !== null
+          )
+            compareData(obj1[compKey], obj2[compKey]);
+          else if (obj2[compKey] !== obj1[compKey]) {
+            // io.sockets.emit("server_log", "change");
+            // io.sockets.emit("server_log", compKey);
+            // io.sockets.emit("server_log", obj2[compKey]);
+            // io.sockets.emit("server_log", "to");
+            // io.sockets.emit("server_log", obj1[compKey]);
+            obj2[compKey] = obj1[compKey];
+          }
+        } else {
+          // io.sockets.emit("server_log", "created");
+          obj2[compKey] = obj1[compKey];
+          // io.sockets.emit("server_log", compKey);
+          // io.sockets.emit("server_log", obj2[compKey]);
+        }
+      });
+    }
 
-    competition.result_formula.overall_result.type =
-      data.result_formula.overall_result.type;
-    competition.result_formula.type = data.result_formula.type;
-    competition.result_formula.types[0].formula =
-      data.result_formula.types[0].formula;
-    competition.result_formula.types[1].sections =
-      data.result_formula.types[1].sections;
-    competition.result_formula.overall_result.select_heats.heats =
-      data.result_formula.overall_result.select_heats.heats;
-    competition.result_formula.overall_result.select_heats.mode =
-      data.result_formula.overall_result.select_heats.mode;
-
-    competition.stuff.judges !== data.stuff.judges &&
-      (competition.stuff.judges = data.stuff.judges);
-
-    competition.stuff.jury !== data.stuff.jury &&
-      (competition.stuff.jury = data.stuff.jury);
-
-    competition.races !== data.races && (competition.races = data.races);
-    competition.selected_race_id !== data.selected_race_id &&
-      (competition.selected_race_id = data.selected_race_id);
-
-    competition.competitorsSheet.competitors !==
-      data.competitorsSheet.competitors &&
-      (competition.competitorsSheet.competitors =
-        data.competitorsSheet.competitors);
-
-    competition.changedMarks !== data.changedMarks &&
-      (competition.changedMarks = data.changedMarks);
+    compareData(data, competition);
+    // competition.mainData !== data.mainData &&
+    //   (competition.mainData = data.mainData);
+    //
+    // competition.result_formula.overall_result.type =
+    //   data.result_formula.overall_result.type;
+    // competition.result_formula.type = data.result_formula.type;
+    // competition.result_formula.types[0].formula =
+    //   data.result_formula.types[0].formula;
+    // competition.result_formula.types[1].sections =
+    //   data.result_formula.types[1].sections;
+    // competition.result_formula.overall_result.select_heats.heats =
+    //   data.result_formula.overall_result.select_heats.heats;
+    // competition.result_formula.overall_result.select_heats.mode =
+    //   data.result_formula.overall_result.select_heats.mode;
+    //
+    // competition.stuff.judges !== data.stuff.judges &&
+    //   (competition.stuff.judges = data.stuff.judges);
+    //
+    // competition.stuff.jury !== data.stuff.jury &&
+    //   (competition.stuff.jury = data.stuff.jury);
+    //
+    // competition.races !== data.races && (competition.races = data.races);
+    //
+    // competition.selected_race_id !== data.selected_race_id &&
+    //   (competition.selected_race_id = data.selected_race_id);
+    //
+    // competition.competitorsSheet.competitors !==
+    //   data.competitorsSheet.competitors &&
+    //   (competition.competitorsSheet.competitors =
+    //     data.competitorsSheet.competitors);
+    //
+    // competition.changedMarks !== data.changedMarks &&
+    //   (competition.changedMarks = data.changedMarks);
 
     io.sockets.emit("competition_data_updated", competition);
-    cb(competition);
+    // cb(competition);
   });
   socket.on("create_judges", (judges, cb) => {
     competition.stuff.judges = judges;
@@ -268,29 +296,27 @@ io.on("connection", socket => {
     io.sockets.emit("competition_data_updated", competition);
   });
   socket.on("set_mark", mark => {
-    competition.races[mark.race].onTrack &&
-    !competition.competitorsSheet.competitors
-      .find(_comp => {
-        return _comp.id === competition.races[mark.race].onTrack;
+    let race = competition.races.find(_race => _race.id === mark.race_id);
+    let competitor = competition.competitorsSheet.competitors.find(_comp => {
+      return _comp.id === race.onTrack;
+    });
+    if (
+      race.onTrack &&
+      !competitor.marks.some(_mark => {
+        return (
+          _mark.judge_id === mark.judge_id && _mark.race_id === mark.race_id
+        );
       })
-      .marks.some(_mark => {
-        return _mark.judge === mark.judge && _mark.race === mark.race;
-      })
-      ? competition.competitorsSheet.competitors
-          .find(_comp => {
-            return _comp.id === competition.races[mark.race].onTrack;
-          })
-          .marks.push(mark)
-      : competition.competitorsSheet.competitors
-          .find(_comp => {
-            return _comp.id === competition.races[mark.race].onTrack;
-          })
-          .marks.find(markToChange => {
-            return markToChange.judge === mark.judge &&
-              markToChange.race === mark.race
-              ? (markToChange.value = mark.value)
-              : null;
-          });
+    ) {
+      competitor.marks.push(mark);
+    } else {
+      competitor.marks.find(markToChange => {
+        return (
+          markToChange.judge_id === mark.judge_id &&
+          markToChange.race_id === mark.race_id
+        );
+      }).value = mark.value;
+    }
 
     io.sockets.emit("competition_data_updated", competition);
   });

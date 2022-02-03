@@ -114,18 +114,17 @@
               ></v-hover>
               <div
                 class="px-2 py-1 ml-2 d-flex justify-center align-center"
-                style="border-radius: 6px;min-width: 3rem"
+                style="border-radius: 6px;min-width: 4rem"
                 :style="{
                   backgroundColor:
                     $vuetify.theme.themes[appTheme].cardBackgroundRGBA
                 }"
               >
                 <div
-                  class="d-flex justify-center align-center"
                   :style="{
                     color: $vuetify.theme.themes[appTheme].textDefault
                   }"
-                  style="height: 3rem; min-width: 4rem; cursor: pointer"
+                  style="flex:0 0 auto; display:flex;align-items: center; justify-content: center;height: 3rem; flex-grow: 1; cursor: pointer;overflow: hidden"
                 >
                   {{
                     competition.set_accuracy(

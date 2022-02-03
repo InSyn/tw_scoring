@@ -255,7 +255,7 @@
                 small
                 tile
                 height="100%"
-                :color="$vuetify.theme.themes[appTheme].accent"
+                :color="$vuetify.theme.themes[appTheme].accent_light"
                 ><v-icon
                   small
                   style="margin-right: .5rem"
@@ -329,7 +329,7 @@
                 tile
                 small
                 height="100%"
-                :color="$vuetify.theme.themes[appTheme].accent"
+                :color="$vuetify.theme.themes[appTheme].accent_light"
                 ><v-icon
                   small
                   style="margin-right: .5rem"
@@ -606,20 +606,19 @@ import xslx from "read-excel-file/node";
 export default {
   name: "competitors",
   mounted() {
-    // if (
-    //   this.competition &&
-    //   this.competition.competitorsSheet.competitors.length < 1
-    // )
-    //   this.load_sheet({
-    //     target: {
-    //       files: [
-    //         {
-    //           path:
-    //             "C:\\Users\\insyn\\Documents\\GitHub\\tw_scoring\\temp_assets\\TestList.xlsx"
-    //         }
-    //       ]
-    //     }
-    //   });
+    if (
+      this.competition &&
+      this.competition.competitorsSheet.competitors.length < 1
+    )
+      this.load_sheet({
+        target: {
+          files: [
+            {
+              path: `${process.cwd()}\\temp_assets\\TestList.xlsx`
+            }
+          ]
+        }
+      });
   },
   methods: {
     log: data => {
@@ -882,13 +881,16 @@ export default {
     };
   },
   computed: {
-    ...mapGetters("main", [
-      "appTheme",
-      "competitions",
-      "competition",
-      "socket"
-    ]),
-    ...mapGetters("roles", ["CompetitorClass", "MarkClass"])
+    ...mapGetters("main", {
+      appTheme: "appTheme",
+      competitions: "competitions",
+      competition: "competition",
+      socket: "socket"
+    }),
+    ...mapGetters("roles", {
+      CompetitorClass: "CompetitorClass",
+      MarkClass: "MarkClass"
+    })
   }
 };
 </script>

@@ -252,6 +252,10 @@ export default {
       if (!state.socket) {
         state.socket = io(`http://${config[0]}:${config[1]}`);
 
+        state.socket.on("server_log", data => {
+          console.log(data);
+        });
+
         state.socket.on("serverConnected", () => {
           state.serverStatus = true;
         });
@@ -287,37 +291,73 @@ export default {
             state.competition.stuff.jury[0].connected = false;
         });
         state.socket.on("competition_data_updated", data => {
-          state.competition.mainData !== data.mainData
-            ? (state.competition.mainData = data.mainData)
-            : null;
-          state.competition.stuff.judges.forEach(_judge => {
-            data.stuff.judges.map(_data_judge => {
-              if (_data_judge.id === _judge.id) {
-                for (let _field in _judge) {
-                  if (_judge[_field] !== _data_judge[_field]) {
-                    _judge[_field] = _data_judge[_field];
-                  }
+          const excludedKeys = [
+            "weather",
+            "structure",
+            "stages",
+            "protocol_fields",
+            "protocol_settings",
+            "result_formula"
+          ];
+          function checkValues(obj1, obj2) {
+            Object.keys(obj2).forEach(dataKey => {
+              if (obj1[dataKey] && !excludedKeys.includes(dataKey)) {
+                if (Array.isArray(obj1[dataKey])) {
+                  obj1[dataKey].forEach((competitor, c_idx) => {
+                    Object.keys(obj2[dataKey][c_idx]).forEach(field => {
+                      if (
+                        obj2[dataKey][c_idx][field] !==
+                        obj1[dataKey][c_idx][field]
+                      )
+                        obj2[dataKey][c_idx][field] =
+                          obj1[dataKey][c_idx][field];
+                    });
+                  });
+                }
+                if (
+                  typeof obj1[dataKey] === "object" &&
+                  obj1[dataKey] !== null
+                ) {
+                  checkValues(obj1[dataKey], obj2[dataKey]);
+                } else if (obj1[dataKey] !== obj2[dataKey]) {
+                  obj2[dataKey] = obj1[dataKey];
                 }
               }
             });
-          });
-          state.competition.stuff.jury !== data.stuff.jury
-            ? (state.competition.stuff.jury = data.stuff.jury)
-            : null;
-          state.competition.selected_race_id !== data.selected_race_id
-            ? (state.competition.selected_race_id = data.selected_race_id)
-            : null;
-          state.competition.races !== data.races
-            ? (state.competition.races = data.races)
-            : null;
-          state.competition.competitorsSheet.competitors !==
-          data.competitorsSheet.competitors
-            ? (state.competition.competitorsSheet.competitors =
-                data.competitorsSheet.competitors)
-            : null;
-          state.competition.changedMarks !== data.changedMarks
-            ? (state.competition.changedMarks = data.changedMarks)
-            : null;
+          }
+
+          checkValues(data, state.competition);
+          // state.competition.mainData !== data.mainData
+          //   ? (state.competition.mainData = data.mainData)
+          //   : null;
+          // state.competition.stuff.judges.forEach(_judge => {
+          //   data.stuff.judges.map(_data_judge => {
+          //     if (_data_judge.id === _judge.id) {
+          //       for (let _field in _judge) {
+          //         if (_judge[_field] !== _data_judge[_field]) {
+          //           _judge[_field] = _data_judge[_field];
+          //         }
+          //       }
+          //     }
+          //   });
+          // });
+          // state.competition.stuff.jury !== data.stuff.jury
+          //   ? (state.competition.stuff.jury = data.stuff.jury)
+          //   : null;
+          // state.competition.selected_race_id !== data.selected_race_id
+          //   ? (state.competition.selected_race_id = data.selected_race_id)
+          //   : null;
+          // state.competition.races !== data.races
+          //   ? (state.competition.races = data.races)
+          //   : null;
+          // state.competition.competitorsSheet.competitors !==
+          // data.competitorsSheet.competitors
+          //   ? (state.competition.competitorsSheet.competitors =
+          //       data.competitorsSheet.competitors)
+          //   : null;
+          // state.competition.changedMarks !== data.changedMarks
+          //   ? (state.competition.changedMarks = data.changedMarks)
+          //   : null;
         });
       }
     },
@@ -377,6 +417,9 @@ export default {
           console.log(res);
         });
     },
+    serverLog: (state, data) => {
+      console.log(data);
+    },
     event_save: async (state, conf) => {
       await fs.readdir("./events", (err, res) => {
         if (err) {
@@ -425,6 +468,8 @@ export default {
     input_blur: (s, e) => {
       e.target.parentNode.style.boxShadow = "inset 0 0 0 0 transparent";
     },
+    serverLog: ({ commit }) => commit("serverLog"),
+    updateEvent: ({ commit }) => commit("updateEvent"),
     xml_export: async (s, object) => {
       const xmlConverter = require("xml-js");
       const options = {
