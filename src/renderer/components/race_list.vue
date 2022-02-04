@@ -128,7 +128,7 @@
           <v-card
             elevation="0"
             class="create_race"
-            style="position: relative"
+            style="position: relative;"
             :style="{
               color: $vuetify.theme.themes[appTheme].textDefault,
               backgroundColor:
@@ -139,12 +139,15 @@
               <div
                 style="display: flex;align-items: center;padding: 8px;width: 100%;font-size: 2rem"
               >
-                {{
-                  `${competition.mainData.title.value &&
-                    competition.mainData.title.value} ${competition.mainData
-                    .discipline.value &&
-                    competition.mainData.discipline.value}`
-                }}<v-btn
+                <div style="font-weight:bold">
+                  {{
+                    `${competition.mainData.title.value}/ ${
+                      competition.mainData.discipline.value
+                    }/ ${dialogs.create_race.title ||
+                      "Заезд " + (competition.races.length + 1)}`
+                  }}
+                </div>
+                <v-btn
                   icon
                   style="margin-left: auto"
                   @click="closeRaceDialog()"
@@ -153,18 +156,15 @@
                 >
               </div>
               <div
-                style="display:flex;flex-wrap: nowrap;align-items: center;margin-top: 1rem;padding: 0 2rem;"
+                style="display:flex;flex-wrap: nowrap;align-items: center;margin-top: 1rem;"
               >
-                <div style="font-weight:bold;font-size: 1.6rem">
-                  Новый заезд
-                </div>
-                <div style="margin-left: 2rem;font-size: 1.4rem">
+                <div style="font-size: 1.2rem;padding: 0 8px">
                   <label for="title">Название</label>
                   <input
                     id="title"
                     class="ml-2 pa-1"
                     type="text"
-                    style="border-radius: 6px"
+                    style="font-size: 1.2rem;border-radius: 6px"
                     :style="{
                       color: $vuetify.theme.themes[appTheme].textDefault,
                       backgroundColor:
@@ -183,11 +183,23 @@
                 class="dialog_action_bar d-flex align-center"
                 style="padding: .5rem 1rem;margin-bottom: 1rem;border-radius: 6px"
               >
-                <div style="display:flex;align-items: center">
+                <div style="display:flex;align-items: center;width: 100%;">
+                  <v-btn
+                    text
+                    small
+                    :color="$vuetify.theme.themes[appTheme].success"
+                    @click="addAll()"
+                    retain-focus-on-click
+                    ><v-icon size="24" style="margin-right: .5rem"
+                      >mdi-playlist-check</v-icon
+                    >Добавить всех</v-btn
+                  >
                   <v-btn
                     text
                     small
                     :color="$vuetify.theme.themes[appTheme].accent_light"
+                    :disabled="!dialogs.create_race.raceStartListFrom"
+                    style="margin-left: auto"
                     @click="
                       addStartListFromRace(
                         dialogs.create_race.raceStartListFrom
@@ -207,7 +219,7 @@
                     @blur="
                       dialogs.create_race.raceStartListFromSelector = false
                     "
-                    style="position:relative;display:flex;align-items: center;flex:1 0 auto;height: 100%;border-radius: 6px;margin-left: .5rem;outline: none;cursor:pointer"
+                    style="position:relative;display:flex;align-items: center;flex:0 0 auto;height: 100%;border-radius: 6px;margin-left: .5rem;outline: none;cursor:pointer"
                     :style="{
                       color: $vuetify.theme.themes[appTheme].textDefault,
                       backgroundColor:
@@ -216,7 +228,7 @@
                   >
                     <div
                       v-if="dialogs.create_race.raceStartListFromSelector"
-                      style="position:absolute;z-index: 1;top: 0;left: 0;min-width: 100%;display:flex;flex-direction: column;border-radius: 6px;padding: 1px"
+                      style="position:absolute;z-index: 1;top: 0;right: 0;min-width: 100%;display:flex;flex-direction: column;border-radius: 6px;padding: 1px"
                       :style="{
                         backgroundColor:
                           $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
@@ -241,7 +253,7 @@
                       >
                         <div
                           @click="selectRaceStartListFrom(race, $event)"
-                          style="flex:0 0 auto;padding: 4px 8px;font-size: 1.2rem"
+                          style="flex:0 0 auto;padding: 4px 8px;font-size: 1.2rem;white-space: nowrap"
                           :style="[
                             {
                               color: $vuetify.theme.themes[appTheme].textDefault
@@ -273,18 +285,7 @@
                     </div>
                   </div>
                 </div>
-                <v-btn
-                  text
-                  small
-                  :color="$vuetify.theme.themes[appTheme].success"
-                  @click="addAll()"
-                  style="margin-left: auto"
-                  retain-focus-on-click
-                  ><v-icon size="24" style="margin-right: .5rem"
-                    >mdi-playlist-check</v-icon
-                  >Добавить всех</v-btn
-                ></v-card-actions
-              >
+              </v-card-actions>
               <v-row class="sheet">
                 <v-col>
                   <div
@@ -967,6 +968,7 @@ export default {
       this.selectRace(race);
 
       this.dialogs.create_race.state = false;
+      this.dialogs.create_race.title = null;
       this.dialogs.create_race.competitors = [];
 
       this.$store.dispatch("main/updateEvent");
@@ -1188,6 +1190,13 @@ export default {
           return !this.dialogs.create_race.competitors.includes(competitor);
         }
       );
+    }
+  },
+  watch: {
+    "dialogs.create_race.state": function(val) {
+      val === false
+        ? (this.dialogs.create_race.raceStartListFrom = null)
+        : null;
     }
   }
 };
