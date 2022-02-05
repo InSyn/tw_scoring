@@ -255,6 +255,9 @@
                     borderRight: '1px solid #212121',
                     borderBottom: '1px solid #212121',
                     borderLeft: '1px solid #212121'
+                  },
+                  gridRow.type === 'raceNotes' && {
+                    marginTop: 'auto'
                   }
                 ]"
               >
@@ -661,14 +664,12 @@ export default {
     this.results.push([...this.getStartList]);
 
     this.results[this.results.length - 1].unshift({ type: "sheetHeader" });
-    if (this.results_protocol.print_header)
-      this.results[this.results.length - 1].push({ type: "officialsData" });
-    if (this.results_protocol.print_openers)
-      this.results[this.results.length - 1].push({ type: "openers" });
-    if (this.results_protocol.print_weather)
-      this.results[this.results.length - 1].push({ type: "weatherData" });
-    if (this.results_protocol.print_notations)
-      this.results[this.results.length - 1].push({ type: "raceNotes" });
+    for (let infoPrintChecksKey in this.results_protocol.infoPrintChecks) {
+      if (this.results_protocol.infoPrintChecks[infoPrintChecksKey].state)
+        this.results[this.results.length - 1].push({
+          type: this.results_protocol.infoPrintChecks[infoPrintChecksKey].id
+        });
+    }
 
     this.$nextTick(() => {
       setTimeout(() => {

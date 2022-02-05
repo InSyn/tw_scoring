@@ -65,7 +65,7 @@
             style="border-radius: 6px; font-weight: bold; font-size: 1.2rem; "
             :style="{
               backgroundColor:
-                $vuetify.theme.themes[appTheme].subjectBackgroundRGBA,
+                $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
               color: $vuetify.theme.themes[appTheme].success
             }"
             v-html="
@@ -292,7 +292,12 @@ export default {
     };
   },
   computed: {
-    ...mapGetters("main", ["appTheme", "competition", "socket", "serverStatus"])
+    ...mapGetters("main", {
+      appTheme: "appTheme",
+      competition: "competition",
+      socket: "socket",
+      serverStatus: "serverStatus"
+    })
   }
 };
 </script>

@@ -10,10 +10,28 @@ export default {
       title: "",
       use_grid: false,
       use_string_light: true,
-      print_header: true,
-      print_openers: true,
-      print_weather: true,
-      print_notations: true,
+      infoPrintChecks: {
+        print_header: {
+          id: "officialsData",
+          title: "Печатать информацию о жюри",
+          state: true
+        },
+        print_openers: {
+          id: "openers",
+          title: "Печатать открывающих",
+          state: false
+        },
+        print_weather: {
+          id: "weatherData",
+          title: "Печатать информацию о погоде",
+          state: false
+        },
+        print_notations: {
+          id: "raceNotes",
+          title: "Печатать замечания",
+          state: true
+        }
+      },
       strings_at_page: 6,
       font_size: 12,
       notations:

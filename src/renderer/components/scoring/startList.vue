@@ -66,7 +66,7 @@
                 competition.selected_race.selectedCompetitor &&
                 setToTrack(competition.selected_race.selectedCompetitor)
             "
-            icon
+            text
             small
             :color="$vuetify.theme.themes[appTheme].success"
             ><v-icon>mdi-play</v-icon></v-btn

@@ -51,6 +51,7 @@ export default {
         this.name = name || "";
         this.lastName = lastName || "";
         this.location = location || "";
+        this.setABC = false;
       }
       category = "";
       socket_id = null;

@@ -42,10 +42,9 @@
               v-for="(jury, jr) in competition.stuff.jury"
               :key="jr"
             >
-              <v-col class="d-flex align-center pa-1" cols="12"
+              <v-col class="d-flex align-center pa-1" cols="6"
                 ><div>Должность:</div>
                 <input
-                  :readonly="jury.connected !== undefined"
                   @focus="
                     $event.target.style.borderBottom = `1px solid ${$vuetify.theme.themes[appTheme].accent}`
                   "
@@ -60,9 +59,27 @@
                     color: $vuetify.theme.themes[appTheme].textDefault
                   }"
                   type="text"
-                  v-model="competition.stuff.jury[jr].title"
+                  v-model="competition.stuff.jury[jr].title"/></v-col
+              ><v-col class="d-flex align-center pa-1" cols="6"
+                ><div>Регион:</div>
+                <input
+                  @focus="
+                    $event.target.style.borderBottom = `1px solid ${$vuetify.theme.themes[appTheme].accent}`
+                  "
+                  @blur="
+                    $event.target.style.borderBottom = `1px solid transparent`
+                  "
+                  class="pa-1 ml-1 font-weight-bold"
+                  style="width: 100%; border-radius: 6px; border-bottom: 1px solid transparent; transition: border-bottom-color 192ms"
+                  :style="{
+                    backgroundColor:
+                      $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
+                    color: $vuetify.theme.themes[appTheme].textDefault
+                  }"
+                  type="text"
+                  v-model="competition.stuff.jury[jr].loc"
               /></v-col>
-              <v-col class="d-flex align-center pa-1" cols="12"
+              <v-col class="d-flex align-center pa-1" cols="5"
                 ><div>Имя:</div>
                 <input
                   @focus="
@@ -81,7 +98,7 @@
                   type="text"
                   v-model="competition.stuff.jury[jr].name"
               /></v-col>
-              <v-col class="d-flex align-center pa-1" cols="12"
+              <v-col class="d-flex align-center pa-1" cols="7"
                 ><div>Фамилия:</div>
                 <input
                   @focus="
@@ -100,25 +117,37 @@
                   type="text"
                   v-model="competition.stuff.jury[jr].lastName"
               /></v-col>
-              <v-col class="d-flex align-center pa-1" cols="12"
-                ><div>Город:</div>
-                <input
-                  @focus="
-                    $event.target.style.borderBottom = `1px solid ${$vuetify.theme.themes[appTheme].accent}`
-                  "
-                  @blur="
-                    $event.target.style.borderBottom = `1px solid transparent`
-                  "
-                  class="pa-1 ml-1 font-weight-bold"
-                  style="width: 100%; border-radius: 6px; border-bottom: 1px solid transparent; transition: border-bottom-color 192ms"
+
+              <v-col
+                cols="12"
+                v-if="jury.id === 'chief'"
+                style="display:flex;align-items: center;flex-wrap: wrap;border-radius: 6px"
+              >
+                <div
+                  @click="toggleABC(jury.id)"
+                  style="display:flex;flex-wrap: nowrap;align-items: center;padding: 4px 8px;border-radius: 6px;font-size: 1rem;font-weight:bold;cursor:pointer;user-select: none"
                   :style="{
                     backgroundColor:
-                      $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
-                    color: $vuetify.theme.themes[appTheme].textDefault
+                      $vuetify.theme.themes[appTheme].cardBackgroundRGBA
                   }"
-                  type="text"
-                  v-model="competition.stuff.jury[jr].loc"
-              /></v-col>
+                >
+                  ABC
+                  <div
+                    style="margin-left: 1rem;height: 12px;width: 12px;border-radius: 50%;transition: 122ms"
+                    :style="
+                      (jury.setABC && {
+                        backgroundColor:
+                          $vuetify.theme.themes[appTheme].success,
+                        boxShadow: `0 0 2px 2px ${$vuetify.theme.themes[appTheme].success}`
+                      }) || {
+                        backgroundColor:
+                          $vuetify.theme.themes[appTheme].subjectBackgroundRGBA,
+                        boxShadow: `0 0 0 0 ${$vuetify.theme.themes[appTheme].success}`
+                      }
+                    "
+                  ></div>
+                </div>
+              </v-col>
               <div
                 v-if="jury.connected !== undefined"
                 style="position:absolute;top: 4px;left: 8px; font-weight:bold;font-size: 0.9rem"
@@ -250,7 +279,7 @@
                 online
               </div>
               <v-col class="d-flex align-center pa-1" cols="3"
-                ><div class="font-weight-bold">ID:</div>
+                ><div style="font-weight:bold;">ID:</div>
                 <input
                   @focus="
                     $event.target.style.borderBottom = `1px solid ${$vuetify.theme.themes[appTheme].accent}`
@@ -268,7 +297,7 @@
                   type="text"
                   v-model="competition.stuff.judges[jd].id"
               /></v-col>
-              <v-col class="d-flex align-center pa-1" cols="9"
+              <v-col class="d-flex align-center pa-1" cols="6"
                 ><input
                   @focus="
                     $event.target.style.borderBottom = `1px solid ${$vuetify.theme.themes[appTheme].accent}`
@@ -284,7 +313,32 @@
                     color: $vuetify.theme.themes[appTheme].textDefault
                   }"
                   type="text"
-                  v-model="competition.stuff.judges[jd].title"
+                  v-model="competition.stuff.judges[jd].title"/></v-col
+              ><v-col class="d-flex align-center pa-1" cols="3"
+                ><div
+                  style="display:flex;align-items: center;font-weight:bold;"
+                >
+                  <v-icon small :color="$vuetify.theme.themes[appTheme].accent"
+                    >mdi-remote</v-icon
+                  >
+                  ID:
+                </div>
+                <input
+                  @focus="
+                    $event.target.style.borderBottom = `1px solid ${$vuetify.theme.themes[appTheme].accent}`
+                  "
+                  @blur="
+                    $event.target.style.borderBottom = `1px solid transparent`
+                  "
+                  class="pa-1 ml-1 font-weight-bold"
+                  style="width: 100%; border-radius: 6px; border-bottom: 1px solid transparent; transition: border-bottom-color 192ms"
+                  :style="{
+                    backgroundColor:
+                      $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
+                    color: $vuetify.theme.themes[appTheme].textDefault
+                  }"
+                  type="text"
+                  v-model="competition.stuff.judges[jd].remoteId"
               /></v-col>
               <v-col class="d-flex align-center pa-1" cols="6"
                 ><div>Имя:</div>
@@ -323,7 +377,7 @@
                   type="text"
                   v-model="competition.stuff.judges[jd].category"
               /></v-col>
-              <v-col class="d-flex align-center pa-1" cols="12"
+              <v-col class="d-flex align-center pa-1" cols="7"
                 ><div>Фамилия:</div>
                 <input
                   @focus="
@@ -342,8 +396,8 @@
                   type="text"
                   v-model="competition.stuff.judges[jd].lastName"
               /></v-col>
-              <v-col class="d-flex align-center pa-1" cols="8"
-                ><div>Город:</div>
+              <v-col class="d-flex align-center pa-1" cols="5"
+                ><div>Регион:</div>
                 <input
                   @focus="
                     $event.target.style.borderBottom = `1px solid ${$vuetify.theme.themes[appTheme].accent}`
@@ -361,30 +415,35 @@
                   type="text"
                   v-model="competition.stuff.judges[jd].location"
               /></v-col>
-              <v-col class="d-flex align-center pa-1" cols="4"
-                ><div style="display:flex;align-items: center">
-                  <v-icon small :color="$vuetify.theme.themes[appTheme].accent"
-                    >mdi-remote</v-icon
-                  >
-                  ID:
-                </div>
-                <input
-                  @focus="
-                    $event.target.style.borderBottom = `1px solid ${$vuetify.theme.themes[appTheme].accent}`
-                  "
-                  @blur="
-                    $event.target.style.borderBottom = `1px solid transparent`
-                  "
-                  class="pa-1 ml-1 font-weight-bold"
-                  style="width: 100%; border-radius: 6px; border-bottom: 1px solid transparent; transition: border-bottom-color 192ms"
+              <v-col
+                cols="12"
+                style="display:flex;align-items: center;flex-wrap: wrap;border-radius: 6px"
+              >
+                <div
+                  @click="toggleABC(judge.id)"
+                  style="display:flex;flex-wrap: nowrap;align-items: center;padding: 4px 8px;border-radius: 6px;font-size: 1rem;font-weight:bold;cursor:pointer;user-select: none"
                   :style="{
                     backgroundColor:
-                      $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
-                    color: $vuetify.theme.themes[appTheme].textDefault
+                      $vuetify.theme.themes[appTheme].cardBackgroundRGBA
                   }"
-                  type="text"
-                  v-model="competition.stuff.judges[jd].remoteId"
-              /></v-col>
+                >
+                  ABC
+                  <div
+                    style="margin-left: 1rem;height: 12px;width: 12px;border-radius: 50%;transition: 122ms"
+                    :style="
+                      (judge.setABC && {
+                        backgroundColor:
+                          $vuetify.theme.themes[appTheme].success,
+                        boxShadow: `0 0 2px 2px ${$vuetify.theme.themes[appTheme].success}`
+                      }) || {
+                        backgroundColor:
+                          $vuetify.theme.themes[appTheme].subjectBackgroundRGBA,
+                        boxShadow: `0 0 0 0 ${$vuetify.theme.themes[appTheme].success}`
+                      }
+                    "
+                  ></div>
+                </div>
+              </v-col>
               <v-btn
                 small
                 icon
@@ -440,6 +499,17 @@ export default {
         });
       });
       console.log(`Judge ${judge_id} removed`);
+    },
+    toggleABC(id) {
+      const stuff = this.competition.stuff;
+      for (const stuffKey in stuff) {
+        if (Array.isArray(stuff[stuffKey]))
+          stuff[stuffKey].forEach(employee => {
+            if (employee["setABC"] !== undefined && employee.id === id) {
+              employee["setABC"] = !employee["setABC"];
+            }
+          });
+      }
     },
     log(data) {
       console.log(data);

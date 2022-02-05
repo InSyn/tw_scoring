@@ -439,7 +439,7 @@
                 >
                   <div
                     class="d-flex justify-center align-center"
-                    style="height: 3rem; width: 4rem"
+                    style="height: 3rem; min-width: 4rem"
                     v-html="
                       `${(competition.selected_race &&
                         competition.selected_race.onTrack &&
@@ -867,7 +867,7 @@ export default {
         });
 
         this.$store.commit("main/updateEvent");
-      }, 1333);
+      }, 1536);
     },
     setTerminalsListener() {
       if (this.listenTerminals) {

@@ -10,7 +10,7 @@
       class="menu"
       style="position:fixed;right: 64px;top: 128px;z-index: 1001;"
     >
-      <!-- Zoom controls -->
+      <!-- PDF controls -->
 
       <v-hover v-slot:default="{ hover }">
         <div
@@ -85,7 +85,7 @@
         </div></v-hover
       >
 
-      <!-- //Zoom controls -->
+      <!-- //PDF controls -->
     </div>
 
     <!-- PDF Body -->
@@ -664,14 +664,12 @@ export default {
     this.results.push([...this.flatGrid]);
 
     this.results[this.results.length - 1].unshift({ type: "sheetHeader" });
-    if (this.results_protocol.print_header)
-      this.results[this.results.length - 1].push({ type: "officialsData" });
-    if (this.results_protocol.print_openers)
-      this.results[this.results.length - 1].push({ type: "openers" });
-    if (this.results_protocol.print_weather)
-      this.results[this.results.length - 1].push({ type: "weatherData" });
-    if (this.results_protocol.print_notations)
-      this.results[this.results.length - 1].push({ type: "raceNotes" });
+    for (let infoPrintChecksKey in this.results_protocol.infoPrintChecks) {
+      if (this.results_protocol.infoPrintChecks[infoPrintChecksKey].state)
+        this.results[this.results.length - 1].push({
+          type: this.results_protocol.infoPrintChecks[infoPrintChecksKey].id
+        });
+    }
 
     this.$nextTick(() => {
       setTimeout(() => {

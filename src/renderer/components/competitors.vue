@@ -223,17 +223,25 @@
                   </div>
                 </div>
               </div>
-              <v-card-actions class="d-flex align-center justify-end"
-                ><v-btn
+              <v-card-actions class="d-flex align-end" style="padding: 8px 8px">
+                <v-btn
+                  x-small
+                  @click="deleteCompetitor(row)"
+                  style="margin-right: auto;"
+                  :color="$vuetify.theme.themes[appTheme].action_red"
+                  :style="{
+                    color: $vuetify.theme.themes[appTheme].textDefault
+                  }"
+                  >Удалить участника</v-btn
+                >
+                <v-btn
+                  small
+                  @click="closeCompetitorDialog(row)"
                   :color="$vuetify.theme.themes[appTheme].accent"
                   :style="{
                     color: $vuetify.theme.themes[appTheme].textDefault
                   }"
-                  >Принять</v-btn
-                ><v-btn
-                  text
-                  :color="$vuetify.theme.themes[appTheme].textDefault"
-                  >Отмена</v-btn
+                  >Закрыть</v-btn
                 ></v-card-actions
               ></v-card
             ></v-dialog
@@ -854,10 +862,42 @@ export default {
         this.sortBy.dir = "asc";
       }
     },
-    deleteCompetitor(id) {
+    refreshAllStartLists(race) {
+      race.startList[0] ? (race.selectedCompetitor = race.startList[0]) : null;
+
+      this.$store.dispatch("main/updateEvent");
+    },
+    rebuildAllStartLists() {
+      this.competition.races.forEach(race => {
+        race._startList = [...race.startList];
+        race.onTrack && race._startList.unshift(race.onTrack);
+        race.finished.length > 0 &&
+          race._startList.unshift(...[...race.finished]);
+
+        this.refreshAllStartLists(race);
+      });
+    },
+    closeCompetitorDialog(competitor) {
+      competitor.info_dialog.state = false;
+    },
+    deleteCompetitor(competitor) {
+      this.competition.races.forEach(race => {
+        race.startList = race.startList.filter(
+          _competitor => _competitor !== competitor.id
+        );
+        if (race.selectedCompetitor === competitor.id)
+          race.selectedCompetitor = null;
+        if (race.onTrack === competitor.id) race.onTrack = null;
+        race.finished = race.finished.filter(
+          _competitor => _competitor !== competitor.id
+        );
+      });
+
       this.competition.competitorsSheet.competitors = this.competition.competitorsSheet.competitors.filter(
-        _comp => _comp.id !== id
+        _competitor => _competitor.id !== competitor.id
       );
+
+      this.rebuildAllStartLists();
     }
   },
   data() {

@@ -1,21 +1,19 @@
 <template>
   <div style="height: 100%; margin-left: 16px" class="d-flex">
     <div
-      class="d-flex flex-column pa-2"
-      style="height: 100%;width: 100%;"
+      class="pa-2"
+      style="display:flex;flex-direction: column;height: 100%;width: 100%;"
       :style="{
         borderRadius: `6px`,
         backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA
       }"
     >
-      <div>
-        <div class="d-flex flex-wrap align-center">
-          <label for="ip" class="d-inline-block pa-1 font-weight-bold"
-            >IP:</label
-          >
+      <div style="flex: 0 0 auto">
+        <div class="d-flex flex-wrap align-center" style="padding: 2px 4px">
+          <label for="ip" class="d-inline-block font-weight-bold">IP:</label>
           <input
             id="ip"
-            style="border-radius: 6px"
+            style="border-radius: 6px;margin-left: .5rem"
             :style="{
               color: $vuetify.theme.themes[appTheme].textDefault,
               backgroundColor:
@@ -26,12 +24,15 @@
             :value="server_config.ip"
             @change="$store.commit('main/set_ip', $event.target.value)"
           />
-          <label for="port" class="d-inline-block pa-1 font-weight-bold"
+          <label
+            for="port"
+            class="d-inline-block font-weight-bold"
+            style="margin-left: 1rem"
             >Port:</label
           >
           <input
             id="port"
-            style="border-radius: 6px"
+            style="border-radius: 6px;margin-left: .5rem"
             :style="{
               color: $vuetify.theme.themes[appTheme].textDefault,
               backgroundColor:
@@ -54,6 +55,7 @@
         </div>
         <div class="d-flex align-center">
           <v-btn
+            style="padding: 2px 4px"
             @click="startServer()"
             :color="$vuetify.theme.themes[appTheme].textDefault"
             text
@@ -62,20 +64,14 @@
               >mdi-play</v-icon
             ></v-btn
           ><v-btn
-            @click="connect()"
+            :disabled="!socketConnected"
+            @click="reconnect()"
             :color="$vuetify.theme.themes[appTheme].action_blue"
             icon
             ><v-icon>mdi-refresh</v-icon></v-btn
           >
-          <!--          sockets checker-->
-          <!--          <v-btn-->
-          <!--            @click="check_sockets()"-->
-          <!--            :color="$vuetify.theme.themes[appTheme].action_blue"-->
-          <!--            icon-->
-          <!--            ><v-icon>mdi-lan</v-icon></v-btn-->
-          <!--          >-->
         </div>
-        <div class="d-flex align-center">
+        <div class="d-flex align-center" style="padding: 2px 4px">
           <div class="d-flex align-center font-weight-bold">
             Статус сервера
             <div
@@ -100,34 +96,37 @@
         </div>
       </div>
       <div
-        class="flex-grow-1 pa-2"
-        style="max-height: 168px; border-radius: 0 0 6px 6px; overflow-y: auto"
-        :style="{
-          backgroundColor:
-            $vuetify.theme.themes[appTheme].standardBackgroundRGBA
-        }"
+        class="server_messages_container_wrapper"
+        style="position:relative;flex: 1 0 auto"
       >
-        <v-row
-          no-gutters
-          v-for="(mes, m) in serverMessages"
-          :key="m"
-          :style="{
-            color: `${$vuetify.theme.themes[appTheme].messageColor[mes[0]] ||
-              $vuetify.theme.themes[appTheme].textDefault}`
-          }"
-          v-html="serverMessages[m][1]"
-        ></v-row>
+        <div
+          id="server_messages_container"
+          class="pa-2"
+          style="position:absolute;top: 0;right: 0;bottom: 0;left: 0;border-radius: 0 0 6px 6px; overflow-y: auto"
+          :style="[
+            {
+              backgroundColor:
+                $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
+              border: `1px solid ${$vuetify.theme.themes[appTheme].subjectBackgroundRGBA}`
+            },
+            socket &&
+              socket.connected && {
+                border: `1px solid ${$vuetify.theme.themes[appTheme].accent_light}`
+              }
+          ]"
+        >
+          <v-row
+            no-gutters
+            v-for="(mes, m) in serverMessages"
+            :key="m"
+            :style="{
+              color: `${$vuetify.theme.themes[appTheme].messageColor[mes[0]] ||
+                $vuetify.theme.themes[appTheme].textDefault}`
+            }"
+            >{{ mes[1] }}</v-row
+          >
+        </div>
       </div>
-      <!--      <div style="display:flex;align-items: center;flex-wrap: wrap">-->
-      <!--        <div-->
-      <!--          v-for="socket in $store.getters['main/opened_sockets']"-->
-      <!--          :key="socket"-->
-      <!--          style="display:flex;flex-direction: column; font-size: .8rem;padding: 2px 4px"-->
-      <!--        >-->
-      <!--          <div>socket_id:</div>-->
-      <!--          <div>{{ socket }}</div>-->
-      <!--        </div>-->
-      <!--      </div>-->
     </div>
   </div>
 </template>
@@ -140,7 +139,7 @@ export default {
   mounted() {},
   methods: {
     ...mapActions("main", ["serverSetStatus"]),
-    async startServer() {
+    startServer() {
       app.emit("startSocketServer", [
         this.server_config.ip,
         +this.server_config.port
@@ -148,7 +147,7 @@ export default {
       if (!this.serverStatus) {
         this.connect(this.server_config.ip, this.server_config.port);
       }
-      await this.socket.emit("set_competition_data", this.competition, res => {
+      this.socket.emit("set_competition_data", this.competition, res => {
         console.log(res);
       });
     },
@@ -159,6 +158,12 @@ export default {
           +this.server_config.port
         ]);
         this.$store.commit("main/createServerChecker");
+      }
+    },
+    reconnect() {
+      if (this.socket && this.socket.connected) {
+        this.socket.disconnect();
+        this.socket.connect();
       }
     },
     close_server() {
@@ -179,25 +184,37 @@ export default {
           }
         );
     },
-    async check_sockets() {
-      this.socket && this.socket.connected && this.socket.emit("checkSockets");
+    setMessagesScroll() {
+      const messagesContainer = document.querySelector(
+        "#server_messages_container"
+      );
+      messagesContainer.scrollTop = messagesContainer.scrollHeight;
     }
   },
   data() {
     return {};
   },
   computed: {
-    ...mapGetters("main", [
-      "server_config",
-      "socket",
-      "serverMessages",
-      "serverStatusChecker",
-      "serverStatus",
-      "messages",
-      "competition",
-      "appTheme",
-      "serverStatus"
-    ])
+    ...mapGetters("main", {
+      server_config: "server_config",
+      socket: "socket",
+      serverMessages: "serverMessages",
+      serverStatusChecker: "serverStatusChecker",
+      messages: "messages",
+      competition: "competition",
+      appTheme: "appTheme",
+      serverStatus: "serverStatus"
+    }),
+    socketConnected() {
+      return this.socket ? !!this.socket.connected : false;
+    }
+  },
+  watch: {
+    serverMessages: function(val) {
+      this.$nextTick(() => {
+        this.setMessagesScroll();
+      });
+    }
   }
 };
 </script>

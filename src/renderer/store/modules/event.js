@@ -179,11 +179,13 @@ export default {
         },
         jury: [
           {
+            id: "chief",
             title: "Старший судья",
             lastName: "Фамилия",
             name: "Имя",
             loc: "Город",
-            connected: false
+            connected: false,
+            setABC: false
           }
         ],
         judges: [],
@@ -676,6 +678,5 @@ export default {
   },
 
   mutations: {},
-
   actions: {}
 };

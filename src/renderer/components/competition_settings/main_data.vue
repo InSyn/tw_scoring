@@ -1,10 +1,10 @@
 <template>
-  <div class="flex-column align-center justify-center">
+  <div class="d-flex flex-column justify-space-between">
     <v-row
-      class="py-1"
-      style="position:relative"
-      v-for="(main_data, md) in competition.mainData"
+      v-for="(main_data, md, md_idx) in competition.mainData"
       :key="md"
+      style="position:relative"
+      :style="md_idx > 0 && { marginTop: '.5rem' }"
       no-gutters
     >
       <v-col cols="12" class="d-flex align-center" style="position:relative;">
@@ -19,18 +19,18 @@
           ]"
         >
           <span class="d-block" style="min-width: 11rem;font-weight: bold">{{
-            competition.mainData[md].title
+            main_data.title
           }}</span>
           <v-dialog
             v-if="md === 'date'"
             width="300px"
-            v-model="competition.mainData[md].dialog"
+            v-model="main_data.dialog"
           >
             <template v-slot:activator="{ on }">
               <v-hover v-slot:default="{ hover }">
                 <div
                   v-on="on"
-                  v-html="competition.mainData[md].value"
+                  v-html="main_data.value"
                   class="d-flex justify-center ml-2 pa-1"
                   style="border-radius: 6px; cursor: pointer; width: 100%; transition: box-shadow 128ms"
                   :style="[
@@ -47,12 +47,12 @@
             </template>
             <v-date-picker
               locale="ru"
-              v-model="competition.mainData[md].value"
+              v-model="main_data.value"
               :color="$vuetify.theme.themes[appTheme].accent"
               :header-color="$vuetify.theme.themes[appTheme].cardBackgroundRGBA"
             ></v-date-picker>
             <v-btn
-              @click="competition.mainData[md].dialog = false"
+              @click="main_data.dialog = false"
               text
               :color="$vuetify.theme.themes[appTheme].textDefault"
               :style="{
@@ -65,13 +65,13 @@
           <v-dialog
             v-if="md === 'date'"
             width="300px"
-            v-model="competition.mainData[md].time_dialog"
+            v-model="main_data.time_dialog"
           >
             <template v-slot:activator="{ on }">
               <v-hover v-slot:default="{ hover }">
                 <div
                   v-on="on"
-                  v-html="competition.mainData[md].time"
+                  v-html="main_data.time"
                   class="d-flex justify-center ml-2 pa-1"
                   style="border-radius: 6px; cursor: pointer; width: 100%; transition: box-shadow 128ms"
                   :style="[
@@ -90,11 +90,11 @@
               locale="ru"
               :color="$vuetify.theme.themes[appTheme].accent"
               :header-color="$vuetify.theme.themes[appTheme].cardBackgroundRGBA"
-              v-model="competition.mainData[md].time"
+              v-model="main_data.time"
               format="24hr"
             ></v-time-picker>
             <v-btn
-              @click="competition.mainData[md].time_dialog = false"
+              @click="main_data.time_dialog = false"
               text
               :color="$vuetify.theme.themes[appTheme].textDefault"
               :style="{
@@ -106,8 +106,8 @@
           </v-dialog>
           <input
             v-if="md !== 'date'"
-            @focus="competition.mainData[md].focus = true"
-            @blur="competition.mainData[md].focus = false"
+            @focus="main_data.focus = true"
+            @blur="main_data.focus = false"
             class="ml-2 pa-1"
             style="outline: none; border-radius: 6px; width: 100%"
             :style="[
@@ -117,7 +117,7 @@
                   $vuetify.theme.themes[appTheme].standardBackgroundRGBA
               }
             ]"
-            v-model="competition.mainData[md].value"
+            v-model="main_data.value"
             type="text"
           />
           <div
@@ -125,7 +125,7 @@
             v-if="md === 'title'"
           >
             <div style="flex-shrink:0;margin-left: 1rem; font-weight:bold">
-              {{ competition.mainData[md].stage.title }}
+              {{ main_data.stage.title }}
             </div>
             <div
               tabindex="0"
@@ -190,8 +190,8 @@
             >
               <input
                 type="text"
-                @focus="competition.mainData[md].focus = true"
-                @blur="competition.mainData[md].focus = false"
+                @focus="main_data.focus = true"
+                @blur="main_data.focus = false"
                 v-model="competition.mainData.title.stage.value.value"
                 style="flex: 1 0 auto;padding: 4px 8px;border-radius: 6px;max-width: 100%"
                 :style="{
@@ -204,8 +204,8 @@
           </div>
           <input
             v-if="md === 'discipline'"
-            @focus="competition.mainData[md].focus = true"
-            @blur="competition.mainData[md].focus = false"
+            @focus="main_data.focus = true"
+            @blur="main_data.focus = false"
             class="ml-2 pa-1"
             style="outline: none; border-radius: 6px; width: 6rem"
             :style="{
@@ -213,12 +213,12 @@
               backgroundColor:
                 $vuetify.theme.themes[appTheme].standardBackgroundRGBA
             }"
-            v-model="competition.mainData[md].min"
+            v-model="main_data.min"
             type="text"
           /><input
             v-if="md === 'discipline'"
-            @focus="competition.mainData[md].focus = true"
-            @blur="competition.mainData[md].focus = false"
+            @focus="main_data.focus = true"
+            @blur="main_data.focus = false"
             class="ml-2 pa-1"
             style="outline: none; border-radius: 6px; width: 6rem"
             :style="{
@@ -234,7 +234,7 @@
             style="position:absolute; bottom: 0;left: 4px; width: calc(100% - 8px);border-bottom-left-radius: 50%; border-bottom-right-radius: 50%;height: 2px; transform-origin: left; transition: transform 192ms"
             :style="[
               { backgroundColor: $vuetify.theme.themes[appTheme].accent },
-              competition.mainData[md].focus
+              main_data.focus
                 ? { transform: 'scaleX(1)' }
                 : { transform: 'scaleX(0)' }
             ]"

@@ -278,6 +278,10 @@ export default {
           _mark.new_value = null;
         }
       });
+      this.competition.publish_result(
+        competitor,
+        this.competition.selected_race.id
+      );
       this.changeMarksDialog[competitor.id] = false;
       this.$store.commit("main/updateEvent");
     },

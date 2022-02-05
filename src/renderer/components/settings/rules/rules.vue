@@ -354,7 +354,7 @@
                 $vuetify.theme.themes[appTheme].standardBackgroundRGBA
             }"
             v-model="competition.structure.selected.accuracy"
-            @change="this.$store.dispatch('main/updateEvent')"
+            @change="$store.dispatch('main/updateEvent')"
           >
             <v-radio
               class="pa-2 ma-1"

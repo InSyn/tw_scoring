@@ -72,6 +72,7 @@
         style="height: calc(100% - 40px); width: 100%;"
         ><div
           class="pa-1"
+          id="chat_window"
           style="height: 100%; width: 100%; overflow-y: auto; border-radius: 6px"
           :style="{
             backgroundColor:
@@ -79,7 +80,7 @@
           }"
         >
           <v-row no-gutters v-for="(mes, m) in messages" :key="m">{{
-            `${messages[m][1][0]}:${messages[m][1][1]} ${messages[m][2]}: ${messages[m][0]}`
+            `${mes[1][0]}:${mes[1][1]} ${mes[2]}: ${mes[0]}`
           }}</v-row>
         </div></v-row
       >
@@ -113,6 +114,9 @@
 import { mapGetters } from "vuex";
 export default {
   name: "chat",
+  mounted() {
+    this.setChatScroll();
+  },
   data() {
     return {
       message: ""
@@ -134,6 +138,17 @@ export default {
         m !== "" && this.socket.emit("chat_message", [m, time, "Секретарь"]);
         this.message = "";
       } else console.log("server not started");
+    },
+    setChatScroll() {
+      const chatWindow = document.querySelector("#chat_window");
+      chatWindow.scrollTop = chatWindow.scrollHeight;
+    }
+  },
+  watch: {
+    messages: function(val) {
+      this.$nextTick(() => {
+        this.setChatScroll();
+      });
     }
   }
 };

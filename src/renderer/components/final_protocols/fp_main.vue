@@ -460,79 +460,25 @@
         style="display:flex;flex-wrap: wrap;margin-top: .5rem;"
       >
         <div
+          v-for="(infoPrintCheck,
+          check_key) in results_protocol.infoPrintChecks"
+          :key="check_key"
           class="d-flex flex-nowrap align-center py-1"
-          style="min-width: 50%"
+          style="width: 50%"
         >
           <v-checkbox
             hide-details
             class="pa-0 ma-0"
-            id="print_header"
-            v-model="results_protocol.print_header"
+            :id="check_key"
+            v-model="infoPrintCheck.state"
             :color="$vuetify.theme.themes[appTheme].textDefault"
           ></v-checkbox>
           <label
-            :for="'print_header'"
+            :for="check_key"
             class="font-weight-bold"
             style="cursor:pointer;"
             :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
-            >Печатать информацию о жюри</label
-          >
-        </div>
-        <div
-          class="d-flex flex-nowrap align-center py-1"
-          style="min-width: 50%"
-        >
-          <v-checkbox
-            hide-details
-            class="pa-0 ma-0"
-            id="print_openers"
-            v-model="results_protocol.print_openers"
-            :color="$vuetify.theme.themes[appTheme].textDefault"
-          ></v-checkbox>
-          <label
-            :for="`print_openers`"
-            class="font-weight-bold"
-            style="cursor:pointer;"
-            :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
-            >Печатать открывающих</label
-          >
-        </div>
-        <div
-          class="d-flex flex-nowrap align-center py-1"
-          style="min-width: 50%"
-        >
-          <v-checkbox
-            hide-details
-            class="pa-0 ma-0"
-            id="print_weather"
-            v-model="results_protocol.print_weather"
-            :color="$vuetify.theme.themes[appTheme].textDefault"
-          ></v-checkbox>
-          <label
-            :for="`print_weather`"
-            class="font-weight-bold"
-            style="cursor:pointer;"
-            :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
-            >Печатать погодные условия</label
-          >
-        </div>
-        <div
-          class="d-flex flex-nowrap align-center py-1"
-          style="min-width: 50%"
-        >
-          <v-checkbox
-            hide-details
-            class="pa-0 ma-0"
-            id="print_notations"
-            v-model="results_protocol.print_notations"
-            :color="$vuetify.theme.themes[appTheme].textDefault"
-          ></v-checkbox>
-          <label
-            :for="`print_notations`"
-            class="font-weight-bold"
-            style="cursor:pointer;"
-            :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
-            >Печатать замечания</label
+            >{{ infoPrintCheck.title }}</label
           >
         </div>
       </div>
