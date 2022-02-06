@@ -277,14 +277,9 @@ export default {
             data: { id: "race_res", title: "Оценка" },
             handler: function(competitor, competition) {
               return competition.races.map(_race => {
-                return `${competition.set_accuracy(
-                  (competitor.competitor.results.find(
-                    _res => _res.race_id === _race.id
-                  ) &&
-                    competitor.competitor.results.find(
-                      _res => _res.race_id === _race.id
-                    ).value) ||
-                    0
+                return `${competition.getRaceResult(
+                  competitor.competitor,
+                  _race
                 )} ${(competition.result_formula.overall_result.type === 3 &&
                   competitor.competitor.results.find(
                     _res => _res.race_id === _race.id

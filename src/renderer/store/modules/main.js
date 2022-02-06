@@ -327,37 +327,6 @@ export default {
           }
 
           checkValues(data, state.competition);
-          // state.competition.mainData !== data.mainData
-          //   ? (state.competition.mainData = data.mainData)
-          //   : null;
-          // state.competition.stuff.judges.forEach(_judge => {
-          //   data.stuff.judges.map(_data_judge => {
-          //     if (_data_judge.id === _judge.id) {
-          //       for (let _field in _judge) {
-          //         if (_judge[_field] !== _data_judge[_field]) {
-          //           _judge[_field] = _data_judge[_field];
-          //         }
-          //       }
-          //     }
-          //   });
-          // });
-          // state.competition.stuff.jury !== data.stuff.jury
-          //   ? (state.competition.stuff.jury = data.stuff.jury)
-          //   : null;
-          // state.competition.selected_race_id !== data.selected_race_id
-          //   ? (state.competition.selected_race_id = data.selected_race_id)
-          //   : null;
-          // state.competition.races !== data.races
-          //   ? (state.competition.races = data.races)
-          //   : null;
-          // state.competition.competitorsSheet.competitors !==
-          // data.competitorsSheet.competitors
-          //   ? (state.competition.competitorsSheet.competitors =
-          //       data.competitorsSheet.competitors)
-          //   : null;
-          // state.competition.changedMarks !== data.changedMarks
-          //   ? (state.competition.changedMarks = data.changedMarks)
-          //   : null;
         });
       }
     },

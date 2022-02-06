@@ -662,58 +662,52 @@ export default {
           ]);
         })();
     },
-    publishResult(competitor) {
+    publishResult(competitor_id) {
+      const competitor = this.competition.competitorsSheet.competitors.find(
+        _comp => _comp.id === competitor_id
+      );
       this.competition.stuff.judges.forEach(_j => {
         if (
-          !this.competition.competitorsSheet.competitors
-            .find(_comp => _comp.id === competitor)
-            .marks.some(
-              _mark =>
-                _mark.judge_id === _j._id &&
-                _mark.race_id === this.competition.selected_race.id
-            )
+          !competitor.marks.some(
+            _mark =>
+              _mark.judge_id === _j._id &&
+              _mark.race_id === this.competition.selected_race.id
+          )
         ) {
-          this.competition.competitorsSheet.competitors
-            .find(_comp => _comp.id === competitor)
-            .marks.push(
-              new this.MarkClass(
-                this.competition.selected_race_id,
-                this.competition.selected_race.id,
-                _j.id,
-                _j._id,
-                0
-              )
-            );
+          competitor.marks.push(
+            new this.MarkClass(
+              this.competition.selected_race_id,
+              this.competition.selected_race.id,
+              _j.id,
+              _j._id,
+              0
+            )
+          );
         }
       });
       this.competition.publish_result(
-        this.competition.competitorsSheet.competitors.find(
-          _competitor => _competitor.id === competitor
-        ),
+        competitor,
         this.competition.selected_race.id,
-        this.score_repeat
+        this.score_repeat,
+        competitor.race_status
       );
-      this.competition.selected_race.finished.push(competitor);
-      this.competition.competitorsSheet.competitors.find(_comp => {
-        return _comp.id === competitor;
-      }).res_accepted = false;
+      this.competition.selected_race.finished.push(competitor_id);
+      competitor.res_accepted = false;
+      competitor.race_status = null;
       this.competition.selected_race.onTrack = null;
       if (
         this.competition.selected_race.startList.some(_comp => {
-          return _comp === competitor;
+          return _comp === competitor_id;
         })
       ) {
         this.competition.selected_race.startList = this.competition.selected_race.startList.filter(
           _comp => {
-            return _comp !== competitor;
+            return _comp !== competitor_id;
           }
         );
       }
-      this.socket &&
-        this.socket.connected &&
-        (() => {
-          this.socket.emit("set_finished_competitor", this.competition);
-        })();
+      if (this.socket && this.socket.connected)
+        this.socket.emit("set_finished_competitor", this.competition);
     },
     set_raceStatus(status) {
       this.socket &&

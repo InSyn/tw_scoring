@@ -469,7 +469,7 @@
                           @click="
                             competition.result_formula.types[0].formula =
                               formula.id;
-                            this.$store.dispatch('main/updateEvent');
+                            $store.dispatch('main/updateEvent');
                           "
                           class="mr-2 d-flex flex-nowrap align-center"
                           style="cursor:pointer;"
@@ -801,7 +801,7 @@
                                   return _section.id !== section.id;
                                 }
                               );
-                              this.$store.dispatch('main/updateEvent');
+                              $store.dispatch('main/updateEvent');
                             "
                             small
                             :color="$vuetify.theme.themes[appTheme].action_red"
@@ -944,7 +944,7 @@
                       .heats > 0 &&
                       competition.result_formula.overall_result.select_heats
                         .heats--;
-                    this.$store.dispatch('main/updateEvent');
+                    $store.dispatch('main/updateEvent');
                   "
                   >mdi-chevron-left
                 </v-icon>
@@ -964,7 +964,7 @@
                   @click="
                     competition.result_formula.overall_result.select_heats
                       .heats++;
-                    this.$store.dispatch('main/updateEvent');
+                    $store.dispatch('main/updateEvent');
                   "
                   >mdi-chevron-right
                 </v-icon>
@@ -974,7 +974,7 @@
                 @click="
                   competition.result_formula.overall_result.select_heats.mode =
                     mode.id;
-                  this.$store.dispatch('main/updateEvent');
+                  $store.dispatch('main/updateEvent');
                 "
                 style="border-radius: 50%; height: 1rem;width: 1rem; cursor:pointer;"
                 :style="[

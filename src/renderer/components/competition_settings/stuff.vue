@@ -17,7 +17,7 @@
               Жюри
             </div>
             <v-btn
-              @click="competition.stuff.jury.push(new JuryClass())"
+              @click="addStuff('jury')"
               class="mr-4"
               icon
               :color="$vuetify.theme.themes[appTheme].accent"
@@ -231,18 +231,7 @@
               Судьи
             </div>
             <v-btn
-              @click="
-                competition.stuff.judges.push(
-                  new JudgeClass(
-                    'Судья',
-                    competition.stuff.judges.length > 0
-                      ? competition.stuff.judges[
-                          competition.stuff.judges.length - 1
-                        ].id + 1
-                      : 1
-                  )
-                )
-              "
+              @click="addStuff('judge')"
               icon
               :color="$vuetify.theme.themes[appTheme].accent"
               style="margin-left: 1rem;"
@@ -487,6 +476,22 @@ export default {
     force_disconnect(socket_id) {
       this.$store.commit("main/force_disconnect", socket_id);
     },
+    addStuff(stuffType) {
+      stuffType === "judge"
+        ? this.competition.stuff.judges.push(
+            new this.JudgeClass(
+              "Судья",
+              this.competition.stuff.judges.length > 0
+                ? this.competition.stuff.judges[
+                    this.competition.stuff.judges.length - 1
+                  ].id + 1
+                : 1
+            )
+          )
+        : competition.stuff[stuffType].push(new this.JuryClass());
+
+      this.$store.dispatch("main/updateEvent");
+    },
     remove_judge(judge_id) {
       this.competition.stuff.judges = this.competition.stuff.judges.filter(
         _judge => {
@@ -498,7 +503,8 @@ export default {
           return _mark.judge_id !== judge_id;
         });
       });
-      console.log(`Judge ${judge_id} removed`);
+
+      this.$store.dispatch("main/updateEvent");
     },
     toggleABC(id) {
       const stuff = this.competition.stuff;
@@ -510,6 +516,8 @@ export default {
             }
           });
       }
+
+      this.$store.dispatch("main/updateEvent");
     },
     log(data) {
       console.log(data);

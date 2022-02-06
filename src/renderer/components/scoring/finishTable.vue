@@ -67,8 +67,8 @@
             <v-dialog
               v-model="changeMarksDialog[competitor.id]"
               v-for="competitor in sortedFinishedList"
-              :key="`finished_${competitor.id}`"
-              width="720"
+              :key="`finished_${competitor.rank}_${competitor.id}`"
+              width="fit-content"
               ><template v-slot:activator="{ on }">
                 <v-hover v-slot:default="{ hover }">
                   <v-row
@@ -107,24 +107,19 @@
                     <v-col
                       class="d-flex justify-center align-center"
                       style="max-width: 5rem"
-                      v-for="(race_res, rr) in competition.races"
+                      v-for="(race, rr) in competition.races"
                       :key="rr"
                       >{{
-                        `${competition.set_accuracy(
-                          (competitor.results.find(
-                            _res => _res.race_id === race_res.id
-                          ) &&
-                            competitor.results.find(
-                              _res => _res.race_id === race_res.id
-                            ).value) ||
-                            0
+                        `${competition.getRaceResult(
+                          competitor,
+                          race
                         )} ${(competition.result_formula.overall_result.type ===
                           3 &&
                           competitor.results.find(
-                            _res => _res.race_id === race_res.id
+                            _res => _res.race_id === race.id
                           ) &&
                           competitor.results.find(
-                            _res => _res.race_id === race_res.id
+                            _res => _res.race_id === race.id
                           ).repeat) ||
                           ""}`
                       }}</v-col
@@ -145,6 +140,7 @@
                       "
                     ></v-col></v-row></v-hover></template
               ><v-card
+                style="max-width: 900px;"
                 :style="{
                   backgroundColor:
                     $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
@@ -153,7 +149,7 @@
               >
                 <div
                   class="marks_title"
-                  style="padding: 8px 16px; font-weight: bold;font-size: 1.2rem"
+                  style="padding: 16px 16px; font-weight: bold;font-size: 1.4rem"
                 >
                   {{
                     `Участник ${competitor.info_data.bib} ${competitor.info_data.lastname} ${competitor.info_data.name}`
@@ -162,35 +158,60 @@
 
                 <div
                   class="marks_body"
-                  style="padding: 8px 16px;display:flex;flex-direction: column;max-height: 600px;overflow-y:auto;"
+                  style="padding: 8px 16px;display:flex;flex-wrap: wrap;max-height: 720px;overflow-y:auto;"
                 >
-                  <div v-for="race in competition.races" :key="race.id">
-                    <div style="padding: 2px 4px;font-weight: bold;">
-                      {{ `Заезд ${competition.races.indexOf(race) + 1}` }}
+                  <div
+                    v-for="race in competition.races"
+                    :key="race.id"
+                    style="flex: 0 0 auto;margin: 0 .5rem .5rem 0;overflow: hidden;border-radius: 2px"
+                    :style="[
+                      {
+                        border: `1px solid ${$vuetify.theme.themes[appTheme].standardBackgroundRGBA}`
+                      },
+                      race.id === competition.selected_race.id && {
+                        border: `1px solid ${$vuetify.theme.themes[appTheme].accent_light}`
+                      }
+                    ]"
+                  >
+                    <div style="display:flex;;width: 100%;">
+                      <div
+                        style="padding: 4px 8px;font-weight: bold"
+                        :style="[
+                          {
+                            backgroundColor:
+                              $vuetify.theme.themes[appTheme]
+                                .standardBackgroundRGBA
+                          },
+                          race.id === competition.selected_race.id && {
+                            backgroundColor:
+                              $vuetify.theme.themes[appTheme].accent_light
+                          }
+                        ]"
+                      >
+                        {{ `Заезд ${competition.races.indexOf(race) + 1}` }}
+                      </div>
                     </div>
                     <div
-                      v-for="mark in competitor.marks.filter(
-                        _mark => _mark.race_id === race.id
-                      )"
+                      v-for="mark in competitor.marks
+                        .filter(_mark => _mark.race_id === race.id)
+                        .sort((mark1, mark2) => mark1.judge - mark2.judge)"
                       :key="mark.id"
                     >
                       <div
                         style="display:flex;align-items: center;padding: 4px 8px"
                       >
-                        <div style="display:flex;">
-                          <span style="font-weight:bold;">Оценка:</span>
-                          <div
-                            style="flex: 0 0 auto;margin-left: 1rem;font-weight: bold;"
-                          >
-                            {{ `Судья: ${mark.judge}` }}
-                          </div>
+                        <div style="flex: 0 0 auto;font-weight: bold;">
+                          {{ `Судья: ${mark.judge}` }}
                         </div>
 
+                        <div style="margin-left: auto;font-weight:bold;">
+                          оценка
+                        </div>
                         <input
                           type="text"
                           readonly
                           v-model="mark.value"
-                          style="padding: 4px 8px; margin-left: auto; font-weight: bold; width: 4rem;"
+                          style="padding: 2px 4px;margin-left: .5rem; font-weight: bold; width: 4rem;border-radius: 2px"
                           :style="{
                             backgroundColor:
                               $vuetify.theme.themes[appTheme]
@@ -199,13 +220,14 @@
                           }"
                         /><v-icon
                           small
+                          style="margin: 0 4px"
                           :color="$vuetify.theme.themes[appTheme].textDefault"
                           >mdi-arrow-right</v-icon
                         >
                         <input
                           type="text"
                           v-model="mark.new_value"
-                          style="padding: 4px 8px; font-weight: bold; width: 4rem;"
+                          style="padding: 2px 4px; font-weight: bold; width: 4rem;border-radius: 2px"
                           :style="{
                             backgroundColor:
                               $vuetify.theme.themes[appTheme]
@@ -215,6 +237,94 @@
                         />
                       </div>
                     </div>
+                    <div
+                      style="display:flex;align-items: stretch;width: 100%;padding: 8px 4px 4px 4px"
+                    >
+                      <div style="display:flex;align-items: stretch">
+                        <div
+                          v-for="status in ['DNS', 'DNF', 'DSQ']"
+                          :key="status"
+                          @click="
+                            setCompetitorRaceStatus(status, competitor, race)
+                          "
+                          style="display:flex;align-items: center;font-weight:bold;padding: 2px 8px;margin-right: .5rem;border-radius: 2px;cursor:pointer;"
+                          :style="[
+                            {
+                              backgroundColor:
+                                $vuetify.theme.themes[appTheme]
+                                  .standardBackgroundRGBA,
+                              color: $vuetify.theme.themes[appTheme].textDefault
+                            },
+                            checkStatus(status, competitor, race) && {
+                              backgroundColor:
+                                $vuetify.theme.themes[appTheme].accent
+                            }
+                          ]"
+                        >
+                          {{ status }}
+                        </div>
+                      </div>
+                      <div
+                        style="display:flex;flex-wrap: wrap;margin-left: auto"
+                      >
+                        <div
+                          style="display:flex;align-items: flex-end;width: 100%;padding: 2px 8px;border-radius: 2px"
+                          :style="{
+                            backgroundColor:
+                              $vuetify.theme.themes[appTheme]
+                                .standardBackgroundRGBA,
+                            color: $vuetify.theme.themes[appTheme].textDefault
+                          }"
+                        >
+                          <div style="font-weight:bold">
+                            Результат
+                          </div>
+                          <div
+                            style="width: 4rem;margin-left: .5rem;border-radius: 2px;font-weight: bold;font-size: 1.2rem;text-align: center"
+                          >
+                            {{ competition.getRaceResult(competitor, race) }}
+                          </div>
+                        </div>
+                        <div
+                          v-if="
+                            competition.result_formula.overall_result.type == 3
+                          "
+                          style="display:flex;justify-content: space-between;align-items: center;width: 100%;padding: 4px 0"
+                        >
+                          <div
+                            v-for="(s_repeat, sr_idx) in ['A', 'B', 'C']"
+                            :key="s_repeat"
+                            @click="
+                              setCompetitorRaceRepeat(
+                                s_repeat,
+                                competitor,
+                                race
+                              )
+                            "
+                            style="flex: 1 0 auto;font-weight:bold;border-radius: 2px;cursor:pointer;text-align:center;"
+                            :style="[
+                              sr_idx > 0 && { marginLeft: '.5rem' },
+                              {
+                                backgroundColor:
+                                  $vuetify.theme.themes[appTheme]
+                                    .standardBackgroundRGBA,
+                                color:
+                                  $vuetify.theme.themes[appTheme].textDefault
+                              },
+                              checkRepeat(s_repeat, competitor, race) && {
+                                backgroundColor:
+                                  $vuetify.theme.themes[appTheme].textDefault,
+                                color:
+                                  $vuetify.theme.themes[appTheme]
+                                    .standardBackgroundRGBA
+                              }
+                            ]"
+                          >
+                            {{ s_repeat }}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
                 <v-card-actions
@@ -222,18 +332,21 @@
                   :style="{
                     borderTop: `1px solid ${$vuetify.theme.themes[appTheme].standardBackgroundRGBA}`
                   }"
-                >
+                  ><v-btn
+                    @click="accept_changes(competitor)"
+                    small
+                    :color="$vuetify.theme.themes[appTheme].accent"
+                    :style="{
+                      color: $vuetify.theme.themes[appTheme].textDefault
+                    }"
+                    >Подтвердить</v-btn
+                  >
                   <v-btn
                     small
                     text
                     @click="declineChanges(competitor)"
                     :color="$vuetify.theme.themes[appTheme].textDefault"
                     >Отменить</v-btn
-                  ><v-btn
-                    @click="accept_changes(competitor)"
-                    small
-                    :color="$vuetify.theme.themes[appTheme].success"
-                    >Подтвердить</v-btn
                   >
                 </v-card-actions></v-card
               ></v-dialog
@@ -271,6 +384,30 @@ export default {
         return acc + val;
       });
     },
+    setCompetitorRaceStatus(status, competitor, race) {
+      const result = competitor.results.find(res => res.race_id === race.id);
+      if (result) {
+        result.status === status
+          ? (result.status = null)
+          : (result.status = status);
+      }
+    },
+    checkStatus(status, competitor, race) {
+      const result = competitor.results.find(res => res.race_id === race.id);
+      return result && result.status === status;
+    },
+    setCompetitorRaceRepeat(s_repeat, competitor, race) {
+      const result = competitor.results.find(res => res.race_id === race.id);
+      if (result) {
+        result.repeat === s_repeat
+          ? (result.repeat = "A")
+          : (result.repeat = s_repeat);
+      }
+    },
+    checkRepeat(score_repeat, competitor, race) {
+      const result = competitor.results.find(res => res.race_id === race.id);
+      return result && result.repeat === score_repeat;
+    },
     accept_changes(competitor) {
       competitor.marks.forEach(_mark => {
         if (_mark.new_value) {
@@ -278,10 +415,10 @@ export default {
           _mark.new_value = null;
         }
       });
-      this.competition.publish_result(
-        competitor,
-        this.competition.selected_race.id
+      this.competition.races.forEach(race =>
+        this.competition.publish_result(competitor, race.id)
       );
+
       this.changeMarksDialog[competitor.id] = false;
       this.$store.commit("main/updateEvent");
     },

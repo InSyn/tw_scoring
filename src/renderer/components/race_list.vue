@@ -29,16 +29,17 @@
           </div>
           <div
             @click="selectRace(race)"
-            style="position:relative;height: 2.4rem;font-weight:bold;cursor: pointer;margin: 4px;padding: 4px 2rem 4px 1rem;border-radius: 6px;transition: background-color .112s, color .112s"
+            style="position:relative;height: 2.4rem;font-weight:bold;cursor: pointer;margin: 4px;padding: 4px 2rem 4px 1rem;border-radius: 6px;transition: background-color 92ms, color 92ms"
             class="d-flex justify-center align-center"
             :style="[
               {
-                backgroundColor: $vuetify.theme.themes[appTheme].accent
+                backgroundColor: $vuetify.theme.themes[appTheme].textDefault,
+                color: $vuetify.theme.themes[appTheme].standardBackgroundRGBA
               },
               selectedRace &&
                 race.id === selectedRace.id && {
-                  backgroundColor: $vuetify.theme.themes[appTheme].success,
-                  color: $vuetify.theme.themes[appTheme].cardBackgroundRGBA
+                  backgroundColor: $vuetify.theme.themes[appTheme].accent,
+                  color: $vuetify.theme.themes[appTheme].textDefault
                 }
             ]"
             v-for="race in competition.races"

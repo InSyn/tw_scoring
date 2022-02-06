@@ -263,8 +263,17 @@ export default {
               )
           : 0;
       }
-      getRaceResult(competitor_id, race_id) {}
-      publish_result(competitor, race_id, rep) {
+      getRaceResult(competitor, race) {
+        const result = competitor.results.find(
+          result => result.race_id === race.id
+        );
+        return result
+          ? result.status
+            ? result.status
+            : this.set_accuracy(result.value)
+          : this.set_accuracy(0);
+      }
+      publish_result(competitor, race_id, rep, status) {
         const res = {
           id: Math.random()
             .toString(36)
@@ -283,14 +292,14 @@ export default {
               })
             ),
           race_id: race_id,
-          repeat: rep || "A"
+          repeat: rep || "A",
+          status: status || null
         };
         if (!competitor.results.some(_res => _res.race_id === race_id)) {
           competitor.results.push(res);
         } else {
           let _res = competitor.results.find(_res => _res.race_id === race_id);
           _res.value = res.value;
-          _res.repeat = res.repeat;
         }
         return competitor.results;
       }
@@ -324,25 +333,17 @@ export default {
               title: "Лучший",
               result: comp_id => {
                 let res = [];
+                const competitor = this.competitorsSheet.competitors.find(
+                  _competitor => _competitor.id === comp_id
+                );
+
                 this.races.forEach(_race => {
-                  res.push(
-                    this.result_formula.types[this.result_formula.type].formulas
-                      .find(_f => {
-                        return (
-                          _f.id ===
-                          this.result_formula.types[this.result_formula.type]
-                            .formula
-                        );
-                      })
-                      .get_result(
-                        comp_id,
-                        _race.id,
-                        this.stuff.judges.map(_j => {
-                          return +_j.id;
-                        })
-                      )
+                  const result = competitor.results.find(
+                    result => result.race_id === _race.id
                   );
+                  res.push(result ? (result.status ? 0 : result.value) : 0);
                 });
+
                 return res.length > 0 ? Math.max(...res) : 0;
               }
             },
@@ -351,25 +352,17 @@ export default {
               title: "Сумма",
               result: comp_id => {
                 let res = [];
+                const competitor = this.competitorsSheet.competitors.find(
+                  _competitor => _competitor.id === comp_id
+                );
+
                 this.races.forEach(_race => {
-                  res.push(
-                    this.result_formula.types[this.result_formula.type].formulas
-                      .find(_f => {
-                        return (
-                          _f.id ===
-                          this.result_formula.types[this.result_formula.type]
-                            .formula
-                        );
-                      })
-                      .get_result(
-                        comp_id,
-                        _race.id,
-                        this.stuff.judges.map(_j => {
-                          return +_j.id;
-                        })
-                      )
+                  const result = competitor.results.find(
+                    result => result.race_id === _race.id
                   );
+                  res.push(result ? (result.status ? 0 : result.value) : 0);
                 });
+
                 this.result_formula.overall_result.select_heats.mode === 1 &&
                   this.result_formula.overall_result.select_heats.heats > 0 &&
                   (() => {
@@ -399,25 +392,17 @@ export default {
               title: "Среднее",
               result: comp_id => {
                 let res = [];
+                const competitor = this.competitorsSheet.competitors.find(
+                  _competitor => _competitor.id === comp_id
+                );
+
                 this.races.forEach(_race => {
-                  res.push(
-                    this.result_formula.types[this.result_formula.type].formulas
-                      .find(_f => {
-                        return (
-                          _f.id ===
-                          this.result_formula.types[this.result_formula.type]
-                            .formula
-                        );
-                      })
-                      .get_result(
-                        comp_id,
-                        _race.id,
-                        this.stuff.judges.map(_j => {
-                          return +_j.id;
-                        })
-                      )
+                  const result = competitor.results.find(
+                    result => result.race_id === _race.id
                   );
+                  res.push(result ? (result.status ? 0 : result.value) : 0);
                 });
+
                 this.result_formula.overall_result.select_heats.mode === 1 &&
                   this.result_formula.overall_result.select_heats.heats > 0 &&
                   (() => {
@@ -450,22 +435,24 @@ export default {
                   _comp => _comp.id === comp_id
                 );
                 let sorted_res = [[], [], []];
+
                 this.races.forEach(_race => {
-                  if (
-                    competitor.results.find(_res => _res.race_id === _race.id)
-                  ) {
-                    const result = competitor.results.find(
-                      _res => _res.race_id === _race.id
-                    );
-                    if (result.repeat === "A") {
-                      sorted_res[0].push(result);
-                    } else if (result.repeat === "B") {
-                      sorted_res[1].push(result);
-                    } else {
-                      sorted_res[2].push(result);
-                    }
+                  const result = competitor.results.find(
+                    result => result.race_id === _race.id
+                  );
+                  if (result) {
+                    if (!result.status) {
+                      if (result.repeat === "A") {
+                        sorted_res[0].push(result);
+                      } else if (result.repeat === "B") {
+                        sorted_res[1].push(result);
+                      } else {
+                        sorted_res[2].push(result);
+                      }
+                    } else sorted_res[0].push(0);
                   }
                 });
+
                 let res_arr = sorted_res
                   .map(_results =>
                     _results.length > 0
@@ -478,9 +465,11 @@ export default {
                     _result_to_filter =>
                       _result_to_filter !== Math.min(...res_arr)
                   );
-                return res_arr.reduce((r1, r2) => {
-                  return +r1 + +r2;
-                });
+                return res_arr.length > 0
+                  ? res_arr.reduce((r1, r2) => {
+                      return +r1 + +r2;
+                    })
+                  : 0;
               }
             }
           ]
