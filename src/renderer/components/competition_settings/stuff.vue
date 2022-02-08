@@ -9,19 +9,63 @@
             background: $vuetify.theme.themes[appTheme].cardBackgroundRGBA
           }"
         >
-          <div class="d-flex justify-center align-center">
+          <div class="d-flex justify-center align-center pa-1">
+            <v-dialog
+              v-model="competition.stuff.settings.jury.change_dialog"
+              overlay-opacity="100%"
+              width="320px"
+              ><template v-slot:activator="{ on }"
+                ><v-btn
+                  v-on="on"
+                  small
+                  icon
+                  :color="$vuetify.theme.themes[appTheme].accent_light"
+                  ><v-icon small>mdi-tools</v-icon></v-btn
+                ></template
+              ><v-card
+                :style="{
+                  backgroundColor:
+                    $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
+                  color: $vuetify.theme.themes[appTheme].textDefault
+                }"
+                ><v-card-title class="pa-2" style="font-size: 1.2rem"
+                  >Изменение заголовка</v-card-title
+                >
+                <div class="pa-2" style="font-size: 1.1rem">
+                  <input
+                    type="text"
+                    style="padding: 2px 4px;font-size: 1.1rem; border-radius: 2px;"
+                    :style="{
+                      backgroundColor:
+                        $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
+                      color: $vuetify.theme.themes[appTheme].textDefault
+                    }"
+                    v-model.lazy="competition.stuff.settings.jury.title"
+                  />
+                </div>
+                <v-card-actions class="d-flex justify-end pa-1"
+                  ><v-btn
+                    small
+                    @click.stop="
+                      competition.stuff.settings.jury.change_dialog = false
+                    "
+                    :color="$vuetify.theme.themes[appTheme].textDefault"
+                    >Закрыть</v-btn
+                  ></v-card-actions
+                ></v-card
+              ></v-dialog
+            >
             <div
               :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
-              style="font-weight: bold; font-size: 1.2rem"
+              style="font-weight: bold; font-size: 1.4rem"
             >
-              Жюри
+              {{ competition.stuff.settings.jury.title }}
             </div>
             <v-btn
               @click="addStuff('jury')"
-              class="mr-4"
-              icon
+              text
               :color="$vuetify.theme.themes[appTheme].accent"
-              style="margin-left: 1rem;"
+              style="margin-left: auto;"
               ><v-icon>mdi-account-plus</v-icon></v-btn
             >
           </div>
@@ -220,28 +264,64 @@
             border: `1px solid ${$vuetify.theme.themes[appTheme].accent}`
           }"
         >
-          <div
-            class="d-flex justify-center align-center"
-            style="position:relative;"
-          >
+          <div class="d-flex justify-center align-center pa-1">
+            <v-dialog
+              v-model="competition.stuff.settings.judges.change_dialog"
+              overlay-opacity="100%"
+              width="320px"
+              ><template v-slot:activator="{ on }"
+                ><v-btn
+                  v-on="on"
+                  small
+                  icon
+                  :color="$vuetify.theme.themes[appTheme].accent_light"
+                  ><v-icon small>mdi-tools</v-icon></v-btn
+                ></template
+              ><<v-card
+                :style="{
+                  backgroundColor:
+                    $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
+                  color: $vuetify.theme.themes[appTheme].textDefault
+                }"
+                ><v-card-title class="pa-2" style="font-size: 1.2rem"
+                  >Изменение заголовка</v-card-title
+                >
+                <div class="pa-2" style="font-size: 1.1rem">
+                  <input
+                    type="text"
+                    style="padding: 2px 4px;font-size: 1.1rem; border-radius: 2px;"
+                    :style="{
+                      backgroundColor:
+                        $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
+                      color: $vuetify.theme.themes[appTheme].textDefault
+                    }"
+                    v-model.lazy="competition.stuff.settings.judges.title"
+                  />
+                </div>
+                <v-card-actions class="d-flex justify-end pa-1"
+                  ><v-btn
+                    small
+                    @click.stop="
+                      competition.stuff.settings.judges.change_dialog = false
+                    "
+                    :color="$vuetify.theme.themes[appTheme].textDefault"
+                    >Закрыть</v-btn
+                  ></v-card-actions
+                ></v-card
+              ></v-dialog
+            >
             <div
               :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
-              style="font-weight: bold; font-size: 1.2rem"
+              style="font-weight: bold; font-size: 1.4rem"
             >
-              Судьи
+              {{ competition.stuff.settings.judges.title }}
             </div>
             <v-btn
               @click="addStuff('judge')"
-              icon
+              text
               :color="$vuetify.theme.themes[appTheme].accent"
-              style="margin-left: 1rem;"
+              style="margin-left: auto;"
               ><v-icon>mdi-account-plus</v-icon></v-btn
-            >
-            <v-icon
-              class="pa-2"
-              :color="$vuetify.theme.themes[appTheme].accent"
-              style="position:absolute; top: 0; right: 0;"
-              >mdi-account-group-outline</v-icon
             >
           </div>
           <div class="flex-column px-2">
@@ -488,7 +568,7 @@ export default {
                 : 1
             )
           )
-        : competition.stuff[stuffType].push(new this.JuryClass());
+        : this.competition.stuff[stuffType].push(new this.JuryClass());
 
       this.$store.dispatch("main/updateEvent");
     },

@@ -52,7 +52,7 @@ export default {
       },
       string_lights: {
         odd: "#FFFFFF",
-        even: "#AAAAAA"
+        even: "#D1D1D1"
       },
       layout: {
         height: 297,
@@ -147,7 +147,7 @@ export default {
             data: { id: "rank", title: "Ст №" },
             handler: function(_competitor, competition) {
               return [
-                competition.protocol_settings.start_protocols.result_race._startList.indexOf(
+                competition.protocol_settings.start_protocols.filters.race_filter._startList.indexOf(
                   _competitor.competitor.id
                 ) + 1
               ];
@@ -274,7 +274,10 @@ export default {
             value: "start"
           },
           {
-            data: { id: "race_res", title: "Оценка" },
+            data: {
+              id: "race_res",
+              title: "Оценка"
+            },
             handler: function(competitor, competition) {
               return competition.races.map(_race => {
                 return `${competition.getRaceResult(

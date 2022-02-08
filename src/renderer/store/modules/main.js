@@ -1,5 +1,6 @@
 import io from "socket.io-client";
 import fs from "fs";
+import router from "./../../router";
 
 export default {
   namespaced: true,
@@ -14,7 +15,7 @@ export default {
     competition: null,
     competitions: [],
     showPreview: false,
-    showMenu: false,
+    showMenu: true,
     serverStatus: false,
     serverStatusChecker: null,
     appTheme: "dark",
@@ -98,9 +99,10 @@ export default {
     timer: state => state.timer,
     startList: state => {
       return (
-        (state.competition.protocol_settings.start_protocols.result_race &&
-          (state.competition.protocol_settings.start_protocols.result_race
-            ._startList ||
+        (state.competition.protocol_settings.start_protocols.filters
+          .race_filter &&
+          (state.competition.protocol_settings.start_protocols.filters
+            .race_filter._startList ||
             [])) ||
         []
       );
@@ -351,6 +353,7 @@ export default {
     createCompetition: (state, competition) => {
       state.competitions.push(competition);
       state.competition = state.competitions[state.competitions.length - 1];
+
       state.socket &&
         state.socket.connected &&
         state.socket.emit("set_competition_data", state.competition, res => {
@@ -359,6 +362,10 @@ export default {
     },
     setCompetition: (state, competition) => {
       state.competition = competition;
+      router.push("competition_settings").catch(err => {
+        return err;
+      });
+
       state.socket &&
         state.socket.connected &&
         state.socket.emit("set_competition_data", competition, res => {
@@ -370,6 +377,7 @@ export default {
         return _comp.id !== id;
       });
       state.competition = state.competitions[0];
+
       state.socket &&
         state.socket.connected &&
         state.socket.emit("set_competition_data", state.competition, res => {

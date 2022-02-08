@@ -238,7 +238,6 @@
               style="display:flex;flex-direction: column; padding: 0; width: 100%;overflow: hidden"
             >
               <!-- Competitors -->
-
               <div
                 v-for="(gridRow, c_idx) in page"
                 :key="c_idx"
@@ -271,7 +270,7 @@
                   style="flex: 0 0 auto;width: 100%;display: flex; flex-wrap: nowrap; padding: 0;margin: 0; font-weight:bold;background-color: #ffffff;color: #000000;border: 1px solid black;"
                 >
                   <div
-                    style=" padding: 0;margin: 0;overflow: hidden;flex-shrink: 0; white-space: nowrap;line-height: normal"
+                    style="flex: 0 0 auto;padding: 0;margin: 0;font-weight:bold;overflow: hidden;white-space: nowrap;line-height: normal"
                     :style="{
                       width: `${header.params.width}%`
                     }"
@@ -280,11 +279,7 @@
                     :key="h_idx"
                   >
                     <div style="padding: 4px;width: 100%;overflow: hidden;">
-                      {{
-                        header.params &&
-                          header.params.cell_1 &&
-                          header.params.cell_1.title
-                      }}
+                      {{ header.params.cell_1.title }}
                     </div>
                   </div>
                 </div>
@@ -375,7 +370,7 @@
                         <div
                           style="padding: 2px 4px; border-bottom: 1px solid black; font-weight:bold;"
                         >
-                          Судьи
+                          {{ competition.stuff.settings.judges.title }}
                         </div>
                         <div
                           style="padding: 2px 4px;display: flex; flex-wrap: nowrap;"
@@ -408,12 +403,12 @@
                         <div
                           style="padding: 2px 4px; border-bottom: 1px solid black; font-weight:bold;"
                         >
-                          Техническая информация
+                          {{ competition.technicalInfo.title }}
                         </div>
                         <div
                           style="display: flex; flex-wrap: nowrap; padding: 2px 4px;"
-                          v-for="(tech_info,
-                          ti_idx) in competition.technicalInfo"
+                          v-for="(tech_info, ti_idx) in competition
+                            .technicalInfo.records"
                           :key="ti_idx"
                         >
                           <div style="font-weight:bold; width: 40%">
@@ -435,7 +430,7 @@
                         <div
                           style="padding: 2px 4px; border-bottom: 1px solid black; font-weight:bold;"
                         >
-                          Жюри
+                          {{ competition.stuff.settings.jury.title }}
                         </div>
                         <div
                           style="display: flex; flex-wrap: nowrap;padding: 2px 4px;"

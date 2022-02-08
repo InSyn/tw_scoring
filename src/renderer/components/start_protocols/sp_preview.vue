@@ -178,6 +178,19 @@
                   }}
                 </div>
                 <div
+                  style="font-size: 1.2rem; font-weight: bold; line-height: 1.2"
+                >
+                  {{
+                    `${
+                      competition.protocol_settings.start_protocols.filters
+                        .race_filter
+                        ? competition.protocol_settings.start_protocols.filters
+                            .race_filter.title
+                        : ""
+                    }`
+                  }}
+                </div>
+                <div
                   style="font-size: 1.4rem; font-weight: bold; line-height: 1.2"
                 >
                   {{ competition.mainData.discipline.value }}
@@ -372,7 +385,7 @@
                         <div
                           style="padding: 2px 4px; border-bottom: 1px solid black; font-weight:bold;"
                         >
-                          Судьи
+                          {{ competition.stuff.settings.judges.title }}
                         </div>
                         <div
                           style="padding: 2px 4px;display: flex; flex-wrap: nowrap;"
@@ -405,12 +418,12 @@
                         <div
                           style="padding: 2px 4px; border-bottom: 1px solid black; font-weight:bold;"
                         >
-                          Техническая информация
+                          {{ competition.technicalInfo.title }}
                         </div>
                         <div
                           style="display: flex; flex-wrap: nowrap; padding: 2px 4px;"
-                          v-for="(tech_info,
-                          ti_idx) in competition.technicalInfo"
+                          v-for="(tech_info, ti_idx) in competition
+                            .technicalInfo.records"
                           :key="ti_idx"
                         >
                           <div style="font-weight:bold; width: 40%">
@@ -432,7 +445,7 @@
                         <div
                           style="padding: 2px 4px; border-bottom: 1px solid black; font-weight:bold;"
                         >
-                          Жюри
+                          {{ competition.stuff.settings.jury.title }}
                         </div>
                         <div
                           style="display: flex; flex-wrap: nowrap;padding: 2px 4px;"
@@ -519,9 +532,7 @@
                       <div
                         style="margin-left: .5rem;display:flex;flex-wrap: nowrap"
                         v-html="wData.descr2"
-                      >
-                        {{ wData.descr2 }}
-                      </div>
+                      ></div>
                     </div>
                   </div>
                 </div>

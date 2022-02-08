@@ -129,13 +129,15 @@
                       style="max-width: 5rem"
                       v-html="
                         competition.set_accuracy(
-                          competition.result_formula.overall_result.types
-                            .find(
-                              _f =>
-                                _f.id ===
-                                competition.result_formula.overall_result.type
-                            )
-                            .result(competitor.id)
+                          competitor.results_overall.find(
+                            overall_res =>
+                              overall_res.competition_id === competition.id
+                          )
+                            ? competitor.results_overall.find(
+                                overall_res =>
+                                  overall_res.competition_id === competition.id
+                              ).value
+                            : 0
                         )
                       "
                     ></v-col></v-row></v-hover></template
@@ -416,7 +418,7 @@ export default {
         }
       });
       this.competition.races.forEach(race =>
-        this.competition.publish_result(competitor, race.id)
+        this.competition.publishResult(competitor, race.id)
       );
 
       this.changeMarksDialog[competitor.id] = false;

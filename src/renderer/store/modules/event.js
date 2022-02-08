@@ -173,6 +173,16 @@ export default {
         }
       };
       stuff = {
+        settings: {
+          jury: {
+            title: "Жюри",
+            change_dialog: false
+          },
+          judges: {
+            title: "Судьи",
+            change_dialog: false
+          }
+        },
         secretary: {
           name: "",
           lastName: ""
@@ -191,20 +201,24 @@ export default {
         judges: [],
         openers: []
       };
-      technicalInfo = [
-        {
-          title: "Название склона",
-          value: ""
-        },
-        {
-          title: "Длина трассы",
-          value: ""
-        },
-        {
-          title: "Ширина трассы",
-          value: ""
-        }
-      ];
+      technicalInfo = {
+        title: "Техническа информация",
+        change_dialog: false,
+        records: [
+          {
+            title: "Название склона",
+            value: ""
+          },
+          {
+            title: "Длина трассы",
+            value: ""
+          },
+          {
+            title: "Ширина трассы",
+            value: ""
+          }
+        ]
+      };
       competitorsSheet = {
         header: [
           { id: "bib", title: "Bib" },
@@ -212,8 +226,7 @@ export default {
           { id: "lastname", title: "Фамилия" },
           { id: "name", title: "Имя" },
           { id: "year", title: "Год" },
-          { id: "rang", title: "Разряд" },
-          { id: "location", title: "Регион" }
+          { id: "rang", title: "Разряд" }
         ],
         competitors: []
       };
@@ -273,7 +286,7 @@ export default {
             : this.set_accuracy(result.value)
           : this.set_accuracy(0);
       }
-      publish_result(competitor, race_id, rep, status) {
+      publishResult(competitor, race_id, rep, status) {
         const res = {
           id: Math.random()
             .toString(36)
@@ -301,18 +314,42 @@ export default {
           let _res = competitor.results.find(_res => _res.race_id === race_id);
           _res.value = res.value;
         }
+
+        this.calculateOverallResult(competitor);
+
         return competitor.results;
+      }
+      calculateOverallResult(competitor) {
+        const overallResult = {
+          competition_id: this.id,
+          competitor_id: competitor.id,
+          value: this.result_formula.overall_result.types
+            .find(_f => _f.id === this.result_formula.overall_result.type)
+            .result(competitor.id)
+        };
+        let existedResult = competitor.results_overall.find(
+          res => res.competition_id === overallResult.competition_id
+        );
+        existedResult
+          ? (existedResult.value = overallResult.value)
+          : competitor.results_overall.push(overallResult);
+
+        return competitor.results_overall;
       }
       protocol_fields = [];
       protocol_settings = {
         protocol_type: 1,
         show_preview: false,
         start_protocols: {
-          result_race: null,
+          filters: {
+            race_filter: null
+          },
           fields: []
         },
         result_protocols: {
-          result_race: null,
+          filters: {
+            race_filter: null
+          },
           fields: []
         }
       };

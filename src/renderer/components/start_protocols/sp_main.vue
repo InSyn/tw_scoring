@@ -49,7 +49,7 @@
           :color="this.$vuetify.theme.themes[appTheme].accent"
           style="margin-left: auto"
           @click="
-            $store.commit('protocol_settings/initResultProtocolFields', {
+            $store.commit('protocol_settings/initStartProtocolFields', {
               competition: competition,
               fieldClass: fieldClass
             })
@@ -110,8 +110,7 @@
         <div style="max-height: 20vh;overflow-y: auto">
           <v-row
             v-for="(field, f_idx) in competition.protocol_settings
-              .start_protocols.fields &&
-              competition.protocol_settings.start_protocols.fields"
+              .start_protocols.fields"
             :key="f_idx"
             style="font-size: 0.8rem;padding: 0;margin: 0"
             :style="[
@@ -223,7 +222,7 @@
               >
                 <v-dialog
                   v-if="p_key.split('_')[0] === 'cell'"
-                  v-model="field.select_dialog"
+                  v-model="f_prop.select_dialog"
                   width="500"
                 >
                   <template
@@ -238,50 +237,78 @@
                       {{ `${field.params[p_key].title || "пусто"}` }}
                     </div></template
                   ><v-card
-                    style="padding: 16px"
                     :style="{
                       color: $vuetify.theme.themes[appTheme].textDefault,
                       backgroundColor:
                         $vuetify.theme.themes[appTheme].cardBackgroundRGBA
                     }"
-                    ><div
-                      style="display:flex;flex-wrap: nowrap; align-items: flex-end; padding: 4px"
-                    >
-                      <div
-                        style="display:flex;align-items: center;flex-wrap: nowrap; padding: 4px 8px; font-weight:bold;position:relative;"
-                      >
-                        <div
-                          style="display: flex; flex-wrap: nowrap; position: absolute;top: -50%;left: 1rem;font-size: 0.875rem"
-                        >
-                          Текущая ячейка
-                        </div>
-                        <div>{{ `id: ${f_prop.id}` }}</div>
-                        <div>{{ `title: ${f_prop.title}` }}</div>
-                      </div>
-                      <v-btn
-                        @click="field.select_dialog = false"
+                    ><v-card-title style="padding: 8px 16px"
+                      >Настройка ячейки<v-btn
+                        @click="f_prop.select_dialog = false"
                         style="margin-left: auto"
                         icon
                         ><v-icon color="red">mdi-close</v-icon></v-btn
+                      ></v-card-title
+                    >
+                    <div style="display:flex;flex-wrap: wrap;padding: 0 16px">
+                      <div style="width: 100%;">
+                        Текущее значение
+                        <v-btn
+                          @click="clearField(f_prop)"
+                          text
+                          small
+                          :color="$vuetify.theme.themes[appTheme].accent"
+                          style="margin-left: 1rem"
+                          >очистить</v-btn
+                        >
+                      </div>
+
+                      <div
+                        v-if="f_prop.id"
+                        style="width: 100%;display: flex;font-weight: bold"
                       >
+                        <div>{{ `ID: ${f_prop.id}` }}</div>
+                        <div style="margin-left: 1rem">
+                          {{ `Title: ${f_prop.title}` }}
+                        </div>
+                      </div>
+                      <div v-else>Ячейка пуста</div>
                     </div>
                     <div
-                      style="display:flex;flex-direction: column; align-items: flex-start; max-height: 600px; overflow-y: auto"
+                      style="display:flex;flex-wrap: wrap; max-height: 600px; padding: 8px 16px; overflow-y: auto"
                     >
                       <div
                         v-for="(standard_header, sh_idx) in competition
                           .protocol_settings.start_protocols.fields"
                         :key="sh_idx"
-                        @click="setField(field, standard_header)"
-                        style="flex-shrink: 0; padding: 4px; margin: 2px; cursor: pointer"
+                        @click="setField(f_prop, standard_header)"
+                        style="display:flex;flex-wrap: nowrap;flex: 0 0 auto; width: 18rem; margin: 0 .5rem .5rem 0; cursor: pointer"
                         :style="{
                           backgroundColor:
                             $vuetify.theme.themes[appTheme].accent
                         }"
                       >
-                        {{
-                          `${standard_header.params.cell_1.id}: ${standard_header.params.cell_1.title}`
-                        }}
+                        <div
+                          style="flex: 0 0 auto;width: 6rem;font-weight:bold;padding: 4px .5rem"
+                          :style="{
+                            backgroundColor:
+                              $vuetify.theme.themes[appTheme].accent,
+                            color: $vuetify.theme.themes[appTheme].textDefault
+                          }"
+                        >
+                          {{ `${standard_header.params.cell_1.id}:` }}
+                        </div>
+                        <div
+                          style="flex: 1 0 auto;font-weight:bold;padding: 4px .5rem"
+                          :style="{
+                            backgroundColor:
+                              $vuetify.theme.themes[appTheme].textDefault,
+                            color:
+                              $vuetify.theme.themes[appTheme].cardBackgroundRGBA
+                          }"
+                        >
+                          {{ `${standard_header.params.cell_1.title}` }}
+                        </div>
                       </div>
                     </div>
                   </v-card></v-dialog
@@ -300,10 +327,9 @@
                 />
                 <select
                   v-if="p_key === 'align'"
-                  style="outline: none; height: 100%;width: 100%; cursor: pointer"
+                  style="outline: none; height: 100%;width: 100%;padding: 2px 4px;cursor: pointer"
                   :style="{
-                    color: $vuetify.theme.themes[appTheme].textDefault,
-                    textAlignLast: f_prop.value
+                    color: $vuetify.theme.themes[appTheme].textDefault
                   }"
                   v-model.lazy="
                     competition.protocol_settings.start_protocols.fields[f_idx]
@@ -311,6 +337,7 @@
                   "
                 >
                   <option
+                    style="padding: 2px 4px"
                     :style="{
                       backgroundColor:
                         $vuetify.theme.themes[appTheme].standardBackgroundRGBA
@@ -578,7 +605,9 @@ export default {
       else this.selected_fields.push(field_id);
     },
     setField(field, header) {
-      field.params.cell_2 = header.params.cell_1;
+      field.id = header.params.cell_1.id;
+      field.title = header.params.cell_1.title;
+      field.handler = header.params.cell_1.handler;
     },
     remove_fields() {
       this.competition.protocol_settings.start_protocols.fields = this.competition.protocol_settings.start_protocols.fields.filter(
@@ -647,6 +676,15 @@ export default {
           );
         }
       }
+    },
+    clearField(field) {
+      field.id = null;
+      field.title = null;
+      field.handler = function() {
+        return 0;
+      };
+
+      return field;
     }
   },
   data() {
@@ -674,8 +712,11 @@ export default {
     };
   },
   computed: {
-    ...mapGetters("main", ["competition", "appTheme"]),
-    ...mapGetters("protocol_settings", ["results_protocol", "fieldClass"]),
+    ...mapGetters("main", { competition: "competition", appTheme: "appTheme" }),
+    ...mapGetters("protocol_settings", {
+      results_protocol: "results_protocol",
+      fieldClass: "fieldClass"
+    }),
     console: () => console,
     sum_width() {
       let sum = 0,

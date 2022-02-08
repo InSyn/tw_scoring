@@ -114,8 +114,7 @@
         <div style="max-height: 20vh;overflow-y: auto">
           <v-row
             v-for="(field, f_idx) in competition.protocol_settings
-              .result_protocols.fields &&
-              competition.protocol_settings.result_protocols.fields"
+              .result_protocols.fields"
             :key="f_idx"
             style="font-size: 0.8rem;padding: 0;margin: 0"
             :style="[
@@ -294,7 +293,7 @@
                         }"
                       >
                         <div
-                          style="flex: 0 0 auto;width: 8rem;font-weight:bold;padding: 4px .5rem"
+                          style="flex: 0 0 auto;width: 6rem;font-weight:bold;padding: 4px .5rem"
                           :style="{
                             backgroundColor:
                               $vuetify.theme.themes[appTheme].accent,
@@ -304,7 +303,7 @@
                           {{ `${standard_header.params.cell_1.id}:` }}
                         </div>
                         <div
-                          style="flex: 1 0 auto;padding: 4px .5rem"
+                          style="flex: 1 0 auto;font-weight:bold;padding: 4px .5rem"
                           :style="{
                             backgroundColor:
                               $vuetify.theme.themes[appTheme].textDefault,
@@ -332,10 +331,9 @@
                 />
                 <select
                   v-if="p_key === 'align'"
-                  style="outline: none; height: 100%;width: 100%; cursor: pointer"
+                  style="outline: none; height: 100%;width: 100%;padding: 2px 4px;cursor: pointer"
                   :style="{
-                    color: $vuetify.theme.themes[appTheme].textDefault,
-                    textAlignLast: f_prop.value
+                    color: $vuetify.theme.themes[appTheme].textDefault
                   }"
                   v-model.lazy="
                     competition.protocol_settings.result_protocols.fields[f_idx]
@@ -343,6 +341,7 @@
                   "
                 >
                   <option
+                    style="padding: 2px 4px"
                     :style="{
                       backgroundColor:
                         $vuetify.theme.themes[appTheme].standardBackgroundRGBA

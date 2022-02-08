@@ -723,9 +723,9 @@ export default {
         this.competition.stuff.jury.push(_judge);
       });
 
-      this.competition.technicalInfo = [];
-      evData.technicalInfo.forEach(_tInf =>
-        this.competition.technicalInfo.push(_tInf)
+      this.competition.technicalInfo.records = [];
+      evData.technicalInfo.records.forEach(_tInf =>
+        this.competition.technicalInfo.records.push(_tInf)
       );
 
       this.competition.competitorsSheet.header = evData.competitorsSheet.header;

@@ -239,7 +239,7 @@
               <div
                 v-for="(stage, s_idx) in competition.stages.stage_grid"
                 :key="s_idx"
-                style="display:flex;flex-wrap: nowrap;flex: 0 0 auto;align-items: center;margin: .5rem 0;border-radius: 6px"
+                style="display:flex;flex-wrap: nowrap;flex: 0 0 auto;align-items: center;margin: .5rem 0;border-radius: 2px"
               >
                 <div
                   v-if="s_idx > 0"
@@ -249,7 +249,7 @@
                   }"
                 ></div>
                 <div
-                  style="display:flex;flex-direction: column;border-radius: 6px;overflow:hidden;"
+                  style="display:flex;flex-direction: column;border-radius: 2px;overflow:hidden;"
                   :style="{
                     border: `1px solid ${$vuetify.theme.themes[appTheme].accent}`
                   }"
@@ -271,7 +271,7 @@
                         $event.target.style.backgroundColor =
                           $vuetify.theme.themes[appTheme].standardBackgroundRGBA
                       "
-                      style="flex: 1 0 auto;padding: 2px 4px;font-size: .9rem;border-radius: 6px 6px 0 0;transition: background-color 92ms"
+                      style="flex: 1 0 auto;padding: 2px 4px;font-size: .9rem;border-radius: 2px 2px 0 0;transition: background-color 92ms"
                       :style="{
                         color: $vuetify.theme.themes[appTheme].textDefault,
                         backgroundColor:
@@ -469,6 +469,7 @@
                           @click="
                             competition.result_formula.types[0].formula =
                               formula.id;
+                            updateResults();
                             $store.dispatch('main/updateEvent');
                           "
                           class="mr-2 d-flex flex-nowrap align-center"
@@ -635,6 +636,7 @@
                             () => {
                               section_dialog.state = false;
                               section_dialog.section.coefficient = 1;
+                              updateResults();
                             }
                           "
                           :color="$vuetify.theme.themes[appTheme].action_red"
@@ -693,7 +695,8 @@
                                 @click="
                                   section_dialog.section.judges_to_add.push(
                                     judge
-                                  )
+                                  );
+                                  updateResults();
                                 "
                                 class="ma-1 d-flex align-center justify-center font-weight-bold"
                                 style="height: 2rem; width: 4rem; font-size: 0.8rem; border-radius: 2px; cursor:pointer;"
@@ -801,6 +804,7 @@
                                   return _section.id !== section.id;
                                 }
                               );
+                              updateResults();
                               $store.dispatch('main/updateEvent');
                             "
                             small
@@ -944,6 +948,7 @@
                       .heats > 0 &&
                       competition.result_formula.overall_result.select_heats
                         .heats--;
+                    updateResults();
                     $store.dispatch('main/updateEvent');
                   "
                   >mdi-chevron-left
@@ -964,6 +969,7 @@
                   @click="
                     competition.result_formula.overall_result.select_heats
                       .heats++;
+                    updateResults();
                     $store.dispatch('main/updateEvent');
                   "
                   >mdi-chevron-right
@@ -974,6 +980,7 @@
                 @click="
                   competition.result_formula.overall_result.select_heats.mode =
                     mode.id;
+                  updateResults();
                   $store.dispatch('main/updateEvent');
                 "
                 style="border-radius: 50%; height: 1rem;width: 1rem; cursor:pointer;"
@@ -1131,11 +1138,27 @@ export default {
     },
     setRaceResultFormula(type) {
       this.competition.result_formula.type = type;
+
+      this.updateResults();
       this.$store.dispatch("main/updateEvent");
     },
     setOverallResultFormula(type) {
       this.competition.result_formula.overall_result.type = type;
+
+      this.updateResults();
       this.$store.dispatch("main/updateEvent");
+    },
+    updateResults() {
+      this.competition.races.forEach(race => {
+        race.finished.forEach(fin_competitor => {
+          this.competition.publishResult(
+            this.competition.competitorsSheet.competitors.find(
+              competitor => competitor.id === fin_competitor
+            ),
+            race.id
+          );
+        });
+      });
     }
   },
   data() {

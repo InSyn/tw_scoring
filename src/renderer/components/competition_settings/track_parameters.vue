@@ -10,9 +10,55 @@
       <div
         style="display:flex;align-items:center;justify-content:center;font-weight:bold; font-size: 1.2rem"
       >
-        <div>Техническая информация</div>
+        <v-dialog
+          v-model="competition.technicalInfo.change_dialog"
+          overlay-opacity="100%"
+          width="320px"
+          ><template v-slot:activator="{ on }"
+            ><v-btn
+              v-on="on"
+              small
+              icon
+              :color="$vuetify.theme.themes[appTheme].accent_light"
+              ><v-icon small>mdi-tools</v-icon></v-btn
+            ></template
+          ><<v-card
+            :style="{
+              backgroundColor:
+                $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
+              color: $vuetify.theme.themes[appTheme].textDefault
+            }"
+            ><v-card-title class="pa-2" style="font-size: 1.2rem"
+              >Изменение заголовка</v-card-title
+            >
+            <div class="pa-2" style="font-size: 1.1rem">
+              <input
+                type="text"
+                size="32"
+                style="padding: 2px 4px;font-size: 1.1rem; border-radius: 2px;"
+                :style="{
+                  backgroundColor:
+                    $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
+                  color: $vuetify.theme.themes[appTheme].textDefault
+                }"
+                v-model.lazy="competition.technicalInfo.title"
+              />
+            </div>
+            <v-card-actions class="d-flex justify-end pa-1"
+              ><v-btn
+                small
+                @click.stop="competition.technicalInfo.change_dialog = false"
+                :color="$vuetify.theme.themes[appTheme].textDefault"
+                >Закрыть</v-btn
+              ></v-card-actions
+            ></v-card
+          ></v-dialog
+        >
+        <div>{{ competition.technicalInfo.title }}</div>
         <v-btn
-          @click="competition.technicalInfo.push({ title: '', value: '' })"
+          @click="
+            competition.technicalInfo.records.push({ title: '', value: '' })
+          "
           :color="$vuetify.theme.themes[appTheme].accent"
           style="margin-left: .5rem"
           text
@@ -21,7 +67,7 @@
       </div>
       <v-row
         no-gutters
-        v-for="(techString, ts) in competition.technicalInfo"
+        v-for="(techString, ts) in competition.technicalInfo.records"
         :key="ts"
         class="pt-1 d-flex align-center"
         style="font-size: 0.9rem; border-radius: 6px"
@@ -36,7 +82,7 @@
             "
             style="transition: background-color 112ms; border-radius: 6px; width: 100%;"
             class="flex-grow-1 pa-1 font-weight-bold"
-            v-model="competition.technicalInfo[ts].title"
+            v-model="competition.technicalInfo.records[ts].title"
             type="text"
             :style="{
               backgroundColor:
@@ -54,7 +100,7 @@
             "
             style="transition: background-color 112ms; border-radius: 6px; width: 100%;"
             class="flex-grow-1 pa-1"
-            v-model="competition.technicalInfo[ts].value"
+            v-model="competition.technicalInfo.records[ts].value"
             type="text"
             :style="{
               color: $vuetify.theme.themes[appTheme].textDefault,
@@ -65,8 +111,8 @@
         <v-col class="d-flex justify-center align-center" cols="1"
           ><v-btn
             @click="
-              competition.technicalInfo.splice(
-                competition.technicalInfo.indexOf(techString),
+              competition.technicalInfo.records.splice(
+                competition.technicalInfo.records.indexOf(techString),
                 1
               )
             "

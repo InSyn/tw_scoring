@@ -54,10 +54,10 @@
               ><v-icon small>mdi-close</v-icon></v-btn
             >
             <v-row no-gutters>
-              <v-col class="font-weight-bold" cols="12"
+              <v-col class="font-weight-bold pa-1" cols="12"
                 ><span v-html="`Открывающий ${opener.num}`"></span
               ></v-col>
-              <v-col class="d-flex align-center pa-2" cols="3"
+              <v-col class="d-flex align-center pa-1" cols="3"
                 ><div v-html="`Bib: `"></div>
                 <input
                   @focus="
@@ -74,7 +74,7 @@
                     color: $vuetify.theme.themes[appTheme].textDefault
                   }"
               /></v-col>
-              <v-col class="d-flex align-center pa-2" cols="9"
+              <v-col class="d-flex align-center pa-1" cols="9"
                 ><div v-html="`Фамилия: `"></div>
                 <input
                   @focus="
@@ -91,7 +91,7 @@
                     color: $vuetify.theme.themes[appTheme].textDefault
                   }"
               /></v-col>
-              <v-col class="d-flex align-center pa-2" cols="6"
+              <v-col class="d-flex align-center pa-1" cols="6"
                 ><div v-html="`Имя: `"></div>
                 <input
                   @focus="
@@ -108,7 +108,7 @@
                     color: $vuetify.theme.themes[appTheme].textDefault
                   }"
               /></v-col>
-              <v-col class="d-flex align-center pa-2" cols="6"
+              <v-col class="d-flex align-center pa-1" cols="6"
                 ><div v-html="`Город: `"></div>
                 <input
                   @focus="

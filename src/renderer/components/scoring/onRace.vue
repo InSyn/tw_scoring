@@ -685,7 +685,7 @@ export default {
           );
         }
       });
-      this.competition.publish_result(
+      this.competition.publishResult(
         competitor,
         this.competition.selected_race.id,
         this.score_repeat,

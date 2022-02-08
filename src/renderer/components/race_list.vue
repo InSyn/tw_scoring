@@ -5,7 +5,7 @@
     </div>
     <v-container fluid>
       <v-row
-        style="display:flex;flex-wrap: nowrap;align-items: center;width: 100%;"
+        style="display:flex;flex-wrap: nowrap;align-items: center;width: 100%;user-select: none"
         no-gutters
       >
         <v-btn
@@ -15,8 +15,8 @@
           ><v-icon>mdi-chevron-double-left</v-icon></v-btn
         >
         <v-row
-          class="flex-grow-1 align-center"
-          style="margin: 0;padding: 4px;min-height: 3rem;border-radius: 6px;flex: 0 1 auto"
+          class="align-center"
+          style="flex: 1 1 auto;margin: 0;padding: 4px;border-radius: 6px;overflow: auto"
           :style="{
             backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA
           }"
@@ -29,7 +29,7 @@
           </div>
           <div
             @click="selectRace(race)"
-            style="position:relative;height: 2.4rem;font-weight:bold;cursor: pointer;margin: 4px;padding: 4px 2rem 4px 1rem;border-radius: 6px;transition: background-color 92ms, color 92ms"
+            style="position:relative;font-weight:bold;cursor: pointer;margin: 2px 4px;padding: 4px 2rem 4px 1rem;border-radius: 6px;transform-origin: center;transition: background-color 92ms, color 92ms"
             class="d-flex justify-center align-center"
             :style="[
               {
@@ -39,7 +39,9 @@
               selectedRace &&
                 race.id === selectedRace.id && {
                   backgroundColor: $vuetify.theme.themes[appTheme].accent,
-                  color: $vuetify.theme.themes[appTheme].textDefault
+                  color: $vuetify.theme.themes[appTheme].textDefault,
+                  fontSize: '1.2rem',
+                  margin: '2px 8px'
                 }
             ]"
             v-for="race in competition.races"
@@ -311,7 +313,7 @@
                     :color="
                       $vuetify.theme.themes[appTheme].standardBackgroundRGBA
                     "
-                    class="pa-2"
+                    class="pa-0"
                     style="height: 320px; overflow-y: auto; border-radius: 6px"
                   >
                     <v-list-item-group>
@@ -364,7 +366,7 @@
                     :color="
                       $vuetify.theme.themes[appTheme].standardBackgroundRGBA
                     "
-                    class="pa-2"
+                    class="pa-0"
                     style="height: 320px; overflow-y: auto; border-radius: 6px"
                   >
                     <v-list-item-group>
