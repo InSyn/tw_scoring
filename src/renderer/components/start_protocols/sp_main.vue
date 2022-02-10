@@ -7,20 +7,42 @@
     }"
   >
     <div class="pa-2 d-flex align-center flex-nowrap">
-      <label for="prot_title" class="font-weight-bold">Название</label
-      ><input
-        class="flex-grow-1 ml-8 pa-1"
-        id="prot_title"
-        style="border-radius: 6px"
-        v-model="results_protocol.title"
-        :placeholder="competition.mainData.title.value"
-        :style="{
-          backgroundColor:
-            $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
-          color: $vuetify.theme.themes[appTheme].textDefault
-        }"
-        type="text"
-      />
+      <div style="display:flex;align-items: center;width: 50%;">
+        <label for="prot_title" class="font-weight-bold" style="flex: 0 0 auto"
+          >Название</label
+        ><input
+          class="flex-grow-1 ml-4 pa-1"
+          id="prot_title"
+          style="flex: 0 0 auto;border-radius: 6px"
+          v-model="results_protocol.title"
+          :placeholder="competition.mainData.title.value"
+          :style="{
+            backgroundColor:
+              $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
+            color: $vuetify.theme.themes[appTheme].textDefault
+          }"
+          type="text"
+        />
+      </div>
+      <div
+        style="display:flex;align-items: center;width: 50%;margin-left: 1rem"
+      >
+        <label for="prot_type" class="font-weight-bold" style="flex: 0 0 auto"
+          >Вид протокола</label
+        ><input
+          class="flex-grow-1 ml-4 pa-1"
+          id="prot_type"
+          style="flex: 0 0 auto;border-radius: 6px"
+          v-model="competition.protocol_settings.start_protocols.protocol_type"
+          placeholder="вид..."
+          :style="{
+            backgroundColor:
+              $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
+            color: $vuetify.theme.themes[appTheme].textDefault
+          }"
+          type="text"
+        />
+      </div>
     </div>
     <div class="pa-2 d-flex flex-column flex-grow-1">
       <div class="d-flex flex-nowrap align-end">
@@ -459,7 +481,7 @@
           check_key) in results_protocol.infoPrintChecks"
           :key="check_key"
           class="d-flex flex-nowrap align-center py-1"
-          style="width: 50%"
+          style="width: 100%"
         >
           <v-checkbox
             hide-details
@@ -475,6 +497,28 @@
             :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
             >{{ infoPrintCheck.title }}</label
           >
+          <div
+            style="display:flex;align-items: center;margin-left: auto;padding: 0 0 0 8px"
+          >
+            <span style="font-weight: bold">шрифт (px)</span>
+            <input
+              size="2"
+              type="number"
+              min="8"
+              max="24"
+              v-model="
+                competition.protocol_settings.start_protocols.fonts[
+                  infoPrintCheck.id
+                ]
+              "
+              style="padding: 2px 4px;margin-left: .5rem; border-radius: 2px"
+              :style="{
+                backgroundColor:
+                  $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
+                color: $vuetify.theme.themes[appTheme].textDefault
+              }"
+            />
+          </div>
         </div>
       </div>
       <div

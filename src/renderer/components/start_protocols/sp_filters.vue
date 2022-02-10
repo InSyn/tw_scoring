@@ -70,7 +70,8 @@ import { mapGetters } from "vuex";
 export default {
   name: "filters",
   mounted() {
-    this.competition.protocol_settings.start_protocols.filters.race_filter = null;
+    this.competition.protocol_settings.start_protocols.filters.race_filter =
+      this.competition.races[0] || null;
   },
   data() {
     return {};

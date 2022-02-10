@@ -49,6 +49,20 @@ export default {
         }
       ];
       structure = {
+        statuses: [
+          {
+            value: "DNF",
+            priority: -1
+          },
+          {
+            value: "DNS",
+            priority: -2
+          },
+          {
+            value: "DSQ",
+            priority: -3
+          }
+        ],
         selected: {
           type: "",
           discipline: "",
@@ -222,17 +236,40 @@ export default {
       competitorsSheet = {
         header: [
           { id: "bib", title: "Bib" },
-          { id: "fiscode", title: "FIS код" },
+          { id: "stand", title: "Стойка" },
           { id: "lastname", title: "Фамилия" },
           { id: "name", title: "Имя" },
           { id: "year", title: "Год" },
-          { id: "rang", title: "Разряд" }
+          { id: "rang", title: "Разряд" },
+          { id: "region", title: "Суб. РФ" }
         ],
         competitors: []
       };
       getSortedByRank(competitors) {
-        return competitors.sort((c1, c2) => {
-          return this.getResult(c2.id) - this.getResult(c1.id);
+        return competitors.sort((comp1, comp2) => {
+          const statuses = {
+            DNF: -1,
+            DNS: -2,
+            DSQ: -3
+          };
+          const comp1res = comp1.results_overall.find(
+              overall => overall.competition_id === this.id
+            ),
+            comp2res = comp2.results_overall.find(
+              overall => overall.competition_id === this.id
+            );
+          return (
+            (comp2res
+              ? comp2res.status
+                ? statuses[comp2res.status]
+                : comp2res.value
+              : 0) -
+            (comp1res
+              ? comp1res.status
+                ? statuses[comp1res.status]
+                : comp1res.value
+              : 0)
+          );
         });
       }
       get passedCompetitors() {
@@ -265,16 +302,10 @@ export default {
         const competitor = this.competitorsSheet.competitors.find(
           _competitor => _competitor.id === competitor_id
         );
-        return competitor
-          ? competitor.race_status ||
-              this.set_accuracy(
-                this.result_formula.overall_result.types
-                  .find(_f => {
-                    return _f.id === this.result_formula.overall_result.type;
-                  })
-                  .result(competitor_id)
-              )
-          : 0;
+        const overall = competitor.results_overall.find(
+          res => res.competition_id === this.id
+        );
+        return overall ? (overall.status ? overall.status : overall.value) : 0;
       }
       getRaceResult(competitor, race) {
         const result = competitor.results.find(
@@ -325,7 +356,8 @@ export default {
           competitor_id: competitor.id,
           value: this.result_formula.overall_result.types
             .find(_f => _f.id === this.result_formula.overall_result.type)
-            .result(competitor.id)
+            .result(competitor.id),
+          status: null
         };
         let existedResult = competitor.results_overall.find(
           res => res.competition_id === overallResult.competition_id
@@ -344,13 +376,28 @@ export default {
           filters: {
             race_filter: null
           },
+          fonts: {
+            officialsData: 12,
+            openers: 12,
+            weatherData: 12,
+            raceNotes: 12
+          },
+          protocol_type: "Старт-лист",
           fields: []
         },
         result_protocols: {
           filters: {
             race_filter: null
           },
-          fields: []
+          fonts: {
+            officialsData: 12,
+            openers: 12,
+            weatherData: 12,
+            raceNotes: 12
+          },
+          protocol_type: "Результаты",
+          fields: [],
+          raceResultFields: []
         }
       };
       result_formula = {

@@ -32,7 +32,12 @@
         :color="$vuetify.theme.themes[appTheme].action_red"
         >Закрыть
       </v-btn>
-      <preview></preview>
+      <race_results_protocol
+        v-if="
+          competition.protocol_settings.result_protocols.filters.race_filter
+        "
+      ></race_results_protocol>
+      <preview v-else></preview>
     </div>
   </v-container>
 </template>
@@ -45,6 +50,8 @@ import fonts from "./final_protocols/fp_fonts";
 import filters from "./final_protocols/fp_filters";
 import logos from "./final_protocols/fp_logos";
 import preview from "./final_protocols/fp_preview";
+import race_results_protocol from "./final_protocols/race_results_protocol";
+
 export default {
   name: "final_protocols",
   components: {
@@ -53,7 +60,8 @@ export default {
     fonts,
     filters,
     logos,
-    preview
+    preview,
+    race_results_protocol
   },
   computed: {
     ...mapGetters("main", {

@@ -13,77 +13,13 @@
       <!-- Zoom controls -->
 
       <v-hover v-slot:default="{ hover }">
-        <div
-          class="zoom_controls"
-          style="position:relative;padding:8px;display:flex;flex-direction: column; border-radius: 6px; transition: opacity 172ms"
-          :style="[
-            {
-              backgroundColor: $vuetify.theme.themes[appTheme].textDefault,
-              opacity: 0.3,
-              boxShadow: `0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23)`
-            },
-            hover && {
-              opacity: 0.98,
-              boxShadow: `0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22)`
-            }
-          ]"
-        >
-          <div
-            style="display:flex; justify-content: center; align-items: center; font-weight: bold; font-size:1.2rem; margin: 0 4px 4px 4px"
-            :style="{
-              color: $vuetify.theme.themes[appTheme].standardBackgroundRGBA
-            }"
-          >
-            <div style="margin-right: auto;">Масштаб</div>
-            <v-btn @click="results_protocol.layout.pdf_scale = 1.0" icon small
-              ><v-icon :color="$vuetify.theme.themes[appTheme].accent"
-                >mdi-refresh</v-icon
-              ></v-btn
-            >
-          </div>
-          <div
-            class="zoom_controls_buttons"
-            style="display:flex;align-items: center; flex-wrap: nowrap"
-          >
-            <v-btn
-              @click="setPdfScale('-')"
-              style="margin: auto;"
-              :style="
-                hover && { color: $vuetify.theme.themes[appTheme].accent }
-              "
-              icon
-              ><v-icon>mdi-minus</v-icon></v-btn
-            >
-            <div
-              style="margin: auto; font-weight:bold;font-size: 1.2rem"
-              :style="{
-                color: $vuetify.theme.themes[appTheme].standardBackgroundRGBA
-              }"
-            >
-              {{ `${Math.round(results_protocol.layout.pdf_scale * 100)}%` }}
-            </div>
-            <v-btn
-              @click="setPdfScale('+')"
-              style="margin: auto;"
-              :style="
-                hover && { color: $vuetify.theme.themes[appTheme].accent }
-              "
-              icon
-              ><v-icon>mdi-plus</v-icon></v-btn
-            >
-          </div>
-          <v-btn
-            @click="save_pdf()"
-            text
-            style="font-weight: bold;margin-top: 1rem"
-            :style="{ color: $vuetify.theme.themes[appTheme].action_red }"
-            ><v-icon :color="$vuetify.theme.themes[appTheme].action_red"
-              >mdi-file-pdf</v-icon
-            >
-            Сохранить</v-btn
-          >
-        </div></v-hover
-      >
+        <pdf_controls
+          :results_protocol="results_protocol"
+          v-on:decreasePdfScale="setPdfScale('-')"
+          v-on:increasePdfScale="setPdfScale('+')"
+          v-on:savePdf="save_pdf()"
+        ></pdf_controls
+      ></v-hover>
 
       <!-- //Zoom controls -->
     </div>
@@ -114,130 +50,16 @@
           }"
           style="display:flex; flex-direction: column; background-color: white; color: black; margin: auto;"
         >
-          <div
-            ref="pdf_header"
-            class="pdf_header"
-            style="display: flex; flex-direction: column; flex-shrink: 0; justify-content: center; align-items: flex-start"
-          >
-            <div
-              class="header_image"
-              v-if="results_protocol.assets.header_logo"
-            >
-              <img
-                v-if="
-                  results_protocol.assets.header_logo.file &&
-                    results_protocol.assets.header_logo.file.path
-                "
-                :src="results_protocol.assets.header_logo.file.path"
-                style="width: 100%"
-                alt=""
-              />
-            </div>
-            <div
-              class="header_competition_info"
-              style="width: 100%;display:flex;"
-            >
-              <div
-                class="left_asset"
-                style="width: 8rem;margin: 0 2rem;display:flex;align-items: center; justify-content: center"
-              >
-                <div
-                  style="display:flex;align-items: center;justify-content:center; height: 100%;width: 100%"
-                >
-                  <img
-                    v-if="
-                      results_protocol.assets.title_logo.file &&
-                        results_protocol.assets.title_logo.file.path
-                    "
-                    :src="results_protocol.assets.title_logo.file.path"
-                    style="max-width: 100%;max-height: 100%"
-                    alt=""
-                  />
-                </div>
-              </div>
-              <div
-                class="competition_description"
-                style="display: flex; flex-direction: column; align-items: center; margin: auto"
-              >
-                <div
-                  style="font-size: 1.4rem; font-weight: bold; line-height: 1.2"
-                >
-                  {{
-                    results_protocol.title && results_protocol.title.length > 0
-                      ? results_protocol.title
-                      : competition.mainData.title.value
-                  }}
-                </div>
-                <div
-                  style="font-size: 1.4rem; font-weight: bold; line-height: 1.2"
-                >
-                  {{
-                    `Старт-лист ${(competition.mainData.title.stage.value &&
-                      competition.mainData.title.stage.value.value) ||
-                      ""}`
-                  }}
-                </div>
-                <div
-                  style="font-size: 1.2rem; font-weight: bold; line-height: 1.2"
-                >
-                  {{
-                    `${
-                      competition.protocol_settings.start_protocols.filters
-                        .race_filter
-                        ? competition.protocol_settings.start_protocols.filters
-                            .race_filter.title
-                        : ""
-                    }`
-                  }}
-                </div>
-                <div
-                  style="font-size: 1.4rem; font-weight: bold; line-height: 1.2"
-                >
-                  {{ competition.mainData.discipline.value }}
-                </div>
-                <div style="font-size: 1.2rem; line-height: 1.2">
-                  {{
-                    `${competition.mainData.location.value} ${competition
-                      .mainData.country.value &&
-                      "(" + competition.mainData.country.value + ")"}`
-                  }}
-                </div>
-
-                <div
-                  style="font-size: 1.2rem; font-weight: bold; line-height: 1.2"
-                >
-                  {{
-                    `${
-                      competition.mainData.date.value.toString().split("-")[2]
-                    }/${
-                      competition.mainData.date.value.toString().split("-")[1]
-                    }/${
-                      competition.mainData.date.value.toString().split("-")[0]
-                    } Время старта: ${competition.mainData.date.time}`
-                  }}
-                </div>
-              </div>
-              <div
-                class="right_asset"
-                style="height: 8rem;margin: 0 2rem; display:flex;align-items: center; justify-content: center"
-              >
-                <div style="font-weight: bold;font-size: 4rem">
-                  {{ competition.mainData.discipline.min }}
-                </div>
-              </div>
-            </div>
-            <div
-              v-if="p_idx === 0"
-              style="display:flex; flex-wrap: wrap; align-items: center; margin: 2px 0"
-            >
-              {{
-                `Количество участников: ${(getStartList &&
-                  getStartList.filter(_row => _row.type === "competitorResult")
-                    .length) ||
-                  0}`
-              }}
-            </div>
-          </div>
+          <protocol_header
+            :competition="competition"
+            :results_protocol="results_protocol"
+            :stageGrid="stageGrid"
+            :page_index="p_idx"
+            :protocol_type="
+              competition.protocol_settings.start_protocols.protocol_type
+            "
+            :number_of_competitors="number_of_competitors"
+          ></protocol_header>
 
           <!-- Sheet -->
 
@@ -303,18 +125,6 @@
 
                 <!-- //Sheet header -->
                 <div
-                  v-if="gridRow.type && gridRow.type === 'stageTitle'"
-                  ref="stageTitle"
-                  style="width: 100%;background-color: #ffffff"
-                  :style="{
-                    fontSize: `1.2rem`,
-                    padding: `8px 0`,
-                    fontWeight: `bold`
-                  }"
-                >
-                  {{ gridRow.title }}
-                </div>
-                <div
                   v-if="gridRow.type && gridRow.type === 'competitorResult'"
                   v-for="(header, h_idx) in competition.protocol_settings
                     .start_protocols.fields"
@@ -329,12 +139,7 @@
                   <div style="width: 100%;" v-if="header.params.cell_1.id">
                     <div
                       v-for="(value, v_idx) in header &&
-                        header.params.cell_1.handler(
-                          gridRow,
-                          competitions.find(
-                            _competition => _competition.id === gridRow.comp_id
-                          )
-                        )"
+                        header.params.cell_1.handler(gridRow, competition)"
                       :key="`cell_1_${v_idx}`"
                       style="width: 100%;white-space: nowrap;overflow: hidden;padding: 4px"
                       :style="{
@@ -347,12 +152,7 @@
                   <div style="width: 100%;" v-if="header.params.cell_2.id">
                     <div
                       v-for="(value, v_idx) in header &&
-                        header.params.cell_2.handler(
-                          gridRow,
-                          competitions.find(
-                            _competition => _competition.id === gridRow.comp_id
-                          )
-                        )"
+                        header.params.cell_2.handler(gridRow, competition)"
                       :key="`cell_2_${v_idx}`"
                       style="width: 100%;white-space: nowrap;overflow: visible;padding: 4px"
                       :style="{
@@ -389,16 +189,22 @@
                         </div>
                         <div
                           style="padding: 2px 4px;display: flex; flex-wrap: nowrap;"
+                          :style="{
+                            fontSize: `${competition.protocol_settings.start_protocols.fonts.officialsData}px`
+                          }"
                           v-for="(judge, j_idx) in competition.stuff.judges"
                           :key="j_idx"
                         >
-                          <div style="font-weight:bold; width: 35%">
+                          <div style="font-weight:bold; width: 18%">
                             {{ judge.title }}
                           </div>
                           <div style="font-weight:bold; width: 35%">
                             {{ `${judge.lastName} ${judge.name}` }}
                           </div>
-                          <div style="width: 30%">
+                          <div style="font-weight:bold; width: 15%">
+                            {{ `${judge.category}` }}
+                          </div>
+                          <div style="width: 32%">
                             {{ judge.location }}
                           </div>
                         </div>
@@ -422,6 +228,9 @@
                         </div>
                         <div
                           style="display: flex; flex-wrap: nowrap; padding: 2px 4px;"
+                          :style="{
+                            fontSize: `${competition.protocol_settings.start_protocols.fonts.officialsData}px`
+                          }"
                           v-for="(tech_info, ti_idx) in competition
                             .technicalInfo.records"
                           :key="ti_idx"
@@ -449,6 +258,9 @@
                         </div>
                         <div
                           style="display: flex; flex-wrap: nowrap;padding: 2px 4px;"
+                          :style="{
+                            fontSize: `${competition.protocol_settings.start_protocols.fonts.officialsData}px`
+                          }"
                           v-for="(jury, j_idx) in competition.stuff.jury"
                           :key="j_idx"
                         >
@@ -484,7 +296,12 @@
                     >
                       Открывающие
                     </div>
-                    <div style="display:flex;flex-wrap: wrap;padding: 2px 0">
+                    <div
+                      style="display:flex;flex-wrap: wrap;padding: 2px 0"
+                      :style="{
+                        fontSize: `${competition.protocol_settings.start_protocols.fonts.openers}px`
+                      }"
+                    >
                       <div
                         v-for="opener in competition.stuff.openers"
                         :key="`${opener.num}_${opener.bib}`"
@@ -524,6 +341,9 @@
                     <div
                       v-for="wData in competition.weather"
                       style="min-width: 25%;max-width: 50%;display:flex;flex-wrap: nowrap;align-items: center;padding-right: 1rem;margin-right: auto"
+                      :style="{
+                        fontSize: `${competition.protocol_settings.start_protocols.fonts.weatherData}px`
+                      }"
                     >
                       <div
                         style="font-weight: bold"
@@ -544,6 +364,9 @@
                   ref="raceNotes"
                   class="notes"
                   style="flex:0 0 auto;width: 100%;background-color: #ffffff"
+                  :style="{
+                    fontSize: `${competition.protocol_settings.start_protocols.fonts.raceNotes}px`
+                  }"
                 >
                   <div
                     style="border: 1px solid black; padding: 2px 4px; margin-top: 1rem"
@@ -559,85 +382,12 @@
 
           <!-- //Sheet -->
 
-          <div
-            ref="pdf_footer"
-            class="pdf_footer"
-            style="position: relative;background-color: white; color: black;display: flex; flex-direction: column; flex-shrink: 0; align-items: flex-end"
-          >
-            <div
-              style="display:flex;align-items: center;width: 100%;flex-shrink: 0;font-size: 0.75rem;"
-            >
-              <div style="padding: 2px 4px; margin-right: auto;">
-                {{
-                  `${date_now[0]} / ${competition.mainData.location.value}(${
-                    competition.mainData.country.value
-                  })${competition.mainData.codex.value &&
-                    " / " + competition.mainData.codex.value}`
-                }}
-              </div>
-              <div style="margin-left: auto">
-                {{
-                  `Отчёт создан ${date_now[0]} ${
-                    date_now[1]
-                  } / Страница ${p_idx + 1}/${(paginated_results.length > 0 &&
-                    paginated_results.length) ||
-                    1}`
-                }}
-              </div>
-            </div>
-            <div
-              style="width: 100%;flex-shrink: 0;display:flex;padding: 2px; align-items: center;border-top:1px solid black;border-bottom:1px solid black;font-size: 0.75rem;"
-            >
-              <div
-                style="display:flex;justify-content: flex-start;align-items: start;flex-shrink: 0;width:35%;font-weight:bold;"
-              >
-                {{ competition.mainData.provider.value }}
-              </div>
-              <div
-                style="display:flex;justify-content: center;align-items: center;flex-shrink: 0;width:30%;font-weight:bold;"
-              >
-                Timing/Scoring & data processing by Timing Web
-              </div>
-              <div
-                style="display:flex;justify-content: flex-end;align-items: end;flex-shrink: 0;width:35%;"
-              >
-                {{ competition.mainData.providerTiming.value }}
-              </div>
-            </div>
-            <div style="width: 100%;display:flex;flex-shrink: 0">
-              <div
-                style="margin-right: auto;font-size: 0.75rem;font-weight: bold;"
-              >
-                www.timingweb.com
-              </div>
-              <div
-                style="margin-left: auto;font-size: 0.75rem;font-weight: bold;"
-              >
-                <div style="padding: 2px;height: 1.6rem;">
-                  <img
-                    src="./../../assets/logo/TIMINGWEBLOGO-BLACK.png"
-                    alt=""
-                    style="height: 100%;"
-                  />
-                </div>
-              </div>
-            </div>
-            <div
-              class="footer_image"
-              v-if="results_protocol.assets.footer_logo"
-              style="width: 100%;position: relative"
-            >
-              <img
-                v-if="
-                  results_protocol.assets.footer_logo.file &&
-                    results_protocol.assets.footer_logo.file.path
-                "
-                :src="results_protocol.assets.footer_logo.file.path"
-                style="width: 100%;bottom: 0;"
-                alt=""
-              />
-            </div>
-          </div>
+          <protocol_footer
+            :competition="competition"
+            :paginated_results="paginated_results"
+            :results_protocol="results_protocol"
+            :page_index="p_idx"
+          ></protocol_footer>
         </div>
         <!-- Divider -->
         <div
@@ -666,13 +416,21 @@
 <script>
 import { mapGetters } from "vuex";
 import html2pdf from "html2pdf.js";
-import logos from "./sp_logos";
-import startList from "../scoring/startList";
+
+import pdf_controls from "../protocol_template/pdf_controls";
+import protocol_header from "../protocol_template/protocol_header";
+import protocol_footer from "../protocol_template/protocol_footer";
 
 export default {
   name: "preview",
+  components: {
+    pdf_controls,
+    protocol_header,
+    protocol_footer
+  },
   mounted() {
     this.results.push([...this.getStartList]);
+    this.number_of_competitors = this.getStartList.length;
 
     this.results[this.results.length - 1].unshift({ type: "sheetHeader" });
     for (let infoPrintChecksKey in this.results_protocol.infoPrintChecks) {
@@ -720,7 +478,9 @@ export default {
     return {
       saving_loading: false,
       results: [],
-      data_paginated_results: []
+      data_paginated_results: [],
+      protocol_type: "Старт-лист",
+      number_of_competitors: 0
     };
   },
   methods: {
@@ -796,8 +556,7 @@ export default {
           competitor: this.competition.competitorsSheet.competitors.find(
             _comp => _comp.id === _competitor
           ),
-          s_rank: null,
-          result: 0
+          s_rank: null
         };
       });
     },

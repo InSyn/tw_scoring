@@ -127,19 +127,7 @@
                     ><v-col
                       class="d-flex justify-end align-center"
                       style="max-width: 5rem"
-                      v-html="
-                        competition.set_accuracy(
-                          competitor.results_overall.find(
-                            overall_res =>
-                              overall_res.competition_id === competition.id
-                          )
-                            ? competitor.results_overall.find(
-                                overall_res =>
-                                  overall_res.competition_id === competition.id
-                              ).value
-                            : 0
-                        )
-                      "
+                      v-html="competition.getResult(competitor.id)"
                     ></v-col></v-row></v-hover></template
               ><v-card
                 style="max-width: 900px;"
@@ -328,6 +316,52 @@
                       </div>
                     </div>
                   </div>
+                  <div
+                    style="display:flex;align-items: center;padding: 1rem 4px;width: 100%;"
+                  >
+                    <div
+                      style="display:flex;align-items: center;margin-left: auto"
+                    >
+                      <div
+                        v-for="status in ['DNS', 'DNF', 'DSQ']"
+                        :key="status"
+                        @click="setOverallStatus(status, competitor)"
+                        style="display:flex;align-items: center;font-weight:bold;padding: 2px 8px;margin-right: .5rem;border-radius: 2px;cursor:pointer;"
+                        :style="[
+                          {
+                            backgroundColor:
+                              $vuetify.theme.themes[appTheme]
+                                .standardBackgroundRGBA,
+                            color: $vuetify.theme.themes[appTheme].textDefault
+                          },
+                          checkOverallStatus(status, competitor) && {
+                            backgroundColor:
+                              $vuetify.theme.themes[appTheme].accent
+                          }
+                        ]"
+                      >
+                        {{ status }}
+                      </div>
+                    </div>
+                    <div
+                      style="display:flex;align-items: center;margin-left: 1rem;padding: 4px 8px;border-radius: 6px"
+                      :style="{
+                        backgroundColor:
+                          $vuetify.theme.themes[appTheme]
+                            .standardBackgroundRGBA,
+                        color: $vuetify.theme.themes[appTheme].textDefault
+                      }"
+                    >
+                      <span style="font-size: 1.2rem;font-weight:bold;"
+                        >Общий</span
+                      >
+                      <div
+                        style="font-size: 1.4rem;font-weight:bold;margin-left: 1rem"
+                      >
+                        {{ competition.set_accuracy(getOverall(competitor)) }}
+                      </div>
+                    </div>
+                  </div>
                 </div>
                 <v-card-actions
                   style="display:flex;align-items: center;justify-content: flex-end"
@@ -386,6 +420,16 @@ export default {
         return acc + val;
       });
     },
+    getOverall(competitor) {
+      const overall = competitor.results_overall.find(
+        overall => overall.competition_id === this.competition.id
+      );
+      return overall
+        ? overall.status
+          ? overall.status
+          : this.competition.set_accuracy(overall.value)
+        : 0;
+    },
     setCompetitorRaceStatus(status, competitor, race) {
       const result = competitor.results.find(res => res.race_id === race.id);
       if (result) {
@@ -409,6 +453,22 @@ export default {
     checkRepeat(score_repeat, competitor, race) {
       const result = competitor.results.find(res => res.race_id === race.id);
       return result && result.repeat === score_repeat;
+    },
+    setOverallStatus(status, competitor) {
+      const overall = competitor.results_overall.find(
+        res => res.competition_id === this.competition.id
+      );
+      if (overall) {
+        overall.status === status
+          ? (overall.status = null)
+          : (overall.status = status);
+      }
+    },
+    checkOverallStatus(status, competitor) {
+      const overall = competitor.results_overall.find(
+        res => res.competition_id === this.competition.id
+      );
+      return overall && overall.status === status;
     },
     accept_changes(competitor) {
       competitor.marks.forEach(_mark => {
@@ -446,22 +506,29 @@ export default {
             return comp.id === _comp;
           });
         })
-        .sort((c1, c2) => {
+        .sort((comp1, comp2) => {
+          const statuses = {
+            DNF: -1,
+            DNS: -2,
+            DSQ: -3
+          };
+          const comp1res = comp1.results_overall.find(
+              overall => overall.competition_id === this.competition.id
+            ),
+            comp2res = comp2.results_overall.find(
+              overall => overall.competition_id === this.competition.id
+            );
           return (
-            this.competition.result_formula.overall_result.types
-              .find(_f => {
-                return (
-                  _f.id === this.competition.result_formula.overall_result.type
-                );
-              })
-              .result(c2.id) -
-            this.competition.result_formula.overall_result.types
-              .find(_f => {
-                return (
-                  _f.id === this.competition.result_formula.overall_result.type
-                );
-              })
-              .result(c1.id)
+            (comp2res
+              ? comp2res.status
+                ? statuses[comp2res.status]
+                : comp2res.value
+              : 0) -
+            (comp1res
+              ? comp1res.status
+                ? statuses[comp1res.status]
+                : comp1res.value
+              : 0)
           );
         });
       list.forEach((_comp, c_idx) => {

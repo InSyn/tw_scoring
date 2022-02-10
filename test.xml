@@ -7,8 +7,8 @@
         <Discipline>DISCIPLINE</Discipline>
         <Category>FIS</Category>
         <Racedate>
-            <day>31</day>
-            <month>01</month>
+            <day>10</day>
+            <month>02</month>
             <year>2022</year>
         </Racedate>
         <Eventname>Новое соревнование</Eventname>
@@ -17,6 +17,51 @@
     <FS_race>
         <FS_raceinfo></FS_raceinfo>
         <FS_classified>
+            <FS_ranked status="QLF">
+                <Rank>1</Rank>
+                <Bib>29</Bib>
+                <Competitor>
+                    <Fiscode></Fiscode>
+                    <Lastname>ШИМБУЕВ</Lastname>
+                    <Firstname>Семен</Firstname>
+                    <Sex>M</Sex>
+                    <Nation></Nation>
+                    <Yearofbirth>2001</Yearofbirth>
+                </Competitor>
+                <FS_result>
+                    <TotalScore>85.0</TotalScore>
+                </FS_result>
+            </FS_ranked>
+            <FS_ranked status="QLF">
+                <Rank>2</Rank>
+                <Bib>28</Bib>
+                <Competitor>
+                    <Fiscode></Fiscode>
+                    <Lastname>ЧЕВСКИЙ</Lastname>
+                    <Firstname>Илья</Firstname>
+                    <Sex>M</Sex>
+                    <Nation></Nation>
+                    <Yearofbirth>1998</Yearofbirth>
+                </Competitor>
+                <FS_result>
+                    <TotalScore>68.8</TotalScore>
+                </FS_result>
+            </FS_ranked>
+            <FS_ranked status="QLF">
+                <Rank>3</Rank>
+                <Bib>30</Bib>
+                <Competitor>
+                    <Fiscode></Fiscode>
+                    <Lastname>ШУЛЬДЯКОВ</Lastname>
+                    <Firstname>Артём</Firstname>
+                    <Sex>M</Sex>
+                    <Nation></Nation>
+                    <Yearofbirth>2002</Yearofbirth>
+                </Competitor>
+                <FS_result>
+                    <TotalScore>51.0</TotalScore>
+                </FS_result>
+            </FS_ranked>
         </FS_classified>
     </FS_race>
 </Fisresults>

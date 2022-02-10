@@ -288,13 +288,12 @@
               <v-row class="pa-1" no-gutters>
                 <v-col cols="12">
                   <v-dialog
-                    width="720"
+                    width="fit-content"
                     :disabled="
-                      !competition.selected_race ||
-                        !(
-                          competition.selected_race &&
-                          competition.selected_race.onTrack
-                        )
+                      !(
+                        competition.selected_race &&
+                        competition.selected_race.onTrack
+                      )
                     "
                     v-model="change_marks_dialog.state"
                     ><template v-slot:activator="{ on }"
@@ -310,15 +309,22 @@
                         >Изменить оценки</v-btn
                       ></template
                     ><v-card
+                      style="min-width: 320px"
                       :style="{
                         backgroundColor:
                           $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
                         color: $vuetify.theme.themes[appTheme].textDefault
                       }"
                     >
-                      <div style="padding: 1rem 2rem">
+                      <v-card-title
+                        style="padding: 8px 16px; font-size: 1.2rem;font-weight:bold;"
+                        >Ручное выставлние оценок</v-card-title
+                      >
+                      <div
+                        style="display:flex;flex-wrap: wrap;padding: 1rem 2rem"
+                      >
                         <div
-                          style="padding: .5rem 1rem"
+                          style="flex: 0 0 auto; padding: .5rem 1rem"
                           v-for="judge in competition &&
                             competition.selected_race &&
                             competition.selected_race.onTrack &&
@@ -326,13 +332,18 @@
                           :key="judge._id"
                         >
                           <div>
-                            <span style="font-weight: bold;">{{
-                              `Судья ${competition.stuff.judges.indexOf(judge) +
-                                1}`
-                            }}</span>
+                            <div
+                              style="font-weight: bold;font-size: 1.1rem;text-align:center;"
+                            >
+                              {{
+                                `Судья ${competition.stuff.judges.indexOf(
+                                  judge
+                                ) + 1}`
+                              }}
+                            </div>
                             <input
                               type="text"
-                              style="padding: 2px 4px;margin-left: .5rem;width: 3rem;"
+                              style="margin: .5rem;padding: 4px 8px;width: 5rem;border-radius: 2px;font-size: 1.2rem"
                               :style="{
                                 backgroundColor:
                                   $vuetify.theme.themes[appTheme]

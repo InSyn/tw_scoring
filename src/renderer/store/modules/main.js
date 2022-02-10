@@ -151,11 +151,13 @@ export default {
                             comp_id: _competition,
                             competitor: competitor,
                             s_rank: null,
-                            result: state.competitions
-                              .find(
-                                competition => competition.id === _competition
-                              )
-                              .getResult(competitor.id)
+                            result: competitor.results_overall.find(
+                              overall =>
+                                overall.competition_id ===
+                                state.competitions.find(
+                                  competition => competition.id === _competition
+                                ).id
+                            )
                           };
                         })
                     : []
@@ -164,8 +166,24 @@ export default {
             })
             .map(_stage => {
               _stage.s_competitors = flatten(_stage.s_competitors).sort(
-                (c1, c2) => {
-                  return c2.result - c1.result;
+                (comp1, comp2) => {
+                  const statuses = {
+                    DNF: -1,
+                    DNS: -2,
+                    DSQ: -3
+                  };
+                  return (
+                    (comp2.result
+                      ? comp2.result.status
+                        ? statuses[comp2.result.status]
+                        : comp2.result.value
+                      : 0) -
+                    (comp1.result
+                      ? comp1.result.status
+                        ? statuses[comp1.result.status]
+                        : comp1.result.value
+                      : 0)
+                  );
                 }
               );
               return _stage;
@@ -447,7 +465,9 @@ export default {
     },
     serverLog: ({ commit }) => commit("serverLog"),
     updateEvent: ({ commit }) => commit("updateEvent"),
-    xml_export: async (s, object) => {
+    xml_export: async (s, data) => {
+      const object = data[0],
+        competition = data[1];
       const xmlConverter = require("xml-js");
       const options = {
         compact: true,
@@ -457,9 +477,18 @@ export default {
       };
       let xml = xmlConverter.js2xml(object, options);
 
-      await require("fs").writeFile("./test.xml", xml, () => {
-        console.log("ok");
-      });
+      await require("fs").writeFile(
+        `./FIS_XML ${
+          competition.mainData.date.value
+        }_${competition.mainData.title.value
+          .trim()
+          .split(" ")
+          .join("_")}.xml`,
+        xml,
+        () => {
+          console.log("ok");
+        }
+      );
       console.log(xml);
     }
     // updateEvent: state => {

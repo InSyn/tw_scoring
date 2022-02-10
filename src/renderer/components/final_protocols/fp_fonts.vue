@@ -31,7 +31,7 @@
       <v-btn
         small
         depressed
-        @click="$store.dispatch('main/xml_export', objectToXML)"
+        @click="$store.dispatch('main/xml_export', [objectToXML, competition])"
         :color="$vuetify.theme.themes[appTheme].standardBackgroundRGBA"
         style="margin-left: auto"
         :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"

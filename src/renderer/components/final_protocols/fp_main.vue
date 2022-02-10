@@ -7,24 +7,42 @@
     }"
   >
     <div class="pa-2 d-flex align-center flex-nowrap">
-      <label
-        for="prot_title"
-        class="font-weight-bold"
-        v-html="`Название`"
-      ></label
-      ><input
-        class="flex-grow-1 ml-8 pa-1"
-        id="prot_title"
-        style="border-radius: 6px"
-        v-model="results_protocol.title"
-        :placeholder="competition.mainData.title.value"
-        :style="{
-          backgroundColor:
-            $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
-          color: $vuetify.theme.themes[appTheme].textDefault
-        }"
-        type="text"
-      />
+      <div style="display:flex;align-items: center;width: 50%;">
+        <label for="prot_title" class="font-weight-bold" style="flex: 0 0 auto"
+          >Название</label
+        ><input
+          class="flex-grow-1 ml-4 pa-1"
+          id="prot_title"
+          style="flex: 0 0 auto;border-radius: 6px"
+          v-model="results_protocol.title"
+          :placeholder="competition.mainData.title.value"
+          :style="{
+            backgroundColor:
+              $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
+            color: $vuetify.theme.themes[appTheme].textDefault
+          }"
+          type="text"
+        />
+      </div>
+      <div
+        style="display:flex;align-items: center;width: 50%;margin-left: 1rem"
+      >
+        <label for="prot_type" class="font-weight-bold" style="flex: 0 0 auto"
+          >Вид протокола</label
+        ><input
+          class="flex-grow-1 ml-4 pa-1"
+          id="prot_type"
+          style="flex: 0 0 auto;border-radius: 6px"
+          v-model="competition.protocol_settings.result_protocols.protocol_type"
+          placeholder="вид..."
+          :style="{
+            backgroundColor:
+              $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
+            color: $vuetify.theme.themes[appTheme].textDefault
+          }"
+          type="text"
+        />
+      </div>
     </div>
     <div class="pa-2 d-flex flex-column flex-grow-1">
       <div class="d-flex flex-nowrap align-end">
@@ -52,12 +70,7 @@
           small
           :color="this.$vuetify.theme.themes[appTheme].accent"
           style="margin-left: auto"
-          @click="
-            $store.commit('protocol_settings/initResultProtocolFields', {
-              competition: competition,
-              fieldClass: fieldClass
-            })
-          "
+          @click="refreshFields()"
           ><v-icon>mdi-refresh</v-icon>
         </v-btn>
       </div>
@@ -114,7 +127,7 @@
         <div style="max-height: 20vh;overflow-y: auto">
           <v-row
             v-for="(field, f_idx) in competition.protocol_settings
-              .result_protocols.fields"
+              .result_protocols[protocol_fields]"
             :key="f_idx"
             style="font-size: 0.8rem;padding: 0;margin: 0"
             :style="[
@@ -283,7 +296,7 @@
                     >
                       <div
                         v-for="(standard_header, sh_idx) in competition
-                          .protocol_settings.result_protocols.fields"
+                          .protocol_settings.result_protocols[protocol_fields]"
                         :key="sh_idx"
                         @click="setField(f_prop, standard_header)"
                         style="display:flex;flex-wrap: nowrap;flex: 0 0 auto; width: 18rem; margin: 0 .5rem .5rem 0; cursor: pointer"
@@ -325,8 +338,9 @@
                   }"
                   type="number"
                   v-model="
-                    competition.protocol_settings.result_protocols.fields[f_idx]
-                      .params[p_key]
+                    competition.protocol_settings.result_protocols[
+                      protocol_fields
+                    ][f_idx].params[p_key]
                   "
                 />
                 <select
@@ -336,8 +350,9 @@
                     color: $vuetify.theme.themes[appTheme].textDefault
                   }"
                   v-model.lazy="
-                    competition.protocol_settings.result_protocols.fields[f_idx]
-                      .params.align
+                    competition.protocol_settings.result_protocols[
+                      protocol_fields
+                    ][f_idx].params.align
                   "
                 >
                   <option
@@ -463,7 +478,7 @@
           check_key) in results_protocol.infoPrintChecks"
           :key="check_key"
           class="d-flex flex-nowrap align-center py-1"
-          style="width: 50%"
+          style="width: 100%"
         >
           <v-checkbox
             hide-details
@@ -479,6 +494,28 @@
             :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
             >{{ infoPrintCheck.title }}</label
           >
+          <div
+            style="display:flex;align-items: center;margin-left: auto;padding: 0 0 0 8px"
+          >
+            <span style="font-weight: bold">шрифт (px)</span>
+            <input
+              size="2"
+              type="number"
+              min="8"
+              max="24"
+              v-model="
+                competition.protocol_settings.result_protocols.fonts[
+                  infoPrintCheck.id
+                ]
+              "
+              style="padding: 2px 4px;margin-left: .5rem; border-radius: 2px"
+              :style="{
+                backgroundColor:
+                  $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
+                color: $vuetify.theme.themes[appTheme].textDefault
+              }"
+            />
+          </div>
         </div>
       </div>
       <div
@@ -587,14 +624,23 @@
 
 <script>
 import { mapGetters } from "vuex";
+
 export default {
   name: "fp_main",
   mounted() {
-    if (this.competition.protocol_settings.result_protocols.fields.length < 1)
+    if (
+      this.competition.protocol_settings.result_protocols[this.protocol_fields]
+        .length < 1
+    ) {
       this.$store.commit("protocol_settings/initResultProtocolFields", {
         competition: this.competition,
         fieldClass: this.fieldClass
       });
+      this.$store.commit("protocol_settings/initRaceResultProtocolFields", {
+        competition: this.competition,
+        fieldClass: this.fieldClass
+      });
+    }
   },
   methods: {
     select_field(field_id) {
@@ -614,68 +660,81 @@ export default {
       field.handler = header.params.cell_1.handler;
     },
     remove_fields() {
-      this.competition.protocol_settings.result_protocols.fields = this.competition.protocol_settings.result_protocols.fields.filter(
-        protocol_field => {
-          return !this.selected_fields.some(selected_field => {
-            return selected_field === protocol_field.id;
-          });
-        }
-      );
+      this.competition.protocol_settings.result_protocols[
+        this.protocol_fields
+      ] = this.competition.protocol_settings.result_protocols[
+        this.protocol_fields
+      ].filter(protocol_field => {
+        return !this.selected_fields.some(selected_field => {
+          return selected_field === protocol_field.id;
+        });
+      });
     },
     shift(field, to) {
       let next_field;
       if (to === "up") {
         if (
-          this.competition.protocol_settings.result_protocols.fields.indexOf(
-            field
-          ) > 0
+          this.competition.protocol_settings.result_protocols[
+            this.protocol_fields
+          ].indexOf(field) > 0
         ) {
           next_field = this.competition.protocol_settings.result_protocols
             .fields[
-            this.competition.protocol_settings.result_protocols.fields.indexOf(
-              field
-            ) - 1
+            this.competition.protocol_settings.result_protocols[
+              this.protocol_fields
+            ].indexOf(field) - 1
           ];
           this.$set(
-            this.competition.protocol_settings.result_protocols.fields,
-            this.competition.protocol_settings.result_protocols.fields.indexOf(
-              field
-            ) - 1,
+            this.competition.protocol_settings.result_protocols[
+              this.protocol_fields
+            ],
+            this.competition.protocol_settings.result_protocols[
+              this.protocol_fields
+            ].indexOf(field) - 1,
             field
           );
           this.$set(
-            this.competition.protocol_settings.result_protocols.fields,
-            this.competition.protocol_settings.result_protocols.fields.indexOf(
-              field
-            ) + 1,
+            this.competition.protocol_settings.result_protocols[
+              this.protocol_fields
+            ],
+            this.competition.protocol_settings.result_protocols[
+              this.protocol_fields
+            ].indexOf(field) + 1,
             next_field
           );
         }
       } else if (to === "down") {
         if (
-          this.competition.protocol_settings.result_protocols.fields.indexOf(
-            field
-          ) <
-          this.competition.protocol_settings.result_protocols.fields.length - 1
+          this.competition.protocol_settings.result_protocols[
+            this.protocol_fields
+          ].indexOf(field) <
+          this.competition.protocol_settings.result_protocols[
+            this.protocol_fields
+          ].length -
+            1
         ) {
           next_field = this.competition.protocol_settings.result_protocols
             .fields[
-            this.competition.protocol_settings.result_protocols.fields.indexOf(
-              field
-            ) + 1
+            this.competition.protocol_settings.result_protocols[
+              this.protocol_fields
+            ].indexOf(field) + 1
           ];
           this.$set(
-            this.competition.protocol_settings.result_protocols.fields,
-            this.competition.protocol_settings.result_protocols.fields.indexOf(
-              field
-            ) + 1,
+            this.competition.protocol_settings.result_protocols[
+              this.protocol_fields
+            ],
+            this.competition.protocol_settings.result_protocols[
+              this.protocol_fields
+            ].indexOf(field) + 1,
             field
           );
           this.$set(
-            this.competition.protocol_settings.result_protocols.fields,
-            this.competition.protocol_settings.result_protocols.fields.indexOf(
-              field
-            ),
+            this.competition.protocol_settings.result_protocols[
+              this.protocol_fields
+            ],
+            this.competition.protocol_settings.result_protocols[
+              this.protocol_fields
+            ].indexOf(field),
             next_field
           );
         }
@@ -689,6 +748,17 @@ export default {
       };
 
       return field;
+    },
+    refreshFields() {
+      this.protocol_fields === "fields"
+        ? this.$store.commit("protocol_settings/initResultProtocolFields", {
+            competition: this.competition,
+            fieldClass: this.fieldClass
+          })
+        : this.$store.commit("protocol_settings/initRaceResultProtocolFields", {
+            competition: this.competition,
+            fieldClass: this.fieldClass
+          });
     }
   },
   data() {
@@ -724,15 +794,26 @@ export default {
     console: () => console,
     sum_width() {
       let sum = 0,
-        arr = this.competition.protocol_settings.result_protocols.fields.map(
-          _field => {
-            return _field.params.width;
-          }
-        );
+        arr = this.competition.protocol_settings.result_protocols[
+          `${
+            this.competition.protocol_settings.result_protocols.filters
+              .race_filter
+              ? "raceResultFields"
+              : "fields"
+          }`
+        ].map(_field => {
+          return _field.params.width;
+        });
       for (let i = 0; i < arr.length; i++) {
         sum += +arr[i];
       }
       return sum;
+    },
+    protocol_fields() {
+      return this.competition.protocol_settings.result_protocols.filters
+        .race_filter
+        ? "raceResultFields"
+        : "fields";
     }
   }
 };

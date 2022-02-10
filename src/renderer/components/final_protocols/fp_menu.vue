@@ -54,7 +54,7 @@ import { mapGetters } from "vuex";
 export default {
   name: "fp_menu",
   computed: {
-    ...mapGetters("main", ["appTheme", "competition"])
+    ...mapGetters("main", { appTheme: "appTheme", competition: "competition" })
   }
 };
 </script>

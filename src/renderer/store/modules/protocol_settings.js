@@ -1,3 +1,5 @@
+import competition from "../../../main/server_competition";
+
 export default {
   namespaced: true,
   state: {
@@ -309,18 +311,137 @@ export default {
           {
             data: { id: "result", title: "Рез-т" },
             handler: function(competitor, competition) {
-              return [
-                competitor.competitor.race_status ||
-                  competition.set_accuracy(
-                    competition.getResult(competitor.competitor.id)
-                  )
-              ];
+              return [competition.getResult(competitor.competitor.id)];
             }
           }
         )
       );
 
       data.competition.protocol_settings.result_protocols.fields = result_fields;
+    },
+    initRaceResultProtocolFields: (state, data) => {
+      const result_fields = [];
+
+      //add rank
+      result_fields.push(
+        new data.fieldClass(
+          6,
+          12,
+          {
+            title: "Слева",
+            value: "start"
+          },
+          {
+            data: { id: "rank", title: "Место" },
+            handler: function(_competitor) {
+              return [_competitor.s_rank];
+            }
+          }
+        )
+      );
+
+      //add competitors table headers
+      data.competition.competitorsSheet.header.forEach(_header => {
+        result_fields.push(
+          new data.fieldClass(
+            8,
+            12,
+            { title: "Слева", value: "start" },
+            {
+              data: _header,
+              handler: function(_competitor) {
+                return [_competitor.competitor.info_data[_header.id]];
+              }
+            }
+          )
+        );
+      });
+
+      //add race number
+      result_fields.push(
+        new data.fieldClass(
+          8,
+          12,
+          {
+            title: "Слева",
+            value: "start"
+          },
+          {
+            data: { id: "race", title: "Заезд" },
+            handler: function(competitor, competition) {
+              return [
+                competition.protocol_settings.result_protocols.filters
+                  .race_filter.title
+              ];
+            }
+          }
+        )
+      );
+
+      //add judges scores
+      data.competition.stuff.judges.forEach((judge, j_idx) => {
+        result_fields.push(
+          new data.fieldClass(
+            6,
+            12,
+            { title: "Слева", value: "start" },
+            {
+              data: { id: `Судья ${j_idx + 1}`, title: `С${j_idx + 1}` },
+              handler: function(_competitor, competition) {
+                const race =
+                  competition.protocol_settings.result_protocols.filters
+                    .race_filter;
+                return (
+                  _competitor.competitor.marks
+                    .filter((_mark, m_idx, _marks) => {
+                      return (
+                        _mark.judge === judge.id && _mark.race_id === race.id
+                      );
+                    })
+                    .map(_mark => {
+                      return _mark.value;
+                    }) || "-"
+                );
+              }
+            }
+          )
+        );
+      });
+
+      //add races scores
+      result_fields.push(
+        new data.fieldClass(
+          6,
+          12,
+          {
+            title: "Слева",
+            value: "start"
+          },
+          {
+            data: {
+              id: "race_res",
+              title: "Рез-т"
+            },
+            handler: function(competitor, competition) {
+              const race =
+                competition.protocol_settings.result_protocols.filters
+                  .race_filter;
+              const result = competitor.competitor.results.find(
+                result => result.race_id === race.id
+              );
+              return [
+                result.status ||
+                  `${competition.set_accuracy(result.value || 0)} ${(competition
+                    .result_formula.overall_result.type === 3 &&
+                    result.repeat) ||
+                    ""}`
+              ];
+            }
+          }
+        )
+      );
+
+      data.competition.protocol_settings.result_protocols.raceResultFields = result_fields;
     }
   }
 };
