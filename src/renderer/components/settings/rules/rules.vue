@@ -294,12 +294,12 @@
                     ]"
                   >
                     <div
-                      v-for="comp in [
+                      v-for="(comp, c_idx) in [
                         competitions.find(
                           _competition => _competition.id === _stage
                         )
                       ]"
-                      :key="comp.id"
+                      :key="c_idx"
                       style="display:flex;flex-direction: column"
                       :style="{
                         color: $vuetify.theme.themes[appTheme].textDefault

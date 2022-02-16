@@ -17,7 +17,7 @@
       </div>
       <div style="margin-left: auto">
         {{
-          `Отчёт создан ${date_now[0]} ${date_now[1]} / Страница ${page_index +
+          `Report created ${date_now[0]} ${date_now[1]} / Page ${page_index +
             1}/${(paginated_results.length > 0 && paginated_results.length) ||
             1}`
         }}
@@ -85,7 +85,7 @@ export default {
   computed: {
     date_now() {
       const date = new Date()
-        .toLocaleString("ru", {
+        .toLocaleString("en", {
           year: "numeric",
           month: "long",
           day: "numeric"

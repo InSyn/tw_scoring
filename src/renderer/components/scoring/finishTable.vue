@@ -110,9 +110,8 @@
                       v-for="(race, rr) in competition.races"
                       :key="rr"
                       >{{
-                        `${competition.getRaceResult(
-                          competitor,
-                          race
+                        `${competition.set_accuracy(
+                          competition.getRaceResult(competitor, race)
                         )} ${(competition.result_formula.overall_result.type ===
                           3 &&
                           competitor.results.find(
@@ -127,8 +126,14 @@
                     ><v-col
                       class="d-flex justify-end align-center"
                       style="max-width: 5rem"
-                      v-html="competition.getResult(competitor.id)"
-                    ></v-col></v-row></v-hover></template
+                      >{{
+                        competition.set_accuracy(
+                          competition.getResult(competitor.id)
+                        )
+                      }}</v-col
+                    ></v-row
+                  ></v-hover
+                ></template
               ><v-card
                 style="max-width: 900px;"
                 :style="{

@@ -44,6 +44,7 @@
         ><label style="display: block;height: 100%;width: 100%; cursor:pointer;"
           ><v-icon>mdi-download</v-icon>
           <input
+            :key="Math.random()"
             @change="
               $event.target.files[0] && load_event($event.target.files[0].path)
             "
@@ -478,7 +479,7 @@
             >
               {{
                 `${competitions.indexOf(_competition) + 1} ${_competition &&
-                  _competition.mainData.title.value}. ${_competition.mainData
+                  _competition.mainData.title.value} ${_competition.mainData
                   .title.stage.value &&
                   _competition.mainData.title.stage.value.value}`
               }}
@@ -699,17 +700,11 @@ export default {
     load_event(path) {
       let evData = JSON.parse(fs.readFileSync(`${path}`, "utf-8"));
 
-      this.competition.id = evData.id;
-
-      this.competition.stages.lastStageSize = evData.stages.lastStageSize;
-      this.competition.stages.prev_stages = [];
-      evData.stages.prev_stages.forEach(_stage =>
-        this.competition.stages.prev_stages.push(_stage)
-      );
       this.competition.stages.stage_grid = [];
-      evData.stages.stage_grid.forEach(_stage =>
-        this.competition.stages.stage_grid.push(_stage)
-      );
+      this.competition.stages.stage_grid.push({
+        title: this.competition.mainData.title.stage.value.value,
+        s_competitions: [this.competition.id]
+      });
 
       this.competition.mainData = evData.mainData;
 
@@ -727,6 +722,8 @@ export default {
       evData.technicalInfo.records.forEach(_tInf =>
         this.competition.technicalInfo.records.push(_tInf)
       );
+      this.competition.weather = [];
+      evData.weather.forEach(_tInf => this.competition.weather.push(_tInf));
 
       this.competition.competitorsSheet.header = evData.competitorsSheet.header;
 

@@ -95,6 +95,7 @@ export default {
       };
       set_accuracy(val) {
         const acc = this.structure.accuracy[this.structure.selected.accuracy];
+        if (typeof val === "string") return val;
         let res = (Math.round(acc.value * +val) / acc.value)
           .toString()
           .split(".");
@@ -311,11 +312,7 @@ export default {
         const result = competitor.results.find(
           result => result.race_id === race.id
         );
-        return result
-          ? result.status
-            ? result.status
-            : this.set_accuracy(result.value)
-          : this.set_accuracy(0);
+        return result ? (result.status ? result.status : result.value) : 0;
       }
       publishResult(competitor, race_id, rep, status) {
         const res = {
@@ -732,6 +729,7 @@ export default {
           .toString(36)
           .substr(2, 9);
         this.title = title || "Заезд";
+        this.race_dialog = false;
         this.type = type;
         this.discipline = discipline;
         this.startList = competitors || [];

@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Fisresults>
+    <Raceheader Sector="SB" Sex="W">
+        <Season>2022</Season>
+        <Codex>7092</Codex>
+        <Nation>RUS</Nation>
+        <Discipline>HP</Discipline>
+        <Category>FIS</Category>
+        <Racedate>
+            <day>10</day>
+            <month>02</month>
+            <year>2022</year>
+        </Racedate>
+        <Eventname>FIS RUSSIAN SNOWBOARD CUP (1 stage)</Eventname>
+        <Place>Sunny Valley</Place>
+    </Raceheader>
+    <SB_race>
+        <SB_raceinfo></SB_raceinfo>
+        <SB_classified>
+            <SB_ranked status="QLF">
+                <Rank>1</Rank>
+                <Bib>32</Bib>
+                <Competitor>
+                    <Fiscode>9485178</Fiscode>
+                    <Lastname>KOSTENKO</Lastname>
+                    <Firstname>Elena</Firstname>
+                    <Sex>W</Sex>
+                    <Nation>RUS</Nation>
+                    <Yearofbirth>1995</Yearofbirth>
+                </Competitor>
+                <SB_result>
+                    <TotalScore>88</TotalScore>
+                </SB_result>
+            </SB_ranked>
+            <SB_ranked status="QLF">
+                <Rank>2</Rank>
+                <Bib>31</Bib>
+                <Competitor>
+                    <Fiscode>9485383</Fiscode>
+                    <Lastname>FEDCHENKO</Lastname>
+                    <Firstname>Diana</Firstname>
+                    <Sex>W</Sex>
+                    <Nation>RUS</Nation>
+                    <Yearofbirth>2004</Yearofbirth>
+                </Competitor>
+                <SB_result>
+                    <TotalScore>76.5</TotalScore>
+                </SB_result>
+            </SB_ranked>
+            <SB_ranked status="QLF">
+                <Rank>3</Rank>
+                <Bib>24</Bib>
+                <Competitor>
+                    <Fiscode>9485375</Fiscode>
+                    <Lastname>STEPANOVA</Lastname>
+                    <Firstname>Eseniya</Firstname>
+                    <Sex>W</Sex>
+                    <Nation>RUS</Nation>
+                    <Yearofbirth>2004</Yearofbirth>
+                </Competitor>
+                <SB_result>
+                    <TotalScore>63.5</TotalScore>
+                </SB_result>
+            </SB_ranked>
+            <SB_ranked status="QLF">
+                <Rank>4</Rank>
+                <Bib>1</Bib>
+                <Competitor>
+                    <Fiscode>9485434</Fiscode>
+                    <Lastname>AFANASEVA</Lastname>
+                    <Firstname>Sofia</Firstname>
+                    <Sex>W</Sex>
+                    <Nation>RUS</Nation>
+                    <Yearofbirth>2006</Yearofbirth>
+                </Competitor>
+                <SB_result>
+                    <TotalScore>46.25</TotalScore>
+                </SB_result>
+            </SB_ranked>
+            <SB_ranked status="QLF">
+                <Rank>5</Rank>
+                <Bib>19</Bib>
+                <Competitor>
+                    <Fiscode>9485308</Fiscode>
+                    <Lastname>BELIKOVA</Lastname>
+                    <Firstname>Dariya</Firstname>
+                    <Sex>W</Sex>
+                    <Nation>RUS</Nation>
+                    <Yearofbirth>2000</Yearofbirth>
+                </Competitor>
+                <SB_result>
+                    <TotalScore>45.25</TotalScore>
+                </SB_result>
+            </SB_ranked>
+            <SB_ranked status="QLF">
+                <Rank>6</Rank>
+                <Bib>37</Bib>
+                <Competitor>
+                    <Fiscode>9485467</Fiscode>
+                    <Lastname>YAKOVLEVA</Lastname>
+                    <Firstname>Sofia</Firstname>
+                    <Sex>W</Sex>
+                    <Nation>RUS</Nation>
+                    <Yearofbirth>2006</Yearofbirth>
+                </Competitor>
+                <SB_result>
+                    <TotalScore>37.25</TotalScore>
+                </SB_result>
+            </SB_ranked>
+            <SB_ranked status="QLF">
+                <Rank>7</Rank>
+                <Bib>11</Bib>
+                <Competitor>
+                    <Fiscode>9485315</Fiscode>
+                    <Lastname>TRUNOVA</Lastname>
+                    <Firstname>Olga</Firstname>
+                    <Sex>W</Sex>
+                    <Nation>RUS</Nation>
+                    <Yearofbirth>1994</Yearofbirth>
+                </Competitor>
+                <SB_result>
+                    <TotalScore>29.25</TotalScore>
+                </SB_result>
+            </SB_ranked>
+            <SB_ranked status="QLF">
+                <Rank>8</Rank>
+                <Bib>22</Bib>
+                <Competitor>
+                    <Fiscode>9485433</Fiscode>
+                    <Lastname>TERENTYEVA</Lastname>
+                    <Firstname>Sofia</Firstname>
+                    <Sex>W</Sex>
+                    <Nation>RUS</Nation>
+                    <Yearofbirth>2005</Yearofbirth>
+                </Competitor>
+                <SB_result>
+                    <TotalScore>22.25</TotalScore>
+                </SB_result>
+            </SB_ranked>
+        </SB_classified>
+    </SB_race>
+</Fisresults>

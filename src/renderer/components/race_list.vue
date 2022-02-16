@@ -29,7 +29,7 @@
           </div>
           <div
             @click="selectRace(race)"
-            style="position:relative;font-weight:bold;cursor: pointer;margin: 2px 4px;padding: 4px 2rem 4px 1rem;border-radius: 6px;transform-origin: center;transition: background-color 92ms, color 92ms"
+            style="position:relative;font-weight:bold;cursor: pointer;margin: 2px 4px;padding: 6px 24px 4px 4px;border-radius: 6px;transform-origin: center;transition: background-color 92ms, color 92ms"
             class="d-flex justify-center align-center"
             :style="[
               {
@@ -53,7 +53,7 @@
                   <div
                     v-on="on"
                     class="d-flex align-center justify-center"
-                    style="position:absolute;top: 2px;right: 2px;height: 14px;width: 14px;border-radius: 4px"
+                    style="position:absolute;top: 3px;right: 3px;height: 14px;width: 14px;border-radius: 4px"
                     :style="[
                       {
                         backgroundColor:
@@ -98,7 +98,46 @@
                 </v-card-actions>
               </v-card></v-dialog
             >
-            {{ race.title }}
+            <div @dblclick.stop="race.race_dialog = true">
+              <v-dialog v-model="race.race_dialog" width="320"
+                ><template v-slot:activator="{ on }"
+                  ><v-btn
+                    v-on="on"
+                    icon
+                    x-small
+                    :color="
+                      $vuetify.theme.themes[appTheme].subjectBackgroundRGBA
+                    "
+                    ><v-icon x-small>mdi-tools</v-icon></v-btn
+                  ></template
+                >
+                <div
+                  style="padding: 8px 16px"
+                  :style="{
+                    backgroundColor:
+                      $vuetify.theme.themes[appTheme].cardBackgroundRGBA
+                  }"
+                >
+                  <div style="font-size: 1.4rem;font-weight:bold;">
+                    Название заезда
+                  </div>
+                  <div style="display:flex;margin-top: 1rem">
+                    <input
+                      size="16"
+                      v-model="race.title"
+                      style="padding: 4px 8px; font-size: 1.2rem;font-weight:bold;border-radius: 6px"
+                      :style="{
+                        backgroundColor:
+                          $vuetify.theme.themes[appTheme]
+                            .standardBackgroundRGBA,
+                        color: $vuetify.theme.themes[appTheme].textDefault
+                      }"
+                    />
+                  </div>
+                </div>
+              </v-dialog>
+              {{ race.title }}
+            </div>
           </div></v-row
         >
         <v-btn

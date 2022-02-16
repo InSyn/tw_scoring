@@ -609,8 +609,8 @@
 
 <script>
 import { mapGetters } from "vuex";
-import fs from "fs";
 import xslx from "read-excel-file/node";
+
 export default {
   name: "competitors",
   mounted() {

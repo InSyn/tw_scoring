@@ -93,13 +93,12 @@
           <v-col
             style="height: 100%;"
             class="d-flex pa-1 align-center justify-center"
-            v-html="`Ячейка 1`"
-          ></v-col>
+            >Ячейка 1</v-col
+          >
           <v-col
             style="height: 100%;"
             class="d-flex pa-1 align-center justify-center"
-            v-html="`Ячейка 2`"
-          ></v-col
+            >Ячейка 2</v-col
           ><v-col
             style="height: 100%;"
             class="d-flex pa-1 align-center justify-center"
@@ -111,18 +110,23 @@
                 color: $vuetify.theme.themes[appTheme].success
               }
             ]"
-            v-html="`Ширина(%)(${sum_width}%)`"
-          ></v-col>
+            >{{ `Ширина(%)(${sum_width}%)` }}</v-col
+          >
           <v-col
             style="height: 100%;"
             class="d-flex pa-1 align-center justify-center"
-            v-html="`Шрифт(px)`"
-          ></v-col>
+            >Шрифт(px)</v-col
+          >
           <v-col
             style="height: 100%;"
             class="d-flex pa-1 align-center justify-center"
-            v-html="`Выравнивание`"
-          ></v-col>
+            >Выравнивание</v-col
+          >
+          <v-col
+            style="height: 100%;"
+            class="d-flex pa-1 align-center justify-center"
+            >Жирность</v-col
+          >
         </v-row>
         <div style="max-height: 20vh;overflow-y: auto">
           <v-row
@@ -284,10 +288,28 @@
                         v-if="f_prop.id"
                         style="width: 100%;display: flex;font-weight: bold"
                       >
-                        <div>{{ `ID: ${f_prop.id}` }}</div>
-                        <div style="margin-left: 1rem">
-                          {{ `Title: ${f_prop.title}` }}
-                        </div>
+                        <input
+                          type="text"
+                          v-model="f_prop.id"
+                          style=";border-radius: 6px;padding: 2px 4px;"
+                          :style="{
+                            backgroundColor:
+                              $vuetify.theme.themes[appTheme]
+                                .standardBackgroundRGBA,
+                            color: $vuetify.theme.themes[appTheme].textDefault
+                          }"
+                        />
+                        <input
+                          type="text"
+                          v-model="f_prop.title"
+                          style="margin-left: 1rem;border-radius: 6px;padding: 2px 4px; font-weight:bold;"
+                          :style="{
+                            backgroundColor:
+                              $vuetify.theme.themes[appTheme]
+                                .standardBackgroundRGBA,
+                            color: $vuetify.theme.themes[appTheme].textDefault
+                          }"
+                        />
                       </div>
                       <div v-else>Ячейка пуста</div>
                     </div>
@@ -366,6 +388,30 @@
                     :key="at_idx"
                     :value="align_type"
                     >{{ align_type.title }}</option
+                  >
+                </select>
+                <select
+                  v-if="p_key === 'f_weight'"
+                  style="outline: none; height: 100%;width: 100%;padding: 2px 4px;cursor: pointer"
+                  :style="{
+                    color: $vuetify.theme.themes[appTheme].textDefault
+                  }"
+                  v-model.lazy="
+                    competition.protocol_settings.result_protocols[
+                      protocol_fields
+                    ][f_idx].params.f_weight
+                  "
+                >
+                  <option
+                    style="padding: 2px 4px"
+                    :style="{
+                      backgroundColor:
+                        $vuetify.theme.themes[appTheme].standardBackgroundRGBA
+                    }"
+                    v-for="weight in ['normal', 'bold']"
+                    :key="weight"
+                    :value="weight"
+                    >{{ weight }}</option
                   >
                 </select>
               </v-col></v-hover
@@ -474,6 +520,7 @@
         style="display:flex;flex-wrap: wrap;margin-top: .5rem;"
       >
         <div
+          <div
           v-for="(infoPrintCheck,
           check_key) in results_protocol.infoPrintChecks"
           :key="check_key"

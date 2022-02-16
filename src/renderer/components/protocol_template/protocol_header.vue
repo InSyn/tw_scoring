@@ -74,7 +74,7 @@
               competition.mainData.date.value.toString().split("-")[1]
             }/${
               competition.mainData.date.value.toString().split("-")[0]
-            } Время старта: ${competition.mainData.date.time}`
+            } Start time: ${competition.mainData.date.time}`
           }}
         </div>
       </div>
@@ -91,7 +91,7 @@
       :style="page_index !== 0 && { opacity: 0 }"
       style="display:flex; flex-wrap: wrap; align-items: center; margin: 2px 0"
     >
-      {{ `Количество участников: ${number_of_competitors}` }}
+      {{ `Number of competitors: ${number_of_competitors}` }}
     </div>
   </div>
 </template>

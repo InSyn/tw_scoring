@@ -76,7 +76,7 @@ io.on("connection", socket => {
         ]);
       check(true);
     } else {
-      check(false);
+      check(true);
     }
   });
 

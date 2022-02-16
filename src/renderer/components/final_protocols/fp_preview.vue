@@ -131,7 +131,8 @@
                   style="flex-shrink: 0; margin: 0; padding: 0; line-height: normal"
                   :style="{
                     width: `${header.params.width}%`,
-                    fontSize: `${header.params.font}px`
+                    fontSize: `${header.params.font}px`,
+                    fontWeight: `${header.params.f_weight}`
                   }"
                 >
                   <div style="width: 100%;" v-if="header.params.cell_1.id">
@@ -292,7 +293,7 @@
                     <div
                       style="width: 100%;padding: 2px 4px;font-weight:bold;border-bottom: 1px solid #000000"
                     >
-                      Открывающие
+                      Openers
                     </div>
                     <div
                       style="display:flex;flex-wrap: wrap;padding: 2px 0"
@@ -334,7 +335,7 @@
                     style="display:flex;flex-wrap: wrap;width: 100%;border: 1px solid #000000; padding: 2px 4px;margin-top: 1rem"
                   >
                     <div style="width: 100%;font-weight:bold;">
-                      Погодные условия
+                      Conditions on course
                     </div>
                     <div
                       v-for="wData in competition.weather"

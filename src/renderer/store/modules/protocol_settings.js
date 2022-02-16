@@ -86,6 +86,7 @@ export default {
           .substr(2, 9);
         this.params.width = width || 10;
         this.params.font = font || 12;
+        this.params.f_weight = "normal";
         this.params.align = align || { title: "Слева", value: "start" };
 
         this.params.cell_1.id = cell_1.data.id;
@@ -225,17 +226,8 @@ export default {
           },
           {
             data: { id: "race", title: "Заезд" },
-            handler: function(competitor) {
-              return competitor.competitor.marks
-                .map(mark => {
-                  return mark.race_id;
-                })
-                .filter((value, index, self) => {
-                  return self.indexOf(value) === index;
-                })
-                .map((race, index) => {
-                  return `Заезд ${index + 1}`;
-                });
+            handler: function(competitor, competition) {
+              return [...competition.races.map(race => race.title)];
             }
           }
         )
@@ -282,9 +274,8 @@ export default {
             },
             handler: function(competitor, competition) {
               return competition.races.map(_race => {
-                return `${competition.getRaceResult(
-                  competitor.competitor,
-                  _race
+                return `${competition.set_accuracy(
+                  competition.getRaceResult(competitor.competitor, _race)
                 )} ${(competition.result_formula.overall_result.type === 3 &&
                   competitor.competitor.results.find(
                     _res => _res.race_id === _race.id
@@ -311,7 +302,11 @@ export default {
           {
             data: { id: "result", title: "Рез-т" },
             handler: function(competitor, competition) {
-              return [competition.getResult(competitor.competitor.id)];
+              return [
+                competition.set_accuracy(
+                  competition.getResult(competitor.competitor.id)
+                )
+              ];
             }
           }
         )

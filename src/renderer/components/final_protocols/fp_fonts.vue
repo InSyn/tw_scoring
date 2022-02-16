@@ -113,6 +113,7 @@ export default {
                 ...this.$store.getters["main/flatGrid"]
                   .filter(val => val.type === "competitorResult")
                   .map(_competitor => {
+                    console.log(_competitor);
                     return {
                       _attributes: { status: "QLF" },
                       Rank: _competitor.s_rank,
@@ -131,7 +132,7 @@ export default {
                           _competitor.competitor.info_data["year"] || ""
                       },
                       [`${this.type}_result`]: {
-                        TotalScore: _competitor.result
+                        TotalScore: _competitor.result.value
                       }
                     };
                   })
