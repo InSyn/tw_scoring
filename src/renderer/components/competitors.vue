@@ -16,10 +16,14 @@
             style="margin-right: .5rem"
             >mdi-page-previous</v-icon
           >Из предыдущего этапа</v-btn
-        ><v-btn text :color="$vuetify.theme.themes[appTheme].success">
+        ><v-btn
+          text
+          style="padding: 0"
+          :color="$vuetify.theme.themes[appTheme].success"
+        >
           <label
             class="d-flex align-center"
-            style="cursor:pointer"
+            style="padding: 4px 16px;height: 100%;cursor:pointer"
             for="startListInput"
           >
             <v-icon
