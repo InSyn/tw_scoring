@@ -219,7 +219,7 @@ export default {
       };
 
       axios
-        .post("http://79.104.192.118:8080/ags", compToSend)
+        .post("http://192.168.123.1/ags", compToSend)
         .then(res => {
           return res;
         })

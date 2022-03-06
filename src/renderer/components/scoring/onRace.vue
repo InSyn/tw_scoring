@@ -741,37 +741,35 @@ export default {
       }
     },
     setMarksFromChanged() {
+      const competitor = this.competition.competitorsSheet.competitors.find(
+        _comp => _comp.id === this.competition.selected_race.onTrack
+      );
+
       for (let mKey in this.scoresToChange) {
         if (
-          !this.competition.competitorsSheet.competitors
-            .find(_comp => _comp.id === this.competition.selected_race.onTrack)
-            .marks.some(_m => {
-              return (
-                _m.judge_id === mKey &&
-                _m.race_id === this.competition.selected_race.id
-              );
-            })
-        ) {
-          this.competition.competitorsSheet.competitors
-            .find(_comp => _comp.id === this.competition.selected_race.onTrack)
-            .marks.push(
-              new this.MarkClass(
-                this.competition.selected_race_id,
-                this.competition.selected_race.id,
-                this.competition.stuff.judges.find(_j => _j._id === mKey).id,
-                this.competition.stuff.judges.find(_j => _j._id === mKey)._id,
-                this.scoresToChange[mKey]
-              )
+          !competitor.marks.some(_m => {
+            return (
+              _m.judge_id === mKey &&
+              _m.race_id === this.competition.selected_race.id
             );
+          })
+        ) {
+          competitor.marks.push(
+            new this.MarkClass(
+              this.competition.selected_race_id,
+              this.competition.selected_race.id,
+              this.competition.stuff.judges.find(_j => _j._id === mKey).id,
+              this.competition.stuff.judges.find(_j => _j._id === mKey)._id,
+              this.scoresToChange[mKey]
+            )
+          );
         } else {
-          this.competition.competitorsSheet.competitors
-            .find(_comp => _comp.id === this.competition.selected_race.onTrack)
-            .marks.find(_m => {
-              return (
-                _m.judge_id === mKey &&
-                _m.race_id === this.competition.selected_race.id
-              );
-            }).value = this.scoresToChange[mKey];
+          competitor.marks.find(_m => {
+            return (
+              _m.judge_id === mKey &&
+              _m.race_id === this.competition.selected_race.id
+            );
+          }).value = this.scoresToChange[mKey];
         }
       }
 
@@ -784,69 +782,46 @@ export default {
       clearTimeout(this.terminalsListener.listener);
       this.terminalsListener.listener = setTimeout(() => {
         let judges_check = [];
+
         this.competition.stuff.judges.forEach(_judge => {
           axios
-            .get(`http://79.104.192.118:8080/scs?id=${_judge.remoteId}`)
+            .get(`http://192.168.123.1/scs?id=${_judge.remoteId}`)
             .then(response => {
               judges_check.push(_judge["remoteID"]);
+
               if (response.data[response.data.length - 1]) {
+                const competitor = this.competition.competitorsSheet.competitors.find(
+                  _comp =>
+                    _comp.info_data["bib"].toString() ===
+                    response.data[response.data.length - 1]["bip"]
+                );
+
                 if (
-                  !this.competition.competitorsSheet.competitors
-                    .find(
-                      _comp =>
-                        _comp.info_data["bib"].toString() ===
-                        response.data[response.data.length - 1]["bip"]
-                    )
-                    .marks.find(mark => {
+                  !competitor.marks.find(mark => {
+                    return (
+                      mark.race_id === this.competition.selected_race.id &&
+                      mark.judge_id === _judge._id
+                    );
+                  })
+                ) {
+                  if (competitor.id === this.competition.selected_race.onTrack)
+                    competitor.marks.push(
+                      new this.MarkClass(
+                        this.competition.selected_race_id,
+                        this.competition.selected_race.id,
+                        _judge.id,
+                        _judge._id,
+                        response.data[response.data.length - 1]["scor"]
+                      )
+                    );
+                } else {
+                  if (competitor.id === this.competition.selected_race.onTrack)
+                    competitor.marks.find(mark => {
                       return (
                         mark.race_id === this.competition.selected_race.id &&
                         mark.judge_id === _judge._id
                       );
-                    })
-                ) {
-                  if (
-                    this.competition.competitorsSheet.competitors.find(
-                      _comp =>
-                        _comp.info_data["bib"].toString() ===
-                        response.data[response.data.length - 1]["bip"]
-                    ).id === this.competition.selected_race.onTrack
-                  )
-                    this.competition.competitorsSheet.competitors
-                      .find(
-                        _comp =>
-                          _comp.info_data["bib"].toString() ===
-                          response.data[response.data.length - 1]["bip"]
-                      )
-                      .marks.push(
-                        new this.MarkClass(
-                          this.competition.selected_race_id,
-                          this.competition.selected_race.id,
-                          _judge.id,
-                          _judge._id,
-                          response.data[response.data.length - 1]["scor"]
-                        )
-                      );
-                } else {
-                  if (
-                    this.competition.competitorsSheet.competitors.find(
-                      _comp =>
-                        _comp.info_data["bib"].toString() ===
-                        response.data[response.data.length - 1]["bip"]
-                    ).id === this.competition.selected_race.onTrack
-                  )
-                    this.competition.competitorsSheet.competitors
-                      .find(
-                        _comp =>
-                          _comp.info_data["bib"].toString() ===
-                          response.data[response.data.length - 1]["bip"]
-                      )
-                      .marks.find(mark => {
-                        return (
-                          mark.race_id === this.competition.selected_race.id &&
-                          mark.judge_id === _judge._id
-                        );
-                      }).value =
-                      response.data[response.data.length - 1]["scor"];
+                    }).value = response.data[response.data.length - 1]["scor"];
                 }
               }
               if (
@@ -901,7 +876,7 @@ export default {
         listener: null,
         indicator: null
       },
-      score_repeat: "A"
+      score_repeat: null
     };
   },
   computed: {
