@@ -38,14 +38,18 @@
         class="competition_description"
         style="display: flex; flex-direction: column; align-items: center; margin: auto"
       >
-        <div style="font-size: 1.4rem; font-weight: bold; line-height: 1.2">
+        <div
+          style="font-size: 1.4rem; font-weight: bold; line-height: 1.2;text-align: center"
+        >
           {{
             results_protocol.title && results_protocol.title.length > 0
               ? results_protocol.title
               : competition.mainData.title.value
           }}
         </div>
-        <div style="font-size: 1.4rem; font-weight: bold; line-height: 1.2">
+        <div
+          style="font-size: 1.4rem; font-weight: bold; line-height: 1.2;text-align: center"
+        >
           {{
             `${protocol_type} ${(competition.mainData.title.stage.value &&
               competition.mainData.title.stage.value.value) ||
@@ -61,37 +65,34 @@
         <div style="font-size: 1.4rem; font-weight: bold; line-height: 1.2">
           {{ competition.mainData.discipline.value }}
         </div>
-        <div style="font-size: 1.2rem; line-height: 1.2">
+        <div style="font-size: 1.2rem; line-height: 1.2;text-align: center">
           {{
             `${competition.mainData.location.value} ${competition.mainData
               .country.value && "(" + competition.mainData.country.value + ")"}`
           }}
         </div>
-
         <div style="font-size: 1.2rem; font-weight: bold; line-height: 1.2">
           {{
             `${competition.mainData.date.value.toString().split("-")[2]}/${
               competition.mainData.date.value.toString().split("-")[1]
             }/${
               competition.mainData.date.value.toString().split("-")[0]
-            } Start time: ${competition.mainData.date.time}`
+            } Время старта: ${competition.mainData.date.time}`
           }}
         </div>
       </div>
       <div
         class="right_asset"
-        style="height: 8rem;margin: auto 2rem; display:flex;align-items: center; justify-content: center"
+        style="height: 8rem;margin: auto 2rem; display:flex;align-items: center; justify-content: center;font-weight: bold;font-size: 4rem"
       >
-        <div style="font-weight: bold;font-size: 4rem">
-          {{ competition.mainData.discipline.min }}
-        </div>
+        {{ competition.mainData.discipline.min }}
       </div>
     </div>
     <div
       :style="page_index !== 0 && { opacity: 0 }"
       style="display:flex; flex-wrap: wrap; align-items: center; margin: 2px 0"
     >
-      {{ `Number of competitors: ${number_of_competitors}` }}
+      {{ `Кол-во участников: ${number_of_competitors}` }}
     </div>
   </div>
 </template>

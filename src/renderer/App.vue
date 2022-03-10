@@ -636,6 +636,7 @@ export default {
     ipcRenderer.on("server_message", (e, message) => {
       this.$store.commit("main/pushServerMessage", message);
     });
+    this.$store.dispatch("main/checkEventID");
     this.createCompetition(new this.EventClass());
     this.$store.commit("main/setCompetition", this.competitions[0]);
     this.first_competition_setup(this.competition);

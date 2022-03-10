@@ -303,9 +303,11 @@ export default {
         const competitor = this.competitorsSheet.competitors.find(
           _competitor => _competitor.id === competitor_id
         );
-        const overall = competitor.results_overall.find(
-          res => res.competition_id === this.id
-        );
+        const overall = competitor
+          ? competitor.results_overall.find(
+              res => res.competition_id === this.id
+            )
+          : null;
         return overall ? (overall.status ? overall.status : overall.value) : 0;
       }
       getRaceResult(competitor, race) {
@@ -356,9 +358,10 @@ export default {
             .result(competitor.id),
           status: null
         };
-        let existedResult = competitor.results_overall.find(
-          res => res.competition_id === overallResult.competition_id
-        );
+        let existedResult =
+          competitor.results_overall.find(
+            res => res.competition_id === overallResult.competition_id
+          ) || null;
         existedResult
           ? (existedResult.value = overallResult.value)
           : competitor.results_overall.push(overallResult);

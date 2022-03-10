@@ -17,7 +17,7 @@
       </div>
       <div style="margin-left: auto">
         {{
-          `Report created ${date_now[0]} ${date_now[1]} / Page ${page_index +
+          `Отчёт создан ${date_now[0]} ${date_now[1]} / Страница ${page_index +
             1}/${(paginated_results.length > 0 && paginated_results.length) ||
             1}`
         }}

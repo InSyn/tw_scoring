@@ -12,8 +12,13 @@ export default {
     },
     socket: null,
     opened_sockets: [],
+    event_id: null,
     competition: null,
     competitions: [],
+    live_config: {
+      status: false,
+      _id: null
+    },
     showPreview: false,
     showMenu: true,
     serverStatus: false,
@@ -88,6 +93,7 @@ export default {
     opened_sockets: state => state.opened_sockets,
     serverMessages: state => state.serverMessages,
     showMenu: state => state.showMenu,
+    event_id: state => state.event_id,
     competitions: state => state.competitions,
     competition: state => state.competition,
     showPreview: state => state.showPreview,
@@ -253,6 +259,13 @@ export default {
     },
     changeMenuState: state => {
       state.showMenu = !state.showMenu;
+    },
+    checkEventID: state => {
+      state.event_id === null
+        ? (state.event_id = Math.random()
+            .toString(36)
+            .substr(2, 9))
+        : null;
     },
     createServerChecker: state => {
       state.serverStatusChecker === null
@@ -453,6 +466,9 @@ export default {
     },
     serverSetStatus: ({ commit }, status) => {
       commit("serverSetStatus", status);
+    },
+    checkEventID: ({ commit }) => {
+      commit("checkEventID");
     },
     createCompetition: ({ commit }, competition) => {
       commit("createCompetition", competition);

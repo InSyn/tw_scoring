@@ -215,7 +215,8 @@ export default {
         ),
         id_fis: "test",
         status: "1",
-        temp1: this.competition.selected_race.id
+        temp1: this.competition.selected_race.id,
+        temp2: this.competition.selected_race.title
       };
 
       axios

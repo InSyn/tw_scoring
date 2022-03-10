@@ -1,5 +1,5 @@
 import competition from "../../../main/server_competition";
-
+import main from "./../modules/main";
 export default {
   namespaced: true,
   state: {
@@ -226,7 +226,10 @@ export default {
           },
           {
             data: { id: "race", title: "Заезд" },
-            handler: function(competitor, competition) {
+            handler: function(competitor) {
+              const competition = main.state["competitions"].find(
+                _comp => _comp.id === competitor.comp_id
+              );
               return [...competition.races.map(race => race.title)];
             }
           }
@@ -272,7 +275,10 @@ export default {
               id: "race_res",
               title: "Оценка"
             },
-            handler: function(competitor, competition) {
+            handler: function(competitor) {
+              const competition = main.state["competitions"].find(
+                _comp => _comp.id === competitor.comp_id
+              );
               return competition.races.map(_race => {
                 return `${competition.set_accuracy(
                   competition.getRaceResult(competitor.competitor, _race)
@@ -301,7 +307,10 @@ export default {
           },
           {
             data: { id: "result", title: "Рез-т" },
-            handler: function(competitor, competition) {
+            handler: function(competitor) {
+              const competition = main.state["competitions"].find(
+                _comp => _comp.id === competitor.comp_id
+              );
               return [
                 competition.set_accuracy(
                   competition.getResult(competitor.competitor.id)
