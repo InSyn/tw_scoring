@@ -237,9 +237,9 @@ export default {
       competitorsSheet = {
         header: [
           { id: "bib", title: "Bib" },
-          { id: "stand", title: "Стойка" },
           { id: "lastname", title: "Фамилия" },
           { id: "name", title: "Имя" },
+          { id: "fullname", title: "Фамилия, Имя" },
           { id: "year", title: "Год" },
           { id: "rang", title: "Разряд" },
           { id: "region", title: "Суб. РФ" }
@@ -402,7 +402,7 @@ export default {
       };
       result_formula = {
         overall_result: {
-          type: 1,
+          type: 0,
           select_heats: {
             heats: 0,
             mode: 0,
@@ -563,6 +563,10 @@ export default {
           {
             id: 0,
             title: "По судьям",
+            cof: 1,
+            doubleUp: true,
+            doubleUp_corridors: [[], []],
+            doubleUp_competitors: { 0: null, 1: null },
             lower_marks: 0,
             higher_marks: 0,
             formula: 0,
@@ -608,13 +612,25 @@ export default {
                   ) {
                     _marks.splice(_marks.indexOf(Math.min(..._marks)), 1);
                   }
+                  if (this.result_formula.types[0].doubleUp)
+                    return (
+                      (+this.result_formula.types[0].lower_marks +
+                        +this.result_formula.types[0].higher_marks <
+                        marks.length &&
+                        _marks.reduce((a, b) => {
+                          return +a + +b;
+                        }) /
+                          (_marks.length / 2)) ||
+                      0
+                    );
                   return (
                     (+this.result_formula.types[0].lower_marks +
                       +this.result_formula.types[0].higher_marks <
                       marks.length &&
                       _marks.reduce((a, b) => {
                         return +a + +b;
-                      }) / _marks.length) ||
+                      }) /
+                        (_marks.length / this.result_formula.types[0].cof)) ||
                     0
                   );
                 }

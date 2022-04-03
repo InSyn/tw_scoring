@@ -638,10 +638,11 @@
                   @click="addCompetitorToRace(selectedRace)"
                   text
                   :color="$vuetify.theme.themes[appTheme].action_blue"
-                  v-html="`Применить`"
-                ></v-btn
-              ></v-card-actions> </v-card
-          ></v-dialog>
+                  >Применить</v-btn
+                ></v-card-actions
+              >
+            </v-card></v-dialog
+          >
         </div>
         <div
           style="max-height: 60vh; overflow-y: auto; border-radius: 6px"
@@ -909,8 +910,15 @@
             ><v-icon>mdi-undo</v-icon>
           </v-btn>
           <v-btn
-            @click="clearRaceResults(selectedRace)"
+            @click="exportXlsxList(competition, selectedRace)"
             style="margin-left: auto"
+            text
+            small
+            :color="$vuetify.theme.themes[appTheme].action_green"
+            >Экспорт<v-icon small>mdi-file-excel</v-icon>
+          </v-btn>
+          <v-btn
+            @click="clearRaceResults(selectedRace)"
             small
             elevation="0"
             :color="$vuetify.theme.themes[appTheme].action_red"
@@ -924,6 +932,8 @@
 </template>
 
 <script>
+import fs from "fs";
+import { stringify } from "csv";
 import { mapGetters } from "vuex";
 
 export default {
@@ -1057,6 +1067,36 @@ export default {
       this.competition.selected_race_id = 0;
 
       this.$store.dispatch("main/updateEvent");
+    },
+    exportXlsxList(competition, race) {
+      const sheet = [
+        ...race._startList.map(_competitor => {
+          let fieldsArr = {};
+          const competitor = this.competition.competitorsSheet.competitors.find(
+            comp => comp.id === _competitor
+          );
+
+          for (let infoDataKey in competitor.info_data) {
+            competitor.info_data[infoDataKey]
+              ? (fieldsArr[infoDataKey] = competitor.info_data[infoDataKey])
+              : (fieldsArr[infoDataKey] = "");
+          }
+          return fieldsArr;
+        })
+      ];
+      const jsonData = JSON.parse(JSON.stringify(sheet));
+
+      stringify(jsonData, { header: true }, function(err, output) {
+        if (err) throw err;
+        fs.writeFile(
+          `./${competition.mainData.title.value} ${race.title}.csv`,
+          output,
+          "utf8",
+          err => {
+            if (err) throw err;
+          }
+        );
+      });
     },
     clearRaceResults(_race) {
       this.competition.competitorsSheet.competitors.forEach(competitor => {

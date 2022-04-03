@@ -6,7 +6,7 @@
         backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA
       }"
     >
-      <div class="pa-2" style="height: 100%;">
+      <div class="pa-2" style=";height: 100%;">
         <div
           :style="{
             backgroundColor:
@@ -60,7 +60,30 @@
             }}
           </div>
           <v-spacer></v-spacer>
+          <div
+            style="display:flex;flex-direction: column"
+            v-if="competition.result_formula.types[0].doubleUp"
+          >
+            <v-btn
+              v-for="(cor_button, cb_idx) in competition.result_formula.types[0]
+                .doubleUp_corridors"
+              :key="cb_idx"
+              @click="
+                competition.selected_race &&
+                  competition.selected_race.selectedCompetitor &&
+                  setToCorridor(
+                    competition.selected_race.selectedCompetitor,
+                    cb_idx
+                  )
+              "
+              text
+              small
+              :color="$vuetify.theme.themes[appTheme].success"
+              ><v-icon>mdi-play</v-icon></v-btn
+            >
+          </div>
           <v-btn
+            v-else
             @click="
               competition.selected_race &&
                 competition.selected_race.selectedCompetitor &&
@@ -168,12 +191,11 @@ export default {
         })();
     },
     setToTrack(competitor_id) {
-      this.competition.selected_race.onTrack !== null &&
-        (() => {
-          this.competition.selected_race.startList.unshift(
-            this.competition.selected_race.onTrack
-          );
-        })();
+      if (this.competition.selected_race.onTrack !== null)
+        this.competition.selected_race.startList.unshift(
+          this.competition.selected_race.onTrack
+        );
+
       this.competition.selected_race.onTrack = competitor_id;
       this.competition.selected_race.startList = this.competition.selected_race.startList.filter(
         _competitor => {
@@ -195,6 +217,34 @@ export default {
           _comp => _comp.id === competitor_id
         )
       );
+    },
+    setToCorridor(comp_id, cor_idx) {
+      if (
+        this.competition.result_formula.types[0].doubleUp_competitors[
+          cor_idx
+        ] !== null
+      )
+        this.competition.selected_race.startList.unshift(
+          this.competition.result_formula.types[0].doubleUp_competitors[cor_idx]
+        );
+
+      this.competition.result_formula.types[0].doubleUp_competitors[
+        cor_idx
+      ] = comp_id;
+      this.competition.selected_race.startList = this.competition.selected_race.startList.filter(
+        _competitor => {
+          return _competitor !== comp_id;
+        }
+      );
+      this.competition.selected_race.selectedCompetitor = this.competition
+        .selected_race.startList[0]
+        ? this.competition.selected_race.startList[0]
+        : null;
+      this.socket &&
+        this.socket.connected &&
+        this.socket.emit("set_competition_data", this.competition, res => {
+          console.log(res);
+        });
     },
     setFocused(e) {
       e.target.style.backgroundColor = `${

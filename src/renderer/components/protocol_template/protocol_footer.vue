@@ -85,7 +85,7 @@ export default {
   computed: {
     date_now() {
       const date = new Date()
-        .toLocaleString("en", {
+        .toLocaleString("ru", {
           year: "numeric",
           month: "long",
           day: "numeric"

@@ -1,9 +1,9 @@
 <template>
   <v-container style="min-width: 760px" v-if="competition">
     <v-card
-      class="pa-2"
+      elevation="0"
       :style="{
-        backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
+        backgroundColor: $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
         color: $vuetify.theme.themes[appTheme].textDefault
       }"
     >
@@ -16,7 +16,7 @@
           color: $vuetify.theme.themes[appTheme].textDefault
         }"
       >
-        <v-card-title style="padding: .5rem 1rem">
+        <v-card-title style="padding: 0 1rem .5rem 1rem">
           Настройка этапов
         </v-card-title>
         <v-container
@@ -339,10 +339,16 @@
       <!-- НАСТРОЙКА ЭТАПОВ //-->
 
       <!--//НАСТРОЙКА ТОЧНОСТИ -->
-      <div class="pa-2 d-flex flex-column">
-        <v-card-title style="padding: .5rem 1rem"
-          >Точность результа</v-card-title
-        >
+      <div
+        class="pa-2 d-flex flex-column"
+        :style="{
+          backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA
+        }"
+        style="margin-top: 1rem;border-radius: 6px"
+      >
+        <v-card-title style="padding: 0 1rem .5rem 1rem">
+          Точность результата
+        </v-card-title>
         <div style="width: 100%;">
           <v-radio-group
             row
@@ -376,343 +382,487 @@
       <!-- НАСТРОЙКА ТОЧНОСТИ //-->
 
       <!--// НАСТРОЙКА ФОРМУЛЫ ЗАЕЗДА -->
-      <div class="pa-2 d-flex flex-column">
-        <v-card-title style="padding: .5rem 1rem"
-          >Формула подсчёта результата заезда
+      <div
+        class="stage_rules_container pa-2 d-flex flex-column"
+        :style="{
+          backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA
+        }"
+        style="margin-top: 1rem;border-radius: 6px"
+      >
+        <v-card-title style="padding: 0 1rem .5rem 1rem">
+          Формула подсчёта заезда
         </v-card-title>
-        <div class="d-flex flex-column" style="border-radius: 6px">
-          <div class="d-flex flex-nowrap">
-            <div class="mr-2 d-flex" style="width: 50%;min-height: 100px">
-              <div
-                class="pa-1 d-flex flex-column"
-                :style="{
-                  backgroundColor:
-                    $vuetify.theme.themes[appTheme].standardBackgroundRGBA
-                }"
-                style="border-radius: 6px; height: 100%; width: 100%;"
-              >
-                <v-hover v-slot:default="{ hover }">
-                  <div
-                    @click="setRaceResultFormula(0)"
-                    class="pa-1 d-flex flex-nowrap align-center"
-                    style="font-weight:bold; font-size: 1.4rem;border-radius: 6px 6px 0 0;cursor:pointer;"
-                    :style="{
-                      backgroundColor:
-                        $vuetify.theme.themes[appTheme].cardBackgroundRGBA
-                    }"
-                  >
-                    <div class="d-flex justify-center align-center">
-                      <div
-                        style="height: 1.4rem;width: 1.4rem;border-radius: 50%; transition: background-color 132ms, box-shadow 92ms"
-                        :style="[
-                          {
-                            border: `2px solid ${$vuetify.theme.themes[appTheme].standardBackgroundRGBA}`,
-                            backgroundColor:
-                              $vuetify.theme.themes[appTheme]
-                                .standardBackgroundRGBA
-                          },
-                          hover && { backgroundColor: `rgba(32, 48, 192, .4)` },
-                          competition.result_formula.type === 0 && {
-                            boxShadow: `0 0 3px 1px ${$vuetify.theme.themes[appTheme].accent}`,
-                            backgroundColor:
-                              $vuetify.theme.themes[appTheme].accent
-                          }
-                        ]"
-                      ></div>
-                    </div>
-                    <div
-                      style="margin-left: 1rem;"
-                      v-html="`${competition.result_formula.types[0].title}`"
-                    ></div>
-                  </div>
-                </v-hover>
-                <div class="mt-1 d-flex flex-nowrap flex-grow-1">
-                  <div class="d-flex flex-column flex-grow-1">
-                    <div
-                      class="d-flex flex-wrap justify-start align-start flex-grow-1"
-                    >
-                      <div
-                        v-for="(judge, jd) in competition.stuff.judges"
-                        :key="jd"
-                      >
-                        <div
-                          class="d-flex flex-column"
-                          style="min-height: 3rem;padding: .25rem .5rem;margin: 0 4px 4px 0"
-                          :style="{
-                            backgroundColor:
-                              $vuetify.theme.themes[appTheme].cardBackgroundRGBA
-                          }"
-                        >
-                          <div
-                            class="font-weight-bold"
-                            v-html="`Судья ${judge.id}`"
-                          ></div>
-                          <div v-html="`${judge.lastName} ${judge.name}`"></div>
-                        </div>
-                      </div>
-                    </div>
-                    <div
-                      class="pa-2 mr-1 d-flex flex-wrap align-center"
-                      :style="{
-                        backgroundColor:
-                          $vuetify.theme.themes[appTheme].cardBackgroundRGBA
-                      }"
-                      style="border-radius: 0 0 0 6px"
-                    >
-                      <v-hover
-                        v-for="formula in competition.result_formula.types[0]
-                          .formulas"
-                        :key="formula.id"
-                        v-slot:default="{ hover }"
-                      >
-                        <div
-                          @click="
-                            competition.result_formula.types[0].formula =
-                              formula.id;
-                            updateResults();
-                            $store.dispatch('main/updateEvent');
-                          "
-                          class="mr-2 d-flex flex-nowrap align-center"
-                          style="cursor:pointer;"
-                        >
-                          <div
-                            style="height: 1.2rem;width: 1.2rem; border-radius: 50%; transition: background-color 112ms, box-shadow 192ms"
-                            :style="[
-                              {
-                                backgroundColor:
-                                  $vuetify.theme.themes[appTheme]
-                                    .standardBackgroundRGBA
-                              },
-                              formula.id ===
-                                competition.result_formula.types[0].formula && {
-                                backgroundColor:
-                                  $vuetify.theme.themes[appTheme].success,
-                                boxShadow: `0 0 2px 1px ${$vuetify.theme.themes[appTheme].success}`
-                              }
-                            ]"
-                          ></div>
-                          <div
-                            class="ml-1 font-weight-bold"
-                            v-html="formula.title"
-                          ></div>
-                        </div>
-                      </v-hover>
-                    </div>
-                  </div>
-                  <div
-                    class="d-flex flex-column"
-                    style="min-width: 150px;min-height: 100%;border-radius: 0 0 6px 0"
-                    :style="{
-                      backgroundColor:
-                        $vuetify.theme.themes[appTheme].cardBackgroundRGBA
-                    }"
-                  >
-                    <div class="pa-2 d-flex align-center">
-                      <label
-                        class="font-weight-bold"
-                        for="lower_marks"
-                        v-html="`Убрать худш.`"
-                      ></label
-                      ><input
-                        class="pa-1 ml-2 font-weight-bold"
-                        style="width: 3.8rem; border-radius: 6px"
-                        :style="{
-                          color: $vuetify.theme.themes[appTheme].textDefault,
-                          backgroundColor:
-                            $vuetify.theme.themes[appTheme]
-                              .standardBackgroundRGBA
-                        }"
-                        v-model="
-                          competition.result_formula.types[0].lower_marks
-                        "
-                        id="lower_marks"
-                        type="number"
-                        min="0"
-                        max="12"
-                      />
-                    </div>
-                    <div class="pa-2 d-flex align-center">
-                      <label
-                        class="font-weight-bold"
-                        for="higher_marks"
-                        v-html="`Убрать лучш.`"
-                      ></label
-                      ><input
-                        class="pa-1 ml-2 font-weight-bold"
-                        style="width: 3.8rem; border-radius: 6px"
-                        :style="{
-                          color: $vuetify.theme.themes[appTheme].textDefault,
-                          backgroundColor:
-                            $vuetify.theme.themes[appTheme]
-                              .standardBackgroundRGBA
-                        }"
-                        v-model="
-                          competition.result_formula.types[0].higher_marks
-                        "
-                        id="higher_marks"
-                        type="number"
-                        min="0"
-                        max="12"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+        <div class="d-flex flex-nowrap">
+          <div
+            class="byJudges mr-2 d-flex"
+            style="width: 50%;min-height: 100px"
+          >
             <div
-              class="ml-2 d-flex flex-column"
-              style="width: 50%; min-height: 100px"
+              class="pa-1 d-flex flex-column"
+              :style="{
+                backgroundColor:
+                  $vuetify.theme.themes[appTheme].standardBackgroundRGBA
+              }"
+              style="border-radius: 6px; height: 100%; width: 100%;"
             >
-              <div
-                class="pa-1"
-                style="border-radius: 6px"
-                :style="{
-                  backgroundColor:
-                    $vuetify.theme.themes[appTheme].standardBackgroundRGBA
-                }"
-              >
+              <v-hover v-slot:default="{ hover }">
                 <div
-                  class="pa-1 d-flex align-center flex-nowrap"
-                  style="border-radius: 6px; font-weight:bold; font-size: 1.4rem"
+                  @click="setRaceResultFormula(0)"
+                  class="pa-1 d-flex flex-nowrap align-center"
+                  style="font-weight:bold; font-size: 1.4rem;border-radius: 6px 6px 0 0;cursor:pointer;"
                   :style="{
                     backgroundColor:
                       $vuetify.theme.themes[appTheme].cardBackgroundRGBA
                   }"
                 >
-                  <v-hover v-slot:default="{ hover }">
+                  <div class="d-flex justify-center align-center">
                     <div
-                      @click="setRaceResultFormula(1)"
-                      class="d-flex align-center"
-                      style="flex: 1 0 auto;cursor:pointer"
+                      style="height: 1.4rem;width: 1.4rem;border-radius: 50%; transition: background-color 132ms, box-shadow 92ms"
+                      :style="[
+                        {
+                          border: `2px solid ${$vuetify.theme.themes[appTheme].standardBackgroundRGBA}`,
+                          backgroundColor:
+                            $vuetify.theme.themes[appTheme]
+                              .standardBackgroundRGBA
+                        },
+                        hover && { backgroundColor: `rgba(32, 48, 192, .4)` },
+                        competition.result_formula.type === 0 && {
+                          boxShadow: `0 0 3px 1px ${$vuetify.theme.themes[appTheme].accent}`,
+                          backgroundColor:
+                            $vuetify.theme.themes[appTheme].accent
+                        }
+                      ]"
+                    ></div>
+                  </div>
+                  <div style="margin-left: 1rem;">
+                    {{ competition.result_formula.types[0].title }}
+                  </div>
+                </div>
+              </v-hover>
+              <div class="mt-1 d-flex flex-nowrap flex-grow-1">
+                <div class="d-flex flex-column flex-grow-1">
+                  <div
+                    class="d-flex flex-wrap justify-start align-start flex-grow-1"
+                  >
+                    <div
+                      v-for="(judge, jd) in competition.stuff.judges"
+                      :key="jd"
+                      style="flex: 1 0 auto; max-width: 25%"
                     >
                       <div
-                        style="height: 1.4rem;width: 1.4rem;border-radius: 50%; transition: background-color 132ms, box-shadow 92ms"
+                        class="d-flex flex-column"
+                        style="min-height: 3rem;padding: .25rem .5rem;margin: 0 4px 4px 0"
+                        :style="{
+                          backgroundColor:
+                            $vuetify.theme.themes[appTheme].cardBackgroundRGBA
+                        }"
+                      >
+                        <div class="font-weight-bold">
+                          {{ `Судья ${judge.id}` }}
+                        </div>
+                        <div>{{ `${judge.lastName} ${judge.name}` }}</div>
+                      </div>
+                    </div>
+                    <div
+                      v-if="competition.result_formula.types[0].doubleUp"
+                      style="flex: 0 0 auto; display:flex;flex-wrap: nowrap;width: 100%;margin-top: 1rem;margin-bottom: 4px;border-radius: 2px;"
+                    >
+                      <div
+                        style="width: 50%; margin-right: 4px;"
+                        v-for="(cor, cor_idx) in competition.result_formula
+                          .types[0].doubleUp_corridors"
+                        :key="cor_idx"
+                        :style="{
+                          backgroundColor:
+                            $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
+                          color: $vuetify.theme.themes[appTheme].textDefault
+                        }"
+                      >
+                        <div
+                          style="display:flex;align-items: center;width: 100%;font-weight:bold;padding: 2px 4px"
+                        >
+                          Корридор {{ cor_idx + 1 }}
+                          <div style="margin-left: auto">
+                            <v-dialog
+                              v-model="
+                                competition.result_formula.types[0][
+                                  `doubleUp_cor${cor_idx}_dialog`
+                                ]
+                              "
+                              width="420px"
+                              ><template v-slot:activator="{ on }"
+                                ><v-btn
+                                  v-on="on"
+                                  x-small
+                                  icon
+                                  :color="
+                                    $vuetify.theme.themes[appTheme].textDefault
+                                  "
+                                  ><v-icon small>mdi-plus</v-icon></v-btn
+                                ></template
+                              >
+                              <div
+                                class="corridor_setup"
+                                style="padding: 4px 8px; user-select: none"
+                                :style="{
+                                  backgroundColor:
+                                    $vuetify.theme.themes[appTheme]
+                                      .cardBackgroundRGBA,
+                                  color:
+                                    $vuetify.theme.themes[appTheme].textDefault
+                                }"
+                              >
+                                <div
+                                  style="display:flex;align-items: center;font-size: 1.2rem;font-weight:bold;width: 100%;padding: 4px 6px;margin-bottom: 1rem"
+                                >
+                                  Корридор {{ cor_idx + 1 }}
+                                  <v-btn
+                                    @click="
+                                      competition.result_formula.types[0][
+                                        `doubleUp_cor${cor_idx}_dialog`
+                                      ] = false
+                                    "
+                                    small
+                                    icon
+                                    :color="
+                                      $vuetify.theme.themes[appTheme].error
+                                    "
+                                    style="margin-left: auto"
+                                    ><v-icon small>mdi-close</v-icon></v-btn
+                                  >
+                                </div>
+                                <div
+                                  class="judges"
+                                  style="display:flex;align-items: center;flex-wrap: wrap;margin: 0 4px;padding: 4px 0 0 4px"
+                                  :style="{
+                                    backgroundColor:
+                                      $vuetify.theme.themes[appTheme]
+                                        .standardBackgroundRGBA
+                                  }"
+                                >
+                                  <div
+                                    @click="
+                                      !competition.result_formula.types[0].doubleUp_corridors[
+                                        cor_idx
+                                      ].includes(judge) &&
+                                        competition.result_formula.types[0].doubleUp_corridors[
+                                          cor_idx
+                                        ].push(judge)
+                                    "
+                                    v-for="judge in competition.stuff.judges"
+                                    :key="judge.id"
+                                    style="margin: 0 4px 4px 0;font-size: 1.2rem;font-weight:bold;padding: 4px 6px;border-radius: 2px;cursor:pointer;"
+                                    :style="{
+                                      backgroundColor:
+                                        $vuetify.theme.themes[appTheme]
+                                          .cardBackgroundRGBA
+                                    }"
+                                  >
+                                    {{ `С ${judge.id}` }}
+                                  </div>
+                                </div>
+                                <div
+                                  class="corridor_judges"
+                                  style="display:flex;flex-direction: column;margin: .5rem 6px 4px 6px;padding-bottom: 4px;height: 180px;overflow-y: auto"
+                                  :style="{
+                                    backgroundColor:
+                                      $vuetify.theme.themes[appTheme]
+                                        .standardBackgroundRGBA
+                                  }"
+                                >
+                                  <div
+                                    style="padding: 4px 6px;font-weight:bold;"
+                                  >
+                                    Судят корридор:
+                                  </div>
+                                  <div
+                                    v-for="judge in competition.result_formula
+                                      .types[0].doubleUp_corridors[cor_idx]"
+                                    :key="judge.id"
+                                    style="flex: 0 0 auto; display:flex;flex-wrap: nowrap;align-items: center;margin: 4px 2px 0 2px;border-radius: 2px;padding: 2px 4px"
+                                    :style="{
+                                      backgroundColor:
+                                        $vuetify.theme.themes[appTheme]
+                                          .cardBackgroundRGBA
+                                    }"
+                                  >
+                                    {{ `Судья ${judge.id}` }}
+                                    <v-btn
+                                      @click="
+                                        competition.result_formula.types[0].doubleUp_corridors[
+                                          cor_idx
+                                        ].splice(
+                                          competition.result_formula.types[0].doubleUp_corridors[
+                                            cor_idx
+                                          ].indexOf(judge),
+                                          1
+                                        )
+                                      "
+                                      x-small
+                                      icon
+                                      :color="
+                                        $vuetify.theme.themes[appTheme].error
+                                      "
+                                      style="margin-left: auto"
+                                      ><v-icon small>mdi-minus</v-icon></v-btn
+                                    >
+                                  </div>
+                                </div>
+                              </div></v-dialog
+                            >
+                          </div>
+                        </div>
+                        <div
+                          style="display:flex;flex-wrap: wrap;margin:4px 2px 2px 2px;border-radius: 2px;min-height: 1rem; padding: 4px"
+                          :style="{
+                            backgroundColor:
+                              $vuetify.theme.themes[appTheme]
+                                .standardBackgroundRGBA
+                          }"
+                        >
+                          <div
+                            v-for="judge in competition.result_formula.types[0]
+                              .doubleUp_corridors[cor_idx]"
+                            :key="`cor${cor_idx}_${judge._id}`"
+                            style="padding: 4px 6px; font-weight:bold;font-size: 1.1rem;margin: 0 2px 2px"
+                          >
+                            {{ `C ${judge.id}` }}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    class="pa-1 mr-1 d-flex flex-wrap align-center"
+                    :style="{
+                      backgroundColor:
+                        $vuetify.theme.themes[appTheme].cardBackgroundRGBA
+                    }"
+                    style="border-radius: 0 0 0 6px"
+                  >
+                    <v-hover
+                      v-for="formula in competition.result_formula.types[0]
+                        .formulas"
+                      :key="formula.id"
+                      v-slot:default="{ hover }"
+                    >
+                      <div
+                        @click="
+                          competition.result_formula.types[0].formula =
+                            formula.id;
+                          updateResults();
+                          $store.dispatch('main/updateEvent');
+                        "
+                        class="mr-2 d-flex flex-nowrap align-center"
+                        style="cursor:pointer;"
+                      >
+                        <div
+                          style="height: 1.2rem;width: 1.2rem; border-radius: 50%; transition: background-color 112ms, box-shadow 192ms"
+                          :style="[
+                            {
+                              backgroundColor:
+                                $vuetify.theme.themes[appTheme]
+                                  .standardBackgroundRGBA
+                            },
+                            formula.id ===
+                              competition.result_formula.types[0].formula && {
+                              backgroundColor:
+                                $vuetify.theme.themes[appTheme].success,
+                              boxShadow: `0 0 2px 1px ${$vuetify.theme.themes[appTheme].success}`
+                            }
+                          ]"
+                        ></div>
+                        <div
+                          class="ml-1 font-weight-bold"
+                          v-html="formula.title"
+                        ></div>
+                      </div>
+                    </v-hover>
+                    <div
+                      @click="setDoubleUp()"
+                      style="display:flex;align-items: center;flex-wrap:nowrap;margin-left: auto;padding: 4px 6px;font-weight:bold;cursor:pointer;"
+                    >
+                      <div
+                        style="margin-right: .5rem;height: 1.2rem;width: 1.2rem; border-radius: 50%; transition: background-color 112ms, box-shadow 192ms"
                         :style="[
                           {
-                            border: `2px solid ${$vuetify.theme.themes[appTheme].standardBackgroundRGBA}`,
                             backgroundColor:
                               $vuetify.theme.themes[appTheme]
                                 .standardBackgroundRGBA
                           },
-                          hover && { backgroundColor: `rgba(32, 48, 192, .4)` },
-                          competition.result_formula.type === 1 && {
-                            boxShadow: `0 0 3px 1px ${$vuetify.theme.themes[appTheme].accent}`,
+                          competition.result_formula.types[0].doubleUp && {
                             backgroundColor:
-                              $vuetify.theme.themes[appTheme].accent
+                              $vuetify.theme.themes[appTheme].success,
+                            boxShadow: `0 0 2px 1px ${$vuetify.theme.themes[appTheme].success}`
                           }
                         ]"
                       ></div>
-                      <div
-                        style="margin-left: 1rem;"
-                        v-html="`${competition.result_formula.types[1].title}`"
-                      ></div>
+                      Double Up
                     </div>
-                  </v-hover>
-                  <v-dialog v-model="section_dialog.state" width="420px">
-                    <template v-slot:activator="{ on }">
-                      <v-btn
-                        v-on="on"
-                        text
-                        small
-                        style="flex: 0 0 auto"
-                        :color="$vuetify.theme.themes[appTheme].success"
-                        >Добавить секцию</v-btn
-                      >
-                    </template>
-                    <v-card
-                      class="d-flex flex-column"
+                    <div style="padding: 4px 6px">
+                      <input
+                        type="number"
+                        v-model="competition.result_formula.types[0].cof"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="d-flex flex-column"
+                  style="min-width: 150px;min-height: 100%;border-radius: 0 0 6px 0"
+                  :style="{
+                    backgroundColor:
+                      $vuetify.theme.themes[appTheme].cardBackgroundRGBA
+                  }"
+                >
+                  <div class="pa-2 d-flex align-center">
+                    <label class="font-weight-bold" for="lower_marks"
+                      >Убрать худш.</label
+                    ><input
+                      class="pa-1 ml-2 font-weight-bold"
+                      style="width: 3.8rem; border-radius: 6px"
                       :style="{
                         color: $vuetify.theme.themes[appTheme].textDefault,
                         backgroundColor:
-                          $vuetify.theme.themes[appTheme].cardBackgroundRGBA
+                          $vuetify.theme.themes[appTheme].standardBackgroundRGBA
                       }"
+                      v-model="competition.result_formula.types[0].lower_marks"
+                      id="lower_marks"
+                      type="number"
+                      min="0"
+                      max="12"
+                    />
+                  </div>
+                  <div class="pa-2 d-flex align-center">
+                    <label class="font-weight-bold" for="higher_marks"
+                      >Убрать лучш.</label
+                    ><input
+                      class="pa-1 ml-2 font-weight-bold"
+                      style="width: 3.8rem; border-radius: 6px"
+                      :style="{
+                        color: $vuetify.theme.themes[appTheme].textDefault,
+                        backgroundColor:
+                          $vuetify.theme.themes[appTheme].standardBackgroundRGBA
+                      }"
+                      v-model="competition.result_formula.types[0].higher_marks"
+                      id="higher_marks"
+                      type="number"
+                      min="0"
+                      max="12"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="bySections ml-2 d-flex flex-column"
+            style="width: 50%; min-height: 100px"
+          >
+            <div
+              class="pa-1"
+              style="border-radius: 6px"
+              :style="{
+                backgroundColor:
+                  $vuetify.theme.themes[appTheme].standardBackgroundRGBA
+              }"
+            >
+              <div
+                class="pa-1 d-flex align-center flex-nowrap"
+                style="border-radius: 6px; font-weight:bold; font-size: 1.4rem"
+                :style="{
+                  backgroundColor:
+                    $vuetify.theme.themes[appTheme].cardBackgroundRGBA
+                }"
+              >
+                <v-hover v-slot:default="{ hover }">
+                  <div
+                    @click="setRaceResultFormula(1)"
+                    class="d-flex align-center"
+                    style="flex: 1 0 auto;cursor:pointer"
+                  >
+                    <div
+                      style="height: 1.4rem;width: 1.4rem;border-radius: 50%; transition: background-color 132ms, box-shadow 92ms"
+                      :style="[
+                        {
+                          border: `2px solid ${$vuetify.theme.themes[appTheme].standardBackgroundRGBA}`,
+                          backgroundColor:
+                            $vuetify.theme.themes[appTheme]
+                              .standardBackgroundRGBA
+                        },
+                        hover && { backgroundColor: `rgba(32, 48, 192, .4)` },
+                        competition.result_formula.type === 1 && {
+                          boxShadow: `0 0 3px 1px ${$vuetify.theme.themes[appTheme].accent}`,
+                          backgroundColor:
+                            $vuetify.theme.themes[appTheme].accent
+                        }
+                      ]"
+                    ></div>
+                    <div
+                      style="margin-left: 1rem;"
+                      v-html="`${competition.result_formula.types[1].title}`"
+                    ></div>
+                  </div>
+                </v-hover>
+                <v-dialog v-model="section_dialog.state" width="420px">
+                  <template v-slot:activator="{ on }">
+                    <v-btn
+                      v-on="on"
+                      text
+                      small
+                      style="flex: 0 0 auto"
+                      :color="$vuetify.theme.themes[appTheme].success"
+                      >Добавить секцию</v-btn
                     >
-                      <v-card-title class="pa-2 d-flex align-center">
-                        <div>Создание секции</div>
-                        <v-spacer></v-spacer>
-                        <v-btn
-                          icon
-                          @click="
-                            () => {
-                              section_dialog.state = false;
-                              section_dialog.section.coefficient = 1;
-                              updateResults();
-                            }
-                          "
-                          :color="$vuetify.theme.themes[appTheme].action_red"
-                        >
-                          <v-icon>mdi-close</v-icon>
-                        </v-btn>
-                      </v-card-title>
-                      <div class="pa-2 d-flex flex-column">
-                        <div class="pa-1 d-flex align-center">
-                          <div class="pa-2 d-flex align-center">
-                            Коэффициент
-                            <input
-                              class="pa-1 ml-2"
-                              type="number"
-                              step="0.05"
-                              style="border-radius: 2px; width: 4rem; font-weight: bold;"
-                              v-model="section_dialog.section.coefficient"
-                              :style="{
-                                color:
-                                  $vuetify.theme.themes[appTheme].textDefault,
-                                backgroundColor:
-                                  $vuetify.theme.themes[appTheme]
-                                    .standardBackgroundRGBA
-                              }"
-                            />
-                          </div>
-                          <v-spacer></v-spacer>
-                          <div
-                            class="d-flex flex-wrap align-center flex-grow-1"
-                            style="border-radius: 2px"
+                  </template>
+                  <v-card
+                    class="d-flex flex-column"
+                    :style="{
+                      color: $vuetify.theme.themes[appTheme].textDefault,
+                      backgroundColor:
+                        $vuetify.theme.themes[appTheme].cardBackgroundRGBA
+                    }"
+                  >
+                    <v-card-title class="pa-2 d-flex align-center">
+                      <div>Создание секции</div>
+                      <v-spacer></v-spacer>
+                      <v-btn
+                        icon
+                        @click="
+                          () => {
+                            section_dialog.state = false;
+                            section_dialog.section.coefficient = 1;
+                            updateResults();
+                          }
+                        "
+                        :color="$vuetify.theme.themes[appTheme].action_red"
+                      >
+                        <v-icon>mdi-close</v-icon>
+                      </v-btn>
+                    </v-card-title>
+                    <div class="pa-2 d-flex flex-column">
+                      <div class="pa-1 d-flex align-center">
+                        <div class="pa-2 d-flex align-center">
+                          Коэффициент
+                          <input
+                            class="pa-1 ml-2"
+                            type="number"
+                            step="0.05"
+                            style="border-radius: 2px; width: 4rem; font-weight: bold;"
+                            v-model="section_dialog.section.coefficient"
                             :style="{
+                              color:
+                                $vuetify.theme.themes[appTheme].textDefault,
                               backgroundColor:
                                 $vuetify.theme.themes[appTheme]
                                   .standardBackgroundRGBA
                             }"
-                          >
-                            <div
-                              class="d-flex align-center"
-                              v-for="judge in competition.stuff.judges.filter(
-                                _judge => {
-                                  return (
-                                    !competition.result_formula.types[1].sections.some(
-                                      section => {
-                                        return section.judges.includes(_judge);
-                                      }
-                                    ) &&
-                                    !section_dialog.section.judges_to_add.includes(
-                                      _judge
-                                    )
-                                  );
-                                }
-                              )"
-                              :key="judge.id"
-                            >
-                              <div
-                                @click="
-                                  section_dialog.section.judges_to_add.push(
-                                    judge
-                                  );
-                                  updateResults();
-                                "
-                                class="ma-1 d-flex align-center justify-center font-weight-bold"
-                                style="height: 2rem; width: 4rem; font-size: 0.8rem; border-radius: 2px; cursor:pointer;"
-                                :style="{
-                                  backgroundColor:
-                                    $vuetify.theme.themes[appTheme]
-                                      .subjectBackgroundRGBA
-                                }"
-                                v-html="`Судья ${judge.id}`"
-                              ></div>
-                            </div>
-                          </div>
+                          />
                         </div>
+                        <v-spacer></v-spacer>
                         <div
-                          class="pa-1 d-flex flex-wrap align-center"
-                          style="border-radius: 6px"
+                          class="d-flex flex-wrap align-center flex-grow-1"
+                          style="border-radius: 2px"
                           :style="{
                             backgroundColor:
                               $vuetify.theme.themes[appTheme]
@@ -721,16 +871,21 @@
                         >
                           <div
                             class="d-flex align-center"
-                            v-for="(judge_to_add, jta) in section_dialog.section
-                              .judges_to_add"
-                            :key="jta"
+                            v-for="judge in competition.stuff.judges.filter(
+                              _judge => {
+                                return !section_dialog.section.judges_to_add.includes(
+                                  _judge
+                                );
+                              }
+                            )"
+                            :key="judge.id"
                           >
                             <div
                               @click="
-                                section_dialog.section.judges_to_add.splice(
-                                  jta,
-                                  1
-                                )
+                                section_dialog.section.judges_to_add.push(
+                                  judge
+                                );
+                                updateResults();
                               "
                               class="ma-1 d-flex align-center justify-center font-weight-bold"
                               style="height: 2rem; width: 4rem; font-size: 0.8rem; border-radius: 2px; cursor:pointer;"
@@ -739,120 +894,157 @@
                                   $vuetify.theme.themes[appTheme]
                                     .subjectBackgroundRGBA
                               }"
-                              v-html="`Судья ${judge_to_add.id}`"
+                              v-html="`Судья ${judge.id}`"
                             ></div>
                           </div>
                         </div>
                       </div>
-                      <v-card-actions class="d-flex">
-                        <v-spacer></v-spacer>
-                        <v-btn
-                          text
-                          @click="
-                            section_dialog.section.judges_to_add.length > 0 &&
-                              (() => {
-                                competition.result_formula.types[1].sections.push(
-                                  {
-                                    id: Math.random()
-                                      .toString(36)
-                                      .substr(2, 9),
-                                    coefficient:
-                                      section_dialog.section.coefficient,
-                                    judges: section_dialog.section.judges_to_add
-                                  }
-                                );
-                                section_dialog.state = false;
-                                section_dialog.section.coefficient = 1;
-                                section_dialog.section.judges_to_add = [];
-                              })()
-                          "
-                          :color="$vuetify.theme.themes[appTheme].success"
-                          >Создать
-                        </v-btn>
-                      </v-card-actions>
-                    </v-card>
-                  </v-dialog>
-                </div>
-                <div
-                  class="d-flex flex-column"
-                  style="min-height: 100px; margin-top: .5rem"
-                >
-                  <div class="d-flex align-center align-start">
-                    <div
-                      style="margin: 0 .5rem .5rem 0"
-                      v-for="(section, sc) in competition.result_formula
-                        .types[1].sections"
-                      :key="sc"
-                    >
                       <div
-                        class="pa-2 pr-4 d-flex flex-column"
-                        style="border-radius: 6px;position:relative;"
+                        class="pa-1 d-flex flex-wrap align-center"
+                        style="border-radius: 6px"
                         :style="{
                           backgroundColor:
-                            $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
-                          border: `1px solid ${$vuetify.theme.themes[appTheme].accent}`
+                            $vuetify.theme.themes[appTheme]
+                              .standardBackgroundRGBA
                         }"
                       >
                         <div
-                          class="d-flex justify-center align-center"
-                          style="position: absolute; top: 0;right: 0;"
+                          class="d-flex align-center"
+                          v-for="(judge_to_add, jta) in section_dialog.section
+                            .judges_to_add"
+                          :key="jta"
                         >
-                          <v-icon
+                          <div
                             @click="
-                              competition.result_formula.types[1].sections = competition.result_formula.types[1].sections.filter(
-                                _section => {
-                                  return _section.id !== section.id;
-                                }
-                              );
-                              updateResults();
-                              $store.dispatch('main/updateEvent');
+                              section_dialog.section.judges_to_add.splice(
+                                jta,
+                                1
+                              )
                             "
-                            small
-                            :color="$vuetify.theme.themes[appTheme].action_red"
-                            >mdi-close
-                          </v-icon>
-                        </div>
-                        <div class="d-flex align-center flex-nowrap">
-                          <div class="font-weight-bold" v-html="`Kоэф`"></div>
-                          <input
-                            type="number"
-                            step="0.05"
-                            class="ml-2 py-1 px-2"
-                            style="width: 5rem;border-radius: 6px"
+                            class="ma-1 d-flex align-center justify-center font-weight-bold"
+                            style="height: 2rem; width: 4rem; font-size: 0.8rem; border-radius: 2px; cursor:pointer;"
                             :style="{
-                              color:
-                                $vuetify.theme.themes[appTheme].textDefault,
                               backgroundColor:
                                 $vuetify.theme.themes[appTheme]
-                                  .standardBackgroundRGBA
+                                  .subjectBackgroundRGBA
                             }"
-                            v-model="section.coefficient"
-                          />
+                          >
+                            {{ `Судья ${judge_to_add.id}` }}
+                          </div>
                         </div>
-                        <div
-                          class="mt-2 d-flex align-center flex-wrap"
-                          style="border-radius: 6px"
+                      </div>
+                    </div>
+                    <v-card-actions class="d-flex">
+                      <v-spacer></v-spacer>
+                      <v-btn
+                        text
+                        @click="
+                          section_dialog.section.judges_to_add.length > 0 &&
+                            (() => {
+                              competition.result_formula.types[1].sections.push(
+                                {
+                                  id: Math.random()
+                                    .toString(36)
+                                    .substr(2, 9),
+                                  coefficient:
+                                    section_dialog.section.coefficient,
+                                  judges: section_dialog.section.judges_to_add,
+                                  s_num:
+                                    competition.result_formula.types[1].sections
+                                      .length
+                                }
+                              );
+                              section_dialog.state = false;
+                              section_dialog.section.coefficient = 1;
+                              section_dialog.section.judges_to_add = [];
+                            })()
+                        "
+                        :color="$vuetify.theme.themes[appTheme].success"
+                        >Создать
+                      </v-btn>
+                    </v-card-actions>
+                  </v-card>
+                </v-dialog>
+              </div>
+              <div
+                class="d-flex flex-column"
+                style="min-height: 100px; margin-top: .5rem"
+              >
+                <div class="d-flex align-center flex-wrap">
+                  <div
+                    style="margin: 0 .5rem .5rem 0"
+                    v-for="(section, sc) in competition.result_formula.types[1]
+                      .sections"
+                    :key="sc"
+                  >
+                    <div
+                      class="pa-2 pr-4 d-flex flex-column"
+                      style="border-radius: 6px;position:relative;"
+                      :style="{
+                        backgroundColor:
+                          $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
+                        border: `1px solid ${$vuetify.theme.themes[appTheme].accent}`
+                      }"
+                    >
+                      <div
+                        class="d-flex justify-center align-center"
+                        style="position: absolute; top: 0;right: 0;"
+                      >
+                        <v-icon
+                          @click="
+                            competition.result_formula.types[1].sections = competition.result_formula.types[1].sections.filter(
+                              _section => {
+                                return _section.id !== section.id;
+                              }
+                            );
+                            updateResults();
+                            $store.dispatch('main/updateEvent');
+                          "
+                          small
+                          :color="$vuetify.theme.themes[appTheme].action_red"
+                          >mdi-close
+                        </v-icon>
+                      </div>
+                      <div class="d-flex align-center flex-nowrap">
+                        <div class="font-weight-bold">Kоэф.</div>
+                        <input
+                          type="number"
+                          step="0.05"
+                          class="ml-2 py-1 px-2"
+                          style="width: 5rem;border-radius: 6px"
                           :style="{
+                            color: $vuetify.theme.themes[appTheme].textDefault,
                             backgroundColor:
                               $vuetify.theme.themes[appTheme]
                                 .standardBackgroundRGBA
                           }"
+                          v-model="section.coefficient"
+                        />
+                      </div>
+                      <div
+                        class="mt-2 d-flex align-center flex-wrap"
+                        style="border-radius: 6px"
+                        :style="{
+                          backgroundColor:
+                            $vuetify.theme.themes[appTheme]
+                              .standardBackgroundRGBA
+                        }"
+                      >
+                        <div
+                          class="ma-1 d-flex align-center"
+                          v-for="(section_judge, sj) in section.judges"
+                          :key="sj"
                         >
                           <div
-                            class="ma-1 d-flex align-center"
-                            v-for="(section_judge, sj) in section.judges"
-                            :key="sj"
+                            class="ma-1 d-flex align-center justify-center font-weight-bold"
+                            style="height: 2rem; width: 4rem; font-size: 0.8rem; border-radius: 2px; cursor:pointer;"
+                            :style="{
+                              backgroundColor:
+                                $vuetify.theme.themes[appTheme]
+                                  .subjectBackgroundRGBA
+                            }"
                           >
-                            <div
-                              class="ma-1 d-flex align-center justify-center font-weight-bold"
-                              style="height: 2rem; width: 4rem; font-size: 0.8rem; border-radius: 2px; cursor:pointer;"
-                              :style="{
-                                backgroundColor:
-                                  $vuetify.theme.themes[appTheme]
-                                    .subjectBackgroundRGBA
-                              }"
-                              v-html="`Судья ${section_judge.id}`"
-                            ></div>
+                            {{ `Судья ${section_judge.id}` }}
                           </div>
                         </div>
                       </div>
@@ -867,10 +1059,17 @@
       <!-- НАСТРОЙКА ФОРМУЛЫ ЗАЕЗДА //-->
 
       <!--// НАСТРОЙКА ФОРМУЛЫ ЭТАПА -->
-      <div class="pa-2 d-flex flex-column">
-        <v-card-title style="padding: .5rem 1rem"
-          >Формула подсчёта результата этапа</v-card-title
-        >
+      <div
+        class="pa-2 d-flex flex-column"
+        style="border-radius: 6px; margin-top: 1rem;"
+        :style="{
+          backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA
+        }"
+      >
+        <v-card-title style="padding: 0 1rem .5rem 1rem">
+          Формула подсчёта результата этапа
+        </v-card-title>
+
         <div
           class="pa-1 d-flex flex-nowrap"
           style="border-radius: 6px"
@@ -1148,6 +1347,10 @@ export default {
       this.updateResults();
       this.$store.dispatch("main/updateEvent");
     },
+    setDoubleUp() {
+      this.competition.result_formula.types[0].doubleUp = !this.competition
+        .result_formula.types[0].doubleUp;
+    },
     updateResults() {
       this.competition.races.forEach(race => {
         race.finished.forEach(fin_competitor => {
@@ -1178,7 +1381,8 @@ export default {
       competition: "competition",
       competitions: "competitions",
       appTheme: "appTheme"
-    })
+    }),
+    console: () => console
   }
 };
 </script>

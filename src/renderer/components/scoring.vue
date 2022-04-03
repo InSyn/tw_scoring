@@ -14,7 +14,13 @@
       style="height: 30%; min-height: 200px"
     >
       <start-list></start-list>
-      <on-race></on-race> </v-row
+      <double-up
+        v-if="
+          competition.result_formula.type === 0 &&
+            competition.result_formula.types[0].doubleUp
+        "
+      ></double-up>
+      <on-race v-else></on-race> </v-row
     ><v-row
       v-if="!mode_timing"
       no-gutters
@@ -37,10 +43,12 @@ import onRace from "./scoring/onRace";
 import displayControlPanel from "./scoring/displayControlPanel";
 import finishTable from "./scoring/finishTable";
 import timing from "./timing";
+import DoubleUp from "./scoring/onRace/doubleUp";
 
 export default {
   name: "scoring",
   components: {
+    DoubleUp,
     setup,
     chat,
     marksList,

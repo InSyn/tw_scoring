@@ -140,7 +140,32 @@ io.on("connection", socket => {
     }
     io.sockets.emit("competition_data_updated", competition);
   });
+  socket.on("set_mark_to_corr", data => {
+    let race = competition.races.find(_race => _race.id === data[0].race_id);
+    let competitor = competition.competitorsSheet.competitors.find(_comp => {
+      return _comp.id === data[1];
+    });
+    if (
+      data[1] &&
+      !competitor.marks.some(_mark => {
+        return (
+          _mark.judge_id === data[0].judge_id &&
+          _mark.race_id === data[0].race_id
+        );
+      })
+    ) {
+      competitor.marks.push(data[0]);
+    } else {
+      competitor.marks.find(markToChange => {
+        return (
+          markToChange.judge_id === data[0].judge_id &&
+          markToChange.race_id === data[0].race_id
+        );
+      }).value = data[0].value;
+    }
 
+    io.sockets.emit("competition_data_updated", competition);
+  });
   socket.on("set_mark", mark => {
     let race = competition.races.find(_race => _race.id === mark.race_id);
     let competitor = competition.competitorsSheet.competitors.find(_comp => {

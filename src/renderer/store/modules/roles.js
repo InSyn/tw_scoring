@@ -20,7 +20,7 @@ export default {
       rank = null;
     },
     MarkClass: class {
-      constructor(race, race_id, judge, judge_id, value) {
+      constructor(race, race_id, judge, judge_id, value, section) {
         this.id = Math.random()
           .toString(36)
           .substr(2, 9);
@@ -30,6 +30,7 @@ export default {
         this.race_id = race_id;
         this.judge = judge;
         this.judge_id = judge_id;
+        this.section = section || 0;
       }
     },
     JuryClass: class {

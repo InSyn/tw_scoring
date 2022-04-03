@@ -31,12 +31,26 @@
             >Server ON</v-btn
           >
           <v-btn
-            @click="dbUpdateCompetitionLive(competitions, event_id)"
+            @click="setUpdater(competitions, event_id, live_config)"
             class="ml-2"
             depressed
-            style="font-size: 1rem;height: 2rem; border-radius: 2px"
-            :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
-            :color="$vuetify.theme.themes[appTheme].action_green"
+            style="font-size: 1rem;height: 2rem; border-radius: 2px;transition: background-color 192ms"
+            :style="[
+              {
+                color: $vuetify.theme.themes[appTheme].textDefault,
+                border: `1px solid ${$vuetify.theme.themes[appTheme].standardBackgroundRGBA}`
+              },
+              live_config.update_live && {
+                border: `1px solid ${$vuetify.theme.themes[appTheme].success}`
+              }
+            ]"
+            :color="
+              live_config.updateLive_Indicator
+                ? live_config.updateLive_Indicator === 'ok'
+                  ? $vuetify.theme.themes[appTheme].success
+                  : $vuetify.theme.themes[appTheme].error
+                : $vuetify.theme.themes[appTheme].standardBackgroundRGBA
+            "
             >Update</v-btn
           >
         </div>
@@ -223,7 +237,6 @@ export default {
           };
         })
       };
-      // console.log(live_event);
       await axios
         .post("https://live-timingweb.cf/api/v1/events", live_event)
         .then(response => {
@@ -233,7 +246,7 @@ export default {
           console.log(e);
         });
     },
-    dbUpdateCompetitionLive: async (competitions, event_id) => {
+    dbUpdateCompetitionLive(competitions, event_id) {
       const live_event = {
         event_id: event_id,
         title: competitions[0].mainData.title.value,
@@ -315,17 +328,36 @@ export default {
           };
         })
       };
-      await axios
+      axios
         .patch(
           `https://live-timingweb.cf/api/v1/events/${live_event.event_id}`,
           live_event
         )
         .then(response => {
           console.log(response);
+          this.live_config.updateLive_Indicator = "ok";
+          setTimeout(() => {
+            this.live_config.updateLive_Indicator = false;
+          }, 192);
+          if (this.live_config.update_live)
+            setTimeout(() => {
+              this.dbUpdateCompetitionLive(competitions, event_id);
+            }, 2560);
         })
         .catch(e => {
+          this.live_config.updateLive_Indicator = "err";
+          setTimeout(() => {
+            this.live_config.updateLive_Indicator = false;
+          }, 192);
+          this.live_config.update_live = false;
           console.log(e);
         });
+    },
+    setUpdater(competitions, event_id) {
+      if (!this.live_config.update_live) {
+        this.live_config.update_live = true;
+        this.dbUpdateCompetitionLive(competitions, event_id);
+      } else this.live_config.update_live = false;
     }
   },
   data() {
@@ -335,6 +367,7 @@ export default {
   },
   computed: {
     ...mapGetters("main", {
+      live_config: "live_config",
       event_id: "event_id",
       competition: "competition",
       competitions: "competitions",

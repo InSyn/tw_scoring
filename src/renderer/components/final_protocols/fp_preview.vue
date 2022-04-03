@@ -120,6 +120,7 @@
                 >
                   {{ gridRow.title }}
                 </div>
+
                 <div
                   v-if="gridRow.type && gridRow.type === 'competitorResult'"
                   v-for="(header, h_idx) in competition.protocol_settings

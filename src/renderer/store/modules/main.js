@@ -17,7 +17,16 @@ export default {
     competitions: [],
     live_config: {
       status: false,
+      update_live: false,
+      updateLive_Indicator: false,
       _id: null
+    },
+    terminals: {
+      listenTerminals: false,
+      terminalsListener: {
+        listener: null,
+        indicator: null
+      }
     },
     showPreview: false,
     showMenu: true,
@@ -94,6 +103,8 @@ export default {
     serverMessages: state => state.serverMessages,
     showMenu: state => state.showMenu,
     event_id: state => state.event_id,
+    live_config: state => state.live_config,
+    terminals: state => state.terminals,
     competitions: state => state.competitions,
     competition: state => state.competition,
     showPreview: state => state.showPreview,

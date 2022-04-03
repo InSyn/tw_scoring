@@ -73,11 +73,12 @@
         </div>
         <div style="font-size: 1.2rem; font-weight: bold; line-height: 1.2">
           {{
-            `${competition.mainData.date.value.toString().split("-")[2]}/${
-              competition.mainData.date.value.toString().split("-")[1]
-            }/${
-              competition.mainData.date.value.toString().split("-")[0]
-            } Время старта: ${competition.mainData.date.time}`
+            // `${competition.mainData.date.value.toString().split("-")[2]}/${
+            //   competition.mainData.date.value.toString().split("-")[1]
+            // }/${
+            //   competition.mainData.date.value.toString().split("-")[0]
+            // }
+            `Время старта: ${competition.mainData.date.time}`
           }}
         </div>
       </div>
