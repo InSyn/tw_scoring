@@ -9,6 +9,7 @@ if (process.env.NODE_ENV !== "development") {
     .join(__dirname, "/static")
     .replace(/\\/g, "\\\\");
 }
+
 let mainWindow;
 const winURL =
   process.env.NODE_ENV === "development"
@@ -26,8 +27,8 @@ function createWindow() {
     webPreferences: {
       webSecurity: false,
       nodeIntegration: true,
-      nodeIntegrationInWorker: true
-    }
+      nodeIntegrationInWorker: true,
+    },
   });
 
   mainWindow.loadURL(winURL);
