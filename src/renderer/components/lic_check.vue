@@ -15,6 +15,9 @@
 <script>
 export default {
   name: "lic_check",
+  mounted() {
+    console.log("lic");
+  }
 };
 </script>
 

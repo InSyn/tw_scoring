@@ -1,5 +1,3 @@
-import competitors from "../../components/competitors";
-
 export default {
   namespaced: true,
   state: {

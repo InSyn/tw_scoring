@@ -19,7 +19,8 @@
         @click="changeMenuState"
         style="margin-right: 1rem"
         icon
-        ><v-icon v-html="showMenu ? 'mdi-backburger' : 'mdi-menu'"></v-icon>
+      >
+        <v-icon v-html="showMenu ? 'mdi-backburger' : 'mdi-menu'"></v-icon>
       </v-btn>
       <v-btn
         text
@@ -32,7 +33,8 @@
         min-width="0"
         width="48"
         :color="$vuetify.theme.themes[appTheme].accent"
-        ><v-icon>mdi-content-save</v-icon>
+      >
+        <v-icon>mdi-content-save</v-icon>
       </v-btn>
 
       <v-btn
@@ -41,8 +43,10 @@
         min-width="0"
         width="48"
         :color="$vuetify.theme.themes[appTheme].accent"
-        ><label style="display: block;height: 100%;width: 100%; cursor:pointer;"
-          ><v-icon>mdi-download</v-icon>
+        ><label
+          style="display: block;height: 100%;width: 100%; cursor:pointer;"
+        >
+          <v-icon>mdi-download</v-icon>
           <input
             :key="Math.random()"
             @change="
@@ -50,9 +54,9 @@
             "
             type="file"
             accept="application/json"
-            hidden
-        /></label> </v-btn
-      ><v-dialog
+            hidden/></label
+      ></v-btn>
+      <v-dialog
         width="540"
         v-if="competition"
         v-model="create_competition_dialog.state"
@@ -60,8 +64,9 @@
         style="position:relative; z-index: 1001"
         :overlay-color="$vuetify.theme.themes[appTheme].accent"
         :overlay-opacity="0.1"
-        ><template v-slot:activator="{ on, attrs }"
-          ><v-btn
+      >
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
             v-on="on"
             @click="initCreateDialog()"
             style="margin-left:2rem"
@@ -69,8 +74,8 @@
             :color="$vuetify.theme.themes[appTheme].accent"
           >
             <v-icon>mdi-folder-plus</v-icon>
-          </v-btn></template
-        >
+          </v-btn>
+        </template>
         <div
           :style="{
             backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
@@ -78,8 +83,8 @@
           }"
         >
           <v-card-title class="ma-0 pt-2 pb-0 px-4"
-            >Создание соревнования</v-card-title
-          >
+            >Создание соревнования
+          </v-card-title>
           <div
             style="display:flex; flex-direction: column; border-radius: 6px;margin: 1rem"
             :style="{
@@ -174,8 +179,8 @@
                           ]"
                         >
                           {{ stage.title }}
-                        </div></v-hover
-                      >
+                        </div>
+                      </v-hover>
                     </div>
                     <div>
                       {{ input.value && input.value.title }}
@@ -349,27 +354,29 @@
                   >
                     {{ check.title }}
                   </div>
-                </v-btn></v-hover
-              >
+                </v-btn>
+              </v-hover>
             </div>
           </div>
           <v-card-actions
             style="display:flex;align-items: center;justify-content: flex-end;flex-wrap: nowrap"
-            ><v-btn
+          >
+            <v-btn
               text
               small
               @click="create_competition_dialog.state = false"
               :color="$vuetify.theme.themes[appTheme].error"
-              >Отмена</v-btn
-            ><v-btn
+              >Отмена
+            </v-btn>
+            <v-btn
               small
               @click="createNewCompetition()"
               :color="$vuetify.theme.themes[appTheme].success"
-              >Создать</v-btn
-            ></v-card-actions
-          >
-        </div></v-dialog
-      >
+              >Создать
+            </v-btn>
+          </v-card-actions>
+        </div>
+      </v-dialog>
       <div
         tabindex="0"
         @focus="competition_select = true"
@@ -418,8 +425,8 @@
                 }}
               </div>
             </div>
-          </div></v-hover
-        >
+          </div>
+        </v-hover>
 
         <div
           v-if="competitions.some(_comp => _comp.id !== competition.id)"
@@ -483,8 +490,8 @@
                   .title.stage.value &&
                   _competition.mainData.title.stage.value.value}`
               }}
-            </div></v-hover
-          >
+            </div>
+          </v-hover>
         </div>
       </div>
 
@@ -526,8 +533,9 @@
         @click="changeTheme()"
         :color="$vuetify.theme.themes[appTheme].accent"
         icon
-        ><v-icon>mdi-brightness-6</v-icon></v-btn
       >
+        <v-icon>mdi-brightness-6</v-icon>
+      </v-btn>
     </header>
     <main style="position:relative;">
       <div
@@ -579,8 +587,9 @@
                 "
                 v-html="icons[page.icon]"
               ></v-icon>
-              <div class="text-no-wrap ml-3" v-html="page.title"></div></div
-          ></v-hover>
+              <div class="text-no-wrap ml-3" v-html="page.title"></div>
+            </div>
+          </v-hover>
         </router-link>
       </div>
       <router-view class="window"></router-view>
@@ -594,9 +603,9 @@
       }"
     >
       Created by TimingWeb &copy;
-      <span class="ml-2">{{ new Date().getFullYear() }}</span
-      ><v-spacer></v-spacer
-      ><span
+      <span class="ml-2">{{ new Date().getFullYear() }}</span>
+      <v-spacer></v-spacer>
+      <span
         v-if="timer"
         :style="{ color: `${$vuetify.theme.themes[appTheme].accent}` }"
         v-html="`${timer.hrs}:${timer.min}:${timer.sec}`"
@@ -617,6 +626,7 @@ import {
   mdiTrophyVariant
 } from "@mdi/js";
 import fs from "fs";
+
 const { ipcRenderer } = require("electron");
 const { app } = require("electron").remote;
 
@@ -682,7 +692,7 @@ export default {
       }
     },
     first_competition_setup(competition) {
-      competition.mainData.discipline.value = "DISCIPLINE";
+      competition.mainData.discipline.value = "Дисциплина";
       competition.mainData.discipline.min = "DSC";
       competition.mainData.country.value = "RUS";
       competition.mainData.location.value = "Krasnoyarsk";
@@ -863,6 +873,7 @@ export default {
 * {
   /*border: 2px solid #25c2b4;*/
 }
+
 #app {
   position: relative;
   display: flex;
@@ -872,49 +883,61 @@ export default {
   height: 100vh;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
   * {
     &::-webkit-scrollbar {
       width: 6px;
       height: 6px;
     }
+
     &::-webkit-scrollbar-track {
       background: transparent;
     }
+
     &::-webkit-scrollbar-thumb {
       background: #3b70a9;
     }
+
     &::-webkit-scrollbar-thumb:hover {
       background: #3a82ba;
     }
   }
+
   header {
     width: 100%;
     height: 54px;
   }
+
   main {
     display: flex;
     flex-wrap: nowrap;
     height: calc(100vh - 92px);
     overflow-x: auto;
+
     .menu {
       text-decoration: none;
     }
+
     .window {
       overflow-y: auto;
       flex-grow: 1;
     }
   }
+
   footer {
     width: 100%;
     height: 38px;
   }
 }
+
 .menuExpand-enter-active,
 .menuExpand-leave-active {
   width: 320px;
   transition: width 0.5s;
 }
-.menuExpand-enter, .menuExpand-leave-to /* .fade-leave-active до версии 2.1.8 */ {
+
+.menuExpand-enter, .menuExpand-leave-to /* .fade-leave-active до версии 2.1.8 */
+ {
   width: 1px;
 }
 </style>

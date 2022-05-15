@@ -20,6 +20,18 @@ function createWindow() {
   /**
    * Initial window options
    */
+  let licenseFrame = new BrowserWindow({
+    width: 720,
+    height: 480
+  });
+  licenseFrame.loadURL(
+    `${
+      process.env.NODE_ENV === "development"
+        ? `http://localhost:9080/#/lic_check`
+        : `file://${__dirname}/index.html#lic_check`
+    }`
+  );
+
   mainWindow = new BrowserWindow({
     show: false,
     width: 1650,
@@ -27,8 +39,8 @@ function createWindow() {
     webPreferences: {
       webSecurity: false,
       nodeIntegration: true,
-      nodeIntegrationInWorker: true,
-    },
+      nodeIntegrationInWorker: true
+    }
   });
 
   mainWindow.loadURL(winURL);
