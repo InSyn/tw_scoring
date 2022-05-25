@@ -1,4 +1,5 @@
-import { app, ipcMain, BrowserWindow } from "electron";
+import { app, BrowserWindow } from "electron";
+const si = require("systeminformation");
 
 /**
  * Set `__static` path to static files in production
@@ -20,18 +21,6 @@ function createWindow() {
   /**
    * Initial window options
    */
-  let licenseFrame = new BrowserWindow({
-    width: 720,
-    height: 480
-  });
-  licenseFrame.loadURL(
-    `${
-      process.env.NODE_ENV === "development"
-        ? `http://localhost:9080/#/lic_check`
-        : `file://${__dirname}/index.html#lic_check`
-    }`
-  );
-
   mainWindow = new BrowserWindow({
     show: false,
     width: 1650,
@@ -39,8 +28,8 @@ function createWindow() {
     webPreferences: {
       webSecurity: false,
       nodeIntegration: true,
-      nodeIntegrationInWorker: true
-    }
+      nodeIntegrationInWorker: true,
+    },
   });
 
   mainWindow.loadURL(winURL);
@@ -53,6 +42,17 @@ function createWindow() {
 }
 
 app.on("ready", createWindow);
+
+app.on("getSysData", () => {
+  si.baseboard()
+    .then((data) => {
+      console.log(data);
+      mainWindow.webContents.send("sysData", data);
+    })
+    .catch((err) => {
+      throw err;
+    });
+});
 
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") {
@@ -68,6 +68,7 @@ app.on("activate", () => {
 
 export { mainWindow, app };
 
+import "./lic_server";
 import "./socket_setup";
 
 /**

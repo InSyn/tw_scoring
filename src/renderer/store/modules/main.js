@@ -5,10 +5,15 @@ import router from "./../../router";
 export default {
   namespaced: true,
   state: {
+    _licData: {
+      state: false,
+      user: "",
+      key: "",
+    },
     mode_timing: false,
     server_config: {
       ip: "127.0.0.1",
-      port: "3000"
+      port: "3000",
     },
     socket: null,
     opened_sockets: [],
@@ -19,14 +24,14 @@ export default {
       status: false,
       update_live: false,
       updateLive_Indicator: false,
-      _id: null
+      _id: null,
     },
     terminals: {
       listenTerminals: false,
       terminalsListener: {
         listener: null,
-        indicator: null
-      }
+        indicator: null,
+      },
     },
     showPreview: false,
     showMenu: true,
@@ -39,33 +44,33 @@ export default {
       {
         icon: "viewDashboard",
         title: "Событие",
-        link: "competition_settings"
+        link: "competition_settings",
       },
       {
         icon: "cog",
         title: "Настройки",
-        link: "settings"
+        link: "settings",
       },
       {
         icon: "accountGroup",
         title: "Участники",
-        link: "competitors"
+        link: "competitors",
       },
       {
         icon: "clipboardList",
         title: "Заезды",
-        link: "start_protocols"
+        link: "start_protocols",
       },
       {
         icon: "numeric10BoxMultiple",
         title: "Скоринг",
-        link: "scoring"
+        link: "scoring",
       },
       {
         icon: "trophyVariant",
         title: "Протоколы",
-        link: "protocols"
-      }
+        link: "protocols",
+      },
     ],
     timer: {
       sec: null,
@@ -91,30 +96,31 @@ export default {
         setTimeout(() => {
           this.ticker();
         }, 1000);
-      }
-    }
+      },
+    },
   },
 
   getters: {
-    mode_timing: state => state.mode_timing,
-    server_config: state => state.server_config,
-    socket: state => state.socket,
-    opened_sockets: state => state.opened_sockets,
-    serverMessages: state => state.serverMessages,
-    showMenu: state => state.showMenu,
-    event_id: state => state.event_id,
-    live_config: state => state.live_config,
-    terminals: state => state.terminals,
-    competitions: state => state.competitions,
-    competition: state => state.competition,
-    showPreview: state => state.showPreview,
-    serverStatus: state => state.serverStatus,
-    serverStatusChecker: state => state.serverStatusChecker,
-    appTheme: state => state.appTheme,
-    appMenu: state => state.appMenu,
-    messages: state => state.messages,
-    timer: state => state.timer,
-    startList: state => {
+    _licData: (state) => state._licData,
+    mode_timing: (state) => state.mode_timing,
+    server_config: (state) => state.server_config,
+    socket: (state) => state.socket,
+    opened_sockets: (state) => state.opened_sockets,
+    serverMessages: (state) => state.serverMessages,
+    showMenu: (state) => state.showMenu,
+    event_id: (state) => state.event_id,
+    live_config: (state) => state.live_config,
+    terminals: (state) => state.terminals,
+    competitions: (state) => state.competitions,
+    competition: (state) => state.competition,
+    showPreview: (state) => state.showPreview,
+    serverStatus: (state) => state.serverStatus,
+    serverStatusChecker: (state) => state.serverStatusChecker,
+    appTheme: (state) => state.appTheme,
+    appMenu: (state) => state.appMenu,
+    messages: (state) => state.messages,
+    timer: (state) => state.timer,
+    startList: (state) => {
       return (
         (state.competition.protocol_settings.start_protocols.filters
           .race_filter &&
@@ -124,7 +130,7 @@ export default {
         []
       );
     },
-    stageGrid: state => {
+    stageGrid: (state) => {
       function flatten(arr) {
         return arr.reduce((flat, toFlatten) => {
           return flat.concat(
@@ -134,60 +140,62 @@ export default {
       }
       return state.competition.stages.stage_grid
         ? state.competition.stages.stage_grid
-            .map(stage => {
+            .map((stage) => {
               return {
                 title: { type: "stageTitle", title: stage.title },
-                s_competitors: stage.s_competitions.map(_competition =>
+                s_competitors: stage.s_competitions.map((_competition) =>
                   state.competitions.find(
-                    competition => competition.id === _competition
+                    (competition) => competition.id === _competition
                   ).races.length > 0
                     ? state.competitions
-                        .find(competition => competition.id === _competition)
+                        .find((competition) => competition.id === _competition)
                         .getSortedByRank(
                           state.competitions
                             .find(
-                              competition => competition.id === _competition
+                              (competition) => competition.id === _competition
                             )
                             .races[
                               state.competitions.find(
-                                competition => competition.id === _competition
+                                (competition) => competition.id === _competition
                               ).races.length - 1
-                            ].finished.map(c_id =>
+                            ].finished.map((c_id) =>
                               state.competitions
                                 .find(
-                                  competition => competition.id === _competition
+                                  (competition) =>
+                                    competition.id === _competition
                                 )
                                 .competitorsSheet.competitors.find(
-                                  _competitor => _competitor.id === c_id
+                                  (_competitor) => _competitor.id === c_id
                                 )
                             )
                         )
-                        .map(competitor => {
+                        .map((competitor) => {
                           return {
                             type: "competitorResult",
                             comp_id: _competition,
                             competitor: competitor,
                             s_rank: null,
                             result: competitor.results_overall.find(
-                              overall =>
+                              (overall) =>
                                 overall.competition_id ===
                                 state.competitions.find(
-                                  competition => competition.id === _competition
+                                  (competition) =>
+                                    competition.id === _competition
                                 ).id
-                            )
+                            ),
                           };
                         })
                     : []
-                )
+                ),
               };
             })
-            .map(_stage => {
+            .map((_stage) => {
               _stage.s_competitors = flatten(_stage.s_competitors).sort(
                 (comp1, comp2) => {
                   const statuses = {
                     DNF: -1,
                     DNS: -2,
-                    DSQ: -3
+                    DSQ: -3,
                   };
                   return (
                     (comp2.result
@@ -206,36 +214,37 @@ export default {
               return _stage;
             })
             .map((_stage, s_idx, grid) => {
-              _stage.s_competitors = _stage.s_competitors.filter(_competitor =>
-                grid[s_idx + 1]
-                  ? !grid[s_idx + 1].s_competitors.some(
-                      _competitor_to_compare => {
-                        if (
-                          _competitor.competitor.info_data["bib"] &&
-                          _competitor_to_compare.competitor.info_data["bib"]
-                        ) {
-                          return (
-                            _competitor_to_compare.competitor.info_data[
-                              "bib"
-                            ] === _competitor.competitor.info_data["bib"] ||
-                            _competitor_to_compare.competitor.id ===
+              _stage.s_competitors = _stage.s_competitors.filter(
+                (_competitor) =>
+                  grid[s_idx + 1]
+                    ? !grid[s_idx + 1].s_competitors.some(
+                        (_competitor_to_compare) => {
+                          if (
+                            _competitor.competitor.info_data["bib"] &&
+                            _competitor_to_compare.competitor.info_data["bib"]
+                          ) {
+                            return (
+                              _competitor_to_compare.competitor.info_data[
+                                "bib"
+                              ] === _competitor.competitor.info_data["bib"] ||
+                              _competitor_to_compare.competitor.id ===
+                                _competitor.competitor.id
+                            );
+                          } else {
+                            return (
+                              _competitor_to_compare.competitor.id ===
                               _competitor.competitor.id
-                          );
-                        } else {
-                          return (
-                            _competitor_to_compare.competitor.id ===
-                            _competitor.competitor.id
-                          );
+                            );
+                          }
                         }
-                      }
-                    )
-                  : true
+                      )
+                    : true
               );
               return _stage;
             })
             .reverse()
             .map((_stage, s_idx, grid) => {
-              _stage.s_competitors.forEach(_competitor => {
+              _stage.s_competitors.forEach((_competitor) => {
                 _competitor.s_rank =
                   _stage.s_competitors.indexOf(_competitor) +
                   1 +
@@ -253,12 +262,20 @@ export default {
     },
     flatGrid: (state, getters) => {
       return [].concat(
-        ...getters.stageGrid.map(stage => [stage.title, ...stage.s_competitors])
+        ...getters.stageGrid.map((stage) => [
+          stage.title,
+          ...stage.s_competitors,
+        ])
       );
-    }
+    },
   },
   mutations: {
-    toggle_mode: state => {
+    licChecked: (state, lData) => {
+      state._licData.user = lData.user;
+      state._licData.key = lData.key;
+      state._licData.state = true;
+    },
+    toggle_mode: (state) => {
       state.mode_timing = !state.mode_timing;
     },
     set_ip: (state, ip) => {
@@ -268,17 +285,15 @@ export default {
     set_port: (state, port) => {
       state.server_config.port = port;
     },
-    changeMenuState: state => {
+    changeMenuState: (state) => {
       state.showMenu = !state.showMenu;
     },
-    checkEventID: state => {
+    checkEventID: (state) => {
       state.event_id === null
-        ? (state.event_id = Math.random()
-            .toString(36)
-            .substr(2, 9))
+        ? (state.event_id = Math.random().toString(36).substr(2, 9))
         : null;
     },
-    createServerChecker: state => {
+    createServerChecker: (state) => {
       state.serverStatusChecker === null
         ? (state.serverStatusChecker = setInterval(() => {
             if (state.socket)
@@ -296,32 +311,32 @@ export default {
       if (!state.socket) {
         state.socket = io(`http://${config[0]}:${config[1]}`);
 
-        state.socket.on("server_log", data => {
+        state.socket.on("server_log", (data) => {
           console.log(data);
         });
 
         state.socket.on("serverConnected", () => {
           state.serverStatus = true;
         });
-        state.socket.on("sockets_checked", sockets => {
+        state.socket.on("sockets_checked", (sockets) => {
           state.opened_sockets = [];
-          sockets.forEach(socket => {
+          sockets.forEach((socket) => {
             state.opened_sockets.push(socket);
           });
         });
-        state.socket.on("chat_message", message => {
+        state.socket.on("chat_message", (message) => {
           state.messages.push(message);
         });
-        state.socket.on("judge_connected", judge_data => {
+        state.socket.on("judge_connected", (judge_data) => {
           state.competition &&
-            state.competition.stuff.judges.forEach(judge => {
+            state.competition.stuff.judges.forEach((judge) => {
               if (judge.id.toString() === judge_data[1].id.toString())
                 judge.connected = true;
             });
         });
-        state.socket.on("judge_disconnected", judge_data => {
+        state.socket.on("judge_disconnected", (judge_data) => {
           state.competition &&
-            state.competition.stuff.judges.forEach(judge => {
+            state.competition.stuff.judges.forEach((judge) => {
               if (judge.id.toString() === judge_data[1].id.toString())
                 judge.connected = false;
             });
@@ -334,21 +349,21 @@ export default {
           if (state.competition)
             state.competition.stuff.jury[0].connected = false;
         });
-        state.socket.on("competition_data_updated", data => {
+        state.socket.on("competition_data_updated", (data) => {
           const excludedKeys = [
             "weather",
             "structure",
             "stages",
             "protocol_fields",
             "protocol_settings",
-            "result_formula"
+            "result_formula",
           ];
           function checkValues(obj1, obj2) {
-            Object.keys(obj2).forEach(dataKey => {
+            Object.keys(obj2).forEach((dataKey) => {
               if (obj1[dataKey] && !excludedKeys.includes(dataKey)) {
                 if (Array.isArray(obj1[dataKey])) {
                   obj1[dataKey].forEach((competitor, c_idx) => {
-                    Object.keys(obj2[dataKey][c_idx]).forEach(field => {
+                    Object.keys(obj2[dataKey][c_idx]).forEach((field) => {
                       if (
                         obj2[dataKey][c_idx][field] !==
                         obj1[dataKey][c_idx][field]
@@ -374,7 +389,7 @@ export default {
         });
       }
     },
-    close_socket: state => {
+    close_socket: (state) => {
       state.socket && state.socket.disconnect();
       state.socket = null;
     },
@@ -387,7 +402,7 @@ export default {
         state.socket.emit("force_disconnect", user_id);
       console.log(user_id);
     },
-    changeTheme: state => {
+    changeTheme: (state) => {
       state.appTheme === "light"
         ? (state.appTheme = "dark")
         : (state.appTheme = "light");
@@ -398,41 +413,41 @@ export default {
 
       state.socket &&
         state.socket.connected &&
-        state.socket.emit("set_competition_data", state.competition, res => {
+        state.socket.emit("set_competition_data", state.competition, (res) => {
           console.log(res);
         });
     },
     setCompetition: (state, competition) => {
       state.competition = competition;
-      router.push("competition_settings").catch(err => {
+      router.push("competition_settings").catch((err) => {
         return err;
       });
 
       state.socket &&
         state.socket.connected &&
-        state.socket.emit("set_competition_data", competition, res => {
+        state.socket.emit("set_competition_data", competition, (res) => {
           console.log(res);
         });
     },
     delete_competition: (state, id) => {
-      state.competitions = state.competitions.filter(_comp => {
+      state.competitions = state.competitions.filter((_comp) => {
         return _comp.id !== id;
       });
       state.competition = state.competitions[0];
 
       state.socket &&
         state.socket.connected &&
-        state.socket.emit("set_competition_data", state.competition, res => {
+        state.socket.emit("set_competition_data", state.competition, (res) => {
           console.log(res);
         });
     },
     togglePreview: (state, toggleState) => {
       state.showPreview = toggleState;
     },
-    updateEvent: state => {
+    updateEvent: (state) => {
       state.socket &&
         state.socket.connected &&
-        state.socket.emit("set_competition_data", state.competition, res => {
+        state.socket.emit("set_competition_data", state.competition, (res) => {
           console.log(res);
         });
     },
@@ -442,14 +457,14 @@ export default {
     event_save: async (state, conf) => {
       await fs.readdir("./events", (err, res) => {
         if (err) {
-          fs.mkdir("./events", err => {
+          fs.mkdir("./events", (err) => {
             return err;
           });
           fs.writeFile(
             `./events/${conf.name}.json`,
             JSON.stringify(state.competition),
             "utf-8",
-            err => {
+            (err) => {
               if (err) console.log(err);
               else console.log("file saved");
             }
@@ -459,16 +474,19 @@ export default {
             `./events/${conf.name}.json`,
             JSON.stringify(state.competition),
             "utf-8",
-            err => {
+            (err) => {
               if (err) console.log(err);
               else console.log("file saved");
             }
           );
         }
       });
-    }
+    },
   },
   actions: {
+    licChecked: ({ commit }, lData) => {
+      commit("licChecked", lData);
+    },
     changeMenuState: ({ commit }) => {
       commit("changeMenuState");
     },
@@ -500,24 +518,21 @@ export default {
         compact: true,
         ignoreComment: true,
         fullTagEmptyElement: true,
-        spaces: 4
+        spaces: 4,
       };
       let xml = xmlConverter.js2xml(object, options);
 
       await require("fs").writeFile(
         `./FIS_XML ${
           competition.mainData.date.value
-        }_${competition.mainData.title.value
-          .trim()
-          .split(" ")
-          .join("_")}.xml`,
+        }_${competition.mainData.title.value.trim().split(" ").join("_")}.xml`,
         xml,
         () => {
           console.log("ok");
         }
       );
       console.log(xml);
-    }
+    },
     // updateEvent: state => {
     //   console.log(`upd`);
     //   state.socket &&
@@ -526,5 +541,5 @@ export default {
     //       console.log(res);
     //     });
     // }
-  }
+  },
 };

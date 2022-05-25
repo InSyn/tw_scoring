@@ -7,7 +7,7 @@ export default {
       standard_aligns: [
         { title: "Слева", value: "start" },
         { title: "Центр", value: "center" },
-        { title: "Справа", value: "end" }
+        { title: "Справа", value: "end" },
       ],
       title: "",
       use_grid: false,
@@ -16,23 +16,23 @@ export default {
         print_header: {
           id: "officialsData",
           title: "Печатать информацию о жюри",
-          state: true
+          state: true,
         },
         print_openers: {
           id: "openers",
           title: "Печатать открывающих",
-          state: false
+          state: false,
         },
         print_weather: {
           id: "weatherData",
           title: "Печатать информацию о погоде",
-          state: false
+          state: false,
         },
         print_notations: {
           id: "raceNotes",
           title: "Печатать замечания",
-          state: true
-        }
+          state: true,
+        },
       },
       strings_at_page: 6,
       font_size: 12,
@@ -41,49 +41,47 @@ export default {
       signs: {
         left: {
           text: "",
-          img: ""
+          img: "",
         },
         center: {
           text: "",
-          img: ""
+          img: "",
         },
         right: {
           text: "",
-          img: ""
-        }
+          img: "",
+        },
       },
       string_lights: {
         odd: "#FFFFFF",
-        even: "#D1D1D1"
+        even: "#D1D1D1",
       },
       layout: {
         height: 297,
         width: 210,
         padding: [5, 5],
         orientation: "portrait",
-        pdf_scale: 1
+        pdf_scale: 1,
       },
       assets: {
         header_logo: {
           file: null,
-          title: "Изображение для «шапки»"
+          title: "Изображение для «шапки»",
         },
         footer_logo: {
           file: null,
-          title: "Изображение для «подвала»"
+          title: "Изображение для «подвала»",
         },
         title_logo: {
           file: null,
-          title: "Логотип"
-        }
-      }
+          title: "Логотип",
+        },
+      },
     },
     start_list: {},
     fieldClass: class {
       constructor(width, font, align, cell_1, cell_2) {
-        this.id = Math.random()
-          .toString(36)
-          .substr(2, 9);
+        this.id = Math.random().toString(36).substr(2, 9);
         this.params.width = width || 10;
         this.params.font = font || 12;
         this.params.f_weight = "normal";
@@ -99,7 +97,7 @@ export default {
           (cell_2 && cell_2.data && cell_2.data.title) || null;
         this.params.cell_2.handler =
           (cell_2 && cell_2.handler && cell_2.handler) ||
-          function() {
+          function () {
             return 0;
           };
       }
@@ -108,27 +106,27 @@ export default {
           select_dialog: false,
           id: null,
           title: null,
-          handler: function() {
+          handler: function () {
             return 0;
-          }
+          },
         },
         cell_2: {
           select_dialog: false,
           id: null,
           title: null,
-          handler: function() {
+          handler: function () {
             return 0;
-          }
+          },
         },
         width: null,
         font: null,
-        align: null
+        align: null,
       };
-    }
+    },
   },
   getters: {
-    results_protocol: state => state.results_protocol,
-    fieldClass: state => state.fieldClass
+    results_protocol: (state) => state.results_protocol,
+    fieldClass: (state) => state.fieldClass,
   },
   mutations: {
     setImage: (state, data) => {
@@ -144,23 +142,23 @@ export default {
           12,
           {
             title: "Слева",
-            value: "start"
+            value: "start",
           },
           {
             data: { id: "rank", title: "Ст №" },
-            handler: function(_competitor, competition) {
+            handler: function (_competitor, competition) {
               return [
                 competition.protocol_settings.start_protocols.filters.race_filter._startList.indexOf(
                   _competitor.competitor.id
-                ) + 1
+                ) + 1,
               ];
-            }
+            },
           }
         )
       );
 
       //add competitors table headers
-      data.competition.competitorsSheet.header.forEach(_header => {
+      data.competition.competitorsSheet.header.forEach((_header) => {
         result_fields.push(
           new data.fieldClass(
             12,
@@ -168,9 +166,9 @@ export default {
             { title: "Слева", value: "start" },
             {
               data: _header,
-              handler: function(_competitor) {
+              handler: function (_competitor) {
                 return [_competitor.competitor.info_data[_header.id]];
-              }
+              },
             }
           )
         );
@@ -187,19 +185,19 @@ export default {
           12,
           {
             title: "Слева",
-            value: "start"
+            value: "start",
           },
           {
             data: { id: "rank", title: "Место" },
-            handler: function(_competitor) {
+            handler: function (_competitor) {
               return [_competitor.s_rank];
-            }
+            },
           }
         )
       );
 
       //add competitors table headers
-      data.competition.competitorsSheet.header.forEach(_header => {
+      data.competition.competitorsSheet.header.forEach((_header) => {
         result_fields.push(
           new data.fieldClass(
             8,
@@ -207,9 +205,9 @@ export default {
             { title: "Слева", value: "start" },
             {
               data: _header,
-              handler: function(_competitor) {
+              handler: function (_competitor) {
                 return [_competitor.competitor.info_data[_header.id]];
-              }
+              },
             }
           )
         );
@@ -222,16 +220,16 @@ export default {
           12,
           {
             title: "Слева",
-            value: "start"
+            value: "start",
           },
           {
             data: { id: "race", title: "Заезд" },
-            handler: function(competitor) {
+            handler: function (competitor) {
               const competition = main.state["competitions"].find(
-                _comp => _comp.id === competitor.comp_id
+                (_comp) => _comp.id === competitor.comp_id
               );
-              return [...competition.races.map(race => race.title)];
-            }
+              return [...competition.races.map((race) => race.title)];
+            },
           }
         )
       );
@@ -245,17 +243,17 @@ export default {
             { title: "Слева", value: "start" },
             {
               data: { id: `Судья ${j_idx + 1}`, title: `С${j_idx + 1}` },
-              handler: function(_competitor) {
+              handler: function (_competitor) {
                 return (
                   _competitor.competitor.marks
                     .filter((_mark, m_idx, _marks) => {
                       return _mark.judge === judge.id;
                     })
-                    .map(_mark => {
+                    .map((_mark) => {
                       return _mark.value;
                     }) || "-"
                 );
-              }
+              },
             }
           )
         );
@@ -268,30 +266,32 @@ export default {
           12,
           {
             title: "Слева",
-            value: "start"
+            value: "start",
           },
           {
             data: {
               id: "race_res",
-              title: "Оценка"
+              title: "Оценка",
             },
-            handler: function(competitor) {
+            handler: function (competitor) {
               const competition = main.state["competitions"].find(
-                _comp => _comp.id === competitor.comp_id
+                (_comp) => _comp.id === competitor.comp_id
               );
-              return competition.races.map(_race => {
+              return competition.races.map((_race) => {
                 return `${competition.set_accuracy(
                   competition.getRaceResult(competitor.competitor, _race)
-                )} ${(competition.result_formula.overall_result.type === 3 &&
-                  competitor.competitor.results.find(
-                    _res => _res.race_id === _race.id
-                  ) &&
-                  competitor.competitor.results.find(
-                    _res => _res.race_id === _race.id
-                  ).repeat) ||
-                  ""}`;
+                )} ${
+                  (competition.result_formula.overall_result.type === 3 &&
+                    competitor.competitor.results.find(
+                      (_res) => _res.race_id === _race.id
+                    ) &&
+                    competitor.competitor.results.find(
+                      (_res) => _res.race_id === _race.id
+                    ).repeat) ||
+                  ""
+                }`;
               });
-            }
+            },
           }
         )
       );
@@ -303,25 +303,26 @@ export default {
           12,
           {
             title: "Слева",
-            value: "start"
+            value: "start",
           },
           {
             data: { id: "result", title: "Рез-т" },
-            handler: function(competitor) {
+            handler: function (competitor) {
               const competition = main.state["competitions"].find(
-                _comp => _comp.id === competitor.comp_id
+                (_comp) => _comp.id === competitor.comp_id
               );
               return [
                 competition.set_accuracy(
                   competition.getResult(competitor.competitor.id)
-                )
+                ),
               ];
-            }
+            },
           }
         )
       );
 
-      data.competition.protocol_settings.result_protocols.fields = result_fields;
+      data.competition.protocol_settings.result_protocols.fields =
+        result_fields;
     },
     initRaceResultProtocolFields: (state, data) => {
       const result_fields = [];
@@ -333,19 +334,19 @@ export default {
           12,
           {
             title: "Слева",
-            value: "start"
+            value: "start",
           },
           {
             data: { id: "rank", title: "Место" },
-            handler: function(_competitor) {
+            handler: function (_competitor) {
               return [_competitor.s_rank];
-            }
+            },
           }
         )
       );
 
       //add competitors table headers
-      data.competition.competitorsSheet.header.forEach(_header => {
+      data.competition.competitorsSheet.header.forEach((_header) => {
         result_fields.push(
           new data.fieldClass(
             8,
@@ -353,9 +354,9 @@ export default {
             { title: "Слева", value: "start" },
             {
               data: _header,
-              handler: function(_competitor) {
+              handler: function (_competitor) {
                 return [_competitor.competitor.info_data[_header.id]];
-              }
+              },
             }
           )
         );
@@ -368,16 +369,16 @@ export default {
           12,
           {
             title: "Слева",
-            value: "start"
+            value: "start",
           },
           {
             data: { id: "race", title: "Заезд" },
-            handler: function(competitor, competition) {
+            handler: function (competitor, competition) {
               return [
                 competition.protocol_settings.result_protocols.filters
-                  .race_filter.title
+                  .race_filter.title,
               ];
-            }
+            },
           }
         )
       );
@@ -391,7 +392,7 @@ export default {
             { title: "Слева", value: "start" },
             {
               data: { id: `Судья ${j_idx + 1}`, title: `С${j_idx + 1}` },
-              handler: function(_competitor, competition) {
+              handler: function (_competitor, competition) {
                 const race =
                   competition.protocol_settings.result_protocols.filters
                     .race_filter;
@@ -402,11 +403,11 @@ export default {
                         _mark.judge === judge.id && _mark.race_id === race.id
                       );
                     })
-                    .map(_mark => {
+                    .map((_mark) => {
                       return _mark.value;
                     }) || "-"
                 );
-              }
+              },
             }
           )
         );
@@ -419,33 +420,35 @@ export default {
           12,
           {
             title: "Слева",
-            value: "start"
+            value: "start",
           },
           {
             data: {
               id: "race_res",
-              title: "Рез-т"
+              title: "Рез-т",
             },
-            handler: function(competitor, competition) {
+            handler: function (competitor, competition) {
               const race =
                 competition.protocol_settings.result_protocols.filters
                   .race_filter;
               const result = competitor.competitor.results.find(
-                result => result.race_id === race.id
+                (result) => result.race_id === race.id
               );
               return [
                 result.status ||
-                  `${competition.set_accuracy(result.value || 0)} ${(competition
-                    .result_formula.overall_result.type === 3 &&
-                    result.repeat) ||
-                    ""}`
+                  `${competition.set_accuracy(result.value || 0)} ${
+                    (competition.result_formula.overall_result.type === 3 &&
+                      result.repeat) ||
+                    ""
+                  }`,
               ];
-            }
+            },
           }
         )
       );
 
-      data.competition.protocol_settings.result_protocols.raceResultFields = result_fields;
-    }
-  }
+      data.competition.protocol_settings.result_protocols.raceResultFields =
+        result_fields;
+    },
+  },
 };

@@ -3,15 +3,15 @@
     style="min-width: 1200px"
     :style="{
       color: $vuetify.theme.themes[appTheme].textDefault,
-      background: $vuetify.theme.themes[appTheme].standardBackgroundRGBA
+      background: $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
     }"
     id="app"
   >
     <header
       :style="{
-        background: `${$vuetify.theme.themes[appTheme].cardBackgroundRGBA}`
+        background: `${$vuetify.theme.themes[appTheme].cardBackgroundRGBA}`,
       }"
-      style="position:relative;z-index: 1001"
+      style="position: relative; z-index: 1001"
       class="d-flex align-center px-4"
     >
       <v-btn
@@ -26,10 +26,10 @@
         text
         @click="
           $store.commit('main/event_save', {
-            name: `${competition.mainData.date.value} ${competition.mainData.title.value}. ${competition.mainData.title.stage.value.value}`
+            name: `${competition.mainData.date.value} ${competition.mainData.title.value}. ${competition.mainData.title.stage.value.value}`,
           })
         "
-        style="padding:0"
+        style="padding: 0"
         min-width="0"
         width="48"
         :color="$vuetify.theme.themes[appTheme].accent"
@@ -39,12 +39,12 @@
 
       <v-btn
         text
-        style="padding:0"
+        style="padding: 0"
         min-width="0"
         width="48"
         :color="$vuetify.theme.themes[appTheme].accent"
         ><label
-          style="display: block;height: 100%;width: 100%; cursor:pointer;"
+          style="display: block; height: 100%; width: 100%; cursor: pointer"
         >
           <v-icon>mdi-download</v-icon>
           <input
@@ -54,14 +54,14 @@
             "
             type="file"
             accept="application/json"
-            hidden/></label
+            hidden /></label
       ></v-btn>
       <v-dialog
         width="540"
         v-if="competition"
         v-model="create_competition_dialog.state"
         @keydown.enter.prevent="createNewCompetition()"
-        style="position:relative; z-index: 1001"
+        style="position: relative; z-index: 1001"
         :overlay-color="$vuetify.theme.themes[appTheme].accent"
         :overlay-opacity="0.1"
       >
@@ -69,7 +69,7 @@
           <v-btn
             v-on="on"
             @click="initCreateDialog()"
-            style="margin-left:2rem"
+            style="margin-left: 2rem"
             icon
             :color="$vuetify.theme.themes[appTheme].accent"
           >
@@ -79,29 +79,47 @@
         <div
           :style="{
             backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
-            color: $vuetify.theme.themes[appTheme].textDefault
+            color: $vuetify.theme.themes[appTheme].textDefault,
           }"
         >
           <v-card-title class="ma-0 pt-2 pb-0 px-4"
             >Создание соревнования
           </v-card-title>
           <div
-            style="display:flex; flex-direction: column; border-radius: 6px;margin: 1rem"
+            style="
+              display: flex;
+              flex-direction: column;
+              border-radius: 6px;
+              margin: 1rem;
+            "
             :style="{
               backgroundColor:
-                $vuetify.theme.themes[appTheme].standardBackgroundRGBA
+                $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
             }"
           >
             <div
               tabindex="1"
-              style="flex: 0 0 auto;display:flex;flex-wrap: wrap;padding: .5rem 1rem;border-radius: 6px; margin: 8px 8px 8px 8px;outline: none"
+              style="
+                flex: 0 0 auto;
+                display: flex;
+                flex-wrap: wrap;
+                padding: 0.5rem 1rem;
+                border-radius: 6px;
+                margin: 8px 8px 8px 8px;
+                outline: none;
+              "
               :style="{
                 backgroundColor:
-                  $vuetify.theme.themes[appTheme].cardBackgroundRGBA
+                  $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
               }"
             >
               <div
-                style="font-size: 1.1rem; font-weight:bold;width: 100%;padding: 4px 0 8px 0"
+                style="
+                  font-size: 1.1rem;
+                  font-weight: bold;
+                  width: 100%;
+                  padding: 4px 0 8px 0;
+                "
               >
                 Настройки нового соревнования
               </div>
@@ -110,48 +128,79 @@
                 :key="input.id"
                 v-show="input.hasOwnProperty('value')"
                 class="competitionConstructorInput"
-                style="display:flex;flex-direction: column;margin: .2rem .5rem"
+                style="
+                  display: flex;
+                  flex-direction: column;
+                  margin: 0.2rem 0.5rem;
+                "
               >
                 <div
-                  style="flex: 0 0 auto;font-size: .8rem;line-height: 1.2; padding: 2px 6px 0 6px;margin-left: 6px;margin-right: auto;border-radius: 6px 6px 0 0;transition: background-color 122ms"
+                  style="
+                    flex: 0 0 auto;
+                    font-size: 0.8rem;
+                    line-height: 1.2;
+                    padding: 2px 6px 0 6px;
+                    margin-left: 6px;
+                    margin-right: auto;
+                    border-radius: 6px 6px 0 0;
+                    transition: background-color 122ms;
+                  "
                   :style="{
                     backgroundColor:
                       $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
-                    color: $vuetify.theme.themes[appTheme].textDefault
+                    color: $vuetify.theme.themes[appTheme].textDefault,
                   }"
                 >
                   {{ input.title }}
                 </div>
-                <div style="display:flex;align-items: center;flex: 0 0 auto">
+                <div style="display: flex; align-items: center; flex: 0 0 auto">
                   <div
                     v-if="input.id === 'stage'"
                     tabindex="0"
                     @focus="
-                      e => {
+                      (e) => {
                         input.stage_selector = true;
                         e.target.parentNode.parentNode.children[0].style.backgroundColor = `${$vuetify.theme.themes[appTheme].accent}`;
                       }
                     "
                     @blur="
-                      e => {
+                      (e) => {
                         input.stage_selector = false;
                         e.target.parentNode.parentNode.children[0].style.backgroundColor = `${$vuetify.theme.themes[appTheme].standardBackgroundRGBA}`;
                       }
                     "
-                    style="position:relative;flex: 1 0 auto;padding: 4px 8px;border-radius: 6px;outline: none;cursor:pointer;overflow:visible;width: 14rem"
+                    style="
+                      position: relative;
+                      flex: 1 0 auto;
+                      padding: 4px 8px;
+                      border-radius: 6px;
+                      outline: none;
+                      cursor: pointer;
+                      overflow: visible;
+                      width: 14rem;
+                    "
                     :style="{
                       color: $vuetify.theme.themes[appTheme].textDefault,
                       backgroundColor:
-                        $vuetify.theme.themes[appTheme].standardBackgroundRGBA
+                        $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
                     }"
                   >
                     <div
                       v-if="input.stage_selector"
-                      style="position:absolute;z-index: 1;top: 0;left: 0;width: 100%;display:flex;flex-direction: column;border-radius: 6px"
+                      style="
+                        position: absolute;
+                        z-index: 1;
+                        top: 0;
+                        left: 0;
+                        width: 100%;
+                        display: flex;
+                        flex-direction: column;
+                        border-radius: 6px;
+                      "
                       :style="{
                         backgroundColor:
                           $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
-                        border: `1px solid ${$vuetify.theme.themes[appTheme].accent}`
+                        border: `1px solid ${$vuetify.theme.themes[appTheme].accent}`,
                       }"
                     >
                       <v-hover
@@ -161,21 +210,22 @@
                       >
                         <div
                           @click="input.selectStage(stage, $event)"
-                          style="flex:0 0 auto;padding: 4px 8px;"
+                          style="flex: 0 0 auto; padding: 4px 8px"
                           :style="[
                             {
-                              color: $vuetify.theme.themes[appTheme].textDefault
+                              color:
+                                $vuetify.theme.themes[appTheme].textDefault,
                             },
                             s_idx === 0 && { borderRadius: `6px 6px 0 0` },
                             s_idx ===
                               competition.structure.stages.length - 1 && {
-                              borderRadius: `0 0 6px 6px`
+                              borderRadius: `0 0 6px 6px`,
                             },
                             hover && {
                               backgroundColor:
                                 $vuetify.theme.themes[appTheme]
-                                  .subjectBackgroundRGBA
-                            }
+                                  .subjectBackgroundRGBA,
+                            },
                           ]"
                         >
                           {{ stage.title }}
@@ -189,7 +239,7 @@
                   <input
                     v-else
                     @focus="
-                      e => {
+                      (e) => {
                         for (const $child_key in e.target.parentNode.children) {
                           typeof e.target.parentNode.children[$child_key] ===
                           'object'
@@ -202,7 +252,7 @@
                       }
                     "
                     @blur="
-                      e => {
+                      (e) => {
                         for (const $child_key in e.target.parentNode.children) {
                           typeof e.target.parentNode.children[$child_key] ===
                           'object'
@@ -221,18 +271,23 @@
                         : input.value
                     "
                     size="24"
-                    style="border-radius: 6px;padding: 4px 8px;border: 1px solid transparent;transition: border 122ms"
+                    style="
+                      border-radius: 6px;
+                      padding: 4px 8px;
+                      border: 1px solid transparent;
+                      transition: border 122ms;
+                    "
                     :style="{
                       backgroundColor:
                         $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
-                      color: $vuetify.theme.themes[appTheme].textDefault
+                      color: $vuetify.theme.themes[appTheme].textDefault,
                     }"
                   />
                   <input
                     v-if="input.hasOwnProperty('min')"
                     v-model="input.min"
                     @focus="
-                      e => {
+                      (e) => {
                         for (const $child_key in e.target.parentNode.children) {
                           typeof e.target.parentNode.children[$child_key] ===
                           'object'
@@ -245,7 +300,7 @@
                       }
                     "
                     @blur="
-                      e => {
+                      (e) => {
                         for (const $child_key in e.target.parentNode.children) {
                           typeof e.target.parentNode.children[$child_key] ===
                           'object'
@@ -259,22 +314,28 @@
                     "
                     type="text"
                     size="8"
-                    style="border-radius: 6px;padding: 4px 8px;margin-left: .4rem;border: 1px solid transparent;transition: border 122ms"
+                    style="
+                      border-radius: 6px;
+                      padding: 4px 8px;
+                      margin-left: 0.4rem;
+                      border: 1px solid transparent;
+                      transition: border 122ms;
+                    "
                     :style="{
                       backgroundColor:
                         $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
-                      color: $vuetify.theme.themes[appTheme].textDefault
+                      color: $vuetify.theme.themes[appTheme].textDefault,
                     }"
                   />
                   <input
                     v-if="
                       input.id === 'stage' &&
-                        input.value &&
-                        input.value.id === 'custom'
+                      input.value &&
+                      input.value.id === 'custom'
                     "
                     v-model="input.value.value"
                     @focus="
-                      e => {
+                      (e) => {
                         for (const $child_key in e.target.parentNode.children) {
                           typeof e.target.parentNode.children[$child_key] ===
                           'object'
@@ -287,7 +348,7 @@
                       }
                     "
                     @blur="
-                      e => {
+                      (e) => {
                         for (const $child_key in e.target.parentNode.children) {
                           typeof e.target.parentNode.children[$child_key] ===
                           'object'
@@ -301,21 +362,34 @@
                     "
                     type="text"
                     size="16"
-                    style="border-radius: 6px;padding: 4px 8px;margin-left: .4rem;border: 1px solid transparent;transition: border 122ms"
+                    style="
+                      border-radius: 6px;
+                      padding: 4px 8px;
+                      margin-left: 0.4rem;
+                      border: 1px solid transparent;
+                      transition: border 122ms;
+                    "
                     :style="{
                       backgroundColor:
                         $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
-                      color: $vuetify.theme.themes[appTheme].textDefault
+                      color: $vuetify.theme.themes[appTheme].textDefault,
                     }"
                   />
                 </div>
               </div>
             </div>
             <div
-              style="display:flex;flex-wrap: wrap;flex: 0 0 auto; padding: .5rem 1rem;border-radius: 6px; margin: 0 8px 8px 8px;"
+              style="
+                display: flex;
+                flex-wrap: wrap;
+                flex: 0 0 auto;
+                padding: 0.5rem 1rem;
+                border-radius: 6px;
+                margin: 0 8px 8px 8px;
+              "
               :style="{
                 backgroundColor:
-                  $vuetify.theme.themes[appTheme].cardBackgroundRGBA
+                  $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
               }"
             >
               <v-hover
@@ -328,28 +402,41 @@
                   small
                   retain-focus-on-click
                   @click="check.state = !check.state"
-                  style="display:flex;flex-wrap: nowrap;align-items: center;cursor:pointer;margin-right: .5rem;"
+                  style="
+                    display: flex;
+                    flex-wrap: nowrap;
+                    align-items: center;
+                    cursor: pointer;
+                    margin-right: 0.5rem;
+                  "
                   :color="$vuetify.theme.themes[appTheme].success"
                 >
                   <div
-                    style="flex: 0 0 auto;border-radius: 50%;width: 10px;height: 10px;transition: box-shadow .122s, background-color .122s"
+                    style="
+                      flex: 0 0 auto;
+                      border-radius: 50%;
+                      width: 10px;
+                      height: 10px;
+                      transition: box-shadow 0.122s, background-color 0.122s;
+                    "
                     :style="[
                       {
-                        boxShadow: `0 0 0 2px ${$vuetify.theme.themes[appTheme].textDefault}`
+                        boxShadow: `0 0 0 2px ${$vuetify.theme.themes[appTheme].textDefault}`,
                       },
                       hover && {
-                        boxShadow: `0 0 2px 1px ${$vuetify.theme.themes[appTheme].success}`
+                        boxShadow: `0 0 2px 1px ${$vuetify.theme.themes[appTheme].success}`,
                       },
                       check.state && {
                         boxShadow: `0 0 2px 1px ${$vuetify.theme.themes[appTheme].success}`,
-                        backgroundColor: $vuetify.theme.themes[appTheme].success
-                      }
+                        backgroundColor:
+                          $vuetify.theme.themes[appTheme].success,
+                      },
                     ]"
                   ></div>
                   <div
-                    style="margin-left: .5rem;"
+                    style="margin-left: 0.5rem"
                     :style="{
-                      color: $vuetify.theme.themes[appTheme].textDefault
+                      color: $vuetify.theme.themes[appTheme].textDefault,
                     }"
                   >
                     {{ check.title }}
@@ -359,7 +446,12 @@
             </div>
           </div>
           <v-card-actions
-            style="display:flex;align-items: center;justify-content: flex-end;flex-wrap: nowrap"
+            style="
+              display: flex;
+              align-items: center;
+              justify-content: flex-end;
+              flex-wrap: nowrap;
+            "
           >
             <v-btn
               text
@@ -381,47 +473,75 @@
         tabindex="0"
         @focus="competition_select = true"
         @blur="competition_select = false"
-        style="position:relative;z-index: 1001;outline: none;border-radius:6px;margin-left: .5rem"
+        style="
+          position: relative;
+          z-index: 1001;
+          outline: none;
+          border-radius: 6px;
+          margin-left: 0.5rem;
+        "
         :style="{
           backgroundColor:
             $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
-          color: $vuetify.theme.themes[appTheme].textDefault
+          color: $vuetify.theme.themes[appTheme].textDefault,
         }"
       >
         <v-hover v-slot:default="{ hover }">
           <div
-            style="display:flex;align-items: center;flex-wrap: nowrap;font-weight:bold;border-radius:6px;white-space: nowrap;cursor: pointer;user-select: none;transition: background-color .122s,border .122s"
+            style="
+              display: flex;
+              align-items: center;
+              flex-wrap: nowrap;
+              font-weight: bold;
+              border-radius: 6px;
+              white-space: nowrap;
+              cursor: pointer;
+              user-select: none;
+              transition: background-color 0.122s, border 0.122s;
+            "
             :style="[
               {
-                border: `1px solid ${$vuetify.theme.themes[appTheme].standardBackgroundRGBA}`
+                border: `1px solid ${$vuetify.theme.themes[appTheme].standardBackgroundRGBA}`,
               },
               hover && {
                 backgroundColor:
                   $vuetify.theme.themes[appTheme].subjectBackgroundRGBA,
-                border: `1px solid ${$vuetify.theme.themes[appTheme].subjectBackgroundRGBA}`
-              }
+                border: `1px solid ${$vuetify.theme.themes[appTheme].subjectBackgroundRGBA}`,
+              },
             ]"
           >
             <div
-              style="display:flex;flex-direction: column;white-space: nowrap;padding: .4rem"
+              style="
+                display: flex;
+                flex-direction: column;
+                white-space: nowrap;
+                padding: 0.4rem;
+              "
             >
               <div
-                style="display:flex;align-items: center;font-size: .75rem;flex: 0 0 auto;line-height: 1"
+                style="
+                  display: flex;
+                  align-items: center;
+                  font-size: 0.75rem;
+                  flex: 0 0 auto;
+                  line-height: 1;
+                "
                 :style="{
-                  color: $vuetify.theme.themes[appTheme].accent
+                  color: $vuetify.theme.themes[appTheme].accent,
                 }"
               >
-                <div style="margin-right: auto;font-weight: bold">
+                <div style="margin-right: auto; font-weight: bold">
                   {{ competitions.indexOf(competition) + 1 }}
                 </div>
                 <div>{{ `ID: ${competition && competition.id}` }}</div>
               </div>
-              <div style="flex: 0 0 auto;margin-top: .2rem">
+              <div style="flex: 0 0 auto; margin-top: 0.2rem">
                 {{
-                  `${competition &&
-                    competition.mainData.title.value}. ${competition &&
+                  `${competition && competition.mainData.title.value}. ${
+                    competition &&
                     competition.mainData.title.stage.value &&
-                    competition.mainData.title.stage.value.value}`
+                    competition.mainData.title.stage.value.value
+                  }`
                 }}
               </div>
             </div>
@@ -429,66 +549,92 @@
         </v-hover>
 
         <div
-          v-if="competitions.some(_comp => _comp.id !== competition.id)"
-          style="position:absolute;z-index: 3;border-radius: 6px;white-space: nowrap;top: 0;left: 0;overflow:hidden;min-width: 100%;transform: scaleY(0);transform-origin:top"
+          v-if="competitions.some((_comp) => _comp.id !== competition.id)"
+          style="
+            position: absolute;
+            z-index: 3;
+            border-radius: 6px;
+            white-space: nowrap;
+            top: 0;
+            left: 0;
+            overflow: hidden;
+            min-width: 100%;
+            transform: scaleY(0);
+            transform-origin: top;
+          "
           :style="[
             {
-              boxShadow: `0 2px 4px 0 ${$vuetify.theme.themes[appTheme].standardBackgroundRGBA}`
+              boxShadow: `0 2px 4px 0 ${$vuetify.theme.themes[appTheme].standardBackgroundRGBA}`,
             },
             competition_select && {
               transform: 'scaleY(1)',
               backgroundColor:
                 $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
-              border: `1px solid ${$vuetify.theme.themes[appTheme].accent}`
-            }
+              border: `1px solid ${$vuetify.theme.themes[appTheme].accent}`,
+            },
           ]"
         >
           <div
             @click="select_competition($event, competition)"
-            style="padding: .4rem .8rem;font-weight:bold;cursor: default;user-select: none"
+            style="
+              padding: 0.4rem 0.8rem;
+              font-weight: bold;
+              cursor: default;
+              user-select: none;
+            "
             :style="{
               backgroundColor:
                 $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
-              borderBottom: `1px solid ${$vuetify.theme.themes[appTheme].accent}`
+              borderBottom: `1px solid ${$vuetify.theme.themes[appTheme].accent}`,
             }"
           >
             {{
-              `${competitions.indexOf(competition) + 1} ${competition &&
-                competition.mainData.title.value}. ${competition &&
+              `${competitions.indexOf(competition) + 1} ${
+                competition && competition.mainData.title.value
+              }. ${
+                competition &&
                 competition.mainData.title.stage.value &&
-                competition.mainData.title.stage.value.value}`
+                competition.mainData.title.stage.value.value
+              }`
             }}
           </div>
           <v-hover
             v-for="(_competition, c_id) in competitions.filter(
-              _comp => _comp.id !== competition.id
+              (_comp) => _comp.id !== competition.id
             )"
             :key="_competition.id"
             v-slot:default="{ hover }"
           >
             <div
               @click="select_competition($event, _competition)"
-              style="padding: .4rem .8rem;cursor:pointer;user-select: none;transition: border .122s, background-color .122s"
+              style="
+                padding: 0.4rem 0.8rem;
+                cursor: pointer;
+                user-select: none;
+                transition: border 0.122s, background-color 0.122s;
+              "
               :style="[
                 {
                   borderTop: `1px solid ${$vuetify.theme.themes[appTheme].cardBackgroundRGBA}`,
-                  borderBottom: `1px solid ${$vuetify.theme.themes[appTheme].cardBackgroundRGBA}`
+                  borderBottom: `1px solid ${$vuetify.theme.themes[appTheme].cardBackgroundRGBA}`,
                 },
                 hover && {
                   borderTop: `1px solid ${$vuetify.theme.themes[appTheme].accent}`,
                   borderBottom: `1px solid ${$vuetify.theme.themes[appTheme].accent}`,
                   backgroundColor:
-                    $vuetify.theme.themes[appTheme].subjectBackgroundRGBA
+                    $vuetify.theme.themes[appTheme].subjectBackgroundRGBA,
                 },
                 c_id < 1 && { borderTop: `null` },
-                c_id >= competitions.length - 2 && { borderBottom: `null` }
+                c_id >= competitions.length - 2 && { borderBottom: `null` },
               ]"
             >
               {{
-                `${competitions.indexOf(_competition) + 1} ${_competition &&
-                  _competition.mainData.title.value} ${_competition.mainData
-                  .title.stage.value &&
-                  _competition.mainData.title.stage.value.value}`
+                `${competitions.indexOf(_competition) + 1} ${
+                  _competition && _competition.mainData.title.value
+                } ${
+                  _competition.mainData.title.stage.value &&
+                  _competition.mainData.title.stage.value.value
+                }`
               }}
             </div>
           </v-hover>
@@ -496,18 +642,24 @@
       </div>
 
       <div
-        style="position: absolute; left: 50%;transform: translateX(-50%);height: 100%;padding: 8px 2rem"
+        style="
+          position: absolute;
+          left: 50%;
+          transform: translateX(-50%);
+          height: 100%;
+          padding: 8px 2rem;
+        "
       >
         <img
           v-if="appTheme === 'light'"
           src="./assets/logo/TIMINGWEBLOGO-BLACK.png"
-          style="height: 100%;user-select: none"
+          style="height: 100%; user-select: none"
           draggable="false"
           alt=""
         /><img
           v-else
           src="./assets/logo/TIMINGWEBLOGO-WHITE.png"
-          style="height: 100%;user-select: none"
+          style="height: 100%; user-select: none"
           draggable="false"
           alt=""
         />
@@ -517,7 +669,7 @@
         v-if="appTheme === 'light'"
         src="./assets/logo/SCORING-DARK.png"
         class="mr-8"
-        style="height: 100%;user-select: none"
+        style="height: 100%; user-select: none"
         draggable="false"
         alt=""
       />
@@ -525,7 +677,7 @@
         v-else
         src="./assets/logo/SCORING-LIGHT.png"
         class="mr-8"
-        style="height: 100%;user-select: none"
+        style="height: 100%; user-select: none"
         draggable="false"
         alt=""
       />
@@ -537,22 +689,28 @@
         <v-icon>mdi-brightness-6</v-icon>
       </v-btn>
     </header>
-    <main style="position:relative;">
+    <main style="position: relative">
       <div
         class="menu"
-        style="z-index: 2; position: relative; min-width: 220px; overflow: hidden;user-select: none"
+        style="
+          z-index: 2;
+          position: relative;
+          min-width: 220px;
+          overflow: hidden;
+          user-select: none;
+        "
         :style="[
           {
             backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
-            borderRight: `1px solid ${$vuetify.theme.themes[appTheme].subjectBackgroundRGBA}`
+            borderRight: `1px solid ${$vuetify.theme.themes[appTheme].subjectBackgroundRGBA}`,
           },
           showMenu
             ? { width: '220px', minWidth: '220px' }
             : {
                 width: '0',
                 minWidth: '0',
-                borderRight: '0 solid transparent'
-              }
+                borderRight: '0 solid transparent',
+              },
         ]"
       >
         <router-link
@@ -573,8 +731,8 @@
               @click="navigate"
               :style="[
                 (hover || isActive) && {
-                  backgroundColor: $vuetify.theme.themes[appTheme].accent
-                }
+                  backgroundColor: $vuetify.theme.themes[appTheme].accent,
+                },
               ]"
             >
               <v-icon
@@ -596,10 +754,10 @@
     </main>
     <footer
       class="d-flex align-center px-8"
-      style="font-size: 0.8rem; user-select: none;cursor:default;"
+      style="font-size: 0.8rem; user-select: none; cursor: default"
       :style="{
         background: $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
-        borderTop: `1px solid ${$vuetify.theme.themes[appTheme].accent}`
+        borderTop: `1px solid ${$vuetify.theme.themes[appTheme].accent}`,
       }"
     >
       Created by TimingWeb &copy;
@@ -623,7 +781,7 @@ import {
   mdiAccountGroup,
   mdiClipboardList,
   mdiNumeric10BoxMultiple,
-  mdiTrophyVariant
+  mdiTrophyVariant,
 } from "@mdi/js";
 import fs from "fs";
 
@@ -633,18 +791,19 @@ const { app } = require("electron").remote;
 export default {
   name: "tw_scoring",
   mounted() {
-    document.addEventListener("keyup", e => {
+    this.getSysData();
+    ipcRenderer.on("server_message", (e, message) => {
+      this.$store.commit("main/pushServerMessage", message);
+    });
+    document.addEventListener("keyup", (e) => {
       e.key === "Home" && this.changeMenuState();
     });
     fs.readdir("./events", (err, res) => {
       err
-        ? fs.mkdir("./events", err => {
+        ? fs.mkdir("./events", (err) => {
             return err;
           })
         : res;
-    });
-    ipcRenderer.on("server_message", (e, message) => {
-      this.$store.commit("main/pushServerMessage", message);
     });
     this.$store.dispatch("main/checkEventID");
     this.createCompetition(new this.EventClass());
@@ -659,7 +818,7 @@ export default {
 
     //shortcuts handler
     let map = []; // You could also use an array
-    onkeydown = onkeyup = e => {
+    onkeydown = onkeyup = (e) => {
       map[e.key] = e.type === "keydown";
       if (map["Alt"] && map["t"]) {
         this.$store.commit("main/toggle_mode");
@@ -671,10 +830,16 @@ export default {
     ...mapActions("main", [
       "changeMenuState",
       "changeTheme",
-      "createCompetition"
+      "createCompetition",
     ]),
     log(data) {
       console.log(data);
+    },
+    getSysData() {
+      ipcRenderer.on("sysData", (event, data) => {
+        console.log(data);
+      });
+      app.emit("getSysData");
     },
     startServer() {
       app.emit("startSocketServer", this.server_config);
@@ -686,7 +851,7 @@ export default {
       if (!this.socket) {
         this.$store.commit("main/connect_socket", [
           this.server_config[0],
-          this.server_config[1]
+          this.server_config[1],
         ]);
         this.$store.commit("main/createServerChecker");
       }
@@ -714,45 +879,45 @@ export default {
       this.competition.stages.stage_grid = [];
       this.competition.stages.stage_grid.push({
         title: this.competition.mainData.title.stage.value.value,
-        s_competitions: [this.competition.id]
+        s_competitions: [this.competition.id],
       });
 
       this.competition.mainData = evData.mainData;
 
       this.competition.stuff.judges = [];
-      evData.stuff.judges.forEach(_judge => {
+      evData.stuff.judges.forEach((_judge) => {
         this.competition.stuff.judges.push(_judge);
       });
 
       this.competition.stuff.jury = [];
-      evData.stuff.jury.forEach(_judge => {
+      evData.stuff.jury.forEach((_judge) => {
         this.competition.stuff.jury.push(_judge);
       });
 
       this.competition.stuff.openers = [];
-      evData.stuff.openers.forEach(_judge => {
+      evData.stuff.openers.forEach((_judge) => {
         this.competition.stuff.openers.push(_judge);
       });
 
       this.competition.technicalInfo.records = [];
-      evData.technicalInfo.records.forEach(_tInf =>
+      evData.technicalInfo.records.forEach((_tInf) =>
         this.competition.technicalInfo.records.push(_tInf)
       );
       this.competition.weather = [];
-      evData.weather.forEach(_tInf => this.competition.weather.push(_tInf));
+      evData.weather.forEach((_tInf) => this.competition.weather.push(_tInf));
 
       this.competition.competitorsSheet.header = evData.competitorsSheet.header;
 
       this.competition.competitorsSheet.competitors = [];
-      evData.competitorsSheet.competitors.forEach(_competitor => {
+      evData.competitorsSheet.competitors.forEach((_competitor) => {
         this.competition.competitorsSheet.competitors.push(_competitor);
       });
 
       this.competition.races = [];
-      evData.races.forEach(_race => this.competition.races.push(_race));
+      evData.races.forEach((_race) => this.competition.races.push(_race));
     },
     initCreateDialog() {
-      this.create_competition_dialog.data.forEach(_field => {
+      this.create_competition_dialog.data.forEach((_field) => {
         if (this.competition.mainData.hasOwnProperty(_field.id)) {
           _field.value = this.competition.mainData[_field.id].value;
         } else if (_field.id === "stage")
@@ -773,7 +938,7 @@ export default {
         new this.EventClass(...this.create_competition_dialog.data)
       );
 
-      this.create_competition_dialog.data.forEach(_field => {
+      this.create_competition_dialog.data.forEach((_field) => {
         if (_field.id === "judges" || _field.id === "competitors")
           _field[_field.id] = [];
       });
@@ -786,7 +951,7 @@ export default {
     select_competition(e, competition) {
       this.$store.commit("main/setCompetition", competition);
       e.target.parentNode.parentNode.blur();
-    }
+    },
   },
   data() {
     return {
@@ -798,7 +963,7 @@ export default {
         accountGroup: mdiAccountGroup,
         clipboardList: mdiClipboardList,
         numeric10BoxMultiple: mdiNumeric10BoxMultiple,
-        trophyVariant: mdiTrophyVariant
+        trophyVariant: mdiTrophyVariant,
       },
       create_competition_dialog: {
         state: false,
@@ -808,7 +973,7 @@ export default {
             id: "discipline",
             title: "Дисциплина",
             value: null,
-            min: null
+            min: null,
           },
           {
             id: "stage",
@@ -817,13 +982,13 @@ export default {
             stage_selector: false,
             selectStage: (stage, event) => {
               this.create_competition_dialog.data.find(
-                field => field.id === "stage"
+                (field) => field.id === "stage"
               ).value = stage;
               event.target.parentNode.parentNode.parentNode.parentNode.parentNode.focus();
-            }
+            },
           },
           { id: "competitors", competitors: [] },
-          { id: "judges", judges: [] }
+          { id: "judges", judges: [] },
         ],
         checks: {
           judgesFromPrevStage: {
@@ -832,10 +997,10 @@ export default {
             check: () => {
               for (let $judge of this.competition.stuff.judges) {
                 this.create_competition_dialog.data
-                  .find(_data => _data.id === "judges")
+                  .find((_data) => _data.id === "judges")
                   .judges.push(JSON.parse(JSON.stringify($judge)));
               }
-            }
+            },
           },
           competitorsFromPrevStage: {
             state: false,
@@ -844,13 +1009,13 @@ export default {
               for (let $competitor of this.competition.competitorsSheet
                 .competitors) {
                 this.create_competition_dialog.data
-                  .find(_data => _data.id === "competitors")
+                  .find((_data) => _data.id === "competitors")
                   .competitors.push(JSON.parse(JSON.stringify($competitor)));
               }
-            }
-          }
-        }
-      }
+            },
+          },
+        },
+      },
     };
   },
   computed: {
@@ -861,11 +1026,11 @@ export default {
       "appMenu",
       "competitions",
       "competition",
-      "timer"
+      "timer",
     ]),
     ...mapGetters("event", ["EventClass"]),
-    ...mapGetters("roles", ["JudgeClass"])
-  }
+    ...mapGetters("roles", ["JudgeClass"]),
+  },
 };
 </script>
 
@@ -936,8 +1101,7 @@ export default {
   transition: width 0.5s;
 }
 
-.menuExpand-enter, .menuExpand-leave-to /* .fade-leave-active до версии 2.1.8 */
- {
+.menuExpand-enter, .menuExpand-leave-to /* .fade-leave-active до версии 2.1.8 */ {
   width: 1px;
 }
 </style>
