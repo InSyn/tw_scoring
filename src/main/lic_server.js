@@ -5,16 +5,13 @@ let client = new net.Socket();
 
 client.on("data", function (data) {
   console.log("Received: " + data);
-  mainWindow.send("lic_server_response ", data);
-  for (const dataKey in data) {
-    console.log(dataKey);
-  }
+  mainWindow && mainWindow.webContents.send("lic_server_response ", data);
   client.destroy(); // kill client after server's response
 });
 
 client.on("close", function () {
   console.log("Connection closed");
-  mainWindow.send("lic_server_closed");
+  mainWindow.webContents.send("lic_server_closed");
 });
 
 app.on("check_lic", (data) => {

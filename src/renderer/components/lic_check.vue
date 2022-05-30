@@ -71,11 +71,7 @@ const { app } = require("electron").remote;
 
 export default {
   name: "lic_check",
-  mounted() {
-    ipcRenderer.on("lic_server_response", (data) => {
-      console.log(data);
-    });
-  },
+  mounted() {},
   methods: {
     ...mapActions("main", {
       licChecked: "licChecked",
