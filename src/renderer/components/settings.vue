@@ -1,10 +1,10 @@
 <template>
   <v-container style="padding: 0" fluid
-    ><v-row class="flex-nowrap" no-gutters
+    ><v-row v-show="false" class="flex-nowrap" no-gutters
       ><v-col
         v-for="(page, p) in settingsMenu"
         :key="p"
-        style="font-weight:bold;"
+        style="font-weight: bold"
       >
         <router-link
           v-slot="{ href, route, navigate, isActive, isExactActive }"
@@ -22,11 +22,11 @@
               :style="[
                 {
                   backgroundColor:
-                    $vuetify.theme.themes[appTheme].cardBackgroundRGBA
+                    $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
                 },
                 (hover || isActive) && {
-                  backgroundColor: $vuetify.theme.themes[appTheme].accent
-                }
+                  backgroundColor: $vuetify.theme.themes[appTheme].accent,
+                },
               ]"
             >
               <div
@@ -50,8 +50,8 @@ export default {
   name: "settings",
   computed: {
     ...mapGetters("main", ["competition", "appTheme"]),
-    ...mapGetters("settings", { settingsMenu: "settingsMenu" })
-  }
+    ...mapGetters("settings", { settingsMenu: "settingsMenu" }),
+  },
 };
 </script>
 

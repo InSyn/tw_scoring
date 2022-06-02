@@ -3,15 +3,13 @@ export default {
   state: {
     EventClass: class {
       constructor(...args) {
-        this.id = Math.random()
-          .toString(36)
-          .substr(2, 9);
+        this.id = Math.random().toString(36).substr(2, 9);
         this.live_id = null;
         this.structure.selected.type = 0;
         this.structure.selected.discipline = 0;
         this.mainData.title.stage.group = "M";
         this.mainData.title.stage.value = this.structure.stages[0];
-        args.forEach(arg => {
+        args.forEach((arg) => {
           if (typeof arg === "object") {
             if (arg.id === "competitors")
               this.competitorsSheet.competitors.push(...arg.competitors);
@@ -29,47 +27,47 @@ export default {
         });
         this.stages.stage_grid.push({
           title: this.mainData.title.stage.value.value,
-          s_competitions: [this.id]
+          s_competitions: [this.id],
         });
       }
       weather = [
         {
           descr1: "Температура Снега:",
-          descr2: "-"
+          descr2: "-",
         },
         {
           descr1: "Температура Воздуха:",
-          descr2: "-"
+          descr2: "-",
         },
         {
           descr1: "Скорость ветра:",
-          descr2: "-"
-        }
+          descr2: "-",
+        },
       ];
       structure = {
         statuses: [
           {
             value: "DNF",
-            priority: -1
+            priority: -1,
           },
           {
             value: "DNS",
-            priority: -2
+            priority: -2,
           },
           {
             value: "DSQ",
-            priority: -3
-          }
+            priority: -3,
+          },
         ],
         selected: {
           type: "",
           discipline: "",
-          accuracy: 1
+          accuracy: 1,
         },
         types: [
           { id: 0, title: "Сноуборд", disciplines: [0, 1, 2, 100] },
           { id: 1, title: "Фристайл", disciplines: [0, 1, 2, 3, 4, 100] },
-          { id: 2, title: "Пользовательский", disciplines: [100] }
+          { id: 2, title: "Пользовательский", disciplines: [100] },
         ],
         disciplines: [
           { id: 0, title: "Слоуп-Стайл", res_formula: [1] },
@@ -77,19 +75,19 @@ export default {
           { id: 2, title: "Хаф-Пайп", res_formula: [3] },
           { id: 3, title: "Акробатика", res_formula: [4] },
           { id: 4, title: "Могул", res_formula: [5] },
-          { id: 100, title: "Пользовательский", res_formula: [100] }
+          { id: 100, title: "Пользовательский", res_formula: [100] },
         ],
         accuracy: [
           { id: 0, title: "1", value: 1, digits: 0 },
           { id: 1, title: "1:10", value: 10, digits: 1 },
           { id: 2, title: "1:100", value: 100, digits: 2 },
-          { id: 3, title: "1:1000", value: 1000, digits: 3 }
+          { id: 3, title: "1:1000", value: 1000, digits: 3 },
         ],
         stages: [
           { id: "qual", title: "Квалификация", value: "Квалификация" },
           { id: "final", title: "Финал", value: "Финал" },
-          { id: "custom", title: "Пользовательский", value: "" }
-        ]
+          { id: "custom", title: "Пользовательский", value: "" },
+        ],
       };
       set_accuracy(val) {
         const acc = this.structure.accuracy[this.structure.selected.accuracy];
@@ -115,7 +113,7 @@ export default {
       stages = {
         lastStageSize: 0,
         prev_stages: [],
-        stage_grid: []
+        stage_grid: [],
       };
       passed_competitors = 0;
       races = [];
@@ -131,14 +129,14 @@ export default {
           stage: {
             title: "Этап",
             value: null,
-            focus: false
-          }
+            focus: false,
+          },
         },
         discipline: {
           title: "Дисциплина",
           value: "",
           min: "",
-          focus: false
+          focus: false,
         },
         date: {
           title: "Дата проведения",
@@ -157,48 +155,48 @@ export default {
           })(),
           time_dialog: false,
           time: "12:00",
-          focus: false
+          focus: false,
         },
         country: {
           title: "Страна",
           value: "",
-          focus: false
+          focus: false,
         },
         location: {
           title: "Место проведения",
           value: "",
-          focus: false
+          focus: false,
         },
         provider: {
           title: "Организатор",
           value: "",
-          focus: false
+          focus: false,
         },
         providerTiming: {
           title: "Timing provider",
           value: "",
-          focus: false
+          focus: false,
         },
         codex: {
           title: "Codex",
           value: "0000",
-          focus: false
-        }
+          focus: false,
+        },
       };
       stuff = {
         settings: {
           jury: {
             title: "Жюри",
-            change_dialog: false
+            change_dialog: false,
           },
           judges: {
             title: "Судьи",
-            change_dialog: false
-          }
+            change_dialog: false,
+          },
         },
         secretary: {
           name: "",
-          lastName: ""
+          lastName: "",
         },
         jury: [
           {
@@ -208,11 +206,11 @@ export default {
             name: "Имя",
             loc: "Город",
             connected: false,
-            setABC: false
-          }
+            setABC: false,
+          },
         ],
         judges: [],
-        openers: []
+        openers: [],
       };
       technicalInfo = {
         title: "Техническа информация",
@@ -220,17 +218,17 @@ export default {
         records: [
           {
             title: "Название склона",
-            value: ""
+            value: "",
           },
           {
             title: "Длина трассы",
-            value: ""
+            value: "",
           },
           {
             title: "Ширина трассы",
-            value: ""
-          }
-        ]
+            value: "",
+          },
+        ],
       };
       competitorsSheet = {
         header: [
@@ -240,22 +238,22 @@ export default {
           { id: "fullname", title: "Фамилия, Имя" },
           { id: "year", title: "Год" },
           { id: "rang", title: "Разряд" },
-          { id: "region", title: "Суб. РФ" }
+          { id: "region", title: "Суб. РФ" },
         ],
-        competitors: []
+        competitors: [],
       };
       getSortedByRank(competitors) {
         return competitors.sort((comp1, comp2) => {
           const statuses = {
             DNF: -1,
             DNS: -2,
-            DSQ: -3
+            DSQ: -3,
           };
           const comp1res = comp1.results_overall.find(
-              overall => overall.competition_id === this.id
+              (overall) => overall.competition_id === this.id
             ),
             comp2res = comp2.results_overall.find(
-              overall => overall.competition_id === this.id
+              (overall) => overall.competition_id === this.id
             );
           return (
             (comp2res
@@ -276,9 +274,9 @@ export default {
           return this.races[this.races.length - 1].finished.length >=
             this.passed_competitors && this.passed_competitors > 0
             ? this.getSortedByRank(
-                this.races[this.races.length - 1].finished.map(_comp =>
+                this.races[this.races.length - 1].finished.map((_comp) =>
                   this.competitorsSheet.competitors.find(
-                    _competitor => _competitor.id === _comp
+                    (_competitor) => _competitor.id === _comp
                   )
                 )
               ).splice(0, this.passed_competitors)
@@ -292,54 +290,54 @@ export default {
             { id: 1, title: "Стартовый" },
             { id: 2, title: "Результат последнего на финише" },
             { id: 3, title: "Участник на старте" },
-            { id: 4, title: "Награждение" }
+            { id: 4, title: "Награждение" },
           ],
-          selected: 1
-        }
+          selected: 1,
+        },
       };
       getResult(competitor_id) {
         const competitor = this.competitorsSheet.competitors.find(
-          _competitor => _competitor.id === competitor_id
+          (_competitor) => _competitor.id === competitor_id
         );
         const overall = competitor
           ? competitor.results_overall.find(
-              res => res.competition_id === this.id
+              (res) => res.competition_id === this.id
             )
           : null;
         return overall ? (overall.status ? overall.status : overall.value) : 0;
       }
       getRaceResult(competitor, race) {
         const result = competitor.results.find(
-          result => result.race_id === race.id
+          (result) => result.race_id === race.id
         );
         return result ? (result.status ? result.status : result.value) : 0;
       }
       publishResult(competitor, race_id, rep, status) {
         const res = {
-          id: Math.random()
-            .toString(36)
-            .substr(2, 9),
+          id: Math.random().toString(36).substr(2, 9),
           value: this.result_formula.types[this.result_formula.type].formulas
             .find(
-              _f =>
+              (_f) =>
                 _f.id ===
                 this.result_formula.types[this.result_formula.type].formula
             )
             .get_result(
               competitor.id,
               race_id,
-              this.stuff.judges.map(_j => {
+              this.stuff.judges.map((_j) => {
                 return +_j.id;
               })
             ),
           race_id: race_id,
           repeat: rep || "A",
-          status: status || null
+          status: status || null,
         };
-        if (!competitor.results.some(_res => _res.race_id === race_id)) {
+        if (!competitor.results.some((_res) => _res.race_id === race_id)) {
           competitor.results.push(res);
         } else {
-          let _res = competitor.results.find(_res => _res.race_id === race_id);
+          let _res = competitor.results.find(
+            (_res) => _res.race_id === race_id
+          );
           _res.value = res.value;
         }
 
@@ -352,13 +350,13 @@ export default {
           competition_id: this.id,
           competitor_id: competitor.id,
           value: this.result_formula.overall_result.types
-            .find(_f => _f.id === this.result_formula.overall_result.type)
+            .find((_f) => _f.id === this.result_formula.overall_result.type)
             .result(competitor.id),
-          status: null
+          status: null,
         };
         let existedResult =
           competitor.results_overall.find(
-            res => res.competition_id === overallResult.competition_id
+            (res) => res.competition_id === overallResult.competition_id
           ) || null;
         existedResult
           ? (existedResult.value = overallResult.value)
@@ -372,31 +370,31 @@ export default {
         show_preview: false,
         start_protocols: {
           filters: {
-            race_filter: null
+            race_filter: null,
           },
           fonts: {
             officialsData: 12,
             openers: 12,
             weatherData: 12,
-            raceNotes: 12
+            raceNotes: 12,
           },
           protocol_type: "Старт-лист",
-          fields: []
+          fields: [],
         },
         result_protocols: {
           filters: {
-            race_filter: null
+            race_filter: null,
           },
           fonts: {
             officialsData: 12,
             openers: 12,
             weatherData: 12,
-            raceNotes: 12
+            raceNotes: 12,
           },
           protocol_type: "Результаты",
           fields: [],
-          raceResultFields: []
-        }
+          raceResultFields: [],
+        },
       };
       result_formula = {
         overall_result: {
@@ -406,41 +404,41 @@ export default {
             mode: 0,
             modes: [
               { id: 0, title: "Подсчёт из всех" },
-              { id: 1, title: "Подсчёт из N лучших" }
-            ]
+              { id: 1, title: "Подсчёт из N лучших" },
+            ],
           },
           types: [
             {
               id: 0,
               title: "Лучший",
-              result: comp_id => {
+              result: (comp_id) => {
                 let res = [];
                 const competitor = this.competitorsSheet.competitors.find(
-                  _competitor => _competitor.id === comp_id
+                  (_competitor) => _competitor.id === comp_id
                 );
 
-                this.races.forEach(_race => {
+                this.races.forEach((_race) => {
                   const result = competitor.results.find(
-                    result => result.race_id === _race.id
+                    (result) => result.race_id === _race.id
                   );
                   res.push(result ? (result.status ? 0 : result.value) : 0);
                 });
 
                 return res.length > 0 ? Math.max(...res) : 0;
-              }
+              },
             },
             {
               id: 1,
               title: "Сумма",
-              result: comp_id => {
+              result: (comp_id) => {
                 let res = [];
                 const competitor = this.competitorsSheet.competitors.find(
-                  _competitor => _competitor.id === comp_id
+                  (_competitor) => _competitor.id === comp_id
                 );
 
-                this.races.forEach(_race => {
+                this.races.forEach((_race) => {
                   const result = competitor.results.find(
-                    result => result.race_id === _race.id
+                    (result) => result.race_id === _race.id
                   );
                   res.push(result ? (result.status ? 0 : result.value) : 0);
                 });
@@ -456,7 +454,7 @@ export default {
                       i++
                     ) {
                       res.length > 0
-                        ? (res = res.filter(_res => {
+                        ? (res = res.filter((_res) => {
                             return _res !== Math.min(...res);
                           }))
                         : null;
@@ -467,20 +465,20 @@ export default {
                       return +a + +b;
                     })
                   : 0;
-              }
+              },
             },
             {
               id: 2,
               title: "Среднее",
-              result: comp_id => {
+              result: (comp_id) => {
                 let res = [];
                 const competitor = this.competitorsSheet.competitors.find(
-                  _competitor => _competitor.id === comp_id
+                  (_competitor) => _competitor.id === comp_id
                 );
 
-                this.races.forEach(_race => {
+                this.races.forEach((_race) => {
                   const result = competitor.results.find(
-                    result => result.race_id === _race.id
+                    (result) => result.race_id === _race.id
                   );
                   res.push(result ? (result.status ? 0 : result.value) : 0);
                 });
@@ -496,7 +494,7 @@ export default {
                       i++
                     ) {
                       res.length > 0
-                        ? (res = res.filter(_res => {
+                        ? (res = res.filter((_res) => {
                             return _res !== Math.min(...res);
                           }))
                         : 0;
@@ -507,20 +505,20 @@ export default {
                       return +a + +b;
                     }) / res.length
                   : 0;
-              }
+              },
             },
             {
               id: 3,
               title: "ABC",
-              result: comp_id => {
+              result: (comp_id) => {
                 const competitor = this.competitorsSheet.competitors.find(
-                  _comp => _comp.id === comp_id
+                  (_comp) => _comp.id === comp_id
                 );
                 let sorted_res = [[], [], []];
 
-                this.races.forEach(_race => {
+                this.races.forEach((_race) => {
                   const result = competitor.results.find(
-                    result => result.race_id === _race.id
+                    (result) => result.race_id === _race.id
                   );
                   if (result) {
                     if (!result.status) {
@@ -536,15 +534,15 @@ export default {
                 });
 
                 let res_arr = sorted_res
-                  .map(_results =>
+                  .map((_results) =>
                     _results.length > 0
-                      ? _results.map(_res => (_res.value ? _res.value : 0))
+                      ? _results.map((_res) => (_res.value ? _res.value : 0))
                       : [0]
                   )
-                  .map(_repeated => Math.max(..._repeated));
+                  .map((_repeated) => Math.max(..._repeated));
                 if (res_arr.length > 2)
                   res_arr = res_arr.filter(
-                    _result_to_filter =>
+                    (_result_to_filter) =>
                       _result_to_filter !== Math.min(...res_arr)
                   );
                 return res_arr.length > 0
@@ -552,9 +550,9 @@ export default {
                       return +r1 + +r2;
                     })
                   : 0;
-              }
-            }
-          ]
+              },
+            },
+          ],
         },
         type: 0,
         types: [
@@ -562,7 +560,7 @@ export default {
             id: 0,
             title: "По судьям",
             cof: 1,
-            doubleUp: true,
+            doubleUp: false,
             doubleUp_corridors: [[], []],
             doubleUp_competitors: { 0: null, 1: null },
             lower_marks: 0,
@@ -574,22 +572,22 @@ export default {
                 title: "Среднее",
                 get_result: (comp_id, race_id, judges) => {
                   let marks = [];
-                  judges.forEach(_j => {
-                    this.competitorsSheet.competitors.find(_comp => {
+                  judges.forEach((_j) => {
+                    this.competitorsSheet.competitors.find((_comp) => {
                       return _comp.id === comp_id;
                     })
                       ? marks.push(
                           ...this.competitorsSheet.competitors
-                            .find(_comp => {
+                            .find((_comp) => {
                               return _comp.id === comp_id;
                             })
-                            .marks.filter(_mark => {
+                            .marks.filter((_mark) => {
                               return (
                                 +_mark.judge === +_j &&
                                 _mark.race_id === race_id
                               );
                             })
-                            .map(_mark => {
+                            .map((_mark) => {
                               return +_mark.value;
                             })
                         )
@@ -631,25 +629,25 @@ export default {
                         (_marks.length / this.result_formula.types[0].cof)) ||
                     0
                   );
-                }
+                },
               },
               {
                 id: 1,
                 title: "Сумма",
                 get_result: (comp_id, race_id, judges) => {
                   let marks = [];
-                  judges.forEach(_j => {
+                  judges.forEach((_j) => {
                     marks.push(
                       ...this.competitorsSheet.competitors
-                        .find(_comp => {
+                        .find((_comp) => {
                           return _comp.id === comp_id;
                         })
-                        .marks.filter(_mark => {
+                        .marks.filter((_mark) => {
                           return (
                             +_mark.judge === +_j && _mark.race_id === race_id
                           );
                         })
-                        .map(_mark => {
+                        .map((_mark) => {
                           return +_mark.value;
                         })
                     );
@@ -677,9 +675,9 @@ export default {
                       })) ||
                     0
                   );
-                }
-              }
-            ]
+                },
+              },
+            ],
           },
           {
             id: 1,
@@ -691,25 +689,25 @@ export default {
                 id: 0,
                 get_result: (comp_id, race_id) => {
                   let s_results = [];
-                  this.result_formula.types[1].sections.forEach(_section => {
+                  this.result_formula.types[1].sections.forEach((_section) => {
                     let section = [];
-                    _section.judges.forEach(_judge => {
+                    _section.judges.forEach((_judge) => {
                       section.push(
                         (this.competitorsSheet.competitors
-                          .find(_comp => {
+                          .find((_comp) => {
                             return _comp.id === comp_id;
                           })
-                          .marks.find(_mark => {
+                          .marks.find((_mark) => {
                             return (
                               _mark.race_id === race_id &&
                               _mark.judge === _judge.id
                             );
                           }) &&
                           this.competitorsSheet.competitors
-                            .find(_comp => {
+                            .find((_comp) => {
                               return _comp.id === comp_id;
                             })
-                            .marks.find(_mark => {
+                            .marks.find((_mark) => {
                               return (
                                 _mark.race_id === race_id &&
                                 _mark.judge === _judge.id
@@ -733,18 +731,16 @@ export default {
                         return +a + +b;
                       })
                     : 0;
-                }
-              }
-            ]
-          }
-        ]
+                },
+              },
+            ],
+          },
+        ],
       };
     },
     RaceClass: class {
       constructor(title, type, discipline, competitors) {
-        this.id = Math.random()
-          .toString(36)
-          .substr(2, 9);
+        this.id = Math.random().toString(36).substr(2, 9);
         this.title = title || "Заезд";
         this.race_dialog = false;
         this.type = type;
@@ -756,15 +752,15 @@ export default {
       del_dialog = false;
       finished = [];
       onTrack = null;
-    }
+    },
   },
   getters: {
-    EventClass: state => {
+    EventClass: (state) => {
       return state.EventClass;
     },
-    RaceClass: state => state.RaceClass
+    RaceClass: (state) => state.RaceClass,
   },
 
   mutations: {},
-  actions: {}
+  actions: {},
 };

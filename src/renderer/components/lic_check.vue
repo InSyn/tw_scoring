@@ -2,9 +2,15 @@
   <div style="height: 100%; width: 100%; padding: 1rem 2rem">
     <div
       style="border-radius: 6px"
-      :style="{
-        backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
-      }"
+      :style="[
+        {
+          border: `2px solid ${$vuetify.theme.themes[appTheme].cardBackgroundRGBA}`,
+          backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
+        },
+        license.state
+          ? { border: `2px solid ${$vuetify.theme.themes[appTheme].success}` }
+          : { border: `2px solid ${$vuetify.theme.themes[appTheme].error}` },
+      ]"
     >
       <div style="font-weight: bold; font-size: 1.2rem; padding: 1rem 2rem">
         Активация продукта
@@ -100,7 +106,16 @@ export default {
   computed: {
     ...mapGetters("main", {
       appTheme: "appTheme",
+      _licData: "_licData",
     }),
+    license() {
+      if (this._licData.state) {
+        setTimeout(() => {
+          this.$router.push({ name: "competition_settings" });
+        }, 750);
+      }
+      return this._licData;
+    },
   },
 };
 </script>
