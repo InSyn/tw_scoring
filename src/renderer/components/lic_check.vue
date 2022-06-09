@@ -77,7 +77,19 @@ const { app } = require("electron").remote;
 
 export default {
   name: "lic_check",
-  mounted() {},
+  mounted() {
+    ipcRenderer.on("lic_server_response", (e, data) => {
+      console.log(data);
+      if (data.data && data.data["licence"] == "0") {
+        console.log("license approved");
+        this.licChecked({
+          user: this.user_mail,
+          key: this.user_key,
+        });
+      }
+    });
+    this.check_lic();
+  },
   methods: {
     ...mapActions("main", {
       licChecked: "licChecked",
@@ -88,10 +100,6 @@ export default {
         name: this.user_name,
         userSerial: "K816505070",
         userPKey: this.user_key,
-      });
-      this.licChecked({
-        user: this.user_mail,
-        key: this.user_key,
       });
     },
   },

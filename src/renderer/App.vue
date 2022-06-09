@@ -795,9 +795,7 @@ export default {
     ipcRenderer.on("server_message", (e, message) => {
       this.$store.commit("main/pushServerMessage", message);
     });
-    ipcRenderer.on("lic_server_response", (e, data) => {
-      console.log(data);
-    });
+
     document.addEventListener("keyup", (e) => {
       e.key === "Home" && this.changeMenuState();
     });

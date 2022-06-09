@@ -273,7 +273,7 @@ export default {
     licChecked: (state, lData) => {
       state._licData.user = lData.user;
       state._licData.key = lData.key;
-      // state._licData.state = true;
+      state._licData.state = true;
     },
     toggle_mode: (state) => {
       state.mode_timing = !state.mode_timing;
