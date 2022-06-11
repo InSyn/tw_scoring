@@ -6,7 +6,7 @@ export default {
   namespaced: true,
   state: {
     _licData: {
-      state: false,
+      state: true,
       user: "",
       key: "",
     },
