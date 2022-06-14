@@ -10,6 +10,10 @@ io.on("connection", (socket) => {
   socket.emit("serverConnected");
   console.log(`Connected ${socket.id}`);
 
+  socket.on("connect_error", (err) => {
+    console.log(`connect_error due to ${err.message}`);
+  });
+
   mainWindow &&
     mainWindow.webContents.send("server_message", [
       3,
@@ -296,6 +300,9 @@ app.on("startSocketServer", (config) => {
       console.log(
         `Listening on ${http.address().address} ${http.address().port}`
       );
+    });
+    http.once("error", (err) => {
+      console.log(`Connection error: ${err}`);
     });
   }
 });

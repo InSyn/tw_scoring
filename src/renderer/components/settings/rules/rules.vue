@@ -165,6 +165,7 @@
                     competitions.find((_comp) => _comp.id === _competition.id)
                       .passed_competitors
                   "
+                  @change="checkPassedInput"
                 />
                 <div
                   v-else
@@ -1601,6 +1602,10 @@ export default {
           );
         });
       });
+    },
+    checkPassedInput(event) {
+      if (event.target.value < 0) event.target.value = 0;
+      if (event.target.value > 64) event.target.value = 64;
     },
   },
   data() {

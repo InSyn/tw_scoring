@@ -33,15 +33,15 @@ export default {
       weather = [
         {
           descr1: "Температура Снега:",
-          descr2: "-",
+          descr2: "0°",
         },
         {
           descr1: "Температура Воздуха:",
-          descr2: "-",
+          descr2: "0°",
         },
         {
           descr1: "Скорость ветра:",
-          descr2: "-",
+          descr2: "",
         },
       ];
       structure = {
@@ -213,7 +213,7 @@ export default {
         openers: [],
       };
       technicalInfo = {
-        title: "Техническа информация",
+        title: "Техническая информация",
         change_dialog: false,
         records: [
           {
