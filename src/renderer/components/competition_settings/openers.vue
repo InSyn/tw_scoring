@@ -1,11 +1,12 @@
 <template>
   <div
+    class="flex-column pa-2"
     style="border-radius: 6px"
     :style="{
-      backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA
+      backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
     }"
   >
-    <div class="d-flex justify-center align-center">
+    <div class="d-flex align-center">
       <div
         @click="console.log(competition.stuff.openers)"
         :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
@@ -25,24 +26,24 @@
             )
           )
         "
-        class=""
+        style="margin-left: auto"
         text
         :color="$vuetify.theme.themes[appTheme].accent"
-        >Добавить</v-btn
+        ><v-icon>mdi-account-plus</v-icon></v-btn
       >
     </div>
     <div class="d-flex align-center">
-      <div style="display:flex;align-items: center;flex-wrap: wrap">
+      <div style="display: flex; flex-direction: column">
         <div
           v-for="(opener, o) in competition.stuff.openers"
           :key="o"
-          style="flex: 0 0 300px;margin: 8px;font-size: .9rem"
+          style="flex: 0 0 auto; margin: 8px; font-size: 0.9rem"
         >
           <div
             class="pa-2"
-            style="position:relative; border-radius: 6px"
+            style="position: relative; border-radius: 6px"
             :style="{
-              background: $vuetify.theme.themes[appTheme].subjectBackgroundRGBA
+              background: $vuetify.theme.themes[appTheme].subjectBackgroundRGBA,
             }"
           >
             <v-btn
@@ -50,7 +51,7 @@
               @click="competition.stuff.openers.splice(o, 1)"
               small
               color="red"
-              style="position:absolute; top: 0; right: 0;"
+              style="position: absolute; top: 0; right: 0"
               ><v-icon small>mdi-close</v-icon></v-btn
             >
             <v-row no-gutters>
@@ -67,11 +68,18 @@
                     $event.target.style.borderBottom = `1px solid transparent`
                   "
                   v-model="opener.bib"
-                  style="width:100%;margin-left: .5rem;padding: 2px 4px;border-radius:6px;transition:border-bottom 224ms;border-bottom:1px solid transparent"
+                  style="
+                    width: 100%;
+                    margin-left: 0.5rem;
+                    padding: 2px 4px;
+                    border-radius: 6px;
+                    transition: border-bottom 224ms;
+                    border-bottom: 1px solid transparent;
+                  "
                   :style="{
                     backgroundColor:
                       $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
-                    color: $vuetify.theme.themes[appTheme].textDefault
+                    color: $vuetify.theme.themes[appTheme].textDefault,
                   }"
               /></v-col>
               <v-col class="d-flex align-center pa-1" cols="9"
@@ -84,11 +92,18 @@
                     $event.target.style.borderBottom = `1px solid transparent`
                   "
                   v-model="opener.lastName"
-                  style="margin-left: .5rem;padding: 2px 4px;transition: border-bottom 224ms; border-bottom: 1px solid transparent; width: 100%; border-radius: 6px"
+                  style="
+                    margin-left: 0.5rem;
+                    padding: 2px 4px;
+                    transition: border-bottom 224ms;
+                    border-bottom: 1px solid transparent;
+                    width: 100%;
+                    border-radius: 6px;
+                  "
                   :style="{
                     backgroundColor:
                       $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
-                    color: $vuetify.theme.themes[appTheme].textDefault
+                    color: $vuetify.theme.themes[appTheme].textDefault,
                   }"
               /></v-col>
               <v-col class="d-flex align-center pa-1" cols="6"
@@ -101,15 +116,22 @@
                     $event.target.style.borderBottom = `1px solid transparent`
                   "
                   v-model="opener.name"
-                  style="margin-left: .5rem;padding: 2px 4px;transition: border-bottom 224ms; border-bottom: 1px solid transparent; width: 100%; border-radius: 6px"
+                  style="
+                    margin-left: 0.5rem;
+                    padding: 2px 4px;
+                    transition: border-bottom 224ms;
+                    border-bottom: 1px solid transparent;
+                    width: 100%;
+                    border-radius: 6px;
+                  "
                   :style="{
                     backgroundColor:
                       $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
-                    color: $vuetify.theme.themes[appTheme].textDefault
+                    color: $vuetify.theme.themes[appTheme].textDefault,
                   }"
               /></v-col>
               <v-col class="d-flex align-center pa-1" cols="6"
-                ><div v-html="`Город: `"></div>
+                ><div v-html="`Регион: `"></div>
                 <input
                   @focus="
                     $event.target.style.borderBottom = `1px solid ${$vuetify.theme.themes[appTheme].accent}`
@@ -118,11 +140,18 @@
                     $event.target.style.borderBottom = `1px solid transparent`
                   "
                   v-model="opener.location"
-                  style="margin-left: .5rem;padding: 2px 4px;transition: border-bottom 224ms; border-bottom: 1px solid transparent; width: 100%; border-radius: 6px"
+                  style="
+                    margin-left: 0.5rem;
+                    padding: 2px 4px;
+                    transition: border-bottom 224ms;
+                    border-bottom: 1px solid transparent;
+                    width: 100%;
+                    border-radius: 6px;
+                  "
                   :style="{
                     backgroundColor:
                       $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
-                    color: $vuetify.theme.themes[appTheme].textDefault
+                    color: $vuetify.theme.themes[appTheme].textDefault,
                   }"
               /></v-col>
             </v-row>
@@ -140,8 +169,8 @@ export default {
   computed: {
     ...mapGetters("main", { competition: "competition", appTheme: "appTheme" }),
     ...mapGetters("roles", { OpenerClass: "OpenerClass" }),
-    console: () => console
-  }
+    console: () => console,
+  },
 };
 </script>
 

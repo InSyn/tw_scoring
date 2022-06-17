@@ -280,7 +280,7 @@
                     1
                   )
                 "
-                color="red"
+                :color="$vuetify.theme.themes[appTheme].action_red"
               >
                 <v-icon small>mdi-close</v-icon></v-btn
               >
@@ -645,7 +645,7 @@
                 icon
                 style="position: absolute; top: 2px; right: 4px"
                 @click="remove_judge(judge._id)"
-                color="red"
+                :color="$vuetify.theme.themes[appTheme].action_red"
               >
                 <v-icon small>mdi-close</v-icon></v-btn
               >

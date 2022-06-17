@@ -1,24 +1,30 @@
 <template>
   <div
-    class="flex-column pa-1"
+    class="flex-column pa-2"
     style="border-radius: 6px"
     :style="{
-      backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA
+      backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
     }"
   >
-    <div class="d-flex justify-center align-center">
+    <div class="d-flex align-center">
       <div class="font-weight-bold" style="font-size: 1.2rem">
         Данные о погоде
       </div>
       <v-btn
         text
+        style="margin-left: auto"
         :color="$vuetify.theme.themes[appTheme].accent"
         @click="addWeather()"
-        >добавить</v-btn
+        ><v-icon>mdi-playlist-plus</v-icon></v-btn
       >
     </div>
-    <v-row v-for="(w_row, i) in competition.weather" :key="i" no-gutters>
-      <v-col class="d-flex align-center px-2 py-1" cols="5"
+    <v-row
+      v-for="(w_row, i) in competition.weather"
+      :key="i"
+      style="font-size: 0.9rem"
+      no-gutters
+    >
+      <v-col class="d-flex align-center py-1" cols="4"
         ><input
           @blur="
             $event.target.style.backgroundColor =
@@ -29,15 +35,20 @@
               $vuetify.theme.themes[appTheme].subjectBackgroundRGBA
           "
           class="pa-1"
-          style="width: 100%; border-radius: 6px; transition: background-color 112ms"
+          style="
+            width: 100%;
+            font-weight: bold;
+            border-radius: 6px;
+            transition: background-color 112ms;
+          "
           :style="{
             backgroundColor:
               $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
-            color: $vuetify.theme.themes[appTheme].textDefault
+            color: $vuetify.theme.themes[appTheme].textDefault,
           }"
           type="text"
-          v-model="competition.weather[i].descr1"/></v-col
-      ><v-col class="d-flex align-center px-2 py-1" cols="6"
+          v-model="competition.weather[i].descr1" /></v-col
+      ><v-col class="d-flex align-center pl-1 py-1" cols="7"
         ><input
           @blur="
             $event.target.style.backgroundColor =
@@ -48,18 +59,26 @@
               $vuetify.theme.themes[appTheme].subjectBackgroundRGBA
           "
           class="pa-1"
-          style="width: 100%; border-radius: 6px; transition: background-color 112ms"
+          style="
+            width: 100%;
+            border-radius: 6px;
+            transition: background-color 112ms;
+          "
           :style="{
             backgroundColor:
               $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
-            color: $vuetify.theme.themes[appTheme].textDefault
+            color: $vuetify.theme.themes[appTheme].textDefault,
           }"
           type="text"
           v-model="competition.weather[i].descr2"
         /> </v-col
-      ><v-col cols="1" style="display:flex;align-items: center"
-        ><v-btn small icon @click="removeWeather(i)" color="red"
-          ><v-icon small>mdi-minus</v-icon></v-btn
+      ><v-col cols="1" style="display: flex; align-items: center"
+        ><v-btn
+          small
+          icon
+          @click="removeWeather(i)"
+          :color="$vuetify.theme.themes[appTheme].action_red"
+          ><v-icon small>mdi-close</v-icon></v-btn
         ></v-col
       >
     </v-row>
@@ -76,11 +95,11 @@ export default {
     },
     removeWeather(idx) {
       this.competition.weather.splice(idx, 1);
-    }
+    },
   },
   computed: {
-    ...mapGetters("main", { appTheme: "appTheme", competition: "competition" })
-  }
+    ...mapGetters("main", { appTheme: "appTheme", competition: "competition" }),
+  },
 };
 </script>
 

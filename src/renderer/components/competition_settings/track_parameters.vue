@@ -1,14 +1,20 @@
 <template>
-  <div class="wrapper flex-column align-center" style="min-height: 100%;">
+  <div class="wrapper flex-column align-center" style="min-height: 100%">
     <div
       class="pa-2"
       style="min-height: 100%; border-radius: 6px"
       :style="{
-        background: $vuetify.theme.themes[appTheme].cardBackgroundRGBA
+        background: $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
       }"
     >
       <div
-        style="display:flex;align-items:center;justify-content:center;font-weight:bold; font-size: 1.2rem"
+        style="
+          display: flex;
+          align-items: center;
+          flex-wrap: nowrap;
+          font-weight: bold;
+          font-size: 1.2rem;
+        "
       >
         <v-dialog
           v-model="competition.technicalInfo.change_dialog"
@@ -26,7 +32,7 @@
             :style="{
               backgroundColor:
                 $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
-              color: $vuetify.theme.themes[appTheme].textDefault
+              color: $vuetify.theme.themes[appTheme].textDefault,
             }"
             ><v-card-title class="pa-2" style="font-size: 1.2rem"
               >Изменение заголовка</v-card-title
@@ -35,11 +41,11 @@
               <input
                 type="text"
                 size="32"
-                style="padding: 2px 4px;font-size: 1.1rem; border-radius: 2px;"
+                style="padding: 2px 4px; font-size: 1.1rem; border-radius: 2px"
                 :style="{
                   backgroundColor:
                     $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
-                  color: $vuetify.theme.themes[appTheme].textDefault
+                  color: $vuetify.theme.themes[appTheme].textDefault,
                 }"
                 v-model.lazy="competition.technicalInfo.title"
               />
@@ -60,7 +66,7 @@
             competition.technicalInfo.records.push({ title: '', value: '' })
           "
           :color="$vuetify.theme.themes[appTheme].accent"
-          style="margin-left: .5rem"
+          style="margin-left: auto"
           text
           ><v-icon>mdi-playlist-plus</v-icon></v-btn
         >
@@ -80,15 +86,19 @@
             @blur="
               $event.target.style.backgroundColor = `${$vuetify.theme.themes[appTheme].standardBackgroundRGBA}`
             "
-            style="transition: background-color 112ms; border-radius: 6px; width: 100%;"
-            class="flex-grow-1 pa-1 font-weight-bold"
             v-model="competition.technicalInfo.records[ts].title"
-            type="text"
+            class="flex-grow-1 pa-1 font-weight-bold"
+            style="
+              transition: background-color 112ms;
+              border-radius: 6px;
+              width: 100%;
+            "
             :style="{
               backgroundColor:
                 $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
-              color: $vuetify.theme.themes[appTheme].textDefault
+              color: $vuetify.theme.themes[appTheme].textDefault,
             }"
+            type="text"
         /></v-col>
         <v-col cols="7" class="pl-1">
           <input
@@ -98,14 +108,18 @@
             @blur="
               $event.target.style.backgroundColor = `${$vuetify.theme.themes[appTheme].standardBackgroundRGBA}`
             "
-            style="transition: background-color 112ms; border-radius: 6px; width: 100%;"
+            style="
+              transition: background-color 112ms;
+              border-radius: 6px;
+              width: 100%;
+            "
             class="flex-grow-1 pa-1"
             v-model="competition.technicalInfo.records[ts].value"
             type="text"
             :style="{
               color: $vuetify.theme.themes[appTheme].textDefault,
               backgroundColor:
-                $vuetify.theme.themes[appTheme].standardBackgroundRGBA
+                $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
             }"
         /></v-col>
         <v-col class="d-flex justify-center align-center" cols="1"
@@ -118,8 +132,8 @@
             "
             icon
             small
-            ><v-icon :color="$vuetify.theme.themes[appTheme].action_red"
-              >mdi-minus</v-icon
+            ><v-icon small :color="$vuetify.theme.themes[appTheme].action_red"
+              >mdi-close</v-icon
             ></v-btn
           ></v-col
         >
@@ -133,8 +147,8 @@ import { mapGetters } from "vuex";
 export default {
   name: "track_parameters",
   computed: {
-    ...mapGetters("main", ["competition", "appTheme"])
-  }
+    ...mapGetters("main", { competition: "competition", appTheme: "appTheme" }),
+  },
 };
 </script>
 

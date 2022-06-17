@@ -1,18 +1,18 @@
 <template>
   <v-container
     fluid
-    style="min-width: 1024px; margin: 0;padding: 0;"
+    style="min-width: 1024px; margin: 0; padding: 0"
     v-if="competition"
   >
     <v-row style="margin: 16px 16px" no-gutters
-      ><v-col style="font-size: 1.4rem; font-weight:bold;"
+      ><v-col style="font-size: 1.4rem; font-weight: bold"
         >Настройки соревнования</v-col
       ><v-spacer></v-spacer
       ><v-col
         cols="auto"
-        style="display:flex;;align-items: center"
+        style="display: flex; align-items: center"
         :style="{
-          color: $vuetify.theme.themes[appTheme].cardBackgroundRGBA
+          color: $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
         }"
         ><div>Comp_ID: {{ competition.id }}</div>
         <v-dialog
@@ -35,14 +35,14 @@
             :style="{
               backgroundColor:
                 $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
-              color: $vuetify.theme.themes[appTheme].textDefault
+              color: $vuetify.theme.themes[appTheme].textDefault,
             }"
-            ><div style="font-size: 1.2rem;padding: .5rem 1rem">
+            ><div style="font-size: 1.2rem; padding: 0.5rem 1rem">
               Удалить соревнование<b>
                 {{
-                  ` ${competition &&
-                    competition.mainData.title.value} ${competition &&
-                    competition.mainData.title.stage.value.value}?`
+                  ` ${competition && competition.mainData.title.value} ${
+                    competition && competition.mainData.title.stage.value.value
+                  }?`
                 }}</b
               >
             </div>
@@ -76,13 +76,11 @@
         <stuff></stuff>
       </v-col>
       <v-col style="height: 100%" cols="4">
-        <track_parameters></track_parameters>
+        <track_parameters></track_parameters
+        ><weather style="margin-top: 16px"></weather
+        ><openers style="margin-top: 16px"></openers>
       </v-col>
     </v-row>
-    <v-row style="margin: 16px 16px" no-gutters
-      ><v-col cols="6"> <openers style="margin-right: 4px "></openers> </v-col
-      ><v-col cols="6"> <weather style="margin-left: 4px "></weather> </v-col
-    ></v-row>
   </v-container>
 </template>
 
@@ -102,21 +100,21 @@ export default {
     localization,
     stuff,
     track_parameters,
-    weather
+    weather,
   },
   methods: {},
   data() {
     return {
       delete_competition_dialog: {
-        state: false
-      }
+        state: false,
+      },
     };
   },
   computed: {
     ...mapGetters("main", ["competition", "competitions", "appTheme"]),
     ...mapGetters("event", ["EventClass"]),
-    console: () => console
-  }
+    console: () => console,
+  },
 };
 </script>
 
