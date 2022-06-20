@@ -23,7 +23,7 @@ export default new Router({
     {
       path: "/main",
       name: "main",
-      component: Main
+      component: Main,
     },
     {
       path: "/settings",
@@ -34,44 +34,44 @@ export default new Router({
         {
           name: "videoGraphics",
           path: "video_graphics",
-          component: videoGraphics
+          component: videoGraphics,
         },
         {
           name: "sportGraphics",
           path: "sport_graphics",
-          component: sportGraphics
+          component: sportGraphics,
         },
         {
           name: "results",
           path: "results",
-          component: results
+          component: results,
         },
         {
           name: "rules",
           path: "rules",
-          component: rules
-        }
-      ]
+          component: rules,
+        },
+      ],
     },
     {
       path: "/competition_settings",
       name: "competition_settings",
-      component: competition_settings
+      component: competition_settings,
     },
     {
       path: "/competitors",
       name: "competitors",
-      component: competitors
+      component: competitors,
     },
     {
       path: "/start_protocols",
       name: "start_protocols",
-      component: race_list
+      component: race_list,
     },
     {
       path: "/scoring",
       name: "scoring",
-      component: scoring
+      component: scoring,
     },
     {
       path: "/protocols",
@@ -81,23 +81,23 @@ export default new Router({
         {
           name: "startProtocols",
           path: "start_protocols",
-          component: start_protocols
+          component: start_protocols,
         },
         {
           name: "finalProtocols",
           path: "final_protocols",
-          component: final_protocols
-        }
-      ]
+          component: final_protocols,
+        },
+      ],
     },
     {
       path: "/lic_check",
       name: "licCheck",
-      component: lic_check
+      component: lic_check,
     },
     {
       path: "*",
-      redirect: { name: "main" }
-    }
-  ]
+      redirect: { name: "main" },
+    },
+  ],
 });

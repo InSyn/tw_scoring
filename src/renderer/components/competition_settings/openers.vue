@@ -37,7 +37,7 @@
         <div
           v-for="(opener, o) in competition.stuff.openers"
           :key="o"
-          style="flex: 0 0 auto; margin: 8px; font-size: 0.9rem"
+          style="flex: 0 0 auto; margin-top: 1rem; font-size: 0.9rem"
         >
           <div
             class="pa-2"

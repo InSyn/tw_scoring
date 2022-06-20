@@ -477,7 +477,7 @@
           position: relative;
           z-index: 1001;
           outline: none;
-          border-radius: 6px;
+          border-radius: 4px;
           margin-left: 0.5rem;
         "
         :style="{
@@ -537,7 +537,7 @@
               </div>
               <div style="flex: 0 0 auto; margin-top: 0.2rem">
                 {{
-                  `${competition && competition.mainData.title.value}. ${
+                  `${event.event_title}. ${
                     competition &&
                     competition.mainData.title.stage.value &&
                     competition.mainData.title.stage.value.value
@@ -860,17 +860,9 @@ export default {
     first_competition_setup(competition) {
       competition.mainData.discipline.value = "Дисциплина";
       competition.mainData.discipline.min = "DSC";
-      competition.mainData.country.value = "RUS";
-      competition.mainData.location.value = "Krasnoyarsk";
       for (let i = 0; i < 4; i++) {
         competition.stuff.judges.push(
-          new this.JudgeClass(
-            `Судья ${i + 1}`,
-            i + 1,
-            "Фамилия",
-            "Имя",
-            "Город"
-          )
+          new this.JudgeClass(`Судья ${i + 1}`, i + 1)
         );
       }
     },
@@ -1020,17 +1012,18 @@ export default {
     };
   },
   computed: {
-    ...mapGetters("main", [
-      "socket",
-      "showMenu",
-      "appTheme",
-      "appMenu",
-      "competitions",
-      "competition",
-      "timer",
-    ]),
-    ...mapGetters("event", ["EventClass"]),
-    ...mapGetters("roles", ["JudgeClass"]),
+    ...mapGetters("main", {
+      socket: "socket",
+      showMenu: "showMenu",
+      appTheme: "appTheme",
+      appMenu: "appMenu",
+      event: "event",
+      competitions: "competitions",
+      competition: "competition",
+      timer: "timer",
+    }),
+    ...mapGetters("event", { EventClass: "EventClass" }),
+    ...mapGetters("roles", { JudgeClass: "JudgeClass" }),
   },
 };
 </script>

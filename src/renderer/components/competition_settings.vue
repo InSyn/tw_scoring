@@ -4,6 +4,85 @@
     style="min-width: 1024px; margin: 0; padding: 0"
     v-if="competition"
   >
+    <div style="display: flex; flex-wrap: wrap; margin: 16px 16px">
+      <div
+        style="
+          flex: 0 0 100%;
+          margin-bottom: 1rem;
+          font-size: 1.4rem;
+          font-weight: bold;
+        "
+      >
+        Настройки события
+      </div>
+      <div
+        style="
+          flex: 0 0 100%;
+          display: flex;
+          flex-wrap: wrap;
+          align-items: center;
+          padding: 4px 8px;
+          border-radius: 6px;
+        "
+        :style="{
+          backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
+        }"
+      >
+        <div
+          style="
+            flex: 1 0 auto;
+            display: flex;
+            align-items: center;
+            max-width: 50%;
+          "
+        >
+          <div style="flex: 0 0 auto; font-weight: bold; min-width: 11rem">
+            Название события
+          </div>
+          <input
+            v-model.lazy="event.event_title"
+            style="
+              flex: 1 0 auto;
+              border-radius: 6px;
+              margin-left: 8px;
+              padding: 4px;
+            "
+            :style="{
+              backgroundColor:
+                $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
+              color: $vuetify.theme.themes[appTheme].textDefault,
+            }"
+          />
+        </div>
+        <div
+          style="
+            flex: 1 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            font-weight: bold;
+          "
+        >
+          Количество соревнований
+          <div
+            style="
+              font-weight: bold;
+              margin-left: 1rem;
+              padding: 4px;
+              border-radius: 6px;
+              min-width: 3rem;
+              text-align: center;
+            "
+            :style="{
+              backgroundColor:
+                $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
+            }"
+          >
+            {{ competitions.length }}
+          </div>
+        </div>
+      </div>
+    </div>
     <v-row style="margin: 16px 16px" no-gutters
       ><v-col style="font-size: 1.4rem; font-weight: bold"
         >Настройки соревнования</v-col
@@ -111,8 +190,13 @@ export default {
     };
   },
   computed: {
-    ...mapGetters("main", ["competition", "competitions", "appTheme"]),
-    ...mapGetters("event", ["EventClass"]),
+    ...mapGetters("main", {
+      event: "event",
+      competition: "competition",
+      competitions: "competitions",
+      appTheme: "appTheme",
+    }),
+    ...mapGetters("event", { EventClass: "EventClass" }),
     console: () => console,
   },
 };

@@ -17,6 +17,10 @@ export default {
     },
     socket: null,
     opened_sockets: [],
+    event: {
+      id: null,
+      event_title: "Новое событие",
+    },
     event_id: null,
     competition: null,
     competitions: [],
@@ -111,6 +115,7 @@ export default {
     event_id: (state) => state.event_id,
     live_config: (state) => state.live_config,
     terminals: (state) => state.terminals,
+    event: (state) => state.event,
     competitions: (state) => state.competitions,
     competition: (state) => state.competition,
     showPreview: (state) => state.showPreview,

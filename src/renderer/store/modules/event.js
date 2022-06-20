@@ -202,9 +202,9 @@ export default {
           {
             id: "chief",
             title: "Старший судья",
-            lastName: "Фамилия",
-            name: "Имя",
-            loc: "Город",
+            lastName: "",
+            name: "",
+            loc: "",
             connected: false,
             setABC: false,
           },
