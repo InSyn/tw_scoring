@@ -641,7 +641,7 @@ export default {
         }_${this.competition.mainData.title.value.trim().split(" ").join("_")}`,
         image: { type: "jpeg", quality: 1 },
         html2canvas: {
-          scale: 4,
+          scale: 1,
           letterRendering: true,
           allowTaint: true,
         },

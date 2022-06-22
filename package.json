@@ -25,6 +25,15 @@
     "files": [
       "dist/electron/**/*"
     ],
+    "extraResources": [
+      {
+        "from": "srv/",
+        "to": "lsrv/",
+        "filter": [
+          "**/*"
+        ]
+      }
+    ],
     "dmg": {
       "contents": [
         {

@@ -178,7 +178,7 @@ export default {
           focus: false,
         },
         codex: {
-          title: "Codex",
+          title: "Код",
           value: "",
           focus: false,
         },

@@ -2,6 +2,8 @@ import io from "socket.io-client";
 import fs from "fs";
 import router from "./../../router";
 
+import event from "./event";
+
 export default {
   namespaced: true,
   state: {
@@ -497,6 +499,7 @@ export default {
       await fs.readdir("./events", (err, res) => {
         if (err) {
           fs.mkdir("./events", (err) => {
+            console.log(err);
             return err;
           });
           fs.writeFile(
@@ -520,6 +523,64 @@ export default {
           );
         }
       });
+    },
+    load_event: ({ state }, evData) => {
+      state.event.id = evData.id;
+      state.event.event_title = evData.title;
+
+      state.competitions = [];
+
+      evData.competitions.forEach((evData_competition) => {
+        let competition = new event.state["EventClass"]();
+
+        competition.stages = evData_competition.stages;
+
+        competition.mainData = evData_competition.mainData;
+
+        competition.stuff.judges = [];
+        evData_competition.stuff.judges.forEach((_judge) => {
+          competition.stuff.judges.push(_judge);
+        });
+
+        competition.stuff.jury = [];
+        evData_competition.stuff.jury.forEach((_judge) => {
+          competition.stuff.jury.push(_judge);
+        });
+
+        competition.stuff.openers = [];
+        evData_competition.stuff.openers.forEach((_judge) => {
+          competition.stuff.openers.push(_judge);
+        });
+
+        competition.technicalInfo.records = [];
+        evData_competition.technicalInfo.records.forEach((_tInf) =>
+          competition.technicalInfo.records.push(_tInf)
+        );
+
+        competition.weather = [];
+        evData_competition.weather.forEach((_tInf) =>
+          competition.weather.push(_tInf)
+        );
+
+        competition.competitorsSheet.header =
+          evData_competition.competitorsSheet.header;
+
+        competition.competitorsSheet.competitors = [];
+        evData_competition.competitorsSheet.competitors.forEach(
+          (_competitor) => {
+            competition.competitorsSheet.competitors.push(_competitor);
+          }
+        );
+
+        competition.races = [];
+        evData_competition.races.forEach((_race) =>
+          competition.races.push(_race)
+        );
+
+        state.competitions.push(competition);
+      });
+
+      state.competition = state.competitions[0] || null;
     },
     xml_export: async (s, data) => {
       const object = data[0],

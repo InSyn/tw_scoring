@@ -50,7 +50,7 @@
           <input
             :key="Math.random()"
             @change="
-              $event.target.files[0] && load_event($event.target.files[0].path)
+              $event.target.files[0] && load($event.target.files[0].path)
             "
             type="file"
             accept="application/json"
@@ -475,10 +475,11 @@
         @blur="competition_select = false"
         style="
           position: relative;
+          min-width: 200px;
+          margin-left: 0.5rem;
           z-index: 1001;
           outline: none;
           border-radius: 4px;
-          margin-left: 0.5rem;
         "
         :style="{
           backgroundColor:
@@ -512,6 +513,7 @@
           >
             <div
               style="
+                flex: 1 0 auto;
                 display: flex;
                 flex-direction: column;
                 white-space: nowrap;
@@ -629,7 +631,7 @@
               ]"
             >
               {{
-                `${
+                `${competitions.indexOf(_competition) + 1} ${
                   _competition.mainData.title.stage.value &&
                   _competition.mainData.title.stage.value.value
                 }`
@@ -831,6 +833,7 @@ export default {
       "changeTheme",
       "createCompetition",
       "event_save",
+      "load_event",
     ]),
     log(data) {
       console.log(data);
@@ -865,10 +868,12 @@ export default {
         );
       }
     },
-    load_event(path) {
+    load(path) {
+      console.log(path);
       let evData = JSON.parse(fs.readFileSync(`${path}`, "utf-8"));
 
-      console.log(evData);
+      this.load_event(evData);
+
       // this.competition.stages.stage_grid = [];
       // this.competition.stages.stage_grid.push({
       //   title: this.competition.mainData.title.stage.value.value,

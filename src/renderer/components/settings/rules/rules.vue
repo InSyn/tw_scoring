@@ -332,6 +332,7 @@
                 <div
                   style="
                     display: flex;
+
                     flex-direction: column;
                     border-radius: 2px;
                     overflow: hidden;
@@ -393,7 +394,7 @@
                   >
                     <div
                       v-for="(comp, c_idx) in [
-                        competitions.find(
+                        ...competitions.find(
                           (_competition) => _competition.id === _stage
                         ),
                       ]"
