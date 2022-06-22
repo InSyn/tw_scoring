@@ -25,8 +25,8 @@
       <v-btn
         text
         @click="
-          $store.commit('main/event_save', {
-            name: `${competition.mainData.date.value} ${competition.mainData.title.value}. ${competition.mainData.title.stage.value.value}`,
+          event_save({
+            name: `${competition.mainData.date.value} ${event.event_title}`,
           })
         "
         style="padding: 0"
@@ -629,9 +629,7 @@
               ]"
             >
               {{
-                `${competitions.indexOf(_competition) + 1} ${
-                  _competition && _competition.mainData.title.value
-                } ${
+                `${
                   _competition.mainData.title.stage.value &&
                   _competition.mainData.title.stage.value.value
                 }`
@@ -832,6 +830,7 @@ export default {
       "changeMenuState",
       "changeTheme",
       "createCompetition",
+      "event_save",
     ]),
     log(data) {
       console.log(data);
@@ -869,45 +868,46 @@ export default {
     load_event(path) {
       let evData = JSON.parse(fs.readFileSync(`${path}`, "utf-8"));
 
-      this.competition.stages.stage_grid = [];
-      this.competition.stages.stage_grid.push({
-        title: this.competition.mainData.title.stage.value.value,
-        s_competitions: [this.competition.id],
-      });
-
-      this.competition.mainData = evData.mainData;
-
-      this.competition.stuff.judges = [];
-      evData.stuff.judges.forEach((_judge) => {
-        this.competition.stuff.judges.push(_judge);
-      });
-
-      this.competition.stuff.jury = [];
-      evData.stuff.jury.forEach((_judge) => {
-        this.competition.stuff.jury.push(_judge);
-      });
-
-      this.competition.stuff.openers = [];
-      evData.stuff.openers.forEach((_judge) => {
-        this.competition.stuff.openers.push(_judge);
-      });
-
-      this.competition.technicalInfo.records = [];
-      evData.technicalInfo.records.forEach((_tInf) =>
-        this.competition.technicalInfo.records.push(_tInf)
-      );
-      this.competition.weather = [];
-      evData.weather.forEach((_tInf) => this.competition.weather.push(_tInf));
-
-      this.competition.competitorsSheet.header = evData.competitorsSheet.header;
-
-      this.competition.competitorsSheet.competitors = [];
-      evData.competitorsSheet.competitors.forEach((_competitor) => {
-        this.competition.competitorsSheet.competitors.push(_competitor);
-      });
-
-      this.competition.races = [];
-      evData.races.forEach((_race) => this.competition.races.push(_race));
+      console.log(evData);
+      // this.competition.stages.stage_grid = [];
+      // this.competition.stages.stage_grid.push({
+      //   title: this.competition.mainData.title.stage.value.value,
+      //   s_competitions: [this.competition.id],
+      // });
+      //
+      // this.competition.mainData = evData.mainData;
+      //
+      // this.competition.stuff.judges = [];
+      // evData.stuff.judges.forEach((_judge) => {
+      //   this.competition.stuff.judges.push(_judge);
+      // });
+      //
+      // this.competition.stuff.jury = [];
+      // evData.stuff.jury.forEach((_judge) => {
+      //   this.competition.stuff.jury.push(_judge);
+      // });
+      //
+      // this.competition.stuff.openers = [];
+      // evData.stuff.openers.forEach((_judge) => {
+      //   this.competition.stuff.openers.push(_judge);
+      // });
+      //
+      // this.competition.technicalInfo.records = [];
+      // evData.technicalInfo.records.forEach((_tInf) =>
+      //   this.competition.technicalInfo.records.push(_tInf)
+      // );
+      // this.competition.weather = [];
+      // evData.weather.forEach((_tInf) => this.competition.weather.push(_tInf));
+      //
+      // this.competition.competitorsSheet.header = evData.competitorsSheet.header;
+      //
+      // this.competition.competitorsSheet.competitors = [];
+      // evData.competitorsSheet.competitors.forEach((_competitor) => {
+      //   this.competition.competitorsSheet.competitors.push(_competitor);
+      // });
+      //
+      // this.competition.races = [];
+      // evData.races.forEach((_race) => this.competition.races.push(_race));
     },
     initCreateDialog() {
       this.create_competition_dialog.data.forEach((_field) => {

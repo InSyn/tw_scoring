@@ -459,34 +459,6 @@ export default {
     serverLog: (state, data) => {
       console.log(data);
     },
-    event_save: async (state, conf) => {
-      await fs.readdir("./events", (err, res) => {
-        if (err) {
-          fs.mkdir("./events", (err) => {
-            return err;
-          });
-          fs.writeFile(
-            `./events/${conf.name}.json`,
-            JSON.stringify(state.competition),
-            "utf-8",
-            (err) => {
-              if (err) console.log(err);
-              else console.log("file saved");
-            }
-          );
-        } else {
-          fs.writeFile(
-            `./events/${conf.name}.json`,
-            JSON.stringify(state.competition),
-            "utf-8",
-            (err) => {
-              if (err) console.log(err);
-              else console.log("file saved");
-            }
-          );
-        }
-      });
-    },
   },
   actions: {
     licChecked: ({ commit }, lData) => {
@@ -515,6 +487,40 @@ export default {
     },
     serverLog: ({ commit }) => commit("serverLog"),
     updateEvent: ({ commit }) => commit("updateEvent"),
+    event_save: async ({ state }, conf) => {
+      const event_to_save = {
+        title: state.event.event_title,
+        id: state.event.event_id,
+        competitions: state.competitions,
+      };
+      console.log(JSON.stringify(event_to_save));
+      await fs.readdir("./events", (err, res) => {
+        if (err) {
+          fs.mkdir("./events", (err) => {
+            return err;
+          });
+          fs.writeFile(
+            `./events/${conf.name}.json`,
+            JSON.stringify(event_to_save),
+            "utf-8",
+            (err) => {
+              if (err) console.log(err);
+              else console.log("file saved");
+            }
+          );
+        } else {
+          fs.writeFile(
+            `./events/${conf.name}.json`,
+            JSON.stringify(event_to_save),
+            "utf-8",
+            (err) => {
+              if (err) console.log(err);
+              else console.log("file saved");
+            }
+          );
+        }
+      });
+    },
     xml_export: async (s, data) => {
       const object = data[0],
         competition = data[1];

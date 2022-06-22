@@ -179,7 +179,7 @@ export default {
         },
         codex: {
           title: "Codex",
-          value: "0000",
+          value: "",
           focus: false,
         },
       };
