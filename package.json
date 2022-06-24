@@ -1,5 +1,5 @@
 {
-  "name": "scoring_secretary_terminal",
+  "name": "TW_Scoring",
   "version": "1.0.0",
   "author": "insyner@gmail.com",
   "description": "Scoring app by TimingWeb",
@@ -61,10 +61,9 @@
     "nsis": {
       "installerIcon": "build/icons/icon.ico",
       "uninstallerIcon": "build/icons/icon.ico",
-      "uninstallDisplayName": "TW Display App",
-      "oneClick": false,
-      "perMachine": true,
-      "allowToChangeInstallationDirectory": true
+      "uninstallDisplayName": "TW Scoring",
+      "oneClick": true,
+      "perMachine": false
     },
     "linux": {
       "icon": "build/icons"

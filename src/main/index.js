@@ -59,7 +59,6 @@ function createWindow() {
    * Initial window options
    */
   mainWindow = new BrowserWindow({
-    show: false,
     width: 1650,
     height: 900,
     webPreferences: {
@@ -71,7 +70,6 @@ function createWindow() {
 
   mainWindow.loadURL(winURL);
   mainWindow.maximize();
-  mainWindow.show();
 
   mainWindow.on("closed", () => {
     mainWindow = null;

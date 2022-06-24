@@ -540,6 +540,7 @@ export default {
         competition.passed_competitors = evData_competition.passed_competitors;
 
         competition.mainData = evData_competition.mainData;
+        competition.protocol_settings = evData_competition.protocol_settings;
 
         competition.stuff.judges = [];
         evData_competition.stuff.judges.forEach((_judge) => {
