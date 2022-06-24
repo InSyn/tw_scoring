@@ -616,7 +616,7 @@
                             padding: 2px 4px;
                           "
                         >
-                          Корридор {{ cor_idx + 1 }}
+                          Коридор {{ cor_idx + 1 }}
                           <div style="margin-left: auto">
                             <v-dialog
                               v-model="

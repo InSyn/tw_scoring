@@ -8,7 +8,7 @@ export default {
   namespaced: true,
   state: {
     _licData: {
-      state: true,
+      state: false,
       user: "",
       key: "",
     },
@@ -524,16 +524,20 @@ export default {
         }
       });
     },
-    load_event: ({ state }, evData) => {
+    load_event: ({ state, commit }, evData) => {
       state.event.id = evData.id;
       state.event.event_title = evData.title;
 
       state.competitions = [];
+      console.log(evData);
 
       evData.competitions.forEach((evData_competition) => {
         let competition = new event.state["EventClass"]();
 
+        competition.id = evData_competition.id;
+
         competition.stages = evData_competition.stages;
+        competition.passed_competitors = evData_competition.passed_competitors;
 
         competition.mainData = evData_competition.mainData;
 
@@ -580,7 +584,7 @@ export default {
         state.competitions.push(competition);
       });
 
-      state.competition = state.competitions[0] || null;
+      commit("setCompetition", state.competitions[0]);
     },
     xml_export: async (s, data) => {
       const object = data[0],

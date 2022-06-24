@@ -27,7 +27,7 @@
     ],
     "extraResources": [
       {
-        "from": "srv/",
+        "from": "lsrv/",
         "to": "lsrv/",
         "filter": [
           "**/*"
