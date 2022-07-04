@@ -16,7 +16,7 @@
     >
       <v-btn
         :color="$vuetify.theme.themes[appTheme].accent"
-        @click="changeMenuState"
+        @click="changeMenuState()"
         style="margin-right: 1rem"
         icon
       >
@@ -24,11 +24,7 @@
       </v-btn>
       <v-btn
         text
-        @click="
-          event_save({
-            name: `${competition.mainData.date.value} ${event.event_title}`,
-          })
-        "
+        @click="openSaveDialog()"
         style="padding: 0"
         min-width="0"
         width="48"
@@ -49,11 +45,9 @@
           <v-icon>mdi-download</v-icon>
           <input
             :key="Math.random()"
-            @change="
-              $event.target.files[0] && load($event.target.files[0].path)
-            "
+            @change="load($event.target.files[0].path)"
             type="file"
-            accept="application/json"
+            accept=".twe"
             hidden /></label
       ></v-btn>
       <v-dialog
@@ -786,6 +780,7 @@ import {
 import fs from "fs";
 
 const { ipcRenderer } = require("electron");
+const dialog = require("electron").remote.dialog;
 const { app } = require("electron").remote;
 
 export default {
@@ -809,7 +804,7 @@ export default {
     this.$store.dispatch("main/checkEventID");
     this.createCompetition(new this.EventClass());
     this.$store.commit("main/setCompetition", this.competitions[0]);
-    this.first_competition_setup(this.competition);
+    this.competitionFirstSetup(this.competition);
     this.serverStatusChecker = setInterval(() => {
       this.socket && this.socket.connected
         ? this.$store.commit("main/serverSetStatus", true)
@@ -828,15 +823,27 @@ export default {
     //shortcuts handler
   },
   methods: {
-    ...mapActions("main", [
-      "changeMenuState",
-      "changeTheme",
-      "createCompetition",
-      "event_save",
-      "load_event",
-    ]),
+    ...mapActions("main", {
+      changeMenuState: "changeMenuState",
+      changeTheme: "changeTheme",
+      createCompetition: "createCompetition",
+      save_event: "save_event",
+      load_event: "load_event",
+    }),
     log(data) {
       console.log(data);
+    },
+    openSaveDialog() {
+      dialog.showSaveDialog(
+        {
+          title: "Сохранение события",
+          defaultPath: `/${this.event.event_title}`,
+          filters: [{ name: "TW Event", extensions: ["twe"] }],
+        },
+        (resultPath) => {
+          this.save_event({ path: resultPath });
+        }
+      );
     },
     getSysData() {
       ipcRenderer.on("sysData", (event, data) => {
@@ -859,7 +866,7 @@ export default {
         this.$store.commit("main/createServerChecker");
       }
     },
-    first_competition_setup(competition) {
+    competitionFirstSetup(competition) {
       competition.mainData.discipline.value = "Дисциплина";
       competition.mainData.discipline.min = "DSC";
       for (let i = 0; i < 4; i++) {
@@ -869,7 +876,6 @@ export default {
       }
     },
     load(path) {
-      console.log(path);
       let evData = JSON.parse(fs.readFileSync(`${path}`, "utf-8"));
 
       this.load_event(evData);

@@ -8,7 +8,7 @@ export default {
   namespaced: true,
   state: {
     _licData: {
-      state: false,
+      state: true,
       user: "",
       key: "",
     },
@@ -489,47 +489,29 @@ export default {
     },
     serverLog: ({ commit }) => commit("serverLog"),
     updateEvent: ({ commit }) => commit("updateEvent"),
-    event_save: async ({ state }, conf) => {
-      const event_to_save = {
-        title: state.event.event_title,
-        id: state.event.event_id,
-        competitions: state.competitions,
-      };
-      console.log(JSON.stringify(event_to_save));
-      await fs.readdir("./events", (err, res) => {
-        if (err) {
-          fs.mkdir("./events", (err) => {
-            console.log(err);
-            return err;
-          });
-          fs.writeFile(
-            `./events/${conf.name}.json`,
-            JSON.stringify(event_to_save),
-            "utf-8",
-            (err) => {
-              if (err) console.log(err);
-              else console.log("file saved");
-            }
-          );
-        } else {
-          fs.writeFile(
-            `./events/${conf.name}.json`,
-            JSON.stringify(event_to_save),
-            "utf-8",
-            (err) => {
-              if (err) console.log(err);
-              else console.log("file saved");
-            }
-          );
-        }
-      });
+    save_event: async ({ state }, conf) => {
+      if (conf.path) {
+        const event_to_save = {
+          title: state.event.event_title,
+          id: state.event.event_id,
+          competitions: state.competitions,
+        };
+        await fs.writeFile(
+          conf.path,
+          JSON.stringify(event_to_save),
+          "utf-8",
+          (err) => {
+            if (err) console.log(`Error: ${err}`);
+            else console.log(`File saved to: ${conf.path}`);
+          }
+        );
+      }
     },
     load_event: ({ state, commit }, evData) => {
       state.event.id = evData.id;
       state.event.event_title = evData.title;
 
       state.competitions = [];
-      console.log(evData);
 
       evData.competitions.forEach((evData_competition) => {
         let competition = new event.state["EventClass"]();
@@ -540,7 +522,6 @@ export default {
         competition.passed_competitors = evData_competition.passed_competitors;
 
         competition.mainData = evData_competition.mainData;
-        competition.protocol_settings = evData_competition.protocol_settings;
 
         competition.stuff.judges = [];
         evData_competition.stuff.judges.forEach((_judge) => {

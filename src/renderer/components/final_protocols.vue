@@ -2,20 +2,28 @@
   <v-container
     v-if="competition"
     class="d-flex flex-column pa-0"
-    style="position: relative; height: 100%; width: 100%; min-height: 720px; min-width: 1280px"
+    style="
+      position: relative;
+      height: 100%;
+      width: 100%;
+      min-height: 720px;
+      min-width: 1280px;
+    "
     fluid
   >
     <div class="d-flex">
       <fp_menu></fp_menu>
     </div>
-    <div class="d-flex flex-grow-1" style="height: 100%;">
-      <div class="d-flex pa-2" style="height: 100%; width: 50%;">
+    <div class="d-flex flex-grow-1" style="height: 100%">
+      <div class="d-flex pa-2" style="height: 100%; width: 50%">
         <fp_main></fp_main>
       </div>
-      <div class="d-flex flex-column" style="width: 50%; height: 100%;">
-        <div style="height: 40%;" class="d-flex pa-2"><fonts></fonts></div>
-        <div style="height: 40%;" class="d-flex pa-2"><filters></filters></div>
-        <div style="height: 20%;" class="d-flex pa-2"><logos></logos></div>
+      <div class="d-flex flex-column" style="width: 50%; height: 100%">
+        <div style="flex: 0 0 auto" class="d-flex pa-2"><fonts></fonts></div>
+        <div style="flex: 1 0 auto" class="d-flex pa-2">
+          <filters></filters>
+        </div>
+        <div style="flex: 0 0 auto" class="d-flex pa-2"><logos></logos></div>
       </div>
     </div>
     <div
@@ -27,7 +35,15 @@
       <v-btn
         depressed
         @click="competition.protocol_settings.show_preview = false"
-        style="position: absolute; z-index: 1001; right: 0; top: 0; border-radius: 0; height: 2.4rem; font-weight:bold;"
+        style="
+          position: absolute;
+          z-index: 1001;
+          right: 0;
+          top: 0;
+          border-radius: 0;
+          height: 2.4rem;
+          font-weight: bold;
+        "
         :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
         :color="$vuetify.theme.themes[appTheme].action_red"
         >Закрыть
@@ -61,14 +77,14 @@ export default {
     filters,
     logos,
     preview,
-    race_results_protocol
+    race_results_protocol,
   },
   computed: {
     ...mapGetters("main", {
       competition: "competition",
-      appTheme: "appTheme"
-    })
-  }
+      appTheme: "appTheme",
+    }),
+  },
 };
 </script>
 

@@ -1,8 +1,25 @@
-import competition from "../../../main/server_competition";
 import main from "./../modules/main";
+
 export default {
   namespaced: true,
   state: {
+    export_mode: {
+      menu: [
+        {
+          id: "excel",
+          title: "Печатать EXCEL",
+        },
+        {
+          id: "xml",
+          title: "Печатать XML",
+        },
+        {
+          id: "pdf",
+          title: "Печатать PDF",
+        },
+      ],
+      selected: 2,
+    },
     results_protocol: {
       standard_aligns: [
         { title: "Слева", value: "start" },
@@ -126,6 +143,7 @@ export default {
   },
   getters: {
     results_protocol: (state) => state.results_protocol,
+    export_mode: (state) => state.export_mode,
     fieldClass: (state) => state.fieldClass,
   },
   mutations: {
@@ -449,6 +467,14 @@ export default {
 
       data.competition.protocol_settings.result_protocols.raceResultFields =
         result_fields;
+    },
+    setExportMode(state, mode) {
+      state.export_mode.selected = mode;
+    },
+  },
+  actions: {
+    setExportMode({ commit }, mode) {
+      commit("setExportMode", mode);
     },
   },
 };

@@ -59,7 +59,7 @@
                 ><span v-html="`Открывающий ${opener.num}`"></span
               ></v-col>
               <v-col class="d-flex align-center pa-1" cols="3"
-                ><div v-html="`Bib: `"></div>
+                ><div v-html="`Номер: `"></div>
                 <input
                   @focus="
                     $event.target.style.borderBottom = `1px solid ${$vuetify.theme.themes[appTheme].accent}`
