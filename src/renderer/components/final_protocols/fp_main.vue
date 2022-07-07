@@ -205,7 +205,7 @@
                 color: $vuetify.theme.themes[appTheme].success,
               },
             ]"
-            >{{ `Ширина(%)(${sum_width}%)` }}</v-col
+            >{{ `Ширина(${sum_width}%)` }}</v-col
           >
           <v-col
             style="height: 100%"

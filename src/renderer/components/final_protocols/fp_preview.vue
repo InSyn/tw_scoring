@@ -67,7 +67,6 @@
           ></protocol_header>
 
           <!-- Sheet -->
-
           <div
             ref="pdf_table_container"
             class="pdf_table_container"
@@ -113,7 +112,6 @@
                 ]"
               >
                 <!-- Sheet header -->
-
                 <div
                   v-if="gridRow.type && gridRow.type === 'sheetHeader'"
                   ref="sheetHeader"
@@ -153,8 +151,8 @@
                     </div>
                   </div>
                 </div>
-
                 <!-- //Sheet header -->
+
                 <div
                   v-if="gridRow.type && gridRow.type === 'stageTitle'"
                   ref="stageTitle"
@@ -242,7 +240,6 @@
                     "
                   >
                     <!-- JUDGES -->
-
                     <div
                       style="width: 50%; display: flex; flex-direction: column"
                     >
@@ -292,14 +289,12 @@
                         </div>
                       </div>
                     </div>
-
                     <!-- //JUDGES -->
 
                     <div
                       style="width: 50%; display: flex; flex-direction: column"
                     >
                       <!-- TECH DATA -->
-
                       <div
                         style="
                           display: flex;
@@ -338,11 +333,9 @@
                           </div>
                         </div>
                       </div>
-
                       <!-- //TECH DATA -->
 
                       <!-- JURY -->
-
                       <div
                         style="
                           display: flex;
@@ -385,12 +378,10 @@
                           </div>
                         </div>
                       </div>
-
                       <!-- //JURY -->
                     </div>
                   </div>
                 </div>
-
                 <!-- RACE INFO -->
 
                 <!-- OPENERS -->

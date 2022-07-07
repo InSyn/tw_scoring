@@ -16,12 +16,6 @@ import export_pdf from "../protocol_export_settings/export_pdf";
 export default {
   name: "fonts",
   components: { export_excel, export_xml, export_pdf },
-  mounted() {},
-  methods: {
-    log(data) {
-      console.log(data);
-    },
-  },
   computed: {
     ...mapGetters("main", {
       appTheme: "appTheme",

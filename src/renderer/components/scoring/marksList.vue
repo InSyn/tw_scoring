@@ -7,20 +7,11 @@
         backgroundColor: `${$vuetify.theme.themes[appTheme].cardBackgroundRGBA}`,
       }"
     >
-      <v-row class="pa-1" style="font-size: 0.8rem; height: 2rem" no-gutters>
-        <v-col class="d-flex justify-center align-center" cols="2">J/№</v-col>
-        <v-col class="d-flex justify-center align-center" cols="2">Ст.№</v-col>
-        <v-col class="d-flex justify-center align-center" cols="2">Run</v-col>
-        <v-col class="d-flex justify-center align-center" cols="3"
-          >was-become</v-col
-        >
-        <v-col class="d-flex justify-center align-center" cols="3"
-          >changed</v-col
-        >
-      </v-row>
       <div
         style="
-          height: calc(100% - 2rem);
+          display: flex;
+          flex-direction: column;
+          height: 100%;
           width: 100%;
           border-radius: 6px;
           overflow: auto;
@@ -29,18 +20,79 @@
           backgroundColor:
             $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
         }"
-      ></div></div
-  ></v-col>
+      >
+        <v-hover
+          v-slot:default="{ hover }"
+          v-for="(message, m_idx) in competitionLog"
+          :key="m_idx"
+          ><div
+            class="scoring_log_message"
+            :style="
+              hover && {
+                backgroundColor: `rgba(255, 255, 255, 0.4)`,
+              }
+            "
+          >
+            <div class="msgDate">
+              {{
+                `${message.msgDate.getDate()}/${
+                  message.msgDate.getMonth() + 1
+                }/${message.msgDate.getFullYear()}`
+              }}
+            </div>
+            <div class="msgType">{{ message.msgType }}</div>
+            <div class="msgText">{{ message.msgText }}</div>
+          </div></v-hover
+        >
+      </div>
+    </div></v-col
+  >
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 export default {
   name: "marksList",
+  mounted() {
+    console.log(`${this.$vuetify.theme.themes[this.appTheme].textDefault}22`);
+    if (this.competitionLog.length < 1)
+      for (let i = 0; i <= 16; i++)
+        this.addCompetitionLogMessage({
+          text: "Some text",
+          date: Date.now(),
+          type: Math.random() > 0.5 ? "info" : "err",
+        });
+  },
+  methods: {
+    ...mapActions("message_system", {
+      addCompetitionLogMessage: "addCompetitionLogMessage",
+    }),
+  },
   computed: {
-    ...mapGetters("main", ["appTheme"]),
+    ...mapGetters("main", { appTheme: "appTheme" }),
+    ...mapGetters("message_system", { competitionLog: "competitionLog" }),
   },
 };
 </script>
 
-<style scoped></style>
+<style lang="scss" scoped>
+.scoring_log_message {
+  flex: 0 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  padding: 4px 8px;
+  transition: background-color 92ms;
+
+  .msgDate {
+    flex: 1 0 auto;
+    font-size: 0.8rem;
+  }
+  .msgType {
+    flex: 0 0 auto;
+    font-size: 0.8rem;
+  }
+  .msgText {
+    flex: 1 0 100%;
+  }
+}
+</style>

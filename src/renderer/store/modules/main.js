@@ -585,11 +585,18 @@ export default {
           competition.mainData.date.value
         }_${competition.mainData.title.value.trim().split(" ").join("_")}.xml`,
         xml,
-        () => {
-          console.log("ok");
+        (err) => {
+          if (err) throw `XML export error: ${err}`;
+          console.log(
+            `XML: FIS_XML ${
+              competition.mainData.date.value
+            }_${competition.mainData.title.value
+              .trim()
+              .split(" ")
+              .join("_")}.xml Saved`
+          );
         }
       );
-      console.log(xml);
     },
     // updateEvent: state => {
     //   console.log(`upd`);

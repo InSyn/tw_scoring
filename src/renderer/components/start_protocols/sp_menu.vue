@@ -28,64 +28,111 @@
         "
         depressed
         small
-        >Результаты</v-btn
+        ><span style="margin-left: auto">Результаты</span></v-btn
       >
     </div>
-
-    <div style="flex: 1 0 50%; display: flex; justify-content: flex-end">
-      <v-btn
-        class="ml-4"
-        depressed
-        style="font-size: 1rem"
-        @click=""
-        :color="$vuetify.theme.themes[appTheme].cardBackgroundRGBA"
-        :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
-        ><v-icon
-          style="position: relative"
+    <div
+      style="
+        flex: 1 0 50%;
+        display: flex;
+        justify-content: flex-end;
+        padding: 0 4px;
+      "
+    >
+      <div
+        class="exportMenu_button ml-4 py-1 px-2"
+        @click="setExportMode(0)"
+        :style="[
+          {
+            backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
+            color: $vuetify.theme.themes[appTheme].textDefault,
+          },
+          export_mode.selected === 0 && {
+            transform: 'translateY(8px)',
+            borderBottomLeftRadius: '0',
+            borderBottomRightRadius: '0',
+          },
+        ]"
+      >
+        <v-icon
+          style="margin-right: 0.5rem"
           :color="$vuetify.theme.themes[appTheme].action_green"
           >mdi-file-excel</v-icon
         >
-        <div>Excel</div> </v-btn
-      ><v-btn
-        class="ml-4"
-        depressed
-        style="font-size: 1rem"
-        @click=""
-        :color="$vuetify.theme.themes[appTheme].cardBackgroundRGBA"
-        :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
-        ><v-icon
-          style="position: relative"
+        <div>Excel</div>
+      </div>
+      <div
+        class="exportMenu_button ml-4 py-1 px-2"
+        @click="setExportMode(1)"
+        :style="[
+          {
+            backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
+            color: $vuetify.theme.themes[appTheme].textDefault,
+          },
+          export_mode.selected === 1 && {
+            transform: 'translateY(8px)',
+            borderBottomLeftRadius: '0',
+            borderBottomRightRadius: '0',
+          },
+        ]"
+      >
+        <v-icon
+          style="margin-right: 0.5rem"
           :color="$vuetify.theme.themes[appTheme].accent"
           >mdi-xml</v-icon
         >
         <div>XML</div>
-      </v-btn>
-      <v-btn
-        class="ml-4"
-        depressed
-        style="font-size: 1rem"
-        @click="competition.protocol_settings.show_preview = true"
-        :color="$vuetify.theme.themes[appTheme].cardBackgroundRGBA"
-        :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
-        ><v-icon
-          style="position: relative"
+      </div>
+      <div
+        class="exportMenu_button ml-4 py-1 px-2"
+        @click="setExportMode(2)"
+        :style="[
+          {
+            backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
+            color: $vuetify.theme.themes[appTheme].textDefault,
+          },
+          export_mode.selected === 2 && {
+            transform: 'translateY(8px)',
+            borderBottomLeftRadius: '0',
+            borderBottomRightRadius: '0',
+          },
+        ]"
+      >
+        <v-icon
+          style="margin-right: 0.5rem"
           :color="$vuetify.theme.themes[appTheme].action_red"
           >mdi-file-pdf</v-icon
         >
         <div>PDF</div>
-      </v-btn>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 export default {
   name: "fp_menu",
+  methods: {
+    ...mapActions("protocol_settings", {
+      setExportMode: "setExportMode",
+    }),
+  },
   computed: {
     ...mapGetters("main", { appTheme: "appTheme", competition: "competition" }),
+    ...mapGetters("protocol_settings", {
+      export_mode: "export_mode",
+    }),
   },
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.exportMenu_button {
+  display: flex;
+  align-items: center;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+}
+</style>

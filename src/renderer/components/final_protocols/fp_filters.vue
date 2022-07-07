@@ -35,7 +35,7 @@
     <div class="d-flex flex-column font-weight-bold">
       <div class="d-flex flex-nowrap align-center justify-space-between">
         <div class="d-flex flex-column" style="width: 30%">
-          <div class="pa-1" v-html="`Слева`"></div>
+          <div class="pa-1">Слева</div>
           <div class="d-flex align-center justify-space-between">
             <input
               type="text"
@@ -63,7 +63,7 @@
           </div>
         </div>
         <div class="d-flex flex-column" style="width: 30%">
-          <div class="pa-1" v-html="`Центр`"></div>
+          <div class="pa-1">Центр</div>
           <div class="d-flex align-center justify-space-between">
             <input
               type="text"
@@ -91,7 +91,7 @@
           </div>
         </div>
         <div class="d-flex flex-column" style="width: 30%">
-          <div class="pa-1" v-html="`Справа`"></div>
+          <div class="pa-1">Справа</div>
           <div class="d-flex align-center justify-space-between">
             <input
               type="text"
@@ -269,7 +269,6 @@
 import { mapGetters } from "vuex";
 export default {
   name: "filters",
-  mounted() {},
   computed: {
     ...mapGetters("main", { competition: "competition", appTheme: "appTheme" }),
     ...mapGetters("protocol_settings", {

@@ -51,7 +51,7 @@
       <v-btn
         small
         depressed
-        @click="$store.dispatch('main/xml_export', [objectToXML, competition])"
+        @click="xml_export([objectToXML, competition])"
         :color="$vuetify.theme.themes[appTheme].standardBackgroundRGBA"
         :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
       >
@@ -66,11 +66,15 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 
 export default {
   name: "export_xml",
-  methods: {},
+  methods: {
+    ...mapActions("main", {
+      xml_export: "xml_export",
+    }),
+  },
   data() {
     return {
       type: "SB",
@@ -129,7 +133,6 @@ export default {
                 ...this.$store.getters["main/flatGrid"]
                   .filter((val) => val.type === "competitorResult")
                   .map((_competitor) => {
-                    console.log(_competitor);
                     return {
                       _attributes: { status: "QLF" },
                       Rank: _competitor.s_rank,

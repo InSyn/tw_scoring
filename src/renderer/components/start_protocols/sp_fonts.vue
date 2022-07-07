@@ -1,39 +1,29 @@
 <template>
-  <div
-    style="display:flex;flex-direction:column;border-radius: 6px;width: 100%;height: 100%;padding: 16px;overflow-y: auto"
-    :style="{
-      backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA
-    }"
-  >
-    <div></div>
+  <div class="xml_export_wrapper" style="flex: 1 0 auto; width: 100%">
+    <export_excel v-show="export_mode.selected === 0"></export_excel>
+    <export_xml v-show="export_mode.selected === 1"></export_xml>
+    <export_pdf v-show="export_mode.selected === 2"></export_pdf>
   </div>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
+
+import export_excel from "../protocol_export_settings/export_excel";
+import export_xml from "../protocol_export_settings/export_xml";
+import export_pdf from "../protocol_export_settings/export_pdf";
+
 export default {
   name: "fonts",
-  methods: {
-    log(data) {
-      console.log(data);
-    }
-  },
-  data() {
-    return {};
-  },
+  components: { export_excel, export_xml, export_pdf },
   computed: {
     ...mapGetters("main", {
       appTheme: "appTheme",
-      competition: "competition",
-      competitions: "competitions",
-      stageGrid: "stageGrid"
     }),
-    flatGrid() {
-      return [].concat(
-        ...this.stageGrid.map(stage => [stage.title, ...stage.s_competitors])
-      );
-    }
-  }
+    ...mapGetters("protocol_settings", {
+      export_mode: "export_mode",
+    }),
+  },
 };
 </script>
 
