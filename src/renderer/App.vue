@@ -790,7 +790,6 @@ export default {
     ipcRenderer.on("server_message", (e, message) => {
       this.$store.commit("main/pushServerMessage", message);
     });
-
     document.addEventListener("keyup", (e) => {
       e.key === "Home" && this.changeMenuState();
     });
@@ -811,7 +810,6 @@ export default {
         : this.$store.commit("main/serverSetStatus", false);
     }, 2250);
     this.timer.ticker();
-
     //shortcuts handler
     let map = []; // You could also use an array
     onkeydown = onkeyup = (e) => {
@@ -877,7 +875,6 @@ export default {
     },
     load(path) {
       let evData = JSON.parse(fs.readFileSync(`${path}`, "utf-8"));
-
       this.load_event(evData);
     },
     initCreateDialog() {
@@ -896,19 +893,15 @@ export default {
       for (let $check in this.create_competition_dialog.checks)
         if (this.create_competition_dialog.checks[$check].state)
           this.create_competition_dialog.checks[$check].check();
-
       this.$store.commit(
         "main/createCompetition",
         new this.EventClass(...this.create_competition_dialog.data)
       );
-
       this.create_competition_dialog.data.forEach((_field) => {
         if (_field.id === "judges" || _field.id === "competitors")
           _field[_field.id] = [];
       });
-
       this.create_competition_dialog.state = false;
-
       if (this.$route.name !== "competition_settings")
         this.$router.push("/competition_settings");
     },
@@ -1003,7 +996,6 @@ export default {
 * {
   /*border: 2px solid #25c2b4;*/
 }
-
 #app {
   position: relative;
   display: flex;
@@ -1013,59 +1005,48 @@ export default {
   height: 100vh;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-
   * {
     &::-webkit-scrollbar {
       width: 6px;
       height: 6px;
     }
-
     &::-webkit-scrollbar-track {
       background: transparent;
     }
-
     &::-webkit-scrollbar-thumb {
       background: #3b70a9;
     }
-
     &::-webkit-scrollbar-thumb:hover {
       background: #3a82ba;
     }
   }
-
   header {
     width: 100%;
     height: 54px;
   }
-
   main {
     display: flex;
     flex-wrap: nowrap;
     height: calc(100vh - 92px);
     overflow-x: auto;
-
     .menu {
       text-decoration: none;
     }
-
     .window {
       overflow-y: auto;
       flex-grow: 1;
     }
   }
-
   footer {
     width: 100%;
     height: 38px;
   }
 }
-
 .menuExpand-enter-active,
 .menuExpand-leave-active {
   width: 320px;
   transition: width 0.5s;
 }
-
 .menuExpand-enter, .menuExpand-leave-to /* .fade-leave-active до версии 2.1.8 */ {
   width: 1px;
 }

@@ -11,42 +11,42 @@ if (process.env.NODE_ENV !== "development") {
     .replace(/\\/g, "\\\\");
 }
 
-var fs = require("fs");
-var util = require("util");
-var log_file = fs.createWriteStream(process.cwd() + "/debug.log", {
-  flags: "w",
-});
-var log_stdout = process.stdout;
+// var fs = require("fs");
+// var util = require("util");
+// var log_file = fs.createWriteStream(process.cwd() + "/debug.log", {
+//   flags: "w",
+// });
+// var log_stdout = process.stdout;
+//
+// function log(d) {
+//   //
+//   log_file.write(util.format(d) + "\n");
+//   log_stdout.write(util.format(d) + "\n");
+// }
 
-function log(d) {
-  //
-  log_file.write(util.format(d) + "\n");
-  log_stdout.write(util.format(d) + "\n");
-}
-
-const childProcess = require("child_process");
-
-const licPath =
-  process.env.NODE_ENV === "development"
-    ? `${process.cwd()}\\lsrv`
-    : `${process.cwd()}\\resources\\lsrv`;
-
-log(licPath);
-
-childProcess.exec(
-  "licsrv",
-  {
-    cwd: licPath,
-  },
-  (error, stdout, stderr) => {
-    if (error) {
-      log(`exec error: ${error}`);
-      return;
-    }
-    log(`stdout: ${stdout}`);
-    log(`stderr: ${stderr}`);
-  }
-);
+// const childProcess = require("child_process");
+//
+// const licPath =
+//   process.env.NODE_ENV === "development"
+//     ? `${process.cwd()}\\lsrv`
+//     : `${process.cwd()}\\resources\\lsrv`;
+//
+// log(licPath);
+//
+// childProcess.exec(
+//   "licsrv",
+//   {
+//     cwd: licPath,
+//   },
+//   (error, stdout, stderr) => {
+//     if (error) {
+//       log(`exec error: ${error}`);
+//       return;
+//     }
+//     log(`stdout: ${stdout}`);
+//     log(`stderr: ${stderr}`);
+//   }
+// );
 
 let mainWindow;
 const winURL =
@@ -103,7 +103,7 @@ app.on("activate", () => {
 
 export { mainWindow, app };
 
-import "./lic_server";
+// import "./lic_server";
 import "./socket_setup";
 
 /**

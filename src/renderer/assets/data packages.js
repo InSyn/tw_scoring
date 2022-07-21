@@ -1,7 +1,7 @@
 export default [
   //  Софт -> Терминал (Судья)
   {
-    event: "set_competitor_on_start",
+    msg_type: "set_competitor_on_start",
     data: {
       race_id: "",
       competitor_id: "",
@@ -14,19 +14,22 @@ export default [
     },
   },
   {
-    event: "score_approved",
+    msg_type: "score_approved",
     data: {
       race_id: "",
       competitor_id: "",
     },
   },
   {
-    event: "",
+    msg_type: "sync_time",
+    data: {
+      time: "10:00",
+    },
   },
 
   //  Терминал (Судья) -> Софт
   {
-    event: "score_changed",
+    msg_type: "score_changed",
     data: {
       terminal_id: "",
       race_id: "",
@@ -35,10 +38,16 @@ export default [
       scores: [0],
     },
   },
+  {
+    msg_type: "sync_time",
+    data: {
+      terminal_id: "",
+    },
+  },
 
   //    Софт -> Терминал (Ст. судья)
   {
-    event: "init_competition",
+    msg_type: "init_competition_races",
     data: {
       races: [
         {
@@ -49,7 +58,7 @@ export default [
     },
   },
   {
-    event: "competitor_results_by_race",
+    msg_type: "get_competitor_results_by_race",
     data: {
       race_id: "",
       race_num: 0,
@@ -60,7 +69,7 @@ export default [
 
   //    Терминал (Ст. судья) -> Софт
   {
-    event: "score_approve",
+    msg_type: "score_approve",
     data: {
       terminal_id: "",
       race_id: "",
@@ -68,7 +77,7 @@ export default [
     },
   },
   {
-    event: "get_results_by_race",
+    msg_type: "get_results_by_race",
     data: {
       terminal_id: "",
       race_id: "",
