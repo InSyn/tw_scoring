@@ -8,7 +8,7 @@ export default {
   namespaced: true,
   state: {
     _licData: {
-      state: true,
+      state: false,
       user: "",
       key: "",
     },
