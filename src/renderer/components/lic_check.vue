@@ -144,7 +144,6 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
-import axios from "axios";
 
 const { ipcRenderer } = require("electron");
 const { app } = require("electron").remote;
@@ -152,9 +151,9 @@ const { app } = require("electron").remote;
 export default {
   name: "lic_check",
   mounted() {
-    this.get_licenses();
+    this.getLicenses();
     ipcRenderer.on("lic_server_response", (e, data) => {
-      console.log(data);
+      // console.log(data);
       if (data.data && data.data["licence"] == "0") {
         console.log("license approved");
         this.licChecked({
@@ -169,38 +168,14 @@ export default {
     ...mapActions("main", {
       licChecked: "licChecked",
     }),
-    async get_licenses() {
-      await axios
-        .get("http://82.148.19.186:8080/getKeys", {
-          headers: { Authorization: "Jx9t9VAjGsgiCrGSrvv8h5E7wtKXQ6L2" },
-        })
-        .then((response) => {
-          if (response.data.length > 0) this.licenses = [...response.data];
-        })
-        .catch((err) => {
-          if (err) console.log("AJAX Err: " + err);
-        });
-    },
-    async register_key(license) {
-      await axios
-        .post("http://82.148.19.186:8080/registerKey", license, {
-          headers: { Authorization: "Jx9t9VAjGsgiCrGSrvv8h5E7wtKXQ6L2" },
-        })
-        .then((response) => console.log(response))
-        .catch((err) => {
-          if (err) console.log("AJAX Err: " + err);
-        });
-      await this.get_licenses();
-    },
-    check_lic() {
-      axios
-        .get("http://82.148.19.186:8080/getKeys", {
-          headers: { Authorization: "Jx9t9VAjGsgiCrGSrvv8h5E7wtKXQ6L2" },
-        })
-        .then((response) => console.log(response))
-        .catch((err) => {
-          if (err) console.log("AJAX Err: " + err);
-        });
+    ...mapActions("key", {
+      create_license: "create_license",
+      get_licenses: "get_licenses",
+      register_key: "register_key",
+      check_lic: "check_lic",
+    }),
+    async getLicenses() {
+      this.licenses = await this.get_licenses();
     },
   },
   data() {
