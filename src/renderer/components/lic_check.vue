@@ -19,6 +19,7 @@
         <div style="display: flex; align-items: center; margin-bottom: 1rem">
           <div style="font-weight: bold; width: 4rem">ФИО</div>
           <input
+            disabled
             v-model="user_name"
             size="24"
             style="margin-left: 1rem; padding: 4px 6px; border-radius: 6px"
@@ -32,6 +33,7 @@
         <div style="display: flex; align-items: center; margin-bottom: 1rem">
           <div style="font-weight: bold; width: 4rem">E-Mail</div>
           <input
+            disabled
             v-model="user_mail"
             size="24"
             style="margin-left: 1rem; padding: 4px 6px; border-radius: 6px"
@@ -59,7 +61,13 @@
       </div>
       <div style="display: flex; align-items: center">
         <v-btn
-          @click="check_lic"
+          @click="
+            validate({
+              key: user_key,
+              serial: system_data.serial,
+              salt: 'qwe123qwe123',
+            })
+          "
           text
           :color="$vuetify.theme.themes[appTheme].accent"
           >Проверить</v-btn
@@ -67,12 +75,14 @@
       </div>
     </div>
     <div
+      v-if="license_panel"
       style="
         display: flex;
         flex-direction: column;
         padding: 8px 16px;
         border-radius: 6px;
         overflow-y: auto;
+        margin-top: 8px;
       "
       :style="{
         backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
@@ -91,52 +101,76 @@
           <b>{{ `${la_idx}: ` }}</b
           >{{ `${l_attr}` }}
         </div>
+        <div
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: auto;
+            margin-top: auto;
+            padding: 4px 8px;
+            border-radius: 4px;
+          "
+        >
+          <b>S/N</b>
+          <input
+            type="text"
+            v-model="license['sn_input']"
+            style="
+              margin: 0 1rem 0 0.5rem;
+              padding: 2px 4px;
+              border-radius: 4px;
+            "
+            :style="{
+              color: $vuetify.theme.themes[appTheme].textDefault,
+              backgroundColor:
+                $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
+            }"
+          />
+          <v-btn
+            @click="
+              register_key({
+                Key: license.key,
+                Serial: license['sn_input'],
+              })
+            "
+            text
+            :color="$vuetify.theme.themes[appTheme].success"
+          >
+            Зарегистрировать
+          </v-btn>
+        </div>
       </div>
       <div
         style="
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          margin-left: auto;
-          margin-top: auto;
+          margin: auto 0 0 auto;
           padding: 4px 8px;
-          border-radius: 4px;
+          font-weight: bold;
+          border-radius: 6px;
         "
+        :style="{
+          border: `1px solid ${$vuetify.theme.themes[appTheme].accent}`,
+        }"
       >
-        <b>Key</b>
+        <span>Название&nbsp;</span>
         <input
           type="text"
-          v-model="license['key_input']"
-          style="margin: 0 1rem 0 0.5rem; padding: 2px 4px; border-radius: 4px"
+          v-model="new_license_name"
+          style="padding: 2px 4px; border-radius: 4px"
           :style="{
-            color: $vuetify.theme.themes[appTheme].textDefault,
             backgroundColor:
               $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
-          }"
-        />
-        <b>S/N</b>
-        <input
-          type="text"
-          v-model="license['sn_input']"
-          style="margin: 0 1rem 0 0.5rem; padding: 2px 4px; border-radius: 4px"
-          :style="{
             color: $vuetify.theme.themes[appTheme].textDefault,
-            backgroundColor:
-              $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
           }"
         />
         <v-btn
-          @click="
-            register_key({
-              Key: license['key_input'],
-              Serial: license['sn_input'],
-            })
-          "
-          text
+          @click="createLicense(new_license_name)"
+          small
           :color="$vuetify.theme.themes[appTheme].accent"
+          style="margin-left: 1rem"
+          :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
+          >Создать</v-btn
         >
-          Зарегистрировать
-        </v-btn>
       </div>
     </div>
   </div>
@@ -162,7 +196,12 @@ export default {
         });
       }
     });
-    this.check_lic();
+    // this.validate({
+    //   key: this.user_key,
+    //   serial: this.system_data.serial,
+    //   salt: "qwe123qwe123",
+    // });
+    console.log(new Date().toISOString());
   },
   methods: {
     ...mapActions("main", {
@@ -177,6 +216,19 @@ export default {
     async getLicenses() {
       this.licenses = await this.get_licenses();
     },
+    async validate(license_data) {
+      if (await this.check_lic(license_data))
+        this.licChecked({
+          user: this.user_mail,
+          key: this.user_key,
+        });
+    },
+    async createLicense(name) {
+      let response = await this.create_license(name);
+      this.new_license_name = "";
+      await this.getLicenses();
+      console.log(response);
+    },
   },
   data() {
     return {
@@ -185,12 +237,17 @@ export default {
       user_mail: "",
       user_key: "",
       licenses: [],
+      new_license_name: "",
     };
   },
   computed: {
     ...mapGetters("main", {
       appTheme: "appTheme",
       _licData: "_licData",
+    }),
+    ...mapGetters("key", {
+      license_panel: "license_panel",
+      system_data: "system_data",
     }),
     license() {
       if (this._licData.state) {

@@ -817,6 +817,9 @@ export default {
       if (map["Alt"] && map["t"]) {
         this.$store.commit("main/toggle_mode");
       }
+      if ((map["Alt"] && map["k"]) || (map["Alt"] && map["л"])) {
+        this.$store.commit("key/toggle_panel");
+      }
     };
     //shortcuts handler
   },
@@ -845,6 +848,7 @@ export default {
     },
     getSysData() {
       ipcRenderer.on("sysData", (event, data) => {
+        this.$store.commit("key/set_system_data", data);
         console.log(data);
       });
       app.emit("getSysData");
