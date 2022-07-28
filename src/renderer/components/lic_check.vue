@@ -64,7 +64,7 @@
           @click="
             validate({
               key: user_key,
-              serial: system_data.serial,
+              serial: system_data.uuid,
               salt: 'qwe123qwe123',
             })
           "
@@ -112,26 +112,11 @@
             border-radius: 4px;
           "
         >
-          <b>S/N</b>
-          <input
-            type="text"
-            v-model="license['sn_input']"
-            style="
-              margin: 0 1rem 0 0.5rem;
-              padding: 2px 4px;
-              border-radius: 4px;
-            "
-            :style="{
-              color: $vuetify.theme.themes[appTheme].textDefault,
-              backgroundColor:
-                $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
-            }"
-          />
           <v-btn
             @click="
               register_key({
                 Key: license.key,
-                Serial: license['sn_input'],
+                Serial: system_data.uuid,
               })
             "
             text
@@ -172,7 +157,7 @@
           >Создать</v-btn
         >
         <div style="font-size: 0.9rem; font-weight: bold">
-          {{ system_data && system_data["serial"] && system_data["serial"] }}
+          {{ system_data && system_data["uuid"] && system_data["uuid"] }}
         </div>
       </div>
     </div>
@@ -193,7 +178,7 @@ export default {
       if (license)
         this.validate({
           key: license,
-          serial: this.system_data.serial,
+          serial: this.system_data.uuid,
           salt: "qwe123qwe123",
         });
     });

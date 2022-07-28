@@ -79,7 +79,7 @@ function createWindow() {
 app.on("ready", createWindow);
 
 app.on("getSysData", () => {
-  si.baseboard()
+  si.system()
     .then((data) => {
       console.log(data);
       mainWindow.webContents.send("sysData", data);
