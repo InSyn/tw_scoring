@@ -83,6 +83,16 @@ app.on("getSysData", () => {
     .then((data) => {
       console.log(data);
       mainWindow.webContents.send("sysData", data);
+      try {
+        fs.readFile("./lic", (err, key) => {
+          if (err) mainWindow.webContents.send("checked_key", false);
+          else {
+            mainWindow.webContents.send("checked_key", key.toString());
+          }
+        });
+      } catch (err) {
+        if (err) console.log(err);
+      }
     })
     .catch((err) => {
       throw err;
@@ -103,8 +113,9 @@ app.on("activate", () => {
 
 export { mainWindow, app };
 
-// import "./lic_server";
+import "./lic_server";
 import "./socket_setup";
+import fs from "fs";
 
 /**
  * Auto Updater

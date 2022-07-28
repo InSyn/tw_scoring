@@ -1,7 +1,7 @@
 <template>
   <div style="height: 100%; width: 100%; padding: 1rem 2rem">
     <div
-      style="border-radius: 6px"
+      style="border-radius: 6px; transition: all 122ms"
       :style="[
         {
           border: `2px solid ${$vuetify.theme.themes[appTheme].cardBackgroundRGBA}`,
@@ -16,34 +16,34 @@
         Активация продукта
       </div>
       <div style="padding: 1rem 2rem">
-        <div style="display: flex; align-items: center; margin-bottom: 1rem">
-          <div style="font-weight: bold; width: 4rem">ФИО</div>
-          <input
-            disabled
-            v-model="user_name"
-            size="24"
-            style="margin-left: 1rem; padding: 4px 6px; border-radius: 6px"
-            :style="{
-              backgroundColor:
-                $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
-              color: $vuetify.theme.themes[appTheme].textDefault,
-            }"
-          />
-        </div>
-        <div style="display: flex; align-items: center; margin-bottom: 1rem">
-          <div style="font-weight: bold; width: 4rem">E-Mail</div>
-          <input
-            disabled
-            v-model="user_mail"
-            size="24"
-            style="margin-left: 1rem; padding: 4px 6px; border-radius: 6px"
-            :style="{
-              backgroundColor:
-                $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
-              color: $vuetify.theme.themes[appTheme].textDefault,
-            }"
-          />
-        </div>
+        <!--        <div style="display: flex; align-items: center; margin-bottom: 1rem">-->
+        <!--          <div style="font-weight: bold; width: 4rem">ФИО</div>-->
+        <!--          <input-->
+        <!--            disabled-->
+        <!--            v-model="user_name"-->
+        <!--            size="24"-->
+        <!--            style="margin-left: 1rem; padding: 4px 6px; border-radius: 6px"-->
+        <!--            :style="{-->
+        <!--              backgroundColor:-->
+        <!--                $vuetify.theme.themes[appTheme].standardBackgroundRGBA,-->
+        <!--              color: $vuetify.theme.themes[appTheme].textDefault,-->
+        <!--            }"-->
+        <!--          />-->
+        <!--        </div>-->
+        <!--        <div style="display: flex; align-items: center; margin-bottom: 1rem">-->
+        <!--          <div style="font-weight: bold; width: 4rem">E-Mail</div>-->
+        <!--          <input-->
+        <!--            disabled-->
+        <!--            v-model="user_mail"-->
+        <!--            size="24"-->
+        <!--            style="margin-left: 1rem; padding: 4px 6px; border-radius: 6px"-->
+        <!--            :style="{-->
+        <!--              backgroundColor:-->
+        <!--                $vuetify.theme.themes[appTheme].standardBackgroundRGBA,-->
+        <!--              color: $vuetify.theme.themes[appTheme].textDefault,-->
+        <!--            }"-->
+        <!--          />-->
+        <!--        </div>-->
         <div style="display: flex; flex-direction: column; margin-bottom: 1rem">
           <div style="flex: 0 0 auto; font-weight: bold; margin-bottom: 0.5rem">
             Ключ продукта
@@ -171,6 +171,9 @@
           :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
           >Создать</v-btn
         >
+        <div style="font-size: 0.9rem; font-weight: bold">
+          {{ system_data && system_data["serial"] && system_data["serial"] }}
+        </div>
       </div>
     </div>
   </div>
@@ -186,6 +189,14 @@ export default {
   name: "lic_check",
   mounted() {
     this.getLicenses();
+    ipcRenderer.on("checked_key", (e, license) => {
+      if (license)
+        this.validate({
+          key: license,
+          serial: this.system_data.serial,
+          salt: "qwe123qwe123",
+        });
+    });
     ipcRenderer.on("lic_server_response", (e, data) => {
       // console.log(data);
       if (data.data && data.data["licence"] == "0") {
@@ -201,7 +212,8 @@ export default {
     //   serial: this.system_data.serial,
     //   salt: "qwe123qwe123",
     // });
-    console.log(new Date().toISOString());
+    app.emit("check_key");
+    // console.log(new Date().toISOString());
   },
   methods: {
     ...mapActions("main", {
@@ -217,11 +229,13 @@ export default {
       this.licenses = await this.get_licenses();
     },
     async validate(license_data) {
-      if (await this.check_lic(license_data))
+      if (await this.check_lic(license_data)) {
         this.licChecked({
           user: this.user_mail,
           key: this.user_key,
         });
+        app.emit("save_key", this.user_key);
+      }
     },
     async createLicense(name) {
       let response = await this.create_license(name);
