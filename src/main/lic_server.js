@@ -14,17 +14,16 @@ app.on("save_key", (key) => {
   }
 });
 app.on("check_key", () => {
-  console.log("keycheck");
-  // try {
-  //   fs.readFile("./lic", (err, key) => {
-  //     if (err) mainWindow.webContents.send("checked_key", false);
-  //     else {
-  //       mainWindow.webContents.send("checked_key", key.toString());
-  //     }
-  //   });
-  // } catch (err) {
-  //   if (err) console.log(err);
-  // }
+  try {
+    fs.readFile("./lic", (err, key) => {
+      if (err) mainWindow.webContents.send("checked_key", false);
+      else {
+        mainWindow.webContents.send("checked_key", key.toString());
+      }
+    });
+  } catch (err) {
+    if (err) console.log(err);
+  }
 });
 //
 // const net = require("net");

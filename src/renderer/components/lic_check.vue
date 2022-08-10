@@ -115,7 +115,7 @@
           <v-btn
             @click="
               register_key({
-                Key: license.key,
+                Key: user_key,
                 Serial: system_data.uuid,
               })
             "
@@ -183,7 +183,6 @@ export default {
         });
     });
     ipcRenderer.on("lic_server_response", (e, data) => {
-      // console.log(data);
       if (data.data && data.data["licence"] == "0") {
         console.log("license approved");
         this.licChecked({
@@ -192,13 +191,6 @@ export default {
         });
       }
     });
-    // this.validate({
-    //   key: this.user_key,
-    //   serial: this.system_data.serial,
-    //   salt: "qwe123qwe123",
-    // });
-    app.emit("check_key");
-    // console.log(new Date().toISOString());
   },
   methods: {
     ...mapActions("main", {
@@ -214,6 +206,7 @@ export default {
       this.licenses = await this.get_licenses();
     },
     async validate(license_data) {
+      console.log(license_data);
       if (await this.check_lic(license_data)) {
         this.licChecked({
           user: this.user_mail,
