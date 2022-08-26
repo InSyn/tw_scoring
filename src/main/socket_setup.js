@@ -302,7 +302,12 @@ app.on("startSocketServer", (config) => {
       );
     });
     http.once("error", (err) => {
+      mainWindow.webContents.send("server_message", [
+        4,
+        `Connection error: ${err}`,
+      ]);
       console.log(`Connection error: ${err}`);
+      http.close();
     });
   }
 });

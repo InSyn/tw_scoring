@@ -8,14 +8,14 @@ export default {
   namespaced: true,
   state: {
     _licData: {
-      state: false,
+      state: true,
       user: "",
       key: "",
     },
     mode_timing: false,
     server_config: {
       ip: "127.0.0.1",
-      port: "3000",
+      port: "8080",
     },
     socket: null,
     opened_sockets: [],
