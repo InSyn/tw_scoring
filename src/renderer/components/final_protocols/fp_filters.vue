@@ -7,14 +7,14 @@
     }"
   >
     <div style="font-size: 1.2rem; font-weight: bold; margin-bottom: 1rem">
-      Дополнительные настройки
+      Additional settings
     </div>
     <div class="d-flex flex-column">
       <label
         :for="`notations`"
         class="ma-1 font-weight-bold"
         style="flex: 0 0 auto"
-        v-html="`Замечания`"
+        v-html="`Notations`"
       ></label>
       <div
         style="border-radius: 6px"
@@ -35,7 +35,7 @@
     <div class="d-flex flex-column font-weight-bold">
       <div class="d-flex flex-nowrap align-center justify-space-between">
         <div class="d-flex flex-column" style="width: 30%">
-          <div class="pa-1">Слева</div>
+          <div class="pa-1">Left</div>
           <div class="d-flex align-center justify-space-between">
             <input
               type="text"
@@ -63,7 +63,7 @@
           </div>
         </div>
         <div class="d-flex flex-column" style="width: 30%">
-          <div class="pa-1">Центр</div>
+          <div class="pa-1">Center</div>
           <div class="d-flex align-center justify-space-between">
             <input
               type="text"
@@ -91,7 +91,7 @@
           </div>
         </div>
         <div class="d-flex flex-column" style="width: 30%">
-          <div class="pa-1">Справа</div>
+          <div class="pa-1">Right</div>
           <div class="d-flex align-center justify-space-between">
             <input
               type="text"
@@ -152,7 +152,7 @@
             padding: 0 0 0 8px;
           "
         >
-          <span style="font-weight: bold">шрифт (px)</span>
+          <span style="font-weight: bold">Font (px)</span>
           <input
             size="2"
             type="number"
@@ -195,7 +195,7 @@
           class="font-weight-bold"
           style="cursor: pointer"
           :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
-          >Использовать сетку</label
+          >Use grid</label
         >
       </div>
       <div class="d-flex flex-nowrap align-center py-1" style="flex: 0 0 auto">
@@ -211,9 +211,9 @@
           class="font-weight-bold"
           style="cursor: pointer"
           :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
-          >Использовать чрезстрочное подсвечивание</label
+          >Use interlace highlighting</label
         ><v-spacer></v-spacer>
-        <label for="odd" class="ml-2" style="cursor: pointer">Нечет.</label>
+        <label for="odd" class="ml-2" style="cursor: pointer">Even</label>
         <v-dialog width="fit-content"
           ><template v-slot:activator="{ on }">
             <div
@@ -237,7 +237,7 @@
               v-model="results_protocol.string_lights.odd"
             ></v-color-picker> </v-card
         ></v-dialog>
-        <label for="even" class="ml-2" style="cursor: pointer">Чет.</label>
+        <label for="even" class="ml-2" style="cursor: pointer">Odd</label>
         <v-dialog width="fit-content"
           ><template v-slot:activator="{ on }">
             <div

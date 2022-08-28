@@ -46,7 +46,7 @@
         "
         :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
         :color="$vuetify.theme.themes[appTheme].action_red"
-        >Закрыть
+        >Close
       </v-btn>
       <race_results_protocol
         v-if="

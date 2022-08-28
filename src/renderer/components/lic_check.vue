@@ -13,7 +13,7 @@
       ]"
     >
       <div style="font-weight: bold; font-size: 1.2rem; padding: 1rem 2rem">
-        Активация продукта
+        Product activation
       </div>
       <div style="padding: 1rem 2rem">
         <!--        <div style="display: flex; align-items: center; margin-bottom: 1rem">-->
@@ -46,7 +46,7 @@
         <!--        </div>-->
         <div style="display: flex; flex-direction: column; margin-bottom: 1rem">
           <div style="flex: 0 0 auto; font-weight: bold; margin-bottom: 0.5rem">
-            Ключ продукта
+            Product key
           </div>
           <textarea
             v-model="user_key"
@@ -70,7 +70,7 @@
           "
           text
           :color="$vuetify.theme.themes[appTheme].accent"
-          >Проверить</v-btn
+          >Check</v-btn
         >
       </div>
     </div>
@@ -122,7 +122,7 @@
             text
             :color="$vuetify.theme.themes[appTheme].success"
           >
-            Зарегистрировать
+            Register
           </v-btn>
         </div>
       </div>
@@ -137,7 +137,7 @@
           border: `1px solid ${$vuetify.theme.themes[appTheme].accent}`,
         }"
       >
-        <span>Название&nbsp;</span>
+        <span>Title&nbsp;</span>
         <input
           type="text"
           v-model="new_license_name"
@@ -154,7 +154,7 @@
           :color="$vuetify.theme.themes[appTheme].accent"
           style="margin-left: 1rem"
           :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
-          >Создать</v-btn
+          >Crate</v-btn
         >
         <div style="font-size: 0.9rem; font-weight: bold">
           {{ system_data && system_data["uuid"] && system_data["uuid"] }}

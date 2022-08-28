@@ -77,7 +77,7 @@
           }"
         >
           <v-card-title class="ma-0 pt-2 pb-0 px-4"
-            >Создание соревнования
+            >Create competition
           </v-card-title>
           <div
             style="
@@ -115,7 +115,7 @@
                   padding: 4px 0 8px 0;
                 "
               >
-                Настройки нового соревнования
+                New competition setup
               </div>
               <div
                 v-for="(input, i_idx) in create_competition_dialog.data"
@@ -452,13 +452,13 @@
               small
               @click="create_competition_dialog.state = false"
               :color="$vuetify.theme.themes[appTheme].error"
-              >Отмена
+              >Cancel
             </v-btn>
             <v-btn
               small
               @click="createNewCompetition()"
               :color="$vuetify.theme.themes[appTheme].success"
-              >Создать
+              >Create
             </v-btn>
           </v-card-actions>
         </div>
@@ -837,7 +837,7 @@ export default {
     openSaveDialog() {
       dialog.showSaveDialog(
         {
-          title: "Сохранение события",
+          title: "Save event",
           defaultPath: `/${this.event.event_title}`,
           filters: [{ name: "TW Event", extensions: ["twe"] }],
         },
@@ -869,11 +869,11 @@ export default {
       }
     },
     competitionFirstSetup(competition) {
-      competition.mainData.discipline.value = "Дисциплина";
+      competition.mainData.discipline.value = "Discipline";
       competition.mainData.discipline.min = "DSC";
       for (let i = 0; i < 4; i++) {
         competition.stuff.judges.push(
-          new this.JudgeClass(`Судья ${i + 1}`, i + 1)
+          new this.JudgeClass(`Judge ${i + 1}`, i + 1)
         );
       }
     },
@@ -929,16 +929,16 @@ export default {
       create_competition_dialog: {
         state: false,
         data: [
-          { id: "title", title: "Название соревнования", value: null },
+          { id: "title", title: "Competition title", value: null },
           {
             id: "discipline",
-            title: "Дисциплина",
+            title: "Discipline",
             value: null,
             min: null,
           },
           {
             id: "stage",
-            title: "Этап",
+            title: "Stage",
             value: null,
             stage_selector: false,
             selectStage: (stage, event) => {
@@ -954,7 +954,7 @@ export default {
         checks: {
           judgesFromPrevStage: {
             state: true,
-            title: "Перенести судей",
+            title: "Move judges",
             check: () => {
               for (let $judge of this.competition.stuff.judges) {
                 this.create_competition_dialog.data
@@ -965,7 +965,7 @@ export default {
           },
           competitorsFromPrevStage: {
             state: false,
-            title: "Перенести участников",
+            title: "Move competitors",
             check: () => {
               for (let $competitor of this.competition.competitorsSheet
                 .competitors) {

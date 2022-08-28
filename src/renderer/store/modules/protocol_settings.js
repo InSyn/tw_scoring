@@ -7,24 +7,24 @@ export default {
       menu: [
         {
           id: "excel",
-          title: "Печатать EXCEL",
+          title: "Print EXCEL",
         },
         {
           id: "xml",
-          title: "Печатать XML",
+          title: "Print XML",
         },
         {
           id: "pdf",
-          title: "Печатать PDF",
+          title: "Print PDF",
         },
       ],
       selected: 2,
     },
     results_protocol: {
       standard_aligns: [
-        { title: "Слева", value: "start" },
-        { title: "Центр", value: "center" },
-        { title: "Справа", value: "end" },
+        { title: "Left", value: "start" },
+        { title: "Center", value: "center" },
+        { title: "Right", value: "end" },
       ],
       title: "",
       use_grid: false,
@@ -32,29 +32,29 @@ export default {
       infoPrintChecks: {
         print_header: {
           id: "officialsData",
-          title: "Печатать информацию о жюри",
+          title: "Print jury info",
           state: true,
         },
         print_openers: {
           id: "openers",
-          title: "Печатать открывающих",
+          title: "Print forerunners",
           state: false,
         },
         print_weather: {
           id: "weatherData",
-          title: "Печатать информацию о погоде",
+          title: "Print weather info",
           state: false,
         },
         print_notations: {
           id: "raceNotes",
-          title: "Печатать замечания",
+          title: "Print notations",
           state: true,
         },
       },
       strings_at_page: 6,
       font_size: 12,
       notations:
-        "<b>Легенда</b>:<br><b>DNS</b>: Did Not Start &nbsp <b>DSQ</b>: Disqualified &nbsp <b>DNF</b>: Did Not Finish",
+        "<b>Legend</b>:<br><b>DNS</b>: Did Not Start &nbsp <b>DSQ</b>: Disqualified &nbsp <b>DNF</b>: Did Not Finish",
       signs: {
         left: {
           text: "",
@@ -83,15 +83,15 @@ export default {
       assets: {
         header_logo: {
           file: null,
-          title: "Изображение для «шапки»",
+          title: "Image for header",
         },
         footer_logo: {
           file: null,
-          title: "Изображение для «подвала»",
+          title: "Image for footer",
         },
         title_logo: {
           file: null,
-          title: "Логотип",
+          title: "Logo",
         },
       },
     },
@@ -102,7 +102,7 @@ export default {
         this.params.width = width || 10;
         this.params.font = font || 12;
         this.params.f_weight = "normal";
-        this.params.align = align || { title: "Слева", value: "start" };
+        this.params.align = align || { title: "Left", value: "start" };
 
         this.params.cell_1.id = cell_1.data.id;
         this.params.cell_1.title = cell_1.data.title;
@@ -159,11 +159,11 @@ export default {
           6,
           12,
           {
-            title: "Слева",
+            title: "Left",
             value: "start",
           },
           {
-            data: { id: "rank", title: "Ст №" },
+            data: { id: "rank", title: "St. №" },
             handler: function (_competitor, competition) {
               return [
                 competition.protocol_settings.start_protocols.filters.race_filter._startList.indexOf(
@@ -181,7 +181,7 @@ export default {
           new data.fieldClass(
             12,
             12,
-            { title: "Слева", value: "start" },
+            { title: "Left", value: "start" },
             {
               data: _header,
               handler: function (_competitor) {
@@ -202,11 +202,11 @@ export default {
           6,
           12,
           {
-            title: "Слева",
+            title: "Left",
             value: "start",
           },
           {
-            data: { id: "rank", title: "Место" },
+            data: { id: "rank", title: "Rank" },
             handler: function (_competitor) {
               return [_competitor.s_rank];
             },
@@ -220,7 +220,7 @@ export default {
           new data.fieldClass(
             8,
             12,
-            { title: "Слева", value: "start" },
+            { title: "Left", value: "start" },
             {
               data: _header,
               handler: function (_competitor) {
@@ -237,11 +237,11 @@ export default {
           8,
           12,
           {
-            title: "Слева",
+            title: "Left",
             value: "start",
           },
           {
-            data: { id: "race", title: "Заезд" },
+            data: { id: "race", title: "Race" },
             handler: function (competitor) {
               const competition = main.state["competitions"].find(
                 (_comp) => _comp.id === competitor.comp_id
@@ -258,9 +258,9 @@ export default {
           new data.fieldClass(
             6,
             12,
-            { title: "Слева", value: "start" },
+            { title: "Left", value: "start" },
             {
-              data: { id: `Судья ${j_idx + 1}`, title: `С${j_idx + 1}` },
+              data: { id: `Judge ${j_idx + 1}`, title: `J${j_idx + 1}` },
               handler: function (_competitor) {
                 return (
                   _competitor.competitor.marks
@@ -283,13 +283,13 @@ export default {
           6,
           12,
           {
-            title: "Слева",
+            title: "Left",
             value: "start",
           },
           {
             data: {
               id: "race_res",
-              title: "Оценка",
+              title: "Score",
             },
             handler: function (competitor) {
               const competition = main.state["competitions"].find(
@@ -320,11 +320,11 @@ export default {
           8,
           12,
           {
-            title: "Слева",
+            title: "Left",
             value: "start",
           },
           {
-            data: { id: "result", title: "Рез-т" },
+            data: { id: "result", title: "Result" },
             handler: function (competitor) {
               const competition = main.state["competitions"].find(
                 (_comp) => _comp.id === competitor.comp_id
@@ -351,11 +351,11 @@ export default {
           6,
           12,
           {
-            title: "Слева",
+            title: "Left",
             value: "start",
           },
           {
-            data: { id: "rank", title: "Место" },
+            data: { id: "rank", title: "Rank" },
             handler: function (_competitor) {
               return [_competitor.s_rank];
             },
@@ -369,7 +369,7 @@ export default {
           new data.fieldClass(
             8,
             12,
-            { title: "Слева", value: "start" },
+            { title: "Left", value: "start" },
             {
               data: _header,
               handler: function (_competitor) {
@@ -386,11 +386,11 @@ export default {
           8,
           12,
           {
-            title: "Слева",
+            title: "Left",
             value: "start",
           },
           {
-            data: { id: "race", title: "Заезд" },
+            data: { id: "race", title: "Race" },
             handler: function (competitor, competition) {
               return [
                 competition.protocol_settings.result_protocols.filters
@@ -407,9 +407,9 @@ export default {
           new data.fieldClass(
             6,
             12,
-            { title: "Слева", value: "start" },
+            { title: "Left", value: "start" },
             {
-              data: { id: `Судья ${j_idx + 1}`, title: `С${j_idx + 1}` },
+              data: { id: `Judge ${j_idx + 1}`, title: `J${j_idx + 1}` },
               handler: function (_competitor, competition) {
                 const race =
                   competition.protocol_settings.result_protocols.filters
@@ -437,13 +437,13 @@ export default {
           6,
           12,
           {
-            title: "Слева",
+            title: "Left",
             value: "start",
           },
           {
             data: {
               id: "race_res",
-              title: "Рез-т",
+              title: "Result",
             },
             handler: function (competitor, competition) {
               const race =

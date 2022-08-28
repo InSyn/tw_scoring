@@ -3,16 +3,16 @@
     ><div
       style="height: 100%; border-radius: 6px"
       :style="{
-        backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA
+        backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
       }"
     >
       <v-row
         class="pa-2 d-flex align-center"
         ver
         no-gutters
-        style="height: 32px;font-size: 1.2rem; font-weight: bold"
+        style="height: 32px; font-size: 1.2rem; font-weight: bold"
       >
-        <div v-html="`На финише:`"></div>
+        <div v-html="`Finished:`"></div>
       </v-row>
       <v-row
         class="pa-2"
@@ -20,31 +20,36 @@
         style="position: relative; height: calc(100% - 32px)"
       >
         <div
-          style="position: relative; height: 100%; width: 100%; border-radius: 6px;"
+          style="
+            position: relative;
+            height: 100%;
+            width: 100%;
+            border-radius: 6px;
+          "
           :style="{
             backgroundColor:
-              $vuetify.theme.themes[appTheme].standardBackgroundRGBA
+              $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
           }"
         >
           <v-row
             class="pa-1"
             no-gutters
-            style="position:absolute; height: 32px; top: 0;right: 0;left: 0;"
+            style="position: absolute; height: 32px; top: 0; right: 0; left: 0"
           >
             <v-col
               class="d-flex justify-center align-center"
               style="max-width: 5rem"
-              v-html="`Место`"
+              v-html="`Rank`"
             ></v-col>
             <v-col
               class="d-flex justify-center align-center"
               style="max-width: 5rem"
-              v-html="`Ст.№`"
+              v-html="`St.№`"
             ></v-col>
             <v-col
               class="d-flex align-center"
               style="max-width: 16rem"
-              v-html="`Фамилия, имя`"
+              v-html="`Lastname, Name`"
             ></v-col>
             <v-col
               class="d-flex justify-center align-center"
@@ -57,12 +62,19 @@
             <v-col
               class="d-flex justify-end align-center"
               style="max-width: 5rem"
-              v-html="`Результат`"
+              v-html="`Result`"
             ></v-col>
           </v-row>
           <div
             v-if="competition.selected_race"
-            style="position: absolute; left: 0;right: 0;top: 32px;height: calc(100% - 32px); overflow-y: auto"
+            style="
+              position: absolute;
+              left: 0;
+              right: 0;
+              top: 32px;
+              height: calc(100% - 32px);
+              overflow-y: auto;
+            "
           >
             <v-dialog
               v-model="changeMarksDialog[competitor.id]"
@@ -75,7 +87,7 @@
                     v-on="on"
                     no-gutters
                     class="pa-1"
-                    style="height: 2rem;border-radius: 6px;cursor:pointer;"
+                    style="height: 2rem; border-radius: 6px; cursor: pointer"
                     :style="[
                       hover
                         ? appTheme === 'dark'
@@ -83,8 +95,8 @@
                           : { backgroundColor: `rgba(0,0,0,.15)` }
                         : null,
                       {
-                        borderBottom: `1px solid ${$vuetify.theme.themes[appTheme].standardBackgroundRGBA}`
-                      }
+                        borderBottom: `1px solid ${$vuetify.theme.themes[appTheme].standardBackgroundRGBA}`,
+                      },
                     ]"
                   >
                     <v-col
@@ -112,15 +124,17 @@
                       >{{
                         `${competition.set_accuracy(
                           competition.getRaceResult(competitor, race)
-                        )} ${(competition.result_formula.overall_result.type ===
-                          3 &&
-                          competitor.results.find(
-                            _res => _res.race_id === race.id
-                          ) &&
-                          competitor.results.find(
-                            _res => _res.race_id === race.id
-                          ).repeat) ||
-                          ""}`
+                        )} ${
+                          (competition.result_formula.overall_result.type ===
+                            3 &&
+                            competitor.results.find(
+                              (_res) => _res.race_id === race.id
+                            ) &&
+                            competitor.results.find(
+                              (_res) => _res.race_id === race.id
+                            ).repeat) ||
+                          ""
+                        }`
                       }}</v-col
                     ><v-spacer></v-spacer
                     ><v-col
@@ -135,83 +149,108 @@
                   ></v-hover
                 ></template
               ><v-card
-                style="max-width: 900px;"
+                style="max-width: 900px"
                 :style="{
                   backgroundColor:
                     $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
-                  color: $vuetify.theme.themes[appTheme].textDefault
+                  color: $vuetify.theme.themes[appTheme].textDefault,
                 }"
               >
                 <div
                   class="marks_title"
-                  style="padding: 16px 16px; font-weight: bold;font-size: 1.4rem"
+                  style="
+                    padding: 16px 16px;
+                    font-weight: bold;
+                    font-size: 1.4rem;
+                  "
                 >
                   {{
-                    `Участник ${competitor.info_data.bib} ${competitor.info_data.lastname} ${competitor.info_data.name}`
+                    `Competitor ${competitor.info_data.bib} ${competitor.info_data.lastname} ${competitor.info_data.name}`
                   }}
                 </div>
 
                 <div
                   class="marks_body"
-                  style="padding: 8px 16px;display:flex;flex-wrap: wrap;max-height: 720px;overflow-y:auto;"
+                  style="
+                    padding: 8px 16px;
+                    display: flex;
+                    flex-wrap: wrap;
+                    max-height: 720px;
+                    overflow-y: auto;
+                  "
                 >
                   <div
                     v-for="race in competition.races"
                     :key="race.id"
-                    style="flex: 0 0 auto;margin: 0 .5rem .5rem 0;overflow: hidden;border-radius: 2px"
+                    style="
+                      flex: 0 0 auto;
+                      margin: 0 0.5rem 0.5rem 0;
+                      overflow: hidden;
+                      border-radius: 2px;
+                    "
                     :style="[
                       {
-                        border: `1px solid ${$vuetify.theme.themes[appTheme].standardBackgroundRGBA}`
+                        border: `1px solid ${$vuetify.theme.themes[appTheme].standardBackgroundRGBA}`,
                       },
                       race.id === competition.selected_race.id && {
-                        border: `1px solid ${$vuetify.theme.themes[appTheme].accent_light}`
-                      }
+                        border: `1px solid ${$vuetify.theme.themes[appTheme].accent_light}`,
+                      },
                     ]"
                   >
-                    <div style="display:flex;;width: 100%;">
+                    <div style="display: flex; width: 100%">
                       <div
-                        style="padding: 4px 8px;font-weight: bold"
+                        style="padding: 4px 8px; font-weight: bold"
                         :style="[
                           {
                             backgroundColor:
                               $vuetify.theme.themes[appTheme]
-                                .standardBackgroundRGBA
+                                .standardBackgroundRGBA,
                           },
                           race.id === competition.selected_race.id && {
                             backgroundColor:
-                              $vuetify.theme.themes[appTheme].accent_light
-                          }
+                              $vuetify.theme.themes[appTheme].accent_light,
+                          },
                         ]"
                       >
-                        {{ `Заезд ${competition.races.indexOf(race) + 1}` }}
+                        {{ `Race ${competition.races.indexOf(race) + 1}` }}
                       </div>
                     </div>
                     <div
                       v-for="mark in competitor.marks
-                        .filter(_mark => _mark.race_id === race.id)
+                        .filter((_mark) => _mark.race_id === race.id)
                         .sort((mark1, mark2) => mark1.judge - mark2.judge)"
                       :key="mark.id"
                     >
                       <div
-                        style="display:flex;align-items: center;padding: 4px 8px"
+                        style="
+                          display: flex;
+                          align-items: center;
+                          padding: 4px 8px;
+                        "
                       >
-                        <div style="flex: 0 0 auto;font-weight: bold;">
-                          {{ `Судья: ${mark.judge}` }}
+                        <div style="flex: 0 0 auto; font-weight: bold">
+                          {{ `Judge: ${mark.judge}` }}
                         </div>
 
-                        <div style="margin-left: auto;font-weight:bold;">
-                          оценка
+                        <div style="margin-left: auto; font-weight: bold">
+                          mark
                         </div>
                         <input
                           type="text"
                           readonly
                           v-model="mark.value"
-                          style="padding: 2px 4px;margin-left: .5rem; font-weight: bold; width: 4rem;border-radius: 2px"
+                          style="
+                            padding: 2px 4px;
+                            margin-left: 0.5rem;
+                            font-weight: bold;
+                            width: 4rem;
+                            border-radius: 2px;
+                          "
                           :style="{
                             backgroundColor:
                               $vuetify.theme.themes[appTheme]
                                 .standardBackgroundRGBA,
-                            color: $vuetify.theme.themes[appTheme].textDefault
+                            color: $vuetify.theme.themes[appTheme].textDefault,
                           }"
                         /><v-icon
                           small
@@ -222,60 +261,94 @@
                         <input
                           type="text"
                           v-model="mark.new_value"
-                          style="padding: 2px 4px; font-weight: bold; width: 4rem;border-radius: 2px"
+                          style="
+                            padding: 2px 4px;
+                            font-weight: bold;
+                            width: 4rem;
+                            border-radius: 2px;
+                          "
                           :style="{
                             backgroundColor:
                               $vuetify.theme.themes[appTheme]
                                 .standardBackgroundRGBA,
-                            color: $vuetify.theme.themes[appTheme].textDefault
+                            color: $vuetify.theme.themes[appTheme].textDefault,
                           }"
                         />
                       </div>
                     </div>
                     <div
-                      style="display:flex;align-items: stretch;width: 100%;padding: 8px 4px 4px 4px"
+                      style="
+                        display: flex;
+                        align-items: stretch;
+                        width: 100%;
+                        padding: 8px 4px 4px 4px;
+                      "
                     >
-                      <div style="display:flex;align-items: stretch">
+                      <div style="display: flex; align-items: stretch">
                         <div
                           v-for="status in ['DNS', 'DNF', 'DSQ']"
                           :key="status"
                           @click="
                             setCompetitorRaceStatus(status, competitor, race)
                           "
-                          style="display:flex;align-items: center;font-weight:bold;padding: 2px 8px;margin-right: .5rem;border-radius: 2px;cursor:pointer;"
+                          style="
+                            display: flex;
+                            align-items: center;
+                            font-weight: bold;
+                            padding: 2px 8px;
+                            margin-right: 0.5rem;
+                            border-radius: 2px;
+                            cursor: pointer;
+                          "
                           :style="[
                             {
                               backgroundColor:
                                 $vuetify.theme.themes[appTheme]
                                   .standardBackgroundRGBA,
-                              color: $vuetify.theme.themes[appTheme].textDefault
+                              color:
+                                $vuetify.theme.themes[appTheme].textDefault,
                             },
                             checkStatus(status, competitor, race) && {
                               backgroundColor:
-                                $vuetify.theme.themes[appTheme].accent
-                            }
+                                $vuetify.theme.themes[appTheme].accent,
+                            },
                           ]"
                         >
                           {{ status }}
                         </div>
                       </div>
                       <div
-                        style="display:flex;flex-wrap: wrap;margin-left: auto"
+                        style="
+                          display: flex;
+                          flex-wrap: wrap;
+                          margin-left: auto;
+                        "
                       >
                         <div
-                          style="display:flex;align-items: flex-end;width: 100%;padding: 2px 8px;border-radius: 2px"
+                          style="
+                            display: flex;
+                            align-items: flex-end;
+                            width: 100%;
+                            padding: 2px 8px;
+                            border-radius: 2px;
+                          "
                           :style="{
                             backgroundColor:
                               $vuetify.theme.themes[appTheme]
                                 .standardBackgroundRGBA,
-                            color: $vuetify.theme.themes[appTheme].textDefault
+                            color: $vuetify.theme.themes[appTheme].textDefault,
                           }"
                         >
-                          <div style="font-weight:bold">
-                            Результат
-                          </div>
+                          <div style="font-weight: bold">Result</div>
                           <div
-                            style="width: 4rem;margin-left: .5rem;border-radius: 2px;font-weight: bold;font-size: 1.2rem;text-align: center"
+                            style="
+                              width: 4rem;
+                              margin-left: 0.5rem;
+                              border-radius: 2px;
+                              font-weight: bold;
+                              font-size: 1.2rem;
+                              text-align: center;
+                            "
                           >
                             {{ competition.getRaceResult(competitor, race) }}
                           </div>
@@ -284,7 +357,13 @@
                           v-if="
                             competition.result_formula.overall_result.type == 3
                           "
-                          style="display:flex;justify-content: space-between;align-items: center;width: 100%;padding: 4px 0"
+                          style="
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                            width: 100%;
+                            padding: 4px 0;
+                          "
                         >
                           <div
                             v-for="(s_repeat, sr_idx) in ['A', 'B', 'C']"
@@ -296,7 +375,13 @@
                                 race
                               )
                             "
-                            style="flex: 1 0 auto;font-weight:bold;border-radius: 2px;cursor:pointer;text-align:center;"
+                            style="
+                              flex: 1 0 auto;
+                              font-weight: bold;
+                              border-radius: 2px;
+                              cursor: pointer;
+                              text-align: center;
+                            "
                             :style="[
                               sr_idx > 0 && { marginLeft: '.5rem' },
                               {
@@ -304,15 +389,15 @@
                                   $vuetify.theme.themes[appTheme]
                                     .standardBackgroundRGBA,
                                 color:
-                                  $vuetify.theme.themes[appTheme].textDefault
+                                  $vuetify.theme.themes[appTheme].textDefault,
                               },
                               checkRepeat(s_repeat, competitor, race) && {
                                 backgroundColor:
                                   $vuetify.theme.themes[appTheme].textDefault,
                                 color:
                                   $vuetify.theme.themes[appTheme]
-                                    .standardBackgroundRGBA
-                              }
+                                    .standardBackgroundRGBA,
+                              },
                             ]"
                           >
                             {{ s_repeat }}
@@ -322,46 +407,73 @@
                     </div>
                   </div>
                   <div
-                    style="display:flex;align-items: center;padding: 1rem 4px;width: 100%;"
+                    style="
+                      display: flex;
+                      align-items: center;
+                      padding: 1rem 4px;
+                      width: 100%;
+                    "
                   >
                     <div
-                      style="display:flex;align-items: center;margin-left: auto"
+                      style="
+                        display: flex;
+                        align-items: center;
+                        margin-left: auto;
+                      "
                     >
                       <div
                         v-for="status in ['DNS', 'DNF', 'DSQ']"
                         :key="status"
                         @click="setOverallStatus(status, competitor)"
-                        style="display:flex;align-items: center;font-weight:bold;padding: 2px 8px;margin-right: .5rem;border-radius: 2px;cursor:pointer;"
+                        style="
+                          display: flex;
+                          align-items: center;
+                          font-weight: bold;
+                          padding: 2px 8px;
+                          margin-right: 0.5rem;
+                          border-radius: 2px;
+                          cursor: pointer;
+                        "
                         :style="[
                           {
                             backgroundColor:
                               $vuetify.theme.themes[appTheme]
                                 .standardBackgroundRGBA,
-                            color: $vuetify.theme.themes[appTheme].textDefault
+                            color: $vuetify.theme.themes[appTheme].textDefault,
                           },
                           checkOverallStatus(status, competitor) && {
                             backgroundColor:
-                              $vuetify.theme.themes[appTheme].accent
-                          }
+                              $vuetify.theme.themes[appTheme].accent,
+                          },
                         ]"
                       >
                         {{ status }}
                       </div>
                     </div>
                     <div
-                      style="display:flex;align-items: center;margin-left: 1rem;padding: 4px 8px;border-radius: 6px"
+                      style="
+                        display: flex;
+                        align-items: center;
+                        margin-left: 1rem;
+                        padding: 4px 8px;
+                        border-radius: 6px;
+                      "
                       :style="{
                         backgroundColor:
                           $vuetify.theme.themes[appTheme]
                             .standardBackgroundRGBA,
-                        color: $vuetify.theme.themes[appTheme].textDefault
+                        color: $vuetify.theme.themes[appTheme].textDefault,
                       }"
                     >
-                      <span style="font-size: 1.2rem;font-weight:bold;"
+                      <span style="font-size: 1.2rem; font-weight: bold"
                         >Общий</span
                       >
                       <div
-                        style="font-size: 1.4rem;font-weight:bold;margin-left: 1rem"
+                        style="
+                          font-size: 1.4rem;
+                          font-weight: bold;
+                          margin-left: 1rem;
+                        "
                       >
                         {{ competition.set_accuracy(getOverall(competitor)) }}
                       </div>
@@ -369,25 +481,29 @@
                   </div>
                 </div>
                 <v-card-actions
-                  style="display:flex;align-items: center;justify-content: flex-end"
+                  style="
+                    display: flex;
+                    align-items: center;
+                    justify-content: flex-end;
+                  "
                   :style="{
-                    borderTop: `1px solid ${$vuetify.theme.themes[appTheme].standardBackgroundRGBA}`
+                    borderTop: `1px solid ${$vuetify.theme.themes[appTheme].standardBackgroundRGBA}`,
                   }"
                   ><v-btn
                     @click="accept_changes(competitor)"
                     small
                     :color="$vuetify.theme.themes[appTheme].accent"
                     :style="{
-                      color: $vuetify.theme.themes[appTheme].textDefault
+                      color: $vuetify.theme.themes[appTheme].textDefault,
                     }"
-                    >Подтвердить</v-btn
+                    >Accept</v-btn
                   >
                   <v-btn
                     small
                     text
                     @click="declineChanges(competitor)"
                     :color="$vuetify.theme.themes[appTheme].textDefault"
-                    >Отменить</v-btn
+                    >Cancel</v-btn
                   >
                 </v-card-actions></v-card
               ></v-dialog
@@ -396,8 +512,8 @@
         </div>
       </v-row>
     </div></v-col
-  ></template
->
+  >
+</template>
 
 <script>
 import { mapGetters } from "vuex";
@@ -409,14 +525,14 @@ export default {
     },
     get_race_res(competitor, _race) {
       return this.competition.result_formula.get_race_result(
-        competitor.marks.filter(mark => {
+        competitor.marks.filter((mark) => {
           return mark.race === _race;
         })
       );
     },
     get_result(competitor) {
       let races_marks = [];
-      this.competition.races.forEach(race => {
+      this.competition.races.forEach((race) => {
         races_marks.push(
           this.get_race_res(competitor, this.competition.races.indexOf(race))
         );
@@ -427,7 +543,7 @@ export default {
     },
     getOverall(competitor) {
       const overall = competitor.results_overall.find(
-        overall => overall.competition_id === this.competition.id
+        (overall) => overall.competition_id === this.competition.id
       );
       return overall
         ? overall.status
@@ -436,7 +552,7 @@ export default {
         : 0;
     },
     setCompetitorRaceStatus(status, competitor, race) {
-      const result = competitor.results.find(res => res.race_id === race.id);
+      const result = competitor.results.find((res) => res.race_id === race.id);
       if (result) {
         result.status === status
           ? (result.status = null)
@@ -444,11 +560,11 @@ export default {
       }
     },
     checkStatus(status, competitor, race) {
-      const result = competitor.results.find(res => res.race_id === race.id);
+      const result = competitor.results.find((res) => res.race_id === race.id);
       return result && result.status === status;
     },
     setCompetitorRaceRepeat(s_repeat, competitor, race) {
-      const result = competitor.results.find(res => res.race_id === race.id);
+      const result = competitor.results.find((res) => res.race_id === race.id);
       if (result) {
         result.repeat === s_repeat
           ? (result.repeat = "A")
@@ -456,12 +572,12 @@ export default {
       }
     },
     checkRepeat(score_repeat, competitor, race) {
-      const result = competitor.results.find(res => res.race_id === race.id);
+      const result = competitor.results.find((res) => res.race_id === race.id);
       return result && result.repeat === score_repeat;
     },
     setOverallStatus(status, competitor) {
       const overall = competitor.results_overall.find(
-        res => res.competition_id === this.competition.id
+        (res) => res.competition_id === this.competition.id
       );
       if (overall) {
         overall.status === status
@@ -471,18 +587,18 @@ export default {
     },
     checkOverallStatus(status, competitor) {
       const overall = competitor.results_overall.find(
-        res => res.competition_id === this.competition.id
+        (res) => res.competition_id === this.competition.id
       );
       return overall && overall.status === status;
     },
     accept_changes(competitor) {
-      competitor.marks.forEach(_mark => {
+      competitor.marks.forEach((_mark) => {
         if (_mark.new_value) {
           _mark.value = _mark.new_value;
           _mark.new_value = null;
         }
       });
-      this.competition.races.forEach(race =>
+      this.competition.races.forEach((race) =>
         this.competition.publishResult(competitor, race.id)
       );
 
@@ -490,24 +606,24 @@ export default {
       this.$store.commit("main/updateEvent");
     },
     declineChanges(competitor) {
-      competitor.marks.forEach(_mark => {
+      competitor.marks.forEach((_mark) => {
         _mark.new_value = null;
       });
       this.changeMarksDialog[competitor.id] = false;
       this.$store.commit("main/updateEvent");
-    }
+    },
   },
   data() {
     return {
-      changeMarksDialog: {}
+      changeMarksDialog: {},
     };
   },
   computed: {
     ...mapGetters("main", { competition: "competition", appTheme: "appTheme" }),
     sortedFinishedList() {
       let list = this.competition.selected_race.finished
-        .map(_comp => {
-          return this.competition.competitorsSheet.competitors.find(comp => {
+        .map((_comp) => {
+          return this.competition.competitorsSheet.competitors.find((comp) => {
             return comp.id === _comp;
           });
         })
@@ -515,13 +631,13 @@ export default {
           const statuses = {
             DNF: -1,
             DNS: -2,
-            DSQ: -3
+            DSQ: -3,
           };
           const comp1res = comp1.results_overall.find(
-              overall => overall.competition_id === this.competition.id
+              (overall) => overall.competition_id === this.competition.id
             ),
             comp2res = comp2.results_overall.find(
-              overall => overall.competition_id === this.competition.id
+              (overall) => overall.competition_id === this.competition.id
             );
           return (
             (comp2res
@@ -540,8 +656,8 @@ export default {
         _comp.rank = c_idx + 1;
       });
       return list;
-    }
-  }
+    },
+  },
 };
 </script>
 

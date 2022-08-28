@@ -3,34 +3,34 @@ export default {
   state: {
     settingsMenu: [
       {
-        name: "Настройки соревнования",
+        name: "Competition settings",
         link: {
-          name: "rules"
-        }
+          name: "rules",
+        },
       },
       {
-        name: "Спортивная графика",
+        name: "Sport graphics",
         link: {
-          name: "sportGraphics"
-        }
+          name: "sportGraphics",
+        },
       },
       {
-        name: "Видео графика",
+        name: "Video graphics",
         link: {
-          name: "videoGraphics"
-        }
+          name: "videoGraphics",
+        },
       },
       {
-        name: "Результаты",
+        name: "Results",
         link: {
-          name: "results"
-        }
-      }
-    ]
+          name: "results",
+        },
+      },
+    ],
   },
   getters: {
-    settingsMenu: state => {
+    settingsMenu: (state) => {
       return state.settingsMenu;
-    }
-  }
+    },
+  },
 };

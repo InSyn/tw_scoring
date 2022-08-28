@@ -17,7 +17,7 @@
         }"
       >
         <v-card-title style="padding: 0 1rem 0.5rem 1rem">
-          Настройка этапов
+          Stages setup
         </v-card-title>
         <v-container
           style="
@@ -93,7 +93,7 @@
                 ]"
               >
                 <div style="padding: 2px 1rem">
-                  Этап:&nbsp
+                  Stage:&nbsp
                   {{
                     (_competition.mainData.title.stage.value &&
                       _competition.mainData.title.stage.value.value) ||
@@ -144,7 +144,7 @@
                     font-weight: bold;
                   "
                 >
-                  Кол-во прошедших
+                  Passed number
                 </div>
                 <input
                   type="number"
@@ -256,7 +256,7 @@
             <v-icon :color="$vuetify.theme.themes[appTheme].textDefault"
               >mdi-dots-horizontal</v-icon
             >
-            Отсутствуют другие этапы
+            No other stages
           </div>
           <v-container
             style="
@@ -282,7 +282,7 @@
                 margin: 0 0 0.5rem 0;
               "
             >
-              Сетка соревнований
+              Stages grid
               <v-tooltip right open-delay="512">
                 <template v-slot:activator="{ on, attrs }">
                   <v-btn
@@ -294,7 +294,7 @@
                     :color="$vuetify.theme.themes[appTheme].action_darkYellow"
                     ><v-icon>mdi-backup-restore</v-icon></v-btn
                   ></template
-                ><span>Восстановить</span></v-tooltip
+                ><span>Reset</span></v-tooltip
               >
             </div>
             <div
@@ -454,7 +454,7 @@
         style="margin-top: 1rem; border-radius: 6px"
       >
         <v-card-title style="padding: 0 1rem 0.5rem 1rem">
-          Точность результата
+          Result precision
         </v-card-title>
         <div style="width: 100%">
           <v-radio-group
@@ -497,7 +497,7 @@
         style="margin-top: 1rem; border-radius: 6px"
       >
         <v-card-title style="padding: 0 1rem 0.5rem 1rem">
-          Формула подсчёта заезда
+          Race result formula
         </v-card-title>
         <div class="d-flex flex-nowrap">
           <div
@@ -579,7 +579,7 @@
                         }"
                       >
                         <div class="font-weight-bold">
-                          {{ `Судья ${judge.id}` }}
+                          {{ `Judge ${judge.id}` }}
                         </div>
                         <div>{{ `${judge.lastName} ${judge.name}` }}</div>
                       </div>
@@ -616,7 +616,7 @@
                             padding: 2px 4px;
                           "
                         >
-                          Коридор {{ cor_idx + 1 }}
+                          Corridor {{ cor_idx + 1 }}
                           <div style="margin-left: auto">
                             <v-dialog
                               v-model="
@@ -658,7 +658,7 @@
                                     margin-bottom: 1rem;
                                   "
                                 >
-                                  Корридор {{ cor_idx + 1 }}
+                                  Corridor {{ cor_idx + 1 }}
                                   <v-btn
                                     @click="
                                       competition.result_formula.types[0][
@@ -714,7 +714,7 @@
                                           .cardBackgroundRGBA,
                                     }"
                                   >
-                                    {{ `С ${judge.id}` }}
+                                    {{ `J ${judge.id}` }}
                                   </div>
                                 </div>
                                 <div
@@ -736,7 +736,7 @@
                                   <div
                                     style="padding: 4px 6px; font-weight: bold"
                                   >
-                                    Судят корридор:
+                                    Corridor judges:
                                   </div>
                                   <div
                                     v-for="judge in competition.result_formula
@@ -757,7 +757,7 @@
                                           .cardBackgroundRGBA,
                                     }"
                                   >
-                                    {{ `Судья ${judge.id}` }}
+                                    {{ `Judge ${judge.id}` }}
                                     <v-btn
                                       @click="
                                         competition.result_formula.types[0].doubleUp_corridors[
@@ -809,7 +809,7 @@
                               margin: 0 2px 2px;
                             "
                           >
-                            {{ `C ${judge.id}` }}
+                            {{ `J ${judge.id}` }}
                           </div>
                         </div>
                       </div>
@@ -923,7 +923,7 @@
                 >
                   <div class="pa-2 d-flex align-center">
                     <label class="font-weight-bold" for="lower_marks"
-                      >Убрать худш.</label
+                      >Remove last</label
                     ><input
                       class="pa-1 ml-2 font-weight-bold"
                       style="width: 3.8rem; border-radius: 6px"
@@ -942,7 +942,7 @@
                   </div>
                   <div class="pa-2 d-flex align-center">
                     <label class="font-weight-bold" for="higher_marks"
-                      >Убрать лучш.</label
+                      >Remove best</label
                     ><input
                       class="pa-1 ml-2 font-weight-bold"
                       style="width: 3.8rem; border-radius: 6px"
@@ -1025,7 +1025,7 @@
                       small
                       style="flex: 0 0 auto"
                       :color="$vuetify.theme.themes[appTheme].success"
-                      >Добавить секцию</v-btn
+                      >Add section</v-btn
                     >
                   </template>
                   <v-card
@@ -1037,7 +1037,7 @@
                     }"
                   >
                     <v-card-title class="pa-2 d-flex align-center">
-                      <div>Создание секции</div>
+                      <div>New section</div>
                       <v-spacer></v-spacer>
                       <v-btn
                         icon
@@ -1056,7 +1056,7 @@
                     <div class="pa-2 d-flex flex-column">
                       <div class="pa-1 d-flex align-center">
                         <div class="pa-2 d-flex align-center">
-                          Коэффициент
+                          Coefficient
                           <input
                             class="pa-1 ml-2"
                             type="number"
@@ -1117,7 +1117,7 @@
                                   $vuetify.theme.themes[appTheme]
                                     .subjectBackgroundRGBA,
                               }"
-                              v-html="`Судья ${judge.id}`"
+                              v-html="`Judge ${judge.id}`"
                             ></div>
                           </div>
                         </div>
@@ -1158,7 +1158,7 @@
                                   .subjectBackgroundRGBA,
                             }"
                           >
-                            {{ `Судья ${judge_to_add.id}` }}
+                            {{ `Judge ${judge_to_add.id}` }}
                           </div>
                         </div>
                       </div>
@@ -1187,7 +1187,7 @@
                             })()
                         "
                         :color="$vuetify.theme.themes[appTheme].success"
-                        >Создать
+                        >Create
                       </v-btn>
                     </v-card-actions>
                   </v-card>
@@ -1234,7 +1234,7 @@
                         </v-icon>
                       </div>
                       <div class="d-flex align-center flex-nowrap">
-                        <div class="font-weight-bold">Kоэф.</div>
+                        <div class="font-weight-bold">Coef.</div>
                         <input
                           type="number"
                           step="0.05"
@@ -1278,7 +1278,7 @@
                                   .subjectBackgroundRGBA,
                             }"
                           >
-                            {{ `Судья ${section_judge.id}` }}
+                            {{ `Judge ${section_judge.id}` }}
                           </div>
                         </div>
                       </div>
@@ -1301,7 +1301,7 @@
         }"
       >
         <v-card-title style="padding: 0 1rem 0.5rem 1rem">
-          Формула подсчёта результата этапа
+          Stage result formula
         </v-card-title>
 
         <div

@@ -15,11 +15,11 @@
     }"
   >
     <div class="xml_export_title" style="font-size: 1.2rem; font-weight: bold">
-      Экспорт XML
+      Export XML
     </div>
     <div class="xml_export_settings">
       <div style="display: flex; align-items: center">
-        <span>Вид соревнования</span
+        <span>Competition type</span
         ><select
           style="
             margin-left: 1rem;
@@ -59,7 +59,7 @@
           :color="$vuetify.theme.themes[appTheme].textDefault"
           style="margin-right: 0.5rem"
           >mdi-download</v-icon
-        >Сохранить</v-btn
+        >Save</v-btn
       >
     </div>
   </div>

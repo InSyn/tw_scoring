@@ -2,21 +2,26 @@
   <v-col class="pa-2" cols="5"
     ><div
       class="pt-14"
-      style="position:relative; height: 100%; border-radius: 6px"
+      style="position: relative; height: 100%; border-radius: 6px"
       :style="{
-        backgroundColor: `${$vuetify.theme.themes[appTheme].cardBackgroundRGBA}`
+        backgroundColor: `${$vuetify.theme.themes[appTheme].cardBackgroundRGBA}`,
       }"
     >
       <div
         class="pa-2 d-flex flex-wrap align-center"
-        style="position:absolute; top: 0;left: 0;right: 0"
+        style="position: absolute; top: 0; left: 0; right: 0"
       >
         <div
           class="d-flex align-center flex-wrap"
-          style="border-radius: 6px; overflow-y: auto; width: 100%; max-height: 50px"
+          style="
+            border-radius: 6px;
+            overflow-y: auto;
+            width: 100%;
+            max-height: 50px;
+          "
           :style="{
             backgroundColor:
-              $vuetify.theme.themes[appTheme].standardBackgroundRGBA
+              $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
           }"
         >
           <div class="d-flex flex-column align-center pa-1">
@@ -54,9 +59,9 @@
               "
               :style="
                 user.socket_id &&
-                  !user.connected && {
-                    color: $vuetify.theme.themes[appTheme].error
-                  }
+                !user.connected && {
+                  color: $vuetify.theme.themes[appTheme].error,
+                }
               "
             ></v-icon>
             <div
@@ -69,14 +74,19 @@
       <v-row
         no-gutters
         class="pa-2"
-        style="height: calc(100% - 40px); width: 100%;"
+        style="height: calc(100% - 40px); width: 100%"
         ><div
           class="pa-1"
           id="chat_window"
-          style="height: 100%; width: 100%; overflow-y: auto; border-radius: 6px"
+          style="
+            height: 100%;
+            width: 100%;
+            overflow-y: auto;
+            border-radius: 6px;
+          "
           :style="{
             backgroundColor:
-              $vuetify.theme.themes[appTheme].standardBackgroundRGBA
+              $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
           }"
         >
           <v-row no-gutters v-for="(mes, m) in messages" :key="m">{{
@@ -91,24 +101,24 @@
             v-model="message"
             type="text"
             class="pa-1"
-            style="width: 100%;border-radius: 6px; font-size: 1.2rem"
+            style="width: 100%; border-radius: 6px; font-size: 1.2rem"
             :style="{
               color: $vuetify.theme.themes[appTheme].textDefault,
               backgroundColor:
-                $vuetify.theme.themes[appTheme].standardBackgroundRGBA
+                $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
             }"
           /><v-btn
             @click="addMessage(message)"
             :color="$vuetify.theme.themes[appTheme].accent"
             text
             small
-            >отправить</v-btn
+            >Send</v-btn
           ></v-col
         ></v-row
       >
     </div></v-col
-  ></template
->
+  >
+</template>
 
 <script>
 import { mapGetters } from "vuex";
@@ -119,7 +129,7 @@ export default {
   },
   data() {
     return {
-      message: ""
+      message: "",
     };
   },
   computed: {
@@ -128,29 +138,29 @@ export default {
       "socket",
       "messages",
       "competition",
-      "timer"
-    ])
+      "timer",
+    ]),
   },
   methods: {
     addMessage(m) {
       if (this.socket) {
         const time = [this.timer.hrs, this.timer.min];
-        m !== "" && this.socket.emit("chat_message", [m, time, "Секретарь"]);
+        m !== "" && this.socket.emit("chat_message", [m, time, "Secretary"]);
         this.message = "";
       } else console.log("server not started");
     },
     setChatScroll() {
       const chatWindow = document.querySelector("#chat_window");
       chatWindow.scrollTop = chatWindow.scrollHeight;
-    }
+    },
   },
   watch: {
-    messages: function(val) {
+    messages: function (val) {
       this.$nextTick(() => {
         this.setChatScroll();
       });
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -29,7 +29,7 @@
                   color: $vuetify.theme.themes[appTheme].textDefault,
                 }"
                 ><v-card-title class="pa-2" style="font-size: 1.2rem"
-                  >Изменение заголовка</v-card-title
+                  >Change title</v-card-title
                 >
                 <div class="pa-2" style="font-size: 1.1rem">
                   <input
@@ -54,7 +54,7 @@
                       competition.stuff.settings.jury.change_dialog = false
                     "
                     :color="$vuetify.theme.themes[appTheme].textDefault"
-                    >Закрыть</v-btn
+                    >Close</v-btn
                   ></v-card-actions
                 ></v-card
               ></v-dialog
@@ -91,7 +91,7 @@
               :key="jr"
             >
               <v-col class="d-flex align-center pa-1" cols="6"
-                ><div>Должность:</div>
+                ><div>Position:</div>
                 <input
                   @focus="
                     $event.target.style.borderBottom = `1px solid ${$vuetify.theme.themes[appTheme].accent}`
@@ -114,7 +114,7 @@
                   type="text"
                   v-model="competition.stuff.jury[jr].title" /></v-col
               ><v-col class="d-flex align-center pa-1" cols="6"
-                ><div>Регион:</div>
+                ><div>Region:</div>
                 <input
                   @focus="
                     $event.target.style.borderBottom = `1px solid ${$vuetify.theme.themes[appTheme].accent}`
@@ -139,7 +139,7 @@
               /></v-col>
 
               <v-col class="d-flex align-center pa-1" cols="7"
-                ><div>Фамилия:</div>
+                ><div>Lastname:</div>
                 <input
                   @focus="
                     $event.target.style.borderBottom = `1px solid ${$vuetify.theme.themes[appTheme].accent}`
@@ -163,7 +163,7 @@
                   v-model="competition.stuff.jury[jr].lastName"
               /></v-col>
               <v-col class="d-flex align-center pa-1" cols="5"
-                ><div>Имя:</div>
+                ><div>Name:</div>
                 <input
                   @focus="
                     $event.target.style.borderBottom = `1px solid ${$vuetify.theme.themes[appTheme].accent}`
@@ -253,7 +253,7 @@
                   },
                 ]"
               >
-                online
+                Online
               </div>
               <div style="position: absolute; top: 4px; right: 32px">
                 <v-icon
@@ -345,7 +345,7 @@
                   color: $vuetify.theme.themes[appTheme].textDefault,
                 }"
                 ><v-card-title class="pa-2" style="font-size: 1.2rem"
-                  >Изменение заголовка</v-card-title
+                  >Change title</v-card-title
                 >
                 <div class="pa-2" style="font-size: 1.1rem">
                   <input
@@ -370,7 +370,7 @@
                       competition.stuff.settings.judges.change_dialog = false
                     "
                     :color="$vuetify.theme.themes[appTheme].textDefault"
-                    >Закрыть</v-btn
+                    >Close</v-btn
                   ></v-card-actions
                 ></v-card
               ></v-dialog
@@ -416,7 +416,7 @@
                   },
                 ]"
               >
-                online
+                Online
               </div>
               <v-col class="d-flex align-center pa-1" cols="3"
                 ><div style="font-weight: bold">ID:</div>
@@ -497,7 +497,7 @@
               /></v-col>
 
               <v-col class="d-flex align-center pa-1" cols="7"
-                ><div>Фамилия:</div>
+                ><div>Lastname:</div>
                 <input
                   @focus="
                     $event.target.style.borderBottom = `1px solid ${$vuetify.theme.themes[appTheme].accent}`
@@ -520,7 +520,7 @@
                   type="text"
                   v-model="competition.stuff.judges[jd].lastName" /></v-col
               ><v-col class="d-flex align-center pa-1" cols="5"
-                ><div>Имя:</div>
+                ><div>Name:</div>
                 <input
                   @focus="
                     $event.target.style.borderBottom = `1px solid ${$vuetify.theme.themes[appTheme].accent}`
@@ -544,7 +544,7 @@
                   v-model="competition.stuff.judges[jd].name"
               /></v-col>
               <v-col class="d-flex align-center pa-1" cols="8"
-                ><div>Регион:</div>
+                ><div>Region:</div>
                 <input
                   @focus="
                     $event.target.style.borderBottom = `1px solid ${$vuetify.theme.themes[appTheme].accent}`
@@ -567,7 +567,7 @@
                   type="text"
                   v-model="competition.stuff.judges[jd].location" /></v-col
               ><v-col class="d-flex align-center pa-1" cols="4"
-                ><div>Категория:</div>
+                ><div>Category:</div>
                 <input
                   @focus="
                     $event.target.style.borderBottom = `1px solid ${$vuetify.theme.themes[appTheme].accent}`
@@ -698,7 +698,7 @@ export default {
       stuffType === "judge"
         ? this.competition.stuff.judges.push(
             new this.JudgeClass(
-              "Судья",
+              "Judge",
               this.competition.stuff.judges.length > 0
                 ? this.competition.stuff.judges[
                     this.competition.stuff.judges.length - 1

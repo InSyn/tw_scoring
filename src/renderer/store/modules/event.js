@@ -32,15 +32,15 @@ export default {
       }
       weather = [
         {
-          descr1: "Температура Снега:",
+          descr1: "Snow Temperature:",
           descr2: "0°",
         },
         {
-          descr1: "Температура Воздуха:",
+          descr1: "Air Temperature:",
           descr2: "0°",
         },
         {
-          descr1: "Скорость ветра:",
+          descr1: "Wind Speed:",
           descr2: "",
         },
       ];
@@ -65,17 +65,17 @@ export default {
           accuracy: 1,
         },
         types: [
-          { id: 0, title: "Сноуборд", disciplines: [0, 1, 2, 100] },
-          { id: 1, title: "Фристайл", disciplines: [0, 1, 2, 3, 4, 100] },
-          { id: 2, title: "Пользовательский", disciplines: [100] },
+          { id: 0, title: "Snowboard", disciplines: [0, 1, 2, 100] },
+          { id: 1, title: "Freestyle", disciplines: [0, 1, 2, 3, 4, 100] },
+          { id: 2, title: "Custom", disciplines: [100] },
         ],
         disciplines: [
-          { id: 0, title: "Слоуп-Стайл", res_formula: [1] },
-          { id: 1, title: "Биг-Эйр", res_formula: [2] },
-          { id: 2, title: "Хаф-Пайп", res_formula: [3] },
-          { id: 3, title: "Акробатика", res_formula: [4] },
-          { id: 4, title: "Могул", res_formula: [5] },
-          { id: 100, title: "Пользовательский", res_formula: [100] },
+          { id: 0, title: "Slope-Style", res_formula: [1] },
+          { id: 1, title: "Big-Air", res_formula: [2] },
+          { id: 2, title: "Half-Pipe", res_formula: [3] },
+          { id: 3, title: "Aerials", res_formula: [4] },
+          { id: 4, title: "Moguls", res_formula: [5] },
+          { id: 100, title: "Custom", res_formula: [100] },
         ],
         accuracy: [
           { id: 0, title: "1", value: 1, digits: 0 },
@@ -84,9 +84,9 @@ export default {
           { id: 3, title: "1:1000", value: 1000, digits: 3 },
         ],
         stages: [
-          { id: "qual", title: "Квалификация", value: "Квалификация" },
-          { id: "final", title: "Финал", value: "Финал" },
-          { id: "custom", title: "Пользовательский", value: "" },
+          { id: "qual", title: "Qualification", value: "Qualification" },
+          { id: "final", title: "Final", value: "Final" },
+          { id: "custom", title: "Custom", value: "" },
         ],
       };
       set_accuracy(val) {
@@ -123,23 +123,23 @@ export default {
       }
       mainData = {
         title: {
-          title: "Название",
-          value: "Новое соревнование",
+          title: "Title",
+          value: "New competition",
           focus: false,
           stage: {
-            title: "Этап",
+            title: "Stage",
             value: null,
             focus: false,
           },
         },
         discipline: {
-          title: "Дисциплина",
+          title: "Discipline",
           value: "",
           min: "",
           focus: false,
         },
         date: {
-          title: "Дата проведения",
+          title: "Start date",
           dialog: false,
           value: (() => {
             let date = new Date();
@@ -158,17 +158,17 @@ export default {
           focus: false,
         },
         country: {
-          title: "Страна",
+          title: "Country",
           value: "",
           focus: false,
         },
         location: {
-          title: "Место проведения",
+          title: "Place",
           value: "",
           focus: false,
         },
         provider: {
-          title: "Организатор",
+          title: "Organization",
           value: "",
           focus: false,
         },
@@ -178,7 +178,7 @@ export default {
           focus: false,
         },
         codex: {
-          title: "Код",
+          title: "Codex",
           value: "",
           focus: false,
         },
@@ -186,11 +186,11 @@ export default {
       stuff = {
         settings: {
           jury: {
-            title: "Жюри",
+            title: "Jury",
             change_dialog: false,
           },
           judges: {
-            title: "Судьи",
+            title: "Judges",
             change_dialog: false,
           },
         },
@@ -201,7 +201,7 @@ export default {
         jury: [
           {
             id: "chief",
-            title: "Старший судья",
+            title: "Chief judge",
             lastName: "",
             name: "",
             loc: "",
@@ -213,19 +213,19 @@ export default {
         openers: [],
       };
       technicalInfo = {
-        title: "Техническая информация",
+        title: "Technical info",
         change_dialog: false,
         records: [
           {
-            title: "Название склона",
+            title: "Track name",
             value: "",
           },
           {
-            title: "Длина трассы",
+            title: "Track length",
             value: "",
           },
           {
-            title: "Ширина трассы",
+            title: "Track width",
             value: "",
           },
         ],
@@ -233,12 +233,12 @@ export default {
       competitorsSheet = {
         header: [
           { id: "bib", title: "Bib" },
-          { id: "lastname", title: "Фамилия" },
-          { id: "name", title: "Имя" },
-          { id: "fullname", title: "Фамилия, Имя" },
-          { id: "year", title: "Год" },
-          { id: "rang", title: "Разряд" },
-          { id: "region", title: "Суб. РФ" },
+          { id: "lastname", title: "Lastname" },
+          { id: "name", title: "Name" },
+          { id: "fullname", title: "Full name" },
+          { id: "year", title: "Year" },
+          { id: "rang", title: "Rang" },
+          { id: "region", title: "Region" },
         ],
         competitors: [],
       };
@@ -286,11 +286,11 @@ export default {
       media_settings = {
         display: {
           modes: [
-            { id: 0, title: "Результаты" },
-            { id: 1, title: "Стартовый" },
-            { id: 2, title: "Результат последнего на финише" },
-            { id: 3, title: "Участник на старте" },
-            { id: 4, title: "Награждение" },
+            { id: 0, title: "Results" },
+            { id: 1, title: "Start" },
+            { id: 2, title: "Last finished" },
+            { id: 3, title: "Competitor on start" },
+            { id: 4, title: "Rewarding" },
           ],
           selected: 1,
         },
@@ -378,7 +378,7 @@ export default {
             weatherData: 12,
             raceNotes: 12,
           },
-          protocol_type: "Старт-лист",
+          protocol_type: "Start-list",
           fields: [],
         },
         result_protocols: {
@@ -391,7 +391,7 @@ export default {
             weatherData: 12,
             raceNotes: 12,
           },
-          protocol_type: "Результаты",
+          protocol_type: "Results",
           fields: [],
           raceResultFields: [],
         },
@@ -403,14 +403,14 @@ export default {
             heats: 0,
             mode: 0,
             modes: [
-              { id: 0, title: "Подсчёт из всех" },
-              { id: 1, title: "Подсчёт из N лучших" },
+              { id: 0, title: "Best of all" },
+              { id: 1, title: "Best of N" },
             ],
           },
           types: [
             {
               id: 0,
-              title: "Лучший",
+              title: "Best",
               result: (comp_id) => {
                 let res = [];
                 const competitor = this.competitorsSheet.competitors.find(
@@ -429,7 +429,7 @@ export default {
             },
             {
               id: 1,
-              title: "Сумма",
+              title: "Sum",
               result: (comp_id) => {
                 let res = [];
                 const competitor = this.competitorsSheet.competitors.find(
@@ -469,7 +469,7 @@ export default {
             },
             {
               id: 2,
-              title: "Среднее",
+              title: "Average",
               result: (comp_id) => {
                 let res = [];
                 const competitor = this.competitorsSheet.competitors.find(
@@ -558,7 +558,7 @@ export default {
         types: [
           {
             id: 0,
-            title: "По судьям",
+            title: "By judge",
             cof: 1,
             doubleUp: false,
             doubleUp_corridors: [[], []],
@@ -569,7 +569,7 @@ export default {
             formulas: [
               {
                 id: 0,
-                title: "Среднее",
+                title: "Average",
                 get_result: (comp_id, race_id, judges) => {
                   let marks = [];
                   judges.forEach((_j) => {
@@ -633,7 +633,7 @@ export default {
               },
               {
                 id: 1,
-                title: "Сумма",
+                title: "Sum",
                 get_result: (comp_id, race_id, judges) => {
                   let marks = [];
                   judges.forEach((_j) => {
@@ -681,7 +681,7 @@ export default {
           },
           {
             id: 1,
-            title: "По секциям",
+            title: "By sections",
             sections: [],
             formula: 0,
             formulas: [
@@ -741,7 +741,7 @@ export default {
     RaceClass: class {
       constructor(title, type, discipline, competitors) {
         this.id = Math.random().toString(36).substr(2, 9);
-        this.title = title || "Заезд";
+        this.title = title || "Race";
         this.race_dialog = false;
         this.type = type;
         this.discipline = discipline;

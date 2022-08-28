@@ -50,7 +50,7 @@
             class="ma-1"
             :color="$vuetify.theme.themes[appTheme].success"
             @click="set_judges()"
-            >Создать слоты для судей</v-btn
+            >Add judges slots</v-btn
           >
         </div>
         <div class="d-flex align-center">
@@ -59,7 +59,7 @@
             @click="startServer()"
             :color="$vuetify.theme.themes[appTheme].textDefault"
             text
-            >Запустить сервер<v-icon
+            >Start server<v-icon
               :color="$vuetify.theme.themes[appTheme].success"
               >mdi-play</v-icon
             ></v-btn
@@ -73,7 +73,7 @@
         </div>
         <div class="d-flex align-center" style="padding: 2px 4px">
           <div class="d-flex align-center font-weight-bold">
-            Статус сервера
+            Server status
             <div
               class="ml-2"
               v-if="!serverStatus"
@@ -91,7 +91,7 @@
           </div>
           <v-spacer></v-spacer>
           <v-btn @click="close_server()" :color="`red`" text
-            ><v-icon :color="`red`">mdi-power</v-icon>Выключить</v-btn
+            ><v-icon :color="`red`">mdi-power</v-icon>Switch off</v-btn
           >
         </div>
       </div>

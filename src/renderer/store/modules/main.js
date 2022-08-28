@@ -21,7 +21,7 @@ export default {
     opened_sockets: [],
     event: {
       id: null,
-      event_title: "Новое событие",
+      event_title: "New event",
     },
     event_id: null,
     competition: null,
@@ -49,32 +49,32 @@ export default {
     appMenu: [
       {
         icon: "viewDashboard",
-        title: "Событие",
+        title: "Event",
         link: "competition_settings",
       },
       {
         icon: "cog",
-        title: "Настройки",
+        title: "Settings",
         link: "settings",
       },
       {
         icon: "accountGroup",
-        title: "Участники",
+        title: "Competitors",
         link: "competitors",
       },
       {
         icon: "clipboardList",
-        title: "Заезды",
+        title: "Races",
         link: "start_protocols",
       },
       {
         icon: "numeric10BoxMultiple",
-        title: "Скоринг",
+        title: "Scoring",
         link: "scoring",
       },
       {
         icon: "trophyVariant",
-        title: "Протоколы",
+        title: "Protocols",
         link: "protocols",
       },
     ],

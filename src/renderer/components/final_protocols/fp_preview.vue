@@ -400,7 +400,7 @@
                         border-bottom: 1px solid #000000;
                       "
                     >
-                      Открывающие
+                      Forerunners
                     </div>
                     <div
                       style="display: flex; flex-wrap: wrap; padding: 2px 0"
@@ -454,7 +454,7 @@
                     "
                   >
                     <div style="width: 100%; font-weight: bold">
-                      Погодные условия
+                      Weather conditions
                     </div>
                     <div
                       v-for="wData in competition.weather"

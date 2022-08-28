@@ -1,41 +1,50 @@
-<template
-  ><v-col class="pa-2" cols="8"
+<template>
+  <v-col class="pa-2" cols="8"
     ><div
-      style="height: 100%; border-radius: 6px;overflow: hidden"
+      style="height: 100%; border-radius: 6px; overflow: hidden"
       :style="{
-        backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA
+        backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
       }"
     >
-      <v-row no-gutters style="height: 100%;"
-        ><v-col style="height: 100%;" cols="9">
+      <v-row no-gutters style="height: 100%"
+        ><v-col style="height: 100%" cols="9">
           <v-row
             no-gutters
             :key="competition.selected_race_id"
             class="pa-2 d-flex align-center flex-nowrap"
-            style="height: 50%;"
+            style="height: 50%"
           >
             <div
               v-if="
                 competition.selected_race && competition.selected_race.onTrack
               "
               class="pa-2 d-flex align-center flex-nowrap"
-              style="border-radius: 6px; font-weight: bold; font-size: 1.6rem; overflow: hidden"
+              style="
+                border-radius: 6px;
+                font-weight: bold;
+                font-size: 1.6rem;
+                overflow: hidden;
+              "
               :style="{
                 backgroundColor:
                   $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
-                color: $vuetify.theme.themes[appTheme].textDefault
+                color: $vuetify.theme.themes[appTheme].textDefault,
               }"
             >
               {{
-                `${competition.competitorsSheet.competitors.find(_comp => {
-                  return _comp.id === competition.selected_race.onTrack;
-                }).info_data.bib ||
-                  ""} ${competition.competitorsSheet.competitors.find(_comp => {
-                  return _comp.id === competition.selected_race.onTrack;
-                }).info_data["lastname"] ||
-                  ""} ${competition.competitorsSheet.competitors.find(_comp => {
-                  return _comp.id === competition.selected_race.onTrack;
-                }).info_data.name || ""}`
+                `${
+                  competition.competitorsSheet.competitors.find((_comp) => {
+                    return _comp.id === competition.selected_race.onTrack;
+                  }).info_data.bib || ""
+                } ${
+                  competition.competitorsSheet.competitors.find((_comp) => {
+                    return _comp.id === competition.selected_race.onTrack;
+                  }).info_data["lastname"] || ""
+                } ${
+                  competition.competitorsSheet.competitors.find((_comp) => {
+                    return _comp.id === competition.selected_race.onTrack;
+                  }).info_data.name || ""
+                }`
               }}
             </div>
 
@@ -49,7 +58,7 @@
                 :color="$vuetify.theme.themes[appTheme].textDefault"
                 >mdi-snowboard</v-icon
               >
-              <div class="d-flex align-center pa-2" v-html="`Ожидание`"></div>
+              <div class="d-flex align-center pa-2" v-html="`Waiting`"></div>
             </div>
             <v-spacer></v-spacer>
 
@@ -59,73 +68,82 @@
               :style="
                 (competition.selected_race &&
                   competition.selected_race.onTrack &&
-                  competition.competitorsSheet.competitors.find(_comp => {
+                  competition.competitorsSheet.competitors.find((_comp) => {
                     return _comp.id === competition.selected_race.onTrack;
                   }).race_status &&
-                  competition.competitorsSheet.competitors.find(_comp => {
+                  competition.competitorsSheet.competitors.find((_comp) => {
                     return _comp.id === competition.selected_race.onTrack;
                   }).race_status === 'DSQ' && {
-                    backgroundColor: $vuetify.theme.themes[appTheme].action_red
+                    backgroundColor: $vuetify.theme.themes[appTheme].action_red,
                   }) ||
-                  (competition.selected_race &&
-                    competition.selected_race.onTrack &&
-                    competition.competitorsSheet.competitors.find(_comp => {
-                      return _comp.id === competition.selected_race.onTrack;
-                    }).race_status &&
-                    competition.competitorsSheet.competitors.find(_comp => {
-                      return _comp.id === competition.selected_race.onTrack;
-                    }).race_status === 'DNS' && {
-                      backgroundColor:
-                        $vuetify.theme.themes[appTheme].action_yellow
-                    }) ||
-                  (competition.selected_race &&
-                    competition.selected_race.onTrack &&
-                    competition.competitorsSheet.competitors.find(_comp => {
-                      return _comp.id === competition.selected_race.onTrack;
-                    }).race_status &&
-                    competition.competitorsSheet.competitors.find(_comp => {
-                      return _comp.id === competition.selected_race.onTrack;
-                    }).race_status === 'DNF' && {
-                      backgroundColor:
-                        $vuetify.theme.themes[appTheme].action_darkYellow
-                    }) ||
-                  (competition.selected_race &&
-                    competition.selected_race.onTrack &&
-                    competition.competitorsSheet.competitors.find(_comp => {
-                      return _comp.id === competition.selected_race.onTrack;
-                    }).res_accepted && {
-                      backgroundColor: $vuetify.theme.themes[appTheme].success
-                    }) || {
+                (competition.selected_race &&
+                  competition.selected_race.onTrack &&
+                  competition.competitorsSheet.competitors.find((_comp) => {
+                    return _comp.id === competition.selected_race.onTrack;
+                  }).race_status &&
+                  competition.competitorsSheet.competitors.find((_comp) => {
+                    return _comp.id === competition.selected_race.onTrack;
+                  }).race_status === 'DNS' && {
                     backgroundColor:
-                      $vuetify.theme.themes[appTheme].standardBackgroundRGBA
-                  }
+                      $vuetify.theme.themes[appTheme].action_yellow,
+                  }) ||
+                (competition.selected_race &&
+                  competition.selected_race.onTrack &&
+                  competition.competitorsSheet.competitors.find((_comp) => {
+                    return _comp.id === competition.selected_race.onTrack;
+                  }).race_status &&
+                  competition.competitorsSheet.competitors.find((_comp) => {
+                    return _comp.id === competition.selected_race.onTrack;
+                  }).race_status === 'DNF' && {
+                    backgroundColor:
+                      $vuetify.theme.themes[appTheme].action_darkYellow,
+                  }) ||
+                (competition.selected_race &&
+                  competition.selected_race.onTrack &&
+                  competition.competitorsSheet.competitors.find((_comp) => {
+                    return _comp.id === competition.selected_race.onTrack;
+                  }).res_accepted && {
+                    backgroundColor: $vuetify.theme.themes[appTheme].success,
+                  }) || {
+                  backgroundColor:
+                    $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
+                }
               "
             >
               <v-hover v-slot:default="{ hover }"
                 ><div
-                  style="cursor:pointer;"
+                  style="cursor: pointer"
                   :style="
                     hover && {
-                      color: $vuetify.theme.themes[appTheme].action_blue
+                      color: $vuetify.theme.themes[appTheme].action_blue,
                     }
                   "
                   @click="pushMarks()"
-                  v-html="`Рез.`"
+                  v-html="`Res.`"
                 ></div
               ></v-hover>
               <div
                 class="px-2 py-1 ml-2 d-flex justify-center align-center"
-                style="border-radius: 6px;min-width: 4rem"
+                style="border-radius: 6px; min-width: 4rem"
                 :style="{
                   backgroundColor:
-                    $vuetify.theme.themes[appTheme].cardBackgroundRGBA
+                    $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
                 }"
               >
                 <div
                   :style="{
-                    color: $vuetify.theme.themes[appTheme].textDefault
+                    color: $vuetify.theme.themes[appTheme].textDefault,
                   }"
-                  style="flex:0 0 auto; display:flex;align-items: center; justify-content: center;height: 3rem; flex-grow: 1; cursor: pointer;overflow: hidden"
+                  style="
+                    flex: 0 0 auto;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    height: 3rem;
+                    flex-grow: 1;
+                    cursor: pointer;
+                    overflow: hidden;
+                  "
                 >
                   {{
                     competition.set_accuracy(
@@ -134,7 +152,7 @@
                         competition.result_formula.types[
                           competition.result_formula.type
                         ].formulas
-                          .find(_f => {
+                          .find((_f) => {
                             return (
                               _f.id ===
                               competition.result_formula.types[
@@ -145,7 +163,7 @@
                           .get_result(
                             competition.selected_race.onTrack,
                             competition.races[competition.selected_race_id].id,
-                            competition.stuff.judges.map(_j => {
+                            competition.stuff.judges.map((_j) => {
                               return +_j.id;
                             })
                           )) ||
@@ -157,24 +175,33 @@
             </div>
             <div
               v-if="competition.result_formula.overall_result.type == 3"
-              style="display:flex;flex-direction: column"
+              style="display: flex; flex-direction: column"
             >
               <div
                 v-for="i in ['A', 'B', 'C']"
                 :key="i"
                 @click="score_repeat = i"
-                style="flex: 0 0 auto;display:flex;align-items: center;justify-content:center;height: 33%;font-size: 1rem;cursor:pointer;border-radius: 2px"
+                style="
+                  flex: 0 0 auto;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  height: 33%;
+                  font-size: 1rem;
+                  cursor: pointer;
+                  border-radius: 2px;
+                "
                 :style="[
                   {
                     backgroundColor:
-                      $vuetify.theme.themes[appTheme].standardBackgroundRGBA
+                      $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
                   },
                   i == score_repeat && {
                     backgroundColor:
                       $vuetify.theme.themes[appTheme].textDefault,
                     color: $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
-                    fontWeight: 'bold'
-                  }
+                    fontWeight: 'bold',
+                  },
                 ]"
               >
                 <span style="margin: auto 16px">{{ i }}</span>
@@ -197,7 +224,7 @@
                             competitor_id:
                               competition.races[competition.selected_race_id]
                                 .onTrack,
-                            status: 'DSQ'
+                            status: 'DSQ',
                           });
                         })()
                     "
@@ -208,14 +235,14 @@
                     :color="
                       competition.selected_race &&
                       competition.selected_race.onTrack &&
-                      competition.competitorsSheet.competitors.find(_comp => {
+                      competition.competitorsSheet.competitors.find((_comp) => {
                         return _comp.id === competition.selected_race.onTrack;
                       }).race_status === 'DSQ'
                         ? $vuetify.theme.themes[appTheme].action_red
                         : $vuetify.theme.themes[appTheme].standardBackgroundRGBA
                     "
                     :style="{
-                      color: $vuetify.theme.themes[appTheme].textDefault
+                      color: $vuetify.theme.themes[appTheme].textDefault,
                     }"
                     >DSQ</v-btn
                   >
@@ -230,7 +257,7 @@
                             competitor_id:
                               competition.races[competition.selected_race_id]
                                 .onTrack,
-                            status: 'DNS'
+                            status: 'DNS',
                           });
                         })()
                     "
@@ -240,14 +267,14 @@
                     :color="
                       competition.selected_race &&
                       competition.selected_race.onTrack &&
-                      competition.competitorsSheet.competitors.find(_comp => {
+                      competition.competitorsSheet.competitors.find((_comp) => {
                         return _comp.id === competition.selected_race.onTrack;
                       }).race_status === 'DNS'
                         ? $vuetify.theme.themes[appTheme].action_yellow
                         : $vuetify.theme.themes[appTheme].standardBackgroundRGBA
                     "
                     :style="{
-                      color: $vuetify.theme.themes[appTheme].textDefault
+                      color: $vuetify.theme.themes[appTheme].textDefault,
                     }"
                     >DNS</v-btn
                   >
@@ -262,7 +289,7 @@
                             competitor_id:
                               competition.races[competition.selected_race_id]
                                 .onTrack,
-                            status: 'DNF'
+                            status: 'DNF',
                           });
                         })()
                     "
@@ -272,14 +299,14 @@
                     :color="
                       competition.selected_race &&
                       competition.selected_race.onTrack &&
-                      competition.competitorsSheet.competitors.find(_comp => {
+                      competition.competitorsSheet.competitors.find((_comp) => {
                         return _comp.id === competition.selected_race.onTrack;
                       }).race_status === 'DNF'
                         ? $vuetify.theme.themes[appTheme].action_darkYellow
                         : $vuetify.theme.themes[appTheme].standardBackgroundRGBA
                     "
                     :style="{
-                      color: $vuetify.theme.themes[appTheme].textDefault
+                      color: $vuetify.theme.themes[appTheme].textDefault,
                     }"
                     >DNF</v-btn
                   >
@@ -301,56 +328,74 @@
                       ><v-btn
                         depressed
                         v-on="on"
-                        style="width: 100%;font-weight: bold"
+                        style="width: 100%; font-weight: bold"
                         height="2rem"
                         :color="$vuetify.theme.themes[appTheme].accent"
                         :style="{
-                          color: $vuetify.theme.themes[appTheme].textDefault
+                          color: $vuetify.theme.themes[appTheme].textDefault,
                         }"
-                        >Изменить оценки</v-btn
+                        >Change marks</v-btn
                       ></template
                     ><v-card
                       style="min-width: 320px"
                       :style="{
                         backgroundColor:
                           $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
-                        color: $vuetify.theme.themes[appTheme].textDefault
+                        color: $vuetify.theme.themes[appTheme].textDefault,
                       }"
                     >
                       <v-card-title
-                        style="padding: 8px 16px; font-size: 1.2rem;font-weight:bold;"
-                        >Ручное выставлние оценок</v-card-title
+                        style="
+                          padding: 8px 16px;
+                          font-size: 1.2rem;
+                          font-weight: bold;
+                        "
+                        >Manual scoring</v-card-title
                       >
                       <div
-                        style="display:flex;flex-wrap: wrap;padding: 1rem 2rem"
+                        style="
+                          display: flex;
+                          flex-wrap: wrap;
+                          padding: 1rem 2rem;
+                        "
                       >
                         <div
-                          style="flex: 0 0 auto; padding: .5rem 1rem"
+                          style="flex: 0 0 auto; padding: 0.5rem 1rem"
                           v-for="judge in competition &&
-                            competition.selected_race &&
-                            competition.selected_race.onTrack &&
-                            competition.stuff.judges"
+                          competition.selected_race &&
+                          competition.selected_race.onTrack &&
+                          competition.stuff.judges"
                           :key="judge._id"
                         >
                           <div>
                             <div
-                              style="font-weight: bold;font-size: 1.1rem;text-align:center;"
+                              style="
+                                font-weight: bold;
+                                font-size: 1.1rem;
+                                text-align: center;
+                              "
                             >
                               {{
-                                `Судья ${competition.stuff.judges.indexOf(
-                                  judge
-                                ) + 1}`
+                                `Judge ${
+                                  competition.stuff.judges.indexOf(judge) + 1
+                                }`
                               }}
                             </div>
                             <input
                               type="text"
-                              style="margin: .5rem;padding: 4px 8px;width: 5rem;border-radius: 2px;font-size: 1.2rem"
+                              style="
+                                margin: 0.5rem;
+                                padding: 4px 8px;
+                                width: 5rem;
+                                border-radius: 2px;
+                                font-size: 1.2rem;
+                              "
                               :style="{
                                 backgroundColor:
                                   $vuetify.theme.themes[appTheme]
                                     .standardBackgroundRGBA,
                                 color:
-                                  $vuetify.theme.themes[appTheme].textDefault
+                                  $vuetify.theme.themes[appTheme].textDefault,
                               }"
                               v-model="scoresToChange[judge._id]"
                             />
@@ -362,13 +407,13 @@
                           @click="setMarksFromChanged()"
                           small
                           :color="$vuetify.theme.themes[appTheme].success"
-                          >Подтвердить</v-btn
+                          >Accept</v-btn
                         ><v-btn
                           text
                           small
                           :color="$vuetify.theme.themes[appTheme].textDefault"
                           @click="change_marks_dialog.state = false"
-                          >Отмена</v-btn
+                          >Cancel</v-btn
                         ></v-card-actions
                       ></v-card
                     ></v-dialog
@@ -382,11 +427,16 @@
           <v-row
             no-gutters
             class="d-flex justify-center align-center"
-            style="height: 50%;"
+            style="height: 50%"
           >
             <div
               class="d-flex flex-wrap align-end"
-              style="width: 100%;height: 100%;padding-bottom: .5rem;overflow-y: auto"
+              style="
+                width: 100%;
+                height: 100%;
+                padding-bottom: 0.5rem;
+                overflow-y: auto;
+              "
             >
               <v-tooltip
                 bottom
@@ -404,89 +454,102 @@
                         ? $vuetify.theme.themes[appTheme].accent
                         : $vuetify.theme.themes[appTheme].standardBackgroundRGBA
                     "
-                    style="align-self: flex-end;border-radius: 6px;margin:0 .5rem;transition: background-color 172ms"
+                    style="
+                      align-self: flex-end;
+                      border-radius: 6px;
+                      margin: 0 0.5rem;
+                      transition: background-color 172ms;
+                    "
                     :style="[
                       {
                         backgroundColor:
                           $vuetify.theme.themes[appTheme]
                             .standardBackgroundRGBA,
-                        color: $vuetify.theme.themes[appTheme].textDefault
+                        color: $vuetify.theme.themes[appTheme].textDefault,
                       },
                       terminals.listenTerminals && {
                         backgroundColor:
                           $vuetify.theme.themes[appTheme].textDefault,
-                        color: $vuetify.theme.themes[appTheme].accent
+                        color: $vuetify.theme.themes[appTheme].accent,
                       },
                       terminals.terminalsListener.indicator === 'ok' && {
                         backgroundColor:
                           $vuetify.theme.themes[appTheme].success,
-                        color: $vuetify.theme.themes[appTheme].accent_light
+                        color: $vuetify.theme.themes[appTheme].accent_light,
                       },
                       terminals.terminalsListener.indicator === 'err' && {
                         backgroundColor: $vuetify.theme.themes[appTheme].error,
-                        color: $vuetify.theme.themes[appTheme].accent_light
-                      }
+                        color: $vuetify.theme.themes[appTheme].accent_light,
+                      },
                     ]"
                     ><v-icon>mdi-remote</v-icon>
                   </v-btn></template
-                ><span>Включить прослушивание терминалов</span></v-tooltip
+                ><span>Start listening terminals</span></v-tooltip
               >
               <div
                 @click="console.log(competition.result_formula.types[1])"
                 v-if="competition.result_formula.type === 1"
-                style="display:flex;align-items: center;flex-wrap: wrap"
+                style="display: flex; align-items: center; flex-wrap: wrap"
               >
                 <div
                   v-for="(section, s_idx) in competition.result_formula.types[
                     competition.result_formula.type
                   ].sections"
                   :key="s_idx"
-                  style="display:flex;flex-wrap: wrap"
+                  style="display: flex; flex-wrap: wrap"
                 >
                   <div style="width: 100%">
-                    {{ `Сек. ${s_idx + 1}` }}
+                    {{ `Sec ${s_idx + 1}` }}
                   </div>
-                  <div style="display:flex;flex-direction: column">
+                  <div style="display: flex; flex-direction: column">
                     <div
                       v-for="(judge, j_idx) in section.judges"
-                      style="display:flex;align-items:center;flex: 0 0 auto; font-weight:bold;padding: 2px 4px"
+                      style="
+                        display: flex;
+                        align-items: center;
+                        flex: 0 0 auto;
+                        font-weight: bold;
+                        padding: 2px 4px;
+                      "
                     >
                       <div>{{ `C ${judge.id}` }}</div>
-                      <div style="margin-left: .5rem;font-size: 1.1rem">
+                      <div style="margin-left: 0.5rem; font-size: 1.1rem">
                         {{
-                          `${(competition.selected_race &&
-                            competition.selected_race.onTrack &&
-                            competition.competitorsSheet.competitors
-                              .find(_competitor => {
-                                return (
-                                  _competitor.id ===
-                                  competition.selected_race.onTrack
-                                );
-                              })
-                              .marks.find(mark => {
-                                return (
-                                  mark.judge_id === judge._id &&
-                                  mark.race_id ===
-                                    competition.selected_race.id &&
-                                  mark.section === s_idx
-                                );
-                              }) &&
-                            competition.competitorsSheet.competitors
-                              .find(_competitor => {
-                                return (
-                                  _competitor.id ===
-                                  competition.selected_race.onTrack
-                                );
-                              })
-                              .marks.find(mark => {
-                                return (
-                                  mark.judge_id === judge._id &&
-                                  mark.race_id ===
-                                    competition.selected_race.id &&
-                                  mark.section === s_idx
-                                );
-                              }).value) ||
-                            "0"}`
+                          `${
+                            (competition.selected_race &&
+                              competition.selected_race.onTrack &&
+                              competition.competitorsSheet.competitors
+                                .find((_competitor) => {
+                                  return (
+                                    _competitor.id ===
+                                    competition.selected_race.onTrack
+                                  );
+                                })
+                                .marks.find((mark) => {
+                                  return (
+                                    mark.judge_id === judge._id &&
+                                    mark.race_id ===
+                                      competition.selected_race.id &&
+                                    mark.section === s_idx
+                                  );
+                                }) &&
+                              competition.competitorsSheet.competitors
+                                .find((_competitor) => {
+                                  return (
+                                    _competitor.id ===
+                                    competition.selected_race.onTrack
+                                  );
+                                })
+                                .marks.find((mark) => {
+                                  return (
+                                    mark.judge_id === judge._id &&
+                                    mark.race_id ===
+                                      competition.selected_race.id &&
+                                    mark.section === s_idx
+                                  );
+                                }).value) ||
+                            "0"
+                          }`
                         }}
                       </div>
                     </div>
@@ -495,7 +558,7 @@
               </div>
               <div
                 v-else
-                style="display:flex;align-items: center;flex-wrap: wrap"
+                style="display: flex; align-items: center; flex-wrap: wrap"
               >
                 <div
                   class="flex-column align-center px-2"
@@ -510,12 +573,17 @@
                   </div>
                   <div
                     class="d-flex justify-center align-center pa-1"
-                    style="font-size: 2.3rem; font-weight: bold; border-bottom-left-radius: 6px; border-bottom-right-radius: 6px"
+                    style="
+                      font-size: 2.3rem;
+                      font-weight: bold;
+                      border-bottom-left-radius: 6px;
+                      border-bottom-right-radius: 6px;
+                    "
                     :style="{
                       backgroundColor:
                         $vuetify.theme.themes[appTheme].textDefault,
                       color:
-                        $vuetify.theme.themes[appTheme].standardBackgroundRGBA
+                        $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
                     }"
                   >
                     <div
@@ -523,35 +591,37 @@
                       style="height: 3rem; min-width: 4rem"
                     >
                       {{
-                        `${(competition.selected_race &&
-                          competition.selected_race.onTrack &&
-                          competition.competitorsSheet.competitors
-                            .find(_competitor => {
-                              return (
-                                _competitor.id ===
-                                competition.selected_race.onTrack
-                              );
-                            })
-                            .marks.find(mark => {
-                              return (
-                                mark.judge_id === judge._id &&
-                                mark.race_id === competition.selected_race.id
-                              );
-                            }) &&
-                          competition.competitorsSheet.competitors
-                            .find(_competitor => {
-                              return (
-                                _competitor.id ===
-                                competition.selected_race.onTrack
-                              );
-                            })
-                            .marks.find(mark => {
-                              return (
-                                mark.judge_id === judge._id &&
-                                mark.race_id === competition.selected_race.id
-                              );
-                            }).value) ||
-                          "0"}`
+                        `${
+                          (competition.selected_race &&
+                            competition.selected_race.onTrack &&
+                            competition.competitorsSheet.competitors
+                              .find((_competitor) => {
+                                return (
+                                  _competitor.id ===
+                                  competition.selected_race.onTrack
+                                );
+                              })
+                              .marks.find((mark) => {
+                                return (
+                                  mark.judge_id === judge._id &&
+                                  mark.race_id === competition.selected_race.id
+                                );
+                              }) &&
+                            competition.competitorsSheet.competitors
+                              .find((_competitor) => {
+                                return (
+                                  _competitor.id ===
+                                  competition.selected_race.onTrack
+                                );
+                              })
+                              .marks.find((mark) => {
+                                return (
+                                  mark.judge_id === judge._id &&
+                                  mark.race_id === competition.selected_race.id
+                                );
+                              }).value) ||
+                          "0"
+                        }`
                       }}
                     </div>
                   </div>
@@ -561,18 +631,24 @@
           </v-row>
         </v-col>
         <v-col
-          style="height: 100%; display: flex; flex-direction: column; align-items: flex-end;padding: .5rem"
+          style="
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            padding: 0.5rem;
+          "
           cols="3"
         >
           <div
-            style="flex: 0 0 auto;padding: .5rem;border-radius: 6px"
+            style="flex: 0 0 auto; padding: 0.5rem; border-radius: 6px"
             :style="{
               backgroundColor:
-                $vuetify.theme.themes[appTheme].standardBackgroundRGBA
+                $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
             }"
           >
             <div class="d-flex justify-center" style="font-size: 1.2rem">
-              Время на оценку
+              Time for scoring
             </div>
             <div class="d-flex justify-center">
               <div class="d-flex" style="font-weight: bold; font-size: 1.4rem">
@@ -581,40 +657,40 @@
               <div class="ml-6 d-flex justify-center align-center">
                 <div
                   @click="setBlinker('red')"
-                  style="height: 10px; width: 42px;border-radius: 1px"
+                  style="height: 10px; width: 42px; border-radius: 1px"
                   :style="[
                     {
-                      transition: `background-color ${indicators.timeout}ms, box-shadow ${indicators.timeout}ms`
+                      transition: `background-color ${indicators.timeout}ms, box-shadow ${indicators.timeout}ms`,
                     },
                     indicators.red
                       ? {
                           backgroundColor: 'red',
-                          boxShadow: `0 0 2px 0 red`
+                          boxShadow: `0 0 2px 0 red`,
                         }
                       : {
                           backgroundColor: `#321212`,
-                          boxShadow: `0 0 0 0 transparent`
-                        }
+                          boxShadow: `0 0 0 0 transparent`,
+                        },
                   ]"
                 ></div>
                 <div
                   class="ml-3"
                   @click="setBlinker('green')"
-                  style="height: 10px; width: 42px;border-radius: 1px"
+                  style="height: 10px; width: 42px; border-radius: 1px"
                   :style="[
                     {
-                      transition: `background-color ${indicators.timeout}ms, box-shadow ${indicators.timeout}ms`
+                      transition: `background-color ${indicators.timeout}ms, box-shadow ${indicators.timeout}ms`,
                     },
                     indicators.green
                       ? {
                           backgroundColor:
                             $vuetify.theme.themes[appTheme].success,
-                          boxShadow: `0 0 2px 0 ${$vuetify.theme.themes[appTheme].success}`
+                          boxShadow: `0 0 2px 0 ${$vuetify.theme.themes[appTheme].success}`,
                         }
                       : {
                           backgroundColor: `#123212`,
-                          boxShadow: `0 0 0 0 transparent`
-                        }
+                          boxShadow: `0 0 0 0 transparent`,
+                        },
                   ]"
                 ></div>
               </div>
@@ -622,9 +698,14 @@
           </div>
           <div
             class="d-flex justify-center align-center flex-nowrap"
-            style="flex: 0 0 auto;font-size: 1.2rem;margin-top: auto;padding: 1rem 0"
+            style="
+              flex: 0 0 auto;
+              font-size: 1.2rem;
+              margin-top: auto;
+              padding: 1rem 0;
+            "
           >
-            <div>Старший судья</div>
+            <div>Chief judge</div>
             <div
               @click="
                 competition.selected_race &&
@@ -634,26 +715,26 @@
                     accept_res({
                       race_id: competition.selected_race_id,
                       competitor_id:
-                        competition.races[competition.selected_race_id].onTrack
+                        competition.races[competition.selected_race_id].onTrack,
                     });
                   })()
               "
               class="ml-2 px-2 py-1 d-flex justify-center align-center"
-              style="border-radius: 3px; user-select: none; cursor:pointer;"
+              style="border-radius: 3px; user-select: none; cursor: pointer"
               :style="[
                 (competition.selected_race &&
                   competition.selected_race.onTrack &&
-                  competition.competitorsSheet.competitors.find(_comp => {
+                  competition.competitorsSheet.competitors.find((_comp) => {
                     return _comp.id === competition.selected_race.onTrack;
                   }).res_accepted && {
-                    backgroundColor: $vuetify.theme.themes[appTheme].success
+                    backgroundColor: $vuetify.theme.themes[appTheme].success,
                   }) || {
                   backgroundColor:
-                    $vuetify.theme.themes[appTheme].standardBackgroundRGBA
+                    $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
                 },
                 {
-                  color: $vuetify.theme.themes[appTheme].textDefault
-                }
+                  color: $vuetify.theme.themes[appTheme].textDefault,
+                },
               ]"
             >
               <div>OK</div>
@@ -662,7 +743,7 @@
 
           <div
             class="d-flex justify-center align-center"
-            style="flex: 0 0 auto;font-size: 1.2rem; font-weight:bold;"
+            style="flex: 0 0 auto; font-size: 1.2rem; font-weight: bold"
           >
             <v-btn
               @click="
@@ -672,7 +753,7 @@
               "
               :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
               :color="$vuetify.theme.themes[appTheme].action_blue"
-              >Опубликовать</v-btn
+              >Publish</v-btn
             >
           </div>
         </v-col></v-row
@@ -689,8 +770,8 @@ export default {
   methods: {
     getJudgeSections(judge) {
       return this.competition.result_formula.types[1].sections.filter(
-        section => {
-          return section.judges.some(_judge => _judge.id === judge.id);
+        (section) => {
+          return section.judges.some((_judge) => _judge.id === judge.id);
         }
       );
     },
@@ -700,15 +781,15 @@ export default {
         this.competition.selected_race.startList &&
         this.competition.stuff.judges.forEach((_judge, j_idx) => {
           this.competition.selected_race.startList
-            .map(_comp =>
+            .map((_comp) =>
               this.competition.competitorsSheet.competitors.find(
-                _competitor => _competitor.id === _comp
+                (_competitor) => _competitor.id === _comp
               )
             )
-            .forEach(_comp => {
+            .forEach((_comp) => {
               if (
                 !_comp.marks.some(
-                  _mark =>
+                  (_mark) =>
                     _mark.race_id === this.competition.selected_race.id &&
                     _mark.judge_id === _judge._id
                 )
@@ -723,7 +804,7 @@ export default {
                   )
                 );
               if (
-                !this.competition.selected_race.finished.some(f_comp => {
+                !this.competition.selected_race.finished.some((f_comp) => {
                   return f_comp === _comp.id;
                 }) &&
                 this.competition.stuff.judges.length - 1 === j_idx
@@ -737,29 +818,28 @@ export default {
       this.$store.commit("main/updateEvent");
     },
     setSelectedCompetitor(competitor) {
-      this.competition.selected_race.selectedCompetitor = this.competition.selected_race.onStart[
-        competitor
-      ];
+      this.competition.selected_race.selectedCompetitor =
+        this.competition.selected_race.onStart[competitor];
       this.socket &&
         this.socket.connected &&
         (() => {
           this.socket.emit("set_selected_competitor", [
             [
               this.competition.selected_race.startList[competitor].id,
-              this.competition.selected_race_id
+              this.competition.selected_race_id,
             ],
-            this.competition
+            this.competition,
           ]);
         })();
     },
     publishResult(competitor_id) {
       const competitor = this.competition.competitorsSheet.competitors.find(
-        _comp => _comp.id === competitor_id
+        (_comp) => _comp.id === competitor_id
       );
-      this.competition.stuff.judges.forEach(_j => {
+      this.competition.stuff.judges.forEach((_j) => {
         if (
           !competitor.marks.some(
-            _mark =>
+            (_mark) =>
               _mark.judge_id === _j._id &&
               _mark.race_id === this.competition.selected_race.id
           )
@@ -786,15 +866,14 @@ export default {
       competitor.race_status = null;
       this.competition.selected_race.onTrack = null;
       if (
-        this.competition.selected_race.startList.some(_comp => {
+        this.competition.selected_race.startList.some((_comp) => {
           return _comp === competitor_id;
         })
       ) {
-        this.competition.selected_race.startList = this.competition.selected_race.startList.filter(
-          _comp => {
+        this.competition.selected_race.startList =
+          this.competition.selected_race.startList.filter((_comp) => {
             return _comp !== competitor_id;
-          }
-        );
+          });
       }
       if (this.socket && this.socket.connected)
         this.socket.emit("set_finished_competitor", this.competition);
@@ -821,12 +900,12 @@ export default {
     },
     setMarksFromChanged() {
       const competitor = this.competition.competitorsSheet.competitors.find(
-        _comp => _comp.id === this.competition.selected_race.onTrack
+        (_comp) => _comp.id === this.competition.selected_race.onTrack
       );
 
       for (let mKey in this.scoresToChange) {
         if (
-          !competitor.marks.some(_m => {
+          !competitor.marks.some((_m) => {
             return (
               _m.judge_id === mKey &&
               _m.race_id === this.competition.selected_race.id
@@ -837,13 +916,13 @@ export default {
             new this.MarkClass(
               this.competition.selected_race_id,
               this.competition.selected_race.id,
-              this.competition.stuff.judges.find(_j => _j._id === mKey).id,
-              this.competition.stuff.judges.find(_j => _j._id === mKey)._id,
+              this.competition.stuff.judges.find((_j) => _j._id === mKey).id,
+              this.competition.stuff.judges.find((_j) => _j._id === mKey)._id,
               this.scoresToChange[mKey]
             )
           );
         } else {
-          competitor.marks.find(_m => {
+          competitor.marks.find((_m) => {
             return (
               _m.judge_id === mKey &&
               _m.race_id === this.competition.selected_race.id
@@ -862,29 +941,32 @@ export default {
       this.terminals.terminalsListener.listener = setTimeout(() => {
         let judges_check = [];
 
-        this.competition.stuff.judges.forEach(async _judge => {
+        this.competition.stuff.judges.forEach(async (_judge) => {
           await axios
             .get(`http://192.168.123.1/scs?id=${_judge.remoteId}`)
-            .then(response => {
+            .then((response) => {
               judges_check.push(_judge["remoteID"]);
 
               if (this.competition.result_formula.type === 1) {
                 if (response.data[response.data.length - 1]) {
-                  const competitor = this.competition.competitorsSheet.competitors.find(
-                    _comp =>
-                      _comp.info_data["bib"].toString() ===
-                      response.data[response.data.length - 1]["bip"]
-                  );
+                  const competitor =
+                    this.competition.competitorsSheet.competitors.find(
+                      (_comp) =>
+                        _comp.info_data["bib"].toString() ===
+                        response.data[response.data.length - 1]["bip"]
+                    );
                   let marks = response.data[response.data.length - 1]["scor"]
                     .split("|")
-                    .filter(s => s !== "");
-                  let judge_sections = this.competition.result_formula.types[1].sections.filter(
-                    sec => sec.judges.some(judge => judge._id === _judge._id)
-                  );
+                    .filter((s) => s !== "");
+                  let judge_sections =
+                    this.competition.result_formula.types[1].sections.filter(
+                      (sec) =>
+                        sec.judges.some((judge) => judge._id === _judge._id)
+                    );
                   marks.forEach((mark, m_idx) => {
                     const section = judge_sections[m_idx].s_num;
                     if (
-                      !competitor.marks.some(_mark => {
+                      !competitor.marks.some((_mark) => {
                         return (
                           _mark.race_id === this.competition.selected_race.id &&
                           _mark.judge_id === _judge._id &&
@@ -910,7 +992,7 @@ export default {
                       if (
                         competitor.id === this.competition.selected_race.onTrack
                       ) {
-                        competitor.marks.find(mark => {
+                        competitor.marks.find((mark) => {
                           return (
                             mark.race_id ===
                               this.competition.selected_race.id &&
@@ -923,14 +1005,15 @@ export default {
                   });
                 }
               } else if (response.data[response.data.length - 1]) {
-                const competitor = this.competition.competitorsSheet.competitors.find(
-                  _comp =>
-                    _comp.info_data["bib"].toString() ===
-                    response.data[response.data.length - 1]["bip"]
-                );
+                const competitor =
+                  this.competition.competitorsSheet.competitors.find(
+                    (_comp) =>
+                      _comp.info_data["bib"].toString() ===
+                      response.data[response.data.length - 1]["bip"]
+                  );
 
                 if (
-                  !competitor.marks.find(mark => {
+                  !competitor.marks.find((mark) => {
                     return (
                       mark.race_id === this.competition.selected_race.id &&
                       mark.judge_id === _judge._id
@@ -966,7 +1049,7 @@ export default {
                     )
                       this.score_repeat =
                         response.data[response.data.length - 1]["temp2"];
-                    competitor.marks.find(mark => {
+                    competitor.marks.find((mark) => {
                       return (
                         mark.race_id === this.competition.selected_race.id &&
                         mark.judge_id === _judge._id
@@ -986,7 +1069,7 @@ export default {
               }
               this.terminals.listenTerminals && this.getMarksFromTerminal();
             })
-            .catch(err => {
+            .catch((err) => {
               this.terminals.terminalsListener.indicator = "err";
               judges_check = [];
               setTimeout(() => {
@@ -1007,7 +1090,7 @@ export default {
         this.getMarksFromTerminal();
         this.terminals.listenTerminals = true;
       }
-    }
+    },
   },
   data() {
     return {
@@ -1015,14 +1098,14 @@ export default {
         timeout: 812,
         blinker: null,
         red: true,
-        green: false
+        green: false,
       },
       change_marks_dialog: {
-        state: false
+        state: false,
       },
       scoresToChange: {},
 
-      score_repeat: null
+      score_repeat: null,
     };
   },
   computed: {
@@ -1030,11 +1113,11 @@ export default {
       competition: "competition",
       appTheme: "appTheme",
       socket: "socket",
-      terminals: "terminals"
+      terminals: "terminals",
     }),
     ...mapGetters("roles", { MarkClass: "MarkClass" }),
-    console: () => console
-  }
+    console: () => console,
+  },
 };
 </script>
 

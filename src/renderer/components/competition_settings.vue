@@ -13,7 +13,7 @@
           font-weight: bold;
         "
       >
-        Настройки события
+        Event settings
       </div>
       <div
         style="
@@ -37,7 +37,7 @@
           "
         >
           <div style="flex: 0 0 auto; font-weight: bold; min-width: 11rem">
-            Название события
+            Event title
           </div>
           <input
             v-model.lazy="event.event_title"
@@ -63,7 +63,7 @@
             font-weight: bold;
           "
         >
-          Количество соревнований
+          Number of competitions
           <div
             style="
               font-weight: bold;
@@ -85,7 +85,7 @@
     </div>
     <v-row style="margin: 16px 16px" no-gutters
       ><v-col style="font-size: 1.4rem; font-weight: bold"
-        >Настройки соревнования</v-col
+        >Competition settings</v-col
       ><v-spacer></v-spacer
       ><v-col
         cols="auto"
@@ -108,7 +108,7 @@
               text
               small
               :color="$vuetify.theme.themes[appTheme].error"
-              >Удалить соревнование</v-btn
+              >Delete competition</v-btn
             ></template
           ><v-card
             :style="{
@@ -117,7 +117,7 @@
               color: $vuetify.theme.themes[appTheme].textDefault,
             }"
             ><div style="font-size: 1.2rem; padding: 0.5rem 1rem">
-              Удалить соревнование<b>
+              Delete<b>
                 {{
                   ` ${competition && competition.mainData.title.value} ${
                     competition && competition.mainData.title.stage.value.value
@@ -133,13 +133,13 @@
                 "
                 :color="$vuetify.theme.themes[appTheme].error"
                 small
-                >Удалить</v-btn
+                >Delete</v-btn
               ><v-btn
                 @click="delete_competition_dialog.state = false"
                 :color="$vuetify.theme.themes[appTheme].accent"
                 small
                 text
-                >Отмена</v-btn
+                >Cancel</v-btn
               ></v-card-actions
             ></v-card
           ></v-dialog

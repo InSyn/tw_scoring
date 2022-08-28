@@ -15,7 +15,7 @@
     }"
   >
     <div class="xml_export_title" style="font-size: 1.2rem; font-weight: bold">
-      Экспорт PDF
+      Export PDF
     </div>
     <div class="xml_export_settings"></div>
     <div
@@ -38,7 +38,7 @@
           :color="$vuetify.theme.themes[appTheme].accent"
           style="margin-right: 0.5rem"
           >mdi-eye-outline</v-icon
-        >Предпросмотр</v-btn
+        >Preview</v-btn
       >
       <v-btn
         small
@@ -52,7 +52,7 @@
           :color="$vuetify.theme.themes[appTheme].textDefault"
           style="margin-right: 0.5rem"
           >mdi-download</v-icon
-        >Сохранить</v-btn
+        >Save</v-btn
       >
     </div>
   </div>

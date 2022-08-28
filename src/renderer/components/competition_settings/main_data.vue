@@ -68,7 +68,7 @@
                 backgroundColor:
                   $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
               }"
-              >принять</v-btn
+              >Accept</v-btn
             >
           </v-dialog>
           <v-dialog
@@ -115,7 +115,7 @@
                 backgroundColor:
                   $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
               }"
-              >принять</v-btn
+              >Accept</v-btn
             >
           </v-dialog>
           <input

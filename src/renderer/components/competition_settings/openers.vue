@@ -12,7 +12,7 @@
         :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
         style="font-weight: bold; font-size: 1.2rem"
       >
-        Открывающие
+        Forerunners
       </div>
       <v-btn
         @click="

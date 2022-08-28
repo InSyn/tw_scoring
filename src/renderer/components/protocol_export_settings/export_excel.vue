@@ -15,7 +15,7 @@
     }"
   >
     <div class="xml_export_title" style="font-size: 1.2rem; font-weight: bold">
-      Экспорт EXCEL
+      Export EXCEL
     </div>
     <div class="xml_export_settings"></div>
     <div
@@ -37,7 +37,7 @@
           :color="$vuetify.theme.themes[appTheme].textDefault"
           style="margin-right: 0.5rem"
           >mdi-download</v-icon
-        >Сохранить</v-btn
+        >Save</v-btn
       >
     </div>
   </div>

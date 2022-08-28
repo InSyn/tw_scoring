@@ -3,11 +3,9 @@ export default {
   state: {
     CompetitorClass: class {
       constructor(fields, marks) {
-        this.id = Math.random()
-          .toString(36)
-          .substr(2, 9);
+        this.id = Math.random().toString(36).substr(2, 9);
         this.info_data = {};
-        fields.map(field => {
+        fields.map((field) => {
           this.info_data[field[0]] = field[1];
         });
         this.marks = marks || [];
@@ -21,9 +19,7 @@ export default {
     },
     MarkClass: class {
       constructor(race, race_id, judge, judge_id, value, section) {
-        this.id = Math.random()
-          .toString(36)
-          .substr(2, 9);
+        this.id = Math.random().toString(36).substr(2, 9);
         this.value = value || 0;
         this.new_value = null;
         this.race = race;
@@ -43,10 +39,8 @@ export default {
     },
     JudgeClass: class {
       constructor(title, id, lastName, name, location) {
-        this._id = Math.random()
-          .toString(36)
-          .substr(2, 9);
-        this.title = title || "Судья";
+        this._id = Math.random().toString(36).substr(2, 9);
+        this.title = title || "Judge";
         this.remoteId = null;
         this.id = id || 0;
         this.name = name || "";
@@ -66,13 +60,13 @@ export default {
       name = "";
       lastName = "";
       location = "";
-    }
+    },
   },
   getters: {
-    CompetitorClass: state => state.CompetitorClass,
-    JudgeClass: state => state.JudgeClass,
-    OpenerClass: state => state.OpenerClass,
-    JuryClass: state => state.JuryClass,
-    MarkClass: state => state.MarkClass
-  }
+    CompetitorClass: (state) => state.CompetitorClass,
+    JudgeClass: (state) => state.JudgeClass,
+    OpenerClass: (state) => state.OpenerClass,
+    JuryClass: (state) => state.JuryClass,
+    MarkClass: (state) => state.MarkClass,
+  },
 };

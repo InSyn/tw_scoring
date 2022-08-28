@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Fisresults>
+    <Raceheader Sector="SB" Sex="M">
+        <Season>2023</Season>
+        <Codex></Codex>
+        <Nation></Nation>
+        <Discipline>Discipline</Discipline>
+        <Category>FIS</Category>
+        <Racedate>
+            <day>28</day>
+            <month>08</month>
+            <year>2022</year>
+        </Racedate>
+        <Eventname>New competition</Eventname>
+        <Place></Place>
+    </Raceheader>
+    <SB_race>
+        <SB_raceinfo></SB_raceinfo>
+        <SB_classified>
+        </SB_classified>
+    </SB_race>
+</Fisresults>

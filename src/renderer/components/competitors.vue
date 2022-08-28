@@ -10,7 +10,7 @@
           user-select: none;
         "
       >
-        <div style="font-size: 1.4rem; font-weight: bold">Участники</div>
+        <div style="font-size: 1.4rem; font-weight: bold">Competitors</div>
         <v-btn
           @click="load_prev_stages()"
           :color="$vuetify.theme.themes[appTheme].action_blue"
@@ -20,7 +20,7 @@
             :color="$vuetify.theme.themes[appTheme].textDefault"
             style="margin-right: 0.5rem"
             >mdi-page-previous</v-icon
-          >Из предыдущего этапа</v-btn
+          >From previous stage</v-btn
         ><v-btn
           text
           style="padding: 0"
@@ -36,7 +36,7 @@
               style="margin-right: 0.5rem"
               >mdi-file-excel</v-icon
             >
-            Загрузить из файла
+            Load from file
           </label></v-btn
         >
         <input
@@ -53,7 +53,7 @@
             :color="$vuetify.theme.themes[appTheme].textDefault"
             style="margin-right: 0.5rem"
             >mdi-arrow-right-bold</v-icon
-          >Экспорт</v-btn
+          >Export</v-btn
         >
       </div>
       <div
@@ -214,7 +214,7 @@
                   }}
                 </div>
                 <div style="margin-left: auto; padding: 0.5rem 1rem">
-                  Данные участника
+                  Competitor info
                 </div>
               </v-card-title>
               <div
@@ -267,7 +267,7 @@
                   :style="{
                     color: $vuetify.theme.themes[appTheme].textDefault,
                   }"
-                  >Удалить участника</v-btn
+                  >Delete competitor</v-btn
                 >
                 <v-btn
                   small
@@ -276,7 +276,7 @@
                   :style="{
                     color: $vuetify.theme.themes[appTheme].textDefault,
                   }"
-                  >Закрыть</v-btn
+                  >Close</v-btn
                 ></v-card-actions
               ></v-card
             ></v-dialog
@@ -312,7 +312,7 @@
                   :color="$vuetify.theme.themes[appTheme].textDefault"
                   >mdi-account-plus</v-icon
                 >
-                Создать участника</v-btn
+                Create competitor</v-btn
               ></template
             ><v-card
               :style="{
@@ -321,7 +321,7 @@
                   $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
               }"
               ><v-card-title class="d-flex align-center"
-                ><div>Создание участника</div>
+                ><div>New competitor</div>
                 <v-spacer></v-spacer
                 ><v-btn
                   icon
@@ -366,7 +366,7 @@
                     createCompetitor(createCompetitorDialog.newCompetitor)
                   "
                   :color="$vuetify.theme.themes[appTheme].success"
-                  >Создать</v-btn
+                  >Create</v-btn
                 ></v-card-actions
               ></v-card
             >
@@ -385,7 +385,7 @@
                   style="margin-right: 0.5rem"
                   :color="$vuetify.theme.themes[appTheme].textDefault"
                   >mdi-settings</v-icon
-                >Настройка таблицы</v-btn
+                >Sheet settings</v-btn
               ></template
             ><v-card
               :style="{
@@ -394,7 +394,7 @@
               }"
               ><v-card-title
                 :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
-                >Настройка таблицы<v-spacer></v-spacer
+                >Sheet settings<v-spacer></v-spacer
                 ><v-btn
                   small
                   icon
@@ -517,7 +517,7 @@
                         width: 3rem;
                       "
                       :color="$vuetify.theme.themes[appTheme].action_red"
-                      >удалить</v-btn
+                      >Delete</v-btn
                     >
                   </div></v-hover
                 >
@@ -588,7 +588,7 @@
                       width: 3rem;
                     "
                     :color="$vuetify.theme.themes[appTheme].textDefault"
-                    >Отменить</v-btn
+                    >Cancel</v-btn
                   >
                 </div></v-card-text
               ><v-card-actions class="d-flex"
@@ -601,7 +601,7 @@
                     })
                   "
                   :color="$vuetify.theme.themes[appTheme].accent"
-                  >Добавить столбец</v-btn
+                  >Add column</v-btn
                 ><v-spacer></v-spacer
                 ><v-btn
                   @click="acceptCols()"
@@ -609,7 +609,7 @@
                     color: $vuetify.theme.themes[appTheme].textDefault,
                   }"
                   :color="$vuetify.theme.themes[appTheme].success"
-                  >Применить</v-btn
+                  >Accept</v-btn
                 ></v-card-actions
               ></v-card
             ></v-dialog
@@ -624,7 +624,7 @@
                 tile
                 height="100%"
                 :color="$vuetify.theme.themes[appTheme].action_red"
-                >Очистить таблицу</v-btn
+                >Clear table</v-btn
               ></template
             ><v-card
               class="pa-2"
@@ -635,23 +635,23 @@
               }"
             >
               <v-card-title style="padding: 0.2rem 1rem"
-                >Очистка таблицы</v-card-title
+                >Clear table</v-card-title
               >
               <div class="d-flex align-center" style="padding: 0.5rem 0.5rem">
-                <div style="margin-right: auto">Удалить всех участников?</div>
+                <div style="margin-right: auto">Delete all competitors?</div>
                 <v-btn
                   @click="clearSheet(), (clearDialog = false)"
                   small
                   text
                   :color="$vuetify.theme.themes[appTheme].accent"
-                  v-html="`Да`"
+                  v-html="`Yes`"
                 ></v-btn
                 ><v-btn
                   @click="clearDialog = false"
                   small
                   text
                   :color="$vuetify.theme.themes[appTheme].action_red"
-                  v-html="`Нет`"
+                  v-html="`No`"
                 ></v-btn></div></v-card
           ></v-dialog>
         </div>

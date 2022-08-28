@@ -2,7 +2,7 @@
   <div class="d-flex px-2 pt-1" style="width: 100%; height: 100%">
     <div style="flex: 1 0 50%; display: flex">
       <div style="font-weight: bold; font-size: 1.6rem; margin-right: auto">
-        Протокол результатов
+        Results protocol
       </div>
       <v-btn
         @click="competition.protocol_settings.protocol_type = 0"
@@ -15,7 +15,7 @@
         "
         depressed
         small
-        >Стартовый протокол</v-btn
+        >Start protocol</v-btn
       ><v-btn
         @click="competition.protocol_settings.protocol_type = 1"
         :text="competition.protocol_settings.protocol_type < 1"
@@ -28,7 +28,7 @@
         "
         depressed
         small
-        ><span style="margin-left: auto">Результаты</span></v-btn
+        ><span style="margin-left: auto">Results</span></v-btn
       >
     </div>
     <div

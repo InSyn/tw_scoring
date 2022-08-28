@@ -7,9 +7,7 @@
     }"
   >
     <div class="d-flex align-center">
-      <div class="font-weight-bold" style="font-size: 1.2rem">
-        Данные о погоде
-      </div>
+      <div class="font-weight-bold" style="font-size: 1.2rem">Weather info</div>
       <v-btn
         text
         style="margin-left: auto"

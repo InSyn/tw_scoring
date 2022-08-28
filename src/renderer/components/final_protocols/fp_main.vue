@@ -9,7 +9,7 @@
     <div class="pa-2 d-flex align-center flex-nowrap">
       <div style="display: flex; align-items: center; width: 50%">
         <label for="prot_title" class="font-weight-bold" style="flex: 0 0 auto"
-          >Название</label
+          >Title</label
         ><input
           class="flex-grow-1 ml-4 pa-1"
           id="prot_title"
@@ -33,7 +33,7 @@
         "
       >
         <label for="prot_type" class="font-weight-bold" style="flex: 0 0 auto"
-          >Вид протокола</label
+          >Protocol type</label
         ><input
           class="flex-grow-1 ml-4 pa-1"
           id="prot_type"
@@ -67,7 +67,7 @@
             font-weight: bold;
           "
         >
-          Выбрать заезд
+          Choose race
         </div>
         <div
           style="
@@ -188,12 +188,12 @@
           <v-col
             style="height: 100%"
             class="d-flex pa-1 align-center justify-center"
-            >Ячейка 1</v-col
+            >Cell 1</v-col
           >
           <v-col
             style="height: 100%"
             class="d-flex pa-1 align-center justify-center"
-            >Ячейка 2</v-col
+            >Cell 2</v-col
           ><v-col
             style="height: 100%"
             class="d-flex pa-1 align-center justify-center"
@@ -205,22 +205,22 @@
                 color: $vuetify.theme.themes[appTheme].success,
               },
             ]"
-            >{{ `Ширина(${sum_width}%)` }}</v-col
+            >{{ `Width(${sum_width}%)` }}</v-col
           >
           <v-col
             style="height: 100%"
             class="d-flex pa-1 align-center justify-center"
-            >Шрифт(px)</v-col
+            >Font(px)</v-col
           >
           <v-col
             style="height: 100%"
             class="d-flex pa-1 align-center justify-center"
-            >Выравнивание</v-col
+            >Align</v-col
           >
           <v-col
             style="height: 100%"
             class="d-flex pa-1 align-center justify-center"
-            >Жирность</v-col
+            >Bold</v-col
           >
         </v-row>
         <div style="flex: 1 0 auto; overflow-y: auto">
@@ -389,7 +389,7 @@
                         $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
                     }"
                     ><v-card-title style="padding: 8px 16px"
-                      >Настройка ячейки<v-btn
+                      >Cell setup<v-btn
                         @click="f_prop.select_dialog = false"
                         style="margin-left: auto"
                         icon
@@ -400,14 +400,14 @@
                       style="display: flex; flex-wrap: wrap; padding: 0 16px"
                     >
                       <div style="width: 100%">
-                        Текущее значение
+                        Current value
                         <v-btn
                           @click="clearField(f_prop)"
                           text
                           small
                           :color="$vuetify.theme.themes[appTheme].accent"
                           style="margin-left: 1rem"
-                          >очистить</v-btn
+                          >Clear</v-btn
                         >
                       </div>
 
@@ -443,7 +443,7 @@
                           }"
                         />
                       </div>
-                      <div v-else>Ячейка пуста</div>
+                      <div v-else>Empty cell</div>
                     </div>
                     <div
                       style="
@@ -737,7 +737,7 @@ export default {
       selected_fields: [],
       field_buttons: [
         {
-          title: "Добавить",
+          title: "Add",
           color: "action_green",
 
           action: function () {
@@ -745,14 +745,14 @@ export default {
           },
         },
         {
-          title: "Редакт.",
+          title: "Edit",
           color: "action_yellow",
 
           action: function () {
             return 0;
           },
         },
-        { title: "Удалить", color: "action_red", action: this.remove_fields },
+        { title: "Remove", color: "action_red", action: this.remove_fields },
       ],
     };
   },

@@ -35,7 +35,7 @@
               color: $vuetify.theme.themes[appTheme].textDefault,
             }"
             ><v-card-title class="pa-2" style="font-size: 1.2rem"
-              >Изменение заголовка</v-card-title
+              >Change title</v-card-title
             >
             <div class="pa-2" style="font-size: 1.1rem">
               <input
@@ -55,7 +55,7 @@
                 small
                 @click.stop="competition.technicalInfo.change_dialog = false"
                 :color="$vuetify.theme.themes[appTheme].textDefault"
-                >Закрыть</v-btn
+                >Close</v-btn
               ></v-card-actions
             ></v-card
           ></v-dialog

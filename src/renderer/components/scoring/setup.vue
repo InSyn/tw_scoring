@@ -4,14 +4,14 @@
       class="pa-2"
       style="border-radius: 6px"
       :style="{
-        backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA
+        backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
       }"
       no-gutters
     >
       <v-col cols="12" style="font-weight: bold; font-size: 1.2rem"
-        >Секретарь хронометрист</v-col
+        >Timing secretary</v-col
       ><v-col class="d-flex align-center" style="font-weight: bold">
-        <span class="mr-2">Фамилия</span>
+        <span class="mr-2">Lastname</span>
         <input
           v-model="competition.stuff.secretary.lastName"
           type="text"
@@ -20,12 +20,12 @@
           :style="{
             backgroundColor:
               $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
-            color: $vuetify.theme.themes[appTheme].textDefault
+            color: $vuetify.theme.themes[appTheme].textDefault,
           }"
         />
       </v-col>
       <v-col class="d-flex align-center ml-4" style="font-weight: bold">
-        <span class="mr-2">Имя</span>
+        <span class="mr-2">Name</span>
         <input
           v-model="competition.stuff.secretary.name"
           type="text"
@@ -34,7 +34,7 @@
           :style="{
             backgroundColor:
               $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
-            color: $vuetify.theme.themes[appTheme].textDefault
+            color: $vuetify.theme.themes[appTheme].textDefault,
           }"
         />
       </v-col> </v-row
@@ -42,7 +42,7 @@
       class="pa-2 mt-2 d-flex flex-column flex-grow-1"
       style="border-radius: 6px"
       :style="{
-        backgroundColor: `${$vuetify.theme.themes[appTheme].cardBackgroundRGBA}`
+        backgroundColor: `${$vuetify.theme.themes[appTheme].cardBackgroundRGBA}`,
       }"
     >
       <v-row v-if="!serverStatus || !socket" no-gutters
@@ -53,7 +53,7 @@
             :style="{
               backgroundColor:
                 $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
-              color: $vuetify.theme.themes[appTheme].action_darkYellow
+              color: $vuetify.theme.themes[appTheme].action_darkYellow,
             }"
             v-html="`Server is not started`"
           ></div></v-col
@@ -62,11 +62,11 @@
         <v-col class="d-flex align-center">
           <div
             class="pa-2"
-            style="border-radius: 6px; font-weight: bold; font-size: 1.2rem; "
+            style="border-radius: 6px; font-weight: bold; font-size: 1.2rem"
             :style="{
               backgroundColor:
                 $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
-              color: $vuetify.theme.themes[appTheme].success
+              color: $vuetify.theme.themes[appTheme].success,
             }"
             v-html="
               `Server started on: ${socket.io.opts.hostname}:${socket.io.opts.port}`
@@ -78,12 +78,16 @@
           class="pa-1"
           style="font-size: 1.4rem; font-weight: bold"
           v-html="
-            `${competition.mainData.country.value &&
-              competition.mainData.country.value + ' / '}${competition.mainData
-              .title.value &&
-              competition.mainData.title.value + ' / '}${competition.mainData
-              .discipline.value &&
-              competition.mainData.discipline.value + ' / '}${
+            `${
+              competition.mainData.country.value &&
+              competition.mainData.country.value + ' / '
+            }${
+              competition.mainData.title.value &&
+              competition.mainData.title.value + ' / '
+            }${
+              competition.mainData.discipline.value &&
+              competition.mainData.discipline.value + ' / '
+            }${
               competition.selected_race
                 ? competition.selected_race.title !== null &&
                   competition.selected_race.title
@@ -115,23 +119,28 @@
               <div
                 class="pa-2 d-flex justify-center align-center"
                 tabindex="0"
-                style="position:relative; font-weight: bold; cursor: pointer; outline: none"
+                style="
+                  position: relative;
+                  font-weight: bold;
+                  cursor: pointer;
+                  outline: none;
+                "
                 :style="[
                   {
                     backgroundColor:
-                      $vuetify.theme.themes[appTheme].standardBackgroundRGBA
+                      $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
                   },
                   hover && {
                     backgroundColor:
-                      $vuetify.theme.themes[appTheme].subjectBackgroundRGBA
+                      $vuetify.theme.themes[appTheme].subjectBackgroundRGBA,
                   },
                   menu.state
                     ? {
-                        borderRadius: 0
+                        borderRadius: 0,
                       }
                     : {
-                        borderRadius: `6px`
-                      }
+                        borderRadius: `6px`,
+                      },
                 ]"
                 @click="menu.state = !menu.state"
                 @blur="menu.state = false"
@@ -142,15 +151,23 @@
                 <div
                   v-if="menu.state"
                   class="d-flex flex-column align-center"
-                  style="position:absolute; bottom: 100%; left: 0;right: 0; border-top-right-radius: 6px; border-top-left-radius: 6px; overflow:hidden;"
+                  style="
+                    position: absolute;
+                    bottom: 100%;
+                    left: 0;
+                    right: 0;
+                    border-top-right-radius: 6px;
+                    border-top-left-radius: 6px;
+                    overflow: hidden;
+                  "
                   :style="{
                     backgroundColor:
-                      $vuetify.theme.themes[appTheme].standardBackgroundRGBA
+                      $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
                   }"
                 >
                   <v-hover
                     v-for="(prev, pr) in competition.races.filter(
-                      prev =>
+                      (prev) =>
                         competition.races.indexOf(prev) <
                         competition.selected_race_id
                     )"
@@ -160,9 +177,8 @@
                     <div
                       class="pa-2"
                       @click="
-                        (competition.selected_race_id = competition.races.indexOf(
-                          prev
-                        )),
+                        (competition.selected_race_id =
+                          competition.races.indexOf(prev)),
                           (() => {
                             socket &&
                               socket.connected &&
@@ -172,12 +188,12 @@
                               );
                           })()
                       "
-                      style="width: 100%;"
+                      style="width: 100%"
                       :style="
                         hover && {
                           backgroundColor:
                             $vuetify.theme.themes[appTheme]
-                              .subjectBackgroundRGBA
+                              .subjectBackgroundRGBA,
                         }
                       "
                       v-html="prev.title"
@@ -187,15 +203,23 @@
                 <div
                   v-if="menu.state"
                   class="d-flex flex-column align-center"
-                  style="position:absolute; top: 100%; left: 0;right: 0; border-bottom-right-radius: 6px; border-bottom-left-radius: 6px; overflow:hidden"
+                  style="
+                    position: absolute;
+                    top: 100%;
+                    left: 0;
+                    right: 0;
+                    border-bottom-right-radius: 6px;
+                    border-bottom-left-radius: 6px;
+                    overflow: hidden;
+                  "
                   :style="{
                     backgroundColor:
-                      $vuetify.theme.themes[appTheme].standardBackgroundRGBA
+                      $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
                   }"
                 >
                   <v-hover
                     v-for="(next, nxt) in competition.races.filter(
-                      next =>
+                      (next) =>
                         competition.races.indexOf(next) >
                         competition.selected_race_id
                     )"
@@ -205,9 +229,8 @@
                     <div
                       class="pa-2"
                       @click="
-                        (competition.selected_race_id = competition.races.indexOf(
-                          next
-                        )),
+                        (competition.selected_race_id =
+                          competition.races.indexOf(next)),
                           (() => {
                             socket &&
                               socket.connected &&
@@ -217,12 +240,12 @@
                               );
                           })()
                       "
-                      style="width: 100%;"
+                      style="width: 100%"
                       :style="
                         hover && {
                           backgroundColor:
                             $vuetify.theme.themes[appTheme]
-                              .subjectBackgroundRGBA
+                              .subjectBackgroundRGBA,
                         }
                       "
                       v-html="next.title"
@@ -233,12 +256,17 @@
             <div
               v-else
               class="pa-2"
-              style="font-weight: bold; border-radius: 6px; cursor: pointer; overflow:visible;"
+              style="
+                font-weight: bold;
+                border-radius: 6px;
+                cursor: pointer;
+                overflow: visible;
+              "
               :style="{
                 backgroundColor:
-                  $vuetify.theme.themes[appTheme].standardBackgroundRGBA
+                  $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
               }"
-              v-html="`Заезд не создан`"
+              v-html="`No created race`"
             ></div>
             <v-btn
               icon
@@ -259,7 +287,7 @@ import { mapGetters } from "vuex";
 export default {
   name: "setup",
   methods: {
-    log: data => {
+    log: (data) => {
       console.log(data);
     },
     prevRace() {
@@ -282,13 +310,13 @@ export default {
       this.socket &&
         this.socket.connected &&
         this.socket.emit("set_raceId", this.competition.selected_race_id);
-    }
+    },
   },
   data() {
     return {
       menu: {
-        state: false
-      }
+        state: false,
+      },
     };
   },
   computed: {
@@ -296,9 +324,9 @@ export default {
       appTheme: "appTheme",
       competition: "competition",
       socket: "socket",
-      serverStatus: "serverStatus"
-    })
-  }
+      serverStatus: "serverStatus",
+    }),
+  },
 };
 </script>
 

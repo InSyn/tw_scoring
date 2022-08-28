@@ -1,31 +1,39 @@
 <template>
-  <v-col cols="4" style="height: 100%;" class="pa-2">
+  <v-col cols="4" style="height: 100%" class="pa-2">
     <v-container
       class="pa-2 d-flex flex-column"
-      style="height: 100%;border-radius: 6px"
+      style="height: 100%; border-radius: 6px"
       :style="{
-        backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA
+        backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
       }"
       fluid
-      ><div style="font-size: 1.4rem; font-weight:bold;padding: 4px 8px">
-        Сервисы
+      ><div style="font-size: 1.4rem; font-weight: bold; padding: 4px 8px">
+        Services
       </div>
       <div class="d-flex flex-column">
         <div
           class="d-flex flex-wrap align-center"
           :style="{
             backgroundColor:
-              $vuetify.theme.themes[appTheme].standardBackgroundRGBA
+              $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
           }"
-          style="flex: 0 0 auto; padding: 6px 8px; width: 100%;border-radius: 6px"
+          style="
+            flex: 0 0 auto;
+            padding: 6px 8px;
+            width: 100%;
+            border-radius: 6px;
+          "
         >
-          <div style="font-size: 1.2rem; font-weight:bold">
-            Live-scoring:
-          </div>
+          <div style="font-size: 1.2rem; font-weight: bold">Live-scoring:</div>
           <v-btn
             @click="dbSetCompetitionLive(competitions, event_id)"
             depressed
-            style="font-size: 1rem;height: 2rem; border-radius: 2px;margin-left: auto"
+            style="
+              font-size: 1rem;
+              height: 2rem;
+              border-radius: 2px;
+              margin-left: auto;
+            "
             :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
             :color="$vuetify.theme.themes[appTheme].action_green"
             >Server ON</v-btn
@@ -34,15 +42,20 @@
             @click="setUpdater(competitions, event_id, live_config)"
             class="ml-2"
             depressed
-            style="font-size: 1rem;height: 2rem; border-radius: 2px;transition: background-color 192ms"
+            style="
+              font-size: 1rem;
+              height: 2rem;
+              border-radius: 2px;
+              transition: background-color 192ms;
+            "
             :style="[
               {
                 color: $vuetify.theme.themes[appTheme].textDefault,
-                border: `1px solid ${$vuetify.theme.themes[appTheme].standardBackgroundRGBA}`
+                border: `1px solid ${$vuetify.theme.themes[appTheme].standardBackgroundRGBA}`,
               },
               live_config.update_live && {
-                border: `1px solid ${$vuetify.theme.themes[appTheme].success}`
-              }
+                border: `1px solid ${$vuetify.theme.themes[appTheme].success}`,
+              },
             ]"
             :color="
               live_config.updateLive_Indicator
@@ -154,95 +167,97 @@ import axios from "axios";
 export default {
   name: "displayControlPanel",
   methods: {
-    log: data => console.log(data),
+    log: (data) => console.log(data),
     dbSetCompetitionLive: async (competitions, event_id) => {
       const live_event = {
         event_id: event_id,
         title: competitions[0].mainData.title.value,
-        sport: "Сноуборд",
+        sport: "Snowboard",
         discipline: competitions[0].mainData.discipline.value,
         location: competitions[0].mainData.location.value,
         organization: competitions[0].mainData.provider.value,
         timing_provider: competitions[0].mainData.providerTiming.value,
-        competitions: competitions.map(competition => {
+        competitions: competitions.map((competition) => {
           return {
             ID: competition.id,
             title: competition.mainData.title.value,
             stage: competition.mainData.title.stage.value.value,
-            races: competition.races.map(race => {
+            races: competition.races.map((race) => {
               return {
                 title: race.title,
-                onTrack: [race.onTrack].map(onTrack => {
-                  const competitor = competition.competitorsSheet.competitors.find(
-                    _comp => _comp.id === onTrack
-                  );
+                onTrack: [race.onTrack].map((onTrack) => {
+                  const competitor =
+                    competition.competitorsSheet.competitors.find(
+                      (_comp) => _comp.id === onTrack
+                    );
                   return competitor
                     ? {
                         bib: competitor.info_data["bib"],
                         name: competitor.info_data["name"],
                         lastname: competitor.info_data["lastname"],
                         marks: competitor.marks
-                          .filter(mark => mark.race_id === race.id)
-                          .map(mark => {
+                          .filter((mark) => mark.race_id === race.id)
+                          .map((mark) => {
                             return {
                               value: mark.value,
                               judge: mark.judge,
-                              race_id: mark.race_id
+                              race_id: mark.race_id,
                             };
-                          })
+                          }),
                       }
                     : null;
                 }),
-                competitors: race._startList.map(_competitor => {
-                  const competitor = competition.competitorsSheet.competitors.find(
-                    _comp => _comp.id === _competitor
-                  );
+                competitors: race._startList.map((_competitor) => {
+                  const competitor =
+                    competition.competitorsSheet.competitors.find(
+                      (_comp) => _comp.id === _competitor
+                    );
                   return {
                     bib: competitor.info_data["bib"],
                     name: competitor.info_data["name"],
                     lastname: competitor.info_data["lastname"],
                     results: competitor.results
-                      .filter(result => result.race_id === race.id)
-                      .map(result => {
+                      .filter((result) => result.race_id === race.id)
+                      .map((result) => {
                         return {
                           race: result.race_id,
                           value: result.value,
-                          status: result.status
+                          status: result.status,
                         };
                       }),
                     marks: competitor.marks
-                      .filter(mark => mark.race_id === race.id)
-                      .map(mark => {
+                      .filter((mark) => mark.race_id === race.id)
+                      .map((mark) => {
                         return {
                           value: mark.value,
                           judge: mark.judge,
-                          race_id: mark.race_id
+                          race_id: mark.race_id,
                         };
                       }),
                     overall_results: competitor.results_overall
                       .filter(
-                        overall => overall.competition_id === competition.id
+                        (overall) => overall.competition_id === competition.id
                       )
-                      .map(overall => {
+                      .map((overall) => {
                         return {
                           competition: overall.competition_id,
                           value: overall.value,
-                          status: overall.status
+                          status: overall.status,
                         };
-                      })
+                      }),
                   };
-                })
+                }),
               };
-            })
+            }),
           };
-        })
+        }),
       };
       await axios
         .post("https://live-timingweb.cf/api/v1/events", live_event)
-        .then(response => {
+        .then((response) => {
           console.log(response);
         })
-        .catch(e => {
+        .catch((e) => {
           console.log(e);
         });
     },
@@ -250,90 +265,92 @@ export default {
       const live_event = {
         event_id: event_id,
         title: competitions[0].mainData.title.value,
-        sport: "Сноуборд",
+        sport: "Snowboard",
         discipline: competitions[0].mainData.discipline.value,
         location: competitions[0].mainData.location.value,
         organization: competitions[0].mainData.provider.value,
         timing_provider: competitions[0].mainData.providerTiming.value,
-        competitions: competitions.map(competition => {
+        competitions: competitions.map((competition) => {
           return {
             ID: competition.id,
             title: competition.mainData.title.value,
             stage: competition.mainData.title.stage.value.value,
-            races: competition.races.map(race => {
+            races: competition.races.map((race) => {
               return {
                 title: race.title,
-                onTrack: [race.onTrack].map(onTrack => {
-                  const competitor = competition.competitorsSheet.competitors.find(
-                    _comp => _comp.id === onTrack
-                  );
+                onTrack: [race.onTrack].map((onTrack) => {
+                  const competitor =
+                    competition.competitorsSheet.competitors.find(
+                      (_comp) => _comp.id === onTrack
+                    );
                   return competitor
                     ? {
                         bib: competitor.info_data["bib"],
                         name: competitor.info_data["name"],
                         lastname: competitor.info_data["lastname"],
                         marks: competitor.marks
-                          .filter(mark => mark.race_id === race.id)
-                          .map(mark => {
+                          .filter((mark) => mark.race_id === race.id)
+                          .map((mark) => {
                             return {
                               value: mark.value,
                               judge: mark.judge,
-                              race_id: mark.race_id
+                              race_id: mark.race_id,
                             };
-                          })
+                          }),
                       }
                     : null;
                 }),
-                competitors: race._startList.map(_competitor => {
-                  const competitor = competition.competitorsSheet.competitors.find(
-                    _comp => _comp.id === _competitor
-                  );
+                competitors: race._startList.map((_competitor) => {
+                  const competitor =
+                    competition.competitorsSheet.competitors.find(
+                      (_comp) => _comp.id === _competitor
+                    );
                   return {
                     bib: competitor.info_data["bib"],
                     name: competitor.info_data["name"],
                     lastname: competitor.info_data["lastname"],
                     results: competitor.results
-                      .filter(result => result.race_id === race.id)
-                      .map(result => {
+                      .filter((result) => result.race_id === race.id)
+                      .map((result) => {
                         return {
                           race: result.race_id,
                           value: result.value,
-                          status: result.status
+                          status: result.status,
                         };
                       }),
                     marks: competitor.marks
-                      .filter(mark => mark.race_id === race.id)
-                      .map(mark => {
+                      .filter((mark) => mark.race_id === race.id)
+                      .map((mark) => {
                         return {
                           value: mark.value,
                           judge: mark.judge,
-                          race_id: mark.race_id
+                          race_id: mark.race_id,
                         };
                       }),
                     overall_results: competitor.results_overall
                       .filter(
-                        overall => overall.competition_id === competition.id
+                        (overall) => overall.competition_id === competition.id
                       )
-                      .map(overall => {
+                      .map((overall) => {
                         return {
                           competition: overall.competition_id,
                           value: overall.value,
-                          status: overall.status
+                          status: overall.status,
                         };
-                      })
+                      }),
                   };
-                })
+                }),
               };
-            })
+            }),
           };
-        })
+        }),
       };
       axios
         .patch(
           `https://live-timingweb.cf/api/v1/events/${live_event.event_id}`,
           live_event
         )
-        .then(response => {
+        .then((response) => {
           console.log(response);
           this.live_config.updateLive_Indicator = "ok";
           setTimeout(() => {
@@ -344,7 +361,7 @@ export default {
               this.dbUpdateCompetitionLive(competitions, event_id);
             }, 2560);
         })
-        .catch(e => {
+        .catch((e) => {
           this.live_config.updateLive_Indicator = "err";
           setTimeout(() => {
             this.live_config.updateLive_Indicator = false;
@@ -358,11 +375,11 @@ export default {
         this.live_config.update_live = true;
         this.dbUpdateCompetitionLive(competitions, event_id);
       } else this.live_config.update_live = false;
-    }
+    },
   },
   data() {
     return {
-      filter: ""
+      filter: "",
     };
   },
   computed: {
@@ -371,9 +388,9 @@ export default {
       event_id: "event_id",
       competition: "competition",
       competitions: "competitions",
-      appTheme: "appTheme"
-    })
-  }
+      appTheme: "appTheme",
+    }),
+  },
 };
 </script>
 
