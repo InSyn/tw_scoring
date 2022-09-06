@@ -14,6 +14,7 @@ io.on("connection", (socket) => {
     console.log(`connect_error due to ${err.message}`);
   });
 
+  io.sockets.emit("competition_data_updated", competition);
   mainWindow &&
     mainWindow.webContents.send("server_message", [
       3,

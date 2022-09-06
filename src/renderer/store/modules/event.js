@@ -64,19 +64,6 @@ export default {
           discipline: "",
           accuracy: 1,
         },
-        types: [
-          { id: 0, title: "Snowboard", disciplines: [0, 1, 2, 100] },
-          { id: 1, title: "Freestyle", disciplines: [0, 1, 2, 3, 4, 100] },
-          { id: 2, title: "Custom", disciplines: [100] },
-        ],
-        disciplines: [
-          { id: 0, title: "Slope-Style", res_formula: [1] },
-          { id: 1, title: "Big-Air", res_formula: [2] },
-          { id: 2, title: "Half-Pipe", res_formula: [3] },
-          { id: 3, title: "Aerials", res_formula: [4] },
-          { id: 4, title: "Moguls", res_formula: [5] },
-          { id: 100, title: "Custom", res_formula: [100] },
-        ],
         accuracy: [
           { id: 0, title: "1", value: 1, digits: 0 },
           { id: 1, title: "1:10", value: 10, digits: 1 },
