@@ -10,16 +10,16 @@ io.on("connection", (socket) => {
   socket.emit("serverConnected");
   console.log(`Connected ${socket.id}`);
 
-  socket.on("connect_error", (err) => {
-    console.log(`connect_error due to ${err.message}`);
-  });
-
   io.sockets.emit("competition_data_updated", competition);
   mainWindow &&
     mainWindow.webContents.send("server_message", [
       3,
       `Connected ${socket.id}`,
     ]);
+
+  socket.on("connect_error", (err) => {
+    console.log(`connect_error due to ${err.message}`);
+  });
 
   socket.on("checkServer", () => {
     socket.emit("checkOk", true);
