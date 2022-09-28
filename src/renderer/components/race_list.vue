@@ -1326,6 +1326,8 @@ export default {
       if (!race.startList.includes(competitor.id))
         race.startList.unshift(competitor.id);
 
+      competitor.info_dialog.state = false;
+
       this.rebuildStartList(race);
     },
     addToStartList(competitor) {
