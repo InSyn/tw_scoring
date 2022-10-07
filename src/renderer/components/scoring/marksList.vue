@@ -56,12 +56,11 @@ export default {
   mounted() {
     console.log(`${this.$vuetify.theme.themes[this.appTheme].textDefault}22`);
     if (this.competitionLog.length < 1)
-      for (let i = 0; i <= 16; i++)
-        this.addCompetitionLogMessage({
-          text: "Some text",
-          date: Date.now(),
-          type: Math.random() > 0.5 ? "info" : "err",
-        });
+      this.addCompetitionLogMessage({
+        text: "Message text",
+        date: Date.now(),
+        type: Math.random() > 0.5 ? "info" : "err",
+      });
   },
   methods: {
     ...mapActions("message_system", {
