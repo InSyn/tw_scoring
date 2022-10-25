@@ -20,7 +20,8 @@
         style="margin-right: 1rem"
         icon
       >
-        <v-icon v-html="showMenu ? 'mdi-backburger' : 'mdi-menu'"></v-icon>
+        <v-icon v-if="showMenu">{{ icons.mdiBackburger }}</v-icon>
+        <v-icon v-else>{{ icons.mdiMenu }}</v-icon>
       </v-btn>
       <v-btn
         text
@@ -30,7 +31,7 @@
         width="48"
         :color="$vuetify.theme.themes[appTheme].accent"
       >
-        <v-icon>mdi-content-save</v-icon>
+        <v-icon>{{ icons.mdiContentSave }}</v-icon>
       </v-btn>
 
       <v-btn
@@ -42,7 +43,7 @@
         ><label
           style="display: block; height: 100%; width: 100%; cursor: pointer"
         >
-          <v-icon>mdi-download</v-icon>
+          <v-icon>{{ icons.mdiDownload }}</v-icon>
           <input
             :key="Math.random()"
             @change="load($event.target.files[0].path)"
@@ -67,7 +68,7 @@
             icon
             :color="$vuetify.theme.themes[appTheme].accent"
           >
-            <v-icon>mdi-folder-plus</v-icon>
+            <v-icon>{{ icons.mdiFolderPlus }}</v-icon>
           </v-btn>
         </template>
         <div
@@ -680,7 +681,7 @@
         :color="$vuetify.theme.themes[appTheme].accent"
         icon
       >
-        <v-icon>mdi-brightness-6</v-icon>
+        <v-icon>{{ icons.mdiBrightness6 }}</v-icon>
       </v-btn>
     </header>
     <main style="position: relative">
@@ -776,6 +777,12 @@ import {
   mdiClipboardList,
   mdiNumeric10BoxMultiple,
   mdiTrophyVariant,
+  mdiBackburger,
+  mdiMenu,
+  mdiContentSave,
+  mdiDownload,
+  mdiFolderPlus,
+  mdiBrightness6,
 } from "@mdi/js";
 import fs from "fs";
 
@@ -925,6 +932,12 @@ export default {
         clipboardList: mdiClipboardList,
         numeric10BoxMultiple: mdiNumeric10BoxMultiple,
         trophyVariant: mdiTrophyVariant,
+        mdiBackburger,
+        mdiMenu,
+        mdiContentSave,
+        mdiDownload,
+        mdiFolderPlus,
+        mdiBrightness6,
       },
       create_competition_dialog: {
         state: false,

@@ -82,7 +82,6 @@ app.on("ready", createWindow);
 app.on("getSysData", () => {
   si.system()
     .then((data) => {
-      console.log(data);
       mainWindow.webContents.send("sysData", data);
       try {
         fs.readFile("./lic", (err, key) => {

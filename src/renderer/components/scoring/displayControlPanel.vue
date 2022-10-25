@@ -171,12 +171,17 @@ export default {
     dbSetCompetitionLive: async (competitions, event_id) => {
       const live_event = {
         event_id: event_id,
+        created_at: new Date().toUTCString(),
+        start_at: new Date(
+          `${competitions[0].mainData.date.value}:${competitions[0].mainData.date.time}`
+        ).toUTCString(),
         title: competitions[0].mainData.title.value,
         sport: "Snowboard",
         discipline: competitions[0].mainData.discipline.value,
         location: competitions[0].mainData.location.value,
         organization: competitions[0].mainData.provider.value,
         timing_provider: competitions[0].mainData.providerTiming.value,
+        description: "",
         competitions: competitions.map((competition) => {
           return {
             ID: competition.id,
@@ -253,7 +258,7 @@ export default {
         }),
       };
       await axios
-        .post("https://live-timingweb.cf/api/v1/events", live_event)
+        .post("http://live-timingweb.cf:8081/api/v1/events", live_event)
         .then((response) => {
           console.log(response);
         })
@@ -267,6 +272,9 @@ export default {
         title: competitions[0].mainData.title.value,
         sport: "Snowboard",
         discipline: competitions[0].mainData.discipline.value,
+        start_at: new Date(
+          `${competitions[0].mainData.date.value}:${competitions[0].mainData.date.time}`
+        ).toUTCString(),
         location: competitions[0].mainData.location.value,
         organization: competitions[0].mainData.provider.value,
         timing_provider: competitions[0].mainData.providerTiming.value,
@@ -347,7 +355,7 @@ export default {
       };
       axios
         .patch(
-          `https://live-timingweb.cf/api/v1/events/${live_event.event_id}`,
+          `http://live-timingweb.cf:8081/api/v1/events/${live_event.event_id}`,
           live_event
         )
         .then((response) => {
