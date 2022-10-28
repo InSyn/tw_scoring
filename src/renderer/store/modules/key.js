@@ -23,7 +23,7 @@ export default {
       let response;
       await axios
         .post(
-          "http://82.148.19.186:8081/generateNewLicense",
+          "http://79.143.30.189:8088/generateNewLicense",
           { name: lic_name },
           {
             headers: { Authorization: "Jx9t9VAjGsgiCrGSrvv8h5E7wtKXQ6L2" },
@@ -40,7 +40,7 @@ export default {
     async get_licenses() {
       let licenses = [];
       await axios
-        .get("http://82.148.19.186:8081/getKeys", {
+        .get("http://79.143.30.189:8088/getKeys", {
           headers: { Authorization: "Jx9t9VAjGsgiCrGSrvv8h5E7wtKXQ6L2" },
         })
         .then((response) => {
@@ -54,7 +54,7 @@ export default {
     },
     async register_key(store, license) {
       await axios
-        .post("http://82.148.19.186:8081/registerKey", license, {
+        .post("http://79.143.30.189:8088/registerKey", license, {
           headers: { Authorization: "Jx9t9VAjGsgiCrGSrvv8h5E7wtKXQ6L2" },
         })
         .then((response) => console.log(response))
@@ -66,7 +66,7 @@ export default {
       let validated = false;
       await axios
         .post(
-          "http://82.148.19.186:8081/validate",
+          "http://79.143.30.189:8088/validate",
           {
             key: license_data.key,
             serial: license_data.serial,

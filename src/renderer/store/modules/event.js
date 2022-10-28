@@ -3,6 +3,7 @@ export default {
   state: {
     EventClass: class {
       constructor(...args) {
+        console.log(...args);
         this.id = Math.random().toString(36).substr(2, 9);
         this.live_id = null;
         this.structure.selected.type = 0;

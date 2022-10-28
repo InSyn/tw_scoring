@@ -13,7 +13,7 @@
           font-weight: bold;
         "
       >
-        Event settings
+        Event
       </div>
       <div
         style="

@@ -901,12 +901,17 @@ export default {
       });
     },
     createNewCompetition() {
+      let prevData = [];
+      for (let mainDataKey in this.competition.mainData) {
+        prevData.push(this.competition.mainData[mainDataKey]);
+        prevData[prevData.length - 1].id = mainDataKey;
+      }
       for (let $check in this.create_competition_dialog.checks)
         if (this.create_competition_dialog.checks[$check].state)
           this.create_competition_dialog.checks[$check].check();
       this.$store.commit(
         "main/createCompetition",
-        new this.EventClass(...this.create_competition_dialog.data)
+        new this.EventClass(...this.create_competition_dialog.data, ...prevData)
       );
       this.create_competition_dialog.data.forEach((_field) => {
         if (_field.id === "judges" || _field.id === "competitors")
