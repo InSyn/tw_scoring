@@ -11,9 +11,6 @@ export default {
     system_data: (state) => state.system_data,
   },
   mutations: {
-    toggle_panel(state) {
-      state.license_panel = !state.license_panel;
-    },
     set_system_data(state, sys_data) {
       state.system_data = sys_data;
     },

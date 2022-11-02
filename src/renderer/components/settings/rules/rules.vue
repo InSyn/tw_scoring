@@ -1,7 +1,8 @@
 <template>
-  <v-container style="min-width: 760px" v-if="competition">
+  <div style="flex: 1 0 760px; display: flex" v-if="competition">
     <v-card
       elevation="0"
+      style="flex: 1 0 auto"
       :style="{
         backgroundColor: $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
         color: $vuetify.theme.themes[appTheme].textDefault,
@@ -10,7 +11,7 @@
       <!--// НАСТРОЙКА ЭТАПОВ -->
       <v-card
         elevation="0"
-        style="padding: 8px"
+        style="flex: 1 0 auto; padding: 8px"
         :style="{
           backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
           color: $vuetify.theme.themes[appTheme].textDefault,
@@ -19,14 +20,13 @@
         <v-card-title style="padding: 0 1rem 0.5rem 1rem">
           {{ localization[lang].app.settings.stages.title }}
         </v-card-title>
-        <v-container
+        <div
           style="
             display: flex;
             flex-wrap: wrap;
             align-items: center;
             min-height: 4rem;
             border-radius: 6px;
-            padding: 0;
           "
           :style="{
             backgroundColor:
@@ -259,8 +259,9 @@
 
             {{ localization[lang].app.settings.stages.no_stages }}
           </div>
-          <v-container
+          <div
             style="
+              width: 100%;
               display: flex;
               flex-direction: column;
               padding: 0.5rem 1rem;
@@ -441,8 +442,8 @@
                 </div>
               </div>
             </div>
-          </v-container>
-        </v-container>
+          </div>
+        </div>
       </v-card>
       <!-- НАСТРОЙКА ЭТАПОВ //-->
 
@@ -563,18 +564,23 @@
               </v-hover>
               <div class="mt-1 d-flex flex-nowrap flex-grow-1">
                 <div class="d-flex flex-column flex-grow-1">
-                  <div
-                    class="d-flex flex-wrap justify-start align-start flex-grow-1"
-                  >
+                  <div class="d-flex flex-wrap flex-grow-1">
                     <div
                       v-for="(judge, jd) in competition.stuff.judges"
                       :key="jd"
-                      style="flex: 1 0 auto; max-width: 25%"
+                      style="
+                        flex: 1 0 auto;
+                        display: flex;
+                        align-items: stretch;
+                        width: 25%;
+                        height: 100%;
+                      "
                     >
                       <div
                         class="d-flex flex-column"
                         style="
-                          min-height: 3rem;
+                          flex: 1 0 auto;
+                          height: 100%;
                           padding: 0.25rem 0.5rem;
                           margin: 0 4px 4px 0;
                         "
@@ -848,7 +854,7 @@
                       backgroundColor:
                         $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
                     }"
-                    style="border-radius: 0 0 0 6px"
+                    style="border-radius: 0 0 0 6px; margin-top: auto"
                   >
                     <v-hover
                       v-for="formula in competition.result_formula.types[0]
@@ -1512,7 +1518,7 @@
       </div>
       <!-- НАСТРОЙКА ФОРМУЛЫ ЭТАПА //-->
     </v-card>
-  </v-container>
+  </div>
 </template>
 
 <script>

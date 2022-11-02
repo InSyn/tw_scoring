@@ -897,18 +897,14 @@ export default {
         : this.$store.commit("main/serverSetStatus", false);
     }, 2250);
     this.timer.ticker();
-    //shortcuts handler
-    let map = []; // You could also use an array
+
+    let map = [];
     onkeydown = onkeyup = (e) => {
       map[e.key] = e.type === "keydown";
       if (map["Alt"] && map["t"]) {
         this.$store.commit("main/toggle_mode");
       }
-      if ((map["Alt"] && map["k"]) || (map["Alt"] && map["л"])) {
-        this.$store.commit("key/toggle_panel");
-      }
     };
-    //shortcuts handler
   },
   methods: {
     ...mapActions("main", {

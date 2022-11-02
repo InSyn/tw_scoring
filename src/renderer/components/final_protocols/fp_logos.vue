@@ -21,7 +21,7 @@
         margin: 4px 8px;
       "
     >
-      {{ localization[lang].app.protocols.logos }}
+      {{ localization[lang].app.protocols.images }}
     </div>
     <v-spacer></v-spacer>
     <div

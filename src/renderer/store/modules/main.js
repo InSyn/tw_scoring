@@ -12,40 +12,6 @@ export default {
       user: "",
       key: "",
     },
-    mode_timing: false,
-    server_config: {
-      ip: "127.0.0.1",
-      port: "8080",
-    },
-    socket: null,
-    opened_sockets: [],
-    event: {
-      id: null,
-      event_title: "New event",
-    },
-    event_id: null,
-    competition: null,
-    competitions: [],
-    live_config: {
-      status: false,
-      update_live: false,
-      updateLive_Indicator: false,
-      _id: null,
-    },
-    terminals: {
-      listenTerminals: false,
-      terminalsListener: {
-        listener: null,
-        indicator: null,
-      },
-    },
-    showPreview: false,
-    showMenu: true,
-    serverStatus: false,
-    serverStatusChecker: null,
-    appTheme: "dark",
-    serverMessages: [],
-    messages: [],
     appMenu: [
       {
         icon: "viewDashboard",
@@ -78,6 +44,40 @@ export default {
         link: "protocols",
       },
     ],
+    appTheme: "dark",
+    competition: null,
+    competitions: [],
+    event: {
+      id: null,
+      event_title: "New event",
+    },
+    event_id: null,
+    live_config: {
+      status: false,
+      update_live: false,
+      updateLive_Indicator: false,
+      _id: null,
+    },
+    messages: [],
+    mode_timing: false,
+    opened_sockets: [],
+    server_config: {
+      ip: "127.0.0.1",
+      port: "8080",
+    },
+    serverStatus: false,
+    serverStatusChecker: null,
+    serverMessages: [],
+    showPreview: false,
+    showMenu: true,
+    socket: null,
+    terminals: {
+      listenTerminals: false,
+      terminalsListener: {
+        listener: null,
+        indicator: null,
+      },
+    },
     timer: {
       sec: null,
       min: null,
@@ -108,35 +108,31 @@ export default {
 
   getters: {
     _licData: (state) => state._licData,
-    mode_timing: (state) => state.mode_timing,
-    server_config: (state) => state.server_config,
-    socket: (state) => state.socket,
-    opened_sockets: (state) => state.opened_sockets,
-    serverMessages: (state) => state.serverMessages,
-    showMenu: (state) => state.showMenu,
-    event_id: (state) => state.event_id,
-    live_config: (state) => state.live_config,
-    terminals: (state) => state.terminals,
-    event: (state) => state.event,
-    competitions: (state) => state.competitions,
-    competition: (state) => state.competition,
-    showPreview: (state) => state.showPreview,
-    serverStatus: (state) => state.serverStatus,
-    serverStatusChecker: (state) => state.serverStatusChecker,
     appTheme: (state) => state.appTheme,
     appMenu: (state) => state.appMenu,
-    messages: (state) => state.messages,
-    timer: (state) => state.timer,
-    startList: (state) => {
-      return (
-        (state.competition.protocol_settings.start_protocols.filters
-          .race_filter &&
-          (state.competition.protocol_settings.start_protocols.filters
-            .race_filter._startList ||
-            [])) ||
-        []
+    competition: (state) => state.competition,
+    competitions: (state) => state.competitions,
+    event: (state) => state.event,
+    event_id: (state) => state.event_id,
+    flatGrid: (state, getters) => {
+      return [].concat(
+        ...getters.stageGrid.map((stage) => [
+          stage.title,
+          ...stage.s_competitors,
+        ])
       );
     },
+    live_config: (state) => state.live_config,
+    mode_timing: (state) => state.mode_timing,
+    messages: (state) => state.messages,
+    opened_sockets: (state) => state.opened_sockets,
+    server_config: (state) => state.server_config,
+    serverMessages: (state) => state.serverMessages,
+    serverStatus: (state) => state.serverStatus,
+    serverStatusChecker: (state) => state.serverStatusChecker,
+    showMenu: (state) => state.showMenu,
+    showPreview: (state) => state.showPreview,
+    socket: (state) => state.socket,
     stageGrid: (state) => {
       function flatten(arr) {
         return arr.reduce((flat, toFlatten) => {
@@ -267,52 +263,36 @@ export default {
             })
         : [];
     },
-    flatGrid: (state, getters) => {
-      return [].concat(
-        ...getters.stageGrid.map((stage) => [
-          stage.title,
-          ...stage.s_competitors,
-        ])
+    startList: (state) => {
+      return (
+        (state.competition.protocol_settings.start_protocols.filters
+          .race_filter &&
+          (state.competition.protocol_settings.start_protocols.filters
+            .race_filter._startList ||
+            [])) ||
+        []
       );
     },
+    terminals: (state) => state.terminals,
+    timer: (state) => state.timer,
   },
   mutations: {
-    licChecked: (state, lData) => {
-      state._licData.user = lData.user;
-      state._licData.key = lData.key;
-      state._licData.state = true;
-    },
-    toggle_mode: (state) => {
-      state.mode_timing = !state.mode_timing;
-    },
-    set_ip: (state, ip) => {
-      console.log(ip);
-      state.server_config.ip = ip;
-    },
-    set_port: (state, port) => {
-      state.server_config.port = port;
-    },
     changeMenuState: (state) => {
       state.showMenu = !state.showMenu;
+    },
+    changeTheme: (state) => {
+      state.appTheme === "light"
+        ? (state.appTheme = "dark")
+        : (state.appTheme = "light");
+    },
+    close_socket: (state) => {
+      state.socket && state.socket.disconnect();
+      state.socket = null;
     },
     checkEventID: (state) => {
       state.event_id === null
         ? (state.event_id = Math.random().toString(36).substr(2, 9))
         : null;
-    },
-    createServerChecker: (state) => {
-      state.serverStatusChecker === null
-        ? (state.serverStatusChecker = setInterval(() => {
-            if (state.socket)
-              state.socket.connected
-                ? (state.serverStatus = true)
-                : (state.serverStatus = false);
-          }, 3000))
-        : null;
-    },
-    serverSetStatus: (state, status) => (state.serverStatus = status),
-    setStatusChecker: (state, checker) => {
-      state.serverStatusChecker = checker;
     },
     connect_socket: (state, config) => {
       if (!state.socket) {
@@ -396,23 +376,15 @@ export default {
         });
       }
     },
-    close_socket: (state) => {
-      state.socket && state.socket.disconnect();
-      state.socket = null;
-    },
-    pushServerMessage: (state, message) => {
-      state.serverMessages.push(message);
-    },
-    force_disconnect: (state, user_id) => {
-      state.socket &&
-        state.socket.connected &&
-        state.socket.emit("force_disconnect", user_id);
-      console.log(user_id);
-    },
-    changeTheme: (state) => {
-      state.appTheme === "light"
-        ? (state.appTheme = "dark")
-        : (state.appTheme = "light");
+    createServerChecker: (state) => {
+      state.serverStatusChecker === null
+        ? (state.serverStatusChecker = setInterval(() => {
+            if (state.socket)
+              state.socket.connected
+                ? (state.serverStatus = true)
+                : (state.serverStatus = false);
+          }, 3000))
+        : null;
     },
     createCompetition: (state, competition) => {
       state.competitions.push(competition);
@@ -421,18 +393,6 @@ export default {
       state.socket &&
         state.socket.connected &&
         state.socket.emit("set_competition_data", state.competition, (res) => {
-          console.log(res);
-        });
-    },
-    setCompetition: (state, competition) => {
-      state.competition = competition;
-      router.push("competition_settings").catch((err) => {
-        return err;
-      });
-
-      state.socket &&
-        state.socket.connected &&
-        state.socket.emit("set_competition_data", competition, (res) => {
           console.log(res);
         });
     },
@@ -448,6 +408,42 @@ export default {
           console.log(res);
         });
     },
+    force_disconnect: (state, user_id) => {
+      state.socket &&
+        state.socket.connected &&
+        state.socket.emit("force_disconnect", user_id);
+      console.log(user_id);
+    },
+    licChecked: (state, lData) => {
+      state._licData.user = lData.user;
+      state._licData.key = lData.key;
+      state._licData.state = true;
+    },
+    pushServerMessage: (state, message) => {
+      state.serverMessages.push(message);
+    },
+    serverLog: (state, data) => {
+      console.log(data);
+    },
+    serverSetStatus: (state, status) => (state.serverStatus = status),
+    setCompetition: (state, competition) => {
+      state.competition = competition;
+      router.push("competition_settings").catch((err) => {
+        return err;
+      });
+
+      state.socket &&
+        state.socket.connected &&
+        state.socket.emit("set_competition_data", competition, (res) => {
+          console.log(res);
+        });
+    },
+    setStatusChecker: (state, checker) => {
+      state.serverStatusChecker = checker;
+    },
+    toggle_mode: (state) => {
+      state.mode_timing = !state.mode_timing;
+    },
     togglePreview: (state, toggleState) => {
       state.showPreview = toggleState;
     },
@@ -458,22 +454,13 @@ export default {
           console.log(res);
         });
     },
-    serverLog: (state, data) => {
-      console.log(data);
-    },
   },
   actions: {
-    licChecked: ({ commit }, lData) => {
-      commit("licChecked", lData);
-    },
     changeMenuState: ({ commit }) => {
       commit("changeMenuState");
     },
     changeTheme: ({ commit }) => {
       commit("changeTheme");
-    },
-    serverSetStatus: ({ commit }, status) => {
-      commit("serverSetStatus", status);
     },
     checkEventID: ({ commit }) => {
       commit("checkEventID");
@@ -481,31 +468,14 @@ export default {
     createCompetition: ({ commit }, competition) => {
       commit("createCompetition", competition);
     },
-    input_focus: (s, e) => {
-      e[0].target.parentNode.style.boxShadow = `inset 0 -2px 2px 0 ${e[1]}`;
-    },
     input_blur: (s, e) => {
       e.target.parentNode.style.boxShadow = "inset 0 0 0 0 transparent";
     },
-    serverLog: ({ commit }) => commit("serverLog"),
-    updateEvent: ({ commit }) => commit("updateEvent"),
-    save_event: async ({ state }, conf) => {
-      if (conf.path) {
-        const event_to_save = {
-          title: state.event.event_title,
-          id: state.event.event_id,
-          competitions: state.competitions,
-        };
-        await fs.writeFile(
-          conf.path,
-          JSON.stringify(event_to_save),
-          "utf-8",
-          (err) => {
-            if (err) console.log(`Error: ${err}`);
-            else console.log(`File saved to: ${conf.path}`);
-          }
-        );
-      }
+    input_focus: (s, e) => {
+      e[0].target.parentNode.style.boxShadow = `inset 0 -2px 2px 0 ${e[1]}`;
+    },
+    licChecked: ({ commit }, lData) => {
+      commit("licChecked", lData);
     },
     load_event: ({ state, commit }, evData) => {
       state.event.id = evData.id;
@@ -568,6 +538,29 @@ export default {
 
       commit("setCompetition", state.competitions[0]);
     },
+    save_event: async ({ state }, conf) => {
+      if (conf.path) {
+        const event_to_save = {
+          title: state.event.event_title,
+          id: state.event.event_id,
+          competitions: state.competitions,
+        };
+        await fs.writeFile(
+          conf.path,
+          JSON.stringify(event_to_save),
+          "utf-8",
+          (err) => {
+            if (err) console.log(`Error: ${err}`);
+            else console.log(`File saved to: ${conf.path}`);
+          }
+        );
+      }
+    },
+    serverLog: ({ commit }) => commit("serverLog"),
+    serverSetStatus: ({ commit }, status) => {
+      commit("serverSetStatus", status);
+    },
+    updateEvent: ({ commit }) => commit("updateEvent"),
     xml_export: async (s, data) => {
       const object = data[0],
         competition = data[1];
@@ -598,13 +591,5 @@ export default {
         }
       );
     },
-    // updateEvent: state => {
-    //   console.log(`upd`);
-    //   state.socket &&
-    //     state.socket.connected &&
-    //     state.socket.emit("set_competition_data", state.competition, res => {
-    //       console.log(res);
-    //     });
-    // }
   },
 };

@@ -9,9 +9,6 @@ import competition_settings from "../components/competition_settings";
 import competitors from "../components/competitors";
 import race_list from "../components/race_list";
 import scoring from "../components/scoring";
-import videoGraphics from "../components/settings/video_graphics/videoGraphics";
-import sportGraphics from "../components/settings/sport_graphics/sportGraphics";
-import results from "../components/settings/results/results";
 import rules from "../components/settings/rules/rules";
 import protocols from "../components/protocols";
 import final_protocols from "../components/final_protocols";
@@ -31,21 +28,6 @@ export default new Router({
       name: "settings",
       component: settings,
       children: [
-        {
-          name: "videoGraphics",
-          path: "video_graphics",
-          component: videoGraphics,
-        },
-        {
-          name: "sportGraphics",
-          path: "sport_graphics",
-          component: sportGraphics,
-        },
-        {
-          name: "results",
-          path: "results",
-          component: results,
-        },
         {
           name: "rules",
           path: "rules",
