@@ -680,6 +680,10 @@ export default {
     },
   },
   computed: {
+    ...mapGetters("localization", {
+      localization: "localization",
+      lang: "lang",
+    }),
     ...mapGetters("main", {
       competition: "competition",
       competitions: "competitions",

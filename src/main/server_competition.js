@@ -2,38 +2,38 @@ let competition = {
   mainData: {
     title: {
       title: "Название",
-      value: "Новое соревнование"
+      value: "Новое соревнование",
     },
     discipline: {
       title: "Дисциплина",
       value: "",
-      min: ""
+      min: "",
     },
     date: {
       title: "Дата проведения",
       value: "",
-      time: ""
+      time: "",
     },
     country: {
       title: "Страна",
-      value: ""
+      value: "",
     },
     location: {
       title: "Место проведения",
-      value: ""
+      value: "",
     },
     provider: {
       title: "Организатор",
-      value: ""
+      value: "",
     },
     providerTiming: {
       title: "Timing provider",
-      value: ""
+      value: "",
     },
     codex: {
       title: "Codex",
-      value: "0000"
-    }
+      value: "0000",
+    },
   },
   result_formula: {
     overall_result: {
@@ -43,27 +43,27 @@ let competition = {
         mode: 0,
         modes: [
           { id: 0, title: "Подсчёт из всех" },
-          { id: 1, title: "Подсчёт из N лучших" }
-        ]
+          { id: 1, title: "Подсчёт из N лучших" },
+        ],
       },
       types: [
         {
           id: 0,
-          title: "Лучший"
+          title: "Лучший",
         },
         {
           id: 1,
-          title: "Сумма"
+          title: "Сумма",
         },
         {
           id: 2,
-          title: "Среднее"
+          title: "Среднее",
         },
         {
           id: 3,
-          title: "ABC"
-        }
-      ]
+          title: "ABC",
+        },
+      ],
     },
     type: 0,
     types: [
@@ -72,20 +72,20 @@ let competition = {
         title: "По судьям",
         lower_marks: 0,
         higher_marks: 0,
-        formula: 0
+        formula: 0,
       },
       {
         id: 1,
         title: "По секциям",
         sections: [],
-        formula: 0
-      }
-    ]
+        formula: 0,
+      },
+    ],
   },
   secretary: {
     name: "",
     surName: "",
-    connected: ""
+    connected: "",
   },
   stuff: {
     jury: [
@@ -95,18 +95,18 @@ let competition = {
         surName: "",
         loc: "",
         connected: false,
-        socket_id: null
-      }
+        socket_id: null,
+      },
     ],
-    judges: []
+    judges: [],
   },
   competitorsSheet: {
     header: [],
-    competitors: []
+    competitors: [],
   },
   changed_marks: [],
   races: [],
-  selected_race_id: 0
+  selected_race_id: 0,
 };
 
 export default competition;

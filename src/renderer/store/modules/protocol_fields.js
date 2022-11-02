@@ -3,7 +3,7 @@ export default {
     startProtocol: [],
     resultProtocol: [],
     raceResultProtocol: [],
-    additionalFields: []
+    additionalFields: [],
     // fieldClass: class {
     //   constructor(width, font, align, cell_1, cell_2) {
     //     this.id = Math.random()
@@ -51,11 +51,11 @@ export default {
     // }
   },
   getters: {
-    startProtocol: state => state.startProtocol,
-    resultProtocol: state => state.resultProtocol,
-    raceResultProtocol: state => state.raceResultProtocol,
-    additionalFields: state => state.additionalFields,
-    fieldClass: state => state.fieldClass
+    startProtocol: (state) => state.startProtocol,
+    resultProtocol: (state) => state.resultProtocol,
+    raceResultProtocol: (state) => state.raceResultProtocol,
+    additionalFields: (state) => state.additionalFields,
+    fieldClass: (state) => state.fieldClass,
   },
   mutations: {
     // initStartProtocolFields: (state, data) => {
@@ -252,6 +252,7 @@ export default {
   },
   actions: {
     initStartProtocolFields: ({ commit }) => commit("initStartProtocolFields"),
-    initResultProtocolFields: ({ commit }) => commit("initResultProtocolFields")
-  }
+    initResultProtocolFields: ({ commit }) =>
+      commit("initResultProtocolFields"),
+  },
 };

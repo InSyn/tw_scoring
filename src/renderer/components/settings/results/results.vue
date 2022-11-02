@@ -1,12 +1,10 @@
 <template>
-  <div class="wrapper d-flex pa-2 justify-center align-center">
-    RESULTS
-  </div>
+  <div class="wrapper d-flex pa-2 justify-center align-center">RESULTS</div>
 </template>
 
 <script>
 export default {
-  name: "results"
+  name: "results",
 };
 </script>
 

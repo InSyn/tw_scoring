@@ -1,8 +1,8 @@
-<template> </template>
+<template></template>
 
 <script>
 export default {
-  name: "weather_data"
+  name: "weather_data",
 };
 </script>
 

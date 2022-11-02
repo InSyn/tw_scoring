@@ -7,15 +7,16 @@
     }"
   >
     <div style="font-size: 1.2rem; font-weight: bold; margin-bottom: 1rem">
-      Additional settings
+      {{ localization[lang].app.protocols.additional_settings }}
     </div>
     <div class="d-flex flex-column">
+      <!--suppress XmlInvalidId -->
       <label
         :for="`notations`"
         class="ma-1 font-weight-bold"
         style="flex: 0 0 auto"
-        v-html="`Notations`"
-      ></label>
+        >{{ localization[lang].app.protocols.notations }}</label
+      >
       <div
         style="border-radius: 6px"
         :style="{
@@ -32,10 +33,9 @@
         ></textarea>
       </div>
     </div>
-    <div class="d-flex flex-column font-weight-bold">
+    <div class="d-flex flex-column font-weight-bold my-2">
       <div class="d-flex flex-nowrap align-center justify-space-between">
         <div class="d-flex flex-column" style="width: 30%">
-          <div class="pa-1">Left</div>
           <div class="d-flex align-center justify-space-between">
             <input
               type="text"
@@ -63,7 +63,6 @@
           </div>
         </div>
         <div class="d-flex flex-column" style="width: 30%">
-          <div class="pa-1">Center</div>
           <div class="d-flex align-center justify-space-between">
             <input
               type="text"
@@ -91,7 +90,6 @@
           </div>
         </div>
         <div class="d-flex flex-column" style="width: 30%">
-          <div class="pa-1">Right</div>
           <div class="d-flex align-center justify-space-between">
             <input
               type="text"
@@ -137,12 +135,13 @@
           v-model="infoPrintCheck.state"
           :color="$vuetify.theme.themes[appTheme].textDefault"
         ></v-checkbox>
+        <!--suppress XmlInvalidId -->
         <label
           :for="check_key"
           class="font-weight-bold"
           style="cursor: pointer"
           :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
-          >{{ infoPrintCheck.title }}</label
+          >{{ localization[lang].app.protocols[infoPrintCheck.id] }}</label
         >
         <div
           style="
@@ -152,7 +151,9 @@
             padding: 0 0 0 8px;
           "
         >
-          <span style="font-weight: bold">font (px)</span>
+          <span style="font-weight: bold"
+            >{{ localization[lang].app.protocols.t_font }} (px)</span
+          >
           <input
             size="2"
             type="number"
@@ -190,12 +191,13 @@
           v-model="results_protocol.use_grid"
           :color="$vuetify.theme.themes[appTheme].textDefault"
         ></v-checkbox>
+        <!--suppress XmlInvalidId -->
         <label
           :for="`use_grid`"
           class="font-weight-bold"
           style="cursor: pointer"
           :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
-          >Use grid</label
+          >{{ localization[lang].app.protocols.use_grid }}</label
         >
       </div>
       <div class="d-flex flex-nowrap align-center py-1" style="flex: 0 0 auto">
@@ -206,14 +208,19 @@
           v-model="results_protocol.use_string_light"
           :color="$vuetify.theme.themes[appTheme].textDefault"
         ></v-checkbox>
+        <!--suppress XmlInvalidId -->
         <label
-          :for="`use_string_light`"
+          :for="'use_string_light'"
           class="font-weight-bold"
           style="cursor: pointer"
           :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
-          >Use interlace highlighting</label
+          >{{
+            localization[lang].app.protocols.use_interlace_highlighting
+          }}</label
         ><v-spacer></v-spacer>
-        <label for="odd" class="ml-2" style="cursor: pointer">Even</label>
+        <label for="odd" class="ml-2" style="cursor: pointer">{{
+          localization[lang].app.protocols.row_even
+        }}</label>
         <v-dialog width="fit-content"
           ><template v-slot:activator="{ on }">
             <div
@@ -237,7 +244,9 @@
               v-model="results_protocol.string_lights.odd"
             ></v-color-picker> </v-card
         ></v-dialog>
-        <label for="even" class="ml-2" style="cursor: pointer">Odd</label>
+        <label for="even" class="ml-2" style="cursor: pointer">{{
+          localization[lang].app.protocols.row_odd
+        }}</label>
         <v-dialog width="fit-content"
           ><template v-slot:activator="{ on }">
             <div
@@ -274,6 +283,10 @@ export default {
       this.competition.races[0] || null;
   },
   computed: {
+    ...mapGetters("localization", {
+      localization: "localization",
+      lang: "lang",
+    }),
     ...mapGetters("main", { competition: "competition", appTheme: "appTheme" }),
     ...mapGetters("protocol_settings", {
       results_protocol: "results_protocol",

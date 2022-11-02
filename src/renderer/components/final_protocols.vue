@@ -46,7 +46,7 @@
         "
         :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
         :color="$vuetify.theme.themes[appTheme].action_red"
-        >Close
+        >{{ localization[lang].app.dialogs.d_close }}
       </v-btn>
       <race_results_protocol
         v-if="
@@ -80,6 +80,10 @@ export default {
     race_results_protocol,
   },
   computed: {
+    ...mapGetters("localization", {
+      localization: "localization",
+      lang: "lang",
+    }),
     ...mapGetters("main", {
       competition: "competition",
       appTheme: "appTheme",

@@ -23,7 +23,7 @@
           ]"
         >
           <span class="d-block" style="min-width: 11rem; font-weight: bold">{{
-            main_data.title
+            localization[lang].app.event.main_data[md]
           }}</span>
           <v-dialog
             v-if="md === 'date'"
@@ -101,10 +101,10 @@
               ></v-hover>
             </template>
             <v-time-picker
+              v-model="main_data.time"
               locale="ru"
               :color="$vuetify.theme.themes[appTheme].accent"
               :header-color="$vuetify.theme.themes[appTheme].cardBackgroundRGBA"
-              v-model="main_data.time"
               format="24hr"
             ></v-time-picker>
             <v-btn
@@ -232,10 +232,10 @@
               "
             >
               <input
-                type="text"
+                v-model="competition.mainData.title.stage.value.value"
                 @focus="main_data.focus = true"
                 @blur="main_data.focus = false"
-                v-model="competition.mainData.title.stage.value.value"
+                type="text"
                 style="
                   flex: 1 0 auto;
                   padding: 4px 8px;
@@ -308,10 +308,17 @@ import { mapGetters, mapActions } from "vuex";
 export default {
   name: "main_data",
   methods: {
-    ...mapActions("main", ["input_focus", "input_blur"]),
+    ...mapActions("main", {
+      input_focus: "input_focus",
+      input_blur: "input_blur",
+      updateEvent: "updateEvent",
+    }),
     selectStage(stage, event) {
       this.competition.mainData.title.stage.value = stage;
       event.target.parentNode.parentNode.blur();
+    },
+    update_competition() {
+      this.updateEvent();
     },
   },
   data() {
@@ -324,6 +331,10 @@ export default {
       appTheme: "appTheme",
       competition: "competition",
       socket: "socket",
+    }),
+    ...mapGetters("localization", {
+      lang: "lang",
+      localization: "localization",
     }),
   },
 };

@@ -58,7 +58,9 @@
                 :color="$vuetify.theme.themes[appTheme].textDefault"
                 >mdi-snowboard</v-icon
               >
-              <div class="d-flex align-center pa-2" v-html="`Waiting`"></div>
+              <div class="d-flex align-center pa-2">
+                {{ localization[lang].app.scoring.waiting_competitor }}
+              </div>
             </div>
             <v-spacer></v-spacer>
 
@@ -119,9 +121,10 @@
                     }
                   "
                   @click="pushMarks()"
-                  v-html="`Res.`"
-                ></div
-              ></v-hover>
+                >
+                  {{ localization[lang].app.scoring.result }}
+                </div></v-hover
+              >
               <div
                 class="px-2 py-1 ml-2 d-flex justify-center align-center"
                 style="border-radius: 6px; min-width: 4rem"
@@ -313,8 +316,8 @@
                 </v-col>
               </v-row>
               <!-- CHANGE MARKS -->
-              <v-row class="pa-1" no-gutters>
-                <v-col cols="12">
+              <div class="pa-1" style="display: flex; align-items: center">
+                <div style="flex: 1 0 auto">
                   <v-dialog
                     width="fit-content"
                     :disabled="
@@ -334,7 +337,9 @@
                         :style="{
                           color: $vuetify.theme.themes[appTheme].textDefault,
                         }"
-                        >Change marks</v-btn
+                        >{{
+                          localization[lang].app.scoring.change_marks
+                        }}</v-btn
                       ></template
                     ><v-card
                       style="min-width: 320px"
@@ -350,17 +355,19 @@
                           font-size: 1.2rem;
                           font-weight: bold;
                         "
-                        >Manual scoring</v-card-title
+                        >{{
+                          localization[lang].app.scoring.d_manual_scores
+                        }}</v-card-title
                       >
                       <div
                         style="
                           display: flex;
                           flex-wrap: wrap;
-                          padding: 1rem 2rem;
+                          align-items: center;
                         "
                       >
                         <div
-                          style="flex: 0 0 auto; padding: 0.5rem 1rem"
+                          style="flex: 0 0 auto; padding: 8px"
                           v-for="judge in competition &&
                           competition.selected_race &&
                           competition.selected_race.onTrack &&
@@ -376,7 +383,7 @@
                               "
                             >
                               {{
-                                `Judge ${
+                                `${localization[lang].app.scoring.judge_full} ${
                                   competition.stuff.judges.indexOf(judge) + 1
                                 }`
                               }}
@@ -405,21 +412,22 @@
                       <v-card-actions class="d-flex align-center justify-end"
                         ><v-btn
                           @click="setMarksFromChanged()"
+                          text
                           small
                           :color="$vuetify.theme.themes[appTheme].success"
-                          >Accept</v-btn
+                          >{{ localization[lang].app.dialogs.d_accept }}</v-btn
                         ><v-btn
+                          @click="change_marks_dialog.state = false"
                           text
                           small
                           :color="$vuetify.theme.themes[appTheme].textDefault"
-                          @click="change_marks_dialog.state = false"
-                          >Cancel</v-btn
+                          >{{ localization[lang].app.dialogs.d_cancel }}</v-btn
                         ></v-card-actions
                       ></v-card
                     ></v-dialog
-                  ></v-col
-                >
-              </v-row>
+                  >
+                </div>
+              </div>
             </div>
 
             <!-- //STATUS BUTTONS  -->
@@ -484,10 +492,9 @@
                     ]"
                     ><v-icon>mdi-remote</v-icon>
                   </v-btn></template
-                ><span>Start listening terminals</span></v-tooltip
+                ><span>Listen terminals</span></v-tooltip
               >
               <div
-                @click="console.log(competition.result_formula.types[1])"
                 v-if="competition.result_formula.type === 1"
                 style="display: flex; align-items: center; flex-wrap: wrap"
               >
@@ -499,7 +506,7 @@
                   style="display: flex; flex-wrap: wrap"
                 >
                   <div style="width: 100%">
-                    {{ `Sec ${s_idx + 1}` }}
+                    {{ `Sect. ${s_idx + 1}` }}
                   </div>
                   <div style="display: flex; flex-direction: column">
                     <div
@@ -512,7 +519,11 @@
                         padding: 2px 4px;
                       "
                     >
-                      <div>{{ `C ${judge.id}` }}</div>
+                      <div>
+                        {{
+                          `${localization[lang].app.scoring.judge_short} ${judge.id}`
+                        }}
+                      </div>
                       <div style="margin-left: 0.5rem; font-size: 1.1rem">
                         {{
                           `${
@@ -569,7 +580,11 @@
                     class="d-flex justify-center align-center"
                     style="font-size: 1.9rem; font-weight: bold"
                   >
-                    <div>{{ `J${j + 1}` }}</div>
+                    <div>
+                      {{
+                        `${localization[lang].app.scoring.judge_short} ${j + 1}`
+                      }}
+                    </div>
                   </div>
                   <div
                     class="d-flex justify-center align-center pa-1"
@@ -648,7 +663,7 @@
             }"
           >
             <div class="d-flex justify-center" style="font-size: 1.2rem">
-              Time for scoring
+              {{ localization[lang].app.scoring.scoring_timer }}
             </div>
             <div class="d-flex justify-center">
               <div class="d-flex" style="font-weight: bold; font-size: 1.4rem">
@@ -705,7 +720,7 @@
               padding: 1rem 0;
             "
           >
-            <div>Chief judge</div>
+            <div>{{ localization[lang].app.scoring.chief_judge }}</div>
             <div
               @click="
                 competition.selected_race &&
@@ -752,8 +767,8 @@
                   publishResult(competition.selected_race.onTrack)
               "
               :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
-              :color="$vuetify.theme.themes[appTheme].action_blue"
-              >Publish</v-btn
+              :color="$vuetify.theme.themes[appTheme].accent"
+              >{{ localization[lang].app.scoring.publish }}</v-btn
             >
           </div>
         </v-col></v-row
@@ -1109,6 +1124,10 @@ export default {
     };
   },
   computed: {
+    ...mapGetters("localization", {
+      localization: "localization",
+      lang: "lang",
+    }),
     ...mapGetters("main", {
       competition: "competition",
       appTheme: "appTheme",

@@ -1,34 +1,50 @@
 <template>
   <v-col class="pa-2" cols="4"
     ><div
-      style="height: 100%; border-radius: 6px;user-select: none"
+      style="height: 100%; border-radius: 6px; user-select: none"
       :style="{
-        backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA
+        backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
       }"
     >
-      <div class="pa-2" style=";height: 100%;">
+      <div class="pa-2" style="height: 100%">
         <div
           :style="{
             backgroundColor:
-              $vuetify.theme.themes[appTheme].standardBackgroundRGBA
+              $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
           }"
-          style="display:flex;align-items: stretch;padding: 4px;font-size: 1.2rem; font-weight: bold; border-radius: 6px"
+          style="
+            display: flex;
+            align-items: stretch;
+            padding: 4px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 6px;
+          "
         >
           <div
             :style="{
               backgroundColor: $vuetify.theme.themes[appTheme].textDefault,
-              color: $vuetify.theme.themes[appTheme].cardBackgroundRGBA
+              color: $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
             }"
-            style="display:flex;align-items: center;justify-content: center;font-size: 1.4rem;font-weight:bold;border-radius: 6px; min-width: 3rem;text-align:center;"
+            style="
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              font-size: 1.4rem;
+              font-weight: bold;
+              border-radius: 6px;
+              min-width: 3rem;
+              text-align: center;
+            "
           >
             {{
               competition.selected_race &&
-                competition.selected_race.selectedCompetitor &&
-                competition.competitorsSheet.competitors.find(_comp => {
-                  return (
-                    _comp.id === competition.selected_race.selectedCompetitor
-                  );
-                }).info_data["bib"]
+              competition.selected_race.selectedCompetitor &&
+              competition.competitorsSheet.competitors.find((_comp) => {
+                return (
+                  _comp.id === competition.selected_race.selectedCompetitor
+                );
+              }).info_data["bib"]
             }}
           </div>
           <div
@@ -37,31 +53,31 @@
           >
             {{
               competition.selected_race &&
-                competition.selected_race.selectedCompetitor &&
-                competition.competitorsSheet.competitors.find(_comp => {
-                  return (
-                    _comp.id === competition.selected_race.selectedCompetitor
-                  );
-                }).info_data["lastname"]
+              competition.selected_race.selectedCompetitor &&
+              competition.competitorsSheet.competitors.find((_comp) => {
+                return (
+                  _comp.id === competition.selected_race.selectedCompetitor
+                );
+              }).info_data["lastname"]
             }}
           </div>
           <div
             class="d-flex justify-center align-center"
-            style="margin-left: .5rem"
+            style="margin-left: 0.5rem"
           >
             {{
               competition.selected_race &&
-                competition.selected_race.selectedCompetitor &&
-                competition.competitorsSheet.competitors.find(_comp => {
-                  return (
-                    _comp.id === competition.selected_race.selectedCompetitor
-                  );
-                }).info_data["name"]
+              competition.selected_race.selectedCompetitor &&
+              competition.competitorsSheet.competitors.find((_comp) => {
+                return (
+                  _comp.id === competition.selected_race.selectedCompetitor
+                );
+              }).info_data["name"]
             }}
           </div>
           <v-spacer></v-spacer>
           <div
-            style="display:flex;flex-direction: column"
+            style="display: flex; flex-direction: column"
             v-if="competition.result_formula.types[0].doubleUp"
           >
             <v-btn
@@ -97,25 +113,30 @@
         </div>
         <v-row no-gutters class="pt-2" style="height: calc(100% - 3.6rem)">
           <div
-            style="height: 100%; width: 100%; overflow: auto; border-radius: 6px"
+            style="
+              height: 100%;
+              width: 100%;
+              overflow: auto;
+              border-radius: 6px;
+            "
             :style="{
               backgroundColor:
-                $vuetify.theme.themes[appTheme].standardBackgroundRGBA
+                $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
             }"
           >
             <div class="pa-1" v-if="competition.selected_race">
               <v-hover
                 v-slot:default="{ hover }"
                 v-for="competitor in competition.selected_race.startList
-                  .map(_comp => {
+                  .map((_comp) => {
                     return competition.competitorsSheet.competitors.find(
-                      comp => {
+                      (comp) => {
                         return comp.id === _comp;
                       }
                     );
                   })
                   .filter(
-                    _competitor =>
+                    (_competitor) =>
                       _competitor.id !==
                       competition.selected_race.selectedCompetitor
                   )"
@@ -128,50 +149,59 @@
                   @blur="setBlured($event)"
                   @dblclick="setSelectedCompetitor(competitor.id)"
                   @keypress.enter="setSelectedCompetitor(competitor.id)"
-                  style="cursor: pointer; outline: none; width: 100%; border-radius: 6px; transition: box-shadow 128ms, border 128ms"
+                  style="
+                    cursor: pointer;
+                    outline: none;
+                    width: 100%;
+                    border-radius: 6px;
+                    transition: box-shadow 92ms, border 92ms;
+                  "
                   :style="[
                     {
                       border: `1px solid transparent`,
                       backgroundColor:
-                        $vuetify.theme.themes[appTheme].standardBackgroundRGBA
+                        $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
                     },
                     hover && {
                       border: `1px solid ${$vuetify.theme.themes[appTheme].success}`,
-                      boxShadow: `inset 0 0 2px 1px ${$vuetify.theme.themes[appTheme].success}`
-                    }
+                      boxShadow: `inset 0 0 2px 1px ${$vuetify.theme.themes[appTheme].success}`,
+                    },
                   ]"
                 >
                   <div
-                    v-for="(data, d) in competitor.info_data"
-                    v-if="
-                      d === 'bib' ||
-                        d === 'lastname' ||
-                        d === 'name' ||
-                        d === 'year' ||
-                        d === 'region'
+                    class="d-flex align-center justify-center"
+                    style="
+                      width: 2.4rem;
+                      font-weight: bold;
+                      border-radius: 4px;
+                      white-space: nowrap;
                     "
-                    :key="d"
+                    :style="{
+                      backgroundColor:
+                        $vuetify.theme.themes[appTheme].textDefault,
+                      color:
+                        $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
+                    }"
+                  >
+                    {{ competitor.info_data["bib"] }}
+                  </div>
+                  <div
                     class="pa-1 d-flex flex-nowrap align-center overflow-hidden"
-                    style="font-weight: bold; white-space: nowrap; width: 8rem"
-                    :style="
-                      d === 'bib' && {
-                        justifyContent: 'center',
-                        borderRadius: '4px',
-                        width: '3rem',
-                        backgroundColor:
-                          $vuetify.theme.themes[appTheme].textDefault,
-                        color:
-                          $vuetify.theme.themes[appTheme].standardBackgroundRGBA
-                      }
-                    "
-                    v-html="`${data}`"
-                  ></div></div
-              ></v-hover>
+                    style="font-weight: bold; white-space: nowrap"
+                  >
+                    {{
+                      `${competitor.info_data["lastname"]} ${competitor.info_data["name"]}`
+                    }}
+                  </div>
+                </div></v-hover
+              >
             </div>
           </div>
         </v-row>
-      </div></div></v-col
-></template>
+      </div>
+    </div></v-col
+  >
+</template>
 
 <script>
 import axios from "axios";
@@ -185,7 +215,7 @@ export default {
       this.socket &&
         this.socket.connected &&
         (() => {
-          this.socket.emit("set_competition_data", this.competition, res => {
+          this.socket.emit("set_competition_data", this.competition, (res) => {
             console.log(res);
           });
         })();
@@ -197,24 +227,23 @@ export default {
         );
 
       this.competition.selected_race.onTrack = competitor_id;
-      this.competition.selected_race.startList = this.competition.selected_race.startList.filter(
-        _competitor => {
+      this.competition.selected_race.startList =
+        this.competition.selected_race.startList.filter((_competitor) => {
           return _competitor !== competitor_id;
-        }
-      );
+        });
       this.competition.selected_race.selectedCompetitor = this.competition
         .selected_race.startList[0]
         ? this.competition.selected_race.startList[0]
         : null;
       this.socket &&
         this.socket.connected &&
-        this.socket.emit("set_competition_data", this.competition, res => {
+        this.socket.emit("set_competition_data", this.competition, (res) => {
           console.log(res);
         });
 
       this.setCompetitorToTerminals(
         this.competition.competitorsSheet.competitors.find(
-          _comp => _comp.id === competitor_id
+          (_comp) => _comp.id === competitor_id
         )
       );
     },
@@ -228,21 +257,19 @@ export default {
           this.competition.result_formula.types[0].doubleUp_competitors[cor_idx]
         );
 
-      this.competition.result_formula.types[0].doubleUp_competitors[
-        cor_idx
-      ] = comp_id;
-      this.competition.selected_race.startList = this.competition.selected_race.startList.filter(
-        _competitor => {
+      this.competition.result_formula.types[0].doubleUp_competitors[cor_idx] =
+        comp_id;
+      this.competition.selected_race.startList =
+        this.competition.selected_race.startList.filter((_competitor) => {
           return _competitor !== comp_id;
-        }
-      );
+        });
       this.competition.selected_race.selectedCompetitor = this.competition
         .selected_race.startList[0]
         ? this.competition.selected_race.startList[0]
         : null;
       this.socket &&
         this.socket.connected &&
-        this.socket.emit("set_competition_data", this.competition, res => {
+        this.socket.emit("set_competition_data", this.competition, (res) => {
           console.log(res);
         });
     },
@@ -266,15 +293,15 @@ export default {
         id_fis: "test",
         status: "1",
         temp1: this.competition.selected_race.id,
-        temp2: this.competition.selected_race.title
+        temp2: this.competition.selected_race.title,
       };
 
       axios
         .post("http://192.168.123.1/ags", compToSend)
-        .then(res => {
+        .then((res) => {
           return res;
         })
-        .catch(error => {
+        .catch((error) => {
           return error;
         });
     },
@@ -359,15 +386,15 @@ export default {
         }
       }
       return answer;
-    }
+    },
   },
   computed: {
     ...mapGetters("main", {
       competition: "competition",
       appTheme: "appTheme",
-      socket: "socket"
-    })
-  }
+      socket: "socket",
+    }),
+  },
 };
 </script>
 

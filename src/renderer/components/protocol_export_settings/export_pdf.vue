@@ -15,7 +15,7 @@
     }"
   >
     <div class="xml_export_title" style="font-size: 1.2rem; font-weight: bold">
-      Export PDF
+      {{ `${localization[lang].app.protocols.f_export} PDF` }}
     </div>
     <div class="xml_export_settings"></div>
     <div
@@ -38,7 +38,8 @@
           :color="$vuetify.theme.themes[appTheme].accent"
           style="margin-right: 0.5rem"
           >mdi-eye-outline</v-icon
-        >Preview</v-btn
+        >
+        {{ localization[lang].app.protocols.b_preview }}</v-btn
       >
       <v-btn
         small
@@ -52,7 +53,8 @@
           :color="$vuetify.theme.themes[appTheme].textDefault"
           style="margin-right: 0.5rem"
           >mdi-download</v-icon
-        >Save</v-btn
+        >
+        {{ localization[lang].app.protocols.b_save }}</v-btn
       >
     </div>
   </div>
@@ -68,6 +70,10 @@ export default {
     return {};
   },
   computed: {
+    ...mapGetters("localization", {
+      localization: "localization",
+      lang: "lang",
+    }),
     ...mapGetters("main", {
       appTheme: "appTheme",
       competition: "competition",

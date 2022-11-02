@@ -16,7 +16,7 @@ export default {
   name: "protocols",
   components: {
     start_protocols,
-    final_protocols
+    final_protocols,
   },
   data() {
     return {};
@@ -24,9 +24,9 @@ export default {
   computed: {
     ...mapGetters("main", {
       appTheme: "appTheme",
-      competition: "competition"
-    })
-  }
+      competition: "competition",
+    }),
+  },
 };
 </script>
 

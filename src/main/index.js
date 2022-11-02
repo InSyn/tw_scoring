@@ -23,31 +23,6 @@ if (process.env.NODE_ENV !== "development") {
 //   //
 //   log_file.write(util.format(d) + "\n");
 //   log_stdout.write(util.format(d) + "\n");
-// }
-
-// const childProcess = require("child_process");
-//
-// const licPath =
-//   process.env.NODE_ENV === "development"
-//     ? `${process.cwd()}\\lsrv`
-//     : `${process.cwd()}\\resources\\lsrv`;
-//
-// log(licPath);
-//
-// childProcess.exec(
-//   "licsrv",
-//   {
-//     cwd: licPath,
-//   },
-//   (error, stdout, stderr) => {
-//     if (error) {
-//       log(`exec error: ${error}`);
-//       return;
-//     }
-//     log(`stdout: ${stdout}`);
-//     log(`stderr: ${stderr}`);
-//   }
-// );
 
 let mainWindow;
 const winURL =

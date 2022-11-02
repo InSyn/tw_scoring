@@ -17,6 +17,10 @@ export default {
   name: "fonts",
   components: { export_excel, export_xml, export_pdf },
   computed: {
+    ...mapGetters("localization", {
+      localization: "localization",
+      lang: "lang",
+    }),
     ...mapGetters("main", {
       appTheme: "appTheme",
     }),

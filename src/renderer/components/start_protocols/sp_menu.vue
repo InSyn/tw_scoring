@@ -2,7 +2,7 @@
   <div class="d-flex px-2 pt-1" style="width: 100%; height: 100%">
     <div style="flex: 1 0 50%; display: flex">
       <div style="font-weight: bold; font-size: 1.6rem; margin-right: auto">
-        Стартовый протокол
+        {{ localization[lang].app.protocols.start_protocol }}
       </div>
       <v-btn
         @click="competition.protocol_settings.protocol_type = 0"
@@ -15,7 +15,7 @@
         "
         depressed
         small
-        >Стартовый протокол</v-btn
+        >{{ localization[lang].app.protocols.start_protocol }}</v-btn
       ><v-btn
         @click="competition.protocol_settings.protocol_type = 1"
         :text="competition.protocol_settings.protocol_type < 1"
@@ -28,7 +28,9 @@
         "
         depressed
         small
-        ><span style="margin-left: auto">Результаты</span></v-btn
+        ><span style="margin-left: auto">{{
+          localization[lang].app.protocols.results
+        }}</span></v-btn
       >
     </div>
     <div
@@ -119,6 +121,10 @@ export default {
     }),
   },
   computed: {
+    ...mapGetters("localization", {
+      localization: "localization",
+      lang: "lang",
+    }),
     ...mapGetters("main", { appTheme: "appTheme", competition: "competition" }),
     ...mapGetters("protocol_settings", {
       export_mode: "export_mode",

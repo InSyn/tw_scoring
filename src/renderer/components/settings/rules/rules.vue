@@ -17,7 +17,7 @@
         }"
       >
         <v-card-title style="padding: 0 1rem 0.5rem 1rem">
-          Stages setup
+          {{ localization[lang].app.settings.stages.title }}
         </v-card-title>
         <v-container
           style="
@@ -93,7 +93,7 @@
                 ]"
               >
                 <div style="padding: 2px 1rem">
-                  Stage:&nbsp
+                  {{ localization[lang].app.settings.stages.stage }}:&nbsp
                   {{
                     (_competition.mainData.title.stage.value &&
                       _competition.mainData.title.stage.value.value) ||
@@ -144,7 +144,7 @@
                     font-weight: bold;
                   "
                 >
-                  Passed number
+                  {{ localization[lang].app.settings.stages.passed_number }}
                 </div>
                 <input
                   type="number"
@@ -256,7 +256,8 @@
             <v-icon :color="$vuetify.theme.themes[appTheme].textDefault"
               >mdi-dots-horizontal</v-icon
             >
-            No other stages
+
+            {{ localization[lang].app.settings.stages.no_stages }}
           </div>
           <v-container
             style="
@@ -282,7 +283,7 @@
                 margin: 0 0 0.5rem 0;
               "
             >
-              Stages grid
+              {{ localization[lang].app.settings.stages.stages_grid }}
               <v-tooltip right open-delay="512">
                 <template v-slot:activator="{ on, attrs }">
                   <v-btn
@@ -294,7 +295,9 @@
                     :color="$vuetify.theme.themes[appTheme].action_darkYellow"
                     ><v-icon>mdi-backup-restore</v-icon></v-btn
                   ></template
-                ><span>Reset</span></v-tooltip
+                ><span>{{
+                  localization[lang].app.settings.stages.reset_btn
+                }}</span></v-tooltip
               >
             </div>
             <div
@@ -324,7 +327,7 @@
               >
                 <div
                   v-if="s_idx > 0"
-                  style="margin: auto 0; height: 2px; width: 3rem"
+                  style="margin: auto 0; height: 4px; width: 3rem"
                   :style="{
                     backgroundColor: $vuetify.theme.themes[appTheme].accent,
                   }"
@@ -365,7 +368,7 @@
                       "
                       style="
                         flex: 1 0 auto;
-                        padding: 2px 4px;
+                        padding: 4px;
                         font-size: 0.9rem;
                         border-radius: 2px 2px 0 0;
                         transition: background-color 92ms;
@@ -381,14 +384,12 @@
                   <div
                     v-for="(_stage, s_idx) in stage.s_competitions"
                     :key="_stage"
-                    style="flex: 0 0 auto; padding: 0.2rem 0.5rem"
+                    style="flex: 0 0 auto; padding: 4px"
                     :style="[
                       {
                         backgroundColor:
                           $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
-                      },
-                      s_idx > 0 && {
-                        borderTop: `1px solid ${$vuetify.theme.themes[appTheme].accent}`,
+                        border: `1px solid ${$vuetify.theme.themes[appTheme].accent}`,
                       },
                     ]"
                   >
@@ -454,7 +455,7 @@
         style="margin-top: 1rem; border-radius: 6px"
       >
         <v-card-title style="padding: 0 1rem 0.5rem 1rem">
-          Result precision
+          {{ localization[lang].app.settings.precision.result_precision }}
         </v-card-title>
         <div style="width: 100%">
           <v-radio-group
@@ -497,7 +498,7 @@
         style="margin-top: 1rem; border-radius: 6px"
       >
         <v-card-title style="padding: 0 1rem 0.5rem 1rem">
-          Race result formula
+          {{ localization[lang].app.settings.race_results.title }}
         </v-card-title>
         <div class="d-flex flex-nowrap">
           <div
@@ -552,7 +553,11 @@
                     ></div>
                   </div>
                   <div style="margin-left: 1rem">
-                    {{ competition.result_formula.types[0].title }}
+                    {{
+                      localization[lang].app.settings.race_results[
+                        competition.result_formula.types[0].title
+                      ].title
+                    }}
                   </div>
                 </div>
               </v-hover>
@@ -579,9 +584,19 @@
                         }"
                       >
                         <div class="font-weight-bold">
-                          {{ `Judge ${judge.id}` }}
+                          {{
+                            `${localization[lang].app.scoring.judge_short} ${judge.id}`
+                          }}
                         </div>
-                        <div>{{ `${judge.lastName} ${judge.name}` }}</div>
+                        <div>
+                          {{
+                            `${judge.lastName} ${
+                              judge.name
+                                ? judge.name.toString()[0].toUpperCase()
+                                : ""
+                            }`
+                          }}
+                        </div>
                       </div>
                     </div>
                     <div
@@ -616,7 +631,11 @@
                             padding: 2px 4px;
                           "
                         >
-                          Corridor {{ cor_idx + 1 }}
+                          {{
+                            localization[lang].app.settings.race_results
+                              .by_judge.corridor
+                          }}
+                          {{ cor_idx + 1 }}
                           <div style="margin-left: auto">
                             <v-dialog
                               v-model="
@@ -658,7 +677,11 @@
                                     margin-bottom: 1rem;
                                   "
                                 >
-                                  Corridor {{ cor_idx + 1 }}
+                                  {{
+                                    localization[lang].app.settings.race_results
+                                      .by_judge.corridor
+                                  }}
+                                  {{ cor_idx + 1 }}
                                   <v-btn
                                     @click="
                                       competition.result_formula.types[0][
@@ -714,7 +737,9 @@
                                           .cardBackgroundRGBA,
                                     }"
                                   >
-                                    {{ `J ${judge.id}` }}
+                                    {{
+                                      `${localization[lang].app.scoring.judge_short} ${judge.id}`
+                                    }}
                                   </div>
                                 </div>
                                 <div
@@ -809,7 +834,9 @@
                               margin: 0 2px 2px;
                             "
                           >
-                            {{ `J ${judge.id}` }}
+                            {{
+                              `${localization[lang].app.scoring.judge_short} ${judge.id}`
+                            }}
                           </div>
                         </div>
                       </div>
@@ -860,10 +887,12 @@
                             },
                           ]"
                         ></div>
-                        <div
-                          class="ml-1 font-weight-bold"
-                          v-html="formula.title"
-                        ></div>
+                        <div class="ml-1 font-weight-bold">
+                          {{
+                            localization[lang].app.settings.race_results
+                              .by_judge[formula.title]
+                          }}
+                        </div>
                       </div>
                     </v-hover>
                     <div
@@ -899,7 +928,10 @@
                           },
                         ]"
                       ></div>
-                      Double Up
+                      {{
+                        localization[lang].app.settings.race_results.by_judge
+                          .d_up
+                      }}
                     </div>
                     <!--                    <div style="padding: 4px 6px">-->
                     <!--                      <input-->
@@ -922,8 +954,10 @@
                   }"
                 >
                   <div class="pa-2 d-flex align-center">
-                    <label class="font-weight-bold" for="lower_marks"
-                      >Remove last</label
+                    <label class="font-weight-bold" for="lower_marks">{{
+                      localization[lang].app.settings.race_results.by_judge
+                        .r_last
+                    }}</label
                     ><input
                       class="pa-1 ml-2 font-weight-bold"
                       style="width: 3.8rem; border-radius: 6px"
@@ -941,8 +975,10 @@
                     />
                   </div>
                   <div class="pa-2 d-flex align-center">
-                    <label class="font-weight-bold" for="higher_marks"
-                      >Remove best</label
+                    <label class="font-weight-bold" for="higher_marks">{{
+                      localization[lang].app.settings.race_results.by_judge
+                        .r_best
+                    }}</label
                     ><input
                       class="pa-1 ml-2 font-weight-bold"
                       style="width: 3.8rem; border-radius: 6px"
@@ -1011,10 +1047,13 @@
                         },
                       ]"
                     ></div>
-                    <div
-                      style="margin-left: 1rem"
-                      v-html="`${competition.result_formula.types[1].title}`"
-                    ></div>
+                    <div style="margin-left: 1rem">
+                      {{
+                        localization[lang].app.settings.race_results[
+                          competition.result_formula.types[1].title
+                        ].title
+                      }}
+                    </div>
                   </div>
                 </v-hover>
                 <v-dialog v-model="section_dialog.state" width="420px">
@@ -1025,7 +1064,10 @@
                       small
                       style="flex: 0 0 auto"
                       :color="$vuetify.theme.themes[appTheme].success"
-                      >Add section</v-btn
+                      >{{
+                        localization[lang].app.settings.race_results.by_section
+                          .add_section
+                      }}</v-btn
                     >
                   </template>
                   <v-card
@@ -1037,7 +1079,12 @@
                     }"
                   >
                     <v-card-title class="pa-2 d-flex align-center">
-                      <div>New section</div>
+                      <div>
+                        {{
+                          localization[lang].app.settings.race_results
+                            .by_section.new_section
+                        }}
+                      </div>
                       <v-spacer></v-spacer>
                       <v-btn
                         icon
@@ -1056,7 +1103,10 @@
                     <div class="pa-2 d-flex flex-column">
                       <div class="pa-1 d-flex align-center">
                         <div class="pa-2 d-flex align-center">
-                          Coefficient
+                          {{
+                            localization[lang].app.settings.race_results
+                              .by_section.new_section
+                          }}
                           <input
                             class="pa-1 ml-2"
                             type="number"
@@ -1117,8 +1167,11 @@
                                   $vuetify.theme.themes[appTheme]
                                     .subjectBackgroundRGBA,
                               }"
-                              v-html="`Judge ${judge.id}`"
-                            ></div>
+                            >
+                              {{
+                                `${localization[lang].app.scoring.judge_short} ${judge.id}`
+                              }}
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -1158,7 +1211,9 @@
                                   .subjectBackgroundRGBA,
                             }"
                           >
-                            {{ `Judge ${judge_to_add.id}` }}
+                            {{
+                              `${localization[lang].app.scoring.judge_full} ${judge_to_add.id}`
+                            }}
                           </div>
                         </div>
                       </div>
@@ -1187,7 +1242,7 @@
                             })()
                         "
                         :color="$vuetify.theme.themes[appTheme].success"
-                        >Create
+                        >{{ localization[lang].app.dialogs.d_create }}
                       </v-btn>
                     </v-card-actions>
                   </v-card>
@@ -1234,7 +1289,12 @@
                         </v-icon>
                       </div>
                       <div class="d-flex align-center flex-nowrap">
-                        <div class="font-weight-bold">Coef.</div>
+                        <div class="font-weight-bold">
+                          {{
+                            localization[lang].app.settings.race_results
+                              .by_section.coefficient
+                          }}
+                        </div>
                         <input
                           type="number"
                           step="0.05"
@@ -1278,7 +1338,9 @@
                                   .subjectBackgroundRGBA,
                             }"
                           >
-                            {{ `Judge ${section_judge.id}` }}
+                            {{
+                              `${localization[lang].app.scoring.judge_full} ${section_judge.id}`
+                            }}
                           </div>
                         </div>
                       </div>
@@ -1301,7 +1363,7 @@
         }"
       >
         <v-card-title style="padding: 0 1rem 0.5rem 1rem">
-          Stage result formula
+          {{ localization[lang].app.settings.overall_results.title }}
         </v-card-title>
 
         <div
@@ -1336,7 +1398,11 @@
                   backgroundColor: $vuetify.theme.themes[appTheme].success,
                 },
               ]"
-              >{{ overall_type.title }}</v-btn
+              >{{
+                localization[lang].app.settings.overall_results[
+                  overall_type.title
+                ]
+              }}</v-btn
             >
           </div>
           <v-spacer></v-spacer>
@@ -1361,7 +1427,11 @@
                 }
               "
             >
-              <div v-html="mode.title"></div>
+              <div>
+                {{
+                  localization[lang].app.settings.overall_results[mode.title]
+                }}
+              </div>
               <div
                 v-if="mode.id === 1"
                 class="ml-2 d-flex align-center"
@@ -1392,10 +1462,11 @@
                   :style="{
                     color: $vuetify.theme.themes[appTheme].textDefault,
                   }"
-                  v-html="
+                >
+                  {{
                     competition.result_formula.overall_result.select_heats.heats
-                  "
-                ></div>
+                  }}
+                </div>
                 <v-icon
                   :color="$vuetify.theme.themes[appTheme].textDefault"
                   small
@@ -1626,6 +1697,10 @@ export default {
       competition: "competition",
       competitions: "competitions",
       appTheme: "appTheme",
+    }),
+    ...mapGetters("localization", {
+      localization: "localization",
+      lang: "lang",
     }),
     console: () => console,
   },

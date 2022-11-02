@@ -18,7 +18,7 @@ io.on("connection", (socket) => {
     ]);
 
   socket.on("connect_error", (err) => {
-    console.log(`connect_error due to ${err.message}`);
+    console.log(`Connect error due to ${err.message}`);
   });
 
   socket.on("checkServer", () => {
@@ -146,7 +146,6 @@ io.on("connection", (socket) => {
     io.sockets.emit("competition_data_updated", competition);
   });
   socket.on("set_mark_to_corr", (data) => {
-    let race = competition.races.find((_race) => _race.id === data[0].race_id);
     let competitor = competition.competitorsSheet.competitors.find((_comp) => {
       return _comp.id === data[1];
     });
@@ -185,13 +184,34 @@ io.on("connection", (socket) => {
       })
     ) {
       competitor.marks.push(mark);
+      mainWindow
+        ? mainWindow.send("info_message", {
+            type: "new_mark",
+            race: race.id,
+            judge: mark.judge_id,
+            competitor: competitor.id,
+            mark: mark.value,
+          })
+        : null;
     } else {
-      competitor.marks.find((markToChange) => {
+      let mark_to_overwrite = competitor.marks.find((markToChange) => {
         return (
           markToChange.judge_id === mark.judge_id &&
           markToChange.race_id === mark.race_id
         );
-      }).value = mark.value;
+      });
+      const old_mark = mark_to_overwrite.value;
+      mark_to_overwrite.value = mark.value;
+      mainWindow
+        ? mainWindow.send("info_message", {
+            type: "mark_overwrite",
+            race: race.id,
+            judge: mark.judge_id,
+            competitor: competitor.id,
+            old_mark: old_mark,
+            mark: mark_to_overwrite.value,
+          })
+        : null;
     }
 
     io.sockets.emit("competition_data_updated", competition);

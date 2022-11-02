@@ -13,7 +13,7 @@
           font-weight: bold;
         "
       >
-        Event
+        {{ localization[lang].app.event.event_header }}
       </div>
       <div
         style="
@@ -37,7 +37,7 @@
           "
         >
           <div style="flex: 0 0 auto; font-weight: bold; min-width: 11rem">
-            Event title
+            {{ localization[lang].app.event.event_title }}
           </div>
           <input
             v-model.lazy="event.event_title"
@@ -63,7 +63,7 @@
             font-weight: bold;
           "
         >
-          Number of competitions
+          {{ localization[lang].app.event.number_of_competitions }}
           <div
             style="
               font-weight: bold;
@@ -84,8 +84,8 @@
       </div>
     </div>
     <v-row style="margin: 16px 16px" no-gutters
-      ><v-col style="font-size: 1.4rem; font-weight: bold"
-        >Competition settings</v-col
+      ><v-col style="font-size: 1.4rem; font-weight: bold">
+        {{ localization[lang].app.event.competition_header }}</v-col
       ><v-spacer></v-spacer
       ><v-col
         cols="auto"
@@ -195,6 +195,10 @@ export default {
       competition: "competition",
       competitions: "competitions",
       appTheme: "appTheme",
+    }),
+    ...mapGetters("localization", {
+      lang: "lang",
+      localization: "localization",
     }),
     ...mapGetters("event", { EventClass: "EventClass" }),
     console: () => console,

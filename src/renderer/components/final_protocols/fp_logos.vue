@@ -21,7 +21,7 @@
         margin: 4px 8px;
       "
     >
-      Logos
+      {{ localization[lang].app.protocols.logos }}
     </div>
     <v-spacer></v-spacer>
     <div
@@ -59,7 +59,7 @@
             padding: 4px;
           "
         >
-          {{ logo.title }}
+          {{ localization[lang].app.protocols[logo.title] }}
         </div>
         <div style="display: flex; align-items: center; padding: 4px">
           <input
@@ -96,7 +96,7 @@
                 (results_protocol.assets[l_key] &&
                   results_protocol.assets[l_key].file &&
                   results_protocol.assets[l_key].file.name) ||
-                "Choose..."
+                localization[lang].app.dialogs.d_choose
               }}</label
             ></v-hover
           >
@@ -111,6 +111,10 @@ import { mapGetters } from "vuex";
 export default {
   name: "logos",
   computed: {
+    ...mapGetters("localization", {
+      localization: "localization",
+      lang: "lang",
+    }),
     ...mapGetters("main", ["appTheme"]),
     ...mapGetters("protocol_settings", ["results_protocol"]),
   },

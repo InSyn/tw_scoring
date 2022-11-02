@@ -26,32 +26,28 @@
         >
           <div class="d-flex flex-column align-center pa-1">
             <v-icon
-              v-html="
-                `${
-                  competition.stuff.jury[0].connected
-                    ? 'mdi-account'
-                    : 'mdi-account-cancel'
-                }`
-              "
               :color="
                 competition.stuff.jury[0].connected
                   ? $vuetify.theme.themes[appTheme].accent
                   : $vuetify.theme.themes[appTheme].textDefault
               "
-            ></v-icon>
-            <div
-              class="d-flex justify-center align-center"
-              v-html="`Chief Judge`"
-            ></div>
+              >{{
+                `${
+                  competition.stuff.jury[0].connected
+                    ? "mdi-account"
+                    : "mdi-account-cancel"
+                }`
+              }}</v-icon
+            >
+            <div class="d-flex justify-center align-center">
+              {{ localization[lang].app.scoring.chief_judge }}
+            </div>
           </div>
           <div
             class="d-flex flex-column align-center pa-1"
             v-for="(user, u_id) in competition.stuff.judges"
           >
             <v-icon
-              v-html="
-                `${user.connected ? 'mdi-account' : 'mdi-account-cancel'}`
-              "
               :color="
                 user.connected
                   ? $vuetify.theme.themes[appTheme].accent
@@ -63,11 +59,13 @@
                   color: $vuetify.theme.themes[appTheme].error,
                 }
               "
-            ></v-icon>
-            <div
-              class="d-flex justify-center align-center"
-              v-html="`Judge ${u_id + 1}`"
-            ></div>
+              >{{
+                `${user.connected ? "mdi-account" : "mdi-account-cancel"}`
+              }}</v-icon
+            >
+            <div class="d-flex justify-center align-center">
+              {{ `${localization[lang].app.scoring.judge_full} ${u_id + 1}` }}
+            </div>
           </div>
         </div>
       </div>
@@ -83,6 +81,7 @@
             width: 100%;
             overflow-y: auto;
             border-radius: 6px;
+            scroll-behavior: smooth;
           "
           :style="{
             backgroundColor:
@@ -94,28 +93,32 @@
           }}</v-row>
         </div></v-row
       >
-      <v-row no-gutters class="pa-2" style="height: 40px"
-        ><v-col class="d-flex align-center" cols="8"
-          ><input
-            @keypress.enter="addMessage(message)"
-            v-model="message"
-            type="text"
-            class="pa-1"
-            style="width: 100%; border-radius: 6px; font-size: 1.2rem"
-            :style="{
-              color: $vuetify.theme.themes[appTheme].textDefault,
-              backgroundColor:
-                $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
-            }"
-          /><v-btn
-            @click="addMessage(message)"
-            :color="$vuetify.theme.themes[appTheme].accent"
-            text
-            small
-            >Send</v-btn
-          ></v-col
-        ></v-row
-      >
+      <div class="d-flex px-2 py-1" style="height: 40px">
+        <input
+          @keypress.enter="addMessage(message)"
+          v-model="message"
+          type="text"
+          style="
+            flex: 1 0 auto;
+            height: 100%;
+            padding: 4px;
+            border-radius: 6px;
+            font-size: 1.2rem;
+          "
+          :style="{
+            color: $vuetify.theme.themes[appTheme].textDefault,
+            backgroundColor:
+              $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
+          }"
+        /><v-btn
+          @click="addMessage(message)"
+          text
+          small
+          :color="$vuetify.theme.themes[appTheme].accent"
+          style="height: 100%"
+          >{{ localization[lang].app.scoring.chat_send }}</v-btn
+        >
+      </div>
     </div></v-col
   >
 </template>
@@ -133,13 +136,17 @@ export default {
     };
   },
   computed: {
-    ...mapGetters("main", [
-      "appTheme",
-      "socket",
-      "messages",
-      "competition",
-      "timer",
-    ]),
+    ...mapGetters("localization", {
+      localization: "localization",
+      lang: "lang",
+    }),
+    ...mapGetters("main", {
+      appTheme: "appTheme",
+      socket: "socket",
+      messages: "messages",
+      competition: "competition",
+      timer: "timer",
+    }),
   },
   methods: {
     addMessage(m) {

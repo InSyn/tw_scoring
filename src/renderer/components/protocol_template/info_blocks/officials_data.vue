@@ -1,9 +1,9 @@
-<template> </template>
+<template></template>
 
 <script>
 export default {
   name: "officials_data",
-  props: ["competition"]
+  props: ["competition"],
 };
 </script>
 

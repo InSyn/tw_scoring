@@ -21,38 +21,50 @@ export default {
       selected: 2,
     },
     results_protocol: {
-      standard_aligns: [
-        { title: "Left", value: "start" },
-        { title: "Center", value: "center" },
-        { title: "Right", value: "end" },
-      ],
-      title: "",
-      use_grid: false,
-      use_string_light: true,
+      assets: {
+        header_logo: {
+          file: null,
+          title: "i_header",
+        },
+        footer_logo: {
+          file: null,
+          title: "i_footer",
+        },
+        title_logo: {
+          file: null,
+          title: "i_logo",
+        },
+      },
+      font_size: 12,
       infoPrintChecks: {
         print_header: {
-          id: "officialsData",
+          id: "p_jury_info",
           title: "Print jury info",
           state: true,
         },
         print_openers: {
-          id: "openers",
+          id: "p_forerunners",
           title: "Print forerunners",
           state: false,
         },
         print_weather: {
-          id: "weatherData",
+          id: "p_weather",
           title: "Print weather info",
           state: false,
         },
         print_notations: {
-          id: "raceNotes",
+          id: "p_notations",
           title: "Print notations",
           state: true,
         },
       },
-      strings_at_page: 6,
-      font_size: 12,
+      layout: {
+        height: 297,
+        width: 210,
+        padding: [5, 5],
+        orientation: "portrait",
+        pdf_scale: 1,
+      },
       notations:
         "<b>Legend</b>:<br><b>DNS</b>: Did Not Start &nbsp <b>DSQ</b>: Disqualified &nbsp <b>DNF</b>: Did Not Finish",
       signs: {
@@ -69,31 +81,19 @@ export default {
           img: "",
         },
       },
+      standard_aligns: [
+        { title: "Left", value: "start" },
+        { title: "Center", value: "center" },
+        { title: "Right", value: "end" },
+      ],
       string_lights: {
         odd: "#FFFFFF",
         even: "#D1D1D1",
       },
-      layout: {
-        height: 297,
-        width: 210,
-        padding: [5, 5],
-        orientation: "portrait",
-        pdf_scale: 1,
-      },
-      assets: {
-        header_logo: {
-          file: null,
-          title: "Image for header",
-        },
-        footer_logo: {
-          file: null,
-          title: "Image for footer",
-        },
-        title_logo: {
-          file: null,
-          title: "Logo",
-        },
-      },
+      strings_at_page: 6,
+      title: "",
+      use_grid: false,
+      use_string_light: true,
     },
     start_list: {},
     fieldClass: class {
@@ -199,7 +199,7 @@ export default {
       //add rank
       result_fields.push(
         new data.fieldClass(
-          6,
+          5,
           12,
           {
             title: "Left",
@@ -234,7 +234,7 @@ export default {
       //add race number
       result_fields.push(
         new data.fieldClass(
-          8,
+          6,
           12,
           {
             title: "Left",

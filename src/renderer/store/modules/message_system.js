@@ -2,11 +2,11 @@ export default {
   namespaced: true,
   state: {
     competitionLogMessageClass: class {
-      constructor(msgText, msgDate, msgType) {
+      constructor(msgText, msgType, msgDate) {
         this.msgText = msgText || "";
+        this.msgType = msgType || "info";
         this._msgDate = msgDate || Date.now();
         this.msgDate = new Date(this._msgDate);
-        this.msgType = msgType || "info";
       }
     },
     competitionLog: [],

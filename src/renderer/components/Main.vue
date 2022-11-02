@@ -3,13 +3,13 @@
     <img
       v-if="appTheme === 'dark'"
       src="./../assets/logo/TIMINGWEBLOGO-WHITE.png"
-      style="width: 391px; height: 74px;"
+      style="width: 391px; height: 74px"
       alt=""
     />
     <img
       v-else
       src="./../assets/logo/TIMINGWEBLOGO-BLACK.png"
-      style="width: 391px; height: 74px;margin: auto"
+      style="width: 391px; height: 74px; margin: auto"
       alt=""
     />
   </div>
@@ -26,14 +26,14 @@ export default {
         r: 0,
         g: 0,
         b: 0,
-        a: 1
+        a: 1,
       },
-      test: 1
+      test: 1,
     };
   },
   computed: {
-    ...mapGetters("main", ["appTheme"])
-  }
+    ...mapGetters("main", ["appTheme"]),
+  },
 };
 </script>
 

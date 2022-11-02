@@ -1,17 +1,25 @@
 <template>
   <v-col class="pa-2 d-flex flex-column" cols="4"
-    ><v-row
-      class="pa-2"
+    ><div
+      class="d-flex flex-wrap pa-2"
       style="border-radius: 6px"
       :style="{
         backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
       }"
-      no-gutters
     >
-      <v-col cols="12" style="font-weight: bold; font-size: 1.2rem"
-        >Timing secretary</v-col
-      ><v-col class="d-flex align-center" style="font-weight: bold">
-        <span class="mr-2">Lastname</span>
+      <div
+        class="pa-1"
+        style="flex: 0 0 100%; font-weight: bold; font-size: 1.2rem"
+      >
+        {{ localization[lang].app.scoring.secretary }}
+      </div>
+      <div
+        class="d-flex align-center pa-1"
+        style="flex: 0 0 auto; font-weight: bold"
+      >
+        <span class="mr-2">{{
+          localization[lang].app.scoring.ts_lastname
+        }}</span>
         <input
           v-model="competition.stuff.secretary.lastName"
           type="text"
@@ -23,9 +31,12 @@
             color: $vuetify.theme.themes[appTheme].textDefault,
           }"
         />
-      </v-col>
-      <v-col class="d-flex align-center ml-4" style="font-weight: bold">
-        <span class="mr-2">Name</span>
+      </div>
+      <div
+        class="d-flex align-center pa-1"
+        style="font-weight: bold; margin-left: 1rem"
+      >
+        <span class="mr-2">{{ localization[lang].app.scoring.ts_name }}</span>
         <input
           v-model="competition.stuff.secretary.name"
           type="text"
@@ -37,73 +48,87 @@
             color: $vuetify.theme.themes[appTheme].textDefault,
           }"
         />
-      </v-col> </v-row
-    ><v-container
-      class="pa-2 mt-2 d-flex flex-column flex-grow-1"
+      </div>
+    </div>
+    <v-container
+      class="d-flex flex-column pa-2 mt-2 flex-grow-1"
       style="border-radius: 6px"
       :style="{
         backgroundColor: `${$vuetify.theme.themes[appTheme].cardBackgroundRGBA}`,
       }"
     >
-      <v-row v-if="!serverStatus || !socket" no-gutters
-        ><v-col class="d-flex align-center"
-          ><div
-            class="pa-2"
-            style="font-weight: bold; font-size: 1.2rem; border-radius: 6px"
-            :style="{
-              backgroundColor:
-                $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
-              color: $vuetify.theme.themes[appTheme].action_darkYellow,
-            }"
-            v-html="`Server is not started`"
-          ></div></v-col
-      ></v-row>
-      <v-row v-else no-gutters>
-        <v-col class="d-flex align-center">
-          <div
-            class="pa-2"
-            style="border-radius: 6px; font-weight: bold; font-size: 1.2rem"
-            :style="{
-              backgroundColor:
-                $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
-              color: $vuetify.theme.themes[appTheme].success,
-            }"
-            v-html="
-              `Server started on: ${socket.io.opts.hostname}:${socket.io.opts.port}`
-            "
-          ></div> </v-col
-      ></v-row>
-      <v-row no-gutters>
+      <div
+        class="d-flex align-center"
+        style="flex: 0 0 auto"
+        v-if="!serverStatus || !socket"
+      >
         <div
-          class="pa-1"
-          style="font-size: 1.4rem; font-weight: bold"
-          v-html="
+          class="pa-2"
+          style="
+            flex: 1 0 auto;
+            font-weight: bold;
+            font-size: 1.2rem;
+            border-radius: 6px;
+          "
+          :style="{
+            backgroundColor:
+              $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
+            color: $vuetify.theme.themes[appTheme].textDefault,
+          }"
+        >
+          {{ localization[lang].app.scoring.srv_not_started }}
+        </div>
+      </div>
+      <div class="d-flex align-center" style="flex: 0 0 auto" v-else>
+        <div
+          class="pa-2"
+          style="
+            flex: 1 0 auto;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 1.2rem;
+          "
+          :style="{
+            backgroundColor:
+              $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
+            color: $vuetify.theme.themes[appTheme].success,
+          }"
+        >
+          {{
+            `${localization[lang].app.scoring.srv_started_on} ${socket.io.opts.hostname}:${socket.io.opts.port}`
+          }}
+        </div>
+      </div>
+      <div class="d-flex align-center" style="flex: 0 0 auto">
+        <div
+          class="d-flex align-center pa-1 mt-2"
+          style="flex: 1 0 auto; font-size: 1.4rem; font-weight: bold"
+        >
+          {{
             `${
               competition.mainData.country.value &&
-              competition.mainData.country.value + ' / '
+              competition.mainData.country.value + " / "
             }${
               competition.mainData.title.value &&
-              competition.mainData.title.value + ' / '
+              competition.mainData.title.value + " / "
             }${
               competition.mainData.discipline.value &&
-              competition.mainData.discipline.value + ' / '
+              competition.mainData.discipline.value + " / "
             }${
               competition.selected_race
                 ? competition.selected_race.title !== null &&
                   competition.selected_race.title
-                : ''
+                : ""
             }`
-          "
-        ></div>
-      </v-row>
-
-      <v-row no-gutters>
-        <v-col
-          class="d-flex align-center"
-          style="font-size: 1.2rem; font-weight: bold"
+          }}
+        </div>
+      </div>
+      <div class="d-flex align-center mt-auto" style="flex: 0 0 auto">
+        <div
+          class="d-flex align-center ml-auto"
+          style="flex: 0 0 auto; font-size: 1.2rem; font-weight: bold"
         >
-          <v-spacer></v-spacer>
-          <div v-html="`Заезд: `"></div>
+          <div>{{ localization[lang].app.scoring.race_select }}:&nbsp;</div>
           <div class="d-flex align-center justify-center">
             <v-btn
               icon
@@ -145,9 +170,9 @@
                 @click="menu.state = !menu.state"
                 @blur="menu.state = false"
               >
-                <div
-                  v-html="competition.races[competition.selected_race_id].title"
-                ></div>
+                <div>
+                  {{ competition.races[competition.selected_race_id].title }}
+                </div>
                 <div
                   v-if="menu.state"
                   class="d-flex flex-column align-center"
@@ -196,9 +221,10 @@
                               .subjectBackgroundRGBA,
                         }
                       "
-                      v-html="prev.title"
-                    ></div
-                  ></v-hover>
+                    >
+                      {{ prev.title }}
+                    </div></v-hover
+                  >
                 </div>
                 <div
                   v-if="menu.state"
@@ -248,11 +274,13 @@
                               .subjectBackgroundRGBA,
                         }
                       "
-                      v-html="next.title"
-                    ></div
-                  ></v-hover>
-                </div></div
-            ></v-hover>
+                    >
+                      {{ next.title }}
+                    </div></v-hover
+                  >
+                </div>
+              </div></v-hover
+            >
             <div
               v-else
               class="pa-2"
@@ -266,8 +294,9 @@
                 backgroundColor:
                   $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
               }"
-              v-html="`No created race`"
-            ></div>
+            >
+              {{ localization[lang].app.scoring.no_created_races }}
+            </div>
             <v-btn
               icon
               small
@@ -276,8 +305,8 @@
               ><v-icon>mdi-chevron-right</v-icon></v-btn
             >
           </div>
-        </v-col>
-      </v-row></v-container
+        </div>
+      </div></v-container
     ></v-col
   >
 </template>
@@ -287,9 +316,6 @@ import { mapGetters } from "vuex";
 export default {
   name: "setup",
   methods: {
-    log: (data) => {
-      console.log(data);
-    },
     prevRace() {
       if (this.competition.races.length > 0)
         this.competition.selected_race_id > 0
@@ -320,6 +346,10 @@ export default {
     };
   },
   computed: {
+    ...mapGetters("localization", {
+      localization: "localization",
+      lang: "lang",
+    }),
     ...mapGetters("main", {
       appTheme: "appTheme",
       competition: "competition",

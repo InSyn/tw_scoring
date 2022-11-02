@@ -46,7 +46,7 @@
         "
         :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
         :color="$vuetify.theme.themes[appTheme].action_red"
-        >Close
+        >{{ localization[lang].app.dialogs.d_close }}
       </v-btn>
       <preview></preview>
     </div>
@@ -73,6 +73,10 @@ export default {
     preview,
   },
   computed: {
+    ...mapGetters("localization", {
+      localization: "localization",
+      lang: "lang",
+    }),
     ...mapGetters("main", {
       appTheme: "appTheme",
       competition: "competition",

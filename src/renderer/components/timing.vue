@@ -13,7 +13,7 @@
         overflow-x: auto;
         flex-wrap: wrap;
         height: 100%;
-        border: 1px solid #3a82ba;
+        /*border: 1px solid #3a82ba;*/
       "
     >
       <div
@@ -211,11 +211,11 @@
       </div>
     </div>
 
-    <div>
-      <div v-for="_time in $store.getters['timing/getResults']">
-        {{ _time }}
-      </div>
-    </div>
+    <!--    <div>-->
+    <!--      <div v-for="_time in $store.getters['timing/getResults']">-->
+    <!--        {{ _time }}-->
+    <!--      </div>-->
+    <!--    </div>-->
 
     <div
       class="result_info_wrapper"

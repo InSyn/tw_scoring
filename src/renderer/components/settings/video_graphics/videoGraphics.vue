@@ -6,7 +6,7 @@
 
 <script>
 export default {
-  name: "videoGraphics"
+  name: "videoGraphics",
 };
 </script>
 

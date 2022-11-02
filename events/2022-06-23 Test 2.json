@@ -1,1 +1,3141 @@
-{"title":"Test 2","competitions":[{"weather":[{"descr1":"Температура Снега:","descr2":"0°"},{"descr1":"Температура Воздуха:","descr2":"0°"},{"descr1":"Скорость ветра:","descr2":""}],"structure":{"statuses":[{"value":"DNF","priority":-1},{"value":"DNS","priority":-2},{"value":"DSQ","priority":-3}],"selected":{"type":0,"discipline":0,"accuracy":1},"types":[{"id":0,"title":"Сноуборд","disciplines":[0,1,2,100]},{"id":1,"title":"Фристайл","disciplines":[0,1,2,3,4,100]},{"id":2,"title":"Пользовательский","disciplines":[100]}],"disciplines":[{"id":0,"title":"Слоуп-Стайл","res_formula":[1]},{"id":1,"title":"Биг-Эйр","res_formula":[2]},{"id":2,"title":"Хаф-Пайп","res_formula":[3]},{"id":3,"title":"Акробатика","res_formula":[4]},{"id":4,"title":"Могул","res_formula":[5]},{"id":100,"title":"Пользовательский","res_formula":[100]}],"accuracy":[{"id":0,"title":"1","value":1,"digits":0},{"id":1,"title":"1:10","value":10,"digits":1},{"id":2,"title":"1:100","value":100,"digits":2},{"id":3,"title":"1:1000","value":1000,"digits":3}],"stages":[{"id":"qual","title":"Квалификация","value":"Квалификация"},{"id":"final","title":"Финал","value":"Финал"},{"id":"custom","title":"Пользовательский","value":""}]},"stages":{"lastStageSize":0,"prev_stages":[],"stage_grid":[{"title":"Квалификация","s_competitions":["419t2thqp"]}]},"passed_competitors":"8","races":[{"del_dialog":false,"finished":["7guep1z92","yl56l85cd","0d0kdk2ne","7b9escdfc","mh54vv2n7","rlyedg3m7","ekzkn2cwm","fb3chfe2f","9chg3cwhp","46lbrygdg","as22jed7u","vy8dkzerq","no309uykd","drdcgyjyq","t7wq8ik6b","i2i2pta4b","t251y1t3e","ygggyba5t"],"onTrack":null,"id":"plu4p4xy6","title":"Заезд 1","race_dialog":false,"type":{"id":0,"title":"Сноуборд","disciplines":[0,1,2,100]},"discipline":{"id":0,"title":"Слоуп-Стайл","res_formula":[1]},"startList":[],"_startList":["7guep1z92","yl56l85cd","0d0kdk2ne","7b9escdfc","mh54vv2n7","rlyedg3m7","ekzkn2cwm","fb3chfe2f","9chg3cwhp","46lbrygdg","as22jed7u","vy8dkzerq","no309uykd","drdcgyjyq","t7wq8ik6b","i2i2pta4b","t251y1t3e","ygggyba5t"],"selectedCompetitor":null}],"selected_race_id":0,"mainData":{"title":{"title":"Название","value":"Новое соревнование","focus":false,"stage":{"title":"Этап","value":{"id":"qual","title":"Квалификация","value":"Квалификация"},"focus":false,"group":"M"}},"discipline":{"title":"Дисциплина","value":"Дисциплина","min":"DSC","focus":false},"date":{"title":"Дата проведения","dialog":false,"value":"2022-06-23","time_dialog":false,"time":"12:00","focus":false},"country":{"title":"Страна","value":"","focus":false},"location":{"title":"Место проведения","value":"","focus":false},"provider":{"title":"Организатор","value":"","focus":false},"providerTiming":{"title":"Timing provider","value":"","focus":false},"codex":{"title":"Код","value":"","focus":false}},"stuff":{"settings":{"jury":{"title":"Жюри","change_dialog":false},"judges":{"title":"Судьи","change_dialog":false}},"secretary":{"name":"","lastName":""},"jury":[{"id":"chief","title":"Старший судья","lastName":"","name":"","loc":"","connected":false,"setABC":false}],"judges":[{"category":"","socket_id":null,"connected":false,"_id":"g5j801nh6","title":"Судья 1","remoteId":null,"id":1,"name":"","lastName":"","location":"","setABC":false},{"category":"","socket_id":null,"connected":false,"_id":"joi1k8tct","title":"Судья 2","remoteId":null,"id":2,"name":"","lastName":"","location":"","setABC":false},{"category":"","socket_id":null,"connected":false,"_id":"oypuvzfsa","title":"Судья 3","remoteId":null,"id":3,"name":"","lastName":"","location":"","setABC":false},{"category":"","socket_id":null,"connected":false,"_id":"79nc0yt1b","title":"Судья 4","remoteId":null,"id":4,"name":"","lastName":"","location":"","setABC":false}],"openers":[]},"technicalInfo":{"title":"Техническая информация","change_dialog":false,"records":[{"title":"Название склона","value":""},{"title":"Длина трассы","value":""},{"title":"Ширина трассы","value":""}]},"competitorsSheet":{"header":[{"id":"bib","title":"Bib"},{"id":"lastname","title":"Фамилия"},{"id":"name","title":"Имя"},{"id":"fullname","title":"Фамилия, Имя"},{"id":"year","title":"Год"},{"id":"rang","title":"Разряд"},{"id":"region","title":"Суб. РФ"}],"competitors":[{"info_dialog":{"state":false},"race_status":null,"res_accepted":false,"rank":13,"id":"7guep1z92","info_data":{"bib":75,"lastname":"Чевелев","name":"Степан","fullname":"ЧЕВЕЛЕВ Степан","year":2005,"rang":"1","region":"Свердловская обл."},"marks":[{"id":"5zrflcnna","value":32,"new_value":null,"race":0,"race_id":"plu4p4xy6","judge":1,"judge_id":"g5j801nh6","section":0},{"id":"ij9wsbpe6","value":46,"new_value":null,"race":0,"race_id":"plu4p4xy6","judge":2,"judge_id":"joi1k8tct","section":0},{"id":"5k36076nn","value":100,"new_value":null,"race":0,"race_id":"plu4p4xy6","judge":3,"judge_id":"oypuvzfsa","section":0},{"id":"enr8lx48o","value":36,"new_value":null,"race":0,"race_id":"plu4p4xy6","judge":4,"judge_id":"79nc0yt1b","section":0}],"results":[{"id":"icp0rpxzf","value":53.5,"race_id":"plu4p4xy6","repeat":"A","status":null}],"results_overall":[{"competition_id":"419t2thqp","competitor_id":"7guep1z92","value":53.5,"status":null}]},{"info_dialog":{"state":false},"race_status":null,"res_accepted":false,"rank":1,"id":"yl56l85cd","info_data":{"bib":14,"lastname":"Замятин","name":"Андрей","fullname":"ЗАМЯТИН Андрей","year":2005,"rang":"КМС","region":"г. Санкт-Петербург"},"marks":[{"id":"c5xligurx","value":75,"new_value":null,"race":0,"race_id":"plu4p4xy6","judge":1,"judge_id":"g5j801nh6","section":0},{"id":"q7s931zhq","value":68,"new_value":null,"race":0,"race_id":"plu4p4xy6","judge":2,"judge_id":"joi1k8tct","section":0},{"id":"fos1hlqof","value":85,"new_value":null,"race":0,"race_id":"plu4p4xy6","judge":3,"judge_id":"oypuvzfsa","section":0},{"id":"nddjtpji7","value":98,"new_value":null,"race":0,"race_id":"plu4p4xy6","judge":4,"judge_id":"79nc0yt1b","section":0}],"results":[{"id":"ierpi7lja","value":81.5,"race_id":"plu4p4xy6","repeat":"A","status":null}],"results_overall":[{"competition_id":"419t2thqp","competitor_id":"yl56l85cd","value":81.5,"status":null}]},{"info_dialog":{"state":false},"race_status":null,"res_accepted":false,"rank":12,"id":"0d0kdk2ne","info_data":{"bib":84,"lastname":"Ершов","name":"Артём","fullname":"ЕРШОВ Артём","year":2008,"rang":"1","region":"г. Москва"},"marks":[{"id":"y5vl5synk","value":45,"new_value":null,"race":0,"race_id":"plu4p4xy6","judge":1,"judge_id":"g5j801nh6","section":0},{"id":"4rltxq8bi","value":55,"new_value":null,"race":0,"race_id":"plu4p4xy6","judge":2,"judge_id":"joi1k8tct","section":0},{"id":"hos9h31e3","value":79,"new_value":null,"race":0,"race_id":"plu4p4xy6","judge":3,"judge_id":"oypuvzfsa","section":0},{"id":"6f6mzyjto","value":43,"new_value":null,"race":0,"race_id":"plu4p4xy6","judge":4,"judge_id":"79nc0yt1b","section":0}],"results":[{"id":"utvw9xwgt","value":55.5,"race_id":"plu4p4xy6","repeat":"A","status":null}],"results_overall":[{"competition_id":"419t2thqp","competitor_id":"0d0kdk2ne","value":55.5,"status":null}]},{"info_dialog":{"state":false},"race_status":null,"res_accepted":false,"rank":3,"id":"7b9escdfc","info_data":{"bib":85,"lastname":"Чижиков","name":"Иван","fullname":"ЧИЖИКОВ Иван","year":2007,"rang":"2","region":"Свердловская обл."},"marks":[{"id":"mzndj0rpr","value":60,"new_value":null,"race":0,"race_id":"plu4p4xy6","judge":1,"judge_id":"g5j801nh6","section":0},{"id":"vtf3agden","value":100,"new_value":null,"race":0,"race_id":"plu4p4xy6","judge":2,"judge_id":"joi1k8tct","section":0},{"id":"qmc0zmkqs","value":95,"new_value":null,"race":0,"race_id":"plu4p4xy6","judge":3,"judge_id":"oypuvzfsa","section":0},{"id":"c0rezooul","value":48,"new_value":null,"race":0,"race_id":"plu4p4xy6","judge":4,"judge_id":"79nc0yt1b","section":0}],"results":[{"id":"mkjf0spc0","value":75.75,"race_id":"plu4p4xy6","repeat":"A","status":null}],"results_overall":[{"competition_id":"419t2thqp","competitor_id":"7b9escdfc","value":75.75,"status":null}]},{"info_dialog":{"state":false},"race_status":null,"res_accepted":false,"rank":11,"id":"mh54vv2n7","info_data":{"bib":86,"lastname":"Белоусов","name":"Александр","fullname":"БЕЛОУСОВ Александр","year":2008,"rang":"1","region":"Московская обл."},"marks":[{"id":"snvghs3no","value":69,"new_value":null,"race":0,"race_id":"plu4p4xy6","judge":1,"judge_id":"g5j801nh6","section":0},{"id":"p58yr0qex","value":45,"new_value":null,"race":0,"race_id":"plu4p4xy6","judge":2,"judge_id":"joi1k8tct","section":0},{"id":"j35qgq859","value":76,"new_value":null,"race":0,"race_id":"plu4p4xy6","judge":3,"judge_id":"oypuvzfsa","section":0},{"id":"pascdsj89","value":45,"new_value":null,"race":0,"race_id":"plu4p4xy6","judge":4,"judge_id":"79nc0yt1b","section":0}],"results":[{"id":"wc6wa9bal","value":58.75,"race_id":"plu4p4xy6","repeat":"A","status":null}],"results_overall":[{"competition_id":"419t2thqp","competitor_id":"mh54vv2n7","value":58.75,"status":null}]},{"info_dialog":{"state":false},"race_status":null,"res_accepted":false,"rank":2,"id":"rlyedg3m7","info_data":{"bib":51,"lastname":"Дзидзигури","name":"Даниил","fullname":"ДЗИДЗИГУРИ Даниил","year":2005,"rang":"1","region":"Московская обл."},"marks":[{"id":"6m33h262g","value":63,"new_value":null,"race":0,"race_id":"plu4p4xy6","judge":1,"judge_id":"g5j801nh6","section":0},{"id":"1h6j5j3f8","value":78,"new_value":null,"race":0,"race_id":"plu4p4xy6","judge":2,"judge_id":"joi1k8tct","section":0},{"id":"fq4nz2hrz","value":77,"new_value":null,"race":0,"race_id":"plu4p4xy6","judge":3,"judge_id":"oypuvzfsa","section":0},{"id":"ywpfsltou","value":88,"new_value":null,"race":0,"race_id":"plu4p4xy6","judge":4,"judge_id":"79nc0yt1b","section":0}],"results":[{"id":"enyc1ysto","value":76.5,"race_id":"plu4p4xy6","repeat":"A","status":null}],"results_overall":[{"competition_id":"419t2thqp","competitor_id":"rlyedg3m7","value":76.5,"status":null}]},{"info_dialog":{"state":false},"race_status":null,"res_accepted":false,"rank":18,"id":"ekzkn2cwm","info_data":{"bib":20,"lastname":"Архипов","name":"Лаврентий","fullname":"АРХИПОВ Лаврентий","year":2004,"rang":"КМС","region":"Свердловская обл."},"marks":[{"id":"99l5gyynw","value":47,"new_value":null,"race":0,"race_id":"plu4p4xy6","judge":1,"judge_id":"g5j801nh6","section":0},{"id":"rickge9hi","value":31,"new_value":null,"race":0,"race_id":"plu4p4xy6","judge":2,"judge_id":"joi1k8tct","section":0},{"id":"h29tvjumo","value":50,"new_value":null,"race":0,"race_id":"plu4p4xy6","judge":3,"judge_id":"oypuvzfsa","section":0},{"id":"40etlpqqf","value":36,"new_value":null,"race":0,"race_id":"plu4p4xy6","judge":4,"judge_id":"79nc0yt1b","section":0}],"results":[{"id":"9ippaw5jt","value":41,"race_id":"plu4p4xy6","repeat":"A","status":null}],"results_overall":[{"competition_id":"419t2thqp","competitor_id":"ekzkn2cwm","value":41,"status":null}]},{"info_dialog":{"state":false},"race_status":null,"res_accepted":false,"rank":10,"id":"fb3chfe2f","info_data":{"bib":64,"lastname":"Спирин","name":"Кирилл","fullname":"СПИРИН Кирилл","year":2007,"rang":"1","region":"Красноярский край"},"marks":[{"id":"rxqm0xxoh","value":61,"new_value":null,"race":0,"race_id":"plu4p4xy6","judge":1,"judge_id":"g5j801nh6","section":0},{"id":"y5u5cwr69","value":30,"new_value":null,"race":0,"race_id":"plu4p4xy6","judge":2,"judge_id":"joi1k8tct","section":0},{"id":"rt2qn4g9e","value":70,"new_value":null,"race":0,"race_id":"plu4p4xy6","judge":3,"judge_id":"oypuvzfsa","section":0},{"id":"wdlztl5h8","value":89,"new_value":null,"race":0,"race_id":"plu4p4xy6","judge":4,"judge_id":"79nc0yt1b","section":0}],"results":[{"id":"h79q9mkvs","value":62.5,"race_id":"plu4p4xy6","repeat":"A","status":null}],"results_overall":[{"competition_id":"419t2thqp","competitor_id":"fb3chfe2f","value":62.5,"status":null}]},{"info_dialog":{"state":false},"race_status":null,"res_accepted":false,"rank":8,"id":"9chg3cwhp","info_data":{"bib":81,"lastname":"Ращектаев","name":"Тимофей","fullname":"РАЩЕКТАЕВ Тимофей","year":2009,"rang":"2","region":"Челябинская область"},"marks":[{"id":"wkdmychk0","value":95,"new_value":null,"race":0,"race_id":"plu4p4xy6","judge":1,"judge_id":"g5j801nh6","section":0},{"id":"yoc1h7qrm","value":42,"new_value":null,"race":0,"race_id":"plu4p4xy6","judge":2,"judge_id":"joi1k8tct","section":0},{"id":"t3dfl7vk6","value":69,"new_value":null,"race":0,"race_id":"plu4p4xy6","judge":3,"judge_id":"oypuvzfsa","section":0},{"id":"0niz00iyx","value":60,"new_value":null,"race":0,"race_id":"plu4p4xy6","judge":4,"judge_id":"79nc0yt1b","section":0}],"results":[{"id":"d6epacqbw","value":66.5,"race_id":"plu4p4xy6","repeat":"A","status":null}],"results_overall":[{"competition_id":"419t2thqp","competitor_id":"9chg3cwhp","value":66.5,"status":null}]},{"info_dialog":{"state":false},"race_status":null,"res_accepted":false,"rank":14,"id":"46lbrygdg","info_data":{"bib":73,"lastname":"Матвиенко","name":"Кирилл","fullname":"МАТВИЕНКО Кирилл","year":2007,"rang":"1","region":"Свердловская обл."},"marks":[{"id":"gnpx8qoa5","value":52,"new_value":null,"race":0,"race_id":"plu4p4xy6","judge":1,"judge_id":"g5j801nh6","section":0},{"id":"66db6p7ch","value":37,"new_value":null,"race":0,"race_id":"plu4p4xy6","judge":2,"judge_id":"joi1k8tct","section":0},{"id":"r1kuyyf3w","value":91,"new_value":null,"race":0,"race_id":"plu4p4xy6","judge":3,"judge_id":"oypuvzfsa","section":0},{"id":"rki2iqt5s","value":33,"new_value":null,"race":0,"race_id":"plu4p4xy6","judge":4,"judge_id":"79nc0yt1b","section":0}],"results":[{"id":"erbo43xh1","value":53.25,"race_id":"plu4p4xy6","repeat":"A","status":null}],"results_overall":[{"competition_id":"419t2thqp","competitor_id":"46lbrygdg","value":53.25,"status":null}]},{"info_dialog":{"state":false},"race_status":null,"res_accepted":false,"rank":5,"id":"as22jed7u","info_data":{"bib":70,"lastname":"Маторный","name":"Денис","fullname":"МАТОРНЫЙ Денис","year":2008,"rang":"1","region":"Мурманская обл."},"marks":[{"id":"oniojvhag","value":98,"new_value":null,"race":0,"race_id":"plu4p4xy6","judge":1,"judge_id":"g5j801nh6","section":0},{"id":"yhky5xgf6","value":78,"new_value":null,"race":0,"race_id":"plu4p4xy6","judge":2,"judge_id":"joi1k8tct","section":0},{"id":"pb2bqxkf2","value":64,"new_value":null,"race":0,"race_id":"plu4p4xy6","judge":3,"judge_id":"oypuvzfsa","section":0},{"id":"gmdurynxs","value":57,"new_value":null,"race":0,"race_id":"plu4p4xy6","judge":4,"judge_id":"79nc0yt1b","section":0}],"results":[{"id":"1b115rzhy","value":74.25,"race_id":"plu4p4xy6","repeat":"A","status":null}],"results_overall":[{"competition_id":"419t2thqp","competitor_id":"as22jed7u","value":74.25,"status":null}]},{"info_dialog":{"state":false},"race_status":null,"res_accepted":false,"rank":4,"id":"vy8dkzerq","info_data":{"bib":83,"lastname":"Ремень","name":"Артем","fullname":"РЕМЕНЬ Артем","year":2008,"rang":"2","region":"Свердловская обл."},"marks":[{"id":"h90lexbj1","value":61,"new_value":null,"race":0,"race_id":"plu4p4xy6","judge":1,"judge_id":"g5j801nh6","section":0},{"id":"mzn3yydi5","value":64,"new_value":null,"race":0,"race_id":"plu4p4xy6","judge":2,"judge_id":"joi1k8tct","section":0},{"id":"mliygn9oj","value":76,"new_value":null,"race":0,"race_id":"plu4p4xy6","judge":3,"judge_id":"oypuvzfsa","section":0},{"id":"upgjp1bg0","value":99,"new_value":null,"race":0,"race_id":"plu4p4xy6","judge":4,"judge_id":"79nc0yt1b","section":0}],"results":[{"id":"5czamvemy","value":75,"race_id":"plu4p4xy6","repeat":"A","status":null}],"results_overall":[{"competition_id":"419t2thqp","competitor_id":"vy8dkzerq","value":75,"status":null}]},{"info_dialog":{"state":false},"race_status":null,"res_accepted":false,"rank":17,"id":"no309uykd","info_data":{"bib":24,"lastname":"Питинов","name":"Ярослав","fullname":"ПИТИНОВ Ярослав","year":2008,"rang":"1","region":"г. Санкт-Петербург"},"marks":[{"id":"15s44z6hh","value":43,"new_value":null,"race":0,"race_id":"plu4p4xy6","judge":1,"judge_id":"g5j801nh6","section":0},{"id":"eqz78hlaz","value":64,"new_value":null,"race":0,"race_id":"plu4p4xy6","judge":2,"judge_id":"joi1k8tct","section":0},{"id":"s95gmjqel","value":43,"new_value":null,"race":0,"race_id":"plu4p4xy6","judge":3,"judge_id":"oypuvzfsa","section":0},{"id":"ys17bun16","value":37,"new_value":null,"race":0,"race_id":"plu4p4xy6","judge":4,"judge_id":"79nc0yt1b","section":0}],"results":[{"id":"oliv08kx4","value":46.75,"race_id":"plu4p4xy6","repeat":"A","status":null}],"results_overall":[{"competition_id":"419t2thqp","competitor_id":"no309uykd","value":46.75,"status":null}]},{"info_dialog":{"state":false},"race_status":null,"res_accepted":false,"rank":16,"id":"drdcgyjyq","info_data":{"bib":8,"lastname":"Юмаков","name":"Динар","fullname":"ЮМАКОВ Динар","year":2004,"rang":"КМС","region":"Республика Башкортостан"},"marks":[{"id":"e4x938m3n","value":44,"new_value":null,"race":0,"race_id":"plu4p4xy6","judge":1,"judge_id":"g5j801nh6","section":0},{"id":"9c1al36yc","value":58,"new_value":null,"race":0,"race_id":"plu4p4xy6","judge":2,"judge_id":"joi1k8tct","section":0},{"id":"cvxppl6gz","value":54,"new_value":null,"race":0,"race_id":"plu4p4xy6","judge":3,"judge_id":"oypuvzfsa","section":0},{"id":"k4ydbqlrw","value":34,"new_value":null,"race":0,"race_id":"plu4p4xy6","judge":4,"judge_id":"79nc0yt1b","section":0}],"results":[{"id":"p2p4yg0vw","value":47.5,"race_id":"plu4p4xy6","repeat":"A","status":null}],"results_overall":[{"competition_id":"419t2thqp","competitor_id":"drdcgyjyq","value":47.5,"status":null}]},{"info_dialog":{"state":false},"race_status":null,"res_accepted":false,"rank":9,"id":"t7wq8ik6b","info_data":{"bib":48,"lastname":"Ленчевский","name":"Алексей","fullname":"ЛЕНЧЕВСКИЙ Алексей","year":2006,"rang":"КМС","region":"г. Москва"},"marks":[{"id":"zttvwr0nn","value":31,"new_value":null,"race":0,"race_id":"plu4p4xy6","judge":1,"judge_id":"g5j801nh6","section":0},{"id":"h8ahrx9hq","value":39,"new_value":null,"race":0,"race_id":"plu4p4xy6","judge":2,"judge_id":"joi1k8tct","section":0},{"id":"wgoxd75pe","value":95,"new_value":null,"race":0,"race_id":"plu4p4xy6","judge":3,"judge_id":"oypuvzfsa","section":0},{"id":"wxgjeo3kh","value":87,"new_value":null,"race":0,"race_id":"plu4p4xy6","judge":4,"judge_id":"79nc0yt1b","section":0}],"results":[{"id":"oanqlc7jy","value":63,"race_id":"plu4p4xy6","repeat":"A","status":null}],"results_overall":[{"competition_id":"419t2thqp","competitor_id":"t7wq8ik6b","value":63,"status":null}]},{"info_dialog":{"state":false},"race_status":null,"res_accepted":false,"rank":15,"id":"i2i2pta4b","info_data":{"bib":22,"lastname":"Старков","name":"Матвей","fullname":"СТАРКОВ Матвей","year":2007,"rang":"1","region":"Челябинская область"},"marks":[{"id":"y77lq1icw","value":34,"new_value":null,"race":0,"race_id":"plu4p4xy6","judge":1,"judge_id":"g5j801nh6","section":0},{"id":"xoam14epb","value":63,"new_value":null,"race":0,"race_id":"plu4p4xy6","judge":2,"judge_id":"joi1k8tct","section":0},{"id":"umd4zjid4","value":73,"new_value":null,"race":0,"race_id":"plu4p4xy6","judge":3,"judge_id":"oypuvzfsa","section":0},{"id":"lt50qb23f","value":41,"new_value":null,"race":0,"race_id":"plu4p4xy6","judge":4,"judge_id":"79nc0yt1b","section":0}],"results":[{"id":"ebbl9u29b","value":52.75,"race_id":"plu4p4xy6","repeat":"A","status":null}],"results_overall":[{"competition_id":"419t2thqp","competitor_id":"i2i2pta4b","value":52.75,"status":null}]},{"info_dialog":{"state":false},"race_status":null,"res_accepted":false,"rank":7,"id":"t251y1t3e","info_data":{"bib":28,"lastname":"Корчмит","name":"Николай","fullname":"КОРЧМИТ Николай","year":2006,"rang":"1","region":"Новосибирская обл."},"marks":[{"id":"hlkha13s9","value":85,"new_value":null,"race":0,"race_id":"plu4p4xy6","judge":1,"judge_id":"g5j801nh6","section":0},{"id":"sfspnursh","value":63,"new_value":null,"race":0,"race_id":"plu4p4xy6","judge":2,"judge_id":"joi1k8tct","section":0},{"id":"q8s71sjqx","value":43,"new_value":null,"race":0,"race_id":"plu4p4xy6","judge":3,"judge_id":"oypuvzfsa","section":0},{"id":"aou8c0yzv","value":85,"new_value":null,"race":0,"race_id":"plu4p4xy6","judge":4,"judge_id":"79nc0yt1b","section":0}],"results":[{"id":"zv3tq43li","value":69,"race_id":"plu4p4xy6","repeat":"A","status":null}],"results_overall":[{"competition_id":"419t2thqp","competitor_id":"t251y1t3e","value":69,"status":null}]},{"info_dialog":{"state":false},"race_status":null,"res_accepted":false,"rank":6,"id":"ygggyba5t","info_data":{"bib":25,"lastname":"Осипов","name":"Данил","fullname":"ОСИПОВ Данил","year":2006,"rang":"1","region":"Тюменская обл."},"marks":[{"id":"mt6xum7us","value":78,"new_value":null,"race":0,"race_id":"plu4p4xy6","judge":1,"judge_id":"g5j801nh6","section":0},{"id":"6b4dir65i","value":92,"new_value":null,"race":0,"race_id":"plu4p4xy6","judge":2,"judge_id":"joi1k8tct","section":0},{"id":"s8pr0iwvk","value":47,"new_value":null,"race":0,"race_id":"plu4p4xy6","judge":3,"judge_id":"oypuvzfsa","section":0},{"id":"rnlwuijn2","value":70,"new_value":null,"race":0,"race_id":"plu4p4xy6","judge":4,"judge_id":"79nc0yt1b","section":0}],"results":[{"id":"6k1l1i8ce","value":71.75,"race_id":"plu4p4xy6","repeat":"A","status":null}],"results_overall":[{"competition_id":"419t2thqp","competitor_id":"ygggyba5t","value":71.75,"status":null}]}]},"media_settings":{"display":{"modes":[{"id":0,"title":"Результаты"},{"id":1,"title":"Стартовый"},{"id":2,"title":"Результат последнего на финише"},{"id":3,"title":"Участник на старте"},{"id":4,"title":"Награждение"}],"selected":1}},"protocol_fields":[],"protocol_settings":{"protocol_type":1,"show_preview":false,"start_protocols":{"filters":{"race_filter":null},"fonts":{"officialsData":12,"openers":12,"weatherData":12,"raceNotes":12},"protocol_type":"Старт-лист","fields":[]},"result_protocols":{"filters":{"race_filter":null},"fonts":{"officialsData":12,"openers":12,"weatherData":12,"raceNotes":12},"protocol_type":"Результаты","fields":[],"raceResultFields":[]}},"result_formula":{"overall_result":{"type":0,"select_heats":{"heats":0,"mode":0,"modes":[{"id":0,"title":"Подсчёт из всех"},{"id":1,"title":"Подсчёт из N лучших"}]},"types":[{"id":0,"title":"Лучший"},{"id":1,"title":"Сумма"},{"id":2,"title":"Среднее"},{"id":3,"title":"ABC"}]},"type":0,"types":[{"id":0,"title":"По судьям","cof":1,"doubleUp":false,"doubleUp_corridors":[[],[]],"doubleUp_competitors":{"0":null,"1":null},"lower_marks":0,"higher_marks":0,"formula":0,"formulas":[{"id":0,"title":"Среднее"},{"id":1,"title":"Сумма"}]},{"id":1,"title":"По секциям","sections":[],"formula":0,"formulas":[{"id":0}]}]},"id":"419t2thqp","live_id":null},{"weather":[{"descr1":"Температура Снега:","descr2":"0°"},{"descr1":"Температура Воздуха:","descr2":"0°"},{"descr1":"Скорость ветра:","descr2":""}],"structure":{"statuses":[{"value":"DNF","priority":-1},{"value":"DNS","priority":-2},{"value":"DSQ","priority":-3}],"selected":{"type":0,"discipline":0,"accuracy":1},"types":[{"id":0,"title":"Сноуборд","disciplines":[0,1,2,100]},{"id":1,"title":"Фристайл","disciplines":[0,1,2,3,4,100]},{"id":2,"title":"Пользовательский","disciplines":[100]}],"disciplines":[{"id":0,"title":"Слоуп-Стайл","res_formula":[1]},{"id":1,"title":"Биг-Эйр","res_formula":[2]},{"id":2,"title":"Хаф-Пайп","res_formula":[3]},{"id":3,"title":"Акробатика","res_formula":[4]},{"id":4,"title":"Могул","res_formula":[5]},{"id":100,"title":"Пользовательский","res_formula":[100]}],"accuracy":[{"id":0,"title":"1","value":1,"digits":0},{"id":1,"title":"1:10","value":10,"digits":1},{"id":2,"title":"1:100","value":100,"digits":2},{"id":3,"title":"1:1000","value":1000,"digits":3}],"stages":[{"id":"qual","title":"Квалификация","value":"Квалификация"},{"id":"final","title":"Финал","value":"Финал"},{"id":"custom","title":"Пользовательский","value":""}]},"stages":{"lastStageSize":1,"prev_stages":["419t2thqp"],"stage_grid":[{"title":"Квалификация","s_competitions":["419t2thqp"]},{"title":"Финал","s_competitions":["wq42kn5lz"]}]},"passed_competitors":0,"races":[{"del_dialog":false,"finished":["vy8dkzerq","rlyedg3m7","t251y1t3e","yl56l85cd","7b9escdfc","as22jed7u","ygggyba5t","9chg3cwhp"],"onTrack":null,"id":"a5wqeuku8","title":"Заезд 1","race_dialog":false,"type":{"id":0,"title":"Сноуборд","disciplines":[0,1,2,100]},"discipline":{"id":0,"title":"Слоуп-Стайл","res_formula":[1]},"startList":[],"_startList":["vy8dkzerq","rlyedg3m7","t251y1t3e","yl56l85cd","7b9escdfc","as22jed7u","ygggyba5t","9chg3cwhp"],"selectedCompetitor":null}],"selected_race_id":0,"mainData":{"title":{"title":"Название","value":"Новое соревнование","focus":false,"stage":{"title":"Этап","value":{"id":"final","title":"Финал","value":"Финал"},"focus":false,"group":"M"}},"discipline":{"title":"Дисциплина","value":"Дисциплина","min":"DSC","focus":false},"date":{"title":"Дата проведения","dialog":false,"value":"2022-06-23","time_dialog":false,"time":"12:00","focus":false},"country":{"title":"Страна","value":"","focus":false},"location":{"title":"Место проведения","value":"","focus":false},"provider":{"title":"Организатор","value":"","focus":false},"providerTiming":{"title":"Timing provider","value":"","focus":false},"codex":{"title":"Код","value":"","focus":false}},"stuff":{"settings":{"jury":{"title":"Жюри","change_dialog":false},"judges":{"title":"Судьи","change_dialog":false}},"secretary":{"name":"","lastName":""},"jury":[{"id":"chief","title":"Старший судья","lastName":"","name":"","loc":"","connected":false,"setABC":false}],"judges":[{"category":"","socket_id":null,"connected":false,"_id":"g5j801nh6","title":"Судья 1","remoteId":null,"id":1,"name":"","lastName":"","location":"","setABC":false},{"category":"","socket_id":null,"connected":false,"_id":"joi1k8tct","title":"Судья 2","remoteId":null,"id":2,"name":"","lastName":"","location":"","setABC":false},{"category":"","socket_id":null,"connected":false,"_id":"oypuvzfsa","title":"Судья 3","remoteId":null,"id":3,"name":"","lastName":"","location":"","setABC":false},{"category":"","socket_id":null,"connected":false,"_id":"79nc0yt1b","title":"Судья 4","remoteId":null,"id":4,"name":"","lastName":"","location":"","setABC":false}],"openers":[]},"technicalInfo":{"title":"Техническая информация","change_dialog":false,"records":[{"title":"Название склона","value":""},{"title":"Длина трассы","value":""},{"title":"Ширина трассы","value":""}]},"competitorsSheet":{"header":[{"id":"bib","title":"Bib"},{"id":"lastname","title":"Фамилия"},{"id":"name","title":"Имя"},{"id":"fullname","title":"Фамилия, Имя"},{"id":"year","title":"Год"},{"id":"rang","title":"Разряд"},{"id":"region","title":"Суб. РФ"}],"competitors":[{"info_dialog":{"state":false},"race_status":null,"res_accepted":false,"rank":2,"id":"yl56l85cd","info_data":{"bib":14,"lastname":"Замятин","name":"Андрей","fullname":"ЗАМЯТИН Андрей","year":2005,"rang":"КМС","region":"г. Санкт-Петербург"},"marks":[{"id":"ycf0nzg38","value":95,"new_value":null,"race":0,"race_id":"a5wqeuku8","judge":1,"judge_id":"g5j801nh6","section":0},{"id":"8k0nlwlk4","value":72,"new_value":null,"race":0,"race_id":"a5wqeuku8","judge":2,"judge_id":"joi1k8tct","section":0},{"id":"cgpq554rg","value":68,"new_value":null,"race":0,"race_id":"a5wqeuku8","judge":3,"judge_id":"oypuvzfsa","section":0},{"id":"kwqnlmhcg","value":41,"new_value":null,"race":0,"race_id":"a5wqeuku8","judge":4,"judge_id":"79nc0yt1b","section":0}],"results":[{"id":"ierpi7lja","value":81.5,"race_id":"plu4p4xy6","repeat":"A","status":null},{"id":"s0e55fsl3","value":69,"race_id":"a5wqeuku8","repeat":"A","status":null}],"results_overall":[{"competition_id":"419t2thqp","competitor_id":"yl56l85cd","value":81.5,"status":null},{"id_comp":"419t2thqp","value":81.5},{"competition_id":"wq42kn5lz","competitor_id":"yl56l85cd","value":69,"status":null}]},{"info_dialog":{"state":false},"race_status":null,"res_accepted":false,"rank":5,"id":"rlyedg3m7","info_data":{"bib":51,"lastname":"Дзидзигури","name":"Даниил","fullname":"ДЗИДЗИГУРИ Даниил","year":2005,"rang":"1","region":"Московская обл."},"marks":[{"id":"vhpiz98fr","value":49,"new_value":null,"race":0,"race_id":"a5wqeuku8","judge":1,"judge_id":"g5j801nh6","section":0},{"id":"fuk0k86fb","value":89,"new_value":null,"race":0,"race_id":"a5wqeuku8","judge":2,"judge_id":"joi1k8tct","section":0},{"id":"13o200iu9","value":54,"new_value":null,"race":0,"race_id":"a5wqeuku8","judge":3,"judge_id":"oypuvzfsa","section":0},{"id":"ikja5l46l","value":51,"new_value":null,"race":0,"race_id":"a5wqeuku8","judge":4,"judge_id":"79nc0yt1b","section":0}],"results":[{"id":"enyc1ysto","value":76.5,"race_id":"plu4p4xy6","repeat":"A","status":null},{"id":"l1o3ncgpd","value":60.75,"race_id":"a5wqeuku8","repeat":"A","status":null}],"results_overall":[{"competition_id":"419t2thqp","competitor_id":"rlyedg3m7","value":76.5,"status":null},{"id_comp":"419t2thqp","value":76.5},{"competition_id":"wq42kn5lz","competitor_id":"rlyedg3m7","value":60.75,"status":null}]},{"info_dialog":{"state":false},"race_status":null,"res_accepted":false,"rank":3,"id":"7b9escdfc","info_data":{"bib":85,"lastname":"Чижиков","name":"Иван","fullname":"ЧИЖИКОВ Иван","year":2007,"rang":"2","region":"Свердловская обл."},"marks":[{"id":"ciuwpkhj1","value":95,"new_value":null,"race":0,"race_id":"a5wqeuku8","judge":1,"judge_id":"g5j801nh6","section":0},{"id":"8vlpn66sg","value":36,"new_value":null,"race":0,"race_id":"a5wqeuku8","judge":2,"judge_id":"joi1k8tct","section":0},{"id":"08j3tapu0","value":34,"new_value":null,"race":0,"race_id":"a5wqeuku8","judge":3,"judge_id":"oypuvzfsa","section":0},{"id":"xr8pubyvx","value":92,"new_value":null,"race":0,"race_id":"a5wqeuku8","judge":4,"judge_id":"79nc0yt1b","section":0}],"results":[{"id":"mkjf0spc0","value":75.75,"race_id":"plu4p4xy6","repeat":"A","status":null},{"id":"187v1d4go","value":64.25,"race_id":"a5wqeuku8","repeat":"A","status":null}],"results_overall":[{"competition_id":"419t2thqp","competitor_id":"7b9escdfc","value":75.75,"status":null},{"id_comp":"419t2thqp","value":75.75},{"competition_id":"wq42kn5lz","competitor_id":"7b9escdfc","value":64.25,"status":null}]},{"info_dialog":{"state":false},"race_status":null,"res_accepted":false,"rank":1,"id":"vy8dkzerq","info_data":{"bib":83,"lastname":"Ремень","name":"Артем","fullname":"РЕМЕНЬ Артем","year":2008,"rang":"2","region":"Свердловская обл."},"marks":[{"id":"d69d6vpkd","value":66,"new_value":null,"race":0,"race_id":"a5wqeuku8","judge":1,"judge_id":"g5j801nh6","section":0},{"id":"86iy810pb","value":65,"new_value":null,"race":0,"race_id":"a5wqeuku8","judge":2,"judge_id":"joi1k8tct","section":0},{"id":"eprxfw0z5","value":89,"new_value":null,"race":0,"race_id":"a5wqeuku8","judge":3,"judge_id":"oypuvzfsa","section":0},{"id":"s9sewv46i","value":77,"new_value":null,"race":0,"race_id":"a5wqeuku8","judge":4,"judge_id":"79nc0yt1b","section":0}],"results":[{"id":"5czamvemy","value":75,"race_id":"plu4p4xy6","repeat":"A","status":null},{"id":"km6glqfue","value":74.25,"race_id":"a5wqeuku8","repeat":"A","status":null}],"results_overall":[{"competition_id":"419t2thqp","competitor_id":"vy8dkzerq","value":75,"status":null},{"id_comp":"419t2thqp","value":75},{"competition_id":"wq42kn5lz","competitor_id":"vy8dkzerq","value":74.25,"status":null}]},{"info_dialog":{"state":false},"race_status":null,"res_accepted":false,"rank":7,"id":"as22jed7u","info_data":{"bib":70,"lastname":"Маторный","name":"Денис","fullname":"МАТОРНЫЙ Денис","year":2008,"rang":"1","region":"Мурманская обл."},"marks":[{"id":"lowqpa3rw","value":86,"new_value":null,"race":0,"race_id":"a5wqeuku8","judge":1,"judge_id":"g5j801nh6","section":0},{"id":"qe709xzrj","value":47,"new_value":null,"race":0,"race_id":"a5wqeuku8","judge":2,"judge_id":"joi1k8tct","section":0},{"id":"vyrd60rjc","value":50,"new_value":null,"race":0,"race_id":"a5wqeuku8","judge":3,"judge_id":"oypuvzfsa","section":0},{"id":"ewa2v7j6g","value":33,"new_value":null,"race":0,"race_id":"a5wqeuku8","judge":4,"judge_id":"79nc0yt1b","section":0}],"results":[{"id":"1b115rzhy","value":74.25,"race_id":"plu4p4xy6","repeat":"A","status":null},{"id":"rrfieb093","value":54,"race_id":"a5wqeuku8","repeat":"A","status":null}],"results_overall":[{"competition_id":"419t2thqp","competitor_id":"as22jed7u","value":74.25,"status":null},{"id_comp":"419t2thqp","value":74.25},{"competition_id":"wq42kn5lz","competitor_id":"as22jed7u","value":54,"status":null}]},{"info_dialog":{"state":false},"race_status":null,"res_accepted":false,"rank":4,"id":"ygggyba5t","info_data":{"bib":25,"lastname":"Осипов","name":"Данил","fullname":"ОСИПОВ Данил","year":2006,"rang":"1","region":"Тюменская обл."},"marks":[{"id":"25gac652q","value":84,"new_value":null,"race":0,"race_id":"a5wqeuku8","judge":1,"judge_id":"g5j801nh6","section":0},{"id":"rdbb0r0y7","value":78,"new_value":null,"race":0,"race_id":"a5wqeuku8","judge":2,"judge_id":"joi1k8tct","section":0},{"id":"pfldneab5","value":36,"new_value":null,"race":0,"race_id":"a5wqeuku8","judge":3,"judge_id":"oypuvzfsa","section":0},{"id":"uwawn5yec","value":54,"new_value":null,"race":0,"race_id":"a5wqeuku8","judge":4,"judge_id":"79nc0yt1b","section":0}],"results":[{"id":"6k1l1i8ce","value":71.75,"race_id":"plu4p4xy6","repeat":"A","status":null},{"id":"qcy2nt23q","value":63,"race_id":"a5wqeuku8","repeat":"A","status":null}],"results_overall":[{"competition_id":"419t2thqp","competitor_id":"ygggyba5t","value":71.75,"status":null},{"id_comp":"419t2thqp","value":71.75},{"competition_id":"wq42kn5lz","competitor_id":"ygggyba5t","value":63,"status":null}]},{"info_dialog":{"state":false},"race_status":null,"res_accepted":false,"rank":6,"id":"t251y1t3e","info_data":{"bib":28,"lastname":"Корчмит","name":"Николай","fullname":"КОРЧМИТ Николай","year":2006,"rang":"1","region":"Новосибирская обл."},"marks":[{"id":"xeswt8ay6","value":36,"new_value":null,"race":0,"race_id":"a5wqeuku8","judge":1,"judge_id":"g5j801nh6","section":0},{"id":"7fqju5o5f","value":43,"new_value":null,"race":0,"race_id":"a5wqeuku8","judge":2,"judge_id":"joi1k8tct","section":0},{"id":"0mltwlvp4","value":90,"new_value":null,"race":0,"race_id":"a5wqeuku8","judge":3,"judge_id":"oypuvzfsa","section":0},{"id":"orh1s2key","value":72,"new_value":null,"race":0,"race_id":"a5wqeuku8","judge":4,"judge_id":"79nc0yt1b","section":0}],"results":[{"id":"zv3tq43li","value":69,"race_id":"plu4p4xy6","repeat":"A","status":null},{"id":"2mj6rfmxa","value":60.25,"race_id":"a5wqeuku8","repeat":"A","status":null}],"results_overall":[{"competition_id":"419t2thqp","competitor_id":"t251y1t3e","value":69,"status":null},{"id_comp":"419t2thqp","value":69},{"competition_id":"wq42kn5lz","competitor_id":"t251y1t3e","value":60.25,"status":null}]},{"info_dialog":{"state":false},"race_status":null,"res_accepted":false,"rank":8,"id":"9chg3cwhp","info_data":{"bib":81,"lastname":"Ращектаев","name":"Тимофей","fullname":"РАЩЕКТАЕВ Тимофей","year":2009,"rang":"2","region":"Челябинская область"},"marks":[{"id":"h47o7g0md","value":39,"new_value":null,"race":0,"race_id":"a5wqeuku8","judge":1,"judge_id":"g5j801nh6","section":0},{"id":"ou8eq48gs","value":62,"new_value":null,"race":0,"race_id":"a5wqeuku8","judge":2,"judge_id":"joi1k8tct","section":0},{"id":"s6q3a4kt0","value":45,"new_value":null,"race":0,"race_id":"a5wqeuku8","judge":3,"judge_id":"oypuvzfsa","section":0},{"id":"8k65nt3ro","value":31,"new_value":null,"race":0,"race_id":"a5wqeuku8","judge":4,"judge_id":"79nc0yt1b","section":0}],"results":[{"id":"d6epacqbw","value":66.5,"race_id":"plu4p4xy6","repeat":"A","status":null},{"id":"2nigcc2wk","value":44.25,"race_id":"a5wqeuku8","repeat":"A","status":null}],"results_overall":[{"competition_id":"419t2thqp","competitor_id":"9chg3cwhp","value":66.5,"status":null},{"id_comp":"419t2thqp","value":66.5},{"competition_id":"wq42kn5lz","competitor_id":"9chg3cwhp","value":44.25,"status":null}]}]},"media_settings":{"display":{"modes":[{"id":0,"title":"Результаты"},{"id":1,"title":"Стартовый"},{"id":2,"title":"Результат последнего на финише"},{"id":3,"title":"Участник на старте"},{"id":4,"title":"Награждение"}],"selected":1}},"protocol_fields":[],"protocol_settings":{"protocol_type":1,"show_preview":false,"start_protocols":{"filters":{"race_filter":null},"fonts":{"officialsData":12,"openers":12,"weatherData":12,"raceNotes":12},"protocol_type":"Старт-лист","fields":[]},"result_protocols":{"filters":{"race_filter":null},"fonts":{"officialsData":12,"openers":12,"weatherData":12,"raceNotes":12},"protocol_type":"Результаты","fields":[{"params":{"cell_1":{"select_dialog":false,"id":"rank","title":"Место"},"cell_2":{"select_dialog":false,"id":null,"title":null},"width":6,"font":12,"align":{"title":"Слева","value":"start"},"f_weight":"normal"},"id":"uvptgrku2"},{"params":{"cell_1":{"select_dialog":false,"id":"bib","title":"Bib"},"cell_2":{"select_dialog":false,"id":null,"title":null},"width":8,"font":12,"align":{"title":"Слева","value":"start"},"f_weight":"normal"},"id":"jun9tmfm8"},{"params":{"cell_1":{"select_dialog":false,"id":"lastname","title":"Фамилия"},"cell_2":{"select_dialog":false,"id":null,"title":null},"width":8,"font":12,"align":{"title":"Слева","value":"start"},"f_weight":"normal"},"id":"koqjviexp"},{"params":{"cell_1":{"select_dialog":false,"id":"name","title":"Имя"},"cell_2":{"select_dialog":false,"id":null,"title":null},"width":8,"font":12,"align":{"title":"Слева","value":"start"},"f_weight":"normal"},"id":"2r3za5m03"},{"params":{"cell_1":{"select_dialog":false,"id":"fullname","title":"Фамилия, Имя"},"cell_2":{"select_dialog":false,"id":null,"title":null},"width":8,"font":12,"align":{"title":"Слева","value":"start"},"f_weight":"normal"},"id":"xkmkqbwyv"},{"params":{"cell_1":{"select_dialog":false,"id":"year","title":"Год"},"cell_2":{"select_dialog":false,"id":null,"title":null},"width":8,"font":12,"align":{"title":"Слева","value":"start"},"f_weight":"normal"},"id":"08gu30146"},{"params":{"cell_1":{"select_dialog":false,"id":"rang","title":"Разряд"},"cell_2":{"select_dialog":false,"id":null,"title":null},"width":8,"font":12,"align":{"title":"Слева","value":"start"},"f_weight":"normal"},"id":"c2dxi880k"},{"params":{"cell_1":{"select_dialog":false,"id":"region","title":"Суб. РФ"},"cell_2":{"select_dialog":false,"id":null,"title":null},"width":8,"font":12,"align":{"title":"Слева","value":"start"},"f_weight":"normal"},"id":"ij9m6c6o2"},{"params":{"cell_1":{"select_dialog":false,"id":"race","title":"Заезд"},"cell_2":{"select_dialog":false,"id":null,"title":null},"width":8,"font":12,"align":{"title":"Слева","value":"start"},"f_weight":"normal"},"id":"um5l30yfo"},{"params":{"cell_1":{"select_dialog":false,"id":"Судья 1","title":"С1"},"cell_2":{"select_dialog":false,"id":null,"title":null},"width":6,"font":12,"align":{"title":"Слева","value":"start"},"f_weight":"normal"},"id":"zjsm10tao"},{"params":{"cell_1":{"select_dialog":false,"id":"Судья 2","title":"С2"},"cell_2":{"select_dialog":false,"id":null,"title":null},"width":6,"font":12,"align":{"title":"Слева","value":"start"},"f_weight":"normal"},"id":"84lxp0b2v"},{"params":{"cell_1":{"select_dialog":false,"id":"Судья 3","title":"С3"},"cell_2":{"select_dialog":false,"id":null,"title":null},"width":6,"font":12,"align":{"title":"Слева","value":"start"},"f_weight":"normal"},"id":"ljz4la8s1"},{"params":{"cell_1":{"select_dialog":false,"id":"Судья 4","title":"С4"},"cell_2":{"select_dialog":false,"id":null,"title":null},"width":6,"font":12,"align":{"title":"Слева","value":"start"},"f_weight":"normal"},"id":"loqxacpqa"},{"params":{"cell_1":{"select_dialog":false,"id":"race_res","title":"Оценка"},"cell_2":{"select_dialog":false,"id":null,"title":null},"width":6,"font":12,"align":{"title":"Слева","value":"start"},"f_weight":"normal"},"id":"6bzg3ryfy"},{"params":{"cell_1":{"select_dialog":false,"id":"result","title":"Рез-т"},"cell_2":{"select_dialog":false,"id":null,"title":null},"width":8,"font":12,"align":{"title":"Слева","value":"start"},"f_weight":"normal"},"id":"v1h23dlvw"}],"raceResultFields":[{"params":{"cell_1":{"select_dialog":false,"id":"rank","title":"Место"},"cell_2":{"select_dialog":false,"id":null,"title":null},"width":6,"font":12,"align":{"title":"Слева","value":"start"},"f_weight":"normal"},"id":"4vfljoimd"},{"params":{"cell_1":{"select_dialog":false,"id":"bib","title":"Bib"},"cell_2":{"select_dialog":false,"id":null,"title":null},"width":8,"font":12,"align":{"title":"Слева","value":"start"},"f_weight":"normal"},"id":"4yr0kf1od"},{"params":{"cell_1":{"select_dialog":false,"id":"lastname","title":"Фамилия"},"cell_2":{"select_dialog":false,"id":null,"title":null},"width":8,"font":12,"align":{"title":"Слева","value":"start"},"f_weight":"normal"},"id":"v2eyp7voz"},{"params":{"cell_1":{"select_dialog":false,"id":"name","title":"Имя"},"cell_2":{"select_dialog":false,"id":null,"title":null},"width":8,"font":12,"align":{"title":"Слева","value":"start"},"f_weight":"normal"},"id":"9uk4ekut9"},{"params":{"cell_1":{"select_dialog":false,"id":"fullname","title":"Фамилия, Имя"},"cell_2":{"select_dialog":false,"id":null,"title":null},"width":8,"font":12,"align":{"title":"Слева","value":"start"},"f_weight":"normal"},"id":"7jfhwt68g"},{"params":{"cell_1":{"select_dialog":false,"id":"year","title":"Год"},"cell_2":{"select_dialog":false,"id":null,"title":null},"width":8,"font":12,"align":{"title":"Слева","value":"start"},"f_weight":"normal"},"id":"gtskzd7a3"},{"params":{"cell_1":{"select_dialog":false,"id":"rang","title":"Разряд"},"cell_2":{"select_dialog":false,"id":null,"title":null},"width":8,"font":12,"align":{"title":"Слева","value":"start"},"f_weight":"normal"},"id":"8sr2el8g7"},{"params":{"cell_1":{"select_dialog":false,"id":"region","title":"Суб. РФ"},"cell_2":{"select_dialog":false,"id":null,"title":null},"width":8,"font":12,"align":{"title":"Слева","value":"start"},"f_weight":"normal"},"id":"31bcmpb28"},{"params":{"cell_1":{"select_dialog":false,"id":"race","title":"Заезд"},"cell_2":{"select_dialog":false,"id":null,"title":null},"width":8,"font":12,"align":{"title":"Слева","value":"start"},"f_weight":"normal"},"id":"tqbjx121e"},{"params":{"cell_1":{"select_dialog":false,"id":"Судья 1","title":"С1"},"cell_2":{"select_dialog":false,"id":null,"title":null},"width":6,"font":12,"align":{"title":"Слева","value":"start"},"f_weight":"normal"},"id":"vhnndgwh8"},{"params":{"cell_1":{"select_dialog":false,"id":"Судья 2","title":"С2"},"cell_2":{"select_dialog":false,"id":null,"title":null},"width":6,"font":12,"align":{"title":"Слева","value":"start"},"f_weight":"normal"},"id":"pjzk3d8d0"},{"params":{"cell_1":{"select_dialog":false,"id":"Судья 3","title":"С3"},"cell_2":{"select_dialog":false,"id":null,"title":null},"width":6,"font":12,"align":{"title":"Слева","value":"start"},"f_weight":"normal"},"id":"bx4cyjysm"},{"params":{"cell_1":{"select_dialog":false,"id":"Судья 4","title":"С4"},"cell_2":{"select_dialog":false,"id":null,"title":null},"width":6,"font":12,"align":{"title":"Слева","value":"start"},"f_weight":"normal"},"id":"n0yxqdz9i"},{"params":{"cell_1":{"select_dialog":false,"id":"race_res","title":"Рез-т"},"cell_2":{"select_dialog":false,"id":null,"title":null},"width":6,"font":12,"align":{"title":"Слева","value":"start"},"f_weight":"normal"},"id":"0q39suzx3"}]}},"result_formula":{"overall_result":{"type":0,"select_heats":{"heats":0,"mode":0,"modes":[{"id":0,"title":"Подсчёт из всех"},{"id":1,"title":"Подсчёт из N лучших"}]},"types":[{"id":0,"title":"Лучший"},{"id":1,"title":"Сумма"},{"id":2,"title":"Среднее"},{"id":3,"title":"ABC"}]},"type":0,"types":[{"id":0,"title":"По судьям","cof":1,"doubleUp":false,"doubleUp_corridors":[[],[]],"doubleUp_competitors":{"0":null,"1":null},"lower_marks":0,"higher_marks":0,"formula":0,"formulas":[{"id":0,"title":"Среднее"},{"id":1,"title":"Сумма"}]},{"id":1,"title":"По секциям","sections":[],"formula":0,"formulas":[{"id":0}]}]},"id":"wq42kn5lz","live_id":null}]}
+{
+  "title": "Test 2",
+  "competitions": [
+    {
+      "weather": [
+        { "descr1": "Температура Снега:", "descr2": "0°" },
+        { "descr1": "Температура Воздуха:", "descr2": "0°" },
+        { "descr1": "Скорость ветра:", "descr2": "" }
+      ],
+      "structure": {
+        "statuses": [
+          { "value": "DNF", "priority": -1 },
+          { "value": "DNS", "priority": -2 },
+          { "value": "DSQ", "priority": -3 }
+        ],
+        "selected": { "type": 0, "discipline": 0, "accuracy": 1 },
+        "types": [
+          { "id": 0, "title": "Сноуборд", "disciplines": [0, 1, 2, 100] },
+          { "id": 1, "title": "Фристайл", "disciplines": [0, 1, 2, 3, 4, 100] },
+          { "id": 2, "title": "Пользовательский", "disciplines": [100] }
+        ],
+        "disciplines": [
+          { "id": 0, "title": "Слоуп-Стайл", "res_formula": [1] },
+          { "id": 1, "title": "Биг-Эйр", "res_formula": [2] },
+          { "id": 2, "title": "Хаф-Пайп", "res_formula": [3] },
+          { "id": 3, "title": "Акробатика", "res_formula": [4] },
+          { "id": 4, "title": "Могул", "res_formula": [5] },
+          { "id": 100, "title": "Пользовательский", "res_formula": [100] }
+        ],
+        "accuracy": [
+          { "id": 0, "title": "1", "value": 1, "digits": 0 },
+          { "id": 1, "title": "1:10", "value": 10, "digits": 1 },
+          { "id": 2, "title": "1:100", "value": 100, "digits": 2 },
+          { "id": 3, "title": "1:1000", "value": 1000, "digits": 3 }
+        ],
+        "stages": [
+          { "id": "qual", "title": "Квалификация", "value": "Квалификация" },
+          { "id": "final", "title": "Финал", "value": "Финал" },
+          { "id": "custom", "title": "Пользовательский", "value": "" }
+        ]
+      },
+      "stages": {
+        "lastStageSize": 0,
+        "prev_stages": [],
+        "stage_grid": [
+          { "title": "Квалификация", "s_competitions": ["419t2thqp"] }
+        ]
+      },
+      "passed_competitors": "8",
+      "races": [
+        {
+          "del_dialog": false,
+          "finished": [
+            "7guep1z92",
+            "yl56l85cd",
+            "0d0kdk2ne",
+            "7b9escdfc",
+            "mh54vv2n7",
+            "rlyedg3m7",
+            "ekzkn2cwm",
+            "fb3chfe2f",
+            "9chg3cwhp",
+            "46lbrygdg",
+            "as22jed7u",
+            "vy8dkzerq",
+            "no309uykd",
+            "drdcgyjyq",
+            "t7wq8ik6b",
+            "i2i2pta4b",
+            "t251y1t3e",
+            "ygggyba5t"
+          ],
+          "onTrack": null,
+          "id": "plu4p4xy6",
+          "title": "Заезд 1",
+          "race_dialog": false,
+          "type": {
+            "id": 0,
+            "title": "Сноуборд",
+            "disciplines": [0, 1, 2, 100]
+          },
+          "discipline": { "id": 0, "title": "Слоуп-Стайл", "res_formula": [1] },
+          "startList": [],
+          "_startList": [
+            "7guep1z92",
+            "yl56l85cd",
+            "0d0kdk2ne",
+            "7b9escdfc",
+            "mh54vv2n7",
+            "rlyedg3m7",
+            "ekzkn2cwm",
+            "fb3chfe2f",
+            "9chg3cwhp",
+            "46lbrygdg",
+            "as22jed7u",
+            "vy8dkzerq",
+            "no309uykd",
+            "drdcgyjyq",
+            "t7wq8ik6b",
+            "i2i2pta4b",
+            "t251y1t3e",
+            "ygggyba5t"
+          ],
+          "selectedCompetitor": null
+        }
+      ],
+      "selected_race_id": 0,
+      "mainData": {
+        "title": {
+          "title": "Название",
+          "value": "Новое соревнование",
+          "focus": false,
+          "stage": {
+            "title": "Этап",
+            "value": {
+              "id": "qual",
+              "title": "Квалификация",
+              "value": "Квалификация"
+            },
+            "focus": false,
+            "group": "M"
+          }
+        },
+        "discipline": {
+          "title": "Дисциплина",
+          "value": "Дисциплина",
+          "min": "DSC",
+          "focus": false
+        },
+        "date": {
+          "title": "Дата проведения",
+          "dialog": false,
+          "value": "2022-06-23",
+          "time_dialog": false,
+          "time": "12:00",
+          "focus": false
+        },
+        "country": { "title": "Страна", "value": "", "focus": false },
+        "location": {
+          "title": "Место проведения",
+          "value": "",
+          "focus": false
+        },
+        "provider": { "title": "Организатор", "value": "", "focus": false },
+        "providerTiming": {
+          "title": "Timing provider",
+          "value": "",
+          "focus": false
+        },
+        "codex": { "title": "Код", "value": "", "focus": false }
+      },
+      "stuff": {
+        "settings": {
+          "jury": { "title": "Жюри", "change_dialog": false },
+          "judges": { "title": "Судьи", "change_dialog": false }
+        },
+        "secretary": { "name": "", "lastName": "" },
+        "jury": [
+          {
+            "id": "chief",
+            "title": "Старший судья",
+            "lastName": "",
+            "name": "",
+            "loc": "",
+            "connected": false,
+            "setABC": false
+          }
+        ],
+        "judges": [
+          {
+            "category": "",
+            "socket_id": null,
+            "connected": false,
+            "_id": "g5j801nh6",
+            "title": "Судья 1",
+            "remoteId": null,
+            "id": 1,
+            "name": "",
+            "lastName": "",
+            "location": "",
+            "setABC": false
+          },
+          {
+            "category": "",
+            "socket_id": null,
+            "connected": false,
+            "_id": "joi1k8tct",
+            "title": "Судья 2",
+            "remoteId": null,
+            "id": 2,
+            "name": "",
+            "lastName": "",
+            "location": "",
+            "setABC": false
+          },
+          {
+            "category": "",
+            "socket_id": null,
+            "connected": false,
+            "_id": "oypuvzfsa",
+            "title": "Судья 3",
+            "remoteId": null,
+            "id": 3,
+            "name": "",
+            "lastName": "",
+            "location": "",
+            "setABC": false
+          },
+          {
+            "category": "",
+            "socket_id": null,
+            "connected": false,
+            "_id": "79nc0yt1b",
+            "title": "Судья 4",
+            "remoteId": null,
+            "id": 4,
+            "name": "",
+            "lastName": "",
+            "location": "",
+            "setABC": false
+          }
+        ],
+        "openers": []
+      },
+      "technicalInfo": {
+        "title": "Техническая информация",
+        "change_dialog": false,
+        "records": [
+          { "title": "Название склона", "value": "" },
+          { "title": "Длина трассы", "value": "" },
+          { "title": "Ширина трассы", "value": "" }
+        ]
+      },
+      "competitorsSheet": {
+        "header": [
+          { "id": "bib", "title": "Bib" },
+          { "id": "lastname", "title": "Фамилия" },
+          { "id": "name", "title": "Имя" },
+          { "id": "fullname", "title": "Фамилия, Имя" },
+          { "id": "year", "title": "Год" },
+          { "id": "rang", "title": "Разряд" },
+          { "id": "region", "title": "Суб. РФ" }
+        ],
+        "competitors": [
+          {
+            "info_dialog": { "state": false },
+            "race_status": null,
+            "res_accepted": false,
+            "rank": 13,
+            "id": "7guep1z92",
+            "info_data": {
+              "bib": 75,
+              "lastname": "Чевелев",
+              "name": "Степан",
+              "fullname": "ЧЕВЕЛЕВ Степан",
+              "year": 2005,
+              "rang": "1",
+              "region": "Свердловская обл."
+            },
+            "marks": [
+              {
+                "id": "5zrflcnna",
+                "value": 32,
+                "new_value": null,
+                "race": 0,
+                "race_id": "plu4p4xy6",
+                "judge": 1,
+                "judge_id": "g5j801nh6",
+                "section": 0
+              },
+              {
+                "id": "ij9wsbpe6",
+                "value": 46,
+                "new_value": null,
+                "race": 0,
+                "race_id": "plu4p4xy6",
+                "judge": 2,
+                "judge_id": "joi1k8tct",
+                "section": 0
+              },
+              {
+                "id": "5k36076nn",
+                "value": 100,
+                "new_value": null,
+                "race": 0,
+                "race_id": "plu4p4xy6",
+                "judge": 3,
+                "judge_id": "oypuvzfsa",
+                "section": 0
+              },
+              {
+                "id": "enr8lx48o",
+                "value": 36,
+                "new_value": null,
+                "race": 0,
+                "race_id": "plu4p4xy6",
+                "judge": 4,
+                "judge_id": "79nc0yt1b",
+                "section": 0
+              }
+            ],
+            "results": [
+              {
+                "id": "icp0rpxzf",
+                "value": 53.5,
+                "race_id": "plu4p4xy6",
+                "repeat": "A",
+                "status": null
+              }
+            ],
+            "results_overall": [
+              {
+                "competition_id": "419t2thqp",
+                "competitor_id": "7guep1z92",
+                "value": 53.5,
+                "status": null
+              }
+            ]
+          },
+          {
+            "info_dialog": { "state": false },
+            "race_status": null,
+            "res_accepted": false,
+            "rank": 1,
+            "id": "yl56l85cd",
+            "info_data": {
+              "bib": 14,
+              "lastname": "Замятин",
+              "name": "Андрей",
+              "fullname": "ЗАМЯТИН Андрей",
+              "year": 2005,
+              "rang": "КМС",
+              "region": "г. Санкт-Петербург"
+            },
+            "marks": [
+              {
+                "id": "c5xligurx",
+                "value": 75,
+                "new_value": null,
+                "race": 0,
+                "race_id": "plu4p4xy6",
+                "judge": 1,
+                "judge_id": "g5j801nh6",
+                "section": 0
+              },
+              {
+                "id": "q7s931zhq",
+                "value": 68,
+                "new_value": null,
+                "race": 0,
+                "race_id": "plu4p4xy6",
+                "judge": 2,
+                "judge_id": "joi1k8tct",
+                "section": 0
+              },
+              {
+                "id": "fos1hlqof",
+                "value": 85,
+                "new_value": null,
+                "race": 0,
+                "race_id": "plu4p4xy6",
+                "judge": 3,
+                "judge_id": "oypuvzfsa",
+                "section": 0
+              },
+              {
+                "id": "nddjtpji7",
+                "value": 98,
+                "new_value": null,
+                "race": 0,
+                "race_id": "plu4p4xy6",
+                "judge": 4,
+                "judge_id": "79nc0yt1b",
+                "section": 0
+              }
+            ],
+            "results": [
+              {
+                "id": "ierpi7lja",
+                "value": 81.5,
+                "race_id": "plu4p4xy6",
+                "repeat": "A",
+                "status": null
+              }
+            ],
+            "results_overall": [
+              {
+                "competition_id": "419t2thqp",
+                "competitor_id": "yl56l85cd",
+                "value": 81.5,
+                "status": null
+              }
+            ]
+          },
+          {
+            "info_dialog": { "state": false },
+            "race_status": null,
+            "res_accepted": false,
+            "rank": 12,
+            "id": "0d0kdk2ne",
+            "info_data": {
+              "bib": 84,
+              "lastname": "Ершов",
+              "name": "Артём",
+              "fullname": "ЕРШОВ Артём",
+              "year": 2008,
+              "rang": "1",
+              "region": "г. Москва"
+            },
+            "marks": [
+              {
+                "id": "y5vl5synk",
+                "value": 45,
+                "new_value": null,
+                "race": 0,
+                "race_id": "plu4p4xy6",
+                "judge": 1,
+                "judge_id": "g5j801nh6",
+                "section": 0
+              },
+              {
+                "id": "4rltxq8bi",
+                "value": 55,
+                "new_value": null,
+                "race": 0,
+                "race_id": "plu4p4xy6",
+                "judge": 2,
+                "judge_id": "joi1k8tct",
+                "section": 0
+              },
+              {
+                "id": "hos9h31e3",
+                "value": 79,
+                "new_value": null,
+                "race": 0,
+                "race_id": "plu4p4xy6",
+                "judge": 3,
+                "judge_id": "oypuvzfsa",
+                "section": 0
+              },
+              {
+                "id": "6f6mzyjto",
+                "value": 43,
+                "new_value": null,
+                "race": 0,
+                "race_id": "plu4p4xy6",
+                "judge": 4,
+                "judge_id": "79nc0yt1b",
+                "section": 0
+              }
+            ],
+            "results": [
+              {
+                "id": "utvw9xwgt",
+                "value": 55.5,
+                "race_id": "plu4p4xy6",
+                "repeat": "A",
+                "status": null
+              }
+            ],
+            "results_overall": [
+              {
+                "competition_id": "419t2thqp",
+                "competitor_id": "0d0kdk2ne",
+                "value": 55.5,
+                "status": null
+              }
+            ]
+          },
+          {
+            "info_dialog": { "state": false },
+            "race_status": null,
+            "res_accepted": false,
+            "rank": 3,
+            "id": "7b9escdfc",
+            "info_data": {
+              "bib": 85,
+              "lastname": "Чижиков",
+              "name": "Иван",
+              "fullname": "ЧИЖИКОВ Иван",
+              "year": 2007,
+              "rang": "2",
+              "region": "Свердловская обл."
+            },
+            "marks": [
+              {
+                "id": "mzndj0rpr",
+                "value": 60,
+                "new_value": null,
+                "race": 0,
+                "race_id": "plu4p4xy6",
+                "judge": 1,
+                "judge_id": "g5j801nh6",
+                "section": 0
+              },
+              {
+                "id": "vtf3agden",
+                "value": 100,
+                "new_value": null,
+                "race": 0,
+                "race_id": "plu4p4xy6",
+                "judge": 2,
+                "judge_id": "joi1k8tct",
+                "section": 0
+              },
+              {
+                "id": "qmc0zmkqs",
+                "value": 95,
+                "new_value": null,
+                "race": 0,
+                "race_id": "plu4p4xy6",
+                "judge": 3,
+                "judge_id": "oypuvzfsa",
+                "section": 0
+              },
+              {
+                "id": "c0rezooul",
+                "value": 48,
+                "new_value": null,
+                "race": 0,
+                "race_id": "plu4p4xy6",
+                "judge": 4,
+                "judge_id": "79nc0yt1b",
+                "section": 0
+              }
+            ],
+            "results": [
+              {
+                "id": "mkjf0spc0",
+                "value": 75.75,
+                "race_id": "plu4p4xy6",
+                "repeat": "A",
+                "status": null
+              }
+            ],
+            "results_overall": [
+              {
+                "competition_id": "419t2thqp",
+                "competitor_id": "7b9escdfc",
+                "value": 75.75,
+                "status": null
+              }
+            ]
+          },
+          {
+            "info_dialog": { "state": false },
+            "race_status": null,
+            "res_accepted": false,
+            "rank": 11,
+            "id": "mh54vv2n7",
+            "info_data": {
+              "bib": 86,
+              "lastname": "Белоусов",
+              "name": "Александр",
+              "fullname": "БЕЛОУСОВ Александр",
+              "year": 2008,
+              "rang": "1",
+              "region": "Московская обл."
+            },
+            "marks": [
+              {
+                "id": "snvghs3no",
+                "value": 69,
+                "new_value": null,
+                "race": 0,
+                "race_id": "plu4p4xy6",
+                "judge": 1,
+                "judge_id": "g5j801nh6",
+                "section": 0
+              },
+              {
+                "id": "p58yr0qex",
+                "value": 45,
+                "new_value": null,
+                "race": 0,
+                "race_id": "plu4p4xy6",
+                "judge": 2,
+                "judge_id": "joi1k8tct",
+                "section": 0
+              },
+              {
+                "id": "j35qgq859",
+                "value": 76,
+                "new_value": null,
+                "race": 0,
+                "race_id": "plu4p4xy6",
+                "judge": 3,
+                "judge_id": "oypuvzfsa",
+                "section": 0
+              },
+              {
+                "id": "pascdsj89",
+                "value": 45,
+                "new_value": null,
+                "race": 0,
+                "race_id": "plu4p4xy6",
+                "judge": 4,
+                "judge_id": "79nc0yt1b",
+                "section": 0
+              }
+            ],
+            "results": [
+              {
+                "id": "wc6wa9bal",
+                "value": 58.75,
+                "race_id": "plu4p4xy6",
+                "repeat": "A",
+                "status": null
+              }
+            ],
+            "results_overall": [
+              {
+                "competition_id": "419t2thqp",
+                "competitor_id": "mh54vv2n7",
+                "value": 58.75,
+                "status": null
+              }
+            ]
+          },
+          {
+            "info_dialog": { "state": false },
+            "race_status": null,
+            "res_accepted": false,
+            "rank": 2,
+            "id": "rlyedg3m7",
+            "info_data": {
+              "bib": 51,
+              "lastname": "Дзидзигури",
+              "name": "Даниил",
+              "fullname": "ДЗИДЗИГУРИ Даниил",
+              "year": 2005,
+              "rang": "1",
+              "region": "Московская обл."
+            },
+            "marks": [
+              {
+                "id": "6m33h262g",
+                "value": 63,
+                "new_value": null,
+                "race": 0,
+                "race_id": "plu4p4xy6",
+                "judge": 1,
+                "judge_id": "g5j801nh6",
+                "section": 0
+              },
+              {
+                "id": "1h6j5j3f8",
+                "value": 78,
+                "new_value": null,
+                "race": 0,
+                "race_id": "plu4p4xy6",
+                "judge": 2,
+                "judge_id": "joi1k8tct",
+                "section": 0
+              },
+              {
+                "id": "fq4nz2hrz",
+                "value": 77,
+                "new_value": null,
+                "race": 0,
+                "race_id": "plu4p4xy6",
+                "judge": 3,
+                "judge_id": "oypuvzfsa",
+                "section": 0
+              },
+              {
+                "id": "ywpfsltou",
+                "value": 88,
+                "new_value": null,
+                "race": 0,
+                "race_id": "plu4p4xy6",
+                "judge": 4,
+                "judge_id": "79nc0yt1b",
+                "section": 0
+              }
+            ],
+            "results": [
+              {
+                "id": "enyc1ysto",
+                "value": 76.5,
+                "race_id": "plu4p4xy6",
+                "repeat": "A",
+                "status": null
+              }
+            ],
+            "results_overall": [
+              {
+                "competition_id": "419t2thqp",
+                "competitor_id": "rlyedg3m7",
+                "value": 76.5,
+                "status": null
+              }
+            ]
+          },
+          {
+            "info_dialog": { "state": false },
+            "race_status": null,
+            "res_accepted": false,
+            "rank": 18,
+            "id": "ekzkn2cwm",
+            "info_data": {
+              "bib": 20,
+              "lastname": "Архипов",
+              "name": "Лаврентий",
+              "fullname": "АРХИПОВ Лаврентий",
+              "year": 2004,
+              "rang": "КМС",
+              "region": "Свердловская обл."
+            },
+            "marks": [
+              {
+                "id": "99l5gyynw",
+                "value": 47,
+                "new_value": null,
+                "race": 0,
+                "race_id": "plu4p4xy6",
+                "judge": 1,
+                "judge_id": "g5j801nh6",
+                "section": 0
+              },
+              {
+                "id": "rickge9hi",
+                "value": 31,
+                "new_value": null,
+                "race": 0,
+                "race_id": "plu4p4xy6",
+                "judge": 2,
+                "judge_id": "joi1k8tct",
+                "section": 0
+              },
+              {
+                "id": "h29tvjumo",
+                "value": 50,
+                "new_value": null,
+                "race": 0,
+                "race_id": "plu4p4xy6",
+                "judge": 3,
+                "judge_id": "oypuvzfsa",
+                "section": 0
+              },
+              {
+                "id": "40etlpqqf",
+                "value": 36,
+                "new_value": null,
+                "race": 0,
+                "race_id": "plu4p4xy6",
+                "judge": 4,
+                "judge_id": "79nc0yt1b",
+                "section": 0
+              }
+            ],
+            "results": [
+              {
+                "id": "9ippaw5jt",
+                "value": 41,
+                "race_id": "plu4p4xy6",
+                "repeat": "A",
+                "status": null
+              }
+            ],
+            "results_overall": [
+              {
+                "competition_id": "419t2thqp",
+                "competitor_id": "ekzkn2cwm",
+                "value": 41,
+                "status": null
+              }
+            ]
+          },
+          {
+            "info_dialog": { "state": false },
+            "race_status": null,
+            "res_accepted": false,
+            "rank": 10,
+            "id": "fb3chfe2f",
+            "info_data": {
+              "bib": 64,
+              "lastname": "Спирин",
+              "name": "Кирилл",
+              "fullname": "СПИРИН Кирилл",
+              "year": 2007,
+              "rang": "1",
+              "region": "Красноярский край"
+            },
+            "marks": [
+              {
+                "id": "rxqm0xxoh",
+                "value": 61,
+                "new_value": null,
+                "race": 0,
+                "race_id": "plu4p4xy6",
+                "judge": 1,
+                "judge_id": "g5j801nh6",
+                "section": 0
+              },
+              {
+                "id": "y5u5cwr69",
+                "value": 30,
+                "new_value": null,
+                "race": 0,
+                "race_id": "plu4p4xy6",
+                "judge": 2,
+                "judge_id": "joi1k8tct",
+                "section": 0
+              },
+              {
+                "id": "rt2qn4g9e",
+                "value": 70,
+                "new_value": null,
+                "race": 0,
+                "race_id": "plu4p4xy6",
+                "judge": 3,
+                "judge_id": "oypuvzfsa",
+                "section": 0
+              },
+              {
+                "id": "wdlztl5h8",
+                "value": 89,
+                "new_value": null,
+                "race": 0,
+                "race_id": "plu4p4xy6",
+                "judge": 4,
+                "judge_id": "79nc0yt1b",
+                "section": 0
+              }
+            ],
+            "results": [
+              {
+                "id": "h79q9mkvs",
+                "value": 62.5,
+                "race_id": "plu4p4xy6",
+                "repeat": "A",
+                "status": null
+              }
+            ],
+            "results_overall": [
+              {
+                "competition_id": "419t2thqp",
+                "competitor_id": "fb3chfe2f",
+                "value": 62.5,
+                "status": null
+              }
+            ]
+          },
+          {
+            "info_dialog": { "state": false },
+            "race_status": null,
+            "res_accepted": false,
+            "rank": 8,
+            "id": "9chg3cwhp",
+            "info_data": {
+              "bib": 81,
+              "lastname": "Ращектаев",
+              "name": "Тимофей",
+              "fullname": "РАЩЕКТАЕВ Тимофей",
+              "year": 2009,
+              "rang": "2",
+              "region": "Челябинская область"
+            },
+            "marks": [
+              {
+                "id": "wkdmychk0",
+                "value": 95,
+                "new_value": null,
+                "race": 0,
+                "race_id": "plu4p4xy6",
+                "judge": 1,
+                "judge_id": "g5j801nh6",
+                "section": 0
+              },
+              {
+                "id": "yoc1h7qrm",
+                "value": 42,
+                "new_value": null,
+                "race": 0,
+                "race_id": "plu4p4xy6",
+                "judge": 2,
+                "judge_id": "joi1k8tct",
+                "section": 0
+              },
+              {
+                "id": "t3dfl7vk6",
+                "value": 69,
+                "new_value": null,
+                "race": 0,
+                "race_id": "plu4p4xy6",
+                "judge": 3,
+                "judge_id": "oypuvzfsa",
+                "section": 0
+              },
+              {
+                "id": "0niz00iyx",
+                "value": 60,
+                "new_value": null,
+                "race": 0,
+                "race_id": "plu4p4xy6",
+                "judge": 4,
+                "judge_id": "79nc0yt1b",
+                "section": 0
+              }
+            ],
+            "results": [
+              {
+                "id": "d6epacqbw",
+                "value": 66.5,
+                "race_id": "plu4p4xy6",
+                "repeat": "A",
+                "status": null
+              }
+            ],
+            "results_overall": [
+              {
+                "competition_id": "419t2thqp",
+                "competitor_id": "9chg3cwhp",
+                "value": 66.5,
+                "status": null
+              }
+            ]
+          },
+          {
+            "info_dialog": { "state": false },
+            "race_status": null,
+            "res_accepted": false,
+            "rank": 14,
+            "id": "46lbrygdg",
+            "info_data": {
+              "bib": 73,
+              "lastname": "Матвиенко",
+              "name": "Кирилл",
+              "fullname": "МАТВИЕНКО Кирилл",
+              "year": 2007,
+              "rang": "1",
+              "region": "Свердловская обл."
+            },
+            "marks": [
+              {
+                "id": "gnpx8qoa5",
+                "value": 52,
+                "new_value": null,
+                "race": 0,
+                "race_id": "plu4p4xy6",
+                "judge": 1,
+                "judge_id": "g5j801nh6",
+                "section": 0
+              },
+              {
+                "id": "66db6p7ch",
+                "value": 37,
+                "new_value": null,
+                "race": 0,
+                "race_id": "plu4p4xy6",
+                "judge": 2,
+                "judge_id": "joi1k8tct",
+                "section": 0
+              },
+              {
+                "id": "r1kuyyf3w",
+                "value": 91,
+                "new_value": null,
+                "race": 0,
+                "race_id": "plu4p4xy6",
+                "judge": 3,
+                "judge_id": "oypuvzfsa",
+                "section": 0
+              },
+              {
+                "id": "rki2iqt5s",
+                "value": 33,
+                "new_value": null,
+                "race": 0,
+                "race_id": "plu4p4xy6",
+                "judge": 4,
+                "judge_id": "79nc0yt1b",
+                "section": 0
+              }
+            ],
+            "results": [
+              {
+                "id": "erbo43xh1",
+                "value": 53.25,
+                "race_id": "plu4p4xy6",
+                "repeat": "A",
+                "status": null
+              }
+            ],
+            "results_overall": [
+              {
+                "competition_id": "419t2thqp",
+                "competitor_id": "46lbrygdg",
+                "value": 53.25,
+                "status": null
+              }
+            ]
+          },
+          {
+            "info_dialog": { "state": false },
+            "race_status": null,
+            "res_accepted": false,
+            "rank": 5,
+            "id": "as22jed7u",
+            "info_data": {
+              "bib": 70,
+              "lastname": "Маторный",
+              "name": "Денис",
+              "fullname": "МАТОРНЫЙ Денис",
+              "year": 2008,
+              "rang": "1",
+              "region": "Мурманская обл."
+            },
+            "marks": [
+              {
+                "id": "oniojvhag",
+                "value": 98,
+                "new_value": null,
+                "race": 0,
+                "race_id": "plu4p4xy6",
+                "judge": 1,
+                "judge_id": "g5j801nh6",
+                "section": 0
+              },
+              {
+                "id": "yhky5xgf6",
+                "value": 78,
+                "new_value": null,
+                "race": 0,
+                "race_id": "plu4p4xy6",
+                "judge": 2,
+                "judge_id": "joi1k8tct",
+                "section": 0
+              },
+              {
+                "id": "pb2bqxkf2",
+                "value": 64,
+                "new_value": null,
+                "race": 0,
+                "race_id": "plu4p4xy6",
+                "judge": 3,
+                "judge_id": "oypuvzfsa",
+                "section": 0
+              },
+              {
+                "id": "gmdurynxs",
+                "value": 57,
+                "new_value": null,
+                "race": 0,
+                "race_id": "plu4p4xy6",
+                "judge": 4,
+                "judge_id": "79nc0yt1b",
+                "section": 0
+              }
+            ],
+            "results": [
+              {
+                "id": "1b115rzhy",
+                "value": 74.25,
+                "race_id": "plu4p4xy6",
+                "repeat": "A",
+                "status": null
+              }
+            ],
+            "results_overall": [
+              {
+                "competition_id": "419t2thqp",
+                "competitor_id": "as22jed7u",
+                "value": 74.25,
+                "status": null
+              }
+            ]
+          },
+          {
+            "info_dialog": { "state": false },
+            "race_status": null,
+            "res_accepted": false,
+            "rank": 4,
+            "id": "vy8dkzerq",
+            "info_data": {
+              "bib": 83,
+              "lastname": "Ремень",
+              "name": "Артем",
+              "fullname": "РЕМЕНЬ Артем",
+              "year": 2008,
+              "rang": "2",
+              "region": "Свердловская обл."
+            },
+            "marks": [
+              {
+                "id": "h90lexbj1",
+                "value": 61,
+                "new_value": null,
+                "race": 0,
+                "race_id": "plu4p4xy6",
+                "judge": 1,
+                "judge_id": "g5j801nh6",
+                "section": 0
+              },
+              {
+                "id": "mzn3yydi5",
+                "value": 64,
+                "new_value": null,
+                "race": 0,
+                "race_id": "plu4p4xy6",
+                "judge": 2,
+                "judge_id": "joi1k8tct",
+                "section": 0
+              },
+              {
+                "id": "mliygn9oj",
+                "value": 76,
+                "new_value": null,
+                "race": 0,
+                "race_id": "plu4p4xy6",
+                "judge": 3,
+                "judge_id": "oypuvzfsa",
+                "section": 0
+              },
+              {
+                "id": "upgjp1bg0",
+                "value": 99,
+                "new_value": null,
+                "race": 0,
+                "race_id": "plu4p4xy6",
+                "judge": 4,
+                "judge_id": "79nc0yt1b",
+                "section": 0
+              }
+            ],
+            "results": [
+              {
+                "id": "5czamvemy",
+                "value": 75,
+                "race_id": "plu4p4xy6",
+                "repeat": "A",
+                "status": null
+              }
+            ],
+            "results_overall": [
+              {
+                "competition_id": "419t2thqp",
+                "competitor_id": "vy8dkzerq",
+                "value": 75,
+                "status": null
+              }
+            ]
+          },
+          {
+            "info_dialog": { "state": false },
+            "race_status": null,
+            "res_accepted": false,
+            "rank": 17,
+            "id": "no309uykd",
+            "info_data": {
+              "bib": 24,
+              "lastname": "Питинов",
+              "name": "Ярослав",
+              "fullname": "ПИТИНОВ Ярослав",
+              "year": 2008,
+              "rang": "1",
+              "region": "г. Санкт-Петербург"
+            },
+            "marks": [
+              {
+                "id": "15s44z6hh",
+                "value": 43,
+                "new_value": null,
+                "race": 0,
+                "race_id": "plu4p4xy6",
+                "judge": 1,
+                "judge_id": "g5j801nh6",
+                "section": 0
+              },
+              {
+                "id": "eqz78hlaz",
+                "value": 64,
+                "new_value": null,
+                "race": 0,
+                "race_id": "plu4p4xy6",
+                "judge": 2,
+                "judge_id": "joi1k8tct",
+                "section": 0
+              },
+              {
+                "id": "s95gmjqel",
+                "value": 43,
+                "new_value": null,
+                "race": 0,
+                "race_id": "plu4p4xy6",
+                "judge": 3,
+                "judge_id": "oypuvzfsa",
+                "section": 0
+              },
+              {
+                "id": "ys17bun16",
+                "value": 37,
+                "new_value": null,
+                "race": 0,
+                "race_id": "plu4p4xy6",
+                "judge": 4,
+                "judge_id": "79nc0yt1b",
+                "section": 0
+              }
+            ],
+            "results": [
+              {
+                "id": "oliv08kx4",
+                "value": 46.75,
+                "race_id": "plu4p4xy6",
+                "repeat": "A",
+                "status": null
+              }
+            ],
+            "results_overall": [
+              {
+                "competition_id": "419t2thqp",
+                "competitor_id": "no309uykd",
+                "value": 46.75,
+                "status": null
+              }
+            ]
+          },
+          {
+            "info_dialog": { "state": false },
+            "race_status": null,
+            "res_accepted": false,
+            "rank": 16,
+            "id": "drdcgyjyq",
+            "info_data": {
+              "bib": 8,
+              "lastname": "Юмаков",
+              "name": "Динар",
+              "fullname": "ЮМАКОВ Динар",
+              "year": 2004,
+              "rang": "КМС",
+              "region": "Республика Башкортостан"
+            },
+            "marks": [
+              {
+                "id": "e4x938m3n",
+                "value": 44,
+                "new_value": null,
+                "race": 0,
+                "race_id": "plu4p4xy6",
+                "judge": 1,
+                "judge_id": "g5j801nh6",
+                "section": 0
+              },
+              {
+                "id": "9c1al36yc",
+                "value": 58,
+                "new_value": null,
+                "race": 0,
+                "race_id": "plu4p4xy6",
+                "judge": 2,
+                "judge_id": "joi1k8tct",
+                "section": 0
+              },
+              {
+                "id": "cvxppl6gz",
+                "value": 54,
+                "new_value": null,
+                "race": 0,
+                "race_id": "plu4p4xy6",
+                "judge": 3,
+                "judge_id": "oypuvzfsa",
+                "section": 0
+              },
+              {
+                "id": "k4ydbqlrw",
+                "value": 34,
+                "new_value": null,
+                "race": 0,
+                "race_id": "plu4p4xy6",
+                "judge": 4,
+                "judge_id": "79nc0yt1b",
+                "section": 0
+              }
+            ],
+            "results": [
+              {
+                "id": "p2p4yg0vw",
+                "value": 47.5,
+                "race_id": "plu4p4xy6",
+                "repeat": "A",
+                "status": null
+              }
+            ],
+            "results_overall": [
+              {
+                "competition_id": "419t2thqp",
+                "competitor_id": "drdcgyjyq",
+                "value": 47.5,
+                "status": null
+              }
+            ]
+          },
+          {
+            "info_dialog": { "state": false },
+            "race_status": null,
+            "res_accepted": false,
+            "rank": 9,
+            "id": "t7wq8ik6b",
+            "info_data": {
+              "bib": 48,
+              "lastname": "Ленчевский",
+              "name": "Алексей",
+              "fullname": "ЛЕНЧЕВСКИЙ Алексей",
+              "year": 2006,
+              "rang": "КМС",
+              "region": "г. Москва"
+            },
+            "marks": [
+              {
+                "id": "zttvwr0nn",
+                "value": 31,
+                "new_value": null,
+                "race": 0,
+                "race_id": "plu4p4xy6",
+                "judge": 1,
+                "judge_id": "g5j801nh6",
+                "section": 0
+              },
+              {
+                "id": "h8ahrx9hq",
+                "value": 39,
+                "new_value": null,
+                "race": 0,
+                "race_id": "plu4p4xy6",
+                "judge": 2,
+                "judge_id": "joi1k8tct",
+                "section": 0
+              },
+              {
+                "id": "wgoxd75pe",
+                "value": 95,
+                "new_value": null,
+                "race": 0,
+                "race_id": "plu4p4xy6",
+                "judge": 3,
+                "judge_id": "oypuvzfsa",
+                "section": 0
+              },
+              {
+                "id": "wxgjeo3kh",
+                "value": 87,
+                "new_value": null,
+                "race": 0,
+                "race_id": "plu4p4xy6",
+                "judge": 4,
+                "judge_id": "79nc0yt1b",
+                "section": 0
+              }
+            ],
+            "results": [
+              {
+                "id": "oanqlc7jy",
+                "value": 63,
+                "race_id": "plu4p4xy6",
+                "repeat": "A",
+                "status": null
+              }
+            ],
+            "results_overall": [
+              {
+                "competition_id": "419t2thqp",
+                "competitor_id": "t7wq8ik6b",
+                "value": 63,
+                "status": null
+              }
+            ]
+          },
+          {
+            "info_dialog": { "state": false },
+            "race_status": null,
+            "res_accepted": false,
+            "rank": 15,
+            "id": "i2i2pta4b",
+            "info_data": {
+              "bib": 22,
+              "lastname": "Старков",
+              "name": "Матвей",
+              "fullname": "СТАРКОВ Матвей",
+              "year": 2007,
+              "rang": "1",
+              "region": "Челябинская область"
+            },
+            "marks": [
+              {
+                "id": "y77lq1icw",
+                "value": 34,
+                "new_value": null,
+                "race": 0,
+                "race_id": "plu4p4xy6",
+                "judge": 1,
+                "judge_id": "g5j801nh6",
+                "section": 0
+              },
+              {
+                "id": "xoam14epb",
+                "value": 63,
+                "new_value": null,
+                "race": 0,
+                "race_id": "plu4p4xy6",
+                "judge": 2,
+                "judge_id": "joi1k8tct",
+                "section": 0
+              },
+              {
+                "id": "umd4zjid4",
+                "value": 73,
+                "new_value": null,
+                "race": 0,
+                "race_id": "plu4p4xy6",
+                "judge": 3,
+                "judge_id": "oypuvzfsa",
+                "section": 0
+              },
+              {
+                "id": "lt50qb23f",
+                "value": 41,
+                "new_value": null,
+                "race": 0,
+                "race_id": "plu4p4xy6",
+                "judge": 4,
+                "judge_id": "79nc0yt1b",
+                "section": 0
+              }
+            ],
+            "results": [
+              {
+                "id": "ebbl9u29b",
+                "value": 52.75,
+                "race_id": "plu4p4xy6",
+                "repeat": "A",
+                "status": null
+              }
+            ],
+            "results_overall": [
+              {
+                "competition_id": "419t2thqp",
+                "competitor_id": "i2i2pta4b",
+                "value": 52.75,
+                "status": null
+              }
+            ]
+          },
+          {
+            "info_dialog": { "state": false },
+            "race_status": null,
+            "res_accepted": false,
+            "rank": 7,
+            "id": "t251y1t3e",
+            "info_data": {
+              "bib": 28,
+              "lastname": "Корчмит",
+              "name": "Николай",
+              "fullname": "КОРЧМИТ Николай",
+              "year": 2006,
+              "rang": "1",
+              "region": "Новосибирская обл."
+            },
+            "marks": [
+              {
+                "id": "hlkha13s9",
+                "value": 85,
+                "new_value": null,
+                "race": 0,
+                "race_id": "plu4p4xy6",
+                "judge": 1,
+                "judge_id": "g5j801nh6",
+                "section": 0
+              },
+              {
+                "id": "sfspnursh",
+                "value": 63,
+                "new_value": null,
+                "race": 0,
+                "race_id": "plu4p4xy6",
+                "judge": 2,
+                "judge_id": "joi1k8tct",
+                "section": 0
+              },
+              {
+                "id": "q8s71sjqx",
+                "value": 43,
+                "new_value": null,
+                "race": 0,
+                "race_id": "plu4p4xy6",
+                "judge": 3,
+                "judge_id": "oypuvzfsa",
+                "section": 0
+              },
+              {
+                "id": "aou8c0yzv",
+                "value": 85,
+                "new_value": null,
+                "race": 0,
+                "race_id": "plu4p4xy6",
+                "judge": 4,
+                "judge_id": "79nc0yt1b",
+                "section": 0
+              }
+            ],
+            "results": [
+              {
+                "id": "zv3tq43li",
+                "value": 69,
+                "race_id": "plu4p4xy6",
+                "repeat": "A",
+                "status": null
+              }
+            ],
+            "results_overall": [
+              {
+                "competition_id": "419t2thqp",
+                "competitor_id": "t251y1t3e",
+                "value": 69,
+                "status": null
+              }
+            ]
+          },
+          {
+            "info_dialog": { "state": false },
+            "race_status": null,
+            "res_accepted": false,
+            "rank": 6,
+            "id": "ygggyba5t",
+            "info_data": {
+              "bib": 25,
+              "lastname": "Осипов",
+              "name": "Данил",
+              "fullname": "ОСИПОВ Данил",
+              "year": 2006,
+              "rang": "1",
+              "region": "Тюменская обл."
+            },
+            "marks": [
+              {
+                "id": "mt6xum7us",
+                "value": 78,
+                "new_value": null,
+                "race": 0,
+                "race_id": "plu4p4xy6",
+                "judge": 1,
+                "judge_id": "g5j801nh6",
+                "section": 0
+              },
+              {
+                "id": "6b4dir65i",
+                "value": 92,
+                "new_value": null,
+                "race": 0,
+                "race_id": "plu4p4xy6",
+                "judge": 2,
+                "judge_id": "joi1k8tct",
+                "section": 0
+              },
+              {
+                "id": "s8pr0iwvk",
+                "value": 47,
+                "new_value": null,
+                "race": 0,
+                "race_id": "plu4p4xy6",
+                "judge": 3,
+                "judge_id": "oypuvzfsa",
+                "section": 0
+              },
+              {
+                "id": "rnlwuijn2",
+                "value": 70,
+                "new_value": null,
+                "race": 0,
+                "race_id": "plu4p4xy6",
+                "judge": 4,
+                "judge_id": "79nc0yt1b",
+                "section": 0
+              }
+            ],
+            "results": [
+              {
+                "id": "6k1l1i8ce",
+                "value": 71.75,
+                "race_id": "plu4p4xy6",
+                "repeat": "A",
+                "status": null
+              }
+            ],
+            "results_overall": [
+              {
+                "competition_id": "419t2thqp",
+                "competitor_id": "ygggyba5t",
+                "value": 71.75,
+                "status": null
+              }
+            ]
+          }
+        ]
+      },
+      "media_settings": {
+        "display": {
+          "modes": [
+            { "id": 0, "title": "Результаты" },
+            { "id": 1, "title": "Стартовый" },
+            { "id": 2, "title": "Результат последнего на финише" },
+            { "id": 3, "title": "Участник на старте" },
+            { "id": 4, "title": "Награждение" }
+          ],
+          "selected": 1
+        }
+      },
+      "protocol_fields": [],
+      "protocol_settings": {
+        "protocol_type": 1,
+        "show_preview": false,
+        "start_protocols": {
+          "filters": { "race_filter": null },
+          "fonts": {
+            "officialsData": 12,
+            "openers": 12,
+            "weatherData": 12,
+            "raceNotes": 12
+          },
+          "protocol_type": "Старт-лист",
+          "fields": []
+        },
+        "result_protocols": {
+          "filters": { "race_filter": null },
+          "fonts": {
+            "officialsData": 12,
+            "openers": 12,
+            "weatherData": 12,
+            "raceNotes": 12
+          },
+          "protocol_type": "Результаты",
+          "fields": [],
+          "raceResultFields": []
+        }
+      },
+      "result_formula": {
+        "overall_result": {
+          "type": 0,
+          "select_heats": {
+            "heats": 0,
+            "mode": 0,
+            "modes": [
+              { "id": 0, "title": "Подсчёт из всех" },
+              { "id": 1, "title": "Подсчёт из N лучших" }
+            ]
+          },
+          "types": [
+            { "id": 0, "title": "Лучший" },
+            { "id": 1, "title": "Сумма" },
+            { "id": 2, "title": "Среднее" },
+            { "id": 3, "title": "ABC" }
+          ]
+        },
+        "type": 0,
+        "types": [
+          {
+            "id": 0,
+            "title": "По судьям",
+            "cof": 1,
+            "doubleUp": false,
+            "doubleUp_corridors": [[], []],
+            "doubleUp_competitors": { "0": null, "1": null },
+            "lower_marks": 0,
+            "higher_marks": 0,
+            "formula": 0,
+            "formulas": [
+              { "id": 0, "title": "Среднее" },
+              { "id": 1, "title": "Сумма" }
+            ]
+          },
+          {
+            "id": 1,
+            "title": "По секциям",
+            "sections": [],
+            "formula": 0,
+            "formulas": [{ "id": 0 }]
+          }
+        ]
+      },
+      "id": "419t2thqp",
+      "live_id": null
+    },
+    {
+      "weather": [
+        { "descr1": "Температура Снега:", "descr2": "0°" },
+        { "descr1": "Температура Воздуха:", "descr2": "0°" },
+        { "descr1": "Скорость ветра:", "descr2": "" }
+      ],
+      "structure": {
+        "statuses": [
+          { "value": "DNF", "priority": -1 },
+          { "value": "DNS", "priority": -2 },
+          { "value": "DSQ", "priority": -3 }
+        ],
+        "selected": { "type": 0, "discipline": 0, "accuracy": 1 },
+        "types": [
+          { "id": 0, "title": "Сноуборд", "disciplines": [0, 1, 2, 100] },
+          { "id": 1, "title": "Фристайл", "disciplines": [0, 1, 2, 3, 4, 100] },
+          { "id": 2, "title": "Пользовательский", "disciplines": [100] }
+        ],
+        "disciplines": [
+          { "id": 0, "title": "Слоуп-Стайл", "res_formula": [1] },
+          { "id": 1, "title": "Биг-Эйр", "res_formula": [2] },
+          { "id": 2, "title": "Хаф-Пайп", "res_formula": [3] },
+          { "id": 3, "title": "Акробатика", "res_formula": [4] },
+          { "id": 4, "title": "Могул", "res_formula": [5] },
+          { "id": 100, "title": "Пользовательский", "res_formula": [100] }
+        ],
+        "accuracy": [
+          { "id": 0, "title": "1", "value": 1, "digits": 0 },
+          { "id": 1, "title": "1:10", "value": 10, "digits": 1 },
+          { "id": 2, "title": "1:100", "value": 100, "digits": 2 },
+          { "id": 3, "title": "1:1000", "value": 1000, "digits": 3 }
+        ],
+        "stages": [
+          { "id": "qual", "title": "Квалификация", "value": "Квалификация" },
+          { "id": "final", "title": "Финал", "value": "Финал" },
+          { "id": "custom", "title": "Пользовательский", "value": "" }
+        ]
+      },
+      "stages": {
+        "lastStageSize": 1,
+        "prev_stages": ["419t2thqp"],
+        "stage_grid": [
+          { "title": "Квалификация", "s_competitions": ["419t2thqp"] },
+          { "title": "Финал", "s_competitions": ["wq42kn5lz"] }
+        ]
+      },
+      "passed_competitors": 0,
+      "races": [
+        {
+          "del_dialog": false,
+          "finished": [
+            "vy8dkzerq",
+            "rlyedg3m7",
+            "t251y1t3e",
+            "yl56l85cd",
+            "7b9escdfc",
+            "as22jed7u",
+            "ygggyba5t",
+            "9chg3cwhp"
+          ],
+          "onTrack": null,
+          "id": "a5wqeuku8",
+          "title": "Заезд 1",
+          "race_dialog": false,
+          "type": {
+            "id": 0,
+            "title": "Сноуборд",
+            "disciplines": [0, 1, 2, 100]
+          },
+          "discipline": { "id": 0, "title": "Слоуп-Стайл", "res_formula": [1] },
+          "startList": [],
+          "_startList": [
+            "vy8dkzerq",
+            "rlyedg3m7",
+            "t251y1t3e",
+            "yl56l85cd",
+            "7b9escdfc",
+            "as22jed7u",
+            "ygggyba5t",
+            "9chg3cwhp"
+          ],
+          "selectedCompetitor": null
+        }
+      ],
+      "selected_race_id": 0,
+      "mainData": {
+        "title": {
+          "title": "Название",
+          "value": "Новое соревнование",
+          "focus": false,
+          "stage": {
+            "title": "Этап",
+            "value": { "id": "final", "title": "Финал", "value": "Финал" },
+            "focus": false,
+            "group": "M"
+          }
+        },
+        "discipline": {
+          "title": "Дисциплина",
+          "value": "Дисциплина",
+          "min": "DSC",
+          "focus": false
+        },
+        "date": {
+          "title": "Дата проведения",
+          "dialog": false,
+          "value": "2022-06-23",
+          "time_dialog": false,
+          "time": "12:00",
+          "focus": false
+        },
+        "country": { "title": "Страна", "value": "", "focus": false },
+        "location": {
+          "title": "Место проведения",
+          "value": "",
+          "focus": false
+        },
+        "provider": { "title": "Организатор", "value": "", "focus": false },
+        "providerTiming": {
+          "title": "Timing provider",
+          "value": "",
+          "focus": false
+        },
+        "codex": { "title": "Код", "value": "", "focus": false }
+      },
+      "stuff": {
+        "settings": {
+          "jury": { "title": "Жюри", "change_dialog": false },
+          "judges": { "title": "Судьи", "change_dialog": false }
+        },
+        "secretary": { "name": "", "lastName": "" },
+        "jury": [
+          {
+            "id": "chief",
+            "title": "Старший судья",
+            "lastName": "",
+            "name": "",
+            "loc": "",
+            "connected": false,
+            "setABC": false
+          }
+        ],
+        "judges": [
+          {
+            "category": "",
+            "socket_id": null,
+            "connected": false,
+            "_id": "g5j801nh6",
+            "title": "Судья 1",
+            "remoteId": null,
+            "id": 1,
+            "name": "",
+            "lastName": "",
+            "location": "",
+            "setABC": false
+          },
+          {
+            "category": "",
+            "socket_id": null,
+            "connected": false,
+            "_id": "joi1k8tct",
+            "title": "Судья 2",
+            "remoteId": null,
+            "id": 2,
+            "name": "",
+            "lastName": "",
+            "location": "",
+            "setABC": false
+          },
+          {
+            "category": "",
+            "socket_id": null,
+            "connected": false,
+            "_id": "oypuvzfsa",
+            "title": "Судья 3",
+            "remoteId": null,
+            "id": 3,
+            "name": "",
+            "lastName": "",
+            "location": "",
+            "setABC": false
+          },
+          {
+            "category": "",
+            "socket_id": null,
+            "connected": false,
+            "_id": "79nc0yt1b",
+            "title": "Судья 4",
+            "remoteId": null,
+            "id": 4,
+            "name": "",
+            "lastName": "",
+            "location": "",
+            "setABC": false
+          }
+        ],
+        "openers": []
+      },
+      "technicalInfo": {
+        "title": "Техническая информация",
+        "change_dialog": false,
+        "records": [
+          { "title": "Название склона", "value": "" },
+          { "title": "Длина трассы", "value": "" },
+          { "title": "Ширина трассы", "value": "" }
+        ]
+      },
+      "competitorsSheet": {
+        "header": [
+          { "id": "bib", "title": "Bib" },
+          { "id": "lastname", "title": "Фамилия" },
+          { "id": "name", "title": "Имя" },
+          { "id": "fullname", "title": "Фамилия, Имя" },
+          { "id": "year", "title": "Год" },
+          { "id": "rang", "title": "Разряд" },
+          { "id": "region", "title": "Суб. РФ" }
+        ],
+        "competitors": [
+          {
+            "info_dialog": { "state": false },
+            "race_status": null,
+            "res_accepted": false,
+            "rank": 2,
+            "id": "yl56l85cd",
+            "info_data": {
+              "bib": 14,
+              "lastname": "Замятин",
+              "name": "Андрей",
+              "fullname": "ЗАМЯТИН Андрей",
+              "year": 2005,
+              "rang": "КМС",
+              "region": "г. Санкт-Петербург"
+            },
+            "marks": [
+              {
+                "id": "ycf0nzg38",
+                "value": 95,
+                "new_value": null,
+                "race": 0,
+                "race_id": "a5wqeuku8",
+                "judge": 1,
+                "judge_id": "g5j801nh6",
+                "section": 0
+              },
+              {
+                "id": "8k0nlwlk4",
+                "value": 72,
+                "new_value": null,
+                "race": 0,
+                "race_id": "a5wqeuku8",
+                "judge": 2,
+                "judge_id": "joi1k8tct",
+                "section": 0
+              },
+              {
+                "id": "cgpq554rg",
+                "value": 68,
+                "new_value": null,
+                "race": 0,
+                "race_id": "a5wqeuku8",
+                "judge": 3,
+                "judge_id": "oypuvzfsa",
+                "section": 0
+              },
+              {
+                "id": "kwqnlmhcg",
+                "value": 41,
+                "new_value": null,
+                "race": 0,
+                "race_id": "a5wqeuku8",
+                "judge": 4,
+                "judge_id": "79nc0yt1b",
+                "section": 0
+              }
+            ],
+            "results": [
+              {
+                "id": "ierpi7lja",
+                "value": 81.5,
+                "race_id": "plu4p4xy6",
+                "repeat": "A",
+                "status": null
+              },
+              {
+                "id": "s0e55fsl3",
+                "value": 69,
+                "race_id": "a5wqeuku8",
+                "repeat": "A",
+                "status": null
+              }
+            ],
+            "results_overall": [
+              {
+                "competition_id": "419t2thqp",
+                "competitor_id": "yl56l85cd",
+                "value": 81.5,
+                "status": null
+              },
+              { "id_comp": "419t2thqp", "value": 81.5 },
+              {
+                "competition_id": "wq42kn5lz",
+                "competitor_id": "yl56l85cd",
+                "value": 69,
+                "status": null
+              }
+            ]
+          },
+          {
+            "info_dialog": { "state": false },
+            "race_status": null,
+            "res_accepted": false,
+            "rank": 5,
+            "id": "rlyedg3m7",
+            "info_data": {
+              "bib": 51,
+              "lastname": "Дзидзигури",
+              "name": "Даниил",
+              "fullname": "ДЗИДЗИГУРИ Даниил",
+              "year": 2005,
+              "rang": "1",
+              "region": "Московская обл."
+            },
+            "marks": [
+              {
+                "id": "vhpiz98fr",
+                "value": 49,
+                "new_value": null,
+                "race": 0,
+                "race_id": "a5wqeuku8",
+                "judge": 1,
+                "judge_id": "g5j801nh6",
+                "section": 0
+              },
+              {
+                "id": "fuk0k86fb",
+                "value": 89,
+                "new_value": null,
+                "race": 0,
+                "race_id": "a5wqeuku8",
+                "judge": 2,
+                "judge_id": "joi1k8tct",
+                "section": 0
+              },
+              {
+                "id": "13o200iu9",
+                "value": 54,
+                "new_value": null,
+                "race": 0,
+                "race_id": "a5wqeuku8",
+                "judge": 3,
+                "judge_id": "oypuvzfsa",
+                "section": 0
+              },
+              {
+                "id": "ikja5l46l",
+                "value": 51,
+                "new_value": null,
+                "race": 0,
+                "race_id": "a5wqeuku8",
+                "judge": 4,
+                "judge_id": "79nc0yt1b",
+                "section": 0
+              }
+            ],
+            "results": [
+              {
+                "id": "enyc1ysto",
+                "value": 76.5,
+                "race_id": "plu4p4xy6",
+                "repeat": "A",
+                "status": null
+              },
+              {
+                "id": "l1o3ncgpd",
+                "value": 60.75,
+                "race_id": "a5wqeuku8",
+                "repeat": "A",
+                "status": null
+              }
+            ],
+            "results_overall": [
+              {
+                "competition_id": "419t2thqp",
+                "competitor_id": "rlyedg3m7",
+                "value": 76.5,
+                "status": null
+              },
+              { "id_comp": "419t2thqp", "value": 76.5 },
+              {
+                "competition_id": "wq42kn5lz",
+                "competitor_id": "rlyedg3m7",
+                "value": 60.75,
+                "status": null
+              }
+            ]
+          },
+          {
+            "info_dialog": { "state": false },
+            "race_status": null,
+            "res_accepted": false,
+            "rank": 3,
+            "id": "7b9escdfc",
+            "info_data": {
+              "bib": 85,
+              "lastname": "Чижиков",
+              "name": "Иван",
+              "fullname": "ЧИЖИКОВ Иван",
+              "year": 2007,
+              "rang": "2",
+              "region": "Свердловская обл."
+            },
+            "marks": [
+              {
+                "id": "ciuwpkhj1",
+                "value": 95,
+                "new_value": null,
+                "race": 0,
+                "race_id": "a5wqeuku8",
+                "judge": 1,
+                "judge_id": "g5j801nh6",
+                "section": 0
+              },
+              {
+                "id": "8vlpn66sg",
+                "value": 36,
+                "new_value": null,
+                "race": 0,
+                "race_id": "a5wqeuku8",
+                "judge": 2,
+                "judge_id": "joi1k8tct",
+                "section": 0
+              },
+              {
+                "id": "08j3tapu0",
+                "value": 34,
+                "new_value": null,
+                "race": 0,
+                "race_id": "a5wqeuku8",
+                "judge": 3,
+                "judge_id": "oypuvzfsa",
+                "section": 0
+              },
+              {
+                "id": "xr8pubyvx",
+                "value": 92,
+                "new_value": null,
+                "race": 0,
+                "race_id": "a5wqeuku8",
+                "judge": 4,
+                "judge_id": "79nc0yt1b",
+                "section": 0
+              }
+            ],
+            "results": [
+              {
+                "id": "mkjf0spc0",
+                "value": 75.75,
+                "race_id": "plu4p4xy6",
+                "repeat": "A",
+                "status": null
+              },
+              {
+                "id": "187v1d4go",
+                "value": 64.25,
+                "race_id": "a5wqeuku8",
+                "repeat": "A",
+                "status": null
+              }
+            ],
+            "results_overall": [
+              {
+                "competition_id": "419t2thqp",
+                "competitor_id": "7b9escdfc",
+                "value": 75.75,
+                "status": null
+              },
+              { "id_comp": "419t2thqp", "value": 75.75 },
+              {
+                "competition_id": "wq42kn5lz",
+                "competitor_id": "7b9escdfc",
+                "value": 64.25,
+                "status": null
+              }
+            ]
+          },
+          {
+            "info_dialog": { "state": false },
+            "race_status": null,
+            "res_accepted": false,
+            "rank": 1,
+            "id": "vy8dkzerq",
+            "info_data": {
+              "bib": 83,
+              "lastname": "Ремень",
+              "name": "Артем",
+              "fullname": "РЕМЕНЬ Артем",
+              "year": 2008,
+              "rang": "2",
+              "region": "Свердловская обл."
+            },
+            "marks": [
+              {
+                "id": "d69d6vpkd",
+                "value": 66,
+                "new_value": null,
+                "race": 0,
+                "race_id": "a5wqeuku8",
+                "judge": 1,
+                "judge_id": "g5j801nh6",
+                "section": 0
+              },
+              {
+                "id": "86iy810pb",
+                "value": 65,
+                "new_value": null,
+                "race": 0,
+                "race_id": "a5wqeuku8",
+                "judge": 2,
+                "judge_id": "joi1k8tct",
+                "section": 0
+              },
+              {
+                "id": "eprxfw0z5",
+                "value": 89,
+                "new_value": null,
+                "race": 0,
+                "race_id": "a5wqeuku8",
+                "judge": 3,
+                "judge_id": "oypuvzfsa",
+                "section": 0
+              },
+              {
+                "id": "s9sewv46i",
+                "value": 77,
+                "new_value": null,
+                "race": 0,
+                "race_id": "a5wqeuku8",
+                "judge": 4,
+                "judge_id": "79nc0yt1b",
+                "section": 0
+              }
+            ],
+            "results": [
+              {
+                "id": "5czamvemy",
+                "value": 75,
+                "race_id": "plu4p4xy6",
+                "repeat": "A",
+                "status": null
+              },
+              {
+                "id": "km6glqfue",
+                "value": 74.25,
+                "race_id": "a5wqeuku8",
+                "repeat": "A",
+                "status": null
+              }
+            ],
+            "results_overall": [
+              {
+                "competition_id": "419t2thqp",
+                "competitor_id": "vy8dkzerq",
+                "value": 75,
+                "status": null
+              },
+              { "id_comp": "419t2thqp", "value": 75 },
+              {
+                "competition_id": "wq42kn5lz",
+                "competitor_id": "vy8dkzerq",
+                "value": 74.25,
+                "status": null
+              }
+            ]
+          },
+          {
+            "info_dialog": { "state": false },
+            "race_status": null,
+            "res_accepted": false,
+            "rank": 7,
+            "id": "as22jed7u",
+            "info_data": {
+              "bib": 70,
+              "lastname": "Маторный",
+              "name": "Денис",
+              "fullname": "МАТОРНЫЙ Денис",
+              "year": 2008,
+              "rang": "1",
+              "region": "Мурманская обл."
+            },
+            "marks": [
+              {
+                "id": "lowqpa3rw",
+                "value": 86,
+                "new_value": null,
+                "race": 0,
+                "race_id": "a5wqeuku8",
+                "judge": 1,
+                "judge_id": "g5j801nh6",
+                "section": 0
+              },
+              {
+                "id": "qe709xzrj",
+                "value": 47,
+                "new_value": null,
+                "race": 0,
+                "race_id": "a5wqeuku8",
+                "judge": 2,
+                "judge_id": "joi1k8tct",
+                "section": 0
+              },
+              {
+                "id": "vyrd60rjc",
+                "value": 50,
+                "new_value": null,
+                "race": 0,
+                "race_id": "a5wqeuku8",
+                "judge": 3,
+                "judge_id": "oypuvzfsa",
+                "section": 0
+              },
+              {
+                "id": "ewa2v7j6g",
+                "value": 33,
+                "new_value": null,
+                "race": 0,
+                "race_id": "a5wqeuku8",
+                "judge": 4,
+                "judge_id": "79nc0yt1b",
+                "section": 0
+              }
+            ],
+            "results": [
+              {
+                "id": "1b115rzhy",
+                "value": 74.25,
+                "race_id": "plu4p4xy6",
+                "repeat": "A",
+                "status": null
+              },
+              {
+                "id": "rrfieb093",
+                "value": 54,
+                "race_id": "a5wqeuku8",
+                "repeat": "A",
+                "status": null
+              }
+            ],
+            "results_overall": [
+              {
+                "competition_id": "419t2thqp",
+                "competitor_id": "as22jed7u",
+                "value": 74.25,
+                "status": null
+              },
+              { "id_comp": "419t2thqp", "value": 74.25 },
+              {
+                "competition_id": "wq42kn5lz",
+                "competitor_id": "as22jed7u",
+                "value": 54,
+                "status": null
+              }
+            ]
+          },
+          {
+            "info_dialog": { "state": false },
+            "race_status": null,
+            "res_accepted": false,
+            "rank": 4,
+            "id": "ygggyba5t",
+            "info_data": {
+              "bib": 25,
+              "lastname": "Осипов",
+              "name": "Данил",
+              "fullname": "ОСИПОВ Данил",
+              "year": 2006,
+              "rang": "1",
+              "region": "Тюменская обл."
+            },
+            "marks": [
+              {
+                "id": "25gac652q",
+                "value": 84,
+                "new_value": null,
+                "race": 0,
+                "race_id": "a5wqeuku8",
+                "judge": 1,
+                "judge_id": "g5j801nh6",
+                "section": 0
+              },
+              {
+                "id": "rdbb0r0y7",
+                "value": 78,
+                "new_value": null,
+                "race": 0,
+                "race_id": "a5wqeuku8",
+                "judge": 2,
+                "judge_id": "joi1k8tct",
+                "section": 0
+              },
+              {
+                "id": "pfldneab5",
+                "value": 36,
+                "new_value": null,
+                "race": 0,
+                "race_id": "a5wqeuku8",
+                "judge": 3,
+                "judge_id": "oypuvzfsa",
+                "section": 0
+              },
+              {
+                "id": "uwawn5yec",
+                "value": 54,
+                "new_value": null,
+                "race": 0,
+                "race_id": "a5wqeuku8",
+                "judge": 4,
+                "judge_id": "79nc0yt1b",
+                "section": 0
+              }
+            ],
+            "results": [
+              {
+                "id": "6k1l1i8ce",
+                "value": 71.75,
+                "race_id": "plu4p4xy6",
+                "repeat": "A",
+                "status": null
+              },
+              {
+                "id": "qcy2nt23q",
+                "value": 63,
+                "race_id": "a5wqeuku8",
+                "repeat": "A",
+                "status": null
+              }
+            ],
+            "results_overall": [
+              {
+                "competition_id": "419t2thqp",
+                "competitor_id": "ygggyba5t",
+                "value": 71.75,
+                "status": null
+              },
+              { "id_comp": "419t2thqp", "value": 71.75 },
+              {
+                "competition_id": "wq42kn5lz",
+                "competitor_id": "ygggyba5t",
+                "value": 63,
+                "status": null
+              }
+            ]
+          },
+          {
+            "info_dialog": { "state": false },
+            "race_status": null,
+            "res_accepted": false,
+            "rank": 6,
+            "id": "t251y1t3e",
+            "info_data": {
+              "bib": 28,
+              "lastname": "Корчмит",
+              "name": "Николай",
+              "fullname": "КОРЧМИТ Николай",
+              "year": 2006,
+              "rang": "1",
+              "region": "Новосибирская обл."
+            },
+            "marks": [
+              {
+                "id": "xeswt8ay6",
+                "value": 36,
+                "new_value": null,
+                "race": 0,
+                "race_id": "a5wqeuku8",
+                "judge": 1,
+                "judge_id": "g5j801nh6",
+                "section": 0
+              },
+              {
+                "id": "7fqju5o5f",
+                "value": 43,
+                "new_value": null,
+                "race": 0,
+                "race_id": "a5wqeuku8",
+                "judge": 2,
+                "judge_id": "joi1k8tct",
+                "section": 0
+              },
+              {
+                "id": "0mltwlvp4",
+                "value": 90,
+                "new_value": null,
+                "race": 0,
+                "race_id": "a5wqeuku8",
+                "judge": 3,
+                "judge_id": "oypuvzfsa",
+                "section": 0
+              },
+              {
+                "id": "orh1s2key",
+                "value": 72,
+                "new_value": null,
+                "race": 0,
+                "race_id": "a5wqeuku8",
+                "judge": 4,
+                "judge_id": "79nc0yt1b",
+                "section": 0
+              }
+            ],
+            "results": [
+              {
+                "id": "zv3tq43li",
+                "value": 69,
+                "race_id": "plu4p4xy6",
+                "repeat": "A",
+                "status": null
+              },
+              {
+                "id": "2mj6rfmxa",
+                "value": 60.25,
+                "race_id": "a5wqeuku8",
+                "repeat": "A",
+                "status": null
+              }
+            ],
+            "results_overall": [
+              {
+                "competition_id": "419t2thqp",
+                "competitor_id": "t251y1t3e",
+                "value": 69,
+                "status": null
+              },
+              { "id_comp": "419t2thqp", "value": 69 },
+              {
+                "competition_id": "wq42kn5lz",
+                "competitor_id": "t251y1t3e",
+                "value": 60.25,
+                "status": null
+              }
+            ]
+          },
+          {
+            "info_dialog": { "state": false },
+            "race_status": null,
+            "res_accepted": false,
+            "rank": 8,
+            "id": "9chg3cwhp",
+            "info_data": {
+              "bib": 81,
+              "lastname": "Ращектаев",
+              "name": "Тимофей",
+              "fullname": "РАЩЕКТАЕВ Тимофей",
+              "year": 2009,
+              "rang": "2",
+              "region": "Челябинская область"
+            },
+            "marks": [
+              {
+                "id": "h47o7g0md",
+                "value": 39,
+                "new_value": null,
+                "race": 0,
+                "race_id": "a5wqeuku8",
+                "judge": 1,
+                "judge_id": "g5j801nh6",
+                "section": 0
+              },
+              {
+                "id": "ou8eq48gs",
+                "value": 62,
+                "new_value": null,
+                "race": 0,
+                "race_id": "a5wqeuku8",
+                "judge": 2,
+                "judge_id": "joi1k8tct",
+                "section": 0
+              },
+              {
+                "id": "s6q3a4kt0",
+                "value": 45,
+                "new_value": null,
+                "race": 0,
+                "race_id": "a5wqeuku8",
+                "judge": 3,
+                "judge_id": "oypuvzfsa",
+                "section": 0
+              },
+              {
+                "id": "8k65nt3ro",
+                "value": 31,
+                "new_value": null,
+                "race": 0,
+                "race_id": "a5wqeuku8",
+                "judge": 4,
+                "judge_id": "79nc0yt1b",
+                "section": 0
+              }
+            ],
+            "results": [
+              {
+                "id": "d6epacqbw",
+                "value": 66.5,
+                "race_id": "plu4p4xy6",
+                "repeat": "A",
+                "status": null
+              },
+              {
+                "id": "2nigcc2wk",
+                "value": 44.25,
+                "race_id": "a5wqeuku8",
+                "repeat": "A",
+                "status": null
+              }
+            ],
+            "results_overall": [
+              {
+                "competition_id": "419t2thqp",
+                "competitor_id": "9chg3cwhp",
+                "value": 66.5,
+                "status": null
+              },
+              { "id_comp": "419t2thqp", "value": 66.5 },
+              {
+                "competition_id": "wq42kn5lz",
+                "competitor_id": "9chg3cwhp",
+                "value": 44.25,
+                "status": null
+              }
+            ]
+          }
+        ]
+      },
+      "media_settings": {
+        "display": {
+          "modes": [
+            { "id": 0, "title": "Результаты" },
+            { "id": 1, "title": "Стартовый" },
+            { "id": 2, "title": "Результат последнего на финише" },
+            { "id": 3, "title": "Участник на старте" },
+            { "id": 4, "title": "Награждение" }
+          ],
+          "selected": 1
+        }
+      },
+      "protocol_fields": [],
+      "protocol_settings": {
+        "protocol_type": 1,
+        "show_preview": false,
+        "start_protocols": {
+          "filters": { "race_filter": null },
+          "fonts": {
+            "officialsData": 12,
+            "openers": 12,
+            "weatherData": 12,
+            "raceNotes": 12
+          },
+          "protocol_type": "Старт-лист",
+          "fields": []
+        },
+        "result_protocols": {
+          "filters": { "race_filter": null },
+          "fonts": {
+            "officialsData": 12,
+            "openers": 12,
+            "weatherData": 12,
+            "raceNotes": 12
+          },
+          "protocol_type": "Результаты",
+          "fields": [
+            {
+              "params": {
+                "cell_1": {
+                  "select_dialog": false,
+                  "id": "rank",
+                  "title": "Место"
+                },
+                "cell_2": { "select_dialog": false, "id": null, "title": null },
+                "width": 6,
+                "font": 12,
+                "align": { "title": "Слева", "value": "start" },
+                "f_weight": "normal"
+              },
+              "id": "uvptgrku2"
+            },
+            {
+              "params": {
+                "cell_1": {
+                  "select_dialog": false,
+                  "id": "bib",
+                  "title": "Bib"
+                },
+                "cell_2": { "select_dialog": false, "id": null, "title": null },
+                "width": 8,
+                "font": 12,
+                "align": { "title": "Слева", "value": "start" },
+                "f_weight": "normal"
+              },
+              "id": "jun9tmfm8"
+            },
+            {
+              "params": {
+                "cell_1": {
+                  "select_dialog": false,
+                  "id": "lastname",
+                  "title": "Фамилия"
+                },
+                "cell_2": { "select_dialog": false, "id": null, "title": null },
+                "width": 8,
+                "font": 12,
+                "align": { "title": "Слева", "value": "start" },
+                "f_weight": "normal"
+              },
+              "id": "koqjviexp"
+            },
+            {
+              "params": {
+                "cell_1": {
+                  "select_dialog": false,
+                  "id": "name",
+                  "title": "Имя"
+                },
+                "cell_2": { "select_dialog": false, "id": null, "title": null },
+                "width": 8,
+                "font": 12,
+                "align": { "title": "Слева", "value": "start" },
+                "f_weight": "normal"
+              },
+              "id": "2r3za5m03"
+            },
+            {
+              "params": {
+                "cell_1": {
+                  "select_dialog": false,
+                  "id": "fullname",
+                  "title": "Фамилия, Имя"
+                },
+                "cell_2": { "select_dialog": false, "id": null, "title": null },
+                "width": 8,
+                "font": 12,
+                "align": { "title": "Слева", "value": "start" },
+                "f_weight": "normal"
+              },
+              "id": "xkmkqbwyv"
+            },
+            {
+              "params": {
+                "cell_1": {
+                  "select_dialog": false,
+                  "id": "year",
+                  "title": "Год"
+                },
+                "cell_2": { "select_dialog": false, "id": null, "title": null },
+                "width": 8,
+                "font": 12,
+                "align": { "title": "Слева", "value": "start" },
+                "f_weight": "normal"
+              },
+              "id": "08gu30146"
+            },
+            {
+              "params": {
+                "cell_1": {
+                  "select_dialog": false,
+                  "id": "rang",
+                  "title": "Разряд"
+                },
+                "cell_2": { "select_dialog": false, "id": null, "title": null },
+                "width": 8,
+                "font": 12,
+                "align": { "title": "Слева", "value": "start" },
+                "f_weight": "normal"
+              },
+              "id": "c2dxi880k"
+            },
+            {
+              "params": {
+                "cell_1": {
+                  "select_dialog": false,
+                  "id": "region",
+                  "title": "Суб. РФ"
+                },
+                "cell_2": { "select_dialog": false, "id": null, "title": null },
+                "width": 8,
+                "font": 12,
+                "align": { "title": "Слева", "value": "start" },
+                "f_weight": "normal"
+              },
+              "id": "ij9m6c6o2"
+            },
+            {
+              "params": {
+                "cell_1": {
+                  "select_dialog": false,
+                  "id": "race",
+                  "title": "Заезд"
+                },
+                "cell_2": { "select_dialog": false, "id": null, "title": null },
+                "width": 8,
+                "font": 12,
+                "align": { "title": "Слева", "value": "start" },
+                "f_weight": "normal"
+              },
+              "id": "um5l30yfo"
+            },
+            {
+              "params": {
+                "cell_1": {
+                  "select_dialog": false,
+                  "id": "Судья 1",
+                  "title": "С1"
+                },
+                "cell_2": { "select_dialog": false, "id": null, "title": null },
+                "width": 6,
+                "font": 12,
+                "align": { "title": "Слева", "value": "start" },
+                "f_weight": "normal"
+              },
+              "id": "zjsm10tao"
+            },
+            {
+              "params": {
+                "cell_1": {
+                  "select_dialog": false,
+                  "id": "Судья 2",
+                  "title": "С2"
+                },
+                "cell_2": { "select_dialog": false, "id": null, "title": null },
+                "width": 6,
+                "font": 12,
+                "align": { "title": "Слева", "value": "start" },
+                "f_weight": "normal"
+              },
+              "id": "84lxp0b2v"
+            },
+            {
+              "params": {
+                "cell_1": {
+                  "select_dialog": false,
+                  "id": "Судья 3",
+                  "title": "С3"
+                },
+                "cell_2": { "select_dialog": false, "id": null, "title": null },
+                "width": 6,
+                "font": 12,
+                "align": { "title": "Слева", "value": "start" },
+                "f_weight": "normal"
+              },
+              "id": "ljz4la8s1"
+            },
+            {
+              "params": {
+                "cell_1": {
+                  "select_dialog": false,
+                  "id": "Судья 4",
+                  "title": "С4"
+                },
+                "cell_2": { "select_dialog": false, "id": null, "title": null },
+                "width": 6,
+                "font": 12,
+                "align": { "title": "Слева", "value": "start" },
+                "f_weight": "normal"
+              },
+              "id": "loqxacpqa"
+            },
+            {
+              "params": {
+                "cell_1": {
+                  "select_dialog": false,
+                  "id": "race_res",
+                  "title": "Оценка"
+                },
+                "cell_2": { "select_dialog": false, "id": null, "title": null },
+                "width": 6,
+                "font": 12,
+                "align": { "title": "Слева", "value": "start" },
+                "f_weight": "normal"
+              },
+              "id": "6bzg3ryfy"
+            },
+            {
+              "params": {
+                "cell_1": {
+                  "select_dialog": false,
+                  "id": "result",
+                  "title": "Рез-т"
+                },
+                "cell_2": { "select_dialog": false, "id": null, "title": null },
+                "width": 8,
+                "font": 12,
+                "align": { "title": "Слева", "value": "start" },
+                "f_weight": "normal"
+              },
+              "id": "v1h23dlvw"
+            }
+          ],
+          "raceResultFields": [
+            {
+              "params": {
+                "cell_1": {
+                  "select_dialog": false,
+                  "id": "rank",
+                  "title": "Место"
+                },
+                "cell_2": { "select_dialog": false, "id": null, "title": null },
+                "width": 6,
+                "font": 12,
+                "align": { "title": "Слева", "value": "start" },
+                "f_weight": "normal"
+              },
+              "id": "4vfljoimd"
+            },
+            {
+              "params": {
+                "cell_1": {
+                  "select_dialog": false,
+                  "id": "bib",
+                  "title": "Bib"
+                },
+                "cell_2": { "select_dialog": false, "id": null, "title": null },
+                "width": 8,
+                "font": 12,
+                "align": { "title": "Слева", "value": "start" },
+                "f_weight": "normal"
+              },
+              "id": "4yr0kf1od"
+            },
+            {
+              "params": {
+                "cell_1": {
+                  "select_dialog": false,
+                  "id": "lastname",
+                  "title": "Фамилия"
+                },
+                "cell_2": { "select_dialog": false, "id": null, "title": null },
+                "width": 8,
+                "font": 12,
+                "align": { "title": "Слева", "value": "start" },
+                "f_weight": "normal"
+              },
+              "id": "v2eyp7voz"
+            },
+            {
+              "params": {
+                "cell_1": {
+                  "select_dialog": false,
+                  "id": "name",
+                  "title": "Имя"
+                },
+                "cell_2": { "select_dialog": false, "id": null, "title": null },
+                "width": 8,
+                "font": 12,
+                "align": { "title": "Слева", "value": "start" },
+                "f_weight": "normal"
+              },
+              "id": "9uk4ekut9"
+            },
+            {
+              "params": {
+                "cell_1": {
+                  "select_dialog": false,
+                  "id": "fullname",
+                  "title": "Фамилия, Имя"
+                },
+                "cell_2": { "select_dialog": false, "id": null, "title": null },
+                "width": 8,
+                "font": 12,
+                "align": { "title": "Слева", "value": "start" },
+                "f_weight": "normal"
+              },
+              "id": "7jfhwt68g"
+            },
+            {
+              "params": {
+                "cell_1": {
+                  "select_dialog": false,
+                  "id": "year",
+                  "title": "Год"
+                },
+                "cell_2": { "select_dialog": false, "id": null, "title": null },
+                "width": 8,
+                "font": 12,
+                "align": { "title": "Слева", "value": "start" },
+                "f_weight": "normal"
+              },
+              "id": "gtskzd7a3"
+            },
+            {
+              "params": {
+                "cell_1": {
+                  "select_dialog": false,
+                  "id": "rang",
+                  "title": "Разряд"
+                },
+                "cell_2": { "select_dialog": false, "id": null, "title": null },
+                "width": 8,
+                "font": 12,
+                "align": { "title": "Слева", "value": "start" },
+                "f_weight": "normal"
+              },
+              "id": "8sr2el8g7"
+            },
+            {
+              "params": {
+                "cell_1": {
+                  "select_dialog": false,
+                  "id": "region",
+                  "title": "Суб. РФ"
+                },
+                "cell_2": { "select_dialog": false, "id": null, "title": null },
+                "width": 8,
+                "font": 12,
+                "align": { "title": "Слева", "value": "start" },
+                "f_weight": "normal"
+              },
+              "id": "31bcmpb28"
+            },
+            {
+              "params": {
+                "cell_1": {
+                  "select_dialog": false,
+                  "id": "race",
+                  "title": "Заезд"
+                },
+                "cell_2": { "select_dialog": false, "id": null, "title": null },
+                "width": 8,
+                "font": 12,
+                "align": { "title": "Слева", "value": "start" },
+                "f_weight": "normal"
+              },
+              "id": "tqbjx121e"
+            },
+            {
+              "params": {
+                "cell_1": {
+                  "select_dialog": false,
+                  "id": "Судья 1",
+                  "title": "С1"
+                },
+                "cell_2": { "select_dialog": false, "id": null, "title": null },
+                "width": 6,
+                "font": 12,
+                "align": { "title": "Слева", "value": "start" },
+                "f_weight": "normal"
+              },
+              "id": "vhnndgwh8"
+            },
+            {
+              "params": {
+                "cell_1": {
+                  "select_dialog": false,
+                  "id": "Судья 2",
+                  "title": "С2"
+                },
+                "cell_2": { "select_dialog": false, "id": null, "title": null },
+                "width": 6,
+                "font": 12,
+                "align": { "title": "Слева", "value": "start" },
+                "f_weight": "normal"
+              },
+              "id": "pjzk3d8d0"
+            },
+            {
+              "params": {
+                "cell_1": {
+                  "select_dialog": false,
+                  "id": "Судья 3",
+                  "title": "С3"
+                },
+                "cell_2": { "select_dialog": false, "id": null, "title": null },
+                "width": 6,
+                "font": 12,
+                "align": { "title": "Слева", "value": "start" },
+                "f_weight": "normal"
+              },
+              "id": "bx4cyjysm"
+            },
+            {
+              "params": {
+                "cell_1": {
+                  "select_dialog": false,
+                  "id": "Судья 4",
+                  "title": "С4"
+                },
+                "cell_2": { "select_dialog": false, "id": null, "title": null },
+                "width": 6,
+                "font": 12,
+                "align": { "title": "Слева", "value": "start" },
+                "f_weight": "normal"
+              },
+              "id": "n0yxqdz9i"
+            },
+            {
+              "params": {
+                "cell_1": {
+                  "select_dialog": false,
+                  "id": "race_res",
+                  "title": "Рез-т"
+                },
+                "cell_2": { "select_dialog": false, "id": null, "title": null },
+                "width": 6,
+                "font": 12,
+                "align": { "title": "Слева", "value": "start" },
+                "f_weight": "normal"
+              },
+              "id": "0q39suzx3"
+            }
+          ]
+        }
+      },
+      "result_formula": {
+        "overall_result": {
+          "type": 0,
+          "select_heats": {
+            "heats": 0,
+            "mode": 0,
+            "modes": [
+              { "id": 0, "title": "Подсчёт из всех" },
+              { "id": 1, "title": "Подсчёт из N лучших" }
+            ]
+          },
+          "types": [
+            { "id": 0, "title": "Лучший" },
+            { "id": 1, "title": "Сумма" },
+            { "id": 2, "title": "Среднее" },
+            { "id": 3, "title": "ABC" }
+          ]
+        },
+        "type": 0,
+        "types": [
+          {
+            "id": 0,
+            "title": "По судьям",
+            "cof": 1,
+            "doubleUp": false,
+            "doubleUp_corridors": [[], []],
+            "doubleUp_competitors": { "0": null, "1": null },
+            "lower_marks": 0,
+            "higher_marks": 0,
+            "formula": 0,
+            "formulas": [
+              { "id": 0, "title": "Среднее" },
+              { "id": 1, "title": "Сумма" }
+            ]
+          },
+          {
+            "id": 1,
+            "title": "По секциям",
+            "sections": [],
+            "formula": 0,
+            "formulas": [{ "id": 0 }]
+          }
+        ]
+      },
+      "id": "wq42kn5lz",
+      "live_id": null
+    }
+  ]
+}

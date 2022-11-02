@@ -1,8 +1,8 @@
-<template> </template>
+<template></template>
 
 <script>
 export default {
-  name: "race_notations"
+  name: "race_notations",
 };
 </script>
 

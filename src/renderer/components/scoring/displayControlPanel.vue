@@ -7,8 +7,8 @@
         backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
       }"
       fluid
-      ><div style="font-size: 1.4rem; font-weight: bold; padding: 4px 8px">
-        Services
+      ><div style="font-size: 1.4rem; font-weight: bold; padding: 8px">
+        {{ localization[lang].app.scoring.services }}
       </div>
       <div class="d-flex flex-column">
         <div
@@ -17,14 +17,9 @@
             backgroundColor:
               $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
           }"
-          style="
-            flex: 0 0 auto;
-            padding: 6px 8px;
-            width: 100%;
-            border-radius: 6px;
-          "
+          style="flex: 0 0 auto; padding: 8px; width: 100%; border-radius: 6px"
         >
-          <div style="font-size: 1.2rem; font-weight: bold">Live-scoring:</div>
+          <div style="font-size: 1.2rem; font-weight: bold">LIVE Scoring</div>
           <v-btn
             @click="dbSetCompetitionLive(competitions, event_id)"
             depressed
@@ -36,7 +31,7 @@
             "
             :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
             :color="$vuetify.theme.themes[appTheme].action_green"
-            >Server ON</v-btn
+            >{{ localization[lang].app.scoring.turn_live }}</v-btn
           >
           <v-btn
             @click="setUpdater(competitions, event_id, live_config)"
@@ -64,99 +59,10 @@
                   : $vuetify.theme.themes[appTheme].error
                 : $vuetify.theme.themes[appTheme].standardBackgroundRGBA
             "
-            >Update</v-btn
+            >{{ localization[lang].app.scoring.live_update }}</v-btn
           >
         </div>
       </div>
-      <!--      <div class="px-1 py-2 d-flex flex-nowrap align-center">-->
-      <!--        <div-->
-      <!--          style="font-size: 1.2rem; font-weight:bold;"-->
-      <!--          v-html="`Экран:`"-->
-      <!--        ></div>-->
-      <!--        <v-spacer></v-spacer>-->
-      <!--        <div class="d-flex flex-nowrap align-center">-->
-      <!--          <label for="select_filter"></label>-->
-      <!--          <select-->
-      <!--            class="pa-1"-->
-      <!--            style="width: 120px; outline: none; border-radius: 6px; cursor:pointer;"-->
-      <!--            :style="{-->
-      <!--              backgroundColor:-->
-      <!--                $vuetify.theme.themes[appTheme].standardBackgroundRGBA,-->
-      <!--              color: $vuetify.theme.themes[appTheme].textDefault-->
-      <!--            }"-->
-      <!--            v-model="filter"-->
-      <!--            id="select_filter"-->
-      <!--          >-->
-      <!--            <option-->
-      <!--              value=""-->
-      <!--              label="Фильтр"-->
-      <!--              style="display: none"-->
-      <!--              selected-->
-      <!--              disabled-->
-      <!--            ></option>-->
-      <!--            <option-->
-      <!--              class="pa-1"-->
-      <!--              :style="{-->
-      <!--                backgroundColor:-->
-      <!--                  $vuetify.theme.themes[appTheme].cardBackgroundRGBA,-->
-      <!--                color: $vuetify.theme.themes[appTheme].textDefault-->
-      <!--              }"-->
-      <!--              v-for="(head, h) in competition.competitorsSheet.header"-->
-      <!--              :key="h"-->
-      <!--              :label="head.title"-->
-      <!--              :value="h"-->
-      <!--            ></option>-->
-      <!--          </select>-->
-      <!--          <v-btn-->
-      <!--            @click="getMarks()"-->
-      <!--            class="ml-2"-->
-      <!--            depressed-->
-      <!--            style="font-size: 1rem;height: 2rem; border-radius: 2px"-->
-      <!--            :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"-->
-      <!--            :color="$vuetify.theme.themes[appTheme].action_green"-->
-      <!--            >Запустить</v-btn-->
-      <!--          >-->
-      <!--        </div>-->
-      <!--      </div>-->
-      <!--      <v-spacer></v-spacer>-->
-      <!--      <div class="px-1 py-2 d-flex flex-wrap">-->
-      <!--        <v-hover-->
-      <!--          v-slot:default="{ hover }"-->
-      <!--          v-for="d_mode in competition.media_settings.display.modes"-->
-      <!--          :key="d_mode.id"-->
-      <!--        >-->
-      <!--          <div-->
-      <!--            @click="competition.media_settings.display.selected = d_mode.id"-->
-      <!--            class="ma-1 mr-2 d-flex justify-center align-center"-->
-      <!--            style="position: relative; text-align: center; font-weight:bold; cursor:pointer; font-size: .85rem; height: 4rem; width: 6.5rem; border-radius: 2px"-->
-      <!--            :style="[-->
-      <!--              {-->
-      <!--                backgroundColor:-->
-      <!--                  $vuetify.theme.themes[appTheme].standardBackgroundRGBA,-->
-      <!--                color: $vuetify.theme.themes[appTheme].textDefault-->
-      <!--              },-->
-      <!--              hover && {-->
-      <!--                backgroundColor:-->
-      <!--                  $vuetify.theme.themes[appTheme].subjectBackgroundRGBA,-->
-      <!--                color: $vuetify.theme.themes[appTheme].action_blue-->
-      <!--              }-->
-      <!--            ]"-->
-      <!--          >-->
-      <!--            <div v-html="d_mode.title"></div>-->
-      <!--            <div-->
-      <!--              style="position: absolute; top: 0; right: 0;height: 8px;width: 8px; transition: background-color 172ms"-->
-      <!--              :style="-->
-      <!--                d_mode.id === competition.media_settings.display.selected-->
-      <!--                  ? {-->
-      <!--                      backgroundColor:-->
-      <!--                        $vuetify.theme.themes[appTheme].action_green-->
-      <!--                    }-->
-      <!--                  : { backgroundColor: 'transparent' }-->
-      <!--              "-->
-      <!--            ></div>-->
-      <!--          </div>-->
-      <!--        </v-hover>-->
-      <!--      </div>-->
     </v-container>
   </v-col>
 </template>
@@ -258,7 +164,7 @@ export default {
         }),
       };
       await axios
-        .post("http://live-timingweb.cf:8081/api/v1/events", live_event)
+        .post("https://live-timingweb.cf:8082/api/v1/events", live_event)
         .then((response) => {
           console.log(response);
         })
@@ -355,11 +261,10 @@ export default {
       };
       axios
         .patch(
-          `http://live-timingweb.cf:8081/api/v1/events/${live_event.event_id}`,
+          `https://live-timingweb.cf:8082/api/v1/events/${live_event.event_id}`,
           live_event
         )
         .then((response) => {
-          console.log(response);
           this.live_config.updateLive_Indicator = "ok";
           setTimeout(() => {
             this.live_config.updateLive_Indicator = false;
@@ -391,6 +296,10 @@ export default {
     };
   },
   computed: {
+    ...mapGetters("localization", {
+      localization: "localization",
+      lang: "lang",
+    }),
     ...mapGetters("main", {
       live_config: "live_config",
       event_id: "event_id",

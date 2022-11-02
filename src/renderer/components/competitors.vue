@@ -10,7 +10,9 @@
           user-select: none;
         "
       >
-        <div style="font-size: 1.4rem; font-weight: bold">Competitors</div>
+        <div style="font-size: 1.4rem; font-weight: bold">
+          {{ localization[lang].app.competitors.title }}
+        </div>
         <v-btn
           @click="load_prev_stages()"
           :color="$vuetify.theme.themes[appTheme].action_blue"
@@ -20,7 +22,8 @@
             :color="$vuetify.theme.themes[appTheme].textDefault"
             style="margin-right: 0.5rem"
             >mdi-page-previous</v-icon
-          >From previous stage</v-btn
+          >
+          {{ localization[lang].app.competitors.from_prev }}</v-btn
         ><v-btn
           text
           style="padding: 0"
@@ -36,7 +39,7 @@
               style="margin-right: 0.5rem"
               >mdi-file-excel</v-icon
             >
-            Load from file
+            {{ localization[lang].app.competitors.load_from_file }}
           </label></v-btn
         >
         <input
@@ -53,7 +56,7 @@
             :color="$vuetify.theme.themes[appTheme].textDefault"
             style="margin-right: 0.5rem"
             >mdi-arrow-right-bold</v-icon
-          >Export</v-btn
+          >{{ localization[lang].app.competitors.export_btn }}</v-btn
         >
       </div>
       <div
@@ -87,8 +90,9 @@
               :color="$vuetify.theme.themes[appTheme].accent"
               ><div
                 :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
-                v-html="head.title"
-              ></div>
+              >
+                {{ head.title }}
+              </div>
               <v-spacer></v-spacer>
               <v-icon v-show="sortBy.title === head.id" small>{{
                 sortBy.dir === "desc" ? `mdi-chevron-down` : `mdi-chevron-up`
@@ -214,7 +218,7 @@
                   }}
                 </div>
                 <div style="margin-left: auto; padding: 0.5rem 1rem">
-                  Competitor info
+                  {{ localization[lang].app.competitors.d_competitor_info }}
                 </div>
               </v-card-title>
               <div
@@ -261,13 +265,11 @@
               <v-card-actions class="d-flex align-end" style="padding: 8px 8px">
                 <v-btn
                   x-small
+                  text
                   @click="deleteCompetitor(row)"
                   style="margin-right: auto"
                   :color="$vuetify.theme.themes[appTheme].action_red"
-                  :style="{
-                    color: $vuetify.theme.themes[appTheme].textDefault,
-                  }"
-                  >Delete competitor</v-btn
+                  >{{ localization[lang].app.dialogs.d_delete }}</v-btn
                 >
                 <v-btn
                   small
@@ -276,7 +278,7 @@
                   :style="{
                     color: $vuetify.theme.themes[appTheme].textDefault,
                   }"
-                  >Close</v-btn
+                  >{{ localization[lang].app.dialogs.d_close }}</v-btn
                 ></v-card-actions
               ></v-card
             ></v-dialog
@@ -297,7 +299,7 @@
             backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
           }"
         >
-          <v-dialog width="fit-content" v-model="createCompetitorDialog.state"
+          <v-dialog width="320" v-model="createCompetitorDialog.state"
             ><template v-slot:activator="{ on }">
               <v-btn
                 v-on="on"
@@ -312,7 +314,9 @@
                   :color="$vuetify.theme.themes[appTheme].textDefault"
                   >mdi-account-plus</v-icon
                 >
-                Create competitor</v-btn
+                {{
+                  localization[lang].app.competitors.create_competitor
+                }}</v-btn
               ></template
             ><v-card
               :style="{
@@ -321,7 +325,9 @@
                   $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
               }"
               ><v-card-title class="d-flex align-center"
-                ><div>New competitor</div>
+                ><div>
+                  {{ localization[lang].app.competitors.d_new_competitor }}
+                </div>
                 <v-spacer></v-spacer
                 ><v-btn
                   icon
@@ -341,11 +347,9 @@
                   v-for="(field, fd) in competition.competitorsSheet.header"
                   :key="fd"
                 >
-                  <div
-                    class="font-weight-bold"
-                    style="width: 4rem"
-                    v-html="`${field.title}`"
-                  ></div>
+                  <div class="font-weight-bold" style="width: 6rem">
+                    {{ field.title }}
+                  </div>
                   <input
                     type="text"
                     class="pa-1 ml-1"
@@ -365,8 +369,11 @@
                   @click="
                     createCompetitor(createCompetitorDialog.newCompetitor)
                   "
+                  :style="{
+                    color: $vuetify.theme.themes[appTheme].textDefault,
+                  }"
                   :color="$vuetify.theme.themes[appTheme].success"
-                  >Create</v-btn
+                  >{{ localization[lang].app.dialogs.d_create }}</v-btn
                 ></v-card-actions
               ></v-card
             >
@@ -385,7 +392,7 @@
                   style="margin-right: 0.5rem"
                   :color="$vuetify.theme.themes[appTheme].textDefault"
                   >mdi-settings</v-icon
-                >Sheet settings</v-btn
+                >{{ localization[lang].app.competitors.sheet_settings }}</v-btn
               ></template
             ><v-card
               :style="{
@@ -394,7 +401,8 @@
               }"
               ><v-card-title
                 :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
-                >Sheet settings<v-spacer></v-spacer
+                >{{ localization[lang].app.competitors.sheet_settings
+                }}<v-spacer></v-spacer
                 ><v-btn
                   small
                   icon
@@ -428,11 +436,7 @@
                     ]"
                   >
                     <div class="d-flex align-center pa-1">
-                      <label
-                        for="ID"
-                        style="width: 2rem"
-                        v-html="`ID: `"
-                      ></label
+                      <label for="ID" style="width: 2rem">ID: </label
                       ><input
                         id="ID"
                         class="ml-2 pa-1"
@@ -469,19 +473,15 @@
                               return colToDel.id !== col.id;
                             })
                         "
-                        v-html="`Отменить`"
                         style="font-weight: bold"
                         :style="{
                           color: $vuetify.theme.themes[appTheme].textDefault,
                         }"
-                      ></v-btn>
+                        >{{ localization[lang].app.dialogs.d_cancel }}</v-btn
+                      >
                     </div>
                     <div class="d-flex align-center pa-1">
-                      <label
-                        for="Title"
-                        style="width: 2rem"
-                        v-html="`Title: `"
-                      ></label
+                      <label for="Title" style="width: 2rem">Title: </label
                       ><input
                         id="Title"
                         class="ml-2 pa-1"
@@ -517,7 +517,7 @@
                         width: 3rem;
                       "
                       :color="$vuetify.theme.themes[appTheme].action_red"
-                      >Delete</v-btn
+                      >{{ localization[lang].app.dialogs.d_delete }}</v-btn
                     >
                   </div></v-hover
                 >
@@ -533,11 +533,7 @@
                   :style="{ backgroundColor: `rgba(34,212,38, 0.2)` }"
                 >
                   <div class="d-flex align-center pa-1">
-                    <label
-                      for="ctdID"
-                      style="width: 2rem"
-                      v-html="`ID: `"
-                    ></label>
+                    <label for="ctdID" style="width: 2rem">ID: </label>
                     <input
                       id="ctdID"
                       type="text"
@@ -552,11 +548,7 @@
                     />
                   </div>
                   <div class="d-flex align-center pa-1">
-                    <label
-                      for="ctdTitle"
-                      style="width: 2rem"
-                      v-html="`Title: `"
-                    ></label>
+                    <label for="ctdTitle" style="width: 2rem">Title: </label>
                     <input
                       id="ctdTitle"
                       type="text"
@@ -588,7 +580,7 @@
                       width: 3rem;
                     "
                     :color="$vuetify.theme.themes[appTheme].textDefault"
-                    >Cancel</v-btn
+                    >{{ localization[lang].app.dialogs.d_cancel }}</v-btn
                   >
                 </div></v-card-text
               ><v-card-actions class="d-flex"
@@ -601,15 +593,15 @@
                     })
                   "
                   :color="$vuetify.theme.themes[appTheme].accent"
-                  >Add column</v-btn
+                  >{{ localization[lang].app.competitors.d_add_col }}</v-btn
                 ><v-spacer></v-spacer
                 ><v-btn
                   @click="acceptCols()"
+                  :color="$vuetify.theme.themes[appTheme].success"
                   :style="{
                     color: $vuetify.theme.themes[appTheme].textDefault,
                   }"
-                  :color="$vuetify.theme.themes[appTheme].success"
-                  >Accept</v-btn
+                  >{{ localization[lang].app.dialogs.d_accept }}</v-btn
                 ></v-card-actions
               ></v-card
             ></v-dialog
@@ -624,7 +616,7 @@
                 tile
                 height="100%"
                 :color="$vuetify.theme.themes[appTheme].action_red"
-                >Clear table</v-btn
+                >{{ localization[lang].app.competitors.clear_table }}</v-btn
               ></template
             ><v-card
               class="pa-2"
@@ -634,26 +626,29 @@
                 color: $vuetify.theme.themes[appTheme].textDefault,
               }"
             >
-              <v-card-title style="padding: 0.2rem 1rem"
-                >Clear table</v-card-title
-              >
+              <v-card-title style="padding: 0.2rem 1rem">{{
+                localization[lang].app.competitors.clear_table
+              }}</v-card-title>
               <div class="d-flex align-center" style="padding: 0.5rem 0.5rem">
-                <div style="margin-right: auto">Delete all competitors?</div>
+                <div style="margin-right: auto">
+                  {{ localization[lang].app.competitors.d_delete_all }}
+                </div>
                 <v-btn
                   @click="clearSheet(), (clearDialog = false)"
                   small
                   text
                   :color="$vuetify.theme.themes[appTheme].accent"
-                  v-html="`Yes`"
-                ></v-btn
+                  >{{ localization[lang].app.dialogs.d_yes }}</v-btn
                 ><v-btn
                   @click="clearDialog = false"
                   small
                   text
                   :color="$vuetify.theme.themes[appTheme].action_red"
-                  v-html="`No`"
-                ></v-btn></div></v-card
-          ></v-dialog>
+                  >{{ localization[lang].app.dialogs.d_no }}</v-btn
+                >
+              </div></v-card
+            ></v-dialog
+          >
         </div>
       </div>
     </div>
@@ -687,9 +682,6 @@ export default {
   name: "competitors",
   mounted() {},
   methods: {
-    log: (data) => {
-      console.log(data);
-    },
     autoLoad() {
       if (
         this.competition &&
@@ -1000,6 +992,10 @@ export default {
     };
   },
   computed: {
+    ...mapGetters("localization", {
+      lang: "lang",
+      localization: "localization",
+    }),
     ...mapGetters("main", {
       appTheme: "appTheme",
       competitions: "competitions",

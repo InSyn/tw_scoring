@@ -3,12 +3,11 @@ export default {
   state: {
     EventClass: class {
       constructor(...args) {
-        console.log(...args);
         this.id = Math.random().toString(36).substr(2, 9);
         this.live_id = null;
         this.structure.selected.type = 0;
         this.structure.selected.discipline = 0;
-        this.mainData.title.stage.group = "M";
+        this.mainData.title.stage.group = "Group";
         this.mainData.title.stage.value = this.structure.stages[0];
         args.forEach((arg) => {
           if (typeof arg === "object") {
@@ -80,9 +79,9 @@ export default {
         ],
         accuracy: [
           { id: 0, title: "1", value: 1, digits: 0 },
-          { id: 1, title: "1:10", value: 10, digits: 1 },
-          { id: 2, title: "1:100", value: 100, digits: 2 },
-          { id: 3, title: "1:1000", value: 1000, digits: 3 },
+          { id: 1, title: "0.1", value: 10, digits: 1 },
+          { id: 2, title: "0.01", value: 100, digits: 2 },
+          { id: 3, title: "0.001", value: 1000, digits: 3 },
         ],
         stages: [
           { id: "qual", title: "Qualification", value: "Qualification" },
@@ -187,11 +186,11 @@ export default {
       stuff = {
         settings: {
           jury: {
-            title: "Jury",
+            title: "Жюри",
             change_dialog: false,
           },
           judges: {
-            title: "Judges",
+            title: "Судьи",
             change_dialog: false,
           },
         },
@@ -214,7 +213,7 @@ export default {
         openers: [],
       };
       technicalInfo = {
-        title: "Technical info",
+        title: "Техническая информация",
         change_dialog: false,
         records: [
           {
@@ -404,14 +403,14 @@ export default {
             heats: 0,
             mode: 0,
             modes: [
-              { id: 0, title: "Best of all" },
-              { id: 1, title: "Best of N" },
+              { id: 0, title: "b_o_a" },
+              { id: 1, title: "b_o_n" },
             ],
           },
           types: [
             {
               id: 0,
-              title: "Best",
+              title: "best",
               result: (comp_id) => {
                 let res = [];
                 const competitor = this.competitorsSheet.competitors.find(
@@ -430,7 +429,7 @@ export default {
             },
             {
               id: 1,
-              title: "Sum",
+              title: "sum",
               result: (comp_id) => {
                 let res = [];
                 const competitor = this.competitorsSheet.competitors.find(
@@ -470,7 +469,7 @@ export default {
             },
             {
               id: 2,
-              title: "Average",
+              title: "average",
               result: (comp_id) => {
                 let res = [];
                 const competitor = this.competitorsSheet.competitors.find(
@@ -510,7 +509,7 @@ export default {
             },
             {
               id: 3,
-              title: "ABC",
+              title: "abc",
               result: (comp_id) => {
                 const competitor = this.competitorsSheet.competitors.find(
                   (_comp) => _comp.id === comp_id
@@ -559,7 +558,7 @@ export default {
         types: [
           {
             id: 0,
-            title: "By judge",
+            title: "by_judge",
             cof: 1,
             doubleUp: false,
             doubleUp_corridors: [[], []],
@@ -570,7 +569,7 @@ export default {
             formulas: [
               {
                 id: 0,
-                title: "Average",
+                title: "average",
                 get_result: (comp_id, race_id, judges) => {
                   let marks = [];
                   judges.forEach((_j) => {
@@ -634,7 +633,7 @@ export default {
               },
               {
                 id: 1,
-                title: "Sum",
+                title: "sum",
                 get_result: (comp_id, race_id, judges) => {
                   let marks = [];
                   judges.forEach((_j) => {
@@ -682,7 +681,7 @@ export default {
           },
           {
             id: 1,
-            title: "By sections",
+            title: "by_section",
             sections: [],
             formula: 0,
             formulas: [

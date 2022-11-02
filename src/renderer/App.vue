@@ -676,6 +676,78 @@
         draggable="false"
         alt=""
       />
+      <div
+        tabindex="0"
+        @focus="toggleLangMenu"
+        @blur="toggleLangMenu"
+        style="
+          position: relative;
+          margin: 0 1rem;
+          padding: 8px 12px;
+          width: 4rem;
+          font-size: 1.4rem;
+          font-weight: bold;
+          text-align: center;
+          border-radius: 6px;
+          outline: none;
+          cursor: pointer;
+        "
+        :style="{
+          backgroundColor:
+            $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
+        }"
+      >
+        {{ lang }}
+        <div
+          v-if="lang_menu"
+          style="
+            position: absolute;
+            top: 0;
+            right: 0;
+            cursor: pointer;
+            border-radius: 6px;
+          "
+          :style="{
+            boxShadow: `0 0 0 2px ${$vuetify.theme.themes[appTheme].accent}`,
+          }"
+        >
+          <div
+            v-for="(lang, l_idx) in lang_list"
+            class="hovered"
+            @click="selectLanguage($event, lang)"
+            style="
+              padding: 8px 12px;
+              text-align: center;
+              font-size: 1.4rem;
+              font-weight: bold;
+            "
+            :style="[
+              {
+                backgroundColor:
+                  $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
+              },
+              l_idx === 0
+                ? {
+                    borderTopLeftRadius: '6px',
+                    borderTopRightRadius: '6px',
+                  }
+                : l_idx === lang_list.length - 1
+                ? {
+                    borderBottomLeftRadius: '6px',
+                    borderBottomRightRadius: '6px',
+                  }
+                : null,
+              l_idx !== 0
+                ? {
+                    borderTop: `1px solid ${$vuetify.theme.themes[appTheme].standardBackgroundRGBA}`,
+                  }
+                : null,
+            ]"
+          >
+            {{ lang }}
+          </div>
+        </div>
+      </div>
       <v-btn
         @click="changeTheme()"
         :color="$vuetify.theme.themes[appTheme].accent"
@@ -740,7 +812,9 @@
                 "
                 v-html="icons[page.icon]"
               ></v-icon>
-              <div class="text-no-wrap ml-3" v-html="page.title"></div>
+              <div class="text-no-wrap ml-3">
+                {{ localization[lang].app.menu[page.link] }}
+              </div>
             </div>
           </v-hover>
         </router-link>
@@ -755,6 +829,7 @@
         borderTop: `1px solid ${$vuetify.theme.themes[appTheme].accent}`,
       }"
     >
+      <!--      <div>{{ getVer }}</div>-->
       Created by TimingWeb &copy;
       <span class="ml-2">{{ new Date().getFullYear() }}</span>
       <v-spacer></v-spacer>
@@ -797,6 +872,11 @@ export default {
     ipcRenderer.on("server_message", (e, message) => {
       this.$store.commit("main/pushServerMessage", message);
     });
+    ipcRenderer.on("info_message", (e, message) => {
+      this.$store.commit("message_system/addCompetitionLogMessage", {
+        text: this.stringifyInfoMsg(message),
+      });
+    });
     document.addEventListener("keyup", (e) => {
       e.key === "Home" && this.changeMenuState();
     });
@@ -838,9 +918,9 @@ export default {
       save_event: "save_event",
       load_event: "load_event",
     }),
-    log(data) {
-      console.log(data);
-    },
+    ...mapActions("localization", {
+      changeLang: "changeLang",
+    }),
     openSaveDialog() {
       dialog.showSaveDialog(
         {
@@ -856,9 +936,16 @@ export default {
     getSysData() {
       ipcRenderer.on("sysData", (event, data) => {
         this.$store.commit("key/set_system_data", data);
-        console.log(data);
       });
       app.emit("getSysData");
+    },
+    toggleLangMenu() {
+      this.lang_menu = !this.lang_menu;
+    },
+    selectLanguage(e, lang) {
+      this.$store.dispatch("localization/changeLang", lang);
+
+      e.target.parentNode.parentNode.blur();
     },
     startServer() {
       app.emit("startSocketServer", this.server_config);
@@ -925,11 +1012,27 @@ export default {
       this.$store.commit("main/setCompetition", competition);
       e.target.parentNode.parentNode.blur();
     },
+    stringifyInfoMsg(msg) {
+      const competitor = this.competition.competitorsSheet.competitors.find(
+        (comp) => comp.id === msg.competitor
+      );
+      const judge = this.competition.stuff.judges.find(
+        (judge) => judge._id === msg.judge
+      );
+      const race = this.competition.races.find((race) => race.id === msg.race);
+
+      return msg.type === "new_mark"
+        ? `${competitor.info_data["bib"]} ${race.title}: ${judge.title} -> ${msg.mark}`
+        : msg.type === "mark_overwrite"
+        ? `${competitor.info_data["bib"]} ${race.title}: ${judge.title} ${msg.old_mark} -> ${msg.mark}`
+        : null;
+    },
   },
   data() {
     return {
       serverStatusChecker: null,
       competition_select: false,
+      lang_menu: false,
       icons: {
         cog: mdiCog,
         viewDashboard: mdiViewDashboard,
@@ -1008,8 +1111,16 @@ export default {
       competition: "competition",
       timer: "timer",
     }),
+    ...mapGetters("localization", {
+      lang: "lang",
+      lang_list: "lang_list",
+      localization: "localization",
+    }),
     ...mapGetters("event", { EventClass: "EventClass" }),
     ...mapGetters("roles", { JudgeClass: "JudgeClass" }),
+    getVer() {
+      return require("electron").remote.app.getVersion();
+    },
   },
 };
 </script>
@@ -1063,6 +1174,13 @@ export default {
     width: 100%;
     height: 38px;
   }
+}
+.hovered:hover {
+  overflow: hidden;
+  background: linear-gradient(
+    rgba(255, 255, 255, 0.2),
+    rgba(255, 255, 255, 0.2)
+  );
 }
 .menuExpand-enter-active,
 .menuExpand-leave-active {

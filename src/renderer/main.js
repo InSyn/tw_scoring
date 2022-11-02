@@ -15,7 +15,6 @@ process.env["ELECTRON_DISABLE_SECURITY_WARNINGS"] = "false";
 router.beforeEach((to, from, next) => {
   if (to.name !== "licCheck" && !store.getters["main/_licData"].state) {
     next({ name: "licCheck" });
-    console.log("Product is not activated");
   } else next();
 });
 

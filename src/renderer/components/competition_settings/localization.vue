@@ -10,7 +10,7 @@
     >
       <div style="flex: 0 0 auto">
         <div class="d-flex flex-wrap align-center" style="padding: 2px 4px">
-          <label for="ip" class="d-inline-block font-weight-bold">IP:</label>
+          <label for="ip" class="d-inline-block font-weight-bold">IP</label>
           <input
             id="ip"
             style="border-radius: 6px; margin-left: 0.5rem"
@@ -28,7 +28,7 @@
             for="port"
             class="d-inline-block font-weight-bold"
             style="margin-left: 1rem"
-            >Port:</label
+            >Port</label
           >
           <input
             id="port"
@@ -43,55 +43,60 @@
             :value="server_config.port"
             @change="$store.commit('main/set_port', $event.target.value)"
           />
-          <v-spacer></v-spacer>
-          <v-btn
-            text
-            small
-            class="ma-1"
-            :color="$vuetify.theme.themes[appTheme].success"
-            @click="set_judges()"
-            >Add judges slots</v-btn
-          >
+          <!--          <v-btn-->
+          <!--            text-->
+          <!--            small-->
+          <!--            class="ma-1"-->
+          <!--            :color="$vuetify.theme.themes[appTheme].success"-->
+          <!--            @click="set_judges()"-->
+          <!--            >Add judges slots</v-btn-->
+          <!--          >-->
         </div>
-        <div class="d-flex align-center">
+        <div class="my-1 d-flex align-center">
           <v-btn
-            style="padding: 2px 4px"
             @click="startServer()"
-            :color="$vuetify.theme.themes[appTheme].textDefault"
+            :color="$vuetify.theme.themes[appTheme].success"
+            style="padding: 2px 4px"
             text
-            >Start server<v-icon
-              :color="$vuetify.theme.themes[appTheme].success"
+            >{{ localization[lang].app.server.start_btn
+            }}<v-icon :color="$vuetify.theme.themes[appTheme].success"
               >mdi-play</v-icon
             ></v-btn
-          ><v-btn
-            :disabled="!socketConnected"
-            @click="reconnect()"
-            :color="$vuetify.theme.themes[appTheme].action_blue"
-            icon
-            ><v-icon>mdi-refresh</v-icon></v-btn
           >
-        </div>
-        <div class="d-flex align-center" style="padding: 2px 4px">
-          <div class="d-flex align-center font-weight-bold">
-            Server status
+          <div
+            class="d-flex align-center font-weight-bold"
+            style="font-size: 1.2rem"
+          >
             <div
               class="ml-2"
               v-if="!serverStatus"
               :style="{ color: $vuetify.theme.themes[appTheme].action_red }"
             >
-              OFF
+              {{ localization[lang].app.server.indicator.off }}
             </div>
             <div
               class="ml-2"
               v-else
               :style="{ color: $vuetify.theme.themes[appTheme].success }"
             >
-              ON
+              {{ localization[lang].app.server.indicator.on }}
             </div>
           </div>
-          <v-spacer></v-spacer>
-          <v-btn @click="close_server()" :color="`red`" text
-            ><v-icon :color="`red`">mdi-power</v-icon>Switch off</v-btn
+          <v-btn
+            @click="reconnect()"
+            class="ml-auto"
+            :disabled="!socketConnected"
+            :color="$vuetify.theme.themes[appTheme].action_blue"
+            text
+            ><v-icon>mdi-refresh</v-icon></v-btn
+          >
+
+          <v-btn
+            @click="close_server()"
+            :disabled="!socketConnected"
+            :color="`red`"
+            text
+            ><v-icon :color="`red`">mdi-power</v-icon></v-btn
           >
         </div>
       </div>
@@ -108,8 +113,9 @@
             right: 0;
             bottom: 0;
             left: 0;
-            border-radius: 0 0 6px 6px;
             overflow-y: auto;
+            border-radius: 0 0 6px 6px;
+            scroll-behavior: smooth;
           "
           :style="[
             {
@@ -214,6 +220,10 @@ export default {
       competition: "competition",
       appTheme: "appTheme",
       serverStatus: "serverStatus",
+    }),
+    ...mapGetters("localization", {
+      lang: "lang",
+      localization: "localization",
     }),
     socketConnected() {
       return this.socket ? !!this.socket.connected : false;

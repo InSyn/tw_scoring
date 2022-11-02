@@ -1,7 +1,7 @@
 <template>
   <v-container v-if="competition" fluid>
     <div style="width: 100%; font-size: 1.4rem; font-weight: bold" class="pa-2">
-      Start lists
+      {{ localization[lang].app.races.title }}
     </div>
     <v-container fluid>
       <v-row
@@ -43,7 +43,7 @@
               font-weight: bold;
             "
           >
-            {{ "No created races" }}
+            {{ localization[lang].app.races.no_races }}
           </div>
           <div
             @click="selectRace(race)"
@@ -118,8 +118,11 @@
                   :style="{
                     color: $vuetify.theme.themes[appTheme].textDefault,
                   }"
-                  v-html="`Delete &nbsp<b>${race.title}</b>?`"
-                ></v-card-title>
+                  >{{ localization[lang].app.dialogs.d_delete }}&nbsp;<b>{{
+                    race.title
+                  }}</b
+                  >?</v-card-title
+                >
                 <v-card-actions
                   class="d-flex align-center justify-space-between"
                 >
@@ -127,8 +130,10 @@
                     text
                     @click="del_race(race)"
                     :color="$vuetify.theme.themes[appTheme].action_red"
-                    >Delete</v-btn
-                  ><v-btn @click="race.del_dialog = false">Cancel</v-btn>
+                    >{{ localization[lang].app.dialogs.d_delete }}</v-btn
+                  ><v-btn @click="race.del_dialog = false">{{
+                    localization[lang].app.dialogs.d_cancel
+                  }}</v-btn>
                 </v-card-actions>
               </v-card></v-dialog
             >
@@ -153,7 +158,7 @@
                   }"
                 >
                   <div style="font-size: 1.4rem; font-weight: bold">
-                    Race title
+                    {{ localization[lang].app.races.d_title }}
                   </div>
                   <div style="display: flex; margin-top: 1rem">
                     <input
@@ -203,7 +208,7 @@
               v-on="on"
               :color="$vuetify.theme.themes[appTheme].success"
               text
-              >Create race</v-btn
+              >{{ localization[lang].app.races.create_race }}</v-btn
             ></template
           >
           <v-card
@@ -230,7 +235,8 @@
                       competition.mainData.discipline.value
                     }/ ${
                       dialogs.create_race.title ||
-                      "Race " + (competition.races.length + 1)
+                      localization[lang].app.races.race +
+                        (competition.races.length + 1)
                     }`
                   }}
                 </div>
@@ -251,7 +257,9 @@
                 "
               >
                 <div style="font-size: 1.2rem; padding: 0 8px">
-                  <label for="title">Title</label>
+                  <label for="title">{{
+                    localization[lang].app.races.d_title
+                  }}</label>
                   <input
                     id="title"
                     class="ml-2"
@@ -266,7 +274,9 @@
                       backgroundColor:
                         $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
                     }"
-                    :placeholder="`Race ${competition.races.length + 1}`"
+                    :placeholder="`${localization[lang].app.races.race} ${
+                      competition.races.length + 1
+                    }`"
                     v-model="dialogs.create_race.title"
                   />
                 </div>
@@ -294,7 +304,8 @@
                     retain-focus-on-click
                     ><v-icon size="24" style="margin-right: 0.5rem"
                       >mdi-playlist-check</v-icon
-                    >Add all</v-btn
+                    >
+                    {{ localization[lang].app.races.d_add_all }}</v-btn
                   >
                   <v-btn
                     text
@@ -308,7 +319,7 @@
                       )
                     "
                     retain-focus-on-click
-                    >Start order from
+                    >{{ localization[lang].app.races.d_start_order }}
                     <v-icon size="24" style="margin-left: 0.5rem"
                       >mdi-arrow-down</v-icon
                     ></v-btn
@@ -429,7 +440,7 @@
                       {{
                         dialogs.create_race.raceStartListFrom
                           ? dialogs.create_race.raceStartListFrom.title
-                          : "Choose..."
+                          : localization[lang].app.dialogs.d_choose
                       }}
                     </div>
                   </div>
@@ -445,7 +456,7 @@
                       padding: 0 0 1rem 1rem;
                     "
                   >
-                    Available competitors
+                    {{ localization[lang].app.races.d_available }}
                   </div>
                   <v-list
                     :dark="appTheme === 'dark'"
@@ -503,7 +514,7 @@
                       padding: 0 0 1rem 1rem;
                     "
                   >
-                    Start order
+                    {{ localization[lang].app.races.d_start_order }}
                   </div>
                   <v-list
                     :dark="appTheme === 'dark'"
@@ -573,7 +584,7 @@
                     $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
                 }"
               >
-                Number of competitors:
+                {{ localization[lang].app.races.d_num_of_competitors }}:
                 <span style="margin-left: 1rem">{{
                   dialogs.create_race.competitors.length
                 }}</span>
@@ -594,7 +605,7 @@
                 style="margin-left: auto"
                 text
                 :color="$vuetify.theme.themes[appTheme].success"
-                >Create</v-btn
+                >{{ localization[lang].app.dialogs.d_create }}</v-btn
               ></v-card-actions
             >
           </v-card>
@@ -624,7 +635,7 @@
                 v-on="on"
                 text
                 :color="$vuetify.theme.themes[appTheme].success"
-                >Add competitors</v-btn
+                >{{ localization[lang].app.races.add_competitors }}</v-btn
               ></template
             ><v-card
               class="pa-2 ma-0"
@@ -638,7 +649,7 @@
                 class="d-flex flex-nowrap align-center justify-space-between"
               >
                 <v-card-title class="pa-2 ma-0">{{
-                  `Add competitors to ${selectedRace.title}`
+                  `${localization[lang].app.races.d_add_competitors_to} ${selectedRace.title}`
                 }}</v-card-title
                 ><v-btn
                   @click="
@@ -693,17 +704,18 @@
                           backgroundColor: `rgba(42,190,106,.4)`,
                         }
                       "
-                      v-html="
+                    >
+                      {{
                         `${
                           competitor.info_data.bib && competitor.info_data.bib
                         } ${
-                          competitor.info_data['lastname'] &&
-                          competitor.info_data['lastname']
+                          competitor.info_data["lastname"] &&
+                          competitor.info_data["lastname"]
                         } ${
                           competitor.info_data.name && competitor.info_data.name
                         }`
-                      "
-                    ></div>
+                      }}
+                    </div>
                   </v-hover>
                 </div>
                 <div
@@ -746,17 +758,18 @@
                           backgroundColor: `rgba(217,45,65,.4)`,
                         }
                       "
-                      v-html="
+                    >
+                      {{
                         `${
                           competitor.info_data.bib && competitor.info_data.bib
                         } ${
-                          competitor.info_data['lastname'] &&
-                          competitor.info_data['lastname']
+                          competitor.info_data["lastname"] &&
+                          competitor.info_data["lastname"]
                         } ${
                           competitor.info_data.name && competitor.info_data.name
                         }`
-                      "
-                    ></div>
+                      }}
+                    </div>
                   </v-hover>
                 </div>
               </div>
@@ -766,7 +779,7 @@
                   @click="addCompetitorToRace(selectedRace)"
                   text
                   :color="$vuetify.theme.themes[appTheme].action_blue"
-                  >Apply</v-btn
+                  >{{ localization[lang].app.dialogs.d_accept }}</v-btn
                 ></v-card-actions
               >
             </v-card></v-dialog
@@ -863,7 +876,7 @@
                       ></v-hover
                     >
                   </div>
-                  <div v-html="comp_n + 1"></div>
+                  <div>{{ comp_n + 1 }}</div>
                 </div>
                 <v-dialog v-model="competitor.info_dialog.state" width="380px"
                   ><template v-slot:activator="{ on }">
@@ -991,7 +1004,7 @@
                               flex-grow: 1;
                             "
                           >
-                            No scores
+                            {{ localization[lang].app.races.d_no_marks }}
                           </div>
                           <div
                             v-else
@@ -1008,7 +1021,9 @@
                             "
                           >
                             <div style="margin-right: 0.5rem">
-                              {{ `Judge ${mark.judge}:` }}
+                              {{
+                                `${localization[lang].app.scoring.judge_full} ${mark.judge}:`
+                              }}
                             </div>
                             <div style="font-weight: bold">
                               {{ mark.value }}
@@ -1026,7 +1041,9 @@
                         text
                         small
                         :color="$vuetify.theme.themes[appTheme].accent_light"
-                        >Clear race results</v-btn
+                        >{{
+                          localization[lang].app.races.d_clear_results
+                        }}</v-btn
                       ><v-btn
                         :disabled="section !== 'startList'"
                         @click="removeCompetitor(competitor.id, selectedRace)"
@@ -1036,7 +1053,9 @@
                         :style="{
                           color: $vuetify.theme.themes[appTheme].textDefault,
                         }"
-                        >Remove from race</v-btn
+                        >{{
+                          localization[lang].app.races.d_remove_from_race
+                        }}</v-btn
                       >
                     </v-card-actions>
                   </v-card></v-dialog
@@ -1059,21 +1078,21 @@
             text
             small
             :color="$vuetify.theme.themes[appTheme].accent_light"
-            >Range by result</v-btn
+            >{{ localization[lang].app.races.range_by_res }}</v-btn
           >
           <v-btn
             @click="turnAround(selectedRace)"
             text
             small
             :color="$vuetify.theme.themes[appTheme].accent_light"
-            >Turn over</v-btn
+            >{{ localization[lang].app.races.turn_over }}</v-btn
           >
           <v-btn
             @click="shuffle(selectedRace)"
             text
             small
             :color="$vuetify.theme.themes[appTheme].accent_light"
-            >Shuffle</v-btn
+            >{{ localization[lang].app.races.shuffle }}</v-btn
           >
           <v-btn
             @click="listUndo(selectedRace)"
@@ -1090,7 +1109,8 @@
             text
             small
             :color="$vuetify.theme.themes[appTheme].action_green"
-            >Export<v-icon small>mdi-file-excel</v-icon>
+            >{{ localization[lang].app.races.export_race
+            }}<v-icon small>mdi-file-excel</v-icon>
           </v-btn>
           <v-btn
             @click="clearRaceResults(selectedRace)"
@@ -1098,7 +1118,7 @@
             elevation="0"
             :color="$vuetify.theme.themes[appTheme].action_red"
             :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
-            >Clear results
+            >{{ localization[lang].app.races.clear_res }}
           </v-btn>
         </div>
       </div>
@@ -1263,11 +1283,18 @@ export default {
       stringify(jsonData, { header: true }, function (err, output) {
         if (err) throw err;
         fs.writeFile(
-          `./${competition.mainData.title.value} ${race.title}.csv`,
+          `${process.cwd()}/${competition.mainData.title.value} ${
+            race.title
+          }.csv`,
           output,
-          "utf8",
+          { encoding: "utf-8" },
           (err) => {
             if (err) throw err;
+            console.log(
+              `${process.cwd()}/${competition.mainData.title.value} ${
+                race.title
+              }.csv`
+            );
           }
         );
       });
@@ -1470,6 +1497,10 @@ export default {
     };
   },
   computed: {
+    ...mapGetters("localization", {
+      localization: "localization",
+      lang: "lang",
+    }),
     ...mapGetters("main", {
       competition: "competition",
       appTheme: "appTheme",

@@ -6,14 +6,14 @@
         backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
       }"
     >
-      <v-row
-        class="pa-2 d-flex align-center"
-        ver
-        no-gutters
+      <div
+        class="d-flex align-center px-2"
         style="height: 32px; font-size: 1.2rem; font-weight: bold"
       >
-        <div v-html="`Finished:`"></div>
-      </v-row>
+        <div class="pt-2">
+          {{ localization[lang].app.scoring.finished }}
+        </div>
+      </div>
       <v-row
         class="pa-2"
         no-gutters
@@ -39,31 +39,29 @@
             <v-col
               class="d-flex justify-center align-center"
               style="max-width: 5rem"
-              v-html="`Rank`"
-            ></v-col>
+              >{{ localization[lang].app.scoring.t_rank }}</v-col
+            >
             <v-col
               class="d-flex justify-center align-center"
               style="max-width: 5rem"
-              v-html="`St.№`"
-            ></v-col>
-            <v-col
-              class="d-flex align-center"
-              style="max-width: 16rem"
-              v-html="`Lastname, Name`"
-            ></v-col>
+              >{{ localization[lang].app.scoring.t_st_num }}</v-col
+            >
+            <v-col class="d-flex align-center" style="max-width: 16rem">{{
+              localization[lang].app.scoring.t_name
+            }}</v-col>
             <v-col
               class="d-flex justify-center align-center"
               style="max-width: 5rem"
               v-for="(race, r) in competition.races"
               :key="r"
-              v-html="`${race.title}`"
-            ></v-col>
+              >{{ `${race.title}` }}</v-col
+            >
             <v-spacer></v-spacer>
             <v-col
-              class="d-flex justify-end align-center"
+              class="d-flex justify-center align-center"
               style="max-width: 5rem"
-              v-html="`Result`"
-            ></v-col>
+              >{{ localization[lang].app.scoring.t_result }}</v-col
+            >
           </v-row>
           <div
             v-if="competition.selected_race"
@@ -107,15 +105,15 @@
                     <v-col
                       class="d-flex justify-center align-center"
                       style="max-width: 5rem"
-                      v-html="`${competitor.info_data.bib}`"
-                    ></v-col>
+                      >{{ `${competitor.info_data.bib}` }}</v-col
+                    >
                     <v-col
                       class="d-flex align-center"
                       style="max-width: 16rem"
-                      v-html="
+                      >{{
                         `${competitor.info_data.lastname} ${competitor.info_data.name}`
-                      "
-                    ></v-col>
+                      }}</v-col
+                    >
                     <v-col
                       class="d-flex justify-center align-center"
                       style="max-width: 5rem"
@@ -138,7 +136,7 @@
                       }}</v-col
                     ><v-spacer></v-spacer
                     ><v-col
-                      class="d-flex justify-end align-center"
+                      class="d-flex justify-center align-center"
                       style="max-width: 5rem"
                       >{{
                         competition.set_accuracy(
@@ -165,7 +163,7 @@
                   "
                 >
                   {{
-                    `Competitor ${competitor.info_data.bib} ${competitor.info_data.lastname} ${competitor.info_data.name}`
+                    `${localization[lang].app.scoring.d_competitor} ${competitor.info_data.bib} ${competitor.info_data.lastname} ${competitor.info_data.name}`
                   }}
                 </div>
 
@@ -212,7 +210,7 @@
                           },
                         ]"
                       >
-                        {{ `Race ${competition.races.indexOf(race) + 1}` }}
+                        {{ race.title }}
                       </div>
                     </div>
                     <div
@@ -229,11 +227,9 @@
                         "
                       >
                         <div style="flex: 0 0 auto; font-weight: bold">
-                          {{ `Judge: ${mark.judge}` }}
-                        </div>
-
-                        <div style="margin-left: auto; font-weight: bold">
-                          mark
+                          {{
+                            `${localization[lang].app.scoring.judge_full} ${mark.judge}`
+                          }}
                         </div>
                         <input
                           type="text"
@@ -241,7 +237,7 @@
                           v-model="mark.value"
                           style="
                             padding: 2px 4px;
-                            margin-left: 0.5rem;
+                            margin-left: auto;
                             font-weight: bold;
                             width: 4rem;
                             border-radius: 2px;
@@ -327,7 +323,7 @@
                         <div
                           style="
                             display: flex;
-                            align-items: flex-end;
+                            align-items: center;
                             width: 100%;
                             padding: 2px 8px;
                             border-radius: 2px;
@@ -339,7 +335,9 @@
                             color: $vuetify.theme.themes[appTheme].textDefault,
                           }"
                         >
-                          <div style="font-weight: bold">Result</div>
+                          <div style="font-weight: bold">
+                            {{ localization[lang].app.scoring.d_result }}
+                          </div>
                           <div
                             style="
                               width: 4rem;
@@ -465,9 +463,9 @@
                         color: $vuetify.theme.themes[appTheme].textDefault,
                       }"
                     >
-                      <span style="font-size: 1.2rem; font-weight: bold"
-                        >Общий</span
-                      >
+                      <span style="font-size: 1.2rem; font-weight: bold">{{
+                        localization[lang].app.scoring.d_overall
+                      }}</span>
                       <div
                         style="
                           font-size: 1.4rem;
@@ -496,14 +494,14 @@
                     :style="{
                       color: $vuetify.theme.themes[appTheme].textDefault,
                     }"
-                    >Accept</v-btn
+                    >{{ localization[lang].app.dialogs.d_accept }}</v-btn
                   >
                   <v-btn
                     small
                     text
                     @click="declineChanges(competitor)"
                     :color="$vuetify.theme.themes[appTheme].textDefault"
-                    >Cancel</v-btn
+                    >{{ localization[lang].app.dialogs.d_cancel }}</v-btn
                   >
                 </v-card-actions></v-card
               ></v-dialog
@@ -520,9 +518,6 @@ import { mapGetters } from "vuex";
 export default {
   name: "finishTable",
   methods: {
-    log(data) {
-      console.log(data);
-    },
     get_race_res(competitor, _race) {
       return this.competition.result_formula.get_race_result(
         competitor.marks.filter((mark) => {
@@ -619,6 +614,10 @@ export default {
     };
   },
   computed: {
+    ...mapGetters("localization", {
+      localization: "localization",
+      lang: "lang",
+    }),
     ...mapGetters("main", { competition: "competition", appTheme: "appTheme" }),
     sortedFinishedList() {
       let list = this.competition.selected_race.finished

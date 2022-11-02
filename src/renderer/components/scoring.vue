@@ -17,7 +17,7 @@
       <double-up
         v-if="
           competition.result_formula.type === 0 &&
-            competition.result_formula.types[0].doubleUp
+          competition.result_formula.types[0].doubleUp
         "
       ></double-up>
       <on-race v-else></on-race> </v-row
@@ -56,15 +56,15 @@ export default {
     onRace,
     displayControlPanel,
     finishTable,
-    timing
+    timing,
   },
   computed: {
     ...mapGetters("main", {
       competition: "competition",
       appTheme: "appTheme",
-      mode_timing: "mode_timing"
-    })
-  }
+      mode_timing: "mode_timing",
+    }),
+  },
 };
 </script>
 

@@ -15,30 +15,30 @@
     }"
   >
     <div class="xml_export_title" style="font-size: 1.2rem; font-weight: bold">
-      Export XML
+      {{ `${localization[lang].app.protocols.f_export} XML` }}
     </div>
-    <div class="xml_export_settings">
-      <div style="display: flex; align-items: center">
-        <span>Competition type</span
-        ><select
-          style="
-            margin-left: 1rem;
-            padding: 4px 0.5rem;
-            font-weight: bold;
-            border-radius: 6px;
-            outline: none;
-          "
-          :style="{
-            color: $vuetify.theme.themes[appTheme].textDefault,
-            backgroundColor:
-              $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
-          }"
-          v-model="type"
-        >
-          <option v-for="type in types" :key="type">{{ type }}</option>
-        </select>
-      </div>
-    </div>
+    <!--    <div class="xml_export_settings">-->
+    <!--      <div style="display: flex; align-items: center">-->
+    <!--        <span>Competition type</span-->
+    <!--        ><select-->
+    <!--          style="-->
+    <!--            margin-left: 1rem;-->
+    <!--            padding: 4px 0.5rem;-->
+    <!--            font-weight: bold;-->
+    <!--            border-radius: 6px;-->
+    <!--            outline: none;-->
+    <!--          "-->
+    <!--          :style="{-->
+    <!--            color: $vuetify.theme.themes[appTheme].textDefault,-->
+    <!--            backgroundColor:-->
+    <!--              $vuetify.theme.themes[appTheme].standardBackgroundRGBA,-->
+    <!--          }"-->
+    <!--          v-model="type"-->
+    <!--        >-->
+    <!--          <option v-for="type in types" :key="type">{{ type }}</option>-->
+    <!--        </select>-->
+    <!--      </div>-->
+    <!--    </div>-->
     <div
       class="xml_export_actions"
       style="
@@ -59,7 +59,8 @@
           :color="$vuetify.theme.themes[appTheme].textDefault"
           style="margin-right: 0.5rem"
           >mdi-download</v-icon
-        >Save</v-btn
+        >
+        {{ localization[lang].app.protocols.b_save }}</v-btn
       >
     </div>
   </div>
@@ -82,6 +83,10 @@ export default {
     };
   },
   computed: {
+    ...mapGetters("localization", {
+      localization: "localization",
+      lang: "lang",
+    }),
     ...mapGetters("main", {
       appTheme: "appTheme",
       competition: "competition",

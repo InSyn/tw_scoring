@@ -77,11 +77,14 @@ export default {
           }
         )
         .then((response) => {
-          console.log(response);
-          if (response.data.body.status === "ok") validated = true;
+          if (
+            response.data.body.status === "ok" &&
+            response.data.body.salt === license_data.salt
+          )
+            validated = true;
         })
         .catch((err) => {
-          if (err) console.log("AJAX Err: " + err);
+          if (err) console.log("Check err: " + err);
         });
       return validated;
     },

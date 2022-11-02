@@ -8,8 +8,11 @@
   >
     <div class="pa-2 d-flex align-center flex-nowrap">
       <div style="display: flex; align-items: center; width: 50%">
-        <label for="prot_title" class="font-weight-bold" style="flex: 0 0 auto"
-          >Title</label
+        <label
+          for="prot_title"
+          class="font-weight-bold"
+          style="flex: 0 0 auto"
+          >{{ localization[lang].app.protocols.title }}</label
         ><input
           class="flex-grow-1 ml-4 pa-1"
           id="prot_title"
@@ -32,14 +35,17 @@
           margin-left: 1rem;
         "
       >
-        <label for="prot_type" class="font-weight-bold" style="flex: 0 0 auto"
-          >Protocol type</label
+        <label
+          for="prot_type"
+          class="font-weight-bold"
+          style="flex: 0 0 auto"
+          >{{ localization[lang].app.protocols.protocol_type }}</label
         ><input
           class="flex-grow-1 ml-4 pa-1"
           id="prot_type"
           style="flex: 0 0 auto; border-radius: 6px"
           v-model="competition.protocol_settings.result_protocols.protocol_type"
-          placeholder="вид..."
+          placeholder="Type..."
           :style="{
             backgroundColor:
               $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
@@ -67,7 +73,7 @@
             font-weight: bold;
           "
         >
-          Choose race
+          {{ localization[lang].app.protocols.choose_race }}
         </div>
         <div
           style="
@@ -156,7 +162,7 @@
               { color: $vuetify.theme.themes[appTheme].textDefault },
               hover && { color: $vuetify.theme.themes[appTheme][button.color] },
             ]"
-            >{{ button.title }}</v-btn
+            >{{ localization[lang].app.protocols[button.id] }}</v-btn
           ></v-hover
         >
         <v-btn
@@ -188,12 +194,12 @@
           <v-col
             style="height: 100%"
             class="d-flex pa-1 align-center justify-center"
-            >Cell 1</v-col
+            >{{ localization[lang].app.protocols.t_cell }} 1</v-col
           >
           <v-col
             style="height: 100%"
             class="d-flex pa-1 align-center justify-center"
-            >Cell 2</v-col
+            >{{ localization[lang].app.protocols.t_cell }} 2</v-col
           ><v-col
             style="height: 100%"
             class="d-flex pa-1 align-center justify-center"
@@ -205,22 +211,24 @@
                 color: $vuetify.theme.themes[appTheme].success,
               },
             ]"
-            >{{ `Width(${sum_width}%)` }}</v-col
+            >{{
+              `${localization[lang].app.protocols.t_width}(${sum_width}%)`
+            }}</v-col
           >
           <v-col
             style="height: 100%"
             class="d-flex pa-1 align-center justify-center"
-            >Font(px)</v-col
+            >{{ localization[lang].app.protocols.t_font }}(px)</v-col
           >
           <v-col
             style="height: 100%"
             class="d-flex pa-1 align-center justify-center"
-            >Align</v-col
+            >{{ localization[lang].app.protocols.t_align }}</v-col
           >
           <v-col
             style="height: 100%"
             class="d-flex pa-1 align-center justify-center"
-            >Bold</v-col
+            >{{ localization[lang].app.protocols.t_weight }}</v-col
           >
         </v-row>
         <div style="flex: 1 0 auto; overflow-y: auto">
@@ -389,7 +397,8 @@
                         $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
                     }"
                     ><v-card-title style="padding: 8px 16px"
-                      >Cell setup<v-btn
+                      >{{ localization[lang].app.protocols.cell_settings
+                      }}<v-btn
                         @click="f_prop.select_dialog = false"
                         style="margin-left: auto"
                         icon
@@ -400,14 +409,14 @@
                       style="display: flex; flex-wrap: wrap; padding: 0 16px"
                     >
                       <div style="width: 100%">
-                        Current value
+                        {{ localization[lang].app.protocols.current_val }}
                         <v-btn
                           @click="clearField(f_prop)"
                           text
                           small
                           :color="$vuetify.theme.themes[appTheme].accent"
                           style="margin-left: 1rem"
-                          >Clear</v-btn
+                          >{{ localization[lang].app.dialogs.d_clear }}</v-btn
                         >
                       </div>
 
@@ -443,7 +452,9 @@
                           }"
                         />
                       </div>
-                      <div v-else>Empty cell</div>
+                      <div v-else>
+                        {{ localization[lang].app.protocols.empty_cell }}
+                      </div>
                     </div>
                     <div
                       style="
@@ -737,7 +748,7 @@ export default {
       selected_fields: [],
       field_buttons: [
         {
-          title: "Add",
+          id: "b_add",
           color: "action_green",
 
           action: function () {
@@ -745,18 +756,22 @@ export default {
           },
         },
         {
-          title: "Edit",
+          id: "b_edit",
           color: "action_yellow",
 
           action: function () {
             return 0;
           },
         },
-        { title: "Remove", color: "action_red", action: this.remove_fields },
+        { id: "b_remove", color: "action_red", action: this.remove_fields },
       ],
     };
   },
   computed: {
+    ...mapGetters("localization", {
+      localization: "localization",
+      lang: "lang",
+    }),
     ...mapGetters("main", { competition: "competition", appTheme: "appTheme" }),
     ...mapGetters("protocol_settings", {
       results_protocol: "results_protocol",

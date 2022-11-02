@@ -1,1 +1,3607 @@
-{"weather":[{"descr1":"Температура Снега:","descr2":"-"},{"descr1":"Температура Воздуха:","descr2":"-"},{"descr1":"Скорость ветра:","descr2":"-"}],"structure":{"statuses":[{"value":"DNF","priority":-1},{"value":"DNS","priority":-2},{"value":"DSQ","priority":-3}],"selected":{"type":0,"discipline":0,"accuracy":1},"types":[{"id":0,"title":"Сноуборд","disciplines":[0,1,2,100]},{"id":1,"title":"Фристайл","disciplines":[0,1,2,3,4,100]},{"id":2,"title":"Пользовательский","disciplines":[100]}],"disciplines":[{"id":0,"title":"Слоуп-Стайл","res_formula":[1]},{"id":1,"title":"Биг-Эйр","res_formula":[2]},{"id":2,"title":"Хаф-Пайп","res_formula":[3]},{"id":3,"title":"Акробатика","res_formula":[4]},{"id":4,"title":"Могул","res_formula":[5]},{"id":100,"title":"Пользовательский","res_formula":[100]}],"accuracy":[{"id":0,"title":"1","value":1,"digits":0},{"id":1,"title":"1:10","value":10,"digits":1},{"id":2,"title":"1:100","value":100,"digits":2},{"id":3,"title":"1:1000","value":1000,"digits":3}],"stages":[{"id":"qual","title":"Квалификация","value":"Квалификация"},{"id":"final","title":"Финал","value":"Финал"},{"id":"custom","title":"Пользовательский","value":""}]},"stages":{"lastStageSize":2,"prev_stages":["w3sfh07w0","kttixewz3"],"stage_grid":[{"title":"Квалификация","s_competitions":["w3sfh07w0","kttixewz3"]},{"title":"Финал","s_competitions":["dfzql8pfe"]}]},"passed_competitors":0,"races":[{"del_dialog":false,"finished":["m6bsbal2h","ogb440f77","g5ms896r2","0dt0g3v4z","lbpvijl2m","gooqe7xi7","m4c3yzx61","d2xcty0jg","ynnifeqeg","42it4l522","3mxw7ob1h","x5so1afho"],"onTrack":null,"id":"nzahs23t7","title":"Заезд 1","race_dialog":false,"type":{"id":0,"title":"Сноуборд","disciplines":[0,1,2,100]},"discipline":{"id":0,"title":"Слоуп-Стайл","res_formula":[1]},"startList":[],"_startList":["m6bsbal2h","ogb440f77","g5ms896r2","0dt0g3v4z","lbpvijl2m","gooqe7xi7","m4c3yzx61","d2xcty0jg","ynnifeqeg","42it4l522","3mxw7ob1h","x5so1afho"],"selectedCompetitor":null},{"del_dialog":false,"finished":["m6bsbal2h","ogb440f77","g5ms896r2","0dt0g3v4z","lbpvijl2m","gooqe7xi7","m4c3yzx61","d2xcty0jg","ynnifeqeg","42it4l522","3mxw7ob1h","x5so1afho"],"onTrack":null,"id":"v4gdvw8a5","title":"Заезд 2","race_dialog":false,"type":{"id":0,"title":"Сноуборд","disciplines":[0,1,2,100]},"discipline":{"id":0,"title":"Слоуп-Стайл","res_formula":[1]},"startList":[],"_startList":["m6bsbal2h","ogb440f77","g5ms896r2","0dt0g3v4z","lbpvijl2m","gooqe7xi7","m4c3yzx61","d2xcty0jg","ynnifeqeg","42it4l522","3mxw7ob1h","x5so1afho"],"selectedCompetitor":null},{"del_dialog":false,"finished":["m6bsbal2h","ogb440f77","g5ms896r2","0dt0g3v4z","lbpvijl2m","gooqe7xi7","m4c3yzx61","d2xcty0jg","ynnifeqeg","42it4l522","3mxw7ob1h","x5so1afho"],"onTrack":null,"id":"grquzinec","title":"Заезд 3","race_dialog":false,"type":{"id":0,"title":"Сноуборд","disciplines":[0,1,2,100]},"discipline":{"id":0,"title":"Слоуп-Стайл","res_formula":[1]},"startList":[],"_startList":["m6bsbal2h","ogb440f77","g5ms896r2","0dt0g3v4z","lbpvijl2m","gooqe7xi7","m4c3yzx61","d2xcty0jg","ynnifeqeg","42it4l522","3mxw7ob1h","x5so1afho"],"selectedCompetitor":null}],"selected_race_id":2,"mainData":{"title":{"title":"Название","value":"Первенство России по Сноуборду","focus":false,"stage":{"title":"Этап","value":{"id":"custom","title":"Пользовательский","value":"Финал М"},"focus":false,"group":"M"}},"discipline":{"title":"Дисциплина","value":"Биг-эйр, № ЕКП 2856","min":"BA","focus":false},"date":{"title":"Дата проведения","dialog":false,"value":"2022-03-11","time_dialog":false,"time":"10:40","focus":false},"country":{"title":"Страна","value":"","focus":false},"location":{"title":"Место проведения","value":"ГЛК \"Солнечная долина\", г. Миасс, Челябинская обл., Россия, 23.03.2022","focus":false},"provider":{"title":"Организатор","value":"Федерация Сноуборда России","focus":false},"providerTiming":{"title":"Timing provider","value":"ООО \"Спортивные технологии\"","focus":false},"codex":{"title":"Codex","value":"№ ЕКП 2856","focus":false}},"stuff":{"settings":{"jury":{"title":"Жюри","change_dialog":false},"judges":{"title":"Судьи","change_dialog":false}},"secretary":{"name":"","lastName":""},"jury":[{"id":"chief","title":"Старший судья","lastName":"","name":"","loc":"","connected":false,"setABC":false}],"judges":[{"category":"","socket_id":null,"connected":false,"_id":"e7q2jzqa3","title":"Судья 1","remoteId":"2","id":1,"name":"","lastName":"","location":"","setABC":false},{"category":"","socket_id":null,"connected":false,"_id":"39u9f419o","title":"Судья 2","remoteId":"3","id":2,"name":"","lastName":"","location":"","setABC":false},{"category":"","socket_id":null,"connected":false,"_id":"wra081vpb","title":"Судья 3","remoteId":"4","id":3,"name":"","lastName":"","location":"","setABC":false},{"category":"","socket_id":null,"connected":false,"_id":"jgjif3v0a","title":"Судья 4","remoteId":"5","id":4,"name":"","lastName":"","location":"","setABC":false},{"category":"","socket_id":null,"connected":false,"_id":"f2e55bc80","title":"Судья 5","remoteId":"6","id":5,"name":"","lastName":"","location":"","setABC":true}],"openers":[]},"technicalInfo":{"title":"Техническа информация","change_dialog":false,"records":[]},"competitorsSheet":{"header":[{"id":"bib","title":"Bib"},{"id":"lastname","title":"Фамилия"},{"id":"name","title":"Имя"},{"id":"fullname","title":"Фамилия, Имя"},{"id":"year","title":"Год"},{"id":"rang","title":"Разряд"},{"id":"region","title":"Суб. РФ"}],"competitors":[{"info_dialog":{"state":false},"race_status":null,"res_accepted":false,"rank":1,"id":"x5so1afho","info_data":{"bib":89,"lastname":"Баженов","name":"Всеволод","fullname":"БАЖЕНОВ Всеволод","year":2007,"rang":"КМС","region":"г. Москва"},"marks":[{"id":"nnkmiyosu","value":"33","new_value":null,"race":0,"race_id":"nzahs23t7","judge":5,"judge_id":"f2e55bc80","section":0},{"id":"76op7epeg","value":"34","new_value":null,"race":0,"race_id":"nzahs23t7","judge":2,"judge_id":"39u9f419o","section":0},{"id":"1lfpjfgcp","value":"35","new_value":null,"race":0,"race_id":"nzahs23t7","judge":1,"judge_id":"e7q2jzqa3","section":0},{"id":"he6g0r8ty","value":"38","new_value":null,"race":0,"race_id":"nzahs23t7","judge":3,"judge_id":"wra081vpb","section":0},{"id":"r7s2ygmmu","value":"35","new_value":null,"race":0,"race_id":"nzahs23t7","judge":4,"judge_id":"jgjif3v0a","section":0},{"id":"klszcgelv","value":"88","new_value":null,"race":1,"race_id":"v4gdvw8a5","judge":5,"judge_id":"f2e55bc80","section":0},{"id":"k9hyxln57","value":"88","new_value":null,"race":1,"race_id":"v4gdvw8a5","judge":2,"judge_id":"39u9f419o","section":0},{"id":"ypjzs8o9v","value":"90","new_value":null,"race":1,"race_id":"v4gdvw8a5","judge":1,"judge_id":"e7q2jzqa3","section":0},{"id":"26i1m83fh","value":"88","new_value":null,"race":1,"race_id":"v4gdvw8a5","judge":4,"judge_id":"jgjif3v0a","section":0},{"id":"3j6bmd6ql","value":"92","new_value":null,"race":1,"race_id":"v4gdvw8a5","judge":3,"judge_id":"wra081vpb","section":0},{"id":"p4py6smej","value":"77","new_value":null,"race":2,"race_id":"grquzinec","judge":2,"judge_id":"39u9f419o","section":0},{"id":"yd0nj7u96","value":"72","new_value":null,"race":2,"race_id":"grquzinec","judge":5,"judge_id":"f2e55bc80","section":0},{"id":"ldjc6hwmn","value":"75","new_value":null,"race":2,"race_id":"grquzinec","judge":1,"judge_id":"e7q2jzqa3","section":0},{"id":"y4ub4zh3n","value":"75","new_value":null,"race":2,"race_id":"grquzinec","judge":3,"judge_id":"wra081vpb","section":0},{"id":"i755fsulg","value":"74","new_value":null,"race":2,"race_id":"grquzinec","judge":4,"judge_id":"jgjif3v0a","section":0}],"results":[{"id":"8fsb2k8iq","value":90.8,"race_id":"agkl2cqj7","repeat":"A","status":null},{"id":"ifulyh1it","value":28.4,"race_id":"kzz9b9yid","repeat":"A","status":null},{"id":"c279csnbm","value":35,"race_id":"nzahs23t7","repeat":"A","status":null},{"id":"0014yqlsf","value":89.2,"race_id":"v4gdvw8a5","repeat":"A","status":null},{"id":"zg9tixqjl","value":74.6,"race_id":"grquzinec","repeat":"B","status":null}],"results_overall":[{"competition_id":"o0dsyzg1s","competitor_id":"x5so1afho","value":90.8,"status":null},{"competition_id":"w3sfh07w0","competitor_id":"x5so1afho","value":90.8,"status":null},{"id_comp":"w3sfh07w0","value":90.8},{"competition_id":"dfzql8pfe","competitor_id":"x5so1afho","value":163.8,"status":null}]},{"info_dialog":{"state":false},"race_status":null,"res_accepted":false,"rank":2,"id":"ynnifeqeg","info_data":{"bib":10,"lastname":"Упоров","name":"Ермолай","fullname":"УПОРОВ Ермолай","year":2005,"rang":"КМС","region":"Новосибирская обл."},"marks":[{"id":"a8xsauv7w","value":"83","new_value":null,"race":0,"race_id":"nzahs23t7","judge":5,"judge_id":"f2e55bc80","section":0},{"id":"5hgi61dt1","value":"83","new_value":null,"race":0,"race_id":"nzahs23t7","judge":2,"judge_id":"39u9f419o","section":0},{"id":"u1nsny38n","value":"85","new_value":null,"race":0,"race_id":"nzahs23t7","judge":1,"judge_id":"e7q2jzqa3","section":0},{"id":"85f0vq14v","value":"83","new_value":null,"race":0,"race_id":"nzahs23t7","judge":3,"judge_id":"wra081vpb","section":0},{"id":"b3bvb6mqo","value":"76","new_value":null,"race":0,"race_id":"nzahs23t7","judge":4,"judge_id":"jgjif3v0a","section":0},{"id":"masuianrp","value":"81","new_value":null,"race":1,"race_id":"v4gdvw8a5","judge":2,"judge_id":"39u9f419o","section":0},{"id":"in8rlctmz","value":"80","new_value":null,"race":1,"race_id":"v4gdvw8a5","judge":5,"judge_id":"f2e55bc80","section":0},{"id":"fvqpxdt74","value":"79","new_value":null,"race":1,"race_id":"v4gdvw8a5","judge":1,"judge_id":"e7q2jzqa3","section":0},{"id":"d2d5brm96","value":"79","new_value":null,"race":1,"race_id":"v4gdvw8a5","judge":3,"judge_id":"wra081vpb","section":0},{"id":"qujhvx2jq","value":"78","new_value":null,"race":1,"race_id":"v4gdvw8a5","judge":4,"judge_id":"jgjif3v0a","section":0},{"id":"0avq52a9k","value":"16","new_value":null,"race":2,"race_id":"grquzinec","judge":2,"judge_id":"39u9f419o","section":0},{"id":"8d2pty264","value":"17","new_value":null,"race":2,"race_id":"grquzinec","judge":1,"judge_id":"e7q2jzqa3","section":0},{"id":"uhmfj0ba9","value":"25","new_value":null,"race":2,"race_id":"grquzinec","judge":5,"judge_id":"f2e55bc80","section":0},{"id":"v6au0in37","value":"23","new_value":null,"race":2,"race_id":"grquzinec","judge":4,"judge_id":"jgjif3v0a","section":0},{"id":"ciqaju5hr","value":"21","new_value":null,"race":2,"race_id":"grquzinec","judge":3,"judge_id":"wra081vpb","section":0}],"results":[{"id":"jxbnjfkl1","value":88.2,"race_id":"agkl2cqj7","repeat":"A","status":null},{"id":"98a4p608h","value":37,"race_id":"kzz9b9yid","repeat":"A","status":null},{"id":"sgi6dclju","value":82,"race_id":"nzahs23t7","repeat":"A","status":null},{"id":"l5auuh01e","value":79.4,"race_id":"v4gdvw8a5","repeat":"B","status":null},{"id":"a6qqsxnt6","value":20.4,"race_id":"grquzinec","repeat":"B","status":null}],"results_overall":[{"competition_id":"o0dsyzg1s","competitor_id":"ynnifeqeg","value":88.2,"status":null},{"competition_id":"w3sfh07w0","competitor_id":"ynnifeqeg","value":88.2,"status":null},{"id_comp":"w3sfh07w0","value":88.2},{"competition_id":"dfzql8pfe","competitor_id":"ynnifeqeg","value":161.4,"status":null}]},{"info_dialog":{"state":false},"race_status":null,"res_accepted":false,"rank":4,"id":"m4c3yzx61","info_data":{"bib":17,"lastname":"Лукьянов","name":"Андрей","fullname":"ЛУКЬЯНОВ Андрей","year":2004,"rang":1,"region":"Республика Башкортостан"},"marks":[{"id":"h73i0cvrc","value":"80","new_value":null,"race":0,"race_id":"nzahs23t7","judge":1,"judge_id":"e7q2jzqa3","section":0},{"id":"2gclr0sy2","value":"84","new_value":null,"race":0,"race_id":"nzahs23t7","judge":2,"judge_id":"39u9f419o","section":0},{"id":"wsnasaf4o","value":"80","new_value":null,"race":0,"race_id":"nzahs23t7","judge":4,"judge_id":"jgjif3v0a","section":0},{"id":"8cfdfvjr7","value":"81","new_value":null,"race":0,"race_id":"nzahs23t7","judge":3,"judge_id":"wra081vpb","section":0},{"id":"wu5d7sql4","value":"79","new_value":null,"race":0,"race_id":"nzahs23t7","judge":5,"judge_id":"f2e55bc80","section":0},{"id":"s28mkc17w","value":"36","new_value":null,"race":1,"race_id":"v4gdvw8a5","judge":2,"judge_id":"39u9f419o","section":0},{"id":"zimftanc8","value":"31","new_value":null,"race":1,"race_id":"v4gdvw8a5","judge":4,"judge_id":"jgjif3v0a","section":0},{"id":"b2x6gvlwz","value":"31","new_value":null,"race":1,"race_id":"v4gdvw8a5","judge":1,"judge_id":"e7q2jzqa3","section":0},{"id":"0cxvw8qqd","value":"33","new_value":null,"race":1,"race_id":"v4gdvw8a5","judge":3,"judge_id":"wra081vpb","section":0},{"id":"gyqyxv501","value":"31","new_value":null,"race":1,"race_id":"v4gdvw8a5","judge":5,"judge_id":"f2e55bc80","section":0},{"id":"8cdnzmfvj","value":"9","new_value":null,"race":2,"race_id":"grquzinec","judge":2,"judge_id":"39u9f419o","section":0},{"id":"2e3v6kefh","value":"11","new_value":null,"race":2,"race_id":"grquzinec","judge":4,"judge_id":"jgjif3v0a","section":0},{"id":"cqoact3vu","value":"8","new_value":null,"race":2,"race_id":"grquzinec","judge":5,"judge_id":"f2e55bc80","section":0},{"id":"eerczglp6","value":"13","new_value":null,"race":2,"race_id":"grquzinec","judge":3,"judge_id":"wra081vpb","section":0},{"id":"3yen7kj1d","value":"10","new_value":null,"race":2,"race_id":"grquzinec","judge":1,"judge_id":"e7q2jzqa3","section":0}],"results":[{"id":"lyl3imsop","value":87,"race_id":"agkl2cqj7","repeat":"A","status":null},{"id":"se4g68nxn","value":24.6,"race_id":"kzz9b9yid","repeat":"A","status":null},{"id":"puovyrf76","value":80.8,"race_id":"nzahs23t7","repeat":"A","status":null},{"id":"xsxdmhg1y","value":32.4,"race_id":"v4gdvw8a5","repeat":"B","status":null},{"id":"zqbrkd7fb","value":10.2,"race_id":"grquzinec","repeat":"B","status":null}],"results_overall":[{"competition_id":"o0dsyzg1s","competitor_id":"m4c3yzx61","value":87,"status":null},{"competition_id":"w3sfh07w0","competitor_id":"m4c3yzx61","value":87,"status":null},{"id_comp":"w3sfh07w0","value":87},{"competition_id":"dfzql8pfe","competitor_id":"m4c3yzx61","value":113.19999999999999,"status":null}]},{"info_dialog":{"state":false},"race_status":null,"res_accepted":false,"rank":6,"id":"lbpvijl2m","info_data":{"bib":38,"lastname":"Ершов","name":"Пётр","fullname":"ЕРШОВ Пётр","year":2005,"rang":"МС","region":"г. Москва"},"marks":[{"id":"bssxse8b5","value":"69","new_value":null,"race":0,"race_id":"nzahs23t7","judge":2,"judge_id":"39u9f419o","section":0},{"id":"clkl0gsdp","value":"78","new_value":null,"race":0,"race_id":"nzahs23t7","judge":1,"judge_id":"e7q2jzqa3","section":0},{"id":"7pk9vkzs9","value":"65","new_value":null,"race":0,"race_id":"nzahs23t7","judge":5,"judge_id":"f2e55bc80","section":0},{"id":"1omezn5vk","value":"66","new_value":null,"race":0,"race_id":"nzahs23t7","judge":3,"judge_id":"wra081vpb","section":0},{"id":"pwxla1mva","value":"72","new_value":null,"race":0,"race_id":"nzahs23t7","judge":4,"judge_id":"jgjif3v0a","section":0},{"id":"8oh72l2yb","value":"30","new_value":null,"race":1,"race_id":"v4gdvw8a5","judge":5,"judge_id":"f2e55bc80","section":0},{"id":"4r24psl4x","value":"31","new_value":null,"race":1,"race_id":"v4gdvw8a5","judge":2,"judge_id":"39u9f419o","section":0},{"id":"lp724boi4","value":"28","new_value":null,"race":1,"race_id":"v4gdvw8a5","judge":1,"judge_id":"e7q2jzqa3","section":0},{"id":"jzxbb86n6","value":"31","new_value":null,"race":1,"race_id":"v4gdvw8a5","judge":3,"judge_id":"wra081vpb","section":0},{"id":"qlnl2zexp","value":"30","new_value":null,"race":1,"race_id":"v4gdvw8a5","judge":4,"judge_id":"jgjif3v0a","section":0},{"id":"xxyqc62km","value":"21","new_value":null,"race":2,"race_id":"grquzinec","judge":2,"judge_id":"39u9f419o","section":0},{"id":"f4j79xpir","value":"27","new_value":null,"race":2,"race_id":"grquzinec","judge":4,"judge_id":"jgjif3v0a","section":0},{"id":"090d5i12x","value":"18","new_value":null,"race":2,"race_id":"grquzinec","judge":5,"judge_id":"f2e55bc80","section":0},{"id":"wepgjimi2","value":"22","new_value":null,"race":2,"race_id":"grquzinec","judge":3,"judge_id":"wra081vpb","section":0},{"id":"ltxjn1y3e","value":"19","new_value":null,"race":2,"race_id":"grquzinec","judge":1,"judge_id":"e7q2jzqa3","section":0}],"results":[{"id":"1rhfw7s8w","value":81.2,"race_id":"agkl2cqj7","repeat":"A","status":null},{"id":"h4g386kww","value":27.4,"race_id":"kzz9b9yid","repeat":"A","status":null},{"id":"5tw1ggc26","value":70,"race_id":"nzahs23t7","repeat":"A","status":null},{"id":"437e39i7u","value":30,"race_id":"v4gdvw8a5","repeat":"A","status":null},{"id":"bsw6oghp0","value":21.4,"race_id":"grquzinec","repeat":"B","status":null}],"results_overall":[{"competition_id":"o0dsyzg1s","competitor_id":"lbpvijl2m","value":81.2,"status":null},{"competition_id":"w3sfh07w0","competitor_id":"lbpvijl2m","value":81.2,"status":null},{"id_comp":"w3sfh07w0","value":81.2},{"competition_id":"dfzql8pfe","competitor_id":"lbpvijl2m","value":91.4,"status":null}]},{"info_dialog":{"state":false},"race_status":null,"res_accepted":false,"rank":12,"id":"g5ms896r2","info_data":{"bib":65,"lastname":"Протасов","name":"Кирилл","fullname":"ПРОТАСОВ Кирилл","year":2006,"rang":1,"region":"Красноярский край"},"marks":[{"id":"qnb5vwcxi","value":"17","new_value":null,"race":0,"race_id":"nzahs23t7","judge":5,"judge_id":"f2e55bc80","section":0},{"id":"hm9et8zmm","value":"15","new_value":null,"race":0,"race_id":"nzahs23t7","judge":1,"judge_id":"e7q2jzqa3","section":0},{"id":"4148iv4t2","value":"19","new_value":null,"race":0,"race_id":"nzahs23t7","judge":2,"judge_id":"39u9f419o","section":0},{"id":"5hn7cnz58","value":"18","new_value":null,"race":0,"race_id":"nzahs23t7","judge":3,"judge_id":"wra081vpb","section":0},{"id":"h7qn8d3in","value":"20","new_value":null,"race":0,"race_id":"nzahs23t7","judge":4,"judge_id":"jgjif3v0a","section":0},{"id":"o7d2s9bnx","value":"1","new_value":null,"race":1,"race_id":"v4gdvw8a5","judge":4,"judge_id":"jgjif3v0a","section":0},{"id":"gpw0az3oq","value":"1","new_value":null,"race":1,"race_id":"v4gdvw8a5","judge":2,"judge_id":"39u9f419o","section":0},{"id":"zi4ekqtul","value":"1","new_value":null,"race":1,"race_id":"v4gdvw8a5","judge":1,"judge_id":"e7q2jzqa3","section":0},{"id":"5k6mvicto","value":"1","new_value":null,"race":1,"race_id":"v4gdvw8a5","judge":3,"judge_id":"wra081vpb","section":0},{"id":"63cjko5ku","value":"1","new_value":null,"race":1,"race_id":"v4gdvw8a5","judge":5,"judge_id":"f2e55bc80","section":0},{"id":"4ht68nfx1","value":"3","new_value":null,"race":2,"race_id":"grquzinec","judge":4,"judge_id":"jgjif3v0a","section":0},{"id":"dit1sqiub","value":"1","new_value":null,"race":2,"race_id":"grquzinec","judge":5,"judge_id":"f2e55bc80","section":0},{"id":"6bu18hk31","value":"1","new_value":null,"race":2,"race_id":"grquzinec","judge":1,"judge_id":"e7q2jzqa3","section":0},{"id":"xhfaf2hmx","value":"2","new_value":null,"race":2,"race_id":"grquzinec","judge":2,"judge_id":"39u9f419o","section":0},{"id":"xr9x9po8k","value":"1","new_value":null,"race":2,"race_id":"grquzinec","judge":3,"judge_id":"wra081vpb","section":0}],"results":[{"id":"f8til51ir","value":66.2,"race_id":"agkl2cqj7","repeat":"A","status":null},{"id":"ss7ze4tdo","value":75,"race_id":"kzz9b9yid","repeat":"A","status":null},{"id":"dt4im2go3","value":17.8,"race_id":"nzahs23t7","repeat":"A","status":null},{"id":"mnlycjen0","value":1,"race_id":"v4gdvw8a5","repeat":"B","status":null},{"id":"uypwdam9e","value":1.6,"race_id":"grquzinec","repeat":"B","status":null}],"results_overall":[{"competition_id":"o0dsyzg1s","competitor_id":"g5ms896r2","value":75,"status":null},{"competition_id":"w3sfh07w0","competitor_id":"g5ms896r2","value":75,"status":null},{"id_comp":"w3sfh07w0","value":75},{"competition_id":"dfzql8pfe","competitor_id":"g5ms896r2","value":19.400000000000002,"status":null}]},{"info_dialog":{"state":false},"race_status":null,"res_accepted":false,"rank":11,"id":"m6bsbal2h","info_data":{"bib":91,"lastname":"Далаков","name":"Ярослав","fullname":"ДАЛАКОВ Ярослав","year":2007,"rang":1,"region":"Московская обл."},"marks":[{"id":"o9qybgpgg","value":"63","new_value":null,"race":0,"race_id":"nzahs23t7","judge":5,"judge_id":"f2e55bc80","section":0},{"id":"1aaahjkcw","value":"63","new_value":null,"race":0,"race_id":"nzahs23t7","judge":2,"judge_id":"39u9f419o","section":0},{"id":"a16pvnm4n","value":"68","new_value":null,"race":0,"race_id":"nzahs23t7","judge":1,"judge_id":"e7q2jzqa3","section":0},{"id":"fepjdfvv4","value":"63","new_value":null,"race":0,"race_id":"nzahs23t7","judge":4,"judge_id":"jgjif3v0a","section":0},{"id":"08zo8033h","value":"64","new_value":null,"race":0,"race_id":"nzahs23t7","judge":3,"judge_id":"wra081vpb","section":0},{"id":"fdp77dgoz","value":"6","new_value":null,"race":1,"race_id":"v4gdvw8a5","judge":4,"judge_id":"jgjif3v0a","section":0},{"id":"h1indgrqu","value":"7","new_value":null,"race":1,"race_id":"v4gdvw8a5","judge":2,"judge_id":"39u9f419o","section":0},{"id":"k5wokdv4p","value":"4","new_value":null,"race":1,"race_id":"v4gdvw8a5","judge":3,"judge_id":"wra081vpb","section":0},{"id":"gtcoalqkm","value":"5","new_value":null,"race":1,"race_id":"v4gdvw8a5","judge":5,"judge_id":"f2e55bc80","section":0},{"id":"f10svqihq","value":"6","new_value":null,"race":1,"race_id":"v4gdvw8a5","judge":1,"judge_id":"e7q2jzqa3","section":0},{"id":"yeg89upks","value":"9","new_value":null,"race":2,"race_id":"grquzinec","judge":5,"judge_id":"f2e55bc80","section":0},{"id":"mu8xn0gwn","value":"9","new_value":null,"race":2,"race_id":"grquzinec","judge":2,"judge_id":"39u9f419o","section":0},{"id":"oivf3ey5b","value":"15","new_value":null,"race":2,"race_id":"grquzinec","judge":3,"judge_id":"wra081vpb","section":0},{"id":"vomqjv1i0","value":"9","new_value":null,"race":2,"race_id":"grquzinec","judge":4,"judge_id":"jgjif3v0a","section":0},{"id":"9dmmwnw3b","value":"11","new_value":null,"race":2,"race_id":"grquzinec","judge":1,"judge_id":"e7q2jzqa3","section":0}],"results":[{"id":"s4nz0s4md","value":11.8,"race_id":"agkl2cqj7","repeat":"A","status":null},{"id":"t0l4at2n2","value":71,"race_id":"kzz9b9yid","repeat":"A","status":null},{"id":"cgtx8gkd1","value":64.2,"race_id":"nzahs23t7","repeat":"A","status":null},{"id":"dqwhfmash","value":5.6,"race_id":"v4gdvw8a5","repeat":"B","status":null},{"id":"ld02zfe4x","value":10.6,"race_id":"grquzinec","repeat":"C","status":null}],"results_overall":[{"competition_id":"o0dsyzg1s","competitor_id":"m6bsbal2h","value":71,"status":null},{"competition_id":"w3sfh07w0","competitor_id":"m6bsbal2h","value":71,"status":null},{"id_comp":"w3sfh07w0","value":71},{"competition_id":"dfzql8pfe","competitor_id":"m6bsbal2h","value":74.8,"status":null}]},{"info_dialog":{"state":false},"race_status":null,"res_accepted":false,"rank":5,"id":"3mxw7ob1h","info_data":{"bib":84,"lastname":"Ершов","name":"Артём","fullname":"ЕРШОВ Артём","year":2008,"rang":"1","region":"г. Москва"},"marks":[{"id":"fkz4z9ohg","value":"67","new_value":null,"race":0,"race_id":"nzahs23t7","judge":3,"judge_id":"wra081vpb","section":0},{"id":"od0j460s8","value":"71","new_value":null,"race":0,"race_id":"nzahs23t7","judge":1,"judge_id":"e7q2jzqa3","section":0},{"id":"4fz4zgibj","value":"68","new_value":null,"race":0,"race_id":"nzahs23t7","judge":2,"judge_id":"39u9f419o","section":0},{"id":"fsheaip61","value":"65","new_value":null,"race":0,"race_id":"nzahs23t7","judge":4,"judge_id":"jgjif3v0a","section":0},{"id":"6u9iqdakd","value":"67","new_value":null,"race":0,"race_id":"nzahs23t7","judge":5,"judge_id":"f2e55bc80","section":0},{"id":"tv0asnq3z","value":"2","new_value":null,"race":1,"race_id":"v4gdvw8a5","judge":5,"judge_id":"f2e55bc80","section":0},{"id":"qvd60ecye","value":"2","new_value":null,"race":1,"race_id":"v4gdvw8a5","judge":4,"judge_id":"jgjif3v0a","section":0},{"id":"dqblvian1","value":"2","new_value":null,"race":1,"race_id":"v4gdvw8a5","judge":3,"judge_id":"wra081vpb","section":0},{"id":"kro2xm6ut","value":"2","new_value":null,"race":1,"race_id":"v4gdvw8a5","judge":2,"judge_id":"39u9f419o","section":0},{"id":"jyv1i2u8y","value":"2","new_value":null,"race":1,"race_id":"v4gdvw8a5","judge":1,"judge_id":"e7q2jzqa3","section":0},{"id":"tor9iitnw","value":"28","new_value":null,"race":2,"race_id":"grquzinec","judge":5,"judge_id":"f2e55bc80","section":0},{"id":"0gc2r7ub5","value":"31","new_value":null,"race":2,"race_id":"grquzinec","judge":2,"judge_id":"39u9f419o","section":0},{"id":"7uaya0tj9","value":"25","new_value":null,"race":2,"race_id":"grquzinec","judge":4,"judge_id":"jgjif3v0a","section":0},{"id":"5ropoqx7w","value":"32","new_value":null,"race":2,"race_id":"grquzinec","judge":1,"judge_id":"e7q2jzqa3","section":0},{"id":"0wr0z8vby","value":"27","new_value":null,"race":2,"race_id":"grquzinec","judge":3,"judge_id":"wra081vpb","section":0}],"results":[{"id":"vr4c9e7vx","value":14.6,"race_id":"nbk11vj34","repeat":"A","status":null},{"id":"uqpgrieb3","value":76.4,"race_id":"s3ze4afyu","repeat":"A","status":null},{"id":"c7xkycyog","value":67.6,"race_id":"nzahs23t7","repeat":"A","status":null},{"id":"v9q87nbxz","value":2,"race_id":"v4gdvw8a5","repeat":"B","status":null},{"id":"ue2w2so1q","value":28.6,"race_id":"grquzinec","repeat":"C","status":null}],"results_overall":[{"competition_id":"kttixewz3","competitor_id":"3mxw7ob1h","value":76.4,"status":null},{"id_comp":"kttixewz3","value":76.4},{"competition_id":"dfzql8pfe","competitor_id":"3mxw7ob1h","value":96.19999999999999,"status":null}]},{"info_dialog":{"state":false},"race_status":null,"res_accepted":false,"rank":9,"id":"42it4l522","info_data":{"bib":48,"lastname":"Ленчевский","name":"Алексей","fullname":"ЛЕНЧЕВСКИЙ Алексей","year":2006,"rang":"КМС","region":"г. Москва"},"marks":[{"id":"h7fzjdjk9","value":"76","new_value":null,"race":0,"race_id":"nzahs23t7","judge":2,"judge_id":"39u9f419o","section":0},{"id":"jxu1nqgc3","value":"73","new_value":null,"race":0,"race_id":"nzahs23t7","judge":5,"judge_id":"f2e55bc80","section":0},{"id":"oc970fqdr","value":"77","new_value":null,"race":0,"race_id":"nzahs23t7","judge":1,"judge_id":"e7q2jzqa3","section":0},{"id":"8ilv4fc0o","value":"77","new_value":null,"race":0,"race_id":"nzahs23t7","judge":3,"judge_id":"wra081vpb","section":0},{"id":"rzbnbdao0","value":"75","new_value":null,"race":0,"race_id":"nzahs23t7","judge":4,"judge_id":"jgjif3v0a","section":0},{"id":"0xm6crr2t","value":"7","new_value":null,"race":1,"race_id":"v4gdvw8a5","judge":4,"judge_id":"jgjif3v0a","section":0},{"id":"ul7iw3hkk","value":"10","new_value":null,"race":1,"race_id":"v4gdvw8a5","judge":2,"judge_id":"39u9f419o","section":0},{"id":"jg3pv5qbh","value":"11","new_value":null,"race":1,"race_id":"v4gdvw8a5","judge":3,"judge_id":"wra081vpb","section":0},{"id":"mqxdz2n44","value":"8","new_value":null,"race":1,"race_id":"v4gdvw8a5","judge":1,"judge_id":"e7q2jzqa3","section":0},{"id":"6duh4nsyu","value":"10","new_value":null,"race":1,"race_id":"v4gdvw8a5","judge":5,"judge_id":"f2e55bc80","section":0},{"id":"l64tg5tct","value":"4","new_value":null,"race":2,"race_id":"grquzinec","judge":4,"judge_id":"jgjif3v0a","section":0},{"id":"ppey1okhl","value":"3","new_value":null,"race":2,"race_id":"grquzinec","judge":2,"judge_id":"39u9f419o","section":0},{"id":"zaelp1ofn","value":"3","new_value":null,"race":2,"race_id":"grquzinec","judge":3,"judge_id":"wra081vpb","section":0},{"id":"c1pv60z36","value":"9","new_value":null,"race":2,"race_id":"grquzinec","judge":1,"judge_id":"e7q2jzqa3","section":0},{"id":"ur79rrgf0","value":"7","new_value":null,"race":2,"race_id":"grquzinec","judge":5,"judge_id":"f2e55bc80","section":0}],"results":[{"id":"87bvyjnyg","value":70,"race_id":"nbk11vj34","repeat":"A","status":null},{"id":"f802kj4gs","value":12,"race_id":"s3ze4afyu","repeat":"A","status":null},{"id":"ydz256x8p","value":75.6,"race_id":"nzahs23t7","repeat":"A","status":null},{"id":"o1crww232","value":9.2,"race_id":"v4gdvw8a5","repeat":"B","status":null},{"id":"rn6s3dg8w","value":5.2,"race_id":"grquzinec","repeat":"B","status":null}],"results_overall":[{"competition_id":"kttixewz3","competitor_id":"42it4l522","value":70,"status":null},{"id_comp":"kttixewz3","value":70},{"competition_id":"dfzql8pfe","competitor_id":"42it4l522","value":84.8,"status":null}]},{"info_dialog":{"state":false},"race_status":null,"res_accepted":false,"rank":7,"id":"d2xcty0jg","info_data":{"bib":14,"lastname":"Замятин","name":"Андрей","fullname":"ЗАМЯТИН Андрей","year":2005,"rang":"КМС","region":"г. Санкт-Петербург"},"marks":[{"id":"pqz515ygp","value":"20","new_value":null,"race":0,"race_id":"nzahs23t7","judge":2,"judge_id":"39u9f419o","section":0},{"id":"85q2534tx","value":"20","new_value":null,"race":0,"race_id":"nzahs23t7","judge":5,"judge_id":"f2e55bc80","section":0},{"id":"rmciuf9qh","value":"21","new_value":null,"race":0,"race_id":"nzahs23t7","judge":1,"judge_id":"e7q2jzqa3","section":0},{"id":"x8gza7may","value":"17","new_value":null,"race":0,"race_id":"nzahs23t7","judge":3,"judge_id":"wra081vpb","section":0},{"id":"3t90wzjub","value":"18","new_value":null,"race":0,"race_id":"nzahs23t7","judge":4,"judge_id":"jgjif3v0a","section":0},{"id":"eagye1a9u","value":"70","new_value":null,"race":1,"race_id":"v4gdvw8a5","judge":5,"judge_id":"f2e55bc80","section":0},{"id":"er4j71gn5","value":"70","new_value":null,"race":1,"race_id":"v4gdvw8a5","judge":2,"judge_id":"39u9f419o","section":0},{"id":"8eds8fayx","value":"74","new_value":null,"race":1,"race_id":"v4gdvw8a5","judge":1,"judge_id":"e7q2jzqa3","section":0},{"id":"qu9inzxqv","value":"73","new_value":null,"race":1,"race_id":"v4gdvw8a5","judge":4,"judge_id":"jgjif3v0a","section":0},{"id":"dhdtkyg09","value":"69","new_value":null,"race":1,"race_id":"v4gdvw8a5","judge":3,"judge_id":"wra081vpb","section":0},{"id":"176d7lcan","value":"2","new_value":null,"race":2,"race_id":"grquzinec","judge":4,"judge_id":"jgjif3v0a","section":0},{"id":"xf9aja4hb","value":"1","new_value":null,"race":2,"race_id":"grquzinec","judge":2,"judge_id":"39u9f419o","section":0},{"id":"ir6ymmwmj","value":"2","new_value":null,"race":2,"race_id":"grquzinec","judge":3,"judge_id":"wra081vpb","section":0},{"id":"a33xgpede","value":"3","new_value":null,"race":2,"race_id":"grquzinec","judge":1,"judge_id":"e7q2jzqa3","section":0},{"id":"pp8919f8q","value":"3","new_value":null,"race":2,"race_id":"grquzinec","judge":5,"judge_id":"f2e55bc80","section":0}],"results":[{"id":"s1ldfncjj","value":69.2,"race_id":"nbk11vj34","repeat":"A","status":null},{"id":"dv5ze00gg","value":57.4,"race_id":"s3ze4afyu","repeat":"A","status":null},{"id":"e8nk6whby","value":19.2,"race_id":"nzahs23t7","repeat":"A","status":null},{"id":"54nvckhnx","value":71.2,"race_id":"v4gdvw8a5","repeat":"B","status":null},{"id":"abbsxpfrc","value":2.2,"race_id":"grquzinec","repeat":"C","status":null}],"results_overall":[{"competition_id":"kttixewz3","competitor_id":"d2xcty0jg","value":69.2,"status":null},{"id_comp":"kttixewz3","value":69.2},{"competition_id":"dfzql8pfe","competitor_id":"d2xcty0jg","value":90.4,"status":null}]},{"info_dialog":{"state":false},"race_status":null,"res_accepted":false,"rank":3,"id":"gooqe7xi7","info_data":{"bib":20,"lastname":"Архипов","name":"Лаврентий","fullname":"АРХИПОВ Лаврентий","year":2004,"rang":"КМС","region":"Свердловская обл."},"marks":[{"id":"8y2yvjmty","value":"43","new_value":null,"race":0,"race_id":"nzahs23t7","judge":2,"judge_id":"39u9f419o","section":0},{"id":"oflsotjkh","value":"40","new_value":null,"race":0,"race_id":"nzahs23t7","judge":1,"judge_id":"e7q2jzqa3","section":0},{"id":"ljg1yvs90","value":"43","new_value":null,"race":0,"race_id":"nzahs23t7","judge":3,"judge_id":"wra081vpb","section":0},{"id":"9zpj2on88","value":"45","new_value":null,"race":0,"race_id":"nzahs23t7","judge":4,"judge_id":"jgjif3v0a","section":0},{"id":"i98lj8bor","value":"44","new_value":null,"race":0,"race_id":"nzahs23t7","judge":5,"judge_id":"f2e55bc80","section":0},{"id":"gizlty2u3","value":"58","new_value":null,"race":1,"race_id":"v4gdvw8a5","judge":5,"judge_id":"f2e55bc80","section":0},{"id":"sh5tadi1f","value":"60","new_value":null,"race":1,"race_id":"v4gdvw8a5","judge":1,"judge_id":"e7q2jzqa3","section":0},{"id":"sesowfun1","value":"48","new_value":null,"race":1,"race_id":"v4gdvw8a5","judge":2,"judge_id":"39u9f419o","section":0},{"id":"ttzlgq1nv","value":"50","new_value":null,"race":1,"race_id":"v4gdvw8a5","judge":4,"judge_id":"jgjif3v0a","section":0},{"id":"fdc9erlps","value":"48","new_value":null,"race":1,"race_id":"v4gdvw8a5","judge":3,"judge_id":"wra081vpb","section":0},{"id":"8bvzm0m91","value":"68","new_value":null,"race":2,"race_id":"grquzinec","judge":2,"judge_id":"39u9f419o","section":0},{"id":"nxmih8tdl","value":"67","new_value":null,"race":2,"race_id":"grquzinec","judge":5,"judge_id":"f2e55bc80","section":0},{"id":"n5yi3hih0","value":"69","new_value":null,"race":2,"race_id":"grquzinec","judge":1,"judge_id":"e7q2jzqa3","section":0},{"id":"1d4yin58p","value":"65","new_value":null,"race":2,"race_id":"grquzinec","judge":3,"judge_id":"wra081vpb","section":0},{"id":"fj4nklziz","value":"71","new_value":null,"race":2,"race_id":"grquzinec","judge":4,"judge_id":"jgjif3v0a","section":0}],"results":[{"id":"2e89qeeua","value":66.6,"race_id":"nbk11vj34","repeat":"A","status":null},{"id":"fliljcerw","value":11.2,"race_id":"s3ze4afyu","repeat":"A","status":null},{"id":"zid7kcda8","value":43,"race_id":"nzahs23t7","repeat":"A","status":null},{"id":"lbzwkie5v","value":52.8,"race_id":"v4gdvw8a5","repeat":"B","status":null},{"id":"ziqgvjv34","value":68,"race_id":"grquzinec","repeat":"A","status":null}],"results_overall":[{"competition_id":"kttixewz3","competitor_id":"gooqe7xi7","value":66.6,"status":null},{"id_comp":"kttixewz3","value":66.6},{"competition_id":"dfzql8pfe","competitor_id":"gooqe7xi7","value":120.8,"status":null}]},{"info_dialog":{"state":false},"race_status":null,"res_accepted":false,"rank":8,"id":"0dt0g3v4z","info_data":{"bib":28,"lastname":"Корчмит","name":"Николай","fullname":"КОРЧМИТ Николай","year":2006,"rang":"1","region":"Новосибирская обл."},"marks":[{"id":"0zb0g50wc","value":"68","new_value":null,"race":0,"race_id":"nzahs23t7","judge":5,"judge_id":"f2e55bc80","section":0},{"id":"bm943o8ap","value":"67","new_value":null,"race":0,"race_id":"nzahs23t7","judge":2,"judge_id":"39u9f419o","section":0},{"id":"n1b7ub6q8","value":"68","new_value":null,"race":0,"race_id":"nzahs23t7","judge":3,"judge_id":"wra081vpb","section":0},{"id":"oevjb0nbg","value":"68","new_value":null,"race":0,"race_id":"nzahs23t7","judge":4,"judge_id":"jgjif3v0a","section":0},{"id":"igl2wrqe9","value":"72","new_value":null,"race":0,"race_id":"nzahs23t7","judge":1,"judge_id":"e7q2jzqa3","section":0},{"id":"vw807buy0","value":"3","new_value":null,"race":1,"race_id":"v4gdvw8a5","judge":4,"judge_id":"jgjif3v0a","section":0},{"id":"5knx1ne6q","value":"9","new_value":null,"race":1,"race_id":"v4gdvw8a5","judge":2,"judge_id":"39u9f419o","section":0},{"id":"27lh73jzv","value":"7","new_value":null,"race":1,"race_id":"v4gdvw8a5","judge":1,"judge_id":"e7q2jzqa3","section":0},{"id":"h0bvsi9r4","value":"3","new_value":null,"race":1,"race_id":"v4gdvw8a5","judge":3,"judge_id":"wra081vpb","section":0},{"id":"x5j31gmsd","value":"3","new_value":null,"race":1,"race_id":"v4gdvw8a5","judge":5,"judge_id":"f2e55bc80","section":0},{"id":"kr1ksfpcf","value":"21","new_value":null,"race":2,"race_id":"grquzinec","judge":2,"judge_id":"39u9f419o","section":0},{"id":"eckk1z1iw","value":"20","new_value":null,"race":2,"race_id":"grquzinec","judge":3,"judge_id":"wra081vpb","section":0},{"id":"6m3154n4u","value":"21","new_value":null,"race":2,"race_id":"grquzinec","judge":5,"judge_id":"f2e55bc80","section":0},{"id":"s3y2hwp8d","value":"22","new_value":null,"race":2,"race_id":"grquzinec","judge":1,"judge_id":"e7q2jzqa3","section":0},{"id":"qprlf2ql2","value":"21","new_value":null,"race":2,"race_id":"grquzinec","judge":4,"judge_id":"jgjif3v0a","section":0}],"results":[{"id":"hu7g4k3vk","value":63,"race_id":"nbk11vj34","repeat":"A","status":null},{"id":"wtnuoyaq9","value":9.8,"race_id":"s3ze4afyu","repeat":"A","status":null},{"id":"ogr5yv8l9","value":68.6,"race_id":"nzahs23t7","repeat":"A","status":null},{"id":"2yxmxy4h8","value":5,"race_id":"v4gdvw8a5","repeat":"B","status":null},{"id":"0ynytivlt","value":21,"race_id":"grquzinec","repeat":"C","status":null}],"results_overall":[{"competition_id":"kttixewz3","competitor_id":"0dt0g3v4z","value":63,"status":null},{"id_comp":"kttixewz3","value":63},{"competition_id":"dfzql8pfe","competitor_id":"0dt0g3v4z","value":89.6,"status":null}]},{"info_dialog":{"state":false},"race_status":null,"res_accepted":false,"rank":10,"id":"ogb440f77","info_data":{"bib":8,"lastname":"Юмаков","name":"Динар","fullname":"ЮМАКОВ Динар","year":2004,"rang":"КМС","region":"Республика Башкортостан"},"marks":[{"id":"1cl3osvfp","value":"6","new_value":null,"race":0,"race_id":"nzahs23t7","judge":5,"judge_id":"f2e55bc80","section":0},{"id":"xca91hcwt","value":"5","new_value":null,"race":0,"race_id":"nzahs23t7","judge":4,"judge_id":"jgjif3v0a","section":0},{"id":"0v7jljwfd","value":"6","new_value":null,"race":0,"race_id":"nzahs23t7","judge":2,"judge_id":"39u9f419o","section":0},{"id":"lufxvh3cj","value":"5","new_value":null,"race":0,"race_id":"nzahs23t7","judge":1,"judge_id":"e7q2jzqa3","section":0},{"id":"ouljmp42v","value":"5","new_value":null,"race":0,"race_id":"nzahs23t7","judge":3,"judge_id":"wra081vpb","section":0},{"id":"i57nfte02","value":"10","new_value":null,"race":1,"race_id":"v4gdvw8a5","judge":2,"judge_id":"39u9f419o","section":0},{"id":"eg64p8dk9","value":"10","new_value":null,"race":1,"race_id":"v4gdvw8a5","judge":4,"judge_id":"jgjif3v0a","section":0},{"id":"bx0ugetu8","value":"6","new_value":null,"race":1,"race_id":"v4gdvw8a5","judge":1,"judge_id":"e7q2jzqa3","section":0},{"id":"87ix4dv9t","value":"10","new_value":null,"race":1,"race_id":"v4gdvw8a5","judge":3,"judge_id":"wra081vpb","section":0},{"id":"08twlxbf6","value":"7","new_value":null,"race":1,"race_id":"v4gdvw8a5","judge":5,"judge_id":"f2e55bc80","section":0},{"id":"o69pcp96b","value":"67","new_value":null,"race":2,"race_id":"grquzinec","judge":1,"judge_id":"e7q2jzqa3","section":0},{"id":"03nvln74a","value":"69","new_value":null,"race":2,"race_id":"grquzinec","judge":2,"judge_id":"39u9f419o","section":0},{"id":"3f6e1gy5r","value":"69","new_value":null,"race":2,"race_id":"grquzinec","judge":5,"judge_id":"f2e55bc80","section":0},{"id":"i2vqsedrf","value":"74","new_value":null,"race":2,"race_id":"grquzinec","judge":3,"judge_id":"wra081vpb","section":0},{"id":"ivlzudbvy","value":"64","new_value":null,"race":2,"race_id":"grquzinec","judge":4,"judge_id":"jgjif3v0a","section":0}],"results":[{"id":"iggm399io","value":9.2,"race_id":"nbk11vj34","repeat":"A","status":null},{"id":"gert1t35s","value":61.6,"race_id":"s3ze4afyu","repeat":"A","status":null},{"id":"kofv4l8u3","value":5.4,"race_id":"nzahs23t7","repeat":"A","status":null},{"id":"hv0t9a9mx","value":8.6,"race_id":"v4gdvw8a5","repeat":"A","status":null},{"id":"s51f4lpnd","value":68.6,"race_id":"grquzinec","repeat":"B","status":null}],"results_overall":[{"competition_id":"kttixewz3","competitor_id":"ogb440f77","value":61.6,"status":null},{"id_comp":"kttixewz3","value":61.6},{"competition_id":"dfzql8pfe","competitor_id":"ogb440f77","value":77.19999999999999,"status":null}]}]},"media_settings":{"display":{"modes":[{"id":0,"title":"Результаты"},{"id":1,"title":"Стартовый"},{"id":2,"title":"Результат последнего на финише"},{"id":3,"title":"Участник на старте"},{"id":4,"title":"Награждение"}],"selected":1}},"protocol_fields":[],"protocol_settings":{"protocol_type":1,"show_preview":false,"start_protocols":{"filters":{"race_filter":{"del_dialog":false,"finished":["m6bsbal2h","ogb440f77","g5ms896r2","0dt0g3v4z","lbpvijl2m","gooqe7xi7","m4c3yzx61","d2xcty0jg","ynnifeqeg","42it4l522","3mxw7ob1h","x5so1afho"],"onTrack":null,"id":"nzahs23t7","title":"Заезд 1","race_dialog":false,"type":{"id":0,"title":"Сноуборд","disciplines":[0,1,2,100]},"discipline":{"id":0,"title":"Слоуп-Стайл","res_formula":[1]},"startList":[],"_startList":["m6bsbal2h","ogb440f77","g5ms896r2","0dt0g3v4z","lbpvijl2m","gooqe7xi7","m4c3yzx61","d2xcty0jg","ynnifeqeg","42it4l522","3mxw7ob1h","x5so1afho"],"selectedCompetitor":null}},"fonts":{"officialsData":12,"openers":12,"weatherData":12,"raceNotes":12},"protocol_type":"Стартовый лист","fields":[{"params":{"cell_1":{"select_dialog":false,"id":"rank","title":"Ст №"},"cell_2":{"select_dialog":false,"id":null,"title":null},"width":6,"font":12,"align":{"title":"Слева","value":"start"},"f_weight":"normal"},"id":"bgvnck308"},{"params":{"cell_1":{"select_dialog":false,"id":"bib","title":"Bib"},"cell_2":{"select_dialog":false,"id":null,"title":null},"width":"6","font":12,"align":{"title":"Слева","value":"start"},"f_weight":"normal"},"id":"k7rbebg4l"},{"params":{"cell_1":{"select_dialog":false,"id":"fullname","title":"Фамилия, Имя"},"cell_2":{"select_dialog":false,"id":null,"title":null},"width":"24","font":12,"align":{"title":"Слева","value":"start"},"f_weight":"normal"},"id":"d0x9c564q"},{"params":{"cell_1":{"select_dialog":false,"id":"year","title":"Год"},"cell_2":{"select_dialog":false,"id":null,"title":null},"width":12,"font":12,"align":{"title":"Слева","value":"start"},"f_weight":"normal"},"id":"d97oy1jhe"},{"params":{"cell_1":{"select_dialog":false,"id":"rang","title":"Разряд"},"cell_2":{"select_dialog":false,"id":null,"title":null},"width":12,"font":12,"align":{"title":"Слева","value":"start"},"f_weight":"normal"},"id":"dx1ct6kyx"},{"params":{"cell_1":{"select_dialog":false,"id":"region","title":"Суб. РФ"},"cell_2":{"select_dialog":false,"id":null,"title":null},"width":"40","font":12,"align":{"title":"Слева","value":"start"},"f_weight":"normal"},"id":"0tae0m34e"}]},"result_protocols":{"filters":{"race_filter":null},"fonts":{"officialsData":12,"openers":12,"weatherData":12,"raceNotes":12},"protocol_type":"Официальные результаты","fields":[{"params":{"cell_1":{"select_dialog":false,"id":"rank","title":"Место"},"cell_2":{"select_dialog":false,"id":null,"title":null},"width":6,"font":12,"align":{"title":"Слева","value":"start"},"f_weight":"normal"},"id":"71gjx06z7"},{"params":{"cell_1":{"select_dialog":false,"id":"bib","title":"Bib"},"cell_2":{"select_dialog":false,"id":null,"title":null},"width":"6","font":12,"align":{"title":"Слева","value":"start"},"f_weight":"normal"},"id":"uxno8xeey"},{"params":{"cell_1":{"select_dialog":false,"id":"fullname","title":"Фамилия, Имя"},"cell_2":{"select_dialog":false,"id":"region","title":"Суб. РФ"},"width":"18","font":12,"align":{"title":"Слева","value":"start"},"f_weight":"normal"},"id":"cz9jhlwlb"},{"params":{"cell_1":{"select_dialog":false,"id":"year","title":"Год"},"cell_2":{"select_dialog":false,"id":null,"title":null},"width":8,"font":12,"align":{"title":"Слева","value":"start"},"f_weight":"normal"},"id":"cfwqq93g4"},{"params":{"cell_1":{"select_dialog":false,"id":"rang","title":"Разряд"},"cell_2":{"select_dialog":false,"id":null,"title":null},"width":8,"font":12,"align":{"title":"Слева","value":"start"},"f_weight":"normal"},"id":"5t15hj0sw"},{"params":{"cell_1":{"select_dialog":false,"id":"race","title":"Заезд"},"cell_2":{"select_dialog":false,"id":null,"title":null},"width":8,"font":12,"align":{"title":"Слева","value":"start"},"f_weight":"normal"},"id":"sd37dhp5j"},{"params":{"cell_1":{"select_dialog":false,"id":"Судья 1","title":"С1"},"cell_2":{"select_dialog":false,"id":null,"title":null},"width":6,"font":12,"align":{"title":"Слева","value":"start"},"f_weight":"normal"},"id":"ccl9ugfrg"},{"params":{"cell_1":{"select_dialog":false,"id":"Судья 2","title":"С2"},"cell_2":{"select_dialog":false,"id":null,"title":null},"width":6,"font":12,"align":{"title":"Слева","value":"start"},"f_weight":"normal"},"id":"e6kukjqsz"},{"params":{"cell_1":{"select_dialog":false,"id":"Судья 3","title":"С3"},"cell_2":{"select_dialog":false,"id":null,"title":null},"width":6,"font":12,"align":{"title":"Слева","value":"start"},"f_weight":"normal"},"id":"gm4057jaf"},{"params":{"cell_1":{"select_dialog":false,"id":"Судья 4","title":"С4"},"cell_2":{"select_dialog":false,"id":null,"title":null},"width":6,"font":12,"align":{"title":"Слева","value":"start"},"f_weight":"normal"},"id":"jquv6ncjr"},{"params":{"cell_1":{"select_dialog":false,"id":"Судья 5","title":"С5"},"cell_2":{"select_dialog":false,"id":null,"title":null},"width":6,"font":12,"align":{"title":"Слева","value":"start"},"f_weight":"normal"},"id":"rhdt3adq2"},{"params":{"cell_1":{"select_dialog":false,"id":"race_res","title":"Оценка"},"cell_2":{"select_dialog":false,"id":null,"title":null},"width":"8","font":12,"align":{"title":"Слева","value":"start"},"f_weight":"normal"},"id":"uo0zrhh62"},{"params":{"cell_1":{"select_dialog":false,"id":"result","title":"Рез-т"},"cell_2":{"select_dialog":false,"id":null,"title":null},"width":8,"font":12,"align":{"title":"Слева","value":"start"},"f_weight":"normal"},"id":"5uzlmcxqz"}],"raceResultFields":[{"params":{"cell_1":{"select_dialog":false,"id":"rank","title":"Место"},"cell_2":{"select_dialog":false,"id":null,"title":null},"width":6,"font":12,"align":{"title":"Слева","value":"start"},"f_weight":"normal"},"id":"i7deu3aw9"},{"params":{"cell_1":{"select_dialog":false,"id":"bib","title":"Bib"},"cell_2":{"select_dialog":false,"id":null,"title":null},"width":8,"font":12,"align":{"title":"Слева","value":"start"},"f_weight":"normal"},"id":"829obb9is"},{"params":{"cell_1":{"select_dialog":false,"id":"lastname","title":"Фамилия"},"cell_2":{"select_dialog":false,"id":null,"title":null},"width":8,"font":12,"align":{"title":"Слева","value":"start"},"f_weight":"normal"},"id":"945arooey"},{"params":{"cell_1":{"select_dialog":false,"id":"name","title":"Имя"},"cell_2":{"select_dialog":false,"id":null,"title":null},"width":8,"font":12,"align":{"title":"Слева","value":"start"},"f_weight":"normal"},"id":"lfs1ma9q0"},{"params":{"cell_1":{"select_dialog":false,"id":"fullname","title":"Фамилия, Имя"},"cell_2":{"select_dialog":false,"id":null,"title":null},"width":8,"font":12,"align":{"title":"Слева","value":"start"},"f_weight":"normal"},"id":"bqmkyf38n"},{"params":{"cell_1":{"select_dialog":false,"id":"year","title":"Год"},"cell_2":{"select_dialog":false,"id":null,"title":null},"width":8,"font":12,"align":{"title":"Слева","value":"start"},"f_weight":"normal"},"id":"giqwhj9cn"},{"params":{"cell_1":{"select_dialog":false,"id":"rang","title":"Разряд"},"cell_2":{"select_dialog":false,"id":null,"title":null},"width":8,"font":12,"align":{"title":"Слева","value":"start"},"f_weight":"normal"},"id":"4mwb5lvwp"},{"params":{"cell_1":{"select_dialog":false,"id":"region","title":"Суб. РФ"},"cell_2":{"select_dialog":false,"id":null,"title":null},"width":8,"font":12,"align":{"title":"Слева","value":"start"},"f_weight":"normal"},"id":"rm5372ld4"},{"params":{"cell_1":{"select_dialog":false,"id":"race","title":"Заезд"},"cell_2":{"select_dialog":false,"id":null,"title":null},"width":8,"font":12,"align":{"title":"Слева","value":"start"},"f_weight":"normal"},"id":"avjtbq5ln"},{"params":{"cell_1":{"select_dialog":false,"id":"Судья 1","title":"С1"},"cell_2":{"select_dialog":false,"id":null,"title":null},"width":6,"font":12,"align":{"title":"Слева","value":"start"},"f_weight":"normal"},"id":"6cfwpumab"},{"params":{"cell_1":{"select_dialog":false,"id":"Судья 2","title":"С2"},"cell_2":{"select_dialog":false,"id":null,"title":null},"width":6,"font":12,"align":{"title":"Слева","value":"start"},"f_weight":"normal"},"id":"wk1yn65u2"},{"params":{"cell_1":{"select_dialog":false,"id":"Судья 3","title":"С3"},"cell_2":{"select_dialog":false,"id":null,"title":null},"width":6,"font":12,"align":{"title":"Слева","value":"start"},"f_weight":"normal"},"id":"wdzsaskbg"},{"params":{"cell_1":{"select_dialog":false,"id":"Судья 4","title":"С4"},"cell_2":{"select_dialog":false,"id":null,"title":null},"width":6,"font":12,"align":{"title":"Слева","value":"start"},"f_weight":"normal"},"id":"w525w1gxs"},{"params":{"cell_1":{"select_dialog":false,"id":"Судья 5","title":"С5"},"cell_2":{"select_dialog":false,"id":null,"title":null},"width":6,"font":12,"align":{"title":"Слева","value":"start"},"f_weight":"normal"},"id":"g7prqf096"},{"params":{"cell_1":{"select_dialog":false,"id":"race_res","title":"Рез-т"},"cell_2":{"select_dialog":false,"id":null,"title":null},"width":6,"font":12,"align":{"title":"Слева","value":"start"},"f_weight":"normal"},"id":"t5wk0yi3w"}]}},"result_formula":{"overall_result":{"type":3,"select_heats":{"heats":0,"mode":0,"modes":[{"id":0,"title":"Подсчёт из всех"},{"id":1,"title":"Подсчёт из N лучших"}]},"types":[{"id":0,"title":"Лучший"},{"id":1,"title":"Сумма"},{"id":2,"title":"Среднее"},{"id":3,"title":"ABC"}]},"type":0,"types":[{"id":0,"title":"По судьям","lower_marks":0,"higher_marks":0,"formula":0,"formulas":[{"id":0,"title":"Среднее"},{"id":1,"title":"Сумма"}]},{"id":1,"title":"По секциям","sections":[],"formula":0,"formulas":[{"id":0}]}]},"id":"dfzql8pfe","live_id":null}
+{
+  "weather": [
+    { "descr1": "Температура Снега:", "descr2": "-" },
+    { "descr1": "Температура Воздуха:", "descr2": "-" },
+    { "descr1": "Скорость ветра:", "descr2": "-" }
+  ],
+  "structure": {
+    "statuses": [
+      { "value": "DNF", "priority": -1 },
+      { "value": "DNS", "priority": -2 },
+      { "value": "DSQ", "priority": -3 }
+    ],
+    "selected": { "type": 0, "discipline": 0, "accuracy": 1 },
+    "types": [
+      { "id": 0, "title": "Сноуборд", "disciplines": [0, 1, 2, 100] },
+      { "id": 1, "title": "Фристайл", "disciplines": [0, 1, 2, 3, 4, 100] },
+      { "id": 2, "title": "Пользовательский", "disciplines": [100] }
+    ],
+    "disciplines": [
+      { "id": 0, "title": "Слоуп-Стайл", "res_formula": [1] },
+      { "id": 1, "title": "Биг-Эйр", "res_formula": [2] },
+      { "id": 2, "title": "Хаф-Пайп", "res_formula": [3] },
+      { "id": 3, "title": "Акробатика", "res_formula": [4] },
+      { "id": 4, "title": "Могул", "res_formula": [5] },
+      { "id": 100, "title": "Пользовательский", "res_formula": [100] }
+    ],
+    "accuracy": [
+      { "id": 0, "title": "1", "value": 1, "digits": 0 },
+      { "id": 1, "title": "1:10", "value": 10, "digits": 1 },
+      { "id": 2, "title": "1:100", "value": 100, "digits": 2 },
+      { "id": 3, "title": "1:1000", "value": 1000, "digits": 3 }
+    ],
+    "stages": [
+      { "id": "qual", "title": "Квалификация", "value": "Квалификация" },
+      { "id": "final", "title": "Финал", "value": "Финал" },
+      { "id": "custom", "title": "Пользовательский", "value": "" }
+    ]
+  },
+  "stages": {
+    "lastStageSize": 2,
+    "prev_stages": ["w3sfh07w0", "kttixewz3"],
+    "stage_grid": [
+      { "title": "Квалификация", "s_competitions": ["w3sfh07w0", "kttixewz3"] },
+      { "title": "Финал", "s_competitions": ["dfzql8pfe"] }
+    ]
+  },
+  "passed_competitors": 0,
+  "races": [
+    {
+      "del_dialog": false,
+      "finished": [
+        "m6bsbal2h",
+        "ogb440f77",
+        "g5ms896r2",
+        "0dt0g3v4z",
+        "lbpvijl2m",
+        "gooqe7xi7",
+        "m4c3yzx61",
+        "d2xcty0jg",
+        "ynnifeqeg",
+        "42it4l522",
+        "3mxw7ob1h",
+        "x5so1afho"
+      ],
+      "onTrack": null,
+      "id": "nzahs23t7",
+      "title": "Заезд 1",
+      "race_dialog": false,
+      "type": { "id": 0, "title": "Сноуборд", "disciplines": [0, 1, 2, 100] },
+      "discipline": { "id": 0, "title": "Слоуп-Стайл", "res_formula": [1] },
+      "startList": [],
+      "_startList": [
+        "m6bsbal2h",
+        "ogb440f77",
+        "g5ms896r2",
+        "0dt0g3v4z",
+        "lbpvijl2m",
+        "gooqe7xi7",
+        "m4c3yzx61",
+        "d2xcty0jg",
+        "ynnifeqeg",
+        "42it4l522",
+        "3mxw7ob1h",
+        "x5so1afho"
+      ],
+      "selectedCompetitor": null
+    },
+    {
+      "del_dialog": false,
+      "finished": [
+        "m6bsbal2h",
+        "ogb440f77",
+        "g5ms896r2",
+        "0dt0g3v4z",
+        "lbpvijl2m",
+        "gooqe7xi7",
+        "m4c3yzx61",
+        "d2xcty0jg",
+        "ynnifeqeg",
+        "42it4l522",
+        "3mxw7ob1h",
+        "x5so1afho"
+      ],
+      "onTrack": null,
+      "id": "v4gdvw8a5",
+      "title": "Заезд 2",
+      "race_dialog": false,
+      "type": { "id": 0, "title": "Сноуборд", "disciplines": [0, 1, 2, 100] },
+      "discipline": { "id": 0, "title": "Слоуп-Стайл", "res_formula": [1] },
+      "startList": [],
+      "_startList": [
+        "m6bsbal2h",
+        "ogb440f77",
+        "g5ms896r2",
+        "0dt0g3v4z",
+        "lbpvijl2m",
+        "gooqe7xi7",
+        "m4c3yzx61",
+        "d2xcty0jg",
+        "ynnifeqeg",
+        "42it4l522",
+        "3mxw7ob1h",
+        "x5so1afho"
+      ],
+      "selectedCompetitor": null
+    },
+    {
+      "del_dialog": false,
+      "finished": [
+        "m6bsbal2h",
+        "ogb440f77",
+        "g5ms896r2",
+        "0dt0g3v4z",
+        "lbpvijl2m",
+        "gooqe7xi7",
+        "m4c3yzx61",
+        "d2xcty0jg",
+        "ynnifeqeg",
+        "42it4l522",
+        "3mxw7ob1h",
+        "x5so1afho"
+      ],
+      "onTrack": null,
+      "id": "grquzinec",
+      "title": "Заезд 3",
+      "race_dialog": false,
+      "type": { "id": 0, "title": "Сноуборд", "disciplines": [0, 1, 2, 100] },
+      "discipline": { "id": 0, "title": "Слоуп-Стайл", "res_formula": [1] },
+      "startList": [],
+      "_startList": [
+        "m6bsbal2h",
+        "ogb440f77",
+        "g5ms896r2",
+        "0dt0g3v4z",
+        "lbpvijl2m",
+        "gooqe7xi7",
+        "m4c3yzx61",
+        "d2xcty0jg",
+        "ynnifeqeg",
+        "42it4l522",
+        "3mxw7ob1h",
+        "x5so1afho"
+      ],
+      "selectedCompetitor": null
+    }
+  ],
+  "selected_race_id": 2,
+  "mainData": {
+    "title": {
+      "title": "Название",
+      "value": "Первенство России по Сноуборду",
+      "focus": false,
+      "stage": {
+        "title": "Этап",
+        "value": {
+          "id": "custom",
+          "title": "Пользовательский",
+          "value": "Финал М"
+        },
+        "focus": false,
+        "group": "M"
+      }
+    },
+    "discipline": {
+      "title": "Дисциплина",
+      "value": "Биг-эйр, № ЕКП 2856",
+      "min": "BA",
+      "focus": false
+    },
+    "date": {
+      "title": "Дата проведения",
+      "dialog": false,
+      "value": "2022-03-11",
+      "time_dialog": false,
+      "time": "10:40",
+      "focus": false
+    },
+    "country": { "title": "Страна", "value": "", "focus": false },
+    "location": {
+      "title": "Место проведения",
+      "value": "ГЛК \"Солнечная долина\", г. Миасс, Челябинская обл., Россия, 23.03.2022",
+      "focus": false
+    },
+    "provider": {
+      "title": "Организатор",
+      "value": "Федерация Сноуборда России",
+      "focus": false
+    },
+    "providerTiming": {
+      "title": "Timing provider",
+      "value": "ООО \"Спортивные технологии\"",
+      "focus": false
+    },
+    "codex": { "title": "Codex", "value": "№ ЕКП 2856", "focus": false }
+  },
+  "stuff": {
+    "settings": {
+      "jury": { "title": "Жюри", "change_dialog": false },
+      "judges": { "title": "Судьи", "change_dialog": false }
+    },
+    "secretary": { "name": "", "lastName": "" },
+    "jury": [
+      {
+        "id": "chief",
+        "title": "Старший судья",
+        "lastName": "",
+        "name": "",
+        "loc": "",
+        "connected": false,
+        "setABC": false
+      }
+    ],
+    "judges": [
+      {
+        "category": "",
+        "socket_id": null,
+        "connected": false,
+        "_id": "e7q2jzqa3",
+        "title": "Судья 1",
+        "remoteId": "2",
+        "id": 1,
+        "name": "",
+        "lastName": "",
+        "location": "",
+        "setABC": false
+      },
+      {
+        "category": "",
+        "socket_id": null,
+        "connected": false,
+        "_id": "39u9f419o",
+        "title": "Судья 2",
+        "remoteId": "3",
+        "id": 2,
+        "name": "",
+        "lastName": "",
+        "location": "",
+        "setABC": false
+      },
+      {
+        "category": "",
+        "socket_id": null,
+        "connected": false,
+        "_id": "wra081vpb",
+        "title": "Судья 3",
+        "remoteId": "4",
+        "id": 3,
+        "name": "",
+        "lastName": "",
+        "location": "",
+        "setABC": false
+      },
+      {
+        "category": "",
+        "socket_id": null,
+        "connected": false,
+        "_id": "jgjif3v0a",
+        "title": "Судья 4",
+        "remoteId": "5",
+        "id": 4,
+        "name": "",
+        "lastName": "",
+        "location": "",
+        "setABC": false
+      },
+      {
+        "category": "",
+        "socket_id": null,
+        "connected": false,
+        "_id": "f2e55bc80",
+        "title": "Судья 5",
+        "remoteId": "6",
+        "id": 5,
+        "name": "",
+        "lastName": "",
+        "location": "",
+        "setABC": true
+      }
+    ],
+    "openers": []
+  },
+  "technicalInfo": {
+    "title": "Техническа информация",
+    "change_dialog": false,
+    "records": []
+  },
+  "competitorsSheet": {
+    "header": [
+      { "id": "bib", "title": "Bib" },
+      { "id": "lastname", "title": "Фамилия" },
+      { "id": "name", "title": "Имя" },
+      { "id": "fullname", "title": "Фамилия, Имя" },
+      { "id": "year", "title": "Год" },
+      { "id": "rang", "title": "Разряд" },
+      { "id": "region", "title": "Суб. РФ" }
+    ],
+    "competitors": [
+      {
+        "info_dialog": { "state": false },
+        "race_status": null,
+        "res_accepted": false,
+        "rank": 1,
+        "id": "x5so1afho",
+        "info_data": {
+          "bib": 89,
+          "lastname": "Баженов",
+          "name": "Всеволод",
+          "fullname": "БАЖЕНОВ Всеволод",
+          "year": 2007,
+          "rang": "КМС",
+          "region": "г. Москва"
+        },
+        "marks": [
+          {
+            "id": "nnkmiyosu",
+            "value": "33",
+            "new_value": null,
+            "race": 0,
+            "race_id": "nzahs23t7",
+            "judge": 5,
+            "judge_id": "f2e55bc80",
+            "section": 0
+          },
+          {
+            "id": "76op7epeg",
+            "value": "34",
+            "new_value": null,
+            "race": 0,
+            "race_id": "nzahs23t7",
+            "judge": 2,
+            "judge_id": "39u9f419o",
+            "section": 0
+          },
+          {
+            "id": "1lfpjfgcp",
+            "value": "35",
+            "new_value": null,
+            "race": 0,
+            "race_id": "nzahs23t7",
+            "judge": 1,
+            "judge_id": "e7q2jzqa3",
+            "section": 0
+          },
+          {
+            "id": "he6g0r8ty",
+            "value": "38",
+            "new_value": null,
+            "race": 0,
+            "race_id": "nzahs23t7",
+            "judge": 3,
+            "judge_id": "wra081vpb",
+            "section": 0
+          },
+          {
+            "id": "r7s2ygmmu",
+            "value": "35",
+            "new_value": null,
+            "race": 0,
+            "race_id": "nzahs23t7",
+            "judge": 4,
+            "judge_id": "jgjif3v0a",
+            "section": 0
+          },
+          {
+            "id": "klszcgelv",
+            "value": "88",
+            "new_value": null,
+            "race": 1,
+            "race_id": "v4gdvw8a5",
+            "judge": 5,
+            "judge_id": "f2e55bc80",
+            "section": 0
+          },
+          {
+            "id": "k9hyxln57",
+            "value": "88",
+            "new_value": null,
+            "race": 1,
+            "race_id": "v4gdvw8a5",
+            "judge": 2,
+            "judge_id": "39u9f419o",
+            "section": 0
+          },
+          {
+            "id": "ypjzs8o9v",
+            "value": "90",
+            "new_value": null,
+            "race": 1,
+            "race_id": "v4gdvw8a5",
+            "judge": 1,
+            "judge_id": "e7q2jzqa3",
+            "section": 0
+          },
+          {
+            "id": "26i1m83fh",
+            "value": "88",
+            "new_value": null,
+            "race": 1,
+            "race_id": "v4gdvw8a5",
+            "judge": 4,
+            "judge_id": "jgjif3v0a",
+            "section": 0
+          },
+          {
+            "id": "3j6bmd6ql",
+            "value": "92",
+            "new_value": null,
+            "race": 1,
+            "race_id": "v4gdvw8a5",
+            "judge": 3,
+            "judge_id": "wra081vpb",
+            "section": 0
+          },
+          {
+            "id": "p4py6smej",
+            "value": "77",
+            "new_value": null,
+            "race": 2,
+            "race_id": "grquzinec",
+            "judge": 2,
+            "judge_id": "39u9f419o",
+            "section": 0
+          },
+          {
+            "id": "yd0nj7u96",
+            "value": "72",
+            "new_value": null,
+            "race": 2,
+            "race_id": "grquzinec",
+            "judge": 5,
+            "judge_id": "f2e55bc80",
+            "section": 0
+          },
+          {
+            "id": "ldjc6hwmn",
+            "value": "75",
+            "new_value": null,
+            "race": 2,
+            "race_id": "grquzinec",
+            "judge": 1,
+            "judge_id": "e7q2jzqa3",
+            "section": 0
+          },
+          {
+            "id": "y4ub4zh3n",
+            "value": "75",
+            "new_value": null,
+            "race": 2,
+            "race_id": "grquzinec",
+            "judge": 3,
+            "judge_id": "wra081vpb",
+            "section": 0
+          },
+          {
+            "id": "i755fsulg",
+            "value": "74",
+            "new_value": null,
+            "race": 2,
+            "race_id": "grquzinec",
+            "judge": 4,
+            "judge_id": "jgjif3v0a",
+            "section": 0
+          }
+        ],
+        "results": [
+          {
+            "id": "8fsb2k8iq",
+            "value": 90.8,
+            "race_id": "agkl2cqj7",
+            "repeat": "A",
+            "status": null
+          },
+          {
+            "id": "ifulyh1it",
+            "value": 28.4,
+            "race_id": "kzz9b9yid",
+            "repeat": "A",
+            "status": null
+          },
+          {
+            "id": "c279csnbm",
+            "value": 35,
+            "race_id": "nzahs23t7",
+            "repeat": "A",
+            "status": null
+          },
+          {
+            "id": "0014yqlsf",
+            "value": 89.2,
+            "race_id": "v4gdvw8a5",
+            "repeat": "A",
+            "status": null
+          },
+          {
+            "id": "zg9tixqjl",
+            "value": 74.6,
+            "race_id": "grquzinec",
+            "repeat": "B",
+            "status": null
+          }
+        ],
+        "results_overall": [
+          {
+            "competition_id": "o0dsyzg1s",
+            "competitor_id": "x5so1afho",
+            "value": 90.8,
+            "status": null
+          },
+          {
+            "competition_id": "w3sfh07w0",
+            "competitor_id": "x5so1afho",
+            "value": 90.8,
+            "status": null
+          },
+          { "id_comp": "w3sfh07w0", "value": 90.8 },
+          {
+            "competition_id": "dfzql8pfe",
+            "competitor_id": "x5so1afho",
+            "value": 163.8,
+            "status": null
+          }
+        ]
+      },
+      {
+        "info_dialog": { "state": false },
+        "race_status": null,
+        "res_accepted": false,
+        "rank": 2,
+        "id": "ynnifeqeg",
+        "info_data": {
+          "bib": 10,
+          "lastname": "Упоров",
+          "name": "Ермолай",
+          "fullname": "УПОРОВ Ермолай",
+          "year": 2005,
+          "rang": "КМС",
+          "region": "Новосибирская обл."
+        },
+        "marks": [
+          {
+            "id": "a8xsauv7w",
+            "value": "83",
+            "new_value": null,
+            "race": 0,
+            "race_id": "nzahs23t7",
+            "judge": 5,
+            "judge_id": "f2e55bc80",
+            "section": 0
+          },
+          {
+            "id": "5hgi61dt1",
+            "value": "83",
+            "new_value": null,
+            "race": 0,
+            "race_id": "nzahs23t7",
+            "judge": 2,
+            "judge_id": "39u9f419o",
+            "section": 0
+          },
+          {
+            "id": "u1nsny38n",
+            "value": "85",
+            "new_value": null,
+            "race": 0,
+            "race_id": "nzahs23t7",
+            "judge": 1,
+            "judge_id": "e7q2jzqa3",
+            "section": 0
+          },
+          {
+            "id": "85f0vq14v",
+            "value": "83",
+            "new_value": null,
+            "race": 0,
+            "race_id": "nzahs23t7",
+            "judge": 3,
+            "judge_id": "wra081vpb",
+            "section": 0
+          },
+          {
+            "id": "b3bvb6mqo",
+            "value": "76",
+            "new_value": null,
+            "race": 0,
+            "race_id": "nzahs23t7",
+            "judge": 4,
+            "judge_id": "jgjif3v0a",
+            "section": 0
+          },
+          {
+            "id": "masuianrp",
+            "value": "81",
+            "new_value": null,
+            "race": 1,
+            "race_id": "v4gdvw8a5",
+            "judge": 2,
+            "judge_id": "39u9f419o",
+            "section": 0
+          },
+          {
+            "id": "in8rlctmz",
+            "value": "80",
+            "new_value": null,
+            "race": 1,
+            "race_id": "v4gdvw8a5",
+            "judge": 5,
+            "judge_id": "f2e55bc80",
+            "section": 0
+          },
+          {
+            "id": "fvqpxdt74",
+            "value": "79",
+            "new_value": null,
+            "race": 1,
+            "race_id": "v4gdvw8a5",
+            "judge": 1,
+            "judge_id": "e7q2jzqa3",
+            "section": 0
+          },
+          {
+            "id": "d2d5brm96",
+            "value": "79",
+            "new_value": null,
+            "race": 1,
+            "race_id": "v4gdvw8a5",
+            "judge": 3,
+            "judge_id": "wra081vpb",
+            "section": 0
+          },
+          {
+            "id": "qujhvx2jq",
+            "value": "78",
+            "new_value": null,
+            "race": 1,
+            "race_id": "v4gdvw8a5",
+            "judge": 4,
+            "judge_id": "jgjif3v0a",
+            "section": 0
+          },
+          {
+            "id": "0avq52a9k",
+            "value": "16",
+            "new_value": null,
+            "race": 2,
+            "race_id": "grquzinec",
+            "judge": 2,
+            "judge_id": "39u9f419o",
+            "section": 0
+          },
+          {
+            "id": "8d2pty264",
+            "value": "17",
+            "new_value": null,
+            "race": 2,
+            "race_id": "grquzinec",
+            "judge": 1,
+            "judge_id": "e7q2jzqa3",
+            "section": 0
+          },
+          {
+            "id": "uhmfj0ba9",
+            "value": "25",
+            "new_value": null,
+            "race": 2,
+            "race_id": "grquzinec",
+            "judge": 5,
+            "judge_id": "f2e55bc80",
+            "section": 0
+          },
+          {
+            "id": "v6au0in37",
+            "value": "23",
+            "new_value": null,
+            "race": 2,
+            "race_id": "grquzinec",
+            "judge": 4,
+            "judge_id": "jgjif3v0a",
+            "section": 0
+          },
+          {
+            "id": "ciqaju5hr",
+            "value": "21",
+            "new_value": null,
+            "race": 2,
+            "race_id": "grquzinec",
+            "judge": 3,
+            "judge_id": "wra081vpb",
+            "section": 0
+          }
+        ],
+        "results": [
+          {
+            "id": "jxbnjfkl1",
+            "value": 88.2,
+            "race_id": "agkl2cqj7",
+            "repeat": "A",
+            "status": null
+          },
+          {
+            "id": "98a4p608h",
+            "value": 37,
+            "race_id": "kzz9b9yid",
+            "repeat": "A",
+            "status": null
+          },
+          {
+            "id": "sgi6dclju",
+            "value": 82,
+            "race_id": "nzahs23t7",
+            "repeat": "A",
+            "status": null
+          },
+          {
+            "id": "l5auuh01e",
+            "value": 79.4,
+            "race_id": "v4gdvw8a5",
+            "repeat": "B",
+            "status": null
+          },
+          {
+            "id": "a6qqsxnt6",
+            "value": 20.4,
+            "race_id": "grquzinec",
+            "repeat": "B",
+            "status": null
+          }
+        ],
+        "results_overall": [
+          {
+            "competition_id": "o0dsyzg1s",
+            "competitor_id": "ynnifeqeg",
+            "value": 88.2,
+            "status": null
+          },
+          {
+            "competition_id": "w3sfh07w0",
+            "competitor_id": "ynnifeqeg",
+            "value": 88.2,
+            "status": null
+          },
+          { "id_comp": "w3sfh07w0", "value": 88.2 },
+          {
+            "competition_id": "dfzql8pfe",
+            "competitor_id": "ynnifeqeg",
+            "value": 161.4,
+            "status": null
+          }
+        ]
+      },
+      {
+        "info_dialog": { "state": false },
+        "race_status": null,
+        "res_accepted": false,
+        "rank": 4,
+        "id": "m4c3yzx61",
+        "info_data": {
+          "bib": 17,
+          "lastname": "Лукьянов",
+          "name": "Андрей",
+          "fullname": "ЛУКЬЯНОВ Андрей",
+          "year": 2004,
+          "rang": 1,
+          "region": "Республика Башкортостан"
+        },
+        "marks": [
+          {
+            "id": "h73i0cvrc",
+            "value": "80",
+            "new_value": null,
+            "race": 0,
+            "race_id": "nzahs23t7",
+            "judge": 1,
+            "judge_id": "e7q2jzqa3",
+            "section": 0
+          },
+          {
+            "id": "2gclr0sy2",
+            "value": "84",
+            "new_value": null,
+            "race": 0,
+            "race_id": "nzahs23t7",
+            "judge": 2,
+            "judge_id": "39u9f419o",
+            "section": 0
+          },
+          {
+            "id": "wsnasaf4o",
+            "value": "80",
+            "new_value": null,
+            "race": 0,
+            "race_id": "nzahs23t7",
+            "judge": 4,
+            "judge_id": "jgjif3v0a",
+            "section": 0
+          },
+          {
+            "id": "8cfdfvjr7",
+            "value": "81",
+            "new_value": null,
+            "race": 0,
+            "race_id": "nzahs23t7",
+            "judge": 3,
+            "judge_id": "wra081vpb",
+            "section": 0
+          },
+          {
+            "id": "wu5d7sql4",
+            "value": "79",
+            "new_value": null,
+            "race": 0,
+            "race_id": "nzahs23t7",
+            "judge": 5,
+            "judge_id": "f2e55bc80",
+            "section": 0
+          },
+          {
+            "id": "s28mkc17w",
+            "value": "36",
+            "new_value": null,
+            "race": 1,
+            "race_id": "v4gdvw8a5",
+            "judge": 2,
+            "judge_id": "39u9f419o",
+            "section": 0
+          },
+          {
+            "id": "zimftanc8",
+            "value": "31",
+            "new_value": null,
+            "race": 1,
+            "race_id": "v4gdvw8a5",
+            "judge": 4,
+            "judge_id": "jgjif3v0a",
+            "section": 0
+          },
+          {
+            "id": "b2x6gvlwz",
+            "value": "31",
+            "new_value": null,
+            "race": 1,
+            "race_id": "v4gdvw8a5",
+            "judge": 1,
+            "judge_id": "e7q2jzqa3",
+            "section": 0
+          },
+          {
+            "id": "0cxvw8qqd",
+            "value": "33",
+            "new_value": null,
+            "race": 1,
+            "race_id": "v4gdvw8a5",
+            "judge": 3,
+            "judge_id": "wra081vpb",
+            "section": 0
+          },
+          {
+            "id": "gyqyxv501",
+            "value": "31",
+            "new_value": null,
+            "race": 1,
+            "race_id": "v4gdvw8a5",
+            "judge": 5,
+            "judge_id": "f2e55bc80",
+            "section": 0
+          },
+          {
+            "id": "8cdnzmfvj",
+            "value": "9",
+            "new_value": null,
+            "race": 2,
+            "race_id": "grquzinec",
+            "judge": 2,
+            "judge_id": "39u9f419o",
+            "section": 0
+          },
+          {
+            "id": "2e3v6kefh",
+            "value": "11",
+            "new_value": null,
+            "race": 2,
+            "race_id": "grquzinec",
+            "judge": 4,
+            "judge_id": "jgjif3v0a",
+            "section": 0
+          },
+          {
+            "id": "cqoact3vu",
+            "value": "8",
+            "new_value": null,
+            "race": 2,
+            "race_id": "grquzinec",
+            "judge": 5,
+            "judge_id": "f2e55bc80",
+            "section": 0
+          },
+          {
+            "id": "eerczglp6",
+            "value": "13",
+            "new_value": null,
+            "race": 2,
+            "race_id": "grquzinec",
+            "judge": 3,
+            "judge_id": "wra081vpb",
+            "section": 0
+          },
+          {
+            "id": "3yen7kj1d",
+            "value": "10",
+            "new_value": null,
+            "race": 2,
+            "race_id": "grquzinec",
+            "judge": 1,
+            "judge_id": "e7q2jzqa3",
+            "section": 0
+          }
+        ],
+        "results": [
+          {
+            "id": "lyl3imsop",
+            "value": 87,
+            "race_id": "agkl2cqj7",
+            "repeat": "A",
+            "status": null
+          },
+          {
+            "id": "se4g68nxn",
+            "value": 24.6,
+            "race_id": "kzz9b9yid",
+            "repeat": "A",
+            "status": null
+          },
+          {
+            "id": "puovyrf76",
+            "value": 80.8,
+            "race_id": "nzahs23t7",
+            "repeat": "A",
+            "status": null
+          },
+          {
+            "id": "xsxdmhg1y",
+            "value": 32.4,
+            "race_id": "v4gdvw8a5",
+            "repeat": "B",
+            "status": null
+          },
+          {
+            "id": "zqbrkd7fb",
+            "value": 10.2,
+            "race_id": "grquzinec",
+            "repeat": "B",
+            "status": null
+          }
+        ],
+        "results_overall": [
+          {
+            "competition_id": "o0dsyzg1s",
+            "competitor_id": "m4c3yzx61",
+            "value": 87,
+            "status": null
+          },
+          {
+            "competition_id": "w3sfh07w0",
+            "competitor_id": "m4c3yzx61",
+            "value": 87,
+            "status": null
+          },
+          { "id_comp": "w3sfh07w0", "value": 87 },
+          {
+            "competition_id": "dfzql8pfe",
+            "competitor_id": "m4c3yzx61",
+            "value": 113.19999999999999,
+            "status": null
+          }
+        ]
+      },
+      {
+        "info_dialog": { "state": false },
+        "race_status": null,
+        "res_accepted": false,
+        "rank": 6,
+        "id": "lbpvijl2m",
+        "info_data": {
+          "bib": 38,
+          "lastname": "Ершов",
+          "name": "Пётр",
+          "fullname": "ЕРШОВ Пётр",
+          "year": 2005,
+          "rang": "МС",
+          "region": "г. Москва"
+        },
+        "marks": [
+          {
+            "id": "bssxse8b5",
+            "value": "69",
+            "new_value": null,
+            "race": 0,
+            "race_id": "nzahs23t7",
+            "judge": 2,
+            "judge_id": "39u9f419o",
+            "section": 0
+          },
+          {
+            "id": "clkl0gsdp",
+            "value": "78",
+            "new_value": null,
+            "race": 0,
+            "race_id": "nzahs23t7",
+            "judge": 1,
+            "judge_id": "e7q2jzqa3",
+            "section": 0
+          },
+          {
+            "id": "7pk9vkzs9",
+            "value": "65",
+            "new_value": null,
+            "race": 0,
+            "race_id": "nzahs23t7",
+            "judge": 5,
+            "judge_id": "f2e55bc80",
+            "section": 0
+          },
+          {
+            "id": "1omezn5vk",
+            "value": "66",
+            "new_value": null,
+            "race": 0,
+            "race_id": "nzahs23t7",
+            "judge": 3,
+            "judge_id": "wra081vpb",
+            "section": 0
+          },
+          {
+            "id": "pwxla1mva",
+            "value": "72",
+            "new_value": null,
+            "race": 0,
+            "race_id": "nzahs23t7",
+            "judge": 4,
+            "judge_id": "jgjif3v0a",
+            "section": 0
+          },
+          {
+            "id": "8oh72l2yb",
+            "value": "30",
+            "new_value": null,
+            "race": 1,
+            "race_id": "v4gdvw8a5",
+            "judge": 5,
+            "judge_id": "f2e55bc80",
+            "section": 0
+          },
+          {
+            "id": "4r24psl4x",
+            "value": "31",
+            "new_value": null,
+            "race": 1,
+            "race_id": "v4gdvw8a5",
+            "judge": 2,
+            "judge_id": "39u9f419o",
+            "section": 0
+          },
+          {
+            "id": "lp724boi4",
+            "value": "28",
+            "new_value": null,
+            "race": 1,
+            "race_id": "v4gdvw8a5",
+            "judge": 1,
+            "judge_id": "e7q2jzqa3",
+            "section": 0
+          },
+          {
+            "id": "jzxbb86n6",
+            "value": "31",
+            "new_value": null,
+            "race": 1,
+            "race_id": "v4gdvw8a5",
+            "judge": 3,
+            "judge_id": "wra081vpb",
+            "section": 0
+          },
+          {
+            "id": "qlnl2zexp",
+            "value": "30",
+            "new_value": null,
+            "race": 1,
+            "race_id": "v4gdvw8a5",
+            "judge": 4,
+            "judge_id": "jgjif3v0a",
+            "section": 0
+          },
+          {
+            "id": "xxyqc62km",
+            "value": "21",
+            "new_value": null,
+            "race": 2,
+            "race_id": "grquzinec",
+            "judge": 2,
+            "judge_id": "39u9f419o",
+            "section": 0
+          },
+          {
+            "id": "f4j79xpir",
+            "value": "27",
+            "new_value": null,
+            "race": 2,
+            "race_id": "grquzinec",
+            "judge": 4,
+            "judge_id": "jgjif3v0a",
+            "section": 0
+          },
+          {
+            "id": "090d5i12x",
+            "value": "18",
+            "new_value": null,
+            "race": 2,
+            "race_id": "grquzinec",
+            "judge": 5,
+            "judge_id": "f2e55bc80",
+            "section": 0
+          },
+          {
+            "id": "wepgjimi2",
+            "value": "22",
+            "new_value": null,
+            "race": 2,
+            "race_id": "grquzinec",
+            "judge": 3,
+            "judge_id": "wra081vpb",
+            "section": 0
+          },
+          {
+            "id": "ltxjn1y3e",
+            "value": "19",
+            "new_value": null,
+            "race": 2,
+            "race_id": "grquzinec",
+            "judge": 1,
+            "judge_id": "e7q2jzqa3",
+            "section": 0
+          }
+        ],
+        "results": [
+          {
+            "id": "1rhfw7s8w",
+            "value": 81.2,
+            "race_id": "agkl2cqj7",
+            "repeat": "A",
+            "status": null
+          },
+          {
+            "id": "h4g386kww",
+            "value": 27.4,
+            "race_id": "kzz9b9yid",
+            "repeat": "A",
+            "status": null
+          },
+          {
+            "id": "5tw1ggc26",
+            "value": 70,
+            "race_id": "nzahs23t7",
+            "repeat": "A",
+            "status": null
+          },
+          {
+            "id": "437e39i7u",
+            "value": 30,
+            "race_id": "v4gdvw8a5",
+            "repeat": "A",
+            "status": null
+          },
+          {
+            "id": "bsw6oghp0",
+            "value": 21.4,
+            "race_id": "grquzinec",
+            "repeat": "B",
+            "status": null
+          }
+        ],
+        "results_overall": [
+          {
+            "competition_id": "o0dsyzg1s",
+            "competitor_id": "lbpvijl2m",
+            "value": 81.2,
+            "status": null
+          },
+          {
+            "competition_id": "w3sfh07w0",
+            "competitor_id": "lbpvijl2m",
+            "value": 81.2,
+            "status": null
+          },
+          { "id_comp": "w3sfh07w0", "value": 81.2 },
+          {
+            "competition_id": "dfzql8pfe",
+            "competitor_id": "lbpvijl2m",
+            "value": 91.4,
+            "status": null
+          }
+        ]
+      },
+      {
+        "info_dialog": { "state": false },
+        "race_status": null,
+        "res_accepted": false,
+        "rank": 12,
+        "id": "g5ms896r2",
+        "info_data": {
+          "bib": 65,
+          "lastname": "Протасов",
+          "name": "Кирилл",
+          "fullname": "ПРОТАСОВ Кирилл",
+          "year": 2006,
+          "rang": 1,
+          "region": "Красноярский край"
+        },
+        "marks": [
+          {
+            "id": "qnb5vwcxi",
+            "value": "17",
+            "new_value": null,
+            "race": 0,
+            "race_id": "nzahs23t7",
+            "judge": 5,
+            "judge_id": "f2e55bc80",
+            "section": 0
+          },
+          {
+            "id": "hm9et8zmm",
+            "value": "15",
+            "new_value": null,
+            "race": 0,
+            "race_id": "nzahs23t7",
+            "judge": 1,
+            "judge_id": "e7q2jzqa3",
+            "section": 0
+          },
+          {
+            "id": "4148iv4t2",
+            "value": "19",
+            "new_value": null,
+            "race": 0,
+            "race_id": "nzahs23t7",
+            "judge": 2,
+            "judge_id": "39u9f419o",
+            "section": 0
+          },
+          {
+            "id": "5hn7cnz58",
+            "value": "18",
+            "new_value": null,
+            "race": 0,
+            "race_id": "nzahs23t7",
+            "judge": 3,
+            "judge_id": "wra081vpb",
+            "section": 0
+          },
+          {
+            "id": "h7qn8d3in",
+            "value": "20",
+            "new_value": null,
+            "race": 0,
+            "race_id": "nzahs23t7",
+            "judge": 4,
+            "judge_id": "jgjif3v0a",
+            "section": 0
+          },
+          {
+            "id": "o7d2s9bnx",
+            "value": "1",
+            "new_value": null,
+            "race": 1,
+            "race_id": "v4gdvw8a5",
+            "judge": 4,
+            "judge_id": "jgjif3v0a",
+            "section": 0
+          },
+          {
+            "id": "gpw0az3oq",
+            "value": "1",
+            "new_value": null,
+            "race": 1,
+            "race_id": "v4gdvw8a5",
+            "judge": 2,
+            "judge_id": "39u9f419o",
+            "section": 0
+          },
+          {
+            "id": "zi4ekqtul",
+            "value": "1",
+            "new_value": null,
+            "race": 1,
+            "race_id": "v4gdvw8a5",
+            "judge": 1,
+            "judge_id": "e7q2jzqa3",
+            "section": 0
+          },
+          {
+            "id": "5k6mvicto",
+            "value": "1",
+            "new_value": null,
+            "race": 1,
+            "race_id": "v4gdvw8a5",
+            "judge": 3,
+            "judge_id": "wra081vpb",
+            "section": 0
+          },
+          {
+            "id": "63cjko5ku",
+            "value": "1",
+            "new_value": null,
+            "race": 1,
+            "race_id": "v4gdvw8a5",
+            "judge": 5,
+            "judge_id": "f2e55bc80",
+            "section": 0
+          },
+          {
+            "id": "4ht68nfx1",
+            "value": "3",
+            "new_value": null,
+            "race": 2,
+            "race_id": "grquzinec",
+            "judge": 4,
+            "judge_id": "jgjif3v0a",
+            "section": 0
+          },
+          {
+            "id": "dit1sqiub",
+            "value": "1",
+            "new_value": null,
+            "race": 2,
+            "race_id": "grquzinec",
+            "judge": 5,
+            "judge_id": "f2e55bc80",
+            "section": 0
+          },
+          {
+            "id": "6bu18hk31",
+            "value": "1",
+            "new_value": null,
+            "race": 2,
+            "race_id": "grquzinec",
+            "judge": 1,
+            "judge_id": "e7q2jzqa3",
+            "section": 0
+          },
+          {
+            "id": "xhfaf2hmx",
+            "value": "2",
+            "new_value": null,
+            "race": 2,
+            "race_id": "grquzinec",
+            "judge": 2,
+            "judge_id": "39u9f419o",
+            "section": 0
+          },
+          {
+            "id": "xr9x9po8k",
+            "value": "1",
+            "new_value": null,
+            "race": 2,
+            "race_id": "grquzinec",
+            "judge": 3,
+            "judge_id": "wra081vpb",
+            "section": 0
+          }
+        ],
+        "results": [
+          {
+            "id": "f8til51ir",
+            "value": 66.2,
+            "race_id": "agkl2cqj7",
+            "repeat": "A",
+            "status": null
+          },
+          {
+            "id": "ss7ze4tdo",
+            "value": 75,
+            "race_id": "kzz9b9yid",
+            "repeat": "A",
+            "status": null
+          },
+          {
+            "id": "dt4im2go3",
+            "value": 17.8,
+            "race_id": "nzahs23t7",
+            "repeat": "A",
+            "status": null
+          },
+          {
+            "id": "mnlycjen0",
+            "value": 1,
+            "race_id": "v4gdvw8a5",
+            "repeat": "B",
+            "status": null
+          },
+          {
+            "id": "uypwdam9e",
+            "value": 1.6,
+            "race_id": "grquzinec",
+            "repeat": "B",
+            "status": null
+          }
+        ],
+        "results_overall": [
+          {
+            "competition_id": "o0dsyzg1s",
+            "competitor_id": "g5ms896r2",
+            "value": 75,
+            "status": null
+          },
+          {
+            "competition_id": "w3sfh07w0",
+            "competitor_id": "g5ms896r2",
+            "value": 75,
+            "status": null
+          },
+          { "id_comp": "w3sfh07w0", "value": 75 },
+          {
+            "competition_id": "dfzql8pfe",
+            "competitor_id": "g5ms896r2",
+            "value": 19.400000000000002,
+            "status": null
+          }
+        ]
+      },
+      {
+        "info_dialog": { "state": false },
+        "race_status": null,
+        "res_accepted": false,
+        "rank": 11,
+        "id": "m6bsbal2h",
+        "info_data": {
+          "bib": 91,
+          "lastname": "Далаков",
+          "name": "Ярослав",
+          "fullname": "ДАЛАКОВ Ярослав",
+          "year": 2007,
+          "rang": 1,
+          "region": "Московская обл."
+        },
+        "marks": [
+          {
+            "id": "o9qybgpgg",
+            "value": "63",
+            "new_value": null,
+            "race": 0,
+            "race_id": "nzahs23t7",
+            "judge": 5,
+            "judge_id": "f2e55bc80",
+            "section": 0
+          },
+          {
+            "id": "1aaahjkcw",
+            "value": "63",
+            "new_value": null,
+            "race": 0,
+            "race_id": "nzahs23t7",
+            "judge": 2,
+            "judge_id": "39u9f419o",
+            "section": 0
+          },
+          {
+            "id": "a16pvnm4n",
+            "value": "68",
+            "new_value": null,
+            "race": 0,
+            "race_id": "nzahs23t7",
+            "judge": 1,
+            "judge_id": "e7q2jzqa3",
+            "section": 0
+          },
+          {
+            "id": "fepjdfvv4",
+            "value": "63",
+            "new_value": null,
+            "race": 0,
+            "race_id": "nzahs23t7",
+            "judge": 4,
+            "judge_id": "jgjif3v0a",
+            "section": 0
+          },
+          {
+            "id": "08zo8033h",
+            "value": "64",
+            "new_value": null,
+            "race": 0,
+            "race_id": "nzahs23t7",
+            "judge": 3,
+            "judge_id": "wra081vpb",
+            "section": 0
+          },
+          {
+            "id": "fdp77dgoz",
+            "value": "6",
+            "new_value": null,
+            "race": 1,
+            "race_id": "v4gdvw8a5",
+            "judge": 4,
+            "judge_id": "jgjif3v0a",
+            "section": 0
+          },
+          {
+            "id": "h1indgrqu",
+            "value": "7",
+            "new_value": null,
+            "race": 1,
+            "race_id": "v4gdvw8a5",
+            "judge": 2,
+            "judge_id": "39u9f419o",
+            "section": 0
+          },
+          {
+            "id": "k5wokdv4p",
+            "value": "4",
+            "new_value": null,
+            "race": 1,
+            "race_id": "v4gdvw8a5",
+            "judge": 3,
+            "judge_id": "wra081vpb",
+            "section": 0
+          },
+          {
+            "id": "gtcoalqkm",
+            "value": "5",
+            "new_value": null,
+            "race": 1,
+            "race_id": "v4gdvw8a5",
+            "judge": 5,
+            "judge_id": "f2e55bc80",
+            "section": 0
+          },
+          {
+            "id": "f10svqihq",
+            "value": "6",
+            "new_value": null,
+            "race": 1,
+            "race_id": "v4gdvw8a5",
+            "judge": 1,
+            "judge_id": "e7q2jzqa3",
+            "section": 0
+          },
+          {
+            "id": "yeg89upks",
+            "value": "9",
+            "new_value": null,
+            "race": 2,
+            "race_id": "grquzinec",
+            "judge": 5,
+            "judge_id": "f2e55bc80",
+            "section": 0
+          },
+          {
+            "id": "mu8xn0gwn",
+            "value": "9",
+            "new_value": null,
+            "race": 2,
+            "race_id": "grquzinec",
+            "judge": 2,
+            "judge_id": "39u9f419o",
+            "section": 0
+          },
+          {
+            "id": "oivf3ey5b",
+            "value": "15",
+            "new_value": null,
+            "race": 2,
+            "race_id": "grquzinec",
+            "judge": 3,
+            "judge_id": "wra081vpb",
+            "section": 0
+          },
+          {
+            "id": "vomqjv1i0",
+            "value": "9",
+            "new_value": null,
+            "race": 2,
+            "race_id": "grquzinec",
+            "judge": 4,
+            "judge_id": "jgjif3v0a",
+            "section": 0
+          },
+          {
+            "id": "9dmmwnw3b",
+            "value": "11",
+            "new_value": null,
+            "race": 2,
+            "race_id": "grquzinec",
+            "judge": 1,
+            "judge_id": "e7q2jzqa3",
+            "section": 0
+          }
+        ],
+        "results": [
+          {
+            "id": "s4nz0s4md",
+            "value": 11.8,
+            "race_id": "agkl2cqj7",
+            "repeat": "A",
+            "status": null
+          },
+          {
+            "id": "t0l4at2n2",
+            "value": 71,
+            "race_id": "kzz9b9yid",
+            "repeat": "A",
+            "status": null
+          },
+          {
+            "id": "cgtx8gkd1",
+            "value": 64.2,
+            "race_id": "nzahs23t7",
+            "repeat": "A",
+            "status": null
+          },
+          {
+            "id": "dqwhfmash",
+            "value": 5.6,
+            "race_id": "v4gdvw8a5",
+            "repeat": "B",
+            "status": null
+          },
+          {
+            "id": "ld02zfe4x",
+            "value": 10.6,
+            "race_id": "grquzinec",
+            "repeat": "C",
+            "status": null
+          }
+        ],
+        "results_overall": [
+          {
+            "competition_id": "o0dsyzg1s",
+            "competitor_id": "m6bsbal2h",
+            "value": 71,
+            "status": null
+          },
+          {
+            "competition_id": "w3sfh07w0",
+            "competitor_id": "m6bsbal2h",
+            "value": 71,
+            "status": null
+          },
+          { "id_comp": "w3sfh07w0", "value": 71 },
+          {
+            "competition_id": "dfzql8pfe",
+            "competitor_id": "m6bsbal2h",
+            "value": 74.8,
+            "status": null
+          }
+        ]
+      },
+      {
+        "info_dialog": { "state": false },
+        "race_status": null,
+        "res_accepted": false,
+        "rank": 5,
+        "id": "3mxw7ob1h",
+        "info_data": {
+          "bib": 84,
+          "lastname": "Ершов",
+          "name": "Артём",
+          "fullname": "ЕРШОВ Артём",
+          "year": 2008,
+          "rang": "1",
+          "region": "г. Москва"
+        },
+        "marks": [
+          {
+            "id": "fkz4z9ohg",
+            "value": "67",
+            "new_value": null,
+            "race": 0,
+            "race_id": "nzahs23t7",
+            "judge": 3,
+            "judge_id": "wra081vpb",
+            "section": 0
+          },
+          {
+            "id": "od0j460s8",
+            "value": "71",
+            "new_value": null,
+            "race": 0,
+            "race_id": "nzahs23t7",
+            "judge": 1,
+            "judge_id": "e7q2jzqa3",
+            "section": 0
+          },
+          {
+            "id": "4fz4zgibj",
+            "value": "68",
+            "new_value": null,
+            "race": 0,
+            "race_id": "nzahs23t7",
+            "judge": 2,
+            "judge_id": "39u9f419o",
+            "section": 0
+          },
+          {
+            "id": "fsheaip61",
+            "value": "65",
+            "new_value": null,
+            "race": 0,
+            "race_id": "nzahs23t7",
+            "judge": 4,
+            "judge_id": "jgjif3v0a",
+            "section": 0
+          },
+          {
+            "id": "6u9iqdakd",
+            "value": "67",
+            "new_value": null,
+            "race": 0,
+            "race_id": "nzahs23t7",
+            "judge": 5,
+            "judge_id": "f2e55bc80",
+            "section": 0
+          },
+          {
+            "id": "tv0asnq3z",
+            "value": "2",
+            "new_value": null,
+            "race": 1,
+            "race_id": "v4gdvw8a5",
+            "judge": 5,
+            "judge_id": "f2e55bc80",
+            "section": 0
+          },
+          {
+            "id": "qvd60ecye",
+            "value": "2",
+            "new_value": null,
+            "race": 1,
+            "race_id": "v4gdvw8a5",
+            "judge": 4,
+            "judge_id": "jgjif3v0a",
+            "section": 0
+          },
+          {
+            "id": "dqblvian1",
+            "value": "2",
+            "new_value": null,
+            "race": 1,
+            "race_id": "v4gdvw8a5",
+            "judge": 3,
+            "judge_id": "wra081vpb",
+            "section": 0
+          },
+          {
+            "id": "kro2xm6ut",
+            "value": "2",
+            "new_value": null,
+            "race": 1,
+            "race_id": "v4gdvw8a5",
+            "judge": 2,
+            "judge_id": "39u9f419o",
+            "section": 0
+          },
+          {
+            "id": "jyv1i2u8y",
+            "value": "2",
+            "new_value": null,
+            "race": 1,
+            "race_id": "v4gdvw8a5",
+            "judge": 1,
+            "judge_id": "e7q2jzqa3",
+            "section": 0
+          },
+          {
+            "id": "tor9iitnw",
+            "value": "28",
+            "new_value": null,
+            "race": 2,
+            "race_id": "grquzinec",
+            "judge": 5,
+            "judge_id": "f2e55bc80",
+            "section": 0
+          },
+          {
+            "id": "0gc2r7ub5",
+            "value": "31",
+            "new_value": null,
+            "race": 2,
+            "race_id": "grquzinec",
+            "judge": 2,
+            "judge_id": "39u9f419o",
+            "section": 0
+          },
+          {
+            "id": "7uaya0tj9",
+            "value": "25",
+            "new_value": null,
+            "race": 2,
+            "race_id": "grquzinec",
+            "judge": 4,
+            "judge_id": "jgjif3v0a",
+            "section": 0
+          },
+          {
+            "id": "5ropoqx7w",
+            "value": "32",
+            "new_value": null,
+            "race": 2,
+            "race_id": "grquzinec",
+            "judge": 1,
+            "judge_id": "e7q2jzqa3",
+            "section": 0
+          },
+          {
+            "id": "0wr0z8vby",
+            "value": "27",
+            "new_value": null,
+            "race": 2,
+            "race_id": "grquzinec",
+            "judge": 3,
+            "judge_id": "wra081vpb",
+            "section": 0
+          }
+        ],
+        "results": [
+          {
+            "id": "vr4c9e7vx",
+            "value": 14.6,
+            "race_id": "nbk11vj34",
+            "repeat": "A",
+            "status": null
+          },
+          {
+            "id": "uqpgrieb3",
+            "value": 76.4,
+            "race_id": "s3ze4afyu",
+            "repeat": "A",
+            "status": null
+          },
+          {
+            "id": "c7xkycyog",
+            "value": 67.6,
+            "race_id": "nzahs23t7",
+            "repeat": "A",
+            "status": null
+          },
+          {
+            "id": "v9q87nbxz",
+            "value": 2,
+            "race_id": "v4gdvw8a5",
+            "repeat": "B",
+            "status": null
+          },
+          {
+            "id": "ue2w2so1q",
+            "value": 28.6,
+            "race_id": "grquzinec",
+            "repeat": "C",
+            "status": null
+          }
+        ],
+        "results_overall": [
+          {
+            "competition_id": "kttixewz3",
+            "competitor_id": "3mxw7ob1h",
+            "value": 76.4,
+            "status": null
+          },
+          { "id_comp": "kttixewz3", "value": 76.4 },
+          {
+            "competition_id": "dfzql8pfe",
+            "competitor_id": "3mxw7ob1h",
+            "value": 96.19999999999999,
+            "status": null
+          }
+        ]
+      },
+      {
+        "info_dialog": { "state": false },
+        "race_status": null,
+        "res_accepted": false,
+        "rank": 9,
+        "id": "42it4l522",
+        "info_data": {
+          "bib": 48,
+          "lastname": "Ленчевский",
+          "name": "Алексей",
+          "fullname": "ЛЕНЧЕВСКИЙ Алексей",
+          "year": 2006,
+          "rang": "КМС",
+          "region": "г. Москва"
+        },
+        "marks": [
+          {
+            "id": "h7fzjdjk9",
+            "value": "76",
+            "new_value": null,
+            "race": 0,
+            "race_id": "nzahs23t7",
+            "judge": 2,
+            "judge_id": "39u9f419o",
+            "section": 0
+          },
+          {
+            "id": "jxu1nqgc3",
+            "value": "73",
+            "new_value": null,
+            "race": 0,
+            "race_id": "nzahs23t7",
+            "judge": 5,
+            "judge_id": "f2e55bc80",
+            "section": 0
+          },
+          {
+            "id": "oc970fqdr",
+            "value": "77",
+            "new_value": null,
+            "race": 0,
+            "race_id": "nzahs23t7",
+            "judge": 1,
+            "judge_id": "e7q2jzqa3",
+            "section": 0
+          },
+          {
+            "id": "8ilv4fc0o",
+            "value": "77",
+            "new_value": null,
+            "race": 0,
+            "race_id": "nzahs23t7",
+            "judge": 3,
+            "judge_id": "wra081vpb",
+            "section": 0
+          },
+          {
+            "id": "rzbnbdao0",
+            "value": "75",
+            "new_value": null,
+            "race": 0,
+            "race_id": "nzahs23t7",
+            "judge": 4,
+            "judge_id": "jgjif3v0a",
+            "section": 0
+          },
+          {
+            "id": "0xm6crr2t",
+            "value": "7",
+            "new_value": null,
+            "race": 1,
+            "race_id": "v4gdvw8a5",
+            "judge": 4,
+            "judge_id": "jgjif3v0a",
+            "section": 0
+          },
+          {
+            "id": "ul7iw3hkk",
+            "value": "10",
+            "new_value": null,
+            "race": 1,
+            "race_id": "v4gdvw8a5",
+            "judge": 2,
+            "judge_id": "39u9f419o",
+            "section": 0
+          },
+          {
+            "id": "jg3pv5qbh",
+            "value": "11",
+            "new_value": null,
+            "race": 1,
+            "race_id": "v4gdvw8a5",
+            "judge": 3,
+            "judge_id": "wra081vpb",
+            "section": 0
+          },
+          {
+            "id": "mqxdz2n44",
+            "value": "8",
+            "new_value": null,
+            "race": 1,
+            "race_id": "v4gdvw8a5",
+            "judge": 1,
+            "judge_id": "e7q2jzqa3",
+            "section": 0
+          },
+          {
+            "id": "6duh4nsyu",
+            "value": "10",
+            "new_value": null,
+            "race": 1,
+            "race_id": "v4gdvw8a5",
+            "judge": 5,
+            "judge_id": "f2e55bc80",
+            "section": 0
+          },
+          {
+            "id": "l64tg5tct",
+            "value": "4",
+            "new_value": null,
+            "race": 2,
+            "race_id": "grquzinec",
+            "judge": 4,
+            "judge_id": "jgjif3v0a",
+            "section": 0
+          },
+          {
+            "id": "ppey1okhl",
+            "value": "3",
+            "new_value": null,
+            "race": 2,
+            "race_id": "grquzinec",
+            "judge": 2,
+            "judge_id": "39u9f419o",
+            "section": 0
+          },
+          {
+            "id": "zaelp1ofn",
+            "value": "3",
+            "new_value": null,
+            "race": 2,
+            "race_id": "grquzinec",
+            "judge": 3,
+            "judge_id": "wra081vpb",
+            "section": 0
+          },
+          {
+            "id": "c1pv60z36",
+            "value": "9",
+            "new_value": null,
+            "race": 2,
+            "race_id": "grquzinec",
+            "judge": 1,
+            "judge_id": "e7q2jzqa3",
+            "section": 0
+          },
+          {
+            "id": "ur79rrgf0",
+            "value": "7",
+            "new_value": null,
+            "race": 2,
+            "race_id": "grquzinec",
+            "judge": 5,
+            "judge_id": "f2e55bc80",
+            "section": 0
+          }
+        ],
+        "results": [
+          {
+            "id": "87bvyjnyg",
+            "value": 70,
+            "race_id": "nbk11vj34",
+            "repeat": "A",
+            "status": null
+          },
+          {
+            "id": "f802kj4gs",
+            "value": 12,
+            "race_id": "s3ze4afyu",
+            "repeat": "A",
+            "status": null
+          },
+          {
+            "id": "ydz256x8p",
+            "value": 75.6,
+            "race_id": "nzahs23t7",
+            "repeat": "A",
+            "status": null
+          },
+          {
+            "id": "o1crww232",
+            "value": 9.2,
+            "race_id": "v4gdvw8a5",
+            "repeat": "B",
+            "status": null
+          },
+          {
+            "id": "rn6s3dg8w",
+            "value": 5.2,
+            "race_id": "grquzinec",
+            "repeat": "B",
+            "status": null
+          }
+        ],
+        "results_overall": [
+          {
+            "competition_id": "kttixewz3",
+            "competitor_id": "42it4l522",
+            "value": 70,
+            "status": null
+          },
+          { "id_comp": "kttixewz3", "value": 70 },
+          {
+            "competition_id": "dfzql8pfe",
+            "competitor_id": "42it4l522",
+            "value": 84.8,
+            "status": null
+          }
+        ]
+      },
+      {
+        "info_dialog": { "state": false },
+        "race_status": null,
+        "res_accepted": false,
+        "rank": 7,
+        "id": "d2xcty0jg",
+        "info_data": {
+          "bib": 14,
+          "lastname": "Замятин",
+          "name": "Андрей",
+          "fullname": "ЗАМЯТИН Андрей",
+          "year": 2005,
+          "rang": "КМС",
+          "region": "г. Санкт-Петербург"
+        },
+        "marks": [
+          {
+            "id": "pqz515ygp",
+            "value": "20",
+            "new_value": null,
+            "race": 0,
+            "race_id": "nzahs23t7",
+            "judge": 2,
+            "judge_id": "39u9f419o",
+            "section": 0
+          },
+          {
+            "id": "85q2534tx",
+            "value": "20",
+            "new_value": null,
+            "race": 0,
+            "race_id": "nzahs23t7",
+            "judge": 5,
+            "judge_id": "f2e55bc80",
+            "section": 0
+          },
+          {
+            "id": "rmciuf9qh",
+            "value": "21",
+            "new_value": null,
+            "race": 0,
+            "race_id": "nzahs23t7",
+            "judge": 1,
+            "judge_id": "e7q2jzqa3",
+            "section": 0
+          },
+          {
+            "id": "x8gza7may",
+            "value": "17",
+            "new_value": null,
+            "race": 0,
+            "race_id": "nzahs23t7",
+            "judge": 3,
+            "judge_id": "wra081vpb",
+            "section": 0
+          },
+          {
+            "id": "3t90wzjub",
+            "value": "18",
+            "new_value": null,
+            "race": 0,
+            "race_id": "nzahs23t7",
+            "judge": 4,
+            "judge_id": "jgjif3v0a",
+            "section": 0
+          },
+          {
+            "id": "eagye1a9u",
+            "value": "70",
+            "new_value": null,
+            "race": 1,
+            "race_id": "v4gdvw8a5",
+            "judge": 5,
+            "judge_id": "f2e55bc80",
+            "section": 0
+          },
+          {
+            "id": "er4j71gn5",
+            "value": "70",
+            "new_value": null,
+            "race": 1,
+            "race_id": "v4gdvw8a5",
+            "judge": 2,
+            "judge_id": "39u9f419o",
+            "section": 0
+          },
+          {
+            "id": "8eds8fayx",
+            "value": "74",
+            "new_value": null,
+            "race": 1,
+            "race_id": "v4gdvw8a5",
+            "judge": 1,
+            "judge_id": "e7q2jzqa3",
+            "section": 0
+          },
+          {
+            "id": "qu9inzxqv",
+            "value": "73",
+            "new_value": null,
+            "race": 1,
+            "race_id": "v4gdvw8a5",
+            "judge": 4,
+            "judge_id": "jgjif3v0a",
+            "section": 0
+          },
+          {
+            "id": "dhdtkyg09",
+            "value": "69",
+            "new_value": null,
+            "race": 1,
+            "race_id": "v4gdvw8a5",
+            "judge": 3,
+            "judge_id": "wra081vpb",
+            "section": 0
+          },
+          {
+            "id": "176d7lcan",
+            "value": "2",
+            "new_value": null,
+            "race": 2,
+            "race_id": "grquzinec",
+            "judge": 4,
+            "judge_id": "jgjif3v0a",
+            "section": 0
+          },
+          {
+            "id": "xf9aja4hb",
+            "value": "1",
+            "new_value": null,
+            "race": 2,
+            "race_id": "grquzinec",
+            "judge": 2,
+            "judge_id": "39u9f419o",
+            "section": 0
+          },
+          {
+            "id": "ir6ymmwmj",
+            "value": "2",
+            "new_value": null,
+            "race": 2,
+            "race_id": "grquzinec",
+            "judge": 3,
+            "judge_id": "wra081vpb",
+            "section": 0
+          },
+          {
+            "id": "a33xgpede",
+            "value": "3",
+            "new_value": null,
+            "race": 2,
+            "race_id": "grquzinec",
+            "judge": 1,
+            "judge_id": "e7q2jzqa3",
+            "section": 0
+          },
+          {
+            "id": "pp8919f8q",
+            "value": "3",
+            "new_value": null,
+            "race": 2,
+            "race_id": "grquzinec",
+            "judge": 5,
+            "judge_id": "f2e55bc80",
+            "section": 0
+          }
+        ],
+        "results": [
+          {
+            "id": "s1ldfncjj",
+            "value": 69.2,
+            "race_id": "nbk11vj34",
+            "repeat": "A",
+            "status": null
+          },
+          {
+            "id": "dv5ze00gg",
+            "value": 57.4,
+            "race_id": "s3ze4afyu",
+            "repeat": "A",
+            "status": null
+          },
+          {
+            "id": "e8nk6whby",
+            "value": 19.2,
+            "race_id": "nzahs23t7",
+            "repeat": "A",
+            "status": null
+          },
+          {
+            "id": "54nvckhnx",
+            "value": 71.2,
+            "race_id": "v4gdvw8a5",
+            "repeat": "B",
+            "status": null
+          },
+          {
+            "id": "abbsxpfrc",
+            "value": 2.2,
+            "race_id": "grquzinec",
+            "repeat": "C",
+            "status": null
+          }
+        ],
+        "results_overall": [
+          {
+            "competition_id": "kttixewz3",
+            "competitor_id": "d2xcty0jg",
+            "value": 69.2,
+            "status": null
+          },
+          { "id_comp": "kttixewz3", "value": 69.2 },
+          {
+            "competition_id": "dfzql8pfe",
+            "competitor_id": "d2xcty0jg",
+            "value": 90.4,
+            "status": null
+          }
+        ]
+      },
+      {
+        "info_dialog": { "state": false },
+        "race_status": null,
+        "res_accepted": false,
+        "rank": 3,
+        "id": "gooqe7xi7",
+        "info_data": {
+          "bib": 20,
+          "lastname": "Архипов",
+          "name": "Лаврентий",
+          "fullname": "АРХИПОВ Лаврентий",
+          "year": 2004,
+          "rang": "КМС",
+          "region": "Свердловская обл."
+        },
+        "marks": [
+          {
+            "id": "8y2yvjmty",
+            "value": "43",
+            "new_value": null,
+            "race": 0,
+            "race_id": "nzahs23t7",
+            "judge": 2,
+            "judge_id": "39u9f419o",
+            "section": 0
+          },
+          {
+            "id": "oflsotjkh",
+            "value": "40",
+            "new_value": null,
+            "race": 0,
+            "race_id": "nzahs23t7",
+            "judge": 1,
+            "judge_id": "e7q2jzqa3",
+            "section": 0
+          },
+          {
+            "id": "ljg1yvs90",
+            "value": "43",
+            "new_value": null,
+            "race": 0,
+            "race_id": "nzahs23t7",
+            "judge": 3,
+            "judge_id": "wra081vpb",
+            "section": 0
+          },
+          {
+            "id": "9zpj2on88",
+            "value": "45",
+            "new_value": null,
+            "race": 0,
+            "race_id": "nzahs23t7",
+            "judge": 4,
+            "judge_id": "jgjif3v0a",
+            "section": 0
+          },
+          {
+            "id": "i98lj8bor",
+            "value": "44",
+            "new_value": null,
+            "race": 0,
+            "race_id": "nzahs23t7",
+            "judge": 5,
+            "judge_id": "f2e55bc80",
+            "section": 0
+          },
+          {
+            "id": "gizlty2u3",
+            "value": "58",
+            "new_value": null,
+            "race": 1,
+            "race_id": "v4gdvw8a5",
+            "judge": 5,
+            "judge_id": "f2e55bc80",
+            "section": 0
+          },
+          {
+            "id": "sh5tadi1f",
+            "value": "60",
+            "new_value": null,
+            "race": 1,
+            "race_id": "v4gdvw8a5",
+            "judge": 1,
+            "judge_id": "e7q2jzqa3",
+            "section": 0
+          },
+          {
+            "id": "sesowfun1",
+            "value": "48",
+            "new_value": null,
+            "race": 1,
+            "race_id": "v4gdvw8a5",
+            "judge": 2,
+            "judge_id": "39u9f419o",
+            "section": 0
+          },
+          {
+            "id": "ttzlgq1nv",
+            "value": "50",
+            "new_value": null,
+            "race": 1,
+            "race_id": "v4gdvw8a5",
+            "judge": 4,
+            "judge_id": "jgjif3v0a",
+            "section": 0
+          },
+          {
+            "id": "fdc9erlps",
+            "value": "48",
+            "new_value": null,
+            "race": 1,
+            "race_id": "v4gdvw8a5",
+            "judge": 3,
+            "judge_id": "wra081vpb",
+            "section": 0
+          },
+          {
+            "id": "8bvzm0m91",
+            "value": "68",
+            "new_value": null,
+            "race": 2,
+            "race_id": "grquzinec",
+            "judge": 2,
+            "judge_id": "39u9f419o",
+            "section": 0
+          },
+          {
+            "id": "nxmih8tdl",
+            "value": "67",
+            "new_value": null,
+            "race": 2,
+            "race_id": "grquzinec",
+            "judge": 5,
+            "judge_id": "f2e55bc80",
+            "section": 0
+          },
+          {
+            "id": "n5yi3hih0",
+            "value": "69",
+            "new_value": null,
+            "race": 2,
+            "race_id": "grquzinec",
+            "judge": 1,
+            "judge_id": "e7q2jzqa3",
+            "section": 0
+          },
+          {
+            "id": "1d4yin58p",
+            "value": "65",
+            "new_value": null,
+            "race": 2,
+            "race_id": "grquzinec",
+            "judge": 3,
+            "judge_id": "wra081vpb",
+            "section": 0
+          },
+          {
+            "id": "fj4nklziz",
+            "value": "71",
+            "new_value": null,
+            "race": 2,
+            "race_id": "grquzinec",
+            "judge": 4,
+            "judge_id": "jgjif3v0a",
+            "section": 0
+          }
+        ],
+        "results": [
+          {
+            "id": "2e89qeeua",
+            "value": 66.6,
+            "race_id": "nbk11vj34",
+            "repeat": "A",
+            "status": null
+          },
+          {
+            "id": "fliljcerw",
+            "value": 11.2,
+            "race_id": "s3ze4afyu",
+            "repeat": "A",
+            "status": null
+          },
+          {
+            "id": "zid7kcda8",
+            "value": 43,
+            "race_id": "nzahs23t7",
+            "repeat": "A",
+            "status": null
+          },
+          {
+            "id": "lbzwkie5v",
+            "value": 52.8,
+            "race_id": "v4gdvw8a5",
+            "repeat": "B",
+            "status": null
+          },
+          {
+            "id": "ziqgvjv34",
+            "value": 68,
+            "race_id": "grquzinec",
+            "repeat": "A",
+            "status": null
+          }
+        ],
+        "results_overall": [
+          {
+            "competition_id": "kttixewz3",
+            "competitor_id": "gooqe7xi7",
+            "value": 66.6,
+            "status": null
+          },
+          { "id_comp": "kttixewz3", "value": 66.6 },
+          {
+            "competition_id": "dfzql8pfe",
+            "competitor_id": "gooqe7xi7",
+            "value": 120.8,
+            "status": null
+          }
+        ]
+      },
+      {
+        "info_dialog": { "state": false },
+        "race_status": null,
+        "res_accepted": false,
+        "rank": 8,
+        "id": "0dt0g3v4z",
+        "info_data": {
+          "bib": 28,
+          "lastname": "Корчмит",
+          "name": "Николай",
+          "fullname": "КОРЧМИТ Николай",
+          "year": 2006,
+          "rang": "1",
+          "region": "Новосибирская обл."
+        },
+        "marks": [
+          {
+            "id": "0zb0g50wc",
+            "value": "68",
+            "new_value": null,
+            "race": 0,
+            "race_id": "nzahs23t7",
+            "judge": 5,
+            "judge_id": "f2e55bc80",
+            "section": 0
+          },
+          {
+            "id": "bm943o8ap",
+            "value": "67",
+            "new_value": null,
+            "race": 0,
+            "race_id": "nzahs23t7",
+            "judge": 2,
+            "judge_id": "39u9f419o",
+            "section": 0
+          },
+          {
+            "id": "n1b7ub6q8",
+            "value": "68",
+            "new_value": null,
+            "race": 0,
+            "race_id": "nzahs23t7",
+            "judge": 3,
+            "judge_id": "wra081vpb",
+            "section": 0
+          },
+          {
+            "id": "oevjb0nbg",
+            "value": "68",
+            "new_value": null,
+            "race": 0,
+            "race_id": "nzahs23t7",
+            "judge": 4,
+            "judge_id": "jgjif3v0a",
+            "section": 0
+          },
+          {
+            "id": "igl2wrqe9",
+            "value": "72",
+            "new_value": null,
+            "race": 0,
+            "race_id": "nzahs23t7",
+            "judge": 1,
+            "judge_id": "e7q2jzqa3",
+            "section": 0
+          },
+          {
+            "id": "vw807buy0",
+            "value": "3",
+            "new_value": null,
+            "race": 1,
+            "race_id": "v4gdvw8a5",
+            "judge": 4,
+            "judge_id": "jgjif3v0a",
+            "section": 0
+          },
+          {
+            "id": "5knx1ne6q",
+            "value": "9",
+            "new_value": null,
+            "race": 1,
+            "race_id": "v4gdvw8a5",
+            "judge": 2,
+            "judge_id": "39u9f419o",
+            "section": 0
+          },
+          {
+            "id": "27lh73jzv",
+            "value": "7",
+            "new_value": null,
+            "race": 1,
+            "race_id": "v4gdvw8a5",
+            "judge": 1,
+            "judge_id": "e7q2jzqa3",
+            "section": 0
+          },
+          {
+            "id": "h0bvsi9r4",
+            "value": "3",
+            "new_value": null,
+            "race": 1,
+            "race_id": "v4gdvw8a5",
+            "judge": 3,
+            "judge_id": "wra081vpb",
+            "section": 0
+          },
+          {
+            "id": "x5j31gmsd",
+            "value": "3",
+            "new_value": null,
+            "race": 1,
+            "race_id": "v4gdvw8a5",
+            "judge": 5,
+            "judge_id": "f2e55bc80",
+            "section": 0
+          },
+          {
+            "id": "kr1ksfpcf",
+            "value": "21",
+            "new_value": null,
+            "race": 2,
+            "race_id": "grquzinec",
+            "judge": 2,
+            "judge_id": "39u9f419o",
+            "section": 0
+          },
+          {
+            "id": "eckk1z1iw",
+            "value": "20",
+            "new_value": null,
+            "race": 2,
+            "race_id": "grquzinec",
+            "judge": 3,
+            "judge_id": "wra081vpb",
+            "section": 0
+          },
+          {
+            "id": "6m3154n4u",
+            "value": "21",
+            "new_value": null,
+            "race": 2,
+            "race_id": "grquzinec",
+            "judge": 5,
+            "judge_id": "f2e55bc80",
+            "section": 0
+          },
+          {
+            "id": "s3y2hwp8d",
+            "value": "22",
+            "new_value": null,
+            "race": 2,
+            "race_id": "grquzinec",
+            "judge": 1,
+            "judge_id": "e7q2jzqa3",
+            "section": 0
+          },
+          {
+            "id": "qprlf2ql2",
+            "value": "21",
+            "new_value": null,
+            "race": 2,
+            "race_id": "grquzinec",
+            "judge": 4,
+            "judge_id": "jgjif3v0a",
+            "section": 0
+          }
+        ],
+        "results": [
+          {
+            "id": "hu7g4k3vk",
+            "value": 63,
+            "race_id": "nbk11vj34",
+            "repeat": "A",
+            "status": null
+          },
+          {
+            "id": "wtnuoyaq9",
+            "value": 9.8,
+            "race_id": "s3ze4afyu",
+            "repeat": "A",
+            "status": null
+          },
+          {
+            "id": "ogr5yv8l9",
+            "value": 68.6,
+            "race_id": "nzahs23t7",
+            "repeat": "A",
+            "status": null
+          },
+          {
+            "id": "2yxmxy4h8",
+            "value": 5,
+            "race_id": "v4gdvw8a5",
+            "repeat": "B",
+            "status": null
+          },
+          {
+            "id": "0ynytivlt",
+            "value": 21,
+            "race_id": "grquzinec",
+            "repeat": "C",
+            "status": null
+          }
+        ],
+        "results_overall": [
+          {
+            "competition_id": "kttixewz3",
+            "competitor_id": "0dt0g3v4z",
+            "value": 63,
+            "status": null
+          },
+          { "id_comp": "kttixewz3", "value": 63 },
+          {
+            "competition_id": "dfzql8pfe",
+            "competitor_id": "0dt0g3v4z",
+            "value": 89.6,
+            "status": null
+          }
+        ]
+      },
+      {
+        "info_dialog": { "state": false },
+        "race_status": null,
+        "res_accepted": false,
+        "rank": 10,
+        "id": "ogb440f77",
+        "info_data": {
+          "bib": 8,
+          "lastname": "Юмаков",
+          "name": "Динар",
+          "fullname": "ЮМАКОВ Динар",
+          "year": 2004,
+          "rang": "КМС",
+          "region": "Республика Башкортостан"
+        },
+        "marks": [
+          {
+            "id": "1cl3osvfp",
+            "value": "6",
+            "new_value": null,
+            "race": 0,
+            "race_id": "nzahs23t7",
+            "judge": 5,
+            "judge_id": "f2e55bc80",
+            "section": 0
+          },
+          {
+            "id": "xca91hcwt",
+            "value": "5",
+            "new_value": null,
+            "race": 0,
+            "race_id": "nzahs23t7",
+            "judge": 4,
+            "judge_id": "jgjif3v0a",
+            "section": 0
+          },
+          {
+            "id": "0v7jljwfd",
+            "value": "6",
+            "new_value": null,
+            "race": 0,
+            "race_id": "nzahs23t7",
+            "judge": 2,
+            "judge_id": "39u9f419o",
+            "section": 0
+          },
+          {
+            "id": "lufxvh3cj",
+            "value": "5",
+            "new_value": null,
+            "race": 0,
+            "race_id": "nzahs23t7",
+            "judge": 1,
+            "judge_id": "e7q2jzqa3",
+            "section": 0
+          },
+          {
+            "id": "ouljmp42v",
+            "value": "5",
+            "new_value": null,
+            "race": 0,
+            "race_id": "nzahs23t7",
+            "judge": 3,
+            "judge_id": "wra081vpb",
+            "section": 0
+          },
+          {
+            "id": "i57nfte02",
+            "value": "10",
+            "new_value": null,
+            "race": 1,
+            "race_id": "v4gdvw8a5",
+            "judge": 2,
+            "judge_id": "39u9f419o",
+            "section": 0
+          },
+          {
+            "id": "eg64p8dk9",
+            "value": "10",
+            "new_value": null,
+            "race": 1,
+            "race_id": "v4gdvw8a5",
+            "judge": 4,
+            "judge_id": "jgjif3v0a",
+            "section": 0
+          },
+          {
+            "id": "bx0ugetu8",
+            "value": "6",
+            "new_value": null,
+            "race": 1,
+            "race_id": "v4gdvw8a5",
+            "judge": 1,
+            "judge_id": "e7q2jzqa3",
+            "section": 0
+          },
+          {
+            "id": "87ix4dv9t",
+            "value": "10",
+            "new_value": null,
+            "race": 1,
+            "race_id": "v4gdvw8a5",
+            "judge": 3,
+            "judge_id": "wra081vpb",
+            "section": 0
+          },
+          {
+            "id": "08twlxbf6",
+            "value": "7",
+            "new_value": null,
+            "race": 1,
+            "race_id": "v4gdvw8a5",
+            "judge": 5,
+            "judge_id": "f2e55bc80",
+            "section": 0
+          },
+          {
+            "id": "o69pcp96b",
+            "value": "67",
+            "new_value": null,
+            "race": 2,
+            "race_id": "grquzinec",
+            "judge": 1,
+            "judge_id": "e7q2jzqa3",
+            "section": 0
+          },
+          {
+            "id": "03nvln74a",
+            "value": "69",
+            "new_value": null,
+            "race": 2,
+            "race_id": "grquzinec",
+            "judge": 2,
+            "judge_id": "39u9f419o",
+            "section": 0
+          },
+          {
+            "id": "3f6e1gy5r",
+            "value": "69",
+            "new_value": null,
+            "race": 2,
+            "race_id": "grquzinec",
+            "judge": 5,
+            "judge_id": "f2e55bc80",
+            "section": 0
+          },
+          {
+            "id": "i2vqsedrf",
+            "value": "74",
+            "new_value": null,
+            "race": 2,
+            "race_id": "grquzinec",
+            "judge": 3,
+            "judge_id": "wra081vpb",
+            "section": 0
+          },
+          {
+            "id": "ivlzudbvy",
+            "value": "64",
+            "new_value": null,
+            "race": 2,
+            "race_id": "grquzinec",
+            "judge": 4,
+            "judge_id": "jgjif3v0a",
+            "section": 0
+          }
+        ],
+        "results": [
+          {
+            "id": "iggm399io",
+            "value": 9.2,
+            "race_id": "nbk11vj34",
+            "repeat": "A",
+            "status": null
+          },
+          {
+            "id": "gert1t35s",
+            "value": 61.6,
+            "race_id": "s3ze4afyu",
+            "repeat": "A",
+            "status": null
+          },
+          {
+            "id": "kofv4l8u3",
+            "value": 5.4,
+            "race_id": "nzahs23t7",
+            "repeat": "A",
+            "status": null
+          },
+          {
+            "id": "hv0t9a9mx",
+            "value": 8.6,
+            "race_id": "v4gdvw8a5",
+            "repeat": "A",
+            "status": null
+          },
+          {
+            "id": "s51f4lpnd",
+            "value": 68.6,
+            "race_id": "grquzinec",
+            "repeat": "B",
+            "status": null
+          }
+        ],
+        "results_overall": [
+          {
+            "competition_id": "kttixewz3",
+            "competitor_id": "ogb440f77",
+            "value": 61.6,
+            "status": null
+          },
+          { "id_comp": "kttixewz3", "value": 61.6 },
+          {
+            "competition_id": "dfzql8pfe",
+            "competitor_id": "ogb440f77",
+            "value": 77.19999999999999,
+            "status": null
+          }
+        ]
+      }
+    ]
+  },
+  "media_settings": {
+    "display": {
+      "modes": [
+        { "id": 0, "title": "Результаты" },
+        { "id": 1, "title": "Стартовый" },
+        { "id": 2, "title": "Результат последнего на финише" },
+        { "id": 3, "title": "Участник на старте" },
+        { "id": 4, "title": "Награждение" }
+      ],
+      "selected": 1
+    }
+  },
+  "protocol_fields": [],
+  "protocol_settings": {
+    "protocol_type": 1,
+    "show_preview": false,
+    "start_protocols": {
+      "filters": {
+        "race_filter": {
+          "del_dialog": false,
+          "finished": [
+            "m6bsbal2h",
+            "ogb440f77",
+            "g5ms896r2",
+            "0dt0g3v4z",
+            "lbpvijl2m",
+            "gooqe7xi7",
+            "m4c3yzx61",
+            "d2xcty0jg",
+            "ynnifeqeg",
+            "42it4l522",
+            "3mxw7ob1h",
+            "x5so1afho"
+          ],
+          "onTrack": null,
+          "id": "nzahs23t7",
+          "title": "Заезд 1",
+          "race_dialog": false,
+          "type": {
+            "id": 0,
+            "title": "Сноуборд",
+            "disciplines": [0, 1, 2, 100]
+          },
+          "discipline": { "id": 0, "title": "Слоуп-Стайл", "res_formula": [1] },
+          "startList": [],
+          "_startList": [
+            "m6bsbal2h",
+            "ogb440f77",
+            "g5ms896r2",
+            "0dt0g3v4z",
+            "lbpvijl2m",
+            "gooqe7xi7",
+            "m4c3yzx61",
+            "d2xcty0jg",
+            "ynnifeqeg",
+            "42it4l522",
+            "3mxw7ob1h",
+            "x5so1afho"
+          ],
+          "selectedCompetitor": null
+        }
+      },
+      "fonts": {
+        "officialsData": 12,
+        "openers": 12,
+        "weatherData": 12,
+        "raceNotes": 12
+      },
+      "protocol_type": "Стартовый лист",
+      "fields": [
+        {
+          "params": {
+            "cell_1": { "select_dialog": false, "id": "rank", "title": "Ст №" },
+            "cell_2": { "select_dialog": false, "id": null, "title": null },
+            "width": 6,
+            "font": 12,
+            "align": { "title": "Слева", "value": "start" },
+            "f_weight": "normal"
+          },
+          "id": "bgvnck308"
+        },
+        {
+          "params": {
+            "cell_1": { "select_dialog": false, "id": "bib", "title": "Bib" },
+            "cell_2": { "select_dialog": false, "id": null, "title": null },
+            "width": "6",
+            "font": 12,
+            "align": { "title": "Слева", "value": "start" },
+            "f_weight": "normal"
+          },
+          "id": "k7rbebg4l"
+        },
+        {
+          "params": {
+            "cell_1": {
+              "select_dialog": false,
+              "id": "fullname",
+              "title": "Фамилия, Имя"
+            },
+            "cell_2": { "select_dialog": false, "id": null, "title": null },
+            "width": "24",
+            "font": 12,
+            "align": { "title": "Слева", "value": "start" },
+            "f_weight": "normal"
+          },
+          "id": "d0x9c564q"
+        },
+        {
+          "params": {
+            "cell_1": { "select_dialog": false, "id": "year", "title": "Год" },
+            "cell_2": { "select_dialog": false, "id": null, "title": null },
+            "width": 12,
+            "font": 12,
+            "align": { "title": "Слева", "value": "start" },
+            "f_weight": "normal"
+          },
+          "id": "d97oy1jhe"
+        },
+        {
+          "params": {
+            "cell_1": {
+              "select_dialog": false,
+              "id": "rang",
+              "title": "Разряд"
+            },
+            "cell_2": { "select_dialog": false, "id": null, "title": null },
+            "width": 12,
+            "font": 12,
+            "align": { "title": "Слева", "value": "start" },
+            "f_weight": "normal"
+          },
+          "id": "dx1ct6kyx"
+        },
+        {
+          "params": {
+            "cell_1": {
+              "select_dialog": false,
+              "id": "region",
+              "title": "Суб. РФ"
+            },
+            "cell_2": { "select_dialog": false, "id": null, "title": null },
+            "width": "40",
+            "font": 12,
+            "align": { "title": "Слева", "value": "start" },
+            "f_weight": "normal"
+          },
+          "id": "0tae0m34e"
+        }
+      ]
+    },
+    "result_protocols": {
+      "filters": { "race_filter": null },
+      "fonts": {
+        "officialsData": 12,
+        "openers": 12,
+        "weatherData": 12,
+        "raceNotes": 12
+      },
+      "protocol_type": "Официальные результаты",
+      "fields": [
+        {
+          "params": {
+            "cell_1": {
+              "select_dialog": false,
+              "id": "rank",
+              "title": "Место"
+            },
+            "cell_2": { "select_dialog": false, "id": null, "title": null },
+            "width": 6,
+            "font": 12,
+            "align": { "title": "Слева", "value": "start" },
+            "f_weight": "normal"
+          },
+          "id": "71gjx06z7"
+        },
+        {
+          "params": {
+            "cell_1": { "select_dialog": false, "id": "bib", "title": "Bib" },
+            "cell_2": { "select_dialog": false, "id": null, "title": null },
+            "width": "6",
+            "font": 12,
+            "align": { "title": "Слева", "value": "start" },
+            "f_weight": "normal"
+          },
+          "id": "uxno8xeey"
+        },
+        {
+          "params": {
+            "cell_1": {
+              "select_dialog": false,
+              "id": "fullname",
+              "title": "Фамилия, Имя"
+            },
+            "cell_2": {
+              "select_dialog": false,
+              "id": "region",
+              "title": "Суб. РФ"
+            },
+            "width": "18",
+            "font": 12,
+            "align": { "title": "Слева", "value": "start" },
+            "f_weight": "normal"
+          },
+          "id": "cz9jhlwlb"
+        },
+        {
+          "params": {
+            "cell_1": { "select_dialog": false, "id": "year", "title": "Год" },
+            "cell_2": { "select_dialog": false, "id": null, "title": null },
+            "width": 8,
+            "font": 12,
+            "align": { "title": "Слева", "value": "start" },
+            "f_weight": "normal"
+          },
+          "id": "cfwqq93g4"
+        },
+        {
+          "params": {
+            "cell_1": {
+              "select_dialog": false,
+              "id": "rang",
+              "title": "Разряд"
+            },
+            "cell_2": { "select_dialog": false, "id": null, "title": null },
+            "width": 8,
+            "font": 12,
+            "align": { "title": "Слева", "value": "start" },
+            "f_weight": "normal"
+          },
+          "id": "5t15hj0sw"
+        },
+        {
+          "params": {
+            "cell_1": {
+              "select_dialog": false,
+              "id": "race",
+              "title": "Заезд"
+            },
+            "cell_2": { "select_dialog": false, "id": null, "title": null },
+            "width": 8,
+            "font": 12,
+            "align": { "title": "Слева", "value": "start" },
+            "f_weight": "normal"
+          },
+          "id": "sd37dhp5j"
+        },
+        {
+          "params": {
+            "cell_1": {
+              "select_dialog": false,
+              "id": "Судья 1",
+              "title": "С1"
+            },
+            "cell_2": { "select_dialog": false, "id": null, "title": null },
+            "width": 6,
+            "font": 12,
+            "align": { "title": "Слева", "value": "start" },
+            "f_weight": "normal"
+          },
+          "id": "ccl9ugfrg"
+        },
+        {
+          "params": {
+            "cell_1": {
+              "select_dialog": false,
+              "id": "Судья 2",
+              "title": "С2"
+            },
+            "cell_2": { "select_dialog": false, "id": null, "title": null },
+            "width": 6,
+            "font": 12,
+            "align": { "title": "Слева", "value": "start" },
+            "f_weight": "normal"
+          },
+          "id": "e6kukjqsz"
+        },
+        {
+          "params": {
+            "cell_1": {
+              "select_dialog": false,
+              "id": "Судья 3",
+              "title": "С3"
+            },
+            "cell_2": { "select_dialog": false, "id": null, "title": null },
+            "width": 6,
+            "font": 12,
+            "align": { "title": "Слева", "value": "start" },
+            "f_weight": "normal"
+          },
+          "id": "gm4057jaf"
+        },
+        {
+          "params": {
+            "cell_1": {
+              "select_dialog": false,
+              "id": "Судья 4",
+              "title": "С4"
+            },
+            "cell_2": { "select_dialog": false, "id": null, "title": null },
+            "width": 6,
+            "font": 12,
+            "align": { "title": "Слева", "value": "start" },
+            "f_weight": "normal"
+          },
+          "id": "jquv6ncjr"
+        },
+        {
+          "params": {
+            "cell_1": {
+              "select_dialog": false,
+              "id": "Судья 5",
+              "title": "С5"
+            },
+            "cell_2": { "select_dialog": false, "id": null, "title": null },
+            "width": 6,
+            "font": 12,
+            "align": { "title": "Слева", "value": "start" },
+            "f_weight": "normal"
+          },
+          "id": "rhdt3adq2"
+        },
+        {
+          "params": {
+            "cell_1": {
+              "select_dialog": false,
+              "id": "race_res",
+              "title": "Оценка"
+            },
+            "cell_2": { "select_dialog": false, "id": null, "title": null },
+            "width": "8",
+            "font": 12,
+            "align": { "title": "Слева", "value": "start" },
+            "f_weight": "normal"
+          },
+          "id": "uo0zrhh62"
+        },
+        {
+          "params": {
+            "cell_1": {
+              "select_dialog": false,
+              "id": "result",
+              "title": "Рез-т"
+            },
+            "cell_2": { "select_dialog": false, "id": null, "title": null },
+            "width": 8,
+            "font": 12,
+            "align": { "title": "Слева", "value": "start" },
+            "f_weight": "normal"
+          },
+          "id": "5uzlmcxqz"
+        }
+      ],
+      "raceResultFields": [
+        {
+          "params": {
+            "cell_1": {
+              "select_dialog": false,
+              "id": "rank",
+              "title": "Место"
+            },
+            "cell_2": { "select_dialog": false, "id": null, "title": null },
+            "width": 6,
+            "font": 12,
+            "align": { "title": "Слева", "value": "start" },
+            "f_weight": "normal"
+          },
+          "id": "i7deu3aw9"
+        },
+        {
+          "params": {
+            "cell_1": { "select_dialog": false, "id": "bib", "title": "Bib" },
+            "cell_2": { "select_dialog": false, "id": null, "title": null },
+            "width": 8,
+            "font": 12,
+            "align": { "title": "Слева", "value": "start" },
+            "f_weight": "normal"
+          },
+          "id": "829obb9is"
+        },
+        {
+          "params": {
+            "cell_1": {
+              "select_dialog": false,
+              "id": "lastname",
+              "title": "Фамилия"
+            },
+            "cell_2": { "select_dialog": false, "id": null, "title": null },
+            "width": 8,
+            "font": 12,
+            "align": { "title": "Слева", "value": "start" },
+            "f_weight": "normal"
+          },
+          "id": "945arooey"
+        },
+        {
+          "params": {
+            "cell_1": { "select_dialog": false, "id": "name", "title": "Имя" },
+            "cell_2": { "select_dialog": false, "id": null, "title": null },
+            "width": 8,
+            "font": 12,
+            "align": { "title": "Слева", "value": "start" },
+            "f_weight": "normal"
+          },
+          "id": "lfs1ma9q0"
+        },
+        {
+          "params": {
+            "cell_1": {
+              "select_dialog": false,
+              "id": "fullname",
+              "title": "Фамилия, Имя"
+            },
+            "cell_2": { "select_dialog": false, "id": null, "title": null },
+            "width": 8,
+            "font": 12,
+            "align": { "title": "Слева", "value": "start" },
+            "f_weight": "normal"
+          },
+          "id": "bqmkyf38n"
+        },
+        {
+          "params": {
+            "cell_1": { "select_dialog": false, "id": "year", "title": "Год" },
+            "cell_2": { "select_dialog": false, "id": null, "title": null },
+            "width": 8,
+            "font": 12,
+            "align": { "title": "Слева", "value": "start" },
+            "f_weight": "normal"
+          },
+          "id": "giqwhj9cn"
+        },
+        {
+          "params": {
+            "cell_1": {
+              "select_dialog": false,
+              "id": "rang",
+              "title": "Разряд"
+            },
+            "cell_2": { "select_dialog": false, "id": null, "title": null },
+            "width": 8,
+            "font": 12,
+            "align": { "title": "Слева", "value": "start" },
+            "f_weight": "normal"
+          },
+          "id": "4mwb5lvwp"
+        },
+        {
+          "params": {
+            "cell_1": {
+              "select_dialog": false,
+              "id": "region",
+              "title": "Суб. РФ"
+            },
+            "cell_2": { "select_dialog": false, "id": null, "title": null },
+            "width": 8,
+            "font": 12,
+            "align": { "title": "Слева", "value": "start" },
+            "f_weight": "normal"
+          },
+          "id": "rm5372ld4"
+        },
+        {
+          "params": {
+            "cell_1": {
+              "select_dialog": false,
+              "id": "race",
+              "title": "Заезд"
+            },
+            "cell_2": { "select_dialog": false, "id": null, "title": null },
+            "width": 8,
+            "font": 12,
+            "align": { "title": "Слева", "value": "start" },
+            "f_weight": "normal"
+          },
+          "id": "avjtbq5ln"
+        },
+        {
+          "params": {
+            "cell_1": {
+              "select_dialog": false,
+              "id": "Судья 1",
+              "title": "С1"
+            },
+            "cell_2": { "select_dialog": false, "id": null, "title": null },
+            "width": 6,
+            "font": 12,
+            "align": { "title": "Слева", "value": "start" },
+            "f_weight": "normal"
+          },
+          "id": "6cfwpumab"
+        },
+        {
+          "params": {
+            "cell_1": {
+              "select_dialog": false,
+              "id": "Судья 2",
+              "title": "С2"
+            },
+            "cell_2": { "select_dialog": false, "id": null, "title": null },
+            "width": 6,
+            "font": 12,
+            "align": { "title": "Слева", "value": "start" },
+            "f_weight": "normal"
+          },
+          "id": "wk1yn65u2"
+        },
+        {
+          "params": {
+            "cell_1": {
+              "select_dialog": false,
+              "id": "Судья 3",
+              "title": "С3"
+            },
+            "cell_2": { "select_dialog": false, "id": null, "title": null },
+            "width": 6,
+            "font": 12,
+            "align": { "title": "Слева", "value": "start" },
+            "f_weight": "normal"
+          },
+          "id": "wdzsaskbg"
+        },
+        {
+          "params": {
+            "cell_1": {
+              "select_dialog": false,
+              "id": "Судья 4",
+              "title": "С4"
+            },
+            "cell_2": { "select_dialog": false, "id": null, "title": null },
+            "width": 6,
+            "font": 12,
+            "align": { "title": "Слева", "value": "start" },
+            "f_weight": "normal"
+          },
+          "id": "w525w1gxs"
+        },
+        {
+          "params": {
+            "cell_1": {
+              "select_dialog": false,
+              "id": "Судья 5",
+              "title": "С5"
+            },
+            "cell_2": { "select_dialog": false, "id": null, "title": null },
+            "width": 6,
+            "font": 12,
+            "align": { "title": "Слева", "value": "start" },
+            "f_weight": "normal"
+          },
+          "id": "g7prqf096"
+        },
+        {
+          "params": {
+            "cell_1": {
+              "select_dialog": false,
+              "id": "race_res",
+              "title": "Рез-т"
+            },
+            "cell_2": { "select_dialog": false, "id": null, "title": null },
+            "width": 6,
+            "font": 12,
+            "align": { "title": "Слева", "value": "start" },
+            "f_weight": "normal"
+          },
+          "id": "t5wk0yi3w"
+        }
+      ]
+    }
+  },
+  "result_formula": {
+    "overall_result": {
+      "type": 3,
+      "select_heats": {
+        "heats": 0,
+        "mode": 0,
+        "modes": [
+          { "id": 0, "title": "Подсчёт из всех" },
+          { "id": 1, "title": "Подсчёт из N лучших" }
+        ]
+      },
+      "types": [
+        { "id": 0, "title": "Лучший" },
+        { "id": 1, "title": "Сумма" },
+        { "id": 2, "title": "Среднее" },
+        { "id": 3, "title": "ABC" }
+      ]
+    },
+    "type": 0,
+    "types": [
+      {
+        "id": 0,
+        "title": "По судьям",
+        "lower_marks": 0,
+        "higher_marks": 0,
+        "formula": 0,
+        "formulas": [
+          { "id": 0, "title": "Среднее" },
+          { "id": 1, "title": "Сумма" }
+        ]
+      },
+      {
+        "id": 1,
+        "title": "По секциям",
+        "sections": [],
+        "formula": 0,
+        "formulas": [{ "id": 0 }]
+      }
+    ]
+  },
+  "id": "dfzql8pfe",
+  "live_id": null
+}
