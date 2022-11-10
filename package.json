@@ -57,7 +57,7 @@
       "perMachine": false
     },
     "linux": {
-      "icon": "build/icons/icon-256x256.png",
+      "icon":"build/icons/icon-256x256.png",
       "category": "Office",
       "target": [
         "AppImage",
