@@ -931,6 +931,7 @@ export default {
     },
     getSysData() {
       ipcRenderer.on("sysData", (event, data) => {
+        console.log(data);
         this.$store.commit("key/set_system_data", data);
       });
       app.emit("getSysData");

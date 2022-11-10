@@ -1,7 +1,7 @@
 {
   "name": "TW_Scoring",
   "version": "1.0.0",
-  "author": "insyner@gmail.com",
+  "author": "Insyn, <insyner@gmail.com>",
   "description": "Scoring app by TimingWeb",
   "license": null,
   "main": "./dist/electron/main.js",
@@ -57,7 +57,14 @@
       "perMachine": false
     },
     "linux": {
-      "icon": "build/icons"
+      "icon": "build/icons/icon-256x256.png",
+      "category": "Office",
+      "target": [
+        "AppImage",
+        "snap",
+        "deb"
+      ]
+
     }
   },
   "dependencies": {

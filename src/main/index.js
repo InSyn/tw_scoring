@@ -55,7 +55,8 @@ function createWindow() {
 app.on("ready", createWindow);
 
 app.on("getSysData", () => {
-  si.system()
+  console.log(process.platform);
+  si.uuid()
     .then((data) => {
       mainWindow.webContents.send("sysData", data);
       try {
