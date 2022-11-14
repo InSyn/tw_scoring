@@ -18,7 +18,7 @@
         border: `1px solid ${$vuetify.theme.themes[appTheme].accent}`,
       }"
     >
-      Checking license...
+      {{ localization[lang].app.license.activation }}
     </div>
     <div
       v-else
@@ -34,37 +34,9 @@
       ]"
     >
       <div style="font-weight: bold; font-size: 1.2rem; padding: 8px">
-        Product activation
+        {{ localization[lang].app.license.activation_title }}
       </div>
       <div style="padding: 8px">
-        <!--        <div style="display: flex; align-items: center; margin-bottom: 1rem">-->
-        <!--          <div style="font-weight: bold; width: 4rem">ФИО</div>-->
-        <!--          <input-->
-        <!--            disabled-->
-        <!--            v-model="user_name"-->
-        <!--            size="24"-->
-        <!--            style="margin-left: 1rem; padding: 4px 6px; border-radius: 6px"-->
-        <!--            :style="{-->
-        <!--              backgroundColor:-->
-        <!--                $vuetify.theme.themes[appTheme].standardBackgroundRGBA,-->
-        <!--              color: $vuetify.theme.themes[appTheme].textDefault,-->
-        <!--            }"-->
-        <!--          />-->
-        <!--        </div>-->
-        <!--        <div style="display: flex; align-items: center; margin-bottom: 1rem">-->
-        <!--          <div style="font-weight: bold; width: 4rem">E-Mail</div>-->
-        <!--          <input-->
-        <!--            disabled-->
-        <!--            v-model="user_mail"-->
-        <!--            size="24"-->
-        <!--            style="margin-left: 1rem; padding: 4px 6px; border-radius: 6px"-->
-        <!--            :style="{-->
-        <!--              backgroundColor:-->
-        <!--                $vuetify.theme.themes[appTheme].standardBackgroundRGBA,-->
-        <!--              color: $vuetify.theme.themes[appTheme].textDefault,-->
-        <!--            }"-->
-        <!--          />-->
-        <!--        </div>-->
         <div
           style="
             display: flex;
@@ -73,7 +45,9 @@
             min-width: 400px;
           "
         >
-          <div style="flex: 0 0 auto; font-weight: bold">Product key</div>
+          <div style="flex: 0 0 auto; font-weight: bold">
+            {{ localization[lang].app.license.key }}
+          </div>
           <input
             v-model="user_key"
             type="text"
@@ -104,7 +78,7 @@
           class="white--text"
           :color="$vuetify.theme.themes[appTheme].accent"
           small
-          >Check</v-btn
+          >{{ localization[lang].app.license.check }}</v-btn
         >
         <div
           style="flex: 1 0 auto; font-size: 0.75rem; text-align: right"
@@ -116,93 +90,6 @@
         </div>
       </div>
     </div>
-    <!--    <div-->
-    <!--      v-if="license_panel"-->
-    <!--      style="-->
-    <!--        display: flex;-->
-    <!--        flex-direction: column;-->
-    <!--        padding: 8px 16px;-->
-    <!--        border-radius: 6px;-->
-    <!--        overflow-y: auto;-->
-    <!--        margin-top: 8px;-->
-    <!--      "-->
-    <!--      :style="{-->
-    <!--        backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA,-->
-    <!--      }"-->
-    <!--    >-->
-    <!--      <div-->
-    <!--        v-for="(license, l_idx) in licenses"-->
-    <!--        :key="l_idx"-->
-    <!--        style="flex: 0 0 auto; display: flex; flex-wrap: wrap"-->
-    <!--      >-->
-    <!--        <div-->
-    <!--          style="margin: 4px 8px 0 0"-->
-    <!--          v-for="(l_attr, la_idx) in license"-->
-    <!--          :key="la_idx"-->
-    <!--        >-->
-    <!--          <b>{{ `${la_idx}: ` }}</b-->
-    <!--          >{{ `${l_attr}` }}-->
-    <!--        </div>-->
-    <!--        <div-->
-    <!--          style="-->
-    <!--            display: flex;-->
-    <!--            align-items: center;-->
-    <!--            justify-content: center;-->
-    <!--            margin-left: auto;-->
-    <!--            margin-top: auto;-->
-    <!--            padding: 4px 8px;-->
-    <!--            border-radius: 4px;-->
-    <!--          "-->
-    <!--        >-->
-    <!--          <v-btn-->
-    <!--            @click="-->
-    <!--              register_key({-->
-    <!--                Key: user_key,-->
-    <!--                Serial: system_data.uuid,-->
-    <!--              })-->
-    <!--            "-->
-    <!--            text-->
-    <!--            :color="$vuetify.theme.themes[appTheme].success"-->
-    <!--          >-->
-    <!--            Register-->
-    <!--          </v-btn>-->
-    <!--        </div>-->
-    <!--      </div>-->
-    <!--      <div-->
-    <!--        style="-->
-    <!--          margin: auto 0 0 auto;-->
-    <!--          padding: 4px 8px;-->
-    <!--          font-weight: bold;-->
-    <!--          border-radius: 6px;-->
-    <!--        "-->
-    <!--        :style="{-->
-    <!--          border: `1px solid ${$vuetify.theme.themes[appTheme].accent}`,-->
-    <!--        }"-->
-    <!--      >-->
-    <!--        <span>Title&nbsp;</span>-->
-    <!--        <input-->
-    <!--          type="text"-->
-    <!--          v-model="new_license_name"-->
-    <!--          style="padding: 2px 4px; border-radius: 4px"-->
-    <!--          :style="{-->
-    <!--            backgroundColor:-->
-    <!--              $vuetify.theme.themes[appTheme].standardBackgroundRGBA,-->
-    <!--            color: $vuetify.theme.themes[appTheme].textDefault,-->
-    <!--          }"-->
-    <!--        />-->
-    <!--        <v-btn-->
-    <!--          @click="createLicense(new_license_name)"-->
-    <!--          small-->
-    <!--          :color="$vuetify.theme.themes[appTheme].accent"-->
-    <!--          style="margin-left: 1rem"-->
-    <!--          :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"-->
-    <!--          >Crate</v-btn-->
-    <!--        >-->
-    <!--        <div style="font-size: 0.9rem; font-weight: bold">-->
-    <!--          {{ system_data && system_data["uuid"] && system_data["uuid"] }}-->
-    <!--        </div>-->
-    <!--      </div>-->
-    <!--    </div>-->
   </div>
 </template>
 
@@ -238,7 +125,10 @@ export default {
       key ? (this.user_key = key) : null;
       const license_data = {
         key: this.user_key || key,
-        serial: this.system_data.uuid,
+        serial:
+          this.system_data.platform === "win32"
+            ? this.system_data.system.uuid
+            : this.system_data.uuid.os,
         salt: uuid(),
       };
       if (await this.check_lic(license_data)) {
@@ -269,6 +159,10 @@ export default {
     };
   },
   computed: {
+    ...mapGetters("localization", {
+      localization: "localization",
+      lang: "lang",
+    }),
     ...mapGetters("main", {
       appTheme: "appTheme",
       _licData: "_licData",

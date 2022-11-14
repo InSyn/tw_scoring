@@ -12,6 +12,7 @@ app.on("save_key", (key) => {
     console.log(e);
   }
 });
+
 app.on("check_key", () => {
   try {
     fs.readFile("./lic", (err, key) => {

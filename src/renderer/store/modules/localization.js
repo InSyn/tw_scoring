@@ -180,6 +180,12 @@ export default {
             use_grid: "Сетка",
             use_interlace_highlighting: "Чрезстрочное подсвечивание",
           },
+          license: {
+            activation_title: "Активация продукта",
+            activation: "Проверка лицензии...",
+            key: "Ключ продукта",
+            check: "Проверить",
+          },
           dialogs: {
             d_accept: "Принять",
             d_cancel: "Отменить",
@@ -368,6 +374,12 @@ export default {
             title: "Title",
             use_grid: "Grid",
             use_interlace_highlighting: "Interlace highlighting",
+          },
+          license: {
+            activation_title: "Product activation",
+            activation: "Checking license...",
+            key: "Product key",
+            check: "Check",
           },
           dialogs: {
             d_accept: "Accept",

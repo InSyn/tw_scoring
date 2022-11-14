@@ -55,10 +55,13 @@ function createWindow() {
 app.on("ready", createWindow);
 
 app.on("getSysData", () => {
-  console.log(process.platform);
-  si.uuid()
+  const platform = process.platform;
+  si.get({
+    system: "*",
+    uuid: "*",
+  })
     .then((data) => {
-      mainWindow.webContents.send("sysData", data);
+      mainWindow.webContents.send("sysData", { ...data, platform: platform });
       try {
         fs.readFile("./lic", (err, key) => {
           if (err) mainWindow.webContents.send("checked_key", false);
