@@ -37,11 +37,12 @@
         @click="competition.protocol_settings.show_preview = false"
         style="
           position: absolute;
-          z-index: 1001;
+          z-index: 3;
           right: 0;
           top: 0;
-          border-radius: 0;
+          margin: 4px 12px;
           height: 2.4rem;
+          border-radius: 4px;
           font-weight: bold;
         "
         :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"

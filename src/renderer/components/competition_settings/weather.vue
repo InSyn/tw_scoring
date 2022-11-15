@@ -7,7 +7,9 @@
     }"
   >
     <div class="d-flex align-center">
-      <div class="font-weight-bold" style="font-size: 1.2rem">Weather info</div>
+      <div class="font-weight-bold" style="font-size: 1.2rem">
+        {{ localization[lang].app.event.weather }}
+      </div>
       <v-btn
         text
         style="margin-left: auto"
@@ -96,6 +98,10 @@ export default {
     },
   },
   computed: {
+    ...mapGetters("localization", {
+      localization: "localization",
+      lang: "lang",
+    }),
     ...mapGetters("main", { appTheme: "appTheme", competition: "competition" }),
   },
 };

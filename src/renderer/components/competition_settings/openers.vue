@@ -12,7 +12,7 @@
         :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
         style="font-weight: bold; font-size: 1.2rem"
       >
-        Forerunners
+        {{ localization[lang].app.event.forerunners }}
       </div>
       <v-btn
         @click="
@@ -167,6 +167,10 @@ import { mapGetters } from "vuex";
 export default {
   name: "openers",
   computed: {
+    ...mapGetters("localization", {
+      localization: "localization",
+      lang: "lang",
+    }),
     ...mapGetters("main", { competition: "competition", appTheme: "appTheme" }),
     ...mapGetters("roles", { OpenerClass: "OpenerClass" }),
     console: () => console,

@@ -8,7 +8,7 @@
       justify-content: flex-start;
       height: 100%;
       width: 100%;
-      z-index: 1000;
+      z-index: 2;
       overflow-y: auto;
       padding: 32px;
     "
@@ -228,8 +228,8 @@
 
                 <!-- RACE INFO -->
                 <div
-                  v-if="gridRow.type && gridRow.type === 'officialsData'"
-                  ref="officialsData"
+                  v-if="gridRow.type && gridRow.type === 'p_jury_info'"
+                  ref="p_jury_info"
                   class="technical_data"
                   style="flex: 0 0 auto; width: 100%; background-color: #ffffff"
                 >
@@ -395,8 +395,8 @@
 
                 <!-- OPENERS -->
                 <div
-                  v-if="gridRow.type && gridRow.type === 'openers'"
-                  ref="openers"
+                  v-if="gridRow.type && gridRow.type === 'p_forerunners'"
+                  ref="p_forerunners"
                   class="openers"
                   style="flex: 0 0 auto; width: 100%; background-color: #ffffff"
                 >
@@ -409,7 +409,7 @@
                         border-bottom: 1px solid #000000;
                       "
                     >
-                      Открывающие
+                      {{ localization[lang].app.event.forerunners }}
                     </div>
                     <div
                       style="display: flex; flex-wrap: wrap; padding: 2px 0"
@@ -447,8 +447,8 @@
 
                 <!-- WEATHER -->
                 <div
-                  v-if="gridRow.type && gridRow.type === 'weatherData'"
-                  ref="weatherData"
+                  v-if="gridRow.type && gridRow.type === 'p_weather'"
+                  ref="p_weather"
                   class="weatherData"
                   style="flex: 0 0 auto; width: 100%; background-color: #ffffff"
                 >
@@ -463,7 +463,7 @@
                     "
                   >
                     <div style="width: 100%; font-weight: bold">
-                      Погодные условия
+                      {{ localization[lang].app.event.weather }}
                     </div>
                     <div
                       v-for="wData in competition.weather"
@@ -499,8 +499,8 @@
 
                 <!-- NOTES -->
                 <div
-                  v-if="gridRow.type && gridRow.type === 'raceNotes'"
-                  ref="raceNotes"
+                  v-if="gridRow.type && gridRow.type === 'p_notations'"
+                  ref="p_notations"
                   class="notes"
                   style="flex: 0 0 auto; width: 100%; background-color: #ffffff"
                   :style="{
@@ -601,7 +601,10 @@ export default {
             sumHeight = 0;
             this.data_paginated_results.push([]);
 
-            if (gridRow.type === "competitorResult")
+            if (
+              gridRow.type === "competitorResult" ||
+              gridRow.type === "stageTitle"
+            )
               this.data_paginated_results[
                 this.data_paginated_results.length - 1
               ].push({ type: "sheetHeader" });
@@ -675,6 +678,10 @@ export default {
     },
   },
   computed: {
+    ...mapGetters("localization", {
+      localization: "localization",
+      lang: "lang",
+    }),
     ...mapGetters("main", {
       competition: "competition",
       competitions: "competitions",

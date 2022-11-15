@@ -233,32 +233,8 @@
                   </div>
                   <input
                     v-else
-                    @focus="
-                      (e) => {
-                        for (const $child_key in e.target.parentNode.children) {
-                          typeof e.target.parentNode.children[$child_key] ===
-                          'object'
-                            ? (e.target.parentNode.children[
-                                $child_key
-                              ].style.border = `1px solid ${$vuetify.theme.themes[appTheme].accent}`)
-                            : 0;
-                        }
-                        e.target.parentNode.parentNode.children[0].style.backgroundColor = `${$vuetify.theme.themes[appTheme].accent}`;
-                      }
-                    "
-                    @blur="
-                      (e) => {
-                        for (const $child_key in e.target.parentNode.children) {
-                          typeof e.target.parentNode.children[$child_key] ===
-                          'object'
-                            ? (e.target.parentNode.children[
-                                $child_key
-                              ].style.border = `1px solid transparent`)
-                            : 0;
-                        }
-                        e.target.parentNode.parentNode.children[0].style.backgroundColor = `${$vuetify.theme.themes[appTheme].standardBackgroundRGBA}`;
-                      }
-                    "
+                    @focus="handleInputState($event, 'focus')"
+                    @blur="handleInputState($event, 'blur')"
                     type="text"
                     v-model="
                       typeof input.value === 'object'
@@ -281,32 +257,8 @@
                   <input
                     v-if="input.hasOwnProperty('min')"
                     v-model="input.min"
-                    @focus="
-                      (e) => {
-                        for (const $child_key in e.target.parentNode.children) {
-                          typeof e.target.parentNode.children[$child_key] ===
-                          'object'
-                            ? (e.target.parentNode.children[
-                                $child_key
-                              ].style.border = `1px solid ${$vuetify.theme.themes[appTheme].accent}`)
-                            : 0;
-                        }
-                        e.target.parentNode.parentNode.children[0].style.backgroundColor = `${$vuetify.theme.themes[appTheme].accent}`;
-                      }
-                    "
-                    @blur="
-                      (e) => {
-                        for (const $child_key in e.target.parentNode.children) {
-                          typeof e.target.parentNode.children[$child_key] ===
-                          'object'
-                            ? (e.target.parentNode.children[
-                                $child_key
-                              ].style.border = `1px solid transparent`)
-                            : 0;
-                        }
-                        e.target.parentNode.parentNode.children[0].style.backgroundColor = `${$vuetify.theme.themes[appTheme].standardBackgroundRGBA}`;
-                      }
-                    "
+                    @focus="handleInputState($event, 'focus')"
+                    @blur="handleInputState($event, 'blur')"
                     type="text"
                     size="8"
                     style="
@@ -329,32 +281,8 @@
                       input.value.id === 'custom'
                     "
                     v-model="input.value.value"
-                    @focus="
-                      (e) => {
-                        for (const $child_key in e.target.parentNode.children) {
-                          typeof e.target.parentNode.children[$child_key] ===
-                          'object'
-                            ? (e.target.parentNode.children[
-                                $child_key
-                              ].style.border = `1px solid ${$vuetify.theme.themes[appTheme].accent}`)
-                            : 0;
-                        }
-                        e.target.parentNode.parentNode.children[0].style.backgroundColor = `${$vuetify.theme.themes[appTheme].accent}`;
-                      }
-                    "
-                    @blur="
-                      (e) => {
-                        for (const $child_key in e.target.parentNode.children) {
-                          typeof e.target.parentNode.children[$child_key] ===
-                          'object'
-                            ? (e.target.parentNode.children[
-                                $child_key
-                              ].style.border = `1px solid transparent`)
-                            : 0;
-                        }
-                        e.target.parentNode.parentNode.children[0].style.backgroundColor = `${$vuetify.theme.themes[appTheme].standardBackgroundRGBA}`;
-                      }
-                    "
+                    @focus="handleInputState($event, 'focus')"
+                    @blur="handleInputState($event, 'blur')"
                     type="text"
                     size="16"
                     style="
@@ -793,8 +721,6 @@
             <div
               class="d-flex flex-nowrap align-center pa-2"
               style="cursor: pointer; transition: background-color 256ms"
-              :active="isActive"
-              :href="href"
               @click="navigate"
               :style="[
                 (hover || isActive) && {
@@ -829,9 +755,9 @@
         borderTop: `1px solid ${$vuetify.theme.themes[appTheme].accent}`,
       }"
     >
-      <!--      <div>{{ getVer }}</div>-->
-      Created by TimingWeb &copy;
-      <span class="ml-2">{{ new Date().getFullYear() }}</span>
+      Created by TimingWeb &copy; &nbsp;
+      <span>2021 - {{ new Date().getFullYear() }}</span
+      >&nbsp;{{ `v.${getVer}` }}
       <v-spacer></v-spacer>
       <span
         v-if="timer"
@@ -860,6 +786,7 @@ import {
   mdiBrightness6,
 } from "@mdi/js";
 import fs from "fs";
+import TwInput from "./components/tw-input";
 
 const { ipcRenderer } = require("electron");
 const dialog = require("electron").remote.dialog;
@@ -867,8 +794,10 @@ const { app } = require("electron").remote;
 
 export default {
   name: "tw_scoring",
+  components: { TwInput },
   mounted() {
     this.getSysData();
+
     ipcRenderer.on("server_message", (e, message) => {
       this.$store.commit("main/pushServerMessage", message);
     });
@@ -877,9 +806,11 @@ export default {
         text: this.stringifyInfoMsg(message),
       });
     });
+
     document.addEventListener("keyup", (e) => {
       e.key === "Home" && this.changeMenuState();
     });
+
     fs.readdir("./events", (err, res) => {
       err
         ? fs.mkdir("./events", (err) => {
@@ -887,6 +818,7 @@ export default {
           })
         : res;
     });
+
     this.$store.dispatch("main/checkEventID");
     this.createCompetition(new this.EventClass());
     this.$store.commit("main/setCompetition", this.competitions[0]);
@@ -907,6 +839,9 @@ export default {
     };
   },
   methods: {
+    ...mapActions("localization", {
+      changeLang: "changeLang",
+    }),
     ...mapActions("main", {
       changeMenuState: "changeMenuState",
       changeTheme: "changeTheme",
@@ -914,42 +849,7 @@ export default {
       save_event: "save_event",
       load_event: "load_event",
     }),
-    ...mapActions("localization", {
-      changeLang: "changeLang",
-    }),
-    openSaveDialog() {
-      dialog.showSaveDialog(
-        {
-          title: "Save event",
-          defaultPath: `/${this.event.event_title}`,
-          filters: [{ name: "TW Event", extensions: ["twe"] }],
-        },
-        (resultPath) => {
-          this.save_event({ path: resultPath });
-        }
-      );
-    },
-    getSysData() {
-      ipcRenderer.on("sysData", (event, data) => {
-        console.log(data);
-        this.$store.commit("key/set_system_data", data);
-      });
-      app.emit("getSysData");
-    },
-    toggleLangMenu() {
-      this.lang_menu = !this.lang_menu;
-    },
-    selectLanguage(e, lang) {
-      this.$store.dispatch("localization/changeLang", lang);
 
-      e.target.parentNode.parentNode.blur();
-    },
-    startServer() {
-      app.emit("startSocketServer", this.server_config);
-      if (!this.serverStatus) {
-        this.connect(this.server_config[0], this.server_config[1]);
-      }
-    },
     connect() {
       if (!this.socket) {
         this.$store.commit("main/connect_socket", [
@@ -968,9 +868,60 @@ export default {
         );
       }
     },
-    load(path) {
-      let evData = JSON.parse(fs.readFileSync(`${path}`, "utf-8"));
-      this.load_event(evData);
+    createNewCompetition() {
+      for (let $check in this.create_competition_dialog.checks)
+        if (this.create_competition_dialog.checks[$check].state)
+          this.create_competition_dialog.checks[$check].check();
+      this.$store.commit(
+        "main/createCompetition",
+        new this.EventClass(...this.create_competition_dialog.data)
+      );
+      this.create_competition_dialog.data.forEach((_field) => {
+        if (_field.id === "judges" || _field.id === "competitors")
+          _field[_field.id] = [];
+      });
+      this.create_competition_dialog.state = false;
+      if (this.$route.name !== "competition_settings")
+        this.$router.push("/competition_settings");
+    },
+    getSysData() {
+      ipcRenderer.on("sysData", (event, data) => {
+        console.log(data);
+        this.$store.commit("key/set_system_data", data);
+      });
+      app.emit("getSysData");
+    },
+    handleInputState(event, type) {
+      switch (type) {
+        case "focus":
+          for (let childrenKey in event.target.parentNode.children) {
+            typeof event.target.parentNode.children[childrenKey] === "object"
+              ? (event.target.parentNode.children[
+                  childrenKey
+                ].style.border = `1px solid ${
+                  this.$vuetify.theme.themes[this.appTheme].accent
+                }`)
+              : 0;
+          }
+          event.target.parentNode.parentNode.children[0].style.backgroundColor = `${
+            this.$vuetify.theme.themes[this.appTheme].accent
+          }`;
+          break;
+        case "blur":
+          for (let childrenKey in event.target.parentNode.children) {
+            typeof event.target.parentNode.children[childrenKey] === "object"
+              ? (event.target.parentNode.children[
+                  childrenKey
+                ].style.border = `1px solid transparent`)
+              : 0;
+          }
+          event.target.parentNode.parentNode.children[0].style.backgroundColor = `${
+            this.$vuetify.theme.themes[this.appTheme].standardBackgroundRGBA
+          }`;
+          break;
+        default:
+          return null;
+      }
     },
     initCreateDialog() {
       this.create_competition_dialog.data.forEach((_field) => {
@@ -984,30 +935,36 @@ export default {
           _field.min = this.competition.mainData[_field.id].min;
       });
     },
-    createNewCompetition() {
-      let prevData = [];
-      for (let mainDataKey in this.competition.mainData) {
-        prevData.push(this.competition.mainData[mainDataKey]);
-        prevData[prevData.length - 1].id = mainDataKey;
-      }
-      for (let $check in this.create_competition_dialog.checks)
-        if (this.create_competition_dialog.checks[$check].state)
-          this.create_competition_dialog.checks[$check].check();
-      this.$store.commit(
-        "main/createCompetition",
-        new this.EventClass(...this.create_competition_dialog.data, ...prevData)
+    load(path) {
+      let evData = JSON.parse(fs.readFileSync(`${path}`, "utf-8"));
+      this.load_event(evData);
+    },
+    openSaveDialog() {
+      dialog.showSaveDialog(
+        {
+          title: "Save event",
+          defaultPath: `/${this.event.event_title}`,
+          filters: [{ name: "TW Event", extensions: ["twe"] }],
+        },
+        (resultPath) => {
+          this.save_event({ path: resultPath });
+        }
       );
-      this.create_competition_dialog.data.forEach((_field) => {
-        if (_field.id === "judges" || _field.id === "competitors")
-          _field[_field.id] = [];
-      });
-      this.create_competition_dialog.state = false;
-      if (this.$route.name !== "competition_settings")
-        this.$router.push("/competition_settings");
     },
     select_competition(e, competition) {
       this.$store.commit("main/setCompetition", competition);
       e.target.parentNode.parentNode.blur();
+    },
+    selectLanguage(e, lang) {
+      this.$store.dispatch("localization/changeLang", lang);
+
+      e.target.parentNode.parentNode.blur();
+    },
+    startServer() {
+      app.emit("startSocketServer", this.server_config);
+      if (!this.serverStatus) {
+        this.connect(this.server_config[0], this.server_config[1]);
+      }
     },
     stringifyInfoMsg(msg) {
       const competitor = this.competition.competitorsSheet.competitors.find(
@@ -1023,6 +980,9 @@ export default {
         : msg.type === "mark_overwrite"
         ? `${competitor.info_data["bib"]} ${race.title}: ${judge.title} ${msg.old_mark} -> ${msg.mark}`
         : null;
+    },
+    toggleLangMenu() {
+      this.lang_menu = !this.lang_menu;
     },
   },
   data() {
@@ -1098,6 +1058,12 @@ export default {
     };
   },
   computed: {
+    ...mapGetters("event", { EventClass: "EventClass" }),
+    ...mapGetters("localization", {
+      lang: "lang",
+      lang_list: "lang_list",
+      localization: "localization",
+    }),
     ...mapGetters("main", {
       socket: "socket",
       showMenu: "showMenu",
@@ -1108,13 +1074,8 @@ export default {
       competition: "competition",
       timer: "timer",
     }),
-    ...mapGetters("localization", {
-      lang: "lang",
-      lang_list: "lang_list",
-      localization: "localization",
-    }),
-    ...mapGetters("event", { EventClass: "EventClass" }),
     ...mapGetters("roles", { JudgeClass: "JudgeClass" }),
+
     getVer() {
       return require("electron").remote.app.getVersion();
     },
@@ -1175,16 +1136,8 @@ export default {
 .hovered:hover {
   overflow: hidden;
   background: linear-gradient(
-    rgba(255, 255, 255, 0.2),
-    rgba(255, 255, 255, 0.2)
+    rgba(255, 255, 255, 0.1),
+    rgba(255, 255, 255, 0.1)
   );
-}
-.menuExpand-enter-active,
-.menuExpand-leave-active {
-  width: 320px;
-  transition: width 0.5s;
-}
-.menuExpand-enter, .menuExpand-leave-to /* .fade-leave-active до версии 2.1.8 */ {
-  width: 1px;
 }
 </style>

@@ -1,6 +1,7 @@
 "use strict";
 
 process.env.BABEL_ENV = "renderer";
+process.env.T = "Jx9t9VAjGsgiCrGSrvv8h5E7wtKXQ6L2";
 
 const path = require("path");
 const { dependencies } = require("../package.json");

@@ -18,6 +18,7 @@ export default {
             event_header: "Событие",
             event_title: "Название события",
             competition_header: "Настройки соревнования",
+            forerunners: "Открывающие",
             number_of_competitions: "Количество соревнований",
             main_data: {
               title: "Название",
@@ -29,6 +30,7 @@ export default {
               providerTiming: "Скоринг-провайдер",
               codex: "Код",
             },
+            weather: "Погода",
           },
           server: {
             start_btn: "Запустить сервер",
@@ -160,6 +162,7 @@ export default {
             i_footer: "Изображение низ",
             i_logo: "Логотип",
             images: "Изображения",
+            legend: "Легенда",
             notations: "Замечания",
             p_jury_info: "Печатать информацию о жюри",
             p_forerunners: "Печатать открывающих",
@@ -213,6 +216,7 @@ export default {
             event_header: "Event",
             event_title: "Event title",
             competition_header: "Competition settings",
+            forerunners: "Forerunners",
             number_of_competitions: "Number of competitions",
             main_data: {
               title: "Title",
@@ -224,6 +228,7 @@ export default {
               providerTiming: "Scoring provider",
               codex: "Codex",
             },
+            weather: "Weather",
           },
           server: {
             start_btn: "Start server",
@@ -355,6 +360,7 @@ export default {
             i_header: "Top image",
             i_logo: "Logo image",
             images: "Images",
+            legend: "Legend",
             notations: "Notations",
             p_jury_info: "Print jury info",
             p_forerunners: "Print forerunners",

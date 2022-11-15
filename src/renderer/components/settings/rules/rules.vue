@@ -384,7 +384,7 @@
                   </div>
                   <div
                     v-for="(_stage, s_idx) in stage.s_competitions"
-                    :key="_stage"
+                    :key="`${s_idx}-${_stage}`"
                     style="flex: 0 0 auto; padding: 4px"
                     :style="[
                       {
@@ -395,11 +395,7 @@
                     ]"
                   >
                     <div
-                      v-for="(comp, c_idx) in [
-                        ...competitions.find(
-                          (_competition) => _competition.id === _stage
-                        ),
-                      ]"
+                      v-for="(comp, c_idx) in competitionsInGridSection(_stage)"
                       :key="c_idx"
                       style="display: flex; flex-direction: column"
                       :style="{
@@ -413,7 +409,11 @@
                           font-weight: bold;
                         "
                       >
-                        {{ comp.mainData.title.value }}
+                        {{
+                          comp && comp.mainData && comp.mainData.title
+                            ? comp.mainData.title.value
+                            : null
+                        }}
                       </div>
                       <div
                         style="
@@ -423,13 +423,21 @@
                         "
                       >
                         <div style="flex: 0 0 auto">
-                          {{ comp.mainData.title.stage.value.value }}
+                          {{
+                            comp &&
+                            comp.mainData &&
+                            comp.mainData.title &&
+                            comp.mainData.title.stage &&
+                            comp.mainData.title.stage.value
+                              ? comp.mainData.title.stage.value.value
+                              : null
+                          }}
                         </div>
                         <div
                           v-if="comp.passed_competitors > 0"
                           style="flex: 0 0 auto; margin-left: auto"
                         >
-                          {{ comp.passed_competitors
+                          {{ comp ? comp.passed_competitors : null
                           }}<v-icon
                             x-small
                             :color="$vuetify.theme.themes[appTheme].textDefault"
@@ -1527,7 +1535,6 @@ import { mapGetters } from "vuex";
 export default {
   name: "results",
   methods: {
-    log: (data) => console.log(data),
     add_prev_stage(stage) {
       if (
         this.competition.stages.prev_stages.some((_prev) => _prev === stage)
@@ -1628,6 +1635,42 @@ export default {
         this.competition.stages.lastStageSize += 1;
       }
     },
+    checkPassedInput(event) {
+      if (event.target.value < 0) event.target.value = 0;
+      if (event.target.value > 64) event.target.value = 64;
+    },
+    defaultGrid() {
+      this.competition.stages.stage_grid = [
+        {
+          title: this.competition.mainData.title.stage.value.value,
+          s_competitions: [this.competition.id],
+        },
+      ];
+      this.competition.stages.prev_stages = [this.competition.id];
+      this.competition.stages.lastStageSize = 0;
+    },
+    log: (data) => console.log(data),
+    setDoubleUp() {
+      this.competition.result_formula.types[0].doubleUp =
+        !this.competition.result_formula.types[0].doubleUp;
+    },
+    setRaceResultFormula(type) {
+      this.competition.result_formula.type = type;
+
+      this.updateResults();
+      this.$store.dispatch("main/updateEvent");
+    },
+    setOverallResultFormula(type) {
+      this.competition.result_formula.overall_result.type = type;
+
+      this.updateResults();
+      this.$store.dispatch("main/updateEvent");
+    },
+    competitionsInGridSection(competition_id) {
+      return (
+        [this.competitions.find((comp) => comp.id === competition_id)] || []
+      );
+    },
     stageUsed(stage) {
       return (
         this.competition &&
@@ -1643,32 +1686,6 @@ export default {
           })
       );
     },
-    defaultGrid() {
-      this.competition.stages.stage_grid = [
-        {
-          title: this.competition.mainData.title.stage.value.value,
-          s_competitions: [this.competition.id],
-        },
-      ];
-      this.competition.stages.prev_stages = [this.competition.id];
-      this.competition.stages.lastStageSize = 0;
-    },
-    setRaceResultFormula(type) {
-      this.competition.result_formula.type = type;
-
-      this.updateResults();
-      this.$store.dispatch("main/updateEvent");
-    },
-    setOverallResultFormula(type) {
-      this.competition.result_formula.overall_result.type = type;
-
-      this.updateResults();
-      this.$store.dispatch("main/updateEvent");
-    },
-    setDoubleUp() {
-      this.competition.result_formula.types[0].doubleUp =
-        !this.competition.result_formula.types[0].doubleUp;
-    },
     updateResults() {
       this.competition.races.forEach((race) => {
         race.finished.forEach((fin_competitor) => {
@@ -1680,10 +1697,6 @@ export default {
           );
         });
       });
-    },
-    checkPassedInput(event) {
-      if (event.target.value < 0) event.target.value = 0;
-      if (event.target.value > 64) event.target.value = 64;
     },
   },
   data() {

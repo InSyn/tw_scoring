@@ -86,7 +86,11 @@
             color: $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
           }"
         >
-          {{ system_data.uuid }}
+          {{
+            system_data && system_data.platform === "win32"
+              ? system_data.system.uuid
+              : system_data.uuid.os
+          }}
         </div>
       </div>
     </div>
@@ -156,6 +160,7 @@ export default {
       licenses: [],
       new_license_name: "",
       loading: true,
+      t: null,
     };
   },
   computed: {

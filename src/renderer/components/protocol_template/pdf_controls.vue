@@ -1,7 +1,7 @@
 <template>
   <div
     class="menu"
-    style="position: fixed; right: 64px; top: 128px; z-index: 1001"
+    style="position: fixed; right: 64px; top: 128px; z-index: 3"
   >
     <!-- PDF controls -->
 
@@ -96,7 +96,7 @@
 import { mapGetters } from "vuex";
 
 export default {
-  name: "pdf_comtrols",
+  name: "pdf_controls",
   props: ["results_protocol"],
   computed: {
     ...mapGetters("main", { appTheme: "appTheme" }),
