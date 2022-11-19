@@ -755,15 +755,18 @@
         borderTop: `1px solid ${$vuetify.theme.themes[appTheme].accent}`,
       }"
     >
-      Created by TimingWeb &copy; &nbsp;
-      <span>2021 - {{ new Date().getFullYear() }}</span
-      >&nbsp;{{ `v.${getVer}` }}
+      <span class="mr-2 font-weight-bold">{{ `V ${getVer}` }}</span>
+      <span class="font-weight-bold"
+        >Created by TimingWeb &copy; 2020 - {{ getYear }}</span
+      >
+
       <v-spacer></v-spacer>
+
       <span
         v-if="timer"
+        class="font-weight-bold"
         :style="{ color: `${$vuetify.theme.themes[appTheme].accent}` }"
-        v-html="`${timer.hrs}:${timer.min}:${timer.sec}`"
-      >
+        >{{ `${timer.hrs}:${timer.min}:${timer.sec}` }}
       </span>
     </footer>
   </v-app>
@@ -1077,7 +1080,10 @@ export default {
     ...mapGetters("roles", { JudgeClass: "JudgeClass" }),
 
     getVer() {
-      return require("electron").remote.app.getVersion();
+      return process.env.npm_package_version;
+    },
+    getYear() {
+      return new Date().getFullYear();
     },
   },
 };
