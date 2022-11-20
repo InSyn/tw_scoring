@@ -1,5 +1,7 @@
 import "v8-compile-cache";
 import { app, BrowserWindow } from "electron";
+
+import fs from "fs";
 const si = require("systeminformation");
 
 /**
@@ -94,7 +96,6 @@ export { mainWindow, app };
 
 import "./lic_server";
 import "./socket_setup";
-import fs from "fs";
 
 /**
  * Auto Updater
