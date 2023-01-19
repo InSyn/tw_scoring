@@ -35,15 +35,14 @@
 
 <script>
 import { mapGetters } from "vuex";
-import setup from "./scoring/setup";
-import chat from "./scoring/chat";
-import marksList from "./scoring/marksList";
-import startList from "./scoring/startList";
-import onRace from "./scoring/onRace";
-import displayControlPanel from "./scoring/displayControlPanel";
-import finishTable from "./scoring/finishTable";
-import timing from "./timing";
-import DoubleUp from "./scoring/onRace/doubleUp";
+import setup from "./setup";
+import chat from "./chat";
+import marksList from "./marksList";
+import startList from "./startList";
+import onRace from "./onRace";
+import displayControlPanel from "./displayControlPanel";
+import finishTable from "./finishTable";
+import DoubleUp from "./onRace/doubleUp";
 
 export default {
   name: "scoring",
@@ -56,7 +55,6 @@ export default {
     onRace,
     displayControlPanel,
     finishTable,
-    timing,
   },
   computed: {
     ...mapGetters("main", {

@@ -676,27 +676,26 @@
 
 <script>
 import { mapGetters } from "vuex";
-import xslx from "read-excel-file/node";
+import XLSX from "read-excel-file/node";
 
 export default {
   name: "competitors",
-  mounted() {},
   methods: {
-    autoLoad() {
-      if (
-        this.competition &&
-        this.competition.competitorsSheet.competitors.length < 1
-      )
-        this.load_sheet({
-          target: {
-            files: [
-              {
-                path: `${process.cwd()}\\temp_assets\\TestList _22.xlsx`,
-              },
-            ],
-          },
-        });
-    },
+    // autoLoad() {
+    //   if (
+    //     this.competition &&
+    //     this.competition.competitorsSheet.competitors.length < 1
+    //   )
+    //     this.load_sheet({
+    //       target: {
+    //         files: [
+    //           {
+    //             path: `${process.cwd()}\\temp_assets\\TestList _22.xlsx`,
+    //           },
+    //         ],
+    //       },
+    //     });
+    // },
     switchAthlete(id, to) {
       if (to === "up") {
         if (id > 0) {
@@ -721,7 +720,7 @@ export default {
       }
     },
     async load_sheet(e) {
-      await xslx(`${e.target.files[0].path}`).then((rows) => {
+      await XLSX(`${e.target.files[0].path}`).then((rows) => {
         this.competition.competitorsSheet.competitors = [];
 
         rows.map((row) => {

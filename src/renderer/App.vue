@@ -789,7 +789,6 @@ import {
   mdiBrightness6,
 } from "@mdi/js";
 import fs from "fs";
-import TwInput from "./components/tw-input";
 
 const { ipcRenderer } = require("electron");
 const dialog = require("electron").remote.dialog;
@@ -797,7 +796,6 @@ const { app } = require("electron").remote;
 
 export default {
   name: "tw_scoring",
-  components: { TwInput },
   mounted() {
     this.getSysData();
 
