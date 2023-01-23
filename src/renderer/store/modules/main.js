@@ -438,6 +438,12 @@ export default {
           console.log(res);
         });
     },
+    SET_IP: (state, ip) => {
+      state.server_config.ip = ip;
+    },
+    SET_PORT: (state, port) => {
+      state.server_config.port = port;
+    },
     setStatusChecker: (state, checker) => {
       state.serverStatusChecker = checker;
     },
@@ -559,6 +565,12 @@ export default {
     serverLog: ({ commit }) => commit("serverLog"),
     serverSetStatus: ({ commit }, status) => {
       commit("serverSetStatus", status);
+    },
+    setIp: ({ commit }, ip) => {
+      commit("SET_IP", ip);
+    },
+    setPort: ({ commit }, port) => {
+      commit("SET_PORT", port);
     },
     updateEvent: ({ commit }) => commit("updateEvent"),
     xml_export: async (s, data) => {

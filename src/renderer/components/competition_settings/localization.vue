@@ -22,7 +22,7 @@
             class="pa-1"
             type="text"
             :value="server_config.ip"
-            @change="$store.commit('main/set_ip', $event.target.value)"
+            @change="set_ip($event.target.value)"
           />
           <label
             for="port"
@@ -41,7 +41,7 @@
             class="pa-1"
             type="text"
             :value="server_config.port"
-            @change="$store.commit('main/set_port', $event.target.value)"
+            @change="set_port($event.target.value)"
           />
           <!--          <v-btn-->
           <!--            text-->
@@ -154,7 +154,39 @@ export default {
   name: "localization",
   mounted() {},
   methods: {
-    ...mapActions("main", { serverSetStatus: "serverSetStatus" }),
+    ...mapActions("main", {
+      serverSetStatus: "serverSetStatus",
+      setIp: "setIp",
+      setPort: "setPort",
+    }),
+    close_server() {
+      this.$store.commit("main/close_socket");
+      app.emit("close_server");
+    },
+    close_socket() {
+      this.$store.commit("main/close_socket");
+    },
+    connect() {
+      if (!this.socket) {
+        this.$store.commit("main/connect_socket", [
+          this.server_config.ip,
+          +this.server_config.port,
+        ]);
+        this.$store.commit("main/createServerChecker");
+      }
+    },
+    set_ip(ip) {
+      this.setIp(ip);
+    },
+    set_port(port) {
+      this.setPort(port);
+    },
+    setMessagesScroll() {
+      const messagesContainer = document.querySelector(
+        "#server_messages_container"
+      );
+      messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    },
     startServer() {
       app.emit("startSocketServer", [
         this.server_config.ip,
@@ -167,44 +199,11 @@ export default {
         console.log(res);
       });
     },
-    connect() {
-      if (!this.socket) {
-        this.$store.commit("main/connect_socket", [
-          this.server_config.ip,
-          +this.server_config.port,
-        ]);
-        this.$store.commit("main/createServerChecker");
-      }
-    },
     reconnect() {
       if (this.socket && this.socket.connected) {
         this.socket.disconnect();
         this.socket.connect();
       }
-    },
-    close_server() {
-      this.$store.commit("main/close_socket");
-      app.emit("close_server");
-    },
-    close_socket() {
-      this.$store.commit("main/close_socket");
-    },
-    set_judges() {
-      this.socket &&
-        this.socket.connected &&
-        this.socket.emit(
-          "create_judges",
-          this.competition.stuff.judges,
-          (res) => {
-            console.log(res);
-          }
-        );
-    },
-    setMessagesScroll() {
-      const messagesContainer = document.querySelector(
-        "#server_messages_container"
-      );
-      messagesContainer.scrollTop = messagesContainer.scrollHeight;
     },
   },
   data() {

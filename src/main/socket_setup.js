@@ -114,21 +114,6 @@ io.on("connection", (socket) => {
     } else check(false);
   });
 
-  socket.on("force_disconnect", (socket_id) => {
-    io.sockets.sockets.forEach((socket) => {
-      // If given socket id is exist in list of all sockets, kill it
-      if (socket.id === socket_id) {
-        socket.disconnect(true);
-
-        mainWindow &&
-          mainWindow.webContents.send("server_message", [
-            0,
-            `Судья ID:${socket_id} отключен`,
-          ]);
-      }
-    });
-  });
-
   socket.on("set_raceId", (id) => {
     competition.races[id] &&
       (() => {
@@ -261,46 +246,34 @@ io.on("connection", (socket) => {
     io.sockets.emit("competition_data_updated", competition);
   });
 
-  socket.on("disconnect", (reason) => {
-    delete io.sockets.sockets[socket.id];
-    competition.stuff.judges.forEach((judge) => {
-      if (judge.socket_id === socket.id) {
+  socket.on("force_disconnect", (socket_id) => {
+    io.sockets.sockets.forEach((socket) => {
+      // If given socket id is exist in list of all sockets, kill it
+      if (socket.id === socket_id) {
+        socket.disconnect(true);
+
         mainWindow &&
           mainWindow.webContents.send("server_message", [
-            4,
-            `Судья ${judge.id} ${judge.surName} ${judge.name} отключился`,
+            0,
+            `Судья ID:${socket_id} отключен`,
           ]);
-
-        io.sockets.emit("judge_disconnected", [
-          competition.stuff.judges,
-          judge,
-        ]);
-        judge.socket_id = null;
-        judge.connected = false;
-        io.sockets.emit("competition_data_updated", competition);
       }
     });
-    if (competition.stuff.jury[0].socket_id === socket.id) {
-      competition.stuff.jury[0].socket_id = null;
-      competition.stuff.jury[0].connected = false;
-      mainWindow &&
-        mainWindow.webContents.send("server_message", [
-          4,
-          `Главный судья ${competition.stuff.jury[0].surName} ${competition.stuff.jury[0].name} отключился`,
-        ]);
-      io.sockets.emit("chief_judge_disconnected", competition.stuff.jury[0]);
-    }
+  });
+
+  socket.on("disconnect", (reason) => {
+    delete io.sockets.sockets[socket.id];
+
     mainWindow &&
       mainWindow.webContents.send("server_message", [
         4,
         `${reason} ${socket.id}`,
       ]);
-    console.log(`${reason} ${socket.id}`);
   });
 });
 
 app.on("startSocketServer", (config) => {
-  if (http["_handle"]) {
+  if (http && http["_handle"]) {
     mainWindow &&
       mainWindow.webContents.send("server_message", [
         2,
@@ -308,39 +281,38 @@ app.on("startSocketServer", (config) => {
           http.address().port
         }`,
       ]);
-    console.log(
-      `Listening on ${http.address().address} ${http.address().port}`
-    );
+
+    http.close();
+    mainWindow &&
+      mainWindow.webContents.send("server_message", [0, `Server shut down`]);
   } else {
-    http.listen(config[1], config[0], () => {
-      mainWindow &&
-        mainWindow.webContents.send("server_message", [
-          1,
-          `Listening on ${http.address().address} ${http.address().port}`,
-        ]);
-      console.log(
-        `Listening on ${http.address().address} ${http.address().port}`
-      );
-    });
-    http.once("error", (err) => {
-      mainWindow.webContents.send("server_message", [
-        4,
-        `Connection error: ${err}`,
-      ]);
-      console.log(`Connection error: ${err}`);
-      http.close();
-    });
+    http &&
+      http.listen(config[1], config[0], () => {
+        mainWindow &&
+          mainWindow.webContents.send("server_message", [
+            1,
+            `Listening on ${http.address().address} ${http.address().port}`,
+          ]);
+      });
+    http &&
+      http.once("error", (err) => {
+        mainWindow &&
+          mainWindow.webContents.send("server_message", [
+            4,
+            `Connection error: ${err}`,
+          ]);
+        http.close();
+      });
   }
 });
 
 app.on("close_server", () => {
-  if (http["_handle"]) {
+  if (http && http["_handle"]) {
     mainWindow &&
       mainWindow.webContents.send("server_message", [0, `Server shut down`]);
     http.close();
   } else {
     mainWindow &&
       mainWindow.webContents.send("server_message", [0, `No started server`]);
-    console.log(`No started server`);
   }
 });
