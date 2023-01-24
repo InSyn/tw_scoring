@@ -248,7 +248,7 @@ io.on("connection", (socket) => {
 
   socket.on("force_disconnect", (socket_id) => {
     io.sockets.sockets.forEach((socket) => {
-      // If given socket id is exist in list of all sockets, kill it
+      // If given socket id exists in list of all sockets, kill it
       if (socket.id === socket_id) {
         socket.disconnect(true);
 
