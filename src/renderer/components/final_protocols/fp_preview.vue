@@ -471,18 +471,16 @@
                         fontSize: `${competition.protocol_settings.result_protocols.fonts.weatherData}px`,
                       }"
                     >
-                      <div
-                        style="font-weight: bold"
-                        v-html="wData.descr1"
-                      ></div>
+                      <div style="font-weight: bold">{{ wData.descr1 }}</div>
                       <div
                         style="
                           margin-left: 0.5rem;
                           display: flex;
                           flex-wrap: nowrap;
                         "
-                        v-html="wData.descr2"
-                      ></div>
+                      >
+                        {{ wData.descr2 }}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -504,8 +502,9 @@
                       padding: 2px 4px;
                       margin-top: 1rem;
                     "
-                    v-html="results_protocol.notations"
-                  ></div>
+                  >
+                    {{ results_protocol.notations }}
+                  </div>
                 </div>
                 <!-- //NOTES -->
               </div>

@@ -115,7 +115,7 @@
             // }/${
             //   competition.mainData.date.value.toString().split("-")[0]
             // }
-            `Start time: ${competition.mainData.date.time}`
+            `${localization[lang].app.protocols.start_time}: ${competition.mainData.date.time}`
           }}
         </div>
       </div>
@@ -138,12 +138,16 @@
       :style="page_index !== 0 && { opacity: 0 }"
       style="display: flex; flex-wrap: wrap; align-items: center; margin: 2px 0"
     >
-      {{ `Number of competitors: ${number_of_competitors}` }}
+      {{
+        `${localization[lang].app.protocols.number_of_competitors}: ${number_of_competitors}`
+      }}
     </div>
   </div>
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+
 export default {
   name: "protocol_header",
   props: [
@@ -155,6 +159,12 @@ export default {
     "race",
     "number_of_competitors",
   ],
+  computed: {
+    ...mapGetters("localization", {
+      localization: "localization",
+      lang: "lang",
+    }),
+  },
 };
 </script>
 

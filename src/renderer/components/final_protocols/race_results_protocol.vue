@@ -8,7 +8,7 @@
       justify-content: flex-start;
       height: 100%;
       width: 100%;
-      z-index: 1000;
+      z-index: 2;
       overflow-y: auto;
       padding: 32px;
     "

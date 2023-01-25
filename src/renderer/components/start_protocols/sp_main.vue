@@ -719,7 +719,7 @@ export default {
       selected_fields: [],
       field_buttons: [
         {
-          title: "Добавить",
+          id: "b_add",
           color: "action_green",
 
           action: function () {
@@ -727,14 +727,14 @@ export default {
           },
         },
         {
-          title: "Редакт.",
+          id: "b_edit",
           color: "action_yellow",
 
           action: function () {
             return 0;
           },
         },
-        { title: "Удалить", color: "action_red", action: this.remove_fields },
+        { id: "b_remove", color: "action_red", action: this.remove_fields },
       ],
     };
   },

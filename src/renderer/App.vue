@@ -45,8 +45,8 @@
         >
           <v-icon>{{ icons.mdiDownload }}</v-icon>
           <input
-            :key="Math.random()"
             @change="load($event.target.files[0].path)"
+            ref="fileLoader"
             type="file"
             accept=".twe"
             hidden /></label
@@ -515,12 +515,10 @@
           >
             {{
               `${competitions.indexOf(competition) + 1} ${
-                competition && competition.mainData.title.value
-              }. ${
                 competition &&
                 competition.mainData.title.stage.value &&
                 competition.mainData.title.stage.value.value
-              }`
+              } ${competition && competition.mainData.title.stage.group}`
             }}
           </div>
           <v-hover
@@ -557,7 +555,7 @@
                 `${competitions.indexOf(_competition) + 1} ${
                   _competition.mainData.title.stage.value &&
                   _competition.mainData.title.stage.value.value
-                }`
+                } ${_competition && _competition.mainData.title.stage.group}`
               }}
             </div>
           </v-hover>
@@ -936,8 +934,10 @@ export default {
           _field.min = this.competition.mainData[_field.id].min;
       });
     },
-    load(path) {
-      let evData = JSON.parse(fs.readFileSync(`${path}`, "utf-8"));
+    load(filePath) {
+      let evData = JSON.parse(fs.readFileSync(`${filePath}`, "utf-8"));
+      this.$refs["fileLoader"].value = null;
+
       this.load_event(evData);
     },
     openSaveDialog() {

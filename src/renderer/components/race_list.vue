@@ -1138,8 +1138,247 @@ export default {
       this.selectRace(this.competition.races[0]);
   },
   methods: {
+    addAll() {
+      const list = this.filtered_list;
+      for (let i in list) {
+        if (list.hasOwnProperty(i))
+          this.dialogs.create_race.competitors.push(list[i]);
+      }
+    },
+    addCompetitorToRace(race) {
+      this.selectedRace.startList.push(
+        ...this.dialogs.add_competitor_to_race.competitors
+      );
+      this.dialogs.add_competitor_to_race.state = false;
+      this.dialogs.add_competitor_to_race.competitors = [];
+
+      this.rebuildStartList(race);
+    },
+    addStartListFromRace(race) {
+      if (race)
+        this.dialogs.create_race.competitors = race._startList.map(
+          (_competitor) =>
+            this.competition.competitorsSheet.competitors.find(
+              (competitor) => competitor.id === _competitor
+            )
+        );
+    },
+    addToStartList(competitor) {
+      this.dialogs.create_race.competitors.push(competitor);
+    },
+    arrangeByResults(_race) {
+      if (_race.startList.length > 0) this.listPrev.push([..._race.startList]);
+
+      let resList = _race.startList.map((_comp) => {
+        const comp = this.competition.competitorsSheet.competitors.find(
+          (comp) => comp.id === _comp
+        );
+        return {
+          id: comp.id,
+          res: comp.results_overall[comp.results_overall.length - 1]
+            ? comp.results_overall[comp.results_overall.length - 1]
+            : { id_comp: 0, value: 0 },
+        };
+      });
+      _race.startList = [
+        ...resList
+          .sort((a, b) => {
+            return b.res.value - a.res.value;
+          })
+          .map((_comp) => _comp.id),
+      ];
+
+      this.rebuildStartList(_race);
+
+      return _race;
+    },
+    clearCompetitorRace(competitor, race) {
+      competitor.marks = competitor.marks.filter(
+        (mark) => mark.race_id !== race.id
+      );
+      competitor.results = competitor.results.filter(
+        (result) => result.race_id !== race.id
+      );
+
+      race.finished = race.finished.filter(
+        (_competitor) => _competitor !== competitor.id
+      );
+
+      if (race.selectedCompetitor === competitor.id)
+        race.selectedCompetitor = null;
+
+      if (race.onTrack === competitor.id) race.onTrack = null;
+
+      if (!race.startList.includes(competitor.id))
+        race.startList.unshift(competitor.id);
+
+      competitor.info_dialog.state = false;
+
+      this.rebuildStartList(race);
+    },
+    clearRaceResults(_race) {
+      this.competition.competitorsSheet.competitors.forEach((competitor) => {
+        competitor.marks = competitor.marks.filter(
+          (mark) => mark.race_id !== _race.id
+        );
+        competitor.results = competitor.results.filter(
+          (result) => result.race_id !== _race.id
+        );
+      });
+
+      _race.finished = [];
+      _race.startList = _race._startList;
+      _race.onTrack = null;
+      _race.selectedCompetitor = _race.startList[0] || null;
+
+      this.$store.dispatch("main/updateEvent");
+
+      return _race;
+    },
+    closeRaceDialog() {
+      this.dialogs.create_race.competitors = [];
+      this.dialogs.create_race.title = "";
+      this.dialogs.create_race.state = false;
+    },
+    createRace(title, type, discipline, competitors) {
+      const race = new this.RaceClass(
+        title ||
+          `Race ${
+            this.competition.races.length < 1
+              ? "1"
+              : this.competition.races.length + 1
+          }`,
+        type,
+        discipline,
+        competitors.map((competitor) => {
+          return competitor.id;
+        })
+      );
+
+      this.competition.races.push(race);
+      this.selectRace(race);
+
+      this.dialogs.create_race.state = false;
+      this.dialogs.create_race.title = null;
+      this.dialogs.create_race.competitors = [];
+
+      this.$store.dispatch("main/updateEvent");
+
+      return race;
+    },
+    declineAddToStartList(competitorToRace) {
+      this.dialogs.create_race.competitors.splice(
+        this.dialogs.create_race.competitors.indexOf(competitorToRace),
+        1
+      );
+    },
+    del_race(_race) {
+      _race.del_dialog = false;
+
+      this.competition.races = this.competition.races.filter((race) => {
+        return race.id !== _race.id;
+      });
+
+      this.competition.competitorsSheet.competitors.forEach((_competitor) => {
+        _competitor.marks = _competitor.marks.filter((_mark) => {
+          return _mark.race_id !== _race.id;
+        });
+        _competitor.results = _competitor.results.filter((result) => {
+          return result.race_id !== _race.id;
+        });
+      });
+
+      this.competition.races[0]
+        ? (this.selectedRace = this.competition.races[0])
+        : (this.selectedRace = null);
+      this.competition.selected_race_id = 0;
+
+      this.$store.dispatch("main/updateEvent");
+    },
+    exportXlsxList(competition, race) {
+      const sheet = [
+        ...race._startList.map((_competitor) => {
+          let fieldsArr = {};
+          const competitor = this.competition.competitorsSheet.competitors.find(
+            (comp) => comp.id === _competitor
+          );
+
+          for (let infoDataKey in competitor.info_data) {
+            competitor.info_data[infoDataKey]
+              ? (fieldsArr[infoDataKey] = competitor.info_data[infoDataKey])
+              : (fieldsArr[infoDataKey] = "");
+          }
+          return fieldsArr;
+        }),
+      ];
+      const jsonData = JSON.parse(JSON.stringify(sheet));
+
+      stringify(
+        jsonData,
+        { bom: true, delimiter: ";", header: true },
+        (err, output) => {
+          if (err) throw err;
+          fs.writeFile(
+            `${process.cwd()}\\${competition.mainData.title.value} ${
+              race.title
+            }.csv`,
+            output,
+            { encoding: "utf-8" },
+            (err) => {
+              if (err) throw err;
+              console.log(
+                `${process.cwd()}\\${competition.mainData.title.value} ${
+                  race.title
+                }.csv`
+              );
+            }
+          );
+        }
+      );
+    },
+    listUndo(_race) {
+      _race.startList = [...this.listPrev[this.listPrev.length - 1]];
+      this.rebuildStartList(_race);
+
+      this.listPrev.length > 0 &&
+        this.listPrev.splice(this.listPrev.length - 1, 1);
+
+      return _race.startList;
+    },
     log(data) {
       console.log(data);
+    },
+    selectRaceStartListFrom(race, event) {
+      this.dialogs.create_race.raceStartListFrom = race;
+      event.target.parentNode.parentNode.blur();
+    },
+    removeCompetitor(competitor_id, _race) {
+      this.competition.competitorsSheet.competitors.find((_comp) => {
+        return _comp.id === competitor_id;
+      }).info_dialog.state = false;
+
+      _race.startList = _race.startList.filter((_comp) => {
+        return !(_comp === competitor_id);
+      });
+
+      _race.selectedCompetitor === competitor_id
+        ? (_race.selectedCompetitor = null)
+        : null;
+
+      this.rebuildStartList(_race);
+    },
+    rebuildStartList(race) {
+      race._startList = [...race.startList];
+      race.onTrack && race._startList.unshift(race.onTrack);
+      race.finished.length > 0 &&
+        race._startList.unshift(...[...race.finished]);
+
+      this.refreshStartList(race);
+    },
+    refreshStartList(race) {
+      race.startList[0] ? (race.selectedCompetitor = race.startList[0]) : null;
+
+      this.$store.dispatch("main/updateEvent");
     },
     selectRace(race) {
       if (this.selectedRace && race.id !== this.selectedRace.id)
@@ -1183,205 +1422,6 @@ export default {
 
       this.rebuildStartList(race);
     },
-    turn_race(to) {
-      let race_idx = this.competition.races.indexOf(this.selectedRace);
-      if (to === "right")
-        if (race_idx + 1 < this.competition.races.length) {
-          this.selectedRace = this.competition.races[race_idx + 1];
-        } else {
-          this.selectedRace = this.competition.races[0];
-        }
-      else {
-        if (race_idx - 1 >= 0) {
-          this.selectedRace = this.competition.races[race_idx - 1];
-        } else {
-          this.selectedRace =
-            this.competition.races[this.competition.races.length - 1];
-        }
-      }
-    },
-    selectRaceStartListFrom(race, event) {
-      this.dialogs.create_race.raceStartListFrom = race;
-      event.target.parentNode.parentNode.blur();
-    },
-    addStartListFromRace(race) {
-      if (race)
-        this.dialogs.create_race.competitors = race._startList.map(
-          (_competitor) =>
-            this.competition.competitorsSheet.competitors.find(
-              (competitor) => competitor.id === _competitor
-            )
-        );
-    },
-    createRace(title, type, discipline, competitors) {
-      const race = new this.RaceClass(
-        title ||
-          `Race ${
-            this.competition.races.length < 1
-              ? "1"
-              : this.competition.races.length + 1
-          }`,
-        type,
-        discipline,
-        competitors.map((competitor) => {
-          return competitor.id;
-        })
-      );
-
-      this.competition.races.push(race);
-      this.selectRace(race);
-
-      this.dialogs.create_race.state = false;
-      this.dialogs.create_race.title = null;
-      this.dialogs.create_race.competitors = [];
-
-      this.$store.dispatch("main/updateEvent");
-
-      return race;
-    },
-    del_race(_race) {
-      _race.del_dialog = false;
-
-      this.competition.races = this.competition.races.filter((race) => {
-        return race.id !== _race.id;
-      });
-
-      this.competition.competitorsSheet.competitors.forEach((_competitor) => {
-        _competitor.marks = _competitor.marks.filter((_mark) => {
-          return _mark.race_id !== _race.id;
-        });
-        _competitor.results = _competitor.results.filter((result) => {
-          return result.race_id !== _race.id;
-        });
-      });
-
-      this.competition.races[0]
-        ? (this.selectedRace = this.competition.races[0])
-        : (this.selectedRace = null);
-      this.competition.selected_race_id = 0;
-
-      this.$store.dispatch("main/updateEvent");
-    },
-    exportXlsxList(competition, race) {
-      const sheet = [
-        ...race._startList.map((_competitor) => {
-          let fieldsArr = {};
-          const competitor = this.competition.competitorsSheet.competitors.find(
-            (comp) => comp.id === _competitor
-          );
-
-          for (let infoDataKey in competitor.info_data) {
-            competitor.info_data[infoDataKey]
-              ? (fieldsArr[infoDataKey] = competitor.info_data[infoDataKey])
-              : (fieldsArr[infoDataKey] = "");
-          }
-          return fieldsArr;
-        }),
-      ];
-      const jsonData = JSON.parse(JSON.stringify(sheet));
-
-      stringify(jsonData, { header: true }, function (err, output) {
-        if (err) throw err;
-        fs.writeFile(
-          `${process.cwd()}/${competition.mainData.title.value} ${
-            race.title
-          }.csv`,
-          output,
-          { encoding: "utf-8" },
-          (err) => {
-            if (err) throw err;
-            console.log(
-              `${process.cwd()}/${competition.mainData.title.value} ${
-                race.title
-              }.csv`
-            );
-          }
-        );
-      });
-    },
-    clearRaceResults(_race) {
-      this.competition.competitorsSheet.competitors.forEach((competitor) => {
-        competitor.marks = competitor.marks.filter(
-          (mark) => mark.race_id !== _race.id
-        );
-        competitor.results = competitor.results.filter(
-          (result) => result.race_id !== _race.id
-        );
-      });
-
-      _race.finished = [];
-      _race.startList = _race._startList;
-      _race.onTrack = null;
-      _race.selectedCompetitor = _race.startList[0] || null;
-
-      this.$store.dispatch("main/updateEvent");
-
-      return _race;
-    },
-    removeCompetitor(competitor_id, _race) {
-      this.competition.competitorsSheet.competitors.find((_comp) => {
-        return _comp.id === competitor_id;
-      }).info_dialog.state = false;
-
-      _race.startList = _race.startList.filter((_comp) => {
-        return !(_comp === competitor_id);
-      });
-
-      _race.selectedCompetitor === competitor_id
-        ? (_race.selectedCompetitor = null)
-        : null;
-
-      this.rebuildStartList(_race);
-    },
-    clearCompetitorRace(competitor, race) {
-      competitor.marks = competitor.marks.filter(
-        (mark) => mark.race_id !== race.id
-      );
-      competitor.results = competitor.results.filter(
-        (result) => result.race_id !== race.id
-      );
-
-      race.finished = race.finished.filter(
-        (_competitor) => _competitor !== competitor.id
-      );
-
-      if (race.selectedCompetitor === competitor.id)
-        race.selectedCompetitor = null;
-
-      if (race.onTrack === competitor.id) race.onTrack = null;
-
-      if (!race.startList.includes(competitor.id))
-        race.startList.unshift(competitor.id);
-
-      competitor.info_dialog.state = false;
-
-      this.rebuildStartList(race);
-    },
-    addToStartList(competitor) {
-      this.dialogs.create_race.competitors.push(competitor);
-    },
-    declineAddToStartList(competitorToRace) {
-      this.dialogs.create_race.competitors.splice(
-        this.dialogs.create_race.competitors.indexOf(competitorToRace),
-        1
-      );
-    },
-    addAll() {
-      const list = this.filtered_list;
-      for (let i in list) {
-        if (list.hasOwnProperty(i))
-          this.dialogs.create_race.competitors.push(list[i]);
-      }
-    },
-    addCompetitorToRace(race) {
-      this.selectedRace.startList.push(
-        ...this.dialogs.add_competitor_to_race.competitors
-      );
-      this.dialogs.add_competitor_to_race.state = false;
-      this.dialogs.add_competitor_to_race.competitors = [];
-
-      this.rebuildStartList(race);
-    },
     shuffle(_race) {
       if (_race.startList.length > 0) this.listPrev.push([..._race.startList]);
 
@@ -1405,6 +1445,23 @@ export default {
 
       return list;
     },
+    turn_race(to) {
+      let race_idx = this.competition.races.indexOf(this.selectedRace);
+      if (to === "right")
+        if (race_idx + 1 < this.competition.races.length) {
+          this.selectedRace = this.competition.races[race_idx + 1];
+        } else {
+          this.selectedRace = this.competition.races[0];
+        }
+      else {
+        if (race_idx - 1 >= 0) {
+          this.selectedRace = this.competition.races[race_idx - 1];
+        } else {
+          this.selectedRace =
+            this.competition.races[this.competition.races.length - 1];
+        }
+      }
+    },
     turnAround(_race) {
       if (_race.startList.length > 0) this.listPrev.push([..._race.startList]);
 
@@ -1416,59 +1473,6 @@ export default {
       this.rebuildStartList(_race);
 
       return _race;
-    },
-    arrangeByResults(_race) {
-      if (_race.startList.length > 0) this.listPrev.push([..._race.startList]);
-
-      let resList = _race.startList.map((_comp) => {
-        const comp = this.competition.competitorsSheet.competitors.find(
-          (comp) => comp.id === _comp
-        );
-        return {
-          id: comp.id,
-          res: comp.results_overall[comp.results_overall.length - 1]
-            ? comp.results_overall[comp.results_overall.length - 1]
-            : { id_comp: 0, value: 0 },
-        };
-      });
-      _race.startList = [
-        ...resList
-          .sort((a, b) => {
-            return b.res.value - a.res.value;
-          })
-          .map((_comp) => _comp.id),
-      ];
-
-      this.rebuildStartList(_race);
-
-      return _race;
-    },
-    listUndo(_race) {
-      _race.startList = [...this.listPrev[this.listPrev.length - 1]];
-      this.rebuildStartList(_race);
-
-      this.listPrev.length > 0 &&
-        this.listPrev.splice(this.listPrev.length - 1, 1);
-
-      return _race.startList;
-    },
-    refreshStartList(race) {
-      race.startList[0] ? (race.selectedCompetitor = race.startList[0]) : null;
-
-      this.$store.dispatch("main/updateEvent");
-    },
-    rebuildStartList(race) {
-      race._startList = [...race.startList];
-      race.onTrack && race._startList.unshift(race.onTrack);
-      race.finished.length > 0 &&
-        race._startList.unshift(...[...race.finished]);
-
-      this.refreshStartList(race);
-    },
-    closeRaceDialog() {
-      this.dialogs.create_race.competitors = [];
-      this.dialogs.create_race.title = "";
-      this.dialogs.create_race.state = false;
     },
   },
   data() {
