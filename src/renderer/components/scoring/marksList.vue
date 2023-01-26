@@ -35,9 +35,9 @@
           >
             <div class="msgDate">
               {{
-                `${message.msgDate.getDate()}/${
-                  message.msgDate.getMonth() + 1
-                }/${message.msgDate.getFullYear()}`
+                `${message.msgDate.getHours()}:${
+                  message.msgDate.getMinutes() + 1
+                }:${message.msgDate.getSeconds()}`
               }}
             </div>
             <div class="msgType">{{ message.msgType }}</div>

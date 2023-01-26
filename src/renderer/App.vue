@@ -1,11 +1,12 @@
 <template>
   <v-app
+    id="app"
+    :class="appTheme === 'dark' ? ['app_dark'] : ['app_light']"
     style="min-width: 1200px"
     :style="{
       color: $vuetify.theme.themes[appTheme].textDefault,
       background: $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
     }"
-    id="app"
   >
     <header
       :style="{
@@ -561,7 +562,7 @@
           </v-hover>
         </div>
       </div>
-
+      <export-c-s-v> </export-c-s-v>
       <div
         style="
           position: absolute;
@@ -787,6 +788,7 @@ import {
   mdiBrightness6,
 } from "@mdi/js";
 import fs from "fs";
+import ExportCSV from "./components/exportCSV";
 
 const { ipcRenderer } = require("electron");
 const dialog = require("electron").remote.dialog;
@@ -794,6 +796,7 @@ const { app } = require("electron").remote;
 
 export default {
   name: "tw_scoring",
+  components: { ExportCSV },
   mounted() {
     this.getSysData();
 
@@ -1143,5 +1146,39 @@ export default {
     rgba(255, 255, 255, 0.1),
     rgba(255, 255, 255, 0.1)
   );
+}
+
+:root .app_dark {
+  --accent: #3b70a9;
+  --accent-light: #3a82ba;
+  --action-blue: #2474d9;
+  --action-darkYellow: #d98e3d;
+  --action-green: #139030;
+  --action-red: #d25748;
+  --action-yellow: #d9bb23;
+  --card-background: #28282a;
+  --error: #ff5252;
+  --standard-background: #1b1b1d;
+  --subject-background: #323234;
+  --success: #2abe6a;
+  --success-light: #2ce98f;
+  --text-default: #d2d2d2;
+}
+
+:root .app_light {
+  --accent: #3c8fc9;
+  --accent-light: #3d98d3;
+  --action-blue: #2474d9;
+  --action-darkYellow: #d98e3d;
+  --action-green: #139030;
+  --action-red: #d25748;
+  --action-yellow: #d9bb23;
+  --card-background: #dcdce4;
+  --error: #ff5252;
+  --standard-background: #c4c4ce;
+  --subject-background: #b2b2bb;
+  --success: #2abe6a;
+  --success-light: #2ce98f;
+  --text-default: #2d2d2d;
 }
 </style>

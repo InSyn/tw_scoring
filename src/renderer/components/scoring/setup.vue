@@ -99,11 +99,11 @@
           }}
         </div>
       </div>
-      <div class="d-flex align-center" style="flex: 0 0 auto">
-        <div
-          class="d-flex align-center pa-1 mt-2"
-          style="flex: 1 0 auto; font-size: 1.4rem; font-weight: bold"
-        >
+      <div
+        class="d-flex align-center pa-1 mt-2"
+        style="flex: 0 0 auto; font-size: 1.4rem; font-weight: bold"
+      >
+        <span>
           {{
             `${
               competition.mainData.country.value &&
@@ -121,7 +121,7 @@
                 : ""
             }`
           }}
-        </div>
+        </span>
       </div>
       <div class="d-flex align-center mt-auto" style="flex: 0 0 auto">
         <div

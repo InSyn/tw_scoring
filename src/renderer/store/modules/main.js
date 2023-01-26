@@ -3,6 +3,7 @@ import fs from "fs";
 import router from "./../../router";
 
 import event from "./event";
+import { stringify } from "csv";
 
 export default {
   namespaced: true,
@@ -474,6 +475,17 @@ export default {
     createCompetition: ({ commit }, competition) => {
       commit("createCompetition", competition);
     },
+    exportCSV: (store, params) => {
+      const jsonData = JSON.parse(JSON.stringify(params.data));
+
+      stringify(jsonData, { bom: true, delimiter: "," }, (err, output) => {
+        if (err) throw err;
+        fs.writeFile(`${params.path}`, output, { encoding: "utf-8" }, (err) => {
+          if (err) console.error(err);
+          // console.log(`${params.path}`);
+        });
+      });
+    },
     input_blur: (s, e) => {
       e.target.parentNode.style.boxShadow = "inset 0 0 0 0 transparent";
     },
@@ -484,6 +496,7 @@ export default {
       commit("licChecked", lData);
     },
     load_event: ({ state, commit }, evData) => {
+      console.log(evData);
       state.event.id = evData.id;
       state.event.event_title = evData.title;
 
