@@ -182,9 +182,8 @@ export default {
     async saveCSV() {
       if (this.competition && this.competition.selected_race) {
         this.updating = true;
-        console.log("<export log start>");
+
         const startList = this.getStartList();
-        console.log("startList", startList);
         this.exportCSV({
           path: "C:\\Users\\InSyn\\Documents\\TW_Translation\\StartList.csv",
           data: startList,
@@ -193,27 +192,23 @@ export default {
         const onStart = this.getCompetitorOnStart()[0]
           ? [this.getCompetitorOnStart()[0]]
           : [["", "", "", "", ""]];
-        console.log("onStart", onStart);
         this.exportCSV({
           path: "C:\\Users\\InSyn\\Documents\\TW_Translation\\OnStart.csv",
           data: onStart,
         });
 
         const finishedCompetitor = this.getFinished();
-        console.log("finishedCompetitor", finishedCompetitor);
         this.exportCSV({
           path: "C:\\Users\\InSyn\\Documents\\TW_Translation\\Finished.csv",
           data: finishedCompetitor,
         });
 
         const results = this.getResults();
-        console.log("results", results);
         await this.exportCSV({
           path: "C:\\Users\\InSyn\\Documents\\TW_Translation\\Results.csv",
           data: results,
         });
 
-        console.log("<export log end>");
         setTimeout(() => {
           this.updating = false;
         }, 200);
