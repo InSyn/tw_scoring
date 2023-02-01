@@ -677,6 +677,7 @@
 <script>
 import { mapGetters } from "vuex";
 import XLSX from "read-excel-file/node";
+import CompetitorClass from "../store/Classes/CompetitorClass";
 
 export default {
   name: "competitors",
@@ -732,7 +733,7 @@ export default {
             ])
           );
           this.competition.competitorsSheet.competitors.push(
-            new this.CompetitorClass(fields)
+            new CompetitorClass(fields)
           );
         });
         this.competition.races.forEach((_race) => {
@@ -861,7 +862,7 @@ export default {
         ])
       );
       this.competition.competitorsSheet.competitors.push(
-        new this.CompetitorClass(fields)
+        new CompetitorClass(fields)
       );
       this.socket &&
         this.socket.connected &&
