@@ -61,12 +61,7 @@
       </div>
       <div
         class="ma-2"
-        style="
-          position: relative;
-          flex: 0 0 auto;
-          border-radius: 6px;
-          overflow: hidden;
-        "
+        style="position: relative; flex: 0 0 auto; border-radius: 6px"
       >
         <v-row
           no-gutters
@@ -104,7 +99,6 @@
           style="
             position: relative;
             overflow-y: auto;
-            overflow-x: hidden;
             height: 70vh;
             padding-bottom: 3rem;
           "
@@ -112,177 +106,14 @@
             backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
           }"
         >
-          <v-dialog
-            v-for="(row, r) in competition.competitorsSheet.competitors"
-            :key="r"
-            v-model="row.info_dialog.state"
-            width="480px"
-            ><template v-slot:activator="{ on }"
-              ><v-hover v-slot:default="{ hover }">
-                <v-row
-                  no-gutters
-                  v-on="on"
-                  style="position: relative; cursor: pointer; outline: none"
-                  tabindex="0"
-                  :style="[
-                    (r % 2 === 1 && {
-                      border: `1px solid ${$vuetify.theme.themes[appTheme].standardBackgroundRGBA}`,
-                      backgroundColor:
-                        $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
-                    }) || {
-                      border: `1px solid ${$vuetify.theme.themes[appTheme].cardBackgroundRGBA}`,
-                    },
-                    hover && {
-                      backgroundColor:
-                        $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
-                      border: `1px solid ${$vuetify.theme.themes[appTheme].accent}`,
-                    },
-                  ]"
-                >
-                  <v-col
-                    class="d-flex align-center"
-                    v-for="(col, c, idx) in row.info_data"
-                    :key="c"
-                  >
-                    <div
-                      v-if="idx === 0"
-                      style="height: 100%"
-                      class="flex-column align-center justify-center mr-2"
-                    >
-                      <v-hover v-slot:default="{ hover }">
-                        <div
-                          @click.prevent.stop="switchAthlete(r, 'up')"
-                          class="d-flex justify-center"
-                          style="cursor: pointer; height: 50%"
-                        >
-                          <v-icon
-                            :color="
-                              hover
-                                ? $vuetify.theme.themes[appTheme].accent
-                                : $vuetify.theme.themes[appTheme].textDefault
-                            "
-                            small
-                            >mdi-chevron-up</v-icon
-                          >
-                        </div></v-hover
-                      ><v-hover v-slot:default="{ hover }">
-                        <div
-                          @click.prevent.stop="switchAthlete(r, 'down')"
-                          class="d-flex justify-center"
-                          style="cursor: pointer; height: 50%"
-                        >
-                          <v-icon
-                            :color="
-                              hover
-                                ? $vuetify.theme.themes[appTheme].accent
-                                : $vuetify.theme.themes[appTheme].textDefault
-                            "
-                            small
-                            >mdi-chevron-down</v-icon
-                          >
-                        </div></v-hover
-                      >
-                    </div>
-                    <div
-                      class="d-flex align-center pa-1"
-                      style="
-                        width: 100%;
-                        height: 100%;
-                        transition: background-color 112ms;
-                      "
-                    >
-                      {{ col }}
-                    </div>
-                  </v-col>
-                </v-row></v-hover
-              ></template
-            ><v-card
-              :style="{
-                backgroundColor:
-                  $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
-                color: $vuetify.theme.themes[appTheme].textDefault,
-              }"
-              ><v-card-title style="padding: 0"
-                ><div
-                  style="border-radius: 0 0 6px 0; padding: 4px 8px"
-                  :style="{
-                    backgroundColor: $vuetify.theme.themes[appTheme].accent,
-                  }"
-                >
-                  {{
-                    `${(row.info_data["bib"] && row.info_data["bib"]) || ""} ${
-                      (row.info_data["lastname"] &&
-                        row.info_data["lastname"]) ||
-                      ""
-                    } ${(row.info_data["name"] && row.info_data["name"]) || ""}`
-                  }}
-                </div>
-                <div style="margin-left: auto; padding: 0.5rem 1rem">
-                  {{ localization[lang].app.competitors.d_competitor_info }}
-                </div>
-              </v-card-title>
-              <div
-                style="
-                  display: flex;
-                  flex-direction: column;
-                  padding: 1rem 2rem;
-                "
-              >
-                <div
-                  v-for="(field, f_key) in row.info_data"
-                  :key="f_key"
-                  style="
-                    display: flex;
-                    align-items: center;
-                    flex-wrap: nowrap;
-                    padding: 0;
-                    margin: 0;
-                    border-radius: 6px;
-                  "
-                  :style="{
-                    color: $vuetify.theme.themes[appTheme].textDefault,
-                  }"
-                >
-                  <div class="pa-1" style="flex: 0 0 8rem; font-weight: bold">
-                    {{ f_key }}
-                  </div>
-                  <div class="pa-1" style="flex: 1 0 auto">
-                    <input
-                      type="text"
-                      class="pa-1"
-                      v-model.lazy="row.info_data[f_key]"
-                      :style="{
-                        backgroundColor:
-                          $vuetify.theme.themes[appTheme]
-                            .standardBackgroundRGBA,
-                        color: $vuetify.theme.themes[appTheme].textDefault,
-                      }"
-                      style="border-radius: 6px"
-                    />
-                  </div>
-                </div>
-              </div>
-              <v-card-actions class="d-flex align-end" style="padding: 8px 8px">
-                <v-btn
-                  x-small
-                  text
-                  @click="deleteCompetitor(row)"
-                  style="margin-right: auto"
-                  :color="$vuetify.theme.themes[appTheme].action_red"
-                  >{{ localization[lang].app.dialogs.d_delete }}</v-btn
-                >
-                <v-btn
-                  small
-                  @click="closeCompetitorDialog(row)"
-                  :color="$vuetify.theme.themes[appTheme].accent"
-                  :style="{
-                    color: $vuetify.theme.themes[appTheme].textDefault,
-                  }"
-                  >{{ localization[lang].app.dialogs.d_close }}</v-btn
-                ></v-card-actions
-              ></v-card
-            ></v-dialog
-          >
+          <table-row
+            v-for="(competitor, competitor_idx) in competition.competitorsSheet
+              .competitors"
+            :key="competitor_idx"
+            :competition="competition"
+            :competitor="competitor"
+            :listIsSorted="sortBy.order"
+          ></table-row>
         </div>
         <div
           class="d-flex align-center justify-center"
@@ -677,10 +508,12 @@
 <script>
 import { mapGetters } from "vuex";
 import XLSX from "read-excel-file/node";
-import CompetitorClass from "../store/Classes/CompetitorClass";
+import CompetitorClass from "../../store/Classes/CompetitorClass";
+import TableRow from "./competitorRow";
 
 export default {
   name: "competitors",
+  components: { TableRow },
   methods: {
     // autoLoad() {
     //   if (
@@ -697,28 +530,149 @@ export default {
     //       },
     //     });
     // },
-    switchAthlete(id, to) {
-      if (to === "up") {
-        if (id > 0) {
-          let res = this.competition.competitorsSheet.competitors[id - 1];
-          this.$set(
-            this.competition.competitorsSheet.competitors,
-            id - 1,
-            this.competition.competitorsSheet.competitors[id]
-          );
-          this.$set(this.competition.competitorsSheet.competitors, id, res);
-        }
-      } else if (to === "down") {
-        if (id < this.competition.competitorsSheet.competitors.length - 1) {
-          let res = this.competition.competitorsSheet.competitors[id + 1];
-          this.$set(
-            this.competition.competitorsSheet.competitors,
-            id + 1,
-            this.competition.competitorsSheet.competitors[id]
-          );
-          this.$set(this.competition.competitorsSheet.competitors, id, res);
-        }
-      }
+    acceptCols() {
+      this.addColumnDialog.colToDel.forEach((col) => {
+        this.competition.competitorsSheet.header =
+          this.competition.competitorsSheet.header.filter((header) => {
+            return header.id !== col.id;
+          });
+      });
+      this.competition.competitorsSheet.header.push(
+        ...this.addColumnDialog.colToAdd
+      );
+      this.addColumnDialog.colToDel = [];
+      this.addColumnDialog.colToAdd = [];
+      this.addColumnDialog.state = false;
+    },
+    clearSheet() {
+      this.competition.competitorsSheet.competitors =
+        this.competition.competitorsSheet.competitors.filter((_c) => {
+          return 0;
+        });
+      this.competition.races.forEach((_race) => {
+        _race.startList = _race.startList.filter((_comp) => {
+          return this.competition.competitorsSheet.competitors.some((comp) => {
+            return comp.id === _comp;
+          });
+        });
+        !this.competition.competitorsSheet.competitors.some((_comp) => {
+          return _comp.id === _race.selectedCompetitor;
+        }) &&
+          (() => {
+            _race.selectedCompetitor = null;
+          })();
+        !this.competition.competitorsSheet.competitors.some((_comp) => {
+          return _comp.id === _race.onTrack;
+        }) &&
+          (() => {
+            _race.onTrack = null;
+          })();
+        _race.finished = _race.finished.filter((_comp) => {
+          return this.competition.competitorsSheet.competitors.some((comp) => {
+            return comp.id === _comp;
+          });
+        });
+      });
+      this.socket &&
+        this.socket.connected &&
+        this.socket.emit("set_competition_data", this.competition, (res) => {
+          return res;
+        });
+    },
+    closeCreateCompetitorDialog() {
+      this.createCompetitorDialog.state = false;
+      this.createCompetitorDialog.newCompetitor = [];
+    },
+    closeColsDialog() {
+      this.addColumnDialog.colToDel = [];
+      this.addColumnDialog.colToAdd = [];
+      this.addColumnDialog.state = false;
+    },
+    createCompetitor(data) {
+      let fields = [];
+      this.competition.competitorsSheet.header.map((col) =>
+        fields.push([
+          col.id,
+          data[this.competition.competitorsSheet.header.indexOf(col)] || "",
+        ])
+      );
+      this.competition.competitorsSheet.competitors.push(
+        new CompetitorClass(fields)
+      );
+      this.socket &&
+        this.socket.connected &&
+        this.socket.emit("set_competition_data", this.competition, (res) => {
+          return res;
+        });
+      this.createCompetitorDialog.state = false;
+      this.createCompetitorDialog.newCompetitor = [];
+    },
+    deleteCompetitor(competitor) {
+      this.competition.races.forEach((race) => {
+        race.startList = race.startList.filter(
+          (_competitor) => _competitor !== competitor.id
+        );
+        if (race.selectedCompetitor === competitor.id)
+          race.selectedCompetitor = null;
+        if (race.onTrack === competitor.id) race.onTrack = null;
+        race.finished = race.finished.filter(
+          (_competitor) => _competitor !== competitor.id
+        );
+      });
+
+      this.competition.competitorsSheet.competitors =
+        this.competition.competitorsSheet.competitors.filter(
+          (_competitor) => _competitor.id !== competitor.id
+        );
+
+      this.rebuildAllStartLists();
+    },
+    load_prev_stages() {
+      let compArr = [];
+      if (
+        this.competition.stages.stage_grid[
+          this.competition.stages.stage_grid.length - 2
+        ] &&
+        this.competition.stages.stage_grid[
+          this.competition.stages.stage_grid.length - 2
+        ].s_competitions.length > 0
+      )
+        compArr.push(
+          ...this.competition.stages.stage_grid[
+            this.competition.stages.stage_grid.length - 2
+          ].s_competitions
+            .map((_comp) =>
+              this.competitions.find(
+                (_competition) => _competition.id === _comp
+              )
+            )
+            .map((_stage) => {
+              let _competitors = JSON.parse(
+                JSON.stringify(_stage.passedCompetitors)
+              );
+              _competitors.map((_competitor) => {
+                _competitor.rank = null;
+                _competitor.results_overall.push({
+                  id_comp: _stage.id,
+                  value: _stage.result_formula.overall_result.types
+                    .find(
+                      (_f) =>
+                        _f.id === _stage.result_formula.overall_result.type
+                    )
+                    .result(_competitor.id),
+                });
+                _competitor.marks = [];
+                _competitor.race_status = null;
+
+                return _competitor;
+              });
+              return _competitors;
+            })
+        );
+      this.competition.competitorsSheet.competitors = [];
+      compArr.forEach((arr) =>
+        this.competition.competitorsSheet.competitors.push(...arr)
+      );
     },
     async load_sheet(e) {
       await XLSX(`${e.target.files[0].path}`).then((rows) => {
@@ -771,129 +725,20 @@ export default {
           return res;
         });
     },
-    load_prev_stages() {
-      let compArr = [];
-      if (
-        this.competition.stages.stage_grid[
-          this.competition.stages.stage_grid.length - 2
-        ] &&
-        this.competition.stages.stage_grid[
-          this.competition.stages.stage_grid.length - 2
-        ].s_competitions.length > 0
-      )
-        compArr.push(
-          ...this.competition.stages.stage_grid[
-            this.competition.stages.stage_grid.length - 2
-          ].s_competitions
-            .map((_comp) =>
-              this.competitions.find(
-                (_competition) => _competition.id === _comp
-              )
-            )
-            .map((_stage) => {
-              let _competitors = JSON.parse(
-                JSON.stringify(_stage.passedCompetitors)
-              );
-              _competitors.map((_competitor) => {
-                _competitor.rank = null;
-                _competitor.results_overall.push({
-                  id_comp: _stage.id,
-                  value: _stage.result_formula.overall_result.types
-                    .find(
-                      (_f) =>
-                        _f.id === _stage.result_formula.overall_result.type
-                    )
-                    .result(_competitor.id),
-                });
-                _competitor.marks = [];
-                _competitor.race_status = null;
+    rebuildAllStartLists() {
+      this.competition.races.forEach((race) => {
+        race._startList = [...race.startList];
+        race.onTrack && race._startList.unshift(race.onTrack);
+        race.finished.length > 0 &&
+          race._startList.unshift(...[...race.finished]);
 
-                return _competitor;
-              });
-              return _competitors;
-            })
-        );
-      this.competition.competitorsSheet.competitors = [];
-      compArr.forEach((arr) =>
-        this.competition.competitorsSheet.competitors.push(...arr)
-      );
-    },
-    clearSheet() {
-      this.competition.competitorsSheet.competitors =
-        this.competition.competitorsSheet.competitors.filter((_c) => {
-          return 0;
-        });
-      this.competition.races.forEach((_race) => {
-        _race.startList = _race.startList.filter((_comp) => {
-          return this.competition.competitorsSheet.competitors.some((comp) => {
-            return comp.id === _comp;
-          });
-        });
-        !this.competition.competitorsSheet.competitors.some((_comp) => {
-          return _comp.id === _race.selectedCompetitor;
-        }) &&
-          (() => {
-            _race.selectedCompetitor = null;
-          })();
-        !this.competition.competitorsSheet.competitors.some((_comp) => {
-          return _comp.id === _race.onTrack;
-        }) &&
-          (() => {
-            _race.onTrack = null;
-          })();
-        _race.finished = _race.finished.filter((_comp) => {
-          return this.competition.competitorsSheet.competitors.some((comp) => {
-            return comp.id === _comp;
-          });
-        });
+        this.refreshAllStartLists(race);
       });
-      this.socket &&
-        this.socket.connected &&
-        this.socket.emit("set_competition_data", this.competition, (res) => {
-          return res;
-        });
     },
-    createCompetitor(data) {
-      let fields = [];
-      this.competition.competitorsSheet.header.map((col) =>
-        fields.push([
-          col.id,
-          data[this.competition.competitorsSheet.header.indexOf(col)] || "",
-        ])
-      );
-      this.competition.competitorsSheet.competitors.push(
-        new CompetitorClass(fields)
-      );
-      this.socket &&
-        this.socket.connected &&
-        this.socket.emit("set_competition_data", this.competition, (res) => {
-          return res;
-        });
-      this.createCompetitorDialog.state = false;
-      this.createCompetitorDialog.newCompetitor = [];
-    },
-    closeColsDialog() {
-      this.addColumnDialog.colToDel = [];
-      this.addColumnDialog.colToAdd = [];
-      this.addColumnDialog.state = false;
-    },
-    acceptCols() {
-      this.addColumnDialog.colToDel.forEach((col) => {
-        this.competition.competitorsSheet.header =
-          this.competition.competitorsSheet.header.filter((header) => {
-            return header.id !== col.id;
-          });
-      });
-      this.competition.competitorsSheet.header.push(
-        ...this.addColumnDialog.colToAdd
-      );
-      this.addColumnDialog.colToDel = [];
-      this.addColumnDialog.colToAdd = [];
-      this.addColumnDialog.state = false;
-    },
-    closeCreateCompetitorDialog() {
-      this.createCompetitorDialog.state = false;
-      this.createCompetitorDialog.newCompetitor = [];
+    refreshAllStartLists(race) {
+      race.startList[0] ? (race.selectedCompetitor = race.startList[0]) : null;
+
+      this.$store.dispatch("main/updateEvent");
     },
     sortByCol(list, col) {
       if (this.sortBy.title !== col) {
@@ -931,44 +776,6 @@ export default {
         });
         this.sortBy.dir = "asc";
       }
-    },
-    refreshAllStartLists(race) {
-      race.startList[0] ? (race.selectedCompetitor = race.startList[0]) : null;
-
-      this.$store.dispatch("main/updateEvent");
-    },
-    rebuildAllStartLists() {
-      this.competition.races.forEach((race) => {
-        race._startList = [...race.startList];
-        race.onTrack && race._startList.unshift(race.onTrack);
-        race.finished.length > 0 &&
-          race._startList.unshift(...[...race.finished]);
-
-        this.refreshAllStartLists(race);
-      });
-    },
-    closeCompetitorDialog(competitor) {
-      competitor.info_dialog.state = false;
-    },
-    deleteCompetitor(competitor) {
-      this.competition.races.forEach((race) => {
-        race.startList = race.startList.filter(
-          (_competitor) => _competitor !== competitor.id
-        );
-        if (race.selectedCompetitor === competitor.id)
-          race.selectedCompetitor = null;
-        if (race.onTrack === competitor.id) race.onTrack = null;
-        race.finished = race.finished.filter(
-          (_competitor) => _competitor !== competitor.id
-        );
-      });
-
-      this.competition.competitorsSheet.competitors =
-        this.competition.competitorsSheet.competitors.filter(
-          (_competitor) => _competitor.id !== competitor.id
-        );
-
-      this.rebuildAllStartLists();
     },
   },
   data() {

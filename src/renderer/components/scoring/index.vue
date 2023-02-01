@@ -1,18 +1,10 @@
 <template>
   <v-container v-if="competition" fluid style="min-width: 1220px">
-    <v-row
-      v-if="!mode_timing"
-      no-gutters
-      style="height: 35%; min-height: 240px"
-    >
+    <v-row no-gutters style="height: 35%; min-height: 240px">
       <setup></setup>
       <chat></chat>
       <marks-list></marks-list> </v-row
-    ><v-row
-      v-if="!mode_timing"
-      no-gutters
-      style="height: 30%; min-height: 200px"
-    >
+    ><v-row no-gutters style="height: 30%; min-height: 200px">
       <start-list></start-list>
       <double-up
         v-if="
@@ -21,15 +13,10 @@
         "
       ></double-up>
       <on-race v-else></on-race> </v-row
-    ><v-row
-      v-if="!mode_timing"
-      no-gutters
-      style="height: 35%; min-height: 240px"
-    >
+    ><v-row no-gutters style="height: 35%; min-height: 240px">
       <display-control-panel></display-control-panel>
       <finish-table></finish-table>
     </v-row>
-    <timing v-if="mode_timing"> </timing>
   </v-container>
 </template>
 

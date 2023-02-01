@@ -185,7 +185,8 @@ export default {
       const messagesContainer = document.querySelector(
         "#server_messages_container"
       );
-      messagesContainer.scrollTop = messagesContainer.scrollHeight;
+      if (messagesContainer)
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
     },
     startServer() {
       app.emit("startSocketServer", [

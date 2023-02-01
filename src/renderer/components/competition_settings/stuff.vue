@@ -688,6 +688,9 @@
 
 <script>
 import { mapGetters } from "vuex";
+import JudgeClass from "../../store/Classes/JudgeClass";
+import JuryClass from "../../store/Classes/JuryClass";
+
 export default {
   name: "stuff",
   methods: {
@@ -697,7 +700,7 @@ export default {
     addStuff(stuffType) {
       stuffType === "judge"
         ? this.competition.stuff.judges.push(
-            new this.JudgeClass(
+            new JudgeClass(
               "Judge",
               this.competition.stuff.judges.length > 0
                 ? this.competition.stuff.judges[
@@ -706,7 +709,7 @@ export default {
                 : 1
             )
           )
-        : this.competition.stuff[stuffType].push(new this.JuryClass());
+        : this.competition.stuff[stuffType].push(new JuryClass());
 
       this.$store.dispatch("main/updateEvent");
     },
@@ -743,10 +746,6 @@ export default {
   },
   computed: {
     ...mapGetters("main", { competition: "competition", appTheme: "appTheme" }),
-    ...mapGetters("roles", {
-      JudgeClass: "JudgeClass",
-      JuryClass: "JuryClass",
-    }),
   },
 };
 </script>

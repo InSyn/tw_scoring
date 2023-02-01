@@ -50,519 +50,21 @@
             ref="fileLoader"
             type="file"
             accept=".twe"
-            hidden /></label
-      ></v-btn>
-      <v-dialog
-        width="540"
-        v-if="competition"
-        v-model="create_competition_dialog.state"
-        @keydown.enter.prevent="createNewCompetition()"
-        style="position: relative; z-index: 1001"
-        :overlay-color="$vuetify.theme.themes[appTheme].accent"
-        :overlay-opacity="0.1"
-      >
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn
-            v-on="on"
-            @click="initCreateDialog()"
-            style="margin-left: 2rem"
-            icon
-            :color="$vuetify.theme.themes[appTheme].accent"
-          >
-            <v-icon>{{ icons.mdiFolderPlus }}</v-icon>
-          </v-btn>
-        </template>
-        <div
-          :style="{
-            backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
-            color: $vuetify.theme.themes[appTheme].textDefault,
-          }"
-        >
-          <v-card-title class="ma-0 pt-2 pb-0 px-4"
-            >Create competition
-          </v-card-title>
-          <div
-            style="
-              display: flex;
-              flex-direction: column;
-              border-radius: 6px;
-              margin: 1rem;
-            "
-            :style="{
-              backgroundColor:
-                $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
-            }"
-          >
-            <div
-              tabindex="1"
-              style="
-                flex: 0 0 auto;
-                display: flex;
-                flex-wrap: wrap;
-                padding: 0.5rem 1rem;
-                border-radius: 6px;
-                margin: 8px 8px 8px 8px;
-                outline: none;
-              "
-              :style="{
-                backgroundColor:
-                  $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
-              }"
-            >
-              <div
-                style="
-                  font-size: 1.1rem;
-                  font-weight: bold;
-                  width: 100%;
-                  padding: 4px 0 8px 0;
-                "
-              >
-                New competition setup
-              </div>
-              <div
-                v-for="(input, i_idx) in create_competition_dialog.data"
-                :key="input.id"
-                v-show="input.hasOwnProperty('value')"
-                class="competitionConstructorInput"
-                style="
-                  display: flex;
-                  flex-direction: column;
-                  margin: 0.2rem 0.5rem;
-                "
-              >
-                <div
-                  style="
-                    flex: 0 0 auto;
-                    font-size: 0.8rem;
-                    line-height: 1.2;
-                    padding: 2px 6px 0 6px;
-                    margin-left: 6px;
-                    margin-right: auto;
-                    border-radius: 6px 6px 0 0;
-                    transition: background-color 122ms;
-                  "
-                  :style="{
-                    backgroundColor:
-                      $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
-                    color: $vuetify.theme.themes[appTheme].textDefault,
-                  }"
-                >
-                  {{ input.title }}
-                </div>
-                <div style="display: flex; align-items: center; flex: 0 0 auto">
-                  <div
-                    v-if="input.id === 'stage'"
-                    tabindex="0"
-                    @focus="
-                      (e) => {
-                        input.stage_selector = true;
-                        e.target.parentNode.parentNode.children[0].style.backgroundColor = `${$vuetify.theme.themes[appTheme].accent}`;
-                      }
-                    "
-                    @blur="
-                      (e) => {
-                        input.stage_selector = false;
-                        e.target.parentNode.parentNode.children[0].style.backgroundColor = `${$vuetify.theme.themes[appTheme].standardBackgroundRGBA}`;
-                      }
-                    "
-                    style="
-                      position: relative;
-                      flex: 1 0 auto;
-                      padding: 4px 8px;
-                      border-radius: 6px;
-                      outline: none;
-                      cursor: pointer;
-                      overflow: visible;
-                      width: 14rem;
-                    "
-                    :style="{
-                      color: $vuetify.theme.themes[appTheme].textDefault,
-                      backgroundColor:
-                        $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
-                    }"
-                  >
-                    <div
-                      v-if="input.stage_selector"
-                      style="
-                        position: absolute;
-                        z-index: 1;
-                        top: 0;
-                        left: 0;
-                        width: 100%;
-                        display: flex;
-                        flex-direction: column;
-                        border-radius: 6px;
-                      "
-                      :style="{
-                        backgroundColor:
-                          $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
-                        border: `1px solid ${$vuetify.theme.themes[appTheme].accent}`,
-                      }"
-                    >
-                      <v-hover
-                        v-for="(stage, s_idx) in competition.structure.stages"
-                        :key="stage.id"
-                        v-slot:default="{ hover }"
-                      >
-                        <div
-                          @click="input.selectStage(stage, $event)"
-                          style="flex: 0 0 auto; padding: 4px 8px"
-                          :style="[
-                            {
-                              color:
-                                $vuetify.theme.themes[appTheme].textDefault,
-                            },
-                            s_idx === 0 && { borderRadius: `6px 6px 0 0` },
-                            s_idx ===
-                              competition.structure.stages.length - 1 && {
-                              borderRadius: `0 0 6px 6px`,
-                            },
-                            hover && {
-                              backgroundColor:
-                                $vuetify.theme.themes[appTheme]
-                                  .subjectBackgroundRGBA,
-                            },
-                          ]"
-                        >
-                          {{ stage.title }}
-                        </div>
-                      </v-hover>
-                    </div>
-                    <div>
-                      {{ input.value && input.value.title }}
-                    </div>
-                  </div>
-                  <input
-                    v-else
-                    @focus="handleInputState($event, 'focus')"
-                    @blur="handleInputState($event, 'blur')"
-                    type="text"
-                    v-model="
-                      typeof input.value === 'object'
-                        ? input.value && input.value.value
-                        : input.value
-                    "
-                    size="24"
-                    style="
-                      border-radius: 6px;
-                      padding: 4px 8px;
-                      border: 1px solid transparent;
-                      transition: border 122ms;
-                    "
-                    :style="{
-                      backgroundColor:
-                        $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
-                      color: $vuetify.theme.themes[appTheme].textDefault,
-                    }"
-                  />
-                  <input
-                    v-if="input.hasOwnProperty('min')"
-                    v-model="input.min"
-                    @focus="handleInputState($event, 'focus')"
-                    @blur="handleInputState($event, 'blur')"
-                    type="text"
-                    size="8"
-                    style="
-                      border-radius: 6px;
-                      padding: 4px 8px;
-                      margin-left: 0.4rem;
-                      border: 1px solid transparent;
-                      transition: border 122ms;
-                    "
-                    :style="{
-                      backgroundColor:
-                        $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
-                      color: $vuetify.theme.themes[appTheme].textDefault,
-                    }"
-                  />
-                  <input
-                    v-if="
-                      input.id === 'stage' &&
-                      input.value &&
-                      input.value.id === 'custom'
-                    "
-                    v-model="input.value.value"
-                    @focus="handleInputState($event, 'focus')"
-                    @blur="handleInputState($event, 'blur')"
-                    type="text"
-                    size="16"
-                    style="
-                      border-radius: 6px;
-                      padding: 4px 8px;
-                      margin-left: 0.4rem;
-                      border: 1px solid transparent;
-                      transition: border 122ms;
-                    "
-                    :style="{
-                      backgroundColor:
-                        $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
-                      color: $vuetify.theme.themes[appTheme].textDefault,
-                    }"
-                  />
-                </div>
-              </div>
-            </div>
-            <div
-              style="
-                display: flex;
-                flex-wrap: wrap;
-                flex: 0 0 auto;
-                padding: 0.5rem 1rem;
-                border-radius: 6px;
-                margin: 0 8px 8px 8px;
-              "
-              :style="{
-                backgroundColor:
-                  $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
-              }"
-            >
-              <v-hover
-                v-for="(check, ch_idx) in create_competition_dialog.checks"
-                :key="ch_idx"
-                v-slot:default="{ hover }"
-              >
-                <v-btn
-                  text
-                  small
-                  retain-focus-on-click
-                  @click="check.state = !check.state"
-                  style="
-                    display: flex;
-                    flex-wrap: nowrap;
-                    align-items: center;
-                    cursor: pointer;
-                    margin-right: 0.5rem;
-                  "
-                  :color="$vuetify.theme.themes[appTheme].success"
-                >
-                  <div
-                    style="
-                      flex: 0 0 auto;
-                      border-radius: 50%;
-                      width: 10px;
-                      height: 10px;
-                      transition: box-shadow 0.122s, background-color 0.122s;
-                    "
-                    :style="[
-                      {
-                        boxShadow: `0 0 0 2px ${$vuetify.theme.themes[appTheme].textDefault}`,
-                      },
-                      hover && {
-                        boxShadow: `0 0 2px 1px ${$vuetify.theme.themes[appTheme].success}`,
-                      },
-                      check.state && {
-                        boxShadow: `0 0 2px 1px ${$vuetify.theme.themes[appTheme].success}`,
-                        backgroundColor:
-                          $vuetify.theme.themes[appTheme].success,
-                      },
-                    ]"
-                  ></div>
-                  <div
-                    style="margin-left: 0.5rem"
-                    :style="{
-                      color: $vuetify.theme.themes[appTheme].textDefault,
-                    }"
-                  >
-                    {{ check.title }}
-                  </div>
-                </v-btn>
-              </v-hover>
-            </div>
-          </div>
-          <v-card-actions
-            style="
-              display: flex;
-              align-items: center;
-              justify-content: flex-end;
-              flex-wrap: nowrap;
-            "
-          >
-            <v-btn
-              text
-              small
-              @click="create_competition_dialog.state = false"
-              :color="$vuetify.theme.themes[appTheme].error"
-              >Cancel
-            </v-btn>
-            <v-btn
-              small
-              @click="createNewCompetition()"
-              :color="$vuetify.theme.themes[appTheme].success"
-              >Create
-            </v-btn>
-          </v-card-actions>
-        </div>
-      </v-dialog>
-      <div
-        tabindex="0"
-        @focus="competition_select = true"
-        @blur="competition_select = false"
-        style="
-          position: relative;
-          min-width: 200px;
-          margin-left: 0.5rem;
-          z-index: 1001;
-          outline: none;
-          border-radius: 4px;
-        "
-        :style="{
-          backgroundColor:
-            $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
-          color: $vuetify.theme.themes[appTheme].textDefault,
-        }"
-      >
-        <v-hover v-slot:default="{ hover }">
-          <div
-            style="
-              display: flex;
-              align-items: center;
-              flex-wrap: nowrap;
-              font-weight: bold;
-              border-radius: 6px;
-              white-space: nowrap;
-              cursor: pointer;
-              user-select: none;
-              transition: background-color 0.122s, border 0.122s;
-            "
-            :style="[
-              {
-                border: `1px solid ${$vuetify.theme.themes[appTheme].standardBackgroundRGBA}`,
-              },
-              hover && {
-                backgroundColor:
-                  $vuetify.theme.themes[appTheme].subjectBackgroundRGBA,
-                border: `1px solid ${$vuetify.theme.themes[appTheme].subjectBackgroundRGBA}`,
-              },
-            ]"
-          >
-            <div
-              style="
-                flex: 1 0 auto;
-                display: flex;
-                flex-direction: column;
-                white-space: nowrap;
-                padding: 0.4rem;
-              "
-            >
-              <div
-                style="
-                  display: flex;
-                  align-items: center;
-                  font-size: 0.75rem;
-                  flex: 0 0 auto;
-                  line-height: 1;
-                "
-                :style="{
-                  color: $vuetify.theme.themes[appTheme].accent,
-                }"
-              >
-                <div style="margin-right: auto; font-weight: bold">
-                  {{ competitions.indexOf(competition) + 1 }}
-                </div>
-                <div>{{ `ID: ${competition && competition.id}` }}</div>
-              </div>
-              <div style="flex: 0 0 auto; margin-top: 0.2rem">
-                {{
-                  `${event.event_title}. ${
-                    competition &&
-                    competition.mainData.title.stage.value &&
-                    competition.mainData.title.stage.value.value
-                  }`
-                }}
-              </div>
-            </div>
-          </div>
-        </v-hover>
+            hidden
+          />
+        </label>
+      </v-btn>
 
-        <div
-          v-if="competitions.some((_comp) => _comp.id !== competition.id)"
-          style="
-            position: absolute;
-            z-index: 3;
-            border-radius: 6px;
-            white-space: nowrap;
-            top: 0;
-            left: 0;
-            overflow: hidden;
-            min-width: 100%;
-            transform: scaleY(0);
-            transform-origin: top;
-          "
-          :style="[
-            {
-              boxShadow: `0 2px 4px 0 ${$vuetify.theme.themes[appTheme].standardBackgroundRGBA}`,
-            },
-            competition_select && {
-              transform: 'scaleY(1)',
-              backgroundColor:
-                $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
-              border: `1px solid ${$vuetify.theme.themes[appTheme].accent}`,
-            },
-          ]"
-        >
-          <div
-            @click="select_competition($event, competition)"
-            style="
-              padding: 0.4rem 0.8rem;
-              font-weight: bold;
-              cursor: default;
-              user-select: none;
-            "
-            :style="{
-              backgroundColor:
-                $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
-              borderBottom: `1px solid ${$vuetify.theme.themes[appTheme].accent}`,
-            }"
-          >
-            {{
-              `${competitions.indexOf(competition) + 1} ${
-                competition &&
-                competition.mainData.title.stage.value &&
-                competition.mainData.title.stage.value.value
-              } ${competition && competition.mainData.title.stage.group}`
-            }}
-          </div>
-          <v-hover
-            v-for="(_competition, c_id) in competitions.filter(
-              (_comp) => _comp.id !== competition.id
-            )"
-            :key="_competition.id"
-            v-slot:default="{ hover }"
-          >
-            <div
-              @click="select_competition($event, _competition)"
-              style="
-                padding: 0.4rem 0.8rem;
-                cursor: pointer;
-                user-select: none;
-                transition: border 0.122s, background-color 0.122s;
-              "
-              :style="[
-                {
-                  borderTop: `1px solid ${$vuetify.theme.themes[appTheme].cardBackgroundRGBA}`,
-                  borderBottom: `1px solid ${$vuetify.theme.themes[appTheme].cardBackgroundRGBA}`,
-                },
-                hover && {
-                  borderTop: `1px solid ${$vuetify.theme.themes[appTheme].accent}`,
-                  borderBottom: `1px solid ${$vuetify.theme.themes[appTheme].accent}`,
-                  backgroundColor:
-                    $vuetify.theme.themes[appTheme].subjectBackgroundRGBA,
-                },
-                c_id < 1 && { borderTop: `null` },
-                c_id >= competitions.length - 2 && { borderBottom: `null` },
-              ]"
-            >
-              {{
-                `${competitions.indexOf(_competition) + 1} ${
-                  _competition.mainData.title.stage.value &&
-                  _competition.mainData.title.stage.value.value
-                } ${_competition && _competition.mainData.title.stage.group}`
-              }}
-            </div>
-          </v-hover>
-        </div>
-      </div>
-      <export-c-s-v> </export-c-s-v>
+      <create-new-competition-menu
+        :competition="competition"
+      ></create-new-competition-menu>
+
+      <competition-select-menu
+        :competition="competition"
+        :competitions="competitions"
+        :event="event"
+      ></competition-select-menu>
+
       <div
         style="
           position: absolute;
@@ -684,67 +186,10 @@
       </v-btn>
     </header>
     <main style="position: relative">
-      <div
-        class="menu"
-        style="
-          z-index: 2;
-          position: relative;
-          min-width: 220px;
-          overflow: hidden;
-          user-select: none;
-        "
-        :style="[
-          {
-            backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
-            borderRight: `1px solid ${$vuetify.theme.themes[appTheme].subjectBackgroundRGBA}`,
-          },
-          showMenu
-            ? { width: '220px', minWidth: '220px' }
-            : {
-                width: '0',
-                minWidth: '0',
-                borderRight: '0 solid transparent',
-              },
-        ]"
-      >
-        <router-link
-          v-slot="{ href, route, navigate, isActive, isExactActive }"
-          custom
-          class="m_menu_item"
-          v-for="(page, p) in appMenu"
-          :key="p"
-          :to="{ name: page.link }"
-          tag="div"
-        >
-          <v-hover v-slot:default="{ hover }">
-            <div
-              class="d-flex flex-nowrap align-center pa-2"
-              style="cursor: pointer; transition: background-color 256ms"
-              @click="navigate"
-              :style="[
-                (hover || isActive) && {
-                  backgroundColor: $vuetify.theme.themes[appTheme].accent,
-                },
-              ]"
-            >
-              <v-icon
-                size="1.2rem"
-                style="transition: color 256ms"
-                :color="
-                  hover || isActive
-                    ? $vuetify.theme.themes[appTheme].textDefault
-                    : $vuetify.theme.themes[appTheme].accent
-                "
-                v-html="icons[page.icon]"
-              ></v-icon>
-              <div class="text-no-wrap ml-3">
-                {{ localization[lang].app.menu[page.link] }}
-              </div>
-            </div>
-          </v-hover>
-        </router-link>
-      </div>
-      <router-view class="window"></router-view>
+      <app-menu></app-menu>
+      <keep-alive>
+        <router-view class="window"></router-view>
+      </keep-alive>
     </main>
     <footer
       class="d-flex align-center px-8"
@@ -774,21 +219,18 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 import {
-  mdiCog,
-  mdiViewDashboard,
-  mdiAccountGroup,
-  mdiClipboardList,
-  mdiNumeric10BoxMultiple,
-  mdiTrophyVariant,
   mdiBackburger,
   mdiMenu,
   mdiContentSave,
   mdiDownload,
-  mdiFolderPlus,
   mdiBrightness6,
 } from "@mdi/js";
 import fs from "fs";
-import ExportCSV from "./components/exportCSV";
+import EventClass from "./store/Classes/EventClass";
+import JudgeClass from "./store/Classes/JudgeClass";
+import CreateNewCompetitionMenu from "./components/appComponents/createNewCompetitionMenu";
+import CompetitionSelectMenu from "./components/appComponents/competitionSelectMenu";
+import AppMenu from "./components/appComponents/appMenu";
 
 const { ipcRenderer } = require("electron");
 const dialog = require("electron").remote.dialog;
@@ -796,7 +238,11 @@ const { app } = require("electron").remote;
 
 export default {
   name: "tw_scoring",
-  components: { ExportCSV },
+  components: {
+    AppMenu,
+    CompetitionSelectMenu,
+    CreateNewCompetitionMenu,
+  },
   mounted() {
     this.getSysData();
 
@@ -822,7 +268,7 @@ export default {
     });
 
     this.$store.dispatch("main/checkEventID");
-    this.createCompetition(new this.EventClass());
+    this.createCompetition(new EventClass());
     this.$store.commit("main/setCompetition", this.competitions[0]);
     this.competitionFirstSetup(this.competition);
     this.serverStatusChecker = setInterval(() => {
@@ -836,11 +282,15 @@ export default {
     onkeydown = onkeyup = (e) => {
       map[e.key] = e.type === "keydown";
       if (map["Alt"] && map["t"]) {
-        this.$store.commit("main/toggle_mode");
+        // this.$store.commit("main/toggle_mode");
       }
     };
+    this.getAECodes();
   },
   methods: {
+    ...mapActions("aerials", {
+      setAeSheet: "setAeCodes",
+    }),
     ...mapActions("localization", {
       changeLang: "changeLang",
     }),
@@ -865,77 +315,27 @@ export default {
       competition.mainData.discipline.value = "Discipline";
       competition.mainData.discipline.min = "DSC";
       for (let i = 0; i < 4; i++) {
-        competition.stuff.judges.push(
-          new this.JudgeClass(`Judge ${i + 1}`, i + 1)
-        );
+        competition.stuff.judges.push(new JudgeClass(`Judge ${i + 1}`, i + 1));
       }
     },
-    createNewCompetition() {
-      for (let $check in this.create_competition_dialog.checks)
-        if (this.create_competition_dialog.checks[$check].state)
-          this.create_competition_dialog.checks[$check].check();
-      this.$store.commit(
-        "main/createCompetition",
-        new this.EventClass(...this.create_competition_dialog.data)
-      );
-      this.create_competition_dialog.data.forEach((_field) => {
-        if (_field.id === "judges" || _field.id === "competitors")
-          _field[_field.id] = [];
-      });
-      this.create_competition_dialog.state = false;
-      if (this.$route.name !== "competition_settings")
-        this.$router.push("/competition_settings");
+    getAECodes() {
+      if (!localStorage.getItem("AE_CODES"))
+        fs.readFile(
+          `${process.cwd()}/app_assets/AE_CODES.json`,
+          "utf8",
+          (err, data) => {
+            if (err) console.error(err);
+            localStorage.setItem("AE_CODES", data);
+          }
+        );
+
+      this.setAeSheet(JSON.parse(localStorage.getItem("AE_CODES")));
     },
     getSysData() {
       ipcRenderer.on("sysData", (event, data) => {
-        console.log(data);
         this.$store.commit("key/set_system_data", data);
       });
       app.emit("getSysData");
-    },
-    handleInputState(event, type) {
-      switch (type) {
-        case "focus":
-          for (let childrenKey in event.target.parentNode.children) {
-            typeof event.target.parentNode.children[childrenKey] === "object"
-              ? (event.target.parentNode.children[
-                  childrenKey
-                ].style.border = `1px solid ${
-                  this.$vuetify.theme.themes[this.appTheme].accent
-                }`)
-              : 0;
-          }
-          event.target.parentNode.parentNode.children[0].style.backgroundColor = `${
-            this.$vuetify.theme.themes[this.appTheme].accent
-          }`;
-          break;
-        case "blur":
-          for (let childrenKey in event.target.parentNode.children) {
-            typeof event.target.parentNode.children[childrenKey] === "object"
-              ? (event.target.parentNode.children[
-                  childrenKey
-                ].style.border = `1px solid transparent`)
-              : 0;
-          }
-          event.target.parentNode.parentNode.children[0].style.backgroundColor = `${
-            this.$vuetify.theme.themes[this.appTheme].standardBackgroundRGBA
-          }`;
-          break;
-        default:
-          return null;
-      }
-    },
-    initCreateDialog() {
-      this.create_competition_dialog.data.forEach((_field) => {
-        if (this.competition.mainData.hasOwnProperty(_field.id)) {
-          _field.value = this.competition.mainData[_field.id].value;
-        } else if (_field.id === "stage")
-          _field.value = JSON.parse(
-            JSON.stringify(this.competition.mainData["title"].stage.value)
-          );
-        if (_field.hasOwnProperty("min"))
-          _field.min = this.competition.mainData[_field.id].min;
-      });
     },
     load(filePath) {
       let evData = JSON.parse(fs.readFileSync(`${filePath}`, "utf-8"));
@@ -955,20 +355,10 @@ export default {
         }
       );
     },
-    select_competition(e, competition) {
-      this.$store.commit("main/setCompetition", competition);
-      e.target.parentNode.parentNode.blur();
-    },
     selectLanguage(e, lang) {
       this.$store.dispatch("localization/changeLang", lang);
 
       e.target.parentNode.parentNode.blur();
-    },
-    startServer() {
-      app.emit("startSocketServer", this.server_config);
-      if (!this.serverStatus) {
-        this.connect(this.server_config[0], this.server_config[1]);
-      }
     },
     stringifyInfoMsg(msg) {
       const competitor = this.competition.competitorsSheet.competitors.find(
@@ -992,93 +382,31 @@ export default {
   data() {
     return {
       serverStatusChecker: null,
-      competition_select: false,
       lang_menu: false,
       icons: {
-        cog: mdiCog,
-        viewDashboard: mdiViewDashboard,
-        accountGroup: mdiAccountGroup,
-        clipboardList: mdiClipboardList,
-        numeric10BoxMultiple: mdiNumeric10BoxMultiple,
-        trophyVariant: mdiTrophyVariant,
         mdiBackburger,
         mdiMenu,
         mdiContentSave,
         mdiDownload,
-        mdiFolderPlus,
         mdiBrightness6,
-      },
-      create_competition_dialog: {
-        state: false,
-        data: [
-          { id: "title", title: "Competition title", value: null },
-          {
-            id: "discipline",
-            title: "Discipline",
-            value: null,
-            min: null,
-          },
-          {
-            id: "stage",
-            title: "Stage",
-            value: null,
-            stage_selector: false,
-            selectStage: (stage, event) => {
-              this.create_competition_dialog.data.find(
-                (field) => field.id === "stage"
-              ).value = stage;
-              event.target.parentNode.parentNode.parentNode.parentNode.parentNode.focus();
-            },
-          },
-          { id: "competitors", competitors: [] },
-          { id: "judges", judges: [] },
-        ],
-        checks: {
-          judgesFromPrevStage: {
-            state: true,
-            title: "Move judges",
-            check: () => {
-              for (let $judge of this.competition.stuff.judges) {
-                this.create_competition_dialog.data
-                  .find((_data) => _data.id === "judges")
-                  .judges.push(JSON.parse(JSON.stringify($judge)));
-              }
-            },
-          },
-          competitorsFromPrevStage: {
-            state: false,
-            title: "Move competitors",
-            check: () => {
-              for (let $competitor of this.competition.competitorsSheet
-                .competitors) {
-                this.create_competition_dialog.data
-                  .find((_data) => _data.id === "competitors")
-                  .competitors.push(JSON.parse(JSON.stringify($competitor)));
-              }
-            },
-          },
-        },
       },
     };
   },
   computed: {
-    ...mapGetters("event", { EventClass: "EventClass" }),
     ...mapGetters("localization", {
       lang: "lang",
       lang_list: "lang_list",
       localization: "localization",
     }),
     ...mapGetters("main", {
-      socket: "socket",
-      showMenu: "showMenu",
       appTheme: "appTheme",
-      appMenu: "appMenu",
-      event: "event",
       competitions: "competitions",
       competition: "competition",
+      event: "event",
+      showMenu: "showMenu",
+      socket: "socket",
       timer: "timer",
     }),
-    ...mapGetters("roles", { JudgeClass: "JudgeClass" }),
 
     getVer() {
       return process.env.npm_package_version;
@@ -1164,7 +492,6 @@ export default {
   --success-light: #2ce98f;
   --text-default: #d2d2d2;
 }
-
 :root .app_light {
   --accent: #3c8fc9;
   --accent-light: #3d98d3;

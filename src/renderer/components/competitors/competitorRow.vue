@@ -23,7 +23,7 @@
       }}
     </v-col>
 
-    <div class="switchCompetitorButtons" v-show="!listIsSorted">
+    <div class="switchCompetitorButtons">
       <div @click.stop="moveCompetitorUp" class="switchCompetitor-btn">
         <v-icon class="switchCompetitor-icon" small>mdi-chevron-up</v-icon>
       </div>

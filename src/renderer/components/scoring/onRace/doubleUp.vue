@@ -110,6 +110,7 @@
 
 <script>
 import { mapGetters } from "vuex";
+import MarkClass from "../../../store/Classes/MarkClass";
 
 export default {
   name: "doubleUp",
@@ -133,7 +134,7 @@ export default {
           )
         ) {
           competitor.marks.push(
-            new this.MarkClass(
+            new MarkClass(
               this.competition.selected_race_id,
               this.competition.selected_race.id,
               _j.id,

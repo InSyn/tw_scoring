@@ -158,7 +158,7 @@ export default {
     },
     setChatScroll() {
       const chatWindow = document.querySelector("#chat_window");
-      chatWindow.scrollTop = chatWindow.scrollHeight;
+      if (chatWindow) chatWindow.scrollTop = chatWindow.scrollHeight;
     },
   },
   watch: {

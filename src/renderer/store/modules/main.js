@@ -1,9 +1,9 @@
 import io from "socket.io-client";
 import fs from "fs";
 import router from "./../../router";
-
-import event from "./event";
 import { stringify } from "csv";
+
+import EventClass from "../Classes/EventClass";
 
 export default {
   namespaced: true,
@@ -60,7 +60,6 @@ export default {
       _id: null,
     },
     messages: [],
-    mode_timing: false,
     opened_sockets: [],
     server_config: {
       ip: "127.0.0.1",
@@ -124,7 +123,6 @@ export default {
       );
     },
     live_config: (state) => state.live_config,
-    mode_timing: (state) => state.mode_timing,
     messages: (state) => state.messages,
     opened_sockets: (state) => state.opened_sockets,
     server_config: (state) => state.server_config,
@@ -448,9 +446,6 @@ export default {
     setStatusChecker: (state, checker) => {
       state.serverStatusChecker = checker;
     },
-    toggle_mode: (state) => {
-      state.mode_timing = !state.mode_timing;
-    },
     togglePreview: (state, toggleState) => {
       state.showPreview = toggleState;
     },
@@ -476,15 +471,27 @@ export default {
       commit("createCompetition", competition);
     },
     exportCSV: (store, params) => {
-      const jsonData = JSON.parse(JSON.stringify(params.data));
+      const jsonData = JSON.stringify(params.data);
 
-      stringify(jsonData, { bom: true, delimiter: "," }, (err, output) => {
-        if (err) throw err;
-        fs.writeFile(`${params.path}`, output, { encoding: "utf-8" }, (err) => {
+      // JSON
+      fs.writeFile(
+        `${params.path}.json`,
+        jsonData,
+        { encoding: "utf-8" },
+        (err) => {
           if (err) console.error(err);
-          // console.log(`${params.path}`);
-        });
-      });
+          // console.log(params.path, jsonData);
+        }
+      );
+
+      // CSV
+      // stringify(jsonData, { bom: true, delimiter: "," }, (err, output) => {
+      //   if (err) throw err;
+      //   fs.writeFile(`${params.path}`, output, { encoding: "utf-8" }, (err) => {
+      //     if (err) console.error(err);
+      //     // console.log(`${params.path}`);
+      //   });
+      // });
     },
     input_blur: (s, e) => {
       e.target.parentNode.style.boxShadow = "inset 0 0 0 0 transparent";
@@ -496,14 +503,13 @@ export default {
       commit("licChecked", lData);
     },
     load_event: ({ state, commit }, evData) => {
-      console.log(evData);
       state.event.id = evData.id;
       state.event.event_title = evData.title;
 
       state.competitions = [];
 
       evData.competitions.forEach((evData_competition) => {
-        let competition = new event.state["EventClass"]();
+        let competition = new EventClass();
 
         competition.id = evData_competition.id;
 

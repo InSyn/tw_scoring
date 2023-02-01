@@ -1130,6 +1130,7 @@
 import fs from "fs";
 import { stringify } from "csv";
 import { mapGetters } from "vuex";
+import RaceClass from "../store/Classes/RaceClass";
 
 export default {
   name: "start_protocols",
@@ -1241,7 +1242,7 @@ export default {
       this.dialogs.create_race.state = false;
     },
     createRace(title, type, discipline, competitors) {
-      const race = new this.RaceClass(
+      const race = new RaceClass(
         title ||
           `Race ${
             this.competition.races.length < 1

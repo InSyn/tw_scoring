@@ -187,6 +187,8 @@ io.on("connection", (socket) => {
       });
       const old_mark = mark_to_overwrite.value;
       mark_to_overwrite.value = mark.value;
+      mark_to_overwrite.value_aet = mark.value_aet;
+
       mainWindow
         ? mainWindow.send("info_message", {
             type: "mark_overwrite",

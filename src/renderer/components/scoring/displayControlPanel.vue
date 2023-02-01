@@ -62,6 +62,19 @@
             >{{ localization[lang].app.scoring.live_update }}</v-btn
           >
         </div>
+        <div
+          class="mt-2 d-flex flex-wrap align-center"
+          :style="{
+            backgroundColor:
+              $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
+          }"
+          style="flex: 0 0 auto; padding: 8px; width: 100%; border-radius: 6px"
+        >
+          <div style="font-size: 1.2rem; font-weight: bold">
+            File Translation
+          </div>
+          <export-c-s-v class="ml-auto"></export-c-s-v>
+        </div>
       </div>
     </v-container>
   </v-col>
@@ -70,8 +83,10 @@
 <script>
 import { mapGetters } from "vuex";
 import axios from "axios";
+import ExportCSV from "../exportCSV";
 export default {
   name: "displayControlPanel",
+  components: { ExportCSV },
   methods: {
     log: (data) => console.log(data),
     dbSetCompetitionLive: async (competitions, event_id) => {
@@ -164,7 +179,7 @@ export default {
         }),
       };
       await axios
-        .post("https://live-timingweb.cf:8082/api/v1/events", live_event)
+        .post("https://live-api.timingweb.com:8082/api/v1/events", live_event)
         .then((response) => {
           console.log(response);
         })
@@ -261,7 +276,7 @@ export default {
       };
       axios
         .patch(
-          `https://live-timingweb.cf:8082/api/v1/events/${live_event.event_id}`,
+          `https://live-api.timingweb.com:8082/api/v1/events/${live_event.event_id}`,
           live_event
         )
         .then((response) => {

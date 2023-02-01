@@ -27,14 +27,14 @@ export default {
             (competitor) => competitor.id === competitorId
           )
         )
-        .map((competitor, c_idx, competitors) => {
-          return [
-            c_idx + 1,
-            competitor.info_data["bib"] || " ",
-            competitor.info_data["fullname"] || " ",
-            competitor.info_data["lastname"] || " ",
-            competitor.info_data["name"] || " ",
-          ];
+        .map((competitor, c_idx) => {
+          return {
+            startOrder: c_idx + 1,
+            bib: competitor.info_data["bib"] || " ",
+            fullname: competitor.info_data["fullname"] || " ",
+            lastname: competitor.info_data["lastname"] || " ",
+            name: competitor.info_data["name"] || " ",
+          };
         });
     },
     getFinished() {
@@ -79,24 +79,27 @@ export default {
 
       return list
         .filter((finishedCompetitor, f_idx, finished) => {
-          return finishedCompetitor.order == finished.length - 1;
+          return +finishedCompetitor.order === finished.length - 1;
         })
-        .map((finishedCompetitor) => [
-          finishedCompetitor.rank || " ",
-          finishedCompetitor.info_data["bib"] || " ",
-          finishedCompetitor.info_data["fullname"] || " ",
-          finishedCompetitor.info_data["lastname"] || " ",
-          finishedCompetitor.info_data["name"] || " ",
+        .map((finishedCompetitor) => {
+          return {
+            rank: finishedCompetitor.rank || " ",
+            bib: finishedCompetitor.info_data["bib"] || " ",
+            fullname: finishedCompetitor.info_data["fullname"] || " ",
+            lastname: finishedCompetitor.info_data["lastname"] || " ",
+            name: finishedCompetitor.info_data["name"] || " ",
 
-          this.competition.set_accuracy(
-            this.competition.getRaceResult(
-              finishedCompetitor,
-              this.competition.selected_race
-            )
-          ) || " ",
+            result:
+              this.competition.set_accuracy(
+                this.competition.getRaceResult(
+                  finishedCompetitor,
+                  this.competition.selected_race
+                )
+              ) || " ",
 
-          finishedCompetitor.order,
-        ]);
+            finishOrder: finishedCompetitor.order,
+          };
+        });
     },
     getResults() {
       const list = this.competition.selected_race.finished
@@ -131,26 +134,29 @@ export default {
           );
         });
 
-      list.forEach((_comp, c_idx) => {
-        _comp.rank = c_idx + 1;
-      });
-
-      return list.map((finishedCompetitor) => [
-        finishedCompetitor.rank || " ",
-        finishedCompetitor.info_data["bib"] || " ",
-        finishedCompetitor.info_data["fullname"] || " ",
-        finishedCompetitor.info_data["lastname"] || " ",
-        finishedCompetitor.info_data["name"] || " ",
-        ...this.competition.races.map(
-          (race) =>
+      return list.map((finishedCompetitor, competitor_idx) => {
+        let competitorData = {
+          rank: competitor_idx + 1,
+          bib: finishedCompetitor.info_data["bib"] || " ",
+          fullname: finishedCompetitor.info_data["fullname"] || " ",
+          lastname: finishedCompetitor.info_data["lastname"] || " ",
+          name: finishedCompetitor.info_data["name"] || " ",
+          result:
             this.competition.set_accuracy(
-              this.competition.getRaceResult(finishedCompetitor, race)
-            ) || " "
-        ),
-        this.competition.set_accuracy(
-          this.competition.getResult(finishedCompetitor.id)
-        ) || " ",
-      ]);
+              this.competition.getResult(finishedCompetitor.id)
+            ) || " ",
+        };
+
+        this.competition.races.forEach(
+          (race, race_idx) =>
+            (competitorData[`run_${race_idx + 1}`] =
+              this.competition.set_accuracy(
+                this.competition.getRaceResult(finishedCompetitor, race)
+              ) || " ")
+        );
+
+        return competitorData;
+      });
     },
     getStartList() {
       return this.competition.selected_race._startList
@@ -159,14 +165,14 @@ export default {
             (competitor) => competitor.id === competitorId
           )
         )
-        .map((competitor, c_idx, competitors) => {
-          return [
-            c_idx + 1,
-            competitor.info_data["bib"] || " ",
-            competitor.info_data["fullname"] || " ",
-            competitor.info_data["lastname"] || " ",
-            competitor.info_data["name"] || " ",
-          ];
+        .map((competitor, c_idx) => {
+          return {
+            rank: c_idx + 1,
+            bib: competitor.info_data["bib"] || " ",
+            fullname: competitor.info_data["fullname"] || " ",
+            lastname: competitor.info_data["lastname"] || " ",
+            name: competitor.info_data["name"] || " ",
+          };
         });
     },
 
@@ -185,7 +191,7 @@ export default {
 
         const startList = this.getStartList();
         this.exportCSV({
-          path: "C:\\Users\\InSyn\\Documents\\TW_Translation\\StartList.csv",
+          path: `C:\\Users\\InSyn\\Documents\\TW_Translation\\${this.competitionTitlePrefix}_StartList`,
           data: startList,
         });
 
@@ -193,19 +199,19 @@ export default {
           ? [this.getCompetitorOnStart()[0]]
           : [["", "", "", "", ""]];
         this.exportCSV({
-          path: "C:\\Users\\InSyn\\Documents\\TW_Translation\\OnStart.csv",
+          path: `C:\\Users\\InSyn\\Documents\\TW_Translation\\${this.competitionTitlePrefix}_OnStart`,
           data: onStart,
         });
 
         const finishedCompetitor = this.getFinished();
         this.exportCSV({
-          path: "C:\\Users\\InSyn\\Documents\\TW_Translation\\Finished.csv",
+          path: `C:\\Users\\InSyn\\Documents\\TW_Translation\\${this.competitionTitlePrefix}_Finished`,
           data: finishedCompetitor,
         });
 
         const results = this.getResults();
         await this.exportCSV({
-          path: "C:\\Users\\InSyn\\Documents\\TW_Translation\\Results.csv",
+          path: `C:\\Users\\InSyn\\Documents\\TW_Translation\\${this.competitionTitlePrefix}_Results`,
           data: results,
         });
 
@@ -226,6 +232,9 @@ export default {
     ...mapGetters("main", {
       competition: "competition",
     }),
+    competitionTitlePrefix() {
+      return `${this.competition.mainData.title.stage.value.value}-${this.competition.mainData.title.stage.group}`;
+    },
   },
 };
 </script>

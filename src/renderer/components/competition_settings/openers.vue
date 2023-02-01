@@ -15,17 +15,7 @@
         {{ localization[lang].app.event.forerunners }}
       </div>
       <v-btn
-        @click="
-          competition.stuff.openers.push(
-            new OpenerClass(
-              competition.stuff.openers.length < 1
-                ? competition.stuff.openers.length + 1
-                : competition.stuff.openers[
-                    competition.stuff.openers.length - 1
-                  ].num + 1
-            )
-          )
-        "
+        @click="addOpener"
         style="margin-left: auto"
         text
         :color="$vuetify.theme.themes[appTheme].accent"
@@ -164,16 +154,29 @@
 
 <script>
 import { mapGetters } from "vuex";
+import OpenerClass from "../../store/Classes/OpenerClass";
+
 export default {
   name: "openers",
+  methods: {
+    addOpener() {
+      this.competition.stuff.openers.push(
+        new OpenerClass(
+          this.competition.stuff.openers.length < 1
+            ? this.competition.stuff.openers.length + 1
+            : this.competition.stuff.openers[
+                this.competition.stuff.openers.length - 1
+              ].num + 1
+        )
+      );
+    },
+  },
   computed: {
     ...mapGetters("localization", {
       localization: "localization",
       lang: "lang",
     }),
     ...mapGetters("main", { competition: "competition", appTheme: "appTheme" }),
-    ...mapGetters("roles", { OpenerClass: "OpenerClass" }),
-    console: () => console,
   },
 };
 </script>
