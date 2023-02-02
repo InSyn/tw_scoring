@@ -18,7 +18,7 @@
               v-if="
                 competition.selected_race && competition.selected_race.onTrack
               "
-              class="pa-2 d-flex align-center flex-nowrap"
+              class="pa-2"
               style="
                 border-radius: 6px;
                 font-weight: bold;
@@ -31,21 +31,72 @@
                 color: $vuetify.theme.themes[appTheme].textDefault,
               }"
             >
-              {{
-                `${
-                  competition.competitorsSheet.competitors.find((_comp) => {
-                    return _comp.id === competition.selected_race.onTrack;
-                  }).info_data.bib || ""
-                } ${
-                  competition.competitorsSheet.competitors.find((_comp) => {
-                    return _comp.id === competition.selected_race.onTrack;
-                  }).info_data["lastname"] || ""
-                } ${
-                  competition.competitorsSheet.competitors.find((_comp) => {
-                    return _comp.id === competition.selected_race.onTrack;
-                  }).info_data.name || ""
-                }`
-              }}
+              <div class="competitorName">
+                {{
+                  `${
+                    competition.competitorsSheet.competitors.find((_comp) => {
+                      return _comp.id === competition.selected_race.onTrack;
+                    }).info_data.bib || ""
+                  } ${
+                    competition.competitorsSheet.competitors.find((_comp) => {
+                      return _comp.id === competition.selected_race.onTrack;
+                    }).info_data["lastname"] || ""
+                  } ${
+                    competition.competitorsSheet.competitors.find((_comp) => {
+                      return _comp.id === competition.selected_race.onTrack;
+                    }).info_data.name || ""
+                  }`
+                }}
+              </div>
+              <div
+                class="d-flex align-center mt-1"
+                v-if="
+                  competition.structure.is_aerials && competition.selected_race
+                "
+              >
+                <input
+                  type="text"
+                  v-bind:value="competition.selected_race.ae_code"
+                  @change="setAeCode($event)"
+                  style="
+                    padding: 4px;
+                    min-width: 0;
+                    width: 8rem;
+                    border-radius: 6px;
+                    color: var(--text-default);
+                    background: var(--standard-background);
+                  "
+                />
+                <div
+                  style="
+                    margin-left: 8px;
+                    padding: 4px;
+                    width: 3rem;
+                    border-radius: 6px;
+                    color: var(--text-default);
+                    background: var(--standard-background);
+                  "
+                >
+                  {{
+                    competition.ae_codes.find(
+                      (aeCode) =>
+                        aeCode.code === competition.selected_race.ae_code
+                    )
+                      ? parseFloat(
+                          competition.ae_codes
+                            .find(
+                              (aeCode) =>
+                                aeCode.code ===
+                                competition.selected_race.ae_code
+                            )
+                            [
+                              `value_${competition.mainData.title.stage.group}`
+                            ].replace(",", ".")
+                        )
+                      : 1
+                  }}
+                </div>
+              </div>
             </div>
 
             <div
@@ -120,7 +171,7 @@
                       color: $vuetify.theme.themes[appTheme].action_blue,
                     }
                   "
-                  @click="pushMarks()"
+                  @click=""
                 >
                   {{ localization[lang].app.scoring.result }}
                 </div></v-hover
@@ -168,7 +219,8 @@
                             competition.races[competition.selected_race_id].id,
                             competition.stuff.judges.map((_j) => {
                               return +_j.id;
-                            })
+                            }),
+                            competition.selected_race.ae_code
                           )) ||
                         0
                     )
@@ -601,8 +653,68 @@
                         $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
                     }"
                   >
+                    <!-- AERIALS MARKS -->
                     <div
-                      class="d-flex justify-center align-center"
+                      v-if="competition.structure.is_aerials"
+                      class="aeMarks__wrapper"
+                      style="min-height: 3rem; min-width: 4rem"
+                    >
+                      <div
+                        v-for="aeMark in ['air', 'form', 'landing']"
+                        :key="aeMark"
+                        style="font-size: 12px"
+                      >
+                        <span
+                          style="
+                            display: inline-block;
+                            width: 2rem;
+                            margin-right: 6px;
+                          "
+                        >
+                          {{ aeMark.slice(0, 3) }}:&nbsp;
+                        </span>
+                        {{
+                          `${
+                            (competition.selected_race &&
+                              competition.selected_race.onTrack &&
+                              competition.competitorsSheet.competitors
+                                .find((_competitor) => {
+                                  return (
+                                    _competitor.id ===
+                                    competition.selected_race.onTrack
+                                  );
+                                })
+                                .marks.find((mark) => {
+                                  return (
+                                    mark.judge_id === judge._id &&
+                                    mark.race_id ===
+                                      competition.selected_race.id
+                                  );
+                                }) &&
+                              competition.competitorsSheet.competitors
+                                .find((_competitor) => {
+                                  return (
+                                    _competitor.id ===
+                                    competition.selected_race.onTrack
+                                  );
+                                })
+                                .marks.find((mark) => {
+                                  return (
+                                    mark.judge_id === judge._id &&
+                                    mark.race_id ===
+                                      competition.selected_race.id
+                                  );
+                                }).value_ae[aeMark]) ||
+                            "0"
+                          }`
+                        }}
+                      </div>
+                    </div>
+
+                    <!-- CLASSIC MARK -->
+                    <div
+                      v-else
+                      class="mark__wrapper d-flex justify-center align-center"
                       style="height: 3rem; min-width: 4rem"
                     >
                       {{
@@ -694,7 +806,10 @@
                   @click="
                     competition.selected_race &&
                       competition.selected_race.onTrack &&
-                      publishResult(competition.selected_race.onTrack)
+                      publishResult(
+                        competition.selected_race.onTrack,
+                        competition.selected_race.ae_code
+                      )
                   "
                   :style="{
                     color: $vuetify.theme.themes[appTheme].textDefault,
@@ -712,12 +827,15 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 import MarkClass from "../../store/Classes/MarkClass";
 
 export default {
   name: "onRace",
   methods: {
+    ...mapActions("main", {
+      updateEvent: "updateEvent",
+    }),
     getJudgeSections(judge) {
       return this.competition.result_formula.types[1].sections.filter(
         (section) => {
@@ -765,7 +883,8 @@ export default {
         });
       if (this.competition.selected_race)
         this.competition.selected_race.selectedCompetitor = null;
-      this.$store.commit("main/updateEvent");
+
+      this.updateEvent();
     },
     setSelectedCompetitor(competitor) {
       this.competition.selected_race.selectedCompetitor =
@@ -782,7 +901,7 @@ export default {
           ]);
         })();
     },
-    publishResult(competitor_id) {
+    publishResult(competitor_id, ae_code) {
       const competitor = this.competition.competitorsSheet.competitors.find(
         (_comp) => _comp.id === competitor_id
       );
@@ -809,7 +928,8 @@ export default {
         competitor,
         this.competition.selected_race.id,
         this.score_repeat,
-        competitor.race_status
+        competitor.race_status,
+        ae_code
       );
       this.competition.selected_race.finished.push(competitor_id);
       competitor.res_accepted = false;
@@ -837,6 +957,11 @@ export default {
       this.socket &&
         this.socket.connected &&
         this.socket.emit("accept_res", data);
+    },
+    setAeCode(e) {
+      this.competition.selected_race.ae_code = e.target.value;
+
+      this.updateEvent();
     },
     setBlinker(val) {
       if (this.indicators.blinker === null) {
@@ -884,7 +1009,7 @@ export default {
       this.scoresToChange = {};
       this.change_marks_dialog.state = false;
 
-      this.$store.commit("main/updateEvent");
+      this.updateEvent();
     },
     setTerminalsListener() {
       if (this.terminals.listenTerminals) {
@@ -897,6 +1022,7 @@ export default {
   },
   data() {
     return {
+      ae_code: "",
       indicators: {
         timeout: 812,
         blinker: null,

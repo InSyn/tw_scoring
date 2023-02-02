@@ -10,6 +10,7 @@ export default class RaceClass {
     this.startList = competitors || [];
     this._startList = competitors || [];
     this.selectedCompetitor = competitors[0] || null;
+    this.ae_code = "";
   }
   del_dialog = false;
   finished = [];

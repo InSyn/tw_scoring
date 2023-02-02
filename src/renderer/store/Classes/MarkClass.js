@@ -1,7 +1,7 @@
 import { generateId } from "../../../lib/utils";
 
 export default class MarkClass {
-  constructor(race, race_id, judge, judge_id, value, section) {
+  constructor(race, race_id, judge, judge_id, value, ae_value) {
     this.id = generateId();
 
     this.judge = judge;
@@ -9,13 +9,14 @@ export default class MarkClass {
     this.new_value = null;
     this.race = race;
     this.race_id = race_id;
-    this.section = section || 0;
+    this.section = 0;
     this.value = value || 0;
-    this.value_aet = {
+    this.value_ae = ae_value || {
       air: null,
       form: null,
       landing: null,
     };
-    this.aet_code = null;
+    this.ae_code = null;
   }
+  z;
 }

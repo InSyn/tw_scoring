@@ -1,4 +1,5 @@
 let competition = {
+  ae_codes: [],
   mainData: {
     title: {
       title: "Название",

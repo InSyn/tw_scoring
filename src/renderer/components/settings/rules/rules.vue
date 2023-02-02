@@ -477,7 +477,7 @@
                 $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
             }"
             v-model="competition.structure.selected.accuracy"
-            @change="$store.dispatch('main/updateEvent')"
+            @change="updateEvent"
           >
             <v-radio
               class="pa-2 ma-1"
@@ -875,7 +875,7 @@
                           competition.result_formula.types[0].formula =
                             formula.id;
                           updateResults();
-                          $store.dispatch('main/updateEvent');
+                          updateEvent;
                         "
                         class="mr-2 d-flex flex-nowrap align-center"
                         style="cursor: pointer"
@@ -910,12 +910,47 @@
                       </div>
                     </v-hover>
                     <div
-                      @click="setDoubleUp()"
+                      @click="toggleAerialsMode()"
                       style="
                         display: flex;
                         align-items: center;
                         flex-wrap: nowrap;
                         margin-left: auto;
+                        padding: 4px 6px;
+                        font-weight: bold;
+                        cursor: pointer;
+                      "
+                    >
+                      <div
+                        style="
+                          margin-right: 0.5rem;
+                          height: 1.2rem;
+                          width: 1.2rem;
+                          border-radius: 50%;
+                          transition: background-color 112ms, box-shadow 192ms;
+                        "
+                        :style="[
+                          {
+                            backgroundColor:
+                              $vuetify.theme.themes[appTheme]
+                                .standardBackgroundRGBA,
+                          },
+                          competition.structure.is_aerials && {
+                            backgroundColor:
+                              $vuetify.theme.themes[appTheme].success,
+                            boxShadow: `0 0 2px 1px ${$vuetify.theme.themes[appTheme].success}`,
+                          },
+                        ]"
+                      ></div>
+                      <span>Aerials</span>
+                    </div>
+                    <div
+                      @click="setDoubleUp()"
+                      style="
+                        display: flex;
+                        align-items: center;
+                        flex-wrap: nowrap;
+                        margin-left: 1rem;
                         padding: 4px 6px;
                         font-weight: bold;
                         cursor: pointer;
@@ -1295,7 +1330,7 @@
                                 }
                               );
                             updateResults();
-                            $store.dispatch('main/updateEvent');
+                            updateEvent;
                           "
                           small
                           :color="$vuetify.theme.themes[appTheme].action_red"
@@ -1466,7 +1501,7 @@
                       competition.result_formula.overall_result.select_heats
                         .heats--;
                     updateResults();
-                    $store.dispatch('main/updateEvent');
+                    updateEvent;
                   "
                   >mdi-chevron-left
                 </v-icon>
@@ -1488,7 +1523,7 @@
                     competition.result_formula.overall_result.select_heats
                       .heats++;
                     updateResults();
-                    $store.dispatch('main/updateEvent');
+                    updateEvent;
                   "
                   >mdi-chevron-right
                 </v-icon>
@@ -1499,7 +1534,7 @@
                   competition.result_formula.overall_result.select_heats.mode =
                     mode.id;
                   updateResults();
-                  $store.dispatch('main/updateEvent');
+                  updateEvent;
                 "
                 style="
                   border-radius: 50%;
@@ -1530,11 +1565,14 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 
 export default {
   name: "results",
   methods: {
+    ...mapActions("main", {
+      updateEvent: "updateEvent",
+    }),
     add_prev_stage(stage) {
       if (
         this.competition.stages.prev_stages.some((_prev) => _prev === stage)
@@ -1654,17 +1692,23 @@ export default {
       this.competition.result_formula.types[0].doubleUp =
         !this.competition.result_formula.types[0].doubleUp;
     },
+    toggleAerialsMode() {
+      this.competition.structure.is_aerials =
+        !this.competition.structure.is_aerials;
+
+      this.updateEvent();
+    },
     setRaceResultFormula(type) {
       this.competition.result_formula.type = type;
 
       this.updateResults();
-      this.$store.dispatch("main/updateEvent");
+      this.updateEvent();
     },
     setOverallResultFormula(type) {
       this.competition.result_formula.overall_result.type = type;
 
       this.updateResults();
-      this.$store.dispatch("main/updateEvent");
+      this.updateEvent();
     },
     competitionsInGridSection(competition_id) {
       return (

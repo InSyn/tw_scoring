@@ -59,7 +59,7 @@ export default {
                 r_best: "Убрать лучш.",
                 corridor: "Коридор",
                 average: "Среднее",
-                sum: "Лучший",
+                sum: "Сумма",
                 d_up: "Double Up",
               },
               by_section: {
@@ -259,7 +259,7 @@ export default {
                 r_best: "Remove best",
                 corridor: "Corridor",
                 average: "Average",
-                sum: "Best",
+                sum: "Sum",
                 d_up: "Double Up",
               },
               by_section: {

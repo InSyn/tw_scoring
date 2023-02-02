@@ -191,7 +191,7 @@ export default {
       const live_event = {
         event_id: event_id,
         title: competitions[0].mainData.title.value,
-        sport: "Snowboard",
+        sport: "Фристайл",
         discipline: competitions[0].mainData.discipline.value,
         start_at: new Date(
           `${competitions[0].mainData.date.value}:${competitions[0].mainData.date.time}`

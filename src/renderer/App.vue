@@ -285,12 +285,8 @@ export default {
         // this.$store.commit("main/toggle_mode");
       }
     };
-    this.getAECodes();
   },
   methods: {
-    ...mapActions("aerials", {
-      setAeSheet: "setAeCodes",
-    }),
     ...mapActions("localization", {
       changeLang: "changeLang",
     }),
@@ -300,6 +296,7 @@ export default {
       createCompetition: "createCompetition",
       save_event: "save_event",
       load_event: "load_event",
+      updateEvent: "updateEvent",
     }),
 
     connect() {
@@ -317,19 +314,6 @@ export default {
       for (let i = 0; i < 4; i++) {
         competition.stuff.judges.push(new JudgeClass(`Judge ${i + 1}`, i + 1));
       }
-    },
-    getAECodes() {
-      if (!localStorage.getItem("AE_CODES"))
-        fs.readFile(
-          `${process.cwd()}/app_assets/AE_CODES.json`,
-          "utf8",
-          (err, data) => {
-            if (err) console.error(err);
-            localStorage.setItem("AE_CODES", data);
-          }
-        );
-
-      this.setAeSheet(JSON.parse(localStorage.getItem("AE_CODES")));
     },
     getSysData() {
       ipcRenderer.on("sysData", (event, data) => {

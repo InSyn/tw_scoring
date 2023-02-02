@@ -1,4 +1,4 @@
-import { generateId } from "../../../lib/utils";
+import { generateId, getAECodes } from "../../../lib/utils";
 
 export default class EventClass {
   constructor(...args) {
@@ -6,7 +6,7 @@ export default class EventClass {
     this.live_id = null;
     this.structure.selected.type = 0;
     this.structure.selected.discipline = 0;
-    this.mainData.title.stage.group = "Group";
+    this.mainData.title.stage.group = "men";
     this.mainData.title.stage.value = this.structure.stages[0];
     args.forEach((arg) => {
       if (typeof arg === "object") {
@@ -26,6 +26,8 @@ export default class EventClass {
       title: this.mainData.title.stage.value.value,
       s_competitions: [this.id],
     });
+    this.ae_codes = getAECodes() || [];
+    console.log(this.ae_codes);
   }
   competitorsSheet = {
     header: [
@@ -369,7 +371,7 @@ export default class EventClass {
         doubleUp_competitors: { 0: null, 1: null },
         lower_marks: 0,
         higher_marks: 0,
-        formula: 0,
+        formula: 1,
         formulas: [
           {
             id: 0,
@@ -437,8 +439,21 @@ export default class EventClass {
           {
             id: 1,
             title: "sum",
-            get_result: (comp_id, race_id, judges) => {
+            get_result: (comp_id, race_id, judges, ae_code) => {
               let marks = [];
+              const ae_coef = this.ae_codes.find(
+                (aeCode) => aeCode.code === ae_code
+              )
+                ? parseFloat(
+                    this.ae_codes
+                      .find((aeCode) => aeCode.code === ae_code)
+                      [`value_${this.mainData.title.stage.group}`].replace(
+                        ",",
+                        "."
+                      )
+                  )
+                : 1;
+
               judges.forEach((_j) => {
                 marks.push(
                   ...this.competitorsSheet.competitors
@@ -449,6 +464,13 @@ export default class EventClass {
                       return +_mark.judge === +_j && _mark.race_id === race_id;
                     })
                     .map((_mark) => {
+                      if (this.structure.is_aerials)
+                        return (
+                          (+_mark.value_ae.air +
+                            +_mark.value_ae.form +
+                            +_mark.value_ae.landing) *
+                          ae_coef
+                        );
                       return +_mark.value;
                     })
                 );
@@ -664,9 +686,9 @@ export default class EventClass {
     );
     return result ? (result.status ? result.status : result.value) : 0;
   }
-  publishResult(competitor, race_id, rep, status) {
+  publishResult(competitor, race_id, rep, status, ae_code) {
     const res = {
-      id: Math.random().toString(36).substr(2, 9),
+      id: generateId(),
       value: this.result_formula.types[this.result_formula.type].formulas
         .find(
           (_f) =>
@@ -678,7 +700,8 @@ export default class EventClass {
           race_id,
           this.stuff.judges.map((_j) => {
             return +_j.id;
-          })
+          }),
+          ae_code
         ),
       race_id: race_id,
       repeat: rep || "A",
