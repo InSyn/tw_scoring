@@ -206,10 +206,13 @@
 <script>
 import axios from "axios";
 
-import { mapGetters } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 export default {
   name: "startList",
   methods: {
+    ...mapActions("main", {
+      updateEvent: "updateEvent",
+    }),
     setSelectedCompetitor(competitor_id) {
       this.competition.selected_race.selectedCompetitor = competitor_id;
       this.socket &&
@@ -241,11 +244,11 @@ export default {
           console.log(res);
         });
 
-      this.setCompetitorToTerminals(
-        this.competition.competitorsSheet.competitors.find(
-          (_comp) => _comp.id === competitor_id
-        )
-      );
+      // this.setCompetitorToTerminals(
+      //   this.competition.competitorsSheet.competitors.find(
+      //     (_comp) => _comp.id === competitor_id
+      //   )
+      // );
     },
     setToCorridor(comp_id, cor_idx) {
       if (
@@ -267,11 +270,8 @@ export default {
         .selected_race.startList[0]
         ? this.competition.selected_race.startList[0]
         : null;
-      this.socket &&
-        this.socket.connected &&
-        this.socket.emit("set_competition_data", this.competition, (res) => {
-          console.log(res);
-        });
+
+      this.updateEvent();
     },
     setFocused(e) {
       e.target.style.backgroundColor = `${

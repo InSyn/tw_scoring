@@ -27,17 +27,15 @@ export default class EventClass {
       s_competitions: [this.id],
     });
     this.ae_codes = getAECodes() || [];
-    console.log(this.ae_codes);
   }
   competitorsSheet = {
     header: [
-      { id: "bib", title: "Bib" },
-      { id: "lastname", title: "Lastname" },
-      { id: "name", title: "Name" },
-      { id: "fullname", title: "Full name" },
-      { id: "year", title: "Year" },
-      { id: "rang", title: "Rang" },
-      { id: "region", title: "Region" },
+      { id: "bib", title: "НН" },
+      { id: "lastname", title: "Фамилия" },
+      { id: "name", title: "Имя" },
+      { id: "fullname", title: "Фамилия, Имя" },
+      { id: "year", title: "Год" },
+      { id: "country", title: "Страна" },
     ],
     competitors: [],
   };
@@ -706,6 +704,14 @@ export default class EventClass {
       race_id: race_id,
       repeat: rep || "A",
       status: status || null,
+      jump_code: ae_code || null,
+      degree_difficulty: this.ae_codes.find((aeCode) => aeCode.code === ae_code)
+        ? parseFloat(
+            this.ae_codes
+              .find((aeCode) => aeCode.code === ae_code)
+              [`value_${this.mainData.title.stage.group}`].replace(",", ".")
+          )
+        : 1,
     };
     if (!competitor.results.some((_res) => _res.race_id === race_id)) {
       competitor.results.push(res);

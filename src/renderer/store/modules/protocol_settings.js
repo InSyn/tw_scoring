@@ -296,17 +296,16 @@ export default {
                 (_comp) => _comp.id === competitor.comp_id
               );
               return competition.races.map((_race) => {
+                const result = competitor.competitor.results.find(
+                  (_res) => _res.race_id === _race.id
+                );
+
                 return `${competition.set_accuracy(
                   competition.getRaceResult(competitor.competitor, _race)
                 )} ${
-                  (competition.result_formula.overall_result.type === 3 &&
-                    competitor.competitor.results.find(
-                      (_res) => _res.race_id === _race.id
-                    ) &&
-                    competitor.competitor.results.find(
-                      (_res) => _res.race_id === _race.id
-                    ).repeat) ||
-                  ""
+                  competition.result_formula.overall_result.type === 3 && result
+                    ? result.repeat
+                    : ""
                 }`;
               });
             },

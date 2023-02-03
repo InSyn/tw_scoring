@@ -97,7 +97,7 @@ export default {
           `${competitions[0].mainData.date.value}:${competitions[0].mainData.date.time}`
         ).toUTCString(),
         title: competitions[0].mainData.title.value,
-        sport: "Snowboard",
+        sport: "Фристайл",
         discipline: competitions[0].mainData.discipline.value,
         location: competitions[0].mainData.location.value,
         organization: competitions[0].mainData.provider.value,

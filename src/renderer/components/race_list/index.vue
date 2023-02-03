@@ -469,7 +469,6 @@
                     <v-list-item-group>
                       <v-list-item
                         dense
-                        @dblclick="addToStartList(competitor)"
                         class="d-flex align-center flex-nowrap"
                         v-for="(competitor, c) in filtered_list"
                         :key="c"
@@ -528,7 +527,6 @@
                       <v-list-item
                         dense
                         class="d-flex align-center flex-nowrap"
-                        @dblclick="declineAddToStartList(competitorToRace)"
                         v-for="(competitorToRace, c_r) in dialogs.create_race
                           .competitors"
                         :key="c_r"
@@ -818,7 +816,7 @@
                       }
                     );
                   })"
-              :key="competitor.id"
+              :key="competitor && competitor.id"
             >
               <div
                 class="d-flex flex-nowrap align-center"
@@ -878,7 +876,10 @@
                   </div>
                   <div>{{ comp_n + 1 }}</div>
                 </div>
-                <v-dialog v-model="competitor.info_dialog.state" width="380px"
+                <v-dialog
+                  v-if="competitor"
+                  v-model="competitor.info_dialog.state"
+                  width="380px"
                   ><template v-slot:activator="{ on }">
                     <v-row
                       v-on="on"
@@ -1130,10 +1131,10 @@
 import fs from "fs";
 import { stringify } from "csv";
 import { mapGetters } from "vuex";
-import RaceClass from "../store/Classes/RaceClass";
+import RaceClass from "../../store/Classes/RaceClass";
 
 export default {
-  name: "start_protocols",
+  name: "race_list",
   mounted() {
     if (this.competition && this.competition.races[0])
       this.selectRace(this.competition.races[0]);

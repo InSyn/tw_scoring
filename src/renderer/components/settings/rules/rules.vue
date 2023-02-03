@@ -882,8 +882,8 @@
                       >
                         <div
                           style="
-                            height: 1.2rem;
-                            width: 1.2rem;
+                            height: 12px;
+                            width: 12px;
                             border-radius: 50%;
                             transition: background-color 112ms, box-shadow 192ms;
                           "
@@ -897,7 +897,7 @@
                               competition.result_formula.types[0].formula && {
                               backgroundColor:
                                 $vuetify.theme.themes[appTheme].success,
-                              boxShadow: `0 0 2px 1px ${$vuetify.theme.themes[appTheme].success}`,
+                              boxShadow: `0 0 5px -2px ${$vuetify.theme.themes[appTheme].success}`,
                             },
                           ]"
                         ></div>
@@ -924,8 +924,8 @@
                       <div
                         style="
                           margin-right: 0.5rem;
-                          height: 1.2rem;
-                          width: 1.2rem;
+                          height: 12px;
+                          width: 12px;
                           border-radius: 50%;
                           transition: background-color 112ms, box-shadow 192ms;
                         "
@@ -938,7 +938,7 @@
                           competition.structure.is_aerials && {
                             backgroundColor:
                               $vuetify.theme.themes[appTheme].success,
-                            boxShadow: `0 0 2px 1px ${$vuetify.theme.themes[appTheme].success}`,
+                            boxShadow: `0 0 5px -2px ${$vuetify.theme.themes[appTheme].success}`,
                           },
                         ]"
                       ></div>
@@ -959,8 +959,8 @@
                       <div
                         style="
                           margin-right: 0.5rem;
-                          height: 1.2rem;
-                          width: 1.2rem;
+                          height: 12px;
+                          width: 12px;
                           border-radius: 50%;
                           transition: background-color 112ms, box-shadow 192ms;
                         "
@@ -973,7 +973,7 @@
                           competition.result_formula.types[0].doubleUp && {
                             backgroundColor:
                               $vuetify.theme.themes[appTheme].success,
-                            boxShadow: `0 0 2px 1px ${$vuetify.theme.themes[appTheme].success}`,
+                            boxShadow: `0 0 5px -2px ${$vuetify.theme.themes[appTheme].success}`,
                           },
                         ]"
                       ></div>
@@ -1538,8 +1538,8 @@
                 "
                 style="
                   border-radius: 50%;
-                  height: 1rem;
-                  width: 1rem;
+                  height: 12px;
+                  width: 12px;
                   cursor: pointer;
                 "
                 :style="[
@@ -1551,7 +1551,7 @@
                     .mode === mode.id && {
                     backgroundColor:
                       $vuetify.theme.themes[appTheme].textDefault,
-                    boxShadow: `0 0 2px 1px ${$vuetify.theme.themes[appTheme].textDefault}`,
+                    boxShadow: `0 0 5px -2px ${$vuetify.theme.themes[appTheme].textDefault}`,
                   },
                 ]"
               ></div>

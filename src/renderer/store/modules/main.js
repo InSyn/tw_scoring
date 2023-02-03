@@ -480,7 +480,6 @@ export default {
         { encoding: "utf-8" },
         (err) => {
           if (err) console.error(err);
-          console.log(params.path, jsonData);
         }
       );
 

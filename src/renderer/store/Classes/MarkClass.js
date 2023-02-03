@@ -16,7 +16,5 @@ export default class MarkClass {
       form: null,
       landing: null,
     };
-    this.ae_code = null;
   }
-  z;
 }
