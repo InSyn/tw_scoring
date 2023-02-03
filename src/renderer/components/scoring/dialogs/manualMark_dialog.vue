@@ -206,7 +206,8 @@ export default {
   color: var(--text-default);
   background: var(--standard-background);
 }
-input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
   display: none;
 }
 </style>

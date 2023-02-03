@@ -20,6 +20,30 @@ export default {
     ...mapActions("main", {
       exportCSV: "exportCSV",
     }),
+    getStartList() {
+      return this.competition.selected_race._startList
+        .map((competitorId) =>
+          this.competition.competitorsSheet.competitors.find(
+            (competitor) => competitor.id === competitorId
+          )
+        )
+        .map((competitor, c_idx) => {
+          return {
+            id: competitor.id,
+            start_order: c_idx + 1,
+            bib: competitor.info_data["bib"] || null,
+            fullname: competitor.info_data["fullname"] || null,
+            lastname: competitor.info_data["lastname"] || null,
+            name: competitor.info_data["name"] || null,
+            country: competitor.info_data["country"] || null,
+            country_code: competitor.info_data["country_code"] || null,
+            teamid: null,
+            teamname: null,
+            jump1_code: competitor.info_data["jump1_code"] || null,
+            jump2_code: competitor.info_data["jump2_code"] || null,
+          };
+        });
+    },
     getCompetitorOnStart() {
       return this.competition.selected_race.startList
         .map((competitorId) =>
@@ -36,8 +60,11 @@ export default {
             lastname: competitor.info_data["lastname"] || null,
             name: competitor.info_data["name"] || null,
             country: competitor.info_data["country"] || null,
+            country_code: competitor.info_data["country_code"] || null,
             teamid: null,
             teamname: null,
+            jump1_code: competitor.info_data["jump1_code"] || null,
+            jump2_code: competitor.info_data["jump2_code"] || null,
           };
         })[0];
     },
@@ -87,13 +114,14 @@ export default {
         })
         .map((finishedCompetitor) => {
           let finishedData = {
-            id: competitor.id,
+            id: finishedCompetitor.id,
             rank: finishedCompetitor.rank || null,
             bib: finishedCompetitor.info_data["bib"] || null,
             fullname: finishedCompetitor.info_data["fullname"] || null,
             lastname: finishedCompetitor.info_data["lastname"] || null,
             name: finishedCompetitor.info_data["name"] || null,
             country: finishedCompetitor.info_data["country"] || null,
+            country_code: finishedCompetitor.info_data["country_code"] || null,
             teamid: null,
             teamname: null,
             result:
@@ -153,13 +181,14 @@ export default {
 
       return list.map((finishedCompetitor, competitor_idx) => {
         let competitorData = {
-          id: competitor.id,
+          id: finishedCompetitor.id,
           rank: competitor_idx + 1,
           bib: finishedCompetitor.info_data["bib"] || null,
           fullname: finishedCompetitor.info_data["fullname"] || null,
           lastname: finishedCompetitor.info_data["lastname"] || null,
           name: finishedCompetitor.info_data["name"] || null,
           country: finishedCompetitor.info_data["country"] || null,
+          country_code: finishedCompetitor.info_data["country_code"] || null,
           teamid: null,
           teamname: null,
           result:
@@ -178,27 +207,6 @@ export default {
 
         return competitorData;
       });
-    },
-    getStartList() {
-      return this.competition.selected_race._startList
-        .map((competitorId) =>
-          this.competition.competitorsSheet.competitors.find(
-            (competitor) => competitor.id === competitorId
-          )
-        )
-        .map((competitor, c_idx) => {
-          return {
-            id: competitor.id,
-            rank: c_idx + 1,
-            bib: competitor.info_data["bib"] || null,
-            fullname: competitor.info_data["fullname"] || null,
-            lastname: competitor.info_data["lastname"] || null,
-            name: competitor.info_data["name"] || null,
-            country: competitor.info_data["country"] || null,
-            teamid: null,
-            teamname: null,
-          };
-        });
     },
     setUpdater() {
       if (!this.updateCSV) {
