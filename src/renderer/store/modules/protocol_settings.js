@@ -1,4 +1,5 @@
 import main from "./../modules/main";
+import { generateId } from "../../../lib/utils";
 
 export default {
   namespaced: true,
@@ -66,7 +67,7 @@ export default {
         pdf_scale: 1,
       },
       notations:
-        "<b>Legend</b>:<br><b>DNS</b>: Did Not Start &nbsp <b>DSQ</b>: Disqualified &nbsp <b>DNF</b>: Did Not Finish",
+        "<b>Легенда</b>:<br><b>DNS</b>: Не старт. &nbsp <b>DSQ</b>: Дисквал. &nbsp <b>DNF</b>: Не финиш.",
       signs: {
         left: {
           text: "",
@@ -98,7 +99,7 @@ export default {
     start_list: {},
     fieldClass: class {
       constructor(width, font, align, cell_1, cell_2) {
-        this.id = Math.random().toString(36).substr(2, 9);
+        this.id = generateId();
         this.params.width = width || 10;
         this.params.font = font || 12;
         this.params.f_weight = "normal";
@@ -231,51 +232,182 @@ export default {
         );
       });
 
-      //add race number
-      result_fields.push(
-        new data.fieldClass(
-          6,
-          12,
-          {
-            title: "Left",
-            value: "start",
-          },
-          {
-            data: { id: "race", title: "Race" },
-            handler: function (competitor) {
-              const competition = main.state["competitions"].find(
-                (_comp) => _comp.id === competitor.comp_id
-              );
-              return [...competition.races.map((race) => race.title)];
-            },
-          }
-        )
-      );
-
-      //add judges scores
-      data.competition.stuff.judges.forEach((judge, j_idx) => {
+      //add AE judges scores
+      if (main.state["competition"].structure.is_aerials) {
+        //ADD AE SCORE TYPE
         result_fields.push(
           new data.fieldClass(
             6,
             12,
             { title: "Left", value: "start" },
             {
-              data: { id: `Judge ${j_idx + 1}`, title: `J${j_idx + 1}` },
-              handler: function (_competitor) {
-                return (
-                  _competitor.competitor.marks
-                    .filter((_mark, m_idx, _marks) => {
-                      return _mark.judge === judge.id;
-                    })
-                    .map((_mark) => {
-                      return _mark.value;
-                    }) || "-"
-                );
+              data: {
+                id: `ae_score_type`,
+                title: ``,
+              },
+              handler: function (competitor, competition) {
+                return competition.races.map((race) => [
+                  "Air",
+                  "Form",
+                  "LDG",
+                  "Total",
+                ]);
               },
             }
           )
         );
-      });
+        //ADD AE SCORES ARRAY
+        data.competition.stuff.judges.forEach((judge, j_idx) => {
+          result_fields.push(
+            new data.fieldClass(
+              6,
+              12,
+              { title: "Left", value: "start" },
+              {
+                data: {
+                  id: `AE Judge ${j_idx + 1}`,
+                  title: `AE J${j_idx + 1}`,
+                },
+                handler: function (_competitor) {
+                  return _competitor.competitor.marks
+                    .filter((_mark, m_idx, _marks) => {
+                      return _mark.judge === judge.id;
+                    })
+                    .map((_mark) => {
+                      return [
+                        _mark.value_ae.air || "-",
+                        _mark.value_ae.form || "-",
+                        _mark.value_ae.landing || "-",
+                        " ",
+                      ];
+                    });
+                },
+              }
+            )
+          );
+        });
+        //ADD AE TOTAL
+        result_fields.push(
+          new data.fieldClass(
+            6,
+            12,
+            { title: "Left", value: "start" },
+            {
+              data: {
+                id: `ae_total`,
+                title: `Тотал`,
+              },
+              handler: function (_competitor, competition) {
+                return competition.races.map((race) => {
+                  const marks = _competitor.competitor.marks
+                    .filter((mark) => mark.race_id === race.id)
+                    .map((_mark) => {
+                      return (
+                        +_mark.value_ae.air +
+                          +_mark.value_ae.form +
+                          +_mark.value_ae.landing || ""
+                      );
+                    });
+
+                  const airSum = _competitor.competitor.marks
+                    .map((_mark) => {
+                      return +_mark.value_ae.air || 0;
+                    })
+                    .reduce((form1, form2) => +form1 + +form2);
+                  const formSum = _competitor.competitor.marks
+                    .map((_mark) => {
+                      return +_mark.value_ae.form || 0;
+                    })
+                    .reduce((air1, air2) => +air1 + +air2);
+                  const landingSum = _competitor.competitor.marks
+                    .map((_mark) => {
+                      return +_mark.value_ae.landing || 0;
+                    })
+                    .reduce((landing1, landing2) => +landing1 + +landing2);
+
+                  const totalSum = marks.reduce(
+                    (score1, score2) => +score1 + +score2
+                  );
+
+                  return [
+                    competition.set_accuracy(airSum),
+                    competition.set_accuracy(formSum),
+                    competition.set_accuracy(landingSum),
+                    competition.set_accuracy(totalSum),
+                  ];
+                });
+              },
+            }
+          )
+        );
+        //ADD JUMP CODE
+        result_fields.push(
+          new data.fieldClass(
+            6,
+            12,
+            { title: "Left", value: "start" },
+            {
+              data: {
+                id: `jump_code`,
+                title: `Код`,
+              },
+              handler: function (_competitor) {
+                return _competitor.competitor.results.map((result) => [
+                  result.jump_code || " ",
+                  result.degree_difficulty || " ",
+                ]);
+              },
+            }
+          )
+        );
+      }
+      //CLASSIC SECTION
+      else {
+        //add race number
+        result_fields.push(
+          new data.fieldClass(
+            6,
+            12,
+            {
+              title: "Left",
+              value: "start",
+            },
+            {
+              data: { id: "race", title: "Race" },
+              handler: function (competitor) {
+                const competition = main.state["competitions"].find(
+                  (_comp) => _comp.id === competitor.comp_id
+                );
+                return [...competition.races.map((race) => race.title)];
+              },
+            }
+          )
+        );
+        //add judges scores
+        data.competition.stuff.judges.forEach((judge, j_idx) => {
+          result_fields.push(
+            new data.fieldClass(
+              6,
+              12,
+              { title: "Left", value: "start" },
+              {
+                data: { id: `Judge ${j_idx + 1}`, title: `J${j_idx + 1}` },
+                handler: function (_competitor) {
+                  return (
+                    _competitor.competitor.marks
+                      .filter((_mark, m_idx, _marks) => {
+                        return _mark.judge === judge.id;
+                      })
+                      .map((_mark) => {
+                        return _mark.value;
+                      }) || "-"
+                  );
+                },
+              }
+            )
+          );
+        });
+      }
 
       //add races scores
       result_fields.push(
@@ -291,22 +423,22 @@ export default {
               id: "race_res",
               title: "Score",
             },
-            handler: function (competitor) {
-              const competition = main.state["competitions"].find(
-                (_comp) => _comp.id === competitor.comp_id
-              );
+            handler: function (competitor, competition) {
               return competition.races.map((_race) => {
                 const result = competitor.competitor.results.find(
                   (_res) => _res.race_id === _race.id
                 );
 
-                return `${competition.set_accuracy(
-                  competition.getRaceResult(competitor.competitor, _race)
-                )} ${
-                  competition.result_formula.overall_result.type === 3 && result
-                    ? result.repeat
-                    : ""
-                }`;
+                return [
+                  `${competition.set_accuracy(
+                    competition.getRaceResult(competitor.competitor, _race)
+                  )} ${
+                    competition.result_formula.overall_result.type === 3 &&
+                    result
+                      ? result.repeat
+                      : ""
+                  }`,
+                ];
               });
             },
           }
@@ -332,6 +464,9 @@ export default {
                 competition.set_accuracy(
                   competition.getResult(competitor.competitor.id)
                 ),
+                " ",
+                " ",
+                " ",
               ];
             },
           }

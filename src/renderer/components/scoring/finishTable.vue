@@ -231,46 +231,100 @@
                             `${localization[lang].app.scoring.judge_full} ${mark.judge}`
                           }}
                         </div>
-                        <input
-                          type="text"
-                          readonly
-                          v-model="mark.value"
-                          style="
-                            padding: 2px 4px;
-                            margin-left: auto;
-                            font-weight: bold;
-                            width: 4rem;
-                            border-radius: 2px;
-                          "
-                          :style="{
-                            backgroundColor:
-                              $vuetify.theme.themes[appTheme]
-                                .standardBackgroundRGBA,
-                            color: $vuetify.theme.themes[appTheme].textDefault,
-                          }"
-                        /><v-icon
-                          small
-                          style="margin: 0 4px"
-                          :color="$vuetify.theme.themes[appTheme].textDefault"
-                          >mdi-arrow-right</v-icon
+                        <div
+                          v-if="competition.structure.is_aerials"
+                          class="aeMarks__wrapper ml-auto"
                         >
-                        <input
-                          type="text"
-                          v-model="mark.new_value"
-                          style="
-                            padding: 2px 4px;
-                            font-weight: bold;
-                            width: 4rem;
-                            border-radius: 2px;
-                          "
-                          :style="{
-                            backgroundColor:
-                              $vuetify.theme.themes[appTheme]
-                                .standardBackgroundRGBA,
-                            color: $vuetify.theme.themes[appTheme].textDefault,
-                          }"
-                        />
+                          <input
+                            v-for="(aeMark, aeMarkKey) in mark.value_ae"
+                            :key="`${mark.id}_${aeMarkKey}`"
+                            v-model="mark.value_ae[aeMarkKey]"
+                            style="
+                              margin-left: 4px;
+                              padding: 2px 4px;
+                              font-weight: bold;
+                              width: 4rem;
+                              border-radius: 2px;
+                            "
+                            :style="{
+                              backgroundColor:
+                                $vuetify.theme.themes[appTheme]
+                                  .standardBackgroundRGBA,
+                              color:
+                                $vuetify.theme.themes[appTheme].textDefault,
+                            }"
+                          />
+                        </div>
+                        <div v-else class="classicMarks__wrapper ml-auto">
+                          <input
+                            type="text"
+                            readonly
+                            v-model="mark.value"
+                            style="
+                              padding: 2px 4px;
+                              font-weight: bold;
+                              width: 4rem;
+                              border-radius: 2px;
+                            "
+                            :style="{
+                              backgroundColor:
+                                $vuetify.theme.themes[appTheme]
+                                  .standardBackgroundRGBA,
+                              color:
+                                $vuetify.theme.themes[appTheme].textDefault,
+                            }"
+                          /><v-icon
+                            small
+                            style="margin: 0 4px"
+                            :color="$vuetify.theme.themes[appTheme].textDefault"
+                            >mdi-arrow-right</v-icon
+                          >
+                          <input
+                            type="text"
+                            v-model="mark.new_value"
+                            style="
+                              padding: 2px 4px;
+                              font-weight: bold;
+                              width: 4rem;
+                              border-radius: 2px;
+                            "
+                            :style="{
+                              backgroundColor:
+                                $vuetify.theme.themes[appTheme]
+                                  .standardBackgroundRGBA,
+                              color:
+                                $vuetify.theme.themes[appTheme].textDefault,
+                            }"
+                          />
+                        </div>
                       </div>
+                    </div>
+                    <div
+                      v-if="competition.structure.is_aerials"
+                      style="padding: 4px 8px"
+                    >
+                      <span style="font-weight: bold">jump code</span>
+                      <input
+                        v-if="
+                          competitor.results.find(
+                            (result) => result.race_id === race.id
+                          )
+                        "
+                        v-model="
+                          competitor.results.find(
+                            (result) => result.race_id === race.id
+                          ).jump_code
+                        "
+                        style="
+                          min-width: 0;
+                          width: 5rem;
+                          margin-left: 8px;
+                          padding: 4px 6px;
+                          color: var(--text-default);
+                          background: var(--standard-background);
+                          border-radius: 6px;
+                        "
+                      />
                     </div>
                     <div
                       style="
@@ -514,10 +568,13 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 export default {
   name: "finishTable",
   methods: {
+    ...mapActions("main", {
+      updateEvent: "updateEvent",
+    }),
     get_race_res(competitor, _race) {
       return this.competition.result_formula.get_race_result(
         competitor.marks.filter((mark) => {
@@ -594,7 +651,13 @@ export default {
         }
       });
       this.competition.races.forEach((race) =>
-        this.competition.publishResult(competitor, race.id)
+        this.competition.publishResult({
+          competitor: competitor,
+          race_id: race.id,
+          ae_code: competitor.results.find(
+            (result) => result.race_id === race.id
+          ).jump_code,
+        })
       );
 
       this.changeMarksDialog[competitor.id] = false;

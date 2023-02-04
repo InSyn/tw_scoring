@@ -187,7 +187,7 @@
     </header>
     <main style="position: relative">
       <app-menu></app-menu>
-      <keep-alive>
+      <keep-alive exclude="manualMark_dialog">
         <router-view class="window"></router-view>
       </keep-alive>
     </main>

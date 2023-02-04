@@ -201,7 +201,23 @@
                         textAlign: header.params.align.value,
                       }"
                     >
-                      {{ value }}
+                      <div
+                        class="arrValue"
+                        v-if="Array.isArray(value)"
+                        style="height: 100%"
+                      >
+                        <div
+                          v-for="(nestedValue, v_idx) in value"
+                          :key="v_idx"
+                          style="height: 100%"
+                        >
+                          <span
+                            style="display: inline-block; min-height: 1rem"
+                            >{{ nestedValue }}</span
+                          >
+                        </div>
+                      </div>
+                      <span class="value" v-else>{{ value }}</span>
                     </div>
                   </div>
                   <div style="width: 100%" v-if="header.params.cell_2.id">

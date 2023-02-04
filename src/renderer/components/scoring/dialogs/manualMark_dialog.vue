@@ -52,13 +52,19 @@
           </div>
 
           <div v-if="competition.structure.is_aerials" class="aeMarks__wrapper">
-            <input
-              class="aeMark__input"
+            <div
+              class="aeMark__wrapper"
               v-for="aeMark in ['air', 'form', 'landing']"
               :key="aeMark"
-              v-model="scoresToChange[`${aeMark}_${judge._id}`]"
-              type="number"
-            />
+              style="display: inline-block"
+            >
+              <input
+                class="aeMark__input"
+                v-if="aeScores[judge._id]"
+                v-model.number="aeScores[judge._id][aeMark]"
+                type="number"
+              />
+            </div>
           </div>
           <input
             v-else
@@ -110,6 +116,12 @@ import MarkClass from "../../../store/Classes/MarkClass";
 export default {
   name: "manualMark_dialog",
   props: ["competition"],
+  activated() {
+    this.competition.stuff.judges.forEach(
+      (judge) =>
+        (this.aeScores[judge._id] = { air: null, form: null, landing: null })
+    );
+  },
   methods: {
     ...mapActions("main", {
       updateEvent: "updateEvent",
@@ -119,35 +131,85 @@ export default {
         (_comp) => _comp.id === this.competition.selected_race.onTrack
       );
 
-      for (let mKey in this.scoresToChange) {
-        if (
-          !competitor.marks.some((_m) => {
-            return (
-              _m.judge_id === mKey &&
-              _m.race_id === this.competition.selected_race.id
+      if (this.competition.structure.is_aerials) {
+        //SET AE MARK
+        for (let mKey in this.aeScores) {
+          if (
+            !competitor.marks.some((_m) => {
+              return (
+                _m.judge_id === mKey &&
+                _m.race_id === this.competition.selected_race.id
+              );
+            })
+          ) {
+            const newMark = { air: 0, form: 0, landing: 0 };
+            for (let aeScoreKey in this.aeScores[mKey]) {
+              if (this.aeScores[mKey][aeScoreKey])
+                newMark[aeScoreKey] = this.aeScores[mKey][aeScoreKey];
+            }
+
+            competitor.marks.push(
+              new MarkClass(
+                this.competition.selected_race_id,
+                this.competition.selected_race.id,
+                this.competition.stuff.judges.find((_j) => _j._id === mKey).id,
+                this.competition.stuff.judges.find((_j) => _j._id === mKey)._id,
+                0,
+                newMark
+              )
             );
-          })
-        ) {
-          competitor.marks.push(
-            new MarkClass(
-              this.competition.selected_race_id,
-              this.competition.selected_race.id,
-              this.competition.stuff.judges.find((_j) => _j._id === mKey).id,
-              this.competition.stuff.judges.find((_j) => _j._id === mKey)._id,
-              this.scoresToChange[mKey]
-            )
-          );
-        } else {
-          competitor.marks.find((_m) => {
-            return (
-              _m.judge_id === mKey &&
-              _m.race_id === this.competition.selected_race.id
+          } else {
+            const existingMark = competitor.marks.find((_m) => {
+              return (
+                _m.judge_id === mKey &&
+                _m.race_id === this.competition.selected_race.id
+              );
+            });
+            for (let aeScoreKey in this.aeScores[mKey]) {
+              if (this.aeScores[mKey][aeScoreKey])
+                existingMark.value_ae[aeScoreKey] =
+                  this.aeScores[mKey][aeScoreKey];
+            }
+          }
+        }
+      } else {
+        for (let mKey in this.scoresToChange) {
+          //SET CLASSIC MARK
+          if (
+            !competitor.marks.some((_m) => {
+              return (
+                _m.judge_id === mKey &&
+                _m.race_id === this.competition.selected_race.id
+              );
+            })
+          ) {
+            //NEW MARK IF NOT EXIST
+            competitor.marks.push(
+              new MarkClass(
+                this.competition.selected_race_id,
+                this.competition.selected_race.id,
+                this.competition.stuff.judges.find((_j) => _j._id === mKey).id,
+                this.competition.stuff.judges.find((_j) => _j._id === mKey)._id,
+                this.scoresToChange[mKey]
+              )
             );
-          }).value = this.scoresToChange[mKey];
+          } else {
+            //REPLACE MARK VALUE IF ALREADY EXIST
+            competitor.marks.find((_m) => {
+              return (
+                _m.judge_id === mKey &&
+                _m.race_id === this.competition.selected_race.id
+              );
+            }).value = this.scoresToChange[mKey];
+          }
         }
       }
 
+      //CLEAR DIALOG DATA
       this.scoresToChange = {};
+      for (const aeScoreType in this.aeScores) {
+        this.aeScores[aeScoreType] = {};
+      }
       this.change_marks_dialog.state = false;
 
       this.updateEvent();
@@ -159,6 +221,7 @@ export default {
         state: false,
       },
       scoresToChange: {},
+      aeScores: {},
     };
   },
   computed: {
@@ -197,6 +260,12 @@ export default {
   text-align: center;
 }
 .aeMarks__wrapper {
+}
+.aeMark__wrapper {
+  margin-right: 6px;
+}
+.aeMark__wrapper:last-child {
+  margin-right: 0;
 }
 .aeMark__input {
   min-width: 0;

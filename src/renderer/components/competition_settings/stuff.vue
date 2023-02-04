@@ -650,7 +650,7 @@
                 <v-icon small>mdi-close</v-icon></v-btn
               >
               <span
-                @click="force_disconnect(judge.socket_id)"
+                @click="force_disconnect(judge)"
                 style="
                   display: block;
                   cursor: pointer;
@@ -687,15 +687,21 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 import JudgeClass from "../../store/Classes/JudgeClass";
 import JuryClass from "../../store/Classes/JuryClass";
 
 export default {
   name: "stuff",
   methods: {
-    force_disconnect(socket_id) {
-      this.$store.commit("main/force_disconnect", socket_id);
+    ...mapActions("main", {
+      updateEvent: "updateEvent",
+    }),
+    async force_disconnect(judge) {
+      await this.$store.commit("main/force_disconnect", judge.socket_id);
+
+      if (judge.connected) judge.connected = false;
+      this.updateEvent();
     },
     addStuff(stuffType) {
       stuffType === "judge"

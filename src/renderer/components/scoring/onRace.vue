@@ -557,39 +557,49 @@
                       >
                         {{ aeMark.slice(0, 4) }}:&nbsp;
                       </span>
-                      {{
-                        `${
-                          (competition.selected_race &&
-                            competition.selected_race.onTrack &&
-                            competition.competitorsSheet.competitors
-                              .find((_competitor) => {
-                                return (
-                                  _competitor.id ===
-                                  competition.selected_race.onTrack
-                                );
-                              })
-                              .marks.find((mark) => {
-                                return (
-                                  mark.judge_id === judge._id &&
-                                  mark.race_id === competition.selected_race.id
-                                );
-                              }) &&
-                            competition.competitorsSheet.competitors
-                              .find((_competitor) => {
-                                return (
-                                  _competitor.id ===
-                                  competition.selected_race.onTrack
-                                );
-                              })
-                              .marks.find((mark) => {
-                                return (
-                                  mark.judge_id === judge._id &&
-                                  mark.race_id === competition.selected_race.id
-                                );
-                              }).value_ae[aeMark]) ||
-                          "0"
-                        }`
-                      }}
+                      <span
+                        style="
+                          margin-left: 8px;
+                          font-size: 1.2rem;
+                          font-weight: bold;
+                        "
+                      >
+                        {{
+                          `${
+                            (competition.selected_race &&
+                              competition.selected_race.onTrack &&
+                              competition.competitorsSheet.competitors
+                                .find((_competitor) => {
+                                  return (
+                                    _competitor.id ===
+                                    competition.selected_race.onTrack
+                                  );
+                                })
+                                .marks.find((mark) => {
+                                  return (
+                                    mark.judge_id === judge._id &&
+                                    mark.race_id ===
+                                      competition.selected_race.id
+                                  );
+                                }) &&
+                              competition.competitorsSheet.competitors
+                                .find((_competitor) => {
+                                  return (
+                                    _competitor.id ===
+                                    competition.selected_race.onTrack
+                                  );
+                                })
+                                .marks.find((mark) => {
+                                  return (
+                                    mark.judge_id === judge._id &&
+                                    mark.race_id ===
+                                      competition.selected_race.id
+                                  );
+                                }).value_ae[aeMark]) ||
+                            "0"
+                          }`
+                        }}</span
+                      >
                     </div>
                   </div>
 
@@ -808,13 +818,13 @@ export default {
           );
         }
       });
-      this.competition.publishResult(
-        competitor,
-        this.competition.selected_race.id,
-        this.score_repeat,
-        competitor.race_status,
-        ae_code
-      );
+      this.competition.publishResult({
+        competitor: competitor,
+        race_id: this.competition.selected_race.id,
+        rep: this.score_repeat,
+        status: competitor.race_status,
+        ae_code: ae_code,
+      });
       this.competition.selected_race.finished.push(competitor_id);
       competitor.res_accepted = false;
       competitor.race_status = null;

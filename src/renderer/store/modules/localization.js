@@ -60,6 +60,7 @@ export default {
                 corridor: "Коридор",
                 average: "Среднее",
                 sum: "Сумма",
+                ae: "АЕ",
                 d_up: "Double Up",
               },
               by_section: {
@@ -260,6 +261,7 @@ export default {
                 corridor: "Corridor",
                 average: "Average",
                 sum: "Sum",
+                ae: "AE",
                 d_up: "Double Up",
               },
               by_section: {

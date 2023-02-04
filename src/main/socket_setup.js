@@ -262,11 +262,18 @@ io.on("connection", (socket) => {
           ]);
       }
     });
+    io.sockets.emit("competition_data_updated", competition);
   });
 
   socket.on("disconnect", (reason) => {
+    const connected_judge = competition.stuff.judges.find(
+      (judge) => judge.socket_id === socket.id
+    );
+    if (connected_judge) connected_judge.connected = false;
+
     delete io.sockets.sockets[socket.id];
 
+    io.sockets.emit("competition_data_updated", competition);
     mainWindow &&
       mainWindow.webContents.send("server_message", [
         4,
