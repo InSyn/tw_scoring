@@ -30,6 +30,11 @@ export default {
         link: "competitors",
       },
       {
+        icon: "accountMultiple",
+        title: "Teams",
+        link: "teams",
+      },
+      {
         icon: "clipboardList",
         title: "Races",
         link: "start_protocols",
@@ -450,9 +455,20 @@ export default {
       state.showPreview = toggleState;
     },
     updateEvent: (state) => {
+      const allCompetitions = state.competitions.map((competition) => {
+        return {
+          ...competition,
+        };
+      });
+
+      const competition = {
+        ...state.competition,
+        allCompetitions: allCompetitions,
+      };
+
       state.socket &&
         state.socket.connected &&
-        state.socket.emit("set_competition_data", state.competition, (res) => {
+        state.socket.emit("set_competition_data", competition, (res) => {
           console.log(res);
         });
     },
@@ -556,6 +572,8 @@ export default {
         evData_competition.races.forEach((_race) =>
           competition.races.push(_race)
         );
+
+        competition.teams = [...evData_competition.teams];
 
         state.competitions.push(competition);
       });

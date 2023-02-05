@@ -28,8 +28,37 @@ export default {
           )
         )
         .map((competitor, c_idx) => {
+          // TEAM MODE LIST
+          if (this.competition.is_teams) {
+            const competitorTeam = this.competition.teams.find((team) =>
+              team.competitors.some(
+                (teamCompetitor) => teamCompetitor.id === competitor.id
+              )
+            );
+
+            if (competitorTeam) {
+              const startOrder =
+                this.competition.teams.indexOf(competitorTeam) + 1 || 0;
+
+              return {
+                id: competitor.info_data["id"] || null,
+                start_order: startOrder,
+                bib: competitor.info_data["bib"] || null,
+                fullname: competitor.info_data["fullname"] || null,
+                lastname: competitor.info_data["lastname"] || null,
+                name: competitor.info_data["name"] || null,
+                country: competitor.info_data["country"] || null,
+                country_code: competitor.info_data["country_code"] || null,
+                teamid: competitorTeam.id,
+                teamname: competitorTeam.name,
+                jump1_code: competitor.info_data["jump1_code"] || null,
+                jump2_code: competitor.info_data["jump2_code"] || null,
+              };
+            }
+          }
+
           return {
-            id: competitor.id,
+            id: competitor.info_data["id"] || null,
             start_order: c_idx + 1,
             bib: competitor.info_data["bib"] || null,
             fullname: competitor.info_data["fullname"] || null,
@@ -53,7 +82,7 @@ export default {
         )
         .map((competitor, c_idx) => {
           return {
-            id: competitor.id,
+            id: competitor.info_data["id"] || null,
             start_order: c_idx + 1,
             bib: competitor.info_data["bib"] || null,
             fullname: competitor.info_data["fullname"] || null,
@@ -114,7 +143,7 @@ export default {
         })
         .map((finishedCompetitor) => {
           let finishedData = {
-            id: finishedCompetitor.id,
+            id: finishedCompetitor.info_data["id"] || null,
             rank: finishedCompetitor.rank || null,
             bib: finishedCompetitor.info_data["bib"] || null,
             fullname: finishedCompetitor.info_data["fullname"] || null,
@@ -125,11 +154,9 @@ export default {
             teamid: null,
             teamname: null,
             result:
-              this.competition.set_accuracy(
-                this.competition.getRaceResult(
-                  finishedCompetitor,
-                  this.competition.selected_race
-                )
+              this.competition.getRaceResult(
+                finishedCompetitor,
+                this.competition.selected_race
               ) || null,
 
             finishOrder: finishedCompetitor.order,
@@ -138,9 +165,8 @@ export default {
           this.competition.races.forEach(
             (race, race_idx) =>
               (finishedData[`run_${race_idx + 1}`] =
-                this.competition.set_accuracy(
-                  this.competition.getRaceResult(finishedCompetitor, race)
-                ) || null)
+                this.competition.getRaceResult(finishedCompetitor, race) ||
+                null)
           );
 
           return finishedData;
@@ -180,8 +206,69 @@ export default {
         });
 
       return list.map((finishedCompetitor, competitor_idx) => {
+        // TEAM MODE LIST
+        if (this.competition.is_teams) {
+          const competitorTeam = this.competition.teams.find((team) =>
+            team.competitors.some(
+              (teamCompetitor) => teamCompetitor.id === finishedCompetitor.id
+            )
+          );
+
+          if (competitorTeam) {
+            const rankedTeamsArr = this.competition.teams
+              .map((team) => {
+                const teamResult = this.competition.getTeamRaceResult(
+                  team,
+                  this.competition.selected_race
+                );
+
+                if (teamResult)
+                  return {
+                    ...team,
+                    teamResult,
+                  };
+              })
+              .sort(
+                (team1_res, team2_res) =>
+                  +team2_res.teamResult - +team1_res.teamResult
+              );
+            const competitorTeamRank =
+              rankedTeamsArr.indexOf(
+                rankedTeamsArr.find((team) => team.id === competitorTeam.id)
+              ) + 1 || null;
+            const competitorTeamResult =
+              rankedTeamsArr.find(
+                (rankedTeam) => rankedTeam.id === competitorTeam.id
+              ).teamResult || null;
+
+            const teamResultData = {
+              id: finishedCompetitor.info_data["id"] || null,
+              rank: competitorTeamRank,
+              bib: finishedCompetitor.info_data["bib"] || null,
+              fullname: finishedCompetitor.info_data["fullname"] || null,
+              lastname: finishedCompetitor.info_data["lastname"] || null,
+              name: finishedCompetitor.info_data["name"] || null,
+              country: finishedCompetitor.info_data["country"] || null,
+              country_code:
+                finishedCompetitor.info_data["country_code"] || null,
+              teamid: competitorTeam.id,
+              teamname: competitorTeam.name,
+              result: competitorTeamResult,
+            };
+
+            this.competition.races.forEach(
+              (race, race_idx) =>
+                (teamResultData[`run_${race_idx + 1}`] =
+                  this.competition.getRaceResult(finishedCompetitor, race) ||
+                  null)
+            );
+
+            return teamResultData;
+          }
+        }
+
         let competitorData = {
-          id: finishedCompetitor.id,
+          id: finishedCompetitor.info_data["id"] || null,
           rank: competitor_idx + 1,
           bib: finishedCompetitor.info_data["bib"] || null,
           fullname: finishedCompetitor.info_data["fullname"] || null,
@@ -191,18 +278,13 @@ export default {
           country_code: finishedCompetitor.info_data["country_code"] || null,
           teamid: null,
           teamname: null,
-          result:
-            this.competition.set_accuracy(
-              this.competition.getResult(finishedCompetitor.id)
-            ) || null,
+          result: this.competition.getResult(finishedCompetitor.id) || null,
         };
 
         this.competition.races.forEach(
           (race, race_idx) =>
             (competitorData[`run_${race_idx + 1}`] =
-              this.competition.set_accuracy(
-                this.competition.getRaceResult(finishedCompetitor, race)
-              ) || null)
+              this.competition.getRaceResult(finishedCompetitor, race) || null)
         );
 
         return competitorData;
@@ -210,6 +292,7 @@ export default {
     },
     setUpdater() {
       if (!this.updateCSV) {
+        this.saveCSV();
         this.updateCSV = true;
         this.updater = setInterval(this.saveCSV, 2150);
       } else {

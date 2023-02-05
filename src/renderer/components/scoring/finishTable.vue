@@ -20,6 +20,7 @@
         style="position: relative; height: calc(100% - 32px)"
       >
         <div
+          v-if="competition.selected_race"
           style="
             position: relative;
             height: 100%;
@@ -32,6 +33,7 @@
           }"
         >
           <v-row
+            v-if="!competition.is_teams"
             class="pa-1"
             no-gutters
             style="position: absolute; height: 32px; top: 0; right: 0; left: 0"
@@ -63,8 +65,14 @@
               >{{ localization[lang].app.scoring.t_result }}</v-col
             >
           </v-row>
+
+          <teams-list
+            v-if="competition.is_teams"
+            :competition="competition"
+          ></teams-list>
+
           <div
-            v-if="competition.selected_race"
+            v-else
             style="
               position: absolute;
               left: 0;
@@ -120,9 +128,7 @@
                       v-for="(race, rr) in competition.races"
                       :key="rr"
                       >{{
-                        `${competition.set_accuracy(
-                          competition.getRaceResult(competitor, race)
-                        )} ${
+                        `${competition.getRaceResult(competitor, race)} ${
                           (competition.result_formula.overall_result.type ===
                             3 &&
                             competitor.results.find(
@@ -138,11 +144,7 @@
                     ><v-col
                       class="d-flex justify-center align-center"
                       style="max-width: 5rem"
-                      >{{
-                        competition.set_accuracy(
-                          competition.getResult(competitor.id)
-                        )
-                      }}</v-col
+                      >{{ competition.getResult(competitor.id) }}</v-col
                     ></v-row
                   ></v-hover
                 ></template
@@ -232,7 +234,7 @@
                           }}
                         </div>
                         <div
-                          v-if="competition.structure.is_aerials"
+                          v-if="competition.is_aerials"
                           class="aeMarks__wrapper ml-auto"
                         >
                           <input
@@ -299,10 +301,7 @@
                         </div>
                       </div>
                     </div>
-                    <div
-                      v-if="competition.structure.is_aerials"
-                      style="padding: 4px 8px"
-                    >
+                    <div v-if="competition.is_aerials" style="padding: 4px 8px">
                       <span style="font-weight: bold">jump code</span>
                       <input
                         v-if="
@@ -569,8 +568,10 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
+import TeamsList from "./finishTable/teamsList";
 export default {
   name: "finishTable",
+  components: { TeamsList },
   methods: {
     ...mapActions("main", {
       updateEvent: "updateEvent",

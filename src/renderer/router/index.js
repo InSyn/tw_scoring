@@ -14,6 +14,7 @@ import protocols from "../components/protocols";
 import final_protocols from "../components/final_protocols";
 import start_protocols from "../components/start_protocols";
 import lic_check from "../components/lic_check";
+import teams from "../components/teams";
 
 export default new Router({
   routes: [
@@ -44,6 +45,11 @@ export default new Router({
       path: "/competitors",
       name: "competitors",
       component: competitors,
+    },
+    {
+      path: "/teams",
+      name: "teams",
+      component: teams,
     },
     {
       path: "/start_protocols",

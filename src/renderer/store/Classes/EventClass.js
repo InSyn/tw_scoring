@@ -39,6 +39,8 @@ export default class EventClass {
     ],
     competitors: [],
   };
+  is_aerials = true;
+  is_teams = true;
   mainData = {
     title: {
       title: "Title",
@@ -107,7 +109,6 @@ export default class EventClass {
     stage_grid: [],
   };
   structure = {
-    is_aerials: true,
     statuses: [
       {
         value: "DNF",
@@ -512,9 +513,7 @@ export default class EventClass {
               });
 
               // SPLIT AE MARKS TO ARRAYS BY MARK TYPE
-              const ae_air = marks.map((mark) => {
-                return mark.value_ae.air;
-              });
+              const ae_air = marks.map((mark) => mark.value_ae.air);
               const ae_form = marks.map((mark) => mark.value_ae.form);
               const ae_landing = marks.map((mark) => mark.value_ae.landing);
 
@@ -655,6 +654,7 @@ export default class EventClass {
     judges: [],
     openers: [],
   };
+  teams = [];
   technicalInfo = {
     title: "Техническая информация",
     change_dialog: false,
@@ -741,13 +741,36 @@ export default class EventClass {
     const overall = competitor
       ? competitor.results_overall.find((res) => res.competition_id === this.id)
       : null;
-    return overall ? (overall.status ? overall.status : overall.value) : 0;
+    return overall
+      ? overall.status
+        ? overall.status
+        : this.set_accuracy(overall.value)
+      : this.set_accuracy(0);
   }
   getRaceResult(competitor, race) {
     const result = competitor.results.find(
       (result) => result.race_id === race.id
     );
-    return result ? (result.status ? result.status : result.value) : 0;
+    return result
+      ? result.status
+        ? result.status
+        : this.set_accuracy(result.value)
+      : this.set_accuracy(0);
+  }
+  getTeamRaceResult(team, race) {
+    const teamResultsArr = team.competitors.map((competitor) =>
+      competitor.results.find((result) => result.race_id === race.id)
+    );
+    const filteredArr = teamResultsArr.filter((result) => !!result);
+
+    return filteredArr.length > 0
+      ? this.set_accuracy(
+          filteredArr.reduce(
+            (accumulator, object) => accumulator + +object.value,
+            0
+          )
+        )
+      : this.set_accuracy(0);
   }
   publishResult(params) {
     const res = {
@@ -796,7 +819,7 @@ export default class EventClass {
   set_accuracy(val) {
     const acc = this.structure.accuracy[this.structure.selected.accuracy];
     if (typeof val === "string") return val;
-    let res = (Math.floor(acc.value * +val) / acc.value).toString().split(".");
+    let res = (Math.round(acc.value * +val) / acc.value).toString().split(".");
     if (acc.digits > 0) {
       if (res[1]) {
         for (let i = 0; i < acc.digits - res[1].length; i++) {

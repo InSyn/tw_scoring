@@ -49,9 +49,7 @@
 
             <div
               class="d-flex align-center mt-1"
-              v-if="
-                competition.structure.is_aerials && competition.selected_race
-              "
+              v-if="competition.is_aerials && competition.selected_race"
             >
               <input
                 type="text"
@@ -539,7 +537,7 @@
                 >
                   <!-- AERIALS MARKS -->
                   <div
-                    v-if="competition.structure.is_aerials"
+                    v-if="competition.is_aerials"
                     class="aeMarks__wrapper"
                     style="min-height: 3rem; min-width: 4rem"
                   >

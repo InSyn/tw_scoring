@@ -51,7 +51,7 @@
             }}
           </div>
 
-          <div v-if="competition.structure.is_aerials" class="aeMarks__wrapper">
+          <div v-if="competition.is_aerials" class="aeMarks__wrapper">
             <div
               class="aeMark__wrapper"
               v-for="aeMark in ['air', 'form', 'landing']"
@@ -131,7 +131,7 @@ export default {
         (_comp) => _comp.id === this.competition.selected_race.onTrack
       );
 
-      if (this.competition.structure.is_aerials) {
+      if (this.competition.is_aerials) {
         //SET AE MARK
         for (let mKey in this.aeScores) {
           if (

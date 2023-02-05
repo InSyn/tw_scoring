@@ -233,7 +233,7 @@ export default {
       });
 
       //add AE judges scores
-      if (main.state["competition"].structure.is_aerials) {
+      if (main.state["competition"].is_aerials) {
         //ADD AE SCORE TYPE
         result_fields.push(
           new data.fieldClass(
@@ -430,9 +430,7 @@ export default {
                 );
 
                 return [
-                  `${competition.set_accuracy(
-                    competition.getRaceResult(competitor.competitor, _race)
-                  )} ${
+                  `${competition.getRaceResult(competitor.competitor, _race)} ${
                     competition.result_formula.overall_result.type === 3 &&
                     result
                       ? result.repeat
@@ -461,9 +459,7 @@ export default {
                 (_comp) => _comp.id === competitor.comp_id
               );
               return [
-                competition.set_accuracy(
-                  competition.getResult(competitor.competitor.id)
-                ),
+                competition.getResult(competitor.competitor.id),
                 " ",
                 " ",
                 " ",

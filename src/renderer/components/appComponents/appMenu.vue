@@ -32,6 +32,7 @@
 import { mapGetters } from "vuex";
 import {
   mdiAccountGroup,
+  mdiAccountMultiple,
   mdiClipboardList,
   mdiCog,
   mdiNumeric10BoxMultiple,
@@ -45,12 +46,13 @@ export default {
   data() {
     return {
       icons: {
-        cog: mdiCog,
-        viewDashboard: mdiViewDashboard,
         accountGroup: mdiAccountGroup,
+        accountMultiple: mdiAccountMultiple,
         clipboardList: mdiClipboardList,
+        cog: mdiCog,
         numeric10BoxMultiple: mdiNumeric10BoxMultiple,
         trophyVariant: mdiTrophyVariant,
+        viewDashboard: mdiViewDashboard,
       },
     };
   },

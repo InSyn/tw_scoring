@@ -1,0 +1,111 @@
+<template>
+  <div class="teamTable__row">
+    <div class="teamName__wrapper">
+      <span class="teamName__label">Название</span>
+      <input
+        class="teamName__input"
+        v-model.lazy.trim="team.name"
+        type="text"
+      />
+      <span class="teamId__label">Team ID</span>
+      <input class="teamId__input" v-model.lazy.trim="team.id" type="text" />
+      <team-competitors_dialog
+        :competition="competition"
+        :team="team"
+      ></team-competitors_dialog>
+    </div>
+    <div class="teamCompetitors__wrapper">
+      <team-competitor
+        v-for="competitor in team.competitors"
+        :key="competitor.id"
+        :competitor="competitor"
+      ></team-competitor>
+    </div>
+  </div>
+</template>
+
+<script>
+import TeamCompetitor from "./teamCompetitor";
+import TeamCompetitors_dialog from "./dialogs/teamCompetitors_dialog";
+export default {
+  name: "teamTableRow",
+  props: ["competition", "team"],
+  components: { TeamCompetitors_dialog, TeamCompetitor },
+  methods: {
+    logTeamRes(team) {
+      console.log(
+        this.competition.getTeamRaceResult(team, this.competition.selected_race)
+      );
+    },
+  },
+};
+</script>
+
+<style scoped>
+.teamTable__row {
+  position: relative;
+  margin-bottom: 4px;
+  padding: 6px;
+  background: var(--card-background);
+  border-radius: 6px;
+}
+.teamTable__row:last-child {
+  margin-bottom: 0;
+}
+/*.teamTable__row::before {*/
+/*  content: "";*/
+/*  position: absolute;*/
+/*  top: 0;*/
+/*  right: 0;*/
+/*  bottom: 0;*/
+/*  left: 0;*/
+/*  background: var(--text-default);*/
+/*  opacity: 0;*/
+/*  transition: opacity 128ms;*/
+/*}*/
+/*.teamTable__row:hover::before {*/
+/*  opacity: 0.25;*/
+/*}*/
+.teamName__wrapper {
+  position: relative;
+  display: flex;
+  align-items: baseline;
+}
+.teamName__label {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+.teamName__input {
+  min-width: 0;
+  margin-left: 8px;
+  padding: 4px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: var(--text-default);
+  background: var(--standard-background);
+  border-radius: 6px;
+}
+.teamId__label {
+  margin-left: 8px;
+  font-weight: bold;
+}
+.teamId__input {
+  min-width: 0;
+  width: 6rem;
+  margin-left: 4px;
+  padding: 4px;
+  color: var(--text-default);
+  background: var(--standard-background);
+  border-radius: 6px;
+}
+.teamCompetitors__wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  position: relative;
+  min-height: 32px;
+  margin-top: 6px;
+  padding: 4px 0 0 4px;
+  background: var(--standard-background);
+  border-radius: 6px;
+}
+</style>
