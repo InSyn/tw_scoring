@@ -37,12 +37,12 @@ export default {
             );
 
             if (competitorTeam) {
-              const startOrder =
-                this.competition.teams.indexOf(competitorTeam) + 1 || 0;
+              // const startOrder =
+              //   this.competition.teams.indexOf(competitorTeam) + 1 || 0;
 
               return {
                 id: competitor.info_data["id"] || null,
-                start_order: startOrder,
+                start_order: c_idx + 1,
                 bib: competitor.info_data["bib"] || null,
                 fullname: competitor.info_data["fullname"] || null,
                 lastname: competitor.info_data["lastname"] || null,
@@ -232,6 +232,7 @@ export default {
                 (team1_res, team2_res) =>
                   +team2_res.teamResult - +team1_res.teamResult
               );
+            console.log(rankedTeamsArr);
             const competitorTeamRank =
               rankedTeamsArr.indexOf(
                 rankedTeamsArr.find((team) => team.id === competitorTeam.id)

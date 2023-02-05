@@ -1,5 +1,5 @@
 import main from "./../modules/main";
-import { generateId } from "../../../lib/utils";
+import { cutMarks, generateId } from "../../../lib/utils";
 
 export default {
   namespaced: true,
@@ -233,7 +233,138 @@ export default {
       });
 
       //add AE judges scores
+
       if (main.state["competition"].is_aerials) {
+        //ADD AE AIR SCORE
+        result_fields.push(
+          new data.fieldClass(
+            6,
+            12,
+            { title: "Left", value: "start" },
+            {
+              data: {
+                id: `ae_air_total`,
+                title: `Air`,
+              },
+              handler: function (_competitor, competition) {
+                const airMarks = cutMarks(
+                  competition.stuff.judges.map((judge) => {
+                    return _competitor.competitor.marks
+                      .filter((_mark, m_idx, _marks) => {
+                        return _mark.judge === judge.id;
+                      })
+                      .map((_mark) => {
+                        return _mark.value_ae.air;
+                      });
+                  }),
+                  competition.result_formula.types[0].higher_marks,
+                  competition.result_formula.types[0].lower_marks
+                );
+
+                if (airMarks.length > 0)
+                  return this.set_accuracy([
+                    airMarks.reduce((air1, air2) => +air1 + +air2),
+                  ]);
+
+                return [" "];
+              },
+            }
+          )
+        );
+        //ADD AE FORM SCORE
+        result_fields.push(
+          new data.fieldClass(
+            6,
+            12,
+            { title: "Left", value: "start" },
+            {
+              data: {
+                id: `ae_form_total`,
+                title: `Form`,
+              },
+              handler: function (_competitor, competition) {
+                const formMarks = cutMarks(
+                  competition.stuff.judges.map((judge) => {
+                    return _competitor.competitor.marks
+                      .filter((_mark, m_idx, _marks) => {
+                        return _mark.judge === judge.id;
+                      })
+                      .map((_mark) => {
+                        return _mark.value_ae.form;
+                      });
+                  }),
+                  competition.result_formula.types[0].higher_marks,
+                  competition.result_formula.types[0].lower_marks
+                );
+
+                if (formMarks.length > 0)
+                  return this.set_accuracy([
+                    formMarks.reduce((air1, air2) => +air1 + +air2),
+                  ]);
+
+                return [" "];
+              },
+            }
+          )
+        );
+        //ADD AE LANDING SCORE
+        result_fields.push(
+          new data.fieldClass(
+            6,
+            12,
+            { title: "Left", value: "start" },
+            {
+              data: {
+                id: `ae_landing_total`,
+                title: `LDG`,
+              },
+              handler: function (_competitor, competition) {
+                const landingMarks = cutMarks(
+                  competition.stuff.judges.map((judge) => {
+                    return _competitor.competitor.marks
+                      .filter((_mark, m_idx, _marks) => {
+                        return _mark.judge === judge.id;
+                      })
+                      .map((_mark) => {
+                        return _mark.value_ae.landing;
+                      });
+                  }),
+                  competition.result_formula.types[0].higher_marks,
+                  competition.result_formula.types[0].lower_marks
+                );
+
+                if (landingMarks.length > 0)
+                  return this.set_accuracy([
+                    landingMarks.reduce((air1, air2) => +air1 + +air2),
+                  ]);
+
+                return [" "];
+              },
+            }
+          )
+        );
+
+        //ADD JUMP CODE
+        result_fields.push(
+          new data.fieldClass(
+            6,
+            12,
+            { title: "Left", value: "start" },
+            {
+              data: {
+                id: `jump_code`,
+                title: `Прыжок`,
+              },
+              handler: function (_competitor) {
+                return _competitor.competitor.results.map((result) => [
+                  result.jump_code || " ",
+                  result.degree_difficulty || " ",
+                ]);
+              },
+            }
+          )
+        );
+
         //ADD AE SCORE TYPE
         result_fields.push(
           new data.fieldClass(
@@ -309,25 +440,43 @@ export default {
                       );
                     });
 
-                  const airSum = _competitor.competitor.marks
-                    .map((_mark) => {
+                  const airScores = cutMarks(
+                    _competitor.competitor.marks.map((_mark) => {
                       return +_mark.value_ae.air || 0;
-                    })
-                    .reduce((form1, form2) => +form1 + +form2);
-                  const formSum = _competitor.competitor.marks
-                    .map((_mark) => {
-                      return +_mark.value_ae.form || 0;
-                    })
-                    .reduce((air1, air2) => +air1 + +air2);
-                  const landingSum = _competitor.competitor.marks
-                    .map((_mark) => {
-                      return +_mark.value_ae.landing || 0;
-                    })
-                    .reduce((landing1, landing2) => +landing1 + +landing2);
-
-                  const totalSum = marks.reduce(
-                    (score1, score2) => +score1 + +score2
+                    }),
+                    competition.result_formula.types[0].higher_marks,
+                    competition.result_formula.types[0].lower_marks
                   );
+                  const formScores = cutMarks(
+                    _competitor.competitor.marks.map((_mark) => {
+                      return +_mark.value_ae.form || 0;
+                    }),
+                    competition.result_formula.types[0].higher_marks,
+                    competition.result_formula.types[0].lower_marks
+                  );
+                  const landingScores = cutMarks(
+                    _competitor.competitor.marks.map((_mark) => {
+                      return +_mark.value_ae.landing || 0;
+                    }),
+                    competition.result_formula.types[0].higher_marks,
+                    competition.result_formula.types[0].lower_marks
+                  );
+
+                  const airSum = airScores.reduce(
+                    (form1, form2) => +form1 + +form2
+                  );
+                  const formSum = formScores.reduce(
+                    (air1, air2) => +air1 + +air2
+                  );
+                  const landingSum = landingScores.reduce(
+                    (landing1, landing2) => +landing1 + +landing2
+                  );
+
+                  const totalSum = cutMarks(
+                    marks,
+                    competition.result_formula.types[0].higher_marks,
+                    competition.result_formula.types[0].lower_marks
+                  ).reduce((score1, score2) => +score1 + +score2);
 
                   return [
                     competition.set_accuracy(airSum),
@@ -336,26 +485,6 @@ export default {
                     competition.set_accuracy(totalSum),
                   ];
                 });
-              },
-            }
-          )
-        );
-        //ADD JUMP CODE
-        result_fields.push(
-          new data.fieldClass(
-            6,
-            12,
-            { title: "Left", value: "start" },
-            {
-              data: {
-                id: `jump_code`,
-                title: `Код`,
-              },
-              handler: function (_competitor) {
-                return _competitor.competitor.results.map((result) => [
-                  result.jump_code || " ",
-                  result.degree_difficulty || " ",
-                ]);
               },
             }
           )
@@ -530,6 +659,196 @@ export default {
           }
         )
       );
+      if (main.state["competition"].structure.is_aerials) {
+        //ADD AE SCORE TYPE
+        result_fields.push(
+          new data.fieldClass(
+            6,
+            12,
+            { title: "Left", value: "start" },
+            {
+              data: {
+                id: `ae_score_type`,
+                title: ``,
+              },
+              handler: function (competitor, competition) {
+                return competition.races.map((race) => [
+                  "Air",
+                  "Form",
+                  "LDG",
+                  "Total",
+                ]);
+              },
+            }
+          )
+        );
+        //ADD AE SCORES ARRAY
+        data.competition.stuff.judges.forEach((judge, j_idx) => {
+          result_fields.push(
+            new data.fieldClass(
+              6,
+              12,
+              { title: "Left", value: "start" },
+              {
+                data: {
+                  id: `AE Judge ${j_idx + 1}`,
+                  title: `AE J${j_idx + 1}`,
+                },
+                handler: function (_competitor) {
+                  return _competitor.competitor.marks
+                    .filter((_mark, m_idx, _marks) => {
+                      return _mark.judge === judge.id;
+                    })
+                    .map((_mark) => {
+                      return [
+                        _mark.value_ae.air || "-",
+                        _mark.value_ae.form || "-",
+                        _mark.value_ae.landing || "-",
+                        " ",
+                      ];
+                    });
+                },
+              }
+            )
+          );
+        });
+        //ADD AE TOTAL
+        result_fields.push(
+          new data.fieldClass(
+            6,
+            12,
+            { title: "Left", value: "start" },
+            {
+              data: {
+                id: `ae_total`,
+                title: `Тотал`,
+              },
+              handler: function (_competitor, competition) {
+                return competition.races.map((race) => {
+                  const marks = _competitor.competitor.marks
+                    .filter((mark) => mark.race_id === race.id)
+                    .map((_mark) => {
+                      return (
+                        +_mark.value_ae.air +
+                          +_mark.value_ae.form +
+                          +_mark.value_ae.landing || ""
+                      );
+                    });
+
+                  const airSum = _competitor.competitor.marks
+                    .map((_mark) => {
+                      return +_mark.value_ae.air || 0;
+                    })
+                    .reduce((form1, form2) => +form1 + +form2);
+                  const formSum = _competitor.competitor.marks
+                    .map((_mark) => {
+                      return +_mark.value_ae.form || 0;
+                    })
+                    .reduce((air1, air2) => +air1 + +air2);
+                  const landingSum = _competitor.competitor.marks
+                    .map((_mark) => {
+                      return +_mark.value_ae.landing || 0;
+                    })
+                    .reduce((landing1, landing2) => +landing1 + +landing2);
+
+                  const totalSum = marks.reduce(
+                    (score1, score2) => +score1 + +score2
+                  );
+
+                  return [
+                    competition.set_accuracy(airSum),
+                    competition.set_accuracy(formSum),
+                    competition.set_accuracy(landingSum),
+                    competition.set_accuracy(totalSum),
+                  ];
+                });
+              },
+            }
+          )
+        );
+        //ADD JUMP CODE
+        result_fields.push(
+          new data.fieldClass(
+            6,
+            12,
+            { title: "Left", value: "start" },
+            {
+              data: {
+                id: `jump_code`,
+                title: `Код`,
+              },
+              handler: function (_competitor) {
+                return _competitor.competitor.results.map((result) => [
+                  result.jump_code || " ",
+                  result.degree_difficulty || " ",
+                ]);
+              },
+            }
+          )
+        );
+        //add races scores
+        result_fields.push(
+          new data.fieldClass(
+            6,
+            12,
+            {
+              title: "Left",
+              value: "start",
+            },
+            {
+              data: {
+                id: "race_res",
+                title: "Score",
+              },
+              handler: function (competitor, competition) {
+                return competition.races.map((_race) => {
+                  const result = competitor.competitor.results.find(
+                    (_res) => _res.race_id === _race.id
+                  );
+
+                  return [
+                    `${competition.set_accuracy(
+                      competition.getRaceResult(competitor.competitor, _race)
+                    )} ${
+                      competition.result_formula.overall_result.type === 3 &&
+                      result
+                        ? result.repeat
+                        : ""
+                    }`,
+                  ];
+                });
+              },
+            }
+          )
+        );
+        //add overall result
+        result_fields.push(
+          new data.fieldClass(
+            8,
+            12,
+            {
+              title: "Left",
+              value: "start",
+            },
+            {
+              data: { id: "result", title: "Result" },
+              handler: function (competitor) {
+                const competition = main.state["competitions"].find(
+                  (_comp) => _comp.id === competitor.comp_id
+                );
+                return [
+                  competition.set_accuracy(
+                    competition.getResult(competitor.competitor.id)
+                  ),
+                  " ",
+                  " ",
+                  " ",
+                ];
+              },
+            }
+          )
+        );
+      }
 
       //add judges scores
       data.competition.stuff.judges.forEach((judge, j_idx) => {

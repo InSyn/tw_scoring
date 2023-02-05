@@ -13,6 +13,7 @@
       <div
         class="teamCompetitor"
         v-for="teamCompetitor in rankedTeam.competitors"
+        :key="teamCompetitor.id"
       >
         <div class="teamCompetitorBib">
           {{ teamCompetitor.info_data["bib"] }}

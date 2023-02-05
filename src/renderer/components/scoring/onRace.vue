@@ -87,7 +87,17 @@
                               aeCode.code === competition.selected_race.ae_code
                           )
                           [
-                            `value_${competition.mainData.title.stage.group}`
+                            `value_${
+                              competition.competitorsSheet.competitors.find(
+                                (_comp) => {
+                                  return (
+                                    _comp.id ===
+                                    competition.selected_race.onTrack
+                                  );
+                                }
+                              ).info_data["group"] ||
+                              competition.mainData.title.stage.group
+                            }`
                           ].replace(",", ".")
                       )
                     : 1

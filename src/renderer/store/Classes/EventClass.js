@@ -36,6 +36,12 @@ export default class EventClass {
       { id: "fullname", title: "Фамилия, Имя" },
       { id: "year", title: "Год" },
       { id: "country", title: "Страна" },
+      { id: "country_code", title: "Код" },
+      { id: "jump1_code", title: "Прыжок" },
+      { id: "id", title: "ID" },
+      { id: "team_name", title: "Команда" },
+      { id: "team_id", title: "Team ID" },
+      { id: "group", title: "Пол" },
     ],
     competitors: [],
   };
@@ -485,6 +491,11 @@ export default class EventClass {
             id: 2,
             title: "ae",
             get_result: (comp_id, race_id, judges, ae_code) => {
+              const competitor = this.competitorsSheet.competitors.find(
+                (_comp) => {
+                  return _comp.id === comp_id;
+                }
+              );
               let marks = [];
 
               const aeCode = this.ae_codes.find(
@@ -492,10 +503,12 @@ export default class EventClass {
               );
               const ae_coef = aeCode
                 ? parseFloat(
-                    aeCode[`value_${this.mainData.title.stage.group}`].replace(
-                      ",",
-                      "."
-                    )
+                    aeCode[
+                      `value_${
+                        competitor.info_data["group"] ||
+                        this.mainData.title.stage.group
+                      }`
+                    ].replace(",", ".")
                   )
                 : 1;
 
@@ -758,9 +771,12 @@ export default class EventClass {
       : this.set_accuracy(0);
   }
   getTeamRaceResult(team, race) {
+    console.log(team);
+    console.log(race);
     const teamResultsArr = team.competitors.map((competitor) =>
       competitor.results.find((result) => result.race_id === race.id)
     );
+    console.log(teamResultsArr);
     const filteredArr = teamResultsArr.filter((result) => !!result);
 
     return filteredArr.length > 0
