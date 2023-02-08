@@ -1038,27 +1038,6 @@
                   }"
                 >
                   <div class="pa-2 d-flex align-center">
-                    <label class="font-weight-bold" for="lower_marks">{{
-                      localization[lang].app.settings.race_results.by_judge
-                        .r_last
-                    }}</label
-                    ><input
-                      class="pa-1 ml-2 font-weight-bold"
-                      style="width: 3.8rem; border-radius: 6px"
-                      :style="{
-                        color: $vuetify.theme.themes[appTheme].textDefault,
-                        backgroundColor:
-                          $vuetify.theme.themes[appTheme]
-                            .standardBackgroundRGBA,
-                      }"
-                      v-model="competition.result_formula.types[0].lower_marks"
-                      id="lower_marks"
-                      type="number"
-                      min="0"
-                      max="12"
-                    />
-                  </div>
-                  <div class="pa-2 d-flex align-center">
                     <label class="font-weight-bold" for="higher_marks">{{
                       localization[lang].app.settings.race_results.by_judge
                         .r_best
@@ -1074,6 +1053,27 @@
                       }"
                       v-model="competition.result_formula.types[0].higher_marks"
                       id="higher_marks"
+                      type="number"
+                      min="0"
+                      max="12"
+                    />
+                  </div>
+                  <div class="pa-2 d-flex align-center">
+                    <label class="font-weight-bold" for="lower_marks">{{
+                      localization[lang].app.settings.race_results.by_judge
+                        .r_last
+                    }}</label
+                    ><input
+                      class="pa-1 ml-2 font-weight-bold"
+                      style="width: 3.8rem; border-radius: 6px"
+                      :style="{
+                        color: $vuetify.theme.themes[appTheme].textDefault,
+                        backgroundColor:
+                          $vuetify.theme.themes[appTheme]
+                            .standardBackgroundRGBA,
+                      }"
+                      v-model="competition.result_formula.types[0].lower_marks"
+                      id="lower_marks"
                       type="number"
                       min="0"
                       max="12"

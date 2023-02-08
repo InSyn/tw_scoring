@@ -46,7 +46,7 @@ export default class EventClass {
     competitors: [],
   };
   is_aerials = true;
-  is_teams = true;
+  is_teams = false;
   mainData = {
     title: {
       title: "Title",
@@ -771,12 +771,9 @@ export default class EventClass {
       : this.set_accuracy(0);
   }
   getTeamRaceResult(team, race) {
-    console.log(team);
-    console.log(race);
     const teamResultsArr = team.competitors.map((competitor) =>
       competitor.results.find((result) => result.race_id === race.id)
     );
-    console.log(teamResultsArr);
     const filteredArr = teamResultsArr.filter((result) => !!result);
 
     return filteredArr.length > 0

@@ -56,7 +56,7 @@ export default {
               title: "Формула подсчёта заезда",
               by_judge: {
                 title: "По судьям",
-                r_last: "Убрать посл.",
+                r_last: "Убрать худш.",
                 r_best: "Убрать лучш.",
                 corridor: "Коридор",
                 average: "Среднее",
@@ -258,7 +258,7 @@ export default {
               title: "Race result formula",
               by_judge: {
                 title: "By judge",
-                r_last: "Remove last",
+                r_last: "Remove worst",
                 r_best: "Remove best",
                 corridor: "Corridor",
                 average: "Average",

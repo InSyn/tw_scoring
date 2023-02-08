@@ -350,7 +350,7 @@ export default {
             "result_formula",
             "teams",
           ];
-          console.log(data);
+
           function checkValues(obj1, obj2) {
             Object.keys(obj2).forEach((dataKey) => {
               if (obj1[dataKey] && !excludedKeys.includes(dataKey)) {
@@ -379,7 +379,6 @@ export default {
           }
 
           checkValues(data, state.competition);
-          console.log(data);
         });
       }
     },
@@ -540,7 +539,6 @@ export default {
         evData_competition.stuff.judges.forEach((_judge) => {
           competition.stuff.judges.push(_judge);
         });
-        console.log(competition.stuff.judges);
 
         competition.stuff.jury = [];
         evData_competition.stuff.jury.forEach((_judge) => {
@@ -571,7 +569,6 @@ export default {
             competition.competitorsSheet.competitors.push(_competitor);
           }
         );
-        console.log(competition.competitorsSheet.competitors);
 
         competition.races = [];
         evData_competition.races.forEach((_race) =>
@@ -583,7 +580,6 @@ export default {
           competition.teams.push(_race)
         );
 
-        console.log(competition.teams);
         state.competitions.push(competition);
       });
 

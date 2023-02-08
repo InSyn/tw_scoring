@@ -127,6 +127,7 @@ io.on("connection", (socket) => {
     let competitor = competition.competitorsSheet.competitors.find((_comp) => {
       return _comp.id === race.onTrack;
     });
+
     if (
       race.onTrack &&
       !competitor.marks.some((_mark) => {

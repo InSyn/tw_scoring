@@ -3,7 +3,7 @@
     <router-link
       v-slot="{ href, route, navigate, isActive, isExactActive }"
       custom
-      v-for="(page, p) in appMenu"
+      v-for="(page, p) in getMenuList"
       :key="p"
       :to="{ name: page.link }"
       tag="div"
@@ -63,8 +63,15 @@ export default {
     }),
     ...mapGetters("main", {
       appMenu: "appMenu",
+      competition: "competition",
       showMenu: "showMenu",
     }),
+    getMenuList() {
+      if (this.competition && !this.competition.is_teams)
+        return this.appMenu.filter((menuLink) => menuLink.link !== "teams");
+
+      return this.appMenu;
+    },
   },
 };
 </script>

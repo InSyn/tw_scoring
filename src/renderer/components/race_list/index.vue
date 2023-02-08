@@ -1512,7 +1512,6 @@ export default {
       appTheme: "appTheme",
       socket: "socket",
     }),
-    ...mapGetters("event", { RaceClass: "RaceClass" }),
     filtered_list() {
       return this.competition.competitorsSheet.competitors.filter(
         (competitor) => {
