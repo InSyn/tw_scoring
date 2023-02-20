@@ -49,6 +49,11 @@ export default {
         title: "Protocols",
         link: "protocols",
       },
+      {
+        icon: "",
+        title: "Jumps",
+        link: "aeCodes",
+      },
     ],
     appTheme: "dark",
     competition: null,
@@ -356,14 +361,15 @@ export default {
               if (obj1[dataKey] && !excludedKeys.includes(dataKey)) {
                 if (Array.isArray(obj1[dataKey])) {
                   obj1[dataKey].forEach((competitor, c_idx) => {
-                    Object.keys(obj2[dataKey][c_idx]).forEach((field) => {
-                      if (
-                        obj2[dataKey][c_idx][field] !==
-                        obj1[dataKey][c_idx][field]
-                      )
-                        obj2[dataKey][c_idx][field] =
-                          obj1[dataKey][c_idx][field];
-                    });
+                    if (obj2[dataKey][c_idx])
+                      Object.keys(obj2[dataKey][c_idx]).forEach((field) => {
+                        if (
+                          obj2[dataKey][c_idx][field] !==
+                          obj1[dataKey][c_idx][field]
+                        )
+                          obj2[dataKey][c_idx][field] =
+                            obj1[dataKey][c_idx][field];
+                      });
                   });
                 }
                 if (

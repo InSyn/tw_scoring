@@ -6,8 +6,10 @@
       backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
     }"
   >
-    <div class="pa-2 d-flex align-center flex-nowrap">
-      <div style="display: flex; align-items: center; width: 50%">
+    <div class="pa-2 d-flex align-center flex-nowrap" style="flex: 0 0 auto">
+      <div
+        style="flex: 0 0 auto; display: flex; align-items: center; width: 50%"
+      >
         <label
           for="prot_title"
           class="font-weight-bold"
@@ -29,6 +31,7 @@
       </div>
       <div
         style="
+          flex: 0 0 auto;
           display: flex;
           align-items: center;
           width: 50%;
@@ -55,7 +58,7 @@
         />
       </div>
     </div>
-    <div style="display: flex; flex-wrap: wrap">
+    <div style="flex: 0 0 auto; display: flex; flex-wrap: wrap">
       <div
         style="
           display: flex;
@@ -144,7 +147,7 @@
         </div>
       </div>
     </div>
-    <div class="pa-2 d-flex flex-column flex-grow-1">
+    <div class="pa-2 d-flex flex-column" style="flex: 1 0 auto">
       <div class="d-flex flex-nowrap align-end">
         <v-hover
           v-slot:default="{ hover }"

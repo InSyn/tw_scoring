@@ -27,6 +27,7 @@
       <div @click.stop="moveCompetitorUp" class="switchCompetitor-btn">
         <v-icon class="switchCompetitor-icon" small>mdi-chevron-up</v-icon>
       </div>
+
       <div @click.stop="moveCompetitorDown" class="switchCompetitor-btn">
         <v-icon class="switchCompetitor-icon" small>mdi-chevron-down</v-icon>
       </div>
@@ -39,7 +40,7 @@ import CompetitorDataDialog from "./dialogs/competitorDataDialog";
 import { mapActions } from "vuex";
 
 export default {
-  name: "tableRow",
+  name: "competitorRow",
   components: { CompetitorDataDialog },
   props: ["competition", "competitor", "competitors", "listIsSorted"],
   data() {
@@ -129,6 +130,7 @@ export default {
   position: absolute;
   z-index: 999;
   top: 0;
+  /*left: 0;*/
   left: -24px;
   height: 100%;
   width: 24px;

@@ -148,6 +148,8 @@ export default {
                 newMark[aeScoreKey] = this.aeScores[mKey][aeScoreKey];
             }
 
+            // console.log(mKey);
+            // console.log(this.competition.stuff.judges);
             competitor.marks.push(
               new MarkClass(
                 this.competition.selected_race_id,
@@ -232,6 +234,19 @@ export default {
     ...mapGetters("main", {
       appTheme: "appTheme",
     }),
+  },
+  watch: {
+    "change_marks_dialog.state": function (val) {
+      if (val)
+        this.competition.stuff.judges.forEach(
+          (judge) =>
+            (this.aeScores[judge._id] = {
+              air: null,
+              form: null,
+              landing: null,
+            })
+        );
+    },
   },
 };
 </script>

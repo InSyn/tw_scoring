@@ -144,12 +144,13 @@ export default {
           );
         }
       });
-      this.competition.publishResult(
-        competitor,
-        this.competition.selected_race.id,
-        this.score_repeat,
-        competitor.race_status
-      );
+      this.competition.publishResult({
+        competitor: competitor,
+        race_id: this.competition.selected_race.id,
+        rep: this.score_repeat,
+        status: competitor.race_status,
+        ae_code: competitor.info_data["jump1_code"],
+      });
       this.competition.selected_race.finished.push(competitor_id);
       competitor.res_accepted = false;
       competitor.race_status = null;

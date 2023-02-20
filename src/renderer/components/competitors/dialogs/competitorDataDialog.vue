@@ -30,7 +30,8 @@
           <input
             class="competitorDataUnit-input"
             type="text"
-            v-model.lazy="competitor.info_data[field.id]"
+            @change="setDataValue($event, competitor, field)"
+            v-bind:value="competitor.info_data[field.id]"
           />
         </div>
       </div>
@@ -56,13 +57,16 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 import { mdiAccountEdit } from "@mdi/js";
 
 export default {
   name: "competitorDataDialog",
   props: ["competition", "competitor", "dialogState"],
   methods: {
+    ...mapActions("main", {
+      updateEvent: "updateEvent",
+    }),
     deleteCompetitor(competitor) {
       this.competition.races.forEach((race) => {
         race.startList = race.startList.filter(
@@ -96,7 +100,12 @@ export default {
     refreshAllStartLists(race) {
       race.startList[0] ? (race.selectedCompetitor = race.startList[0]) : null;
 
-      this.$store.dispatch("main/updateEvent");
+      this.updateEvent();
+    },
+    setDataValue(e, competitor, dataField) {
+      competitor.info_data[dataField.id] = e.target.value;
+
+      this.updateEvent();
     },
   },
   data() {

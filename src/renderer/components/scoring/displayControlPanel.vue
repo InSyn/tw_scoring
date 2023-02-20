@@ -147,7 +147,9 @@ export default {
                       .map((result) => {
                         return {
                           race: result.race_id,
-                          value: result.value,
+                          value: `${result.value}${
+                            result.repeat ? " " + result.repeat : ""
+                          }`,
                           status: result.status,
                         };
                       }),
@@ -178,13 +180,14 @@ export default {
           };
         }),
       };
+      // console.log(live_event);
       await axios
         .post("https://live-api.timingweb.com:8082/api/v1/events", live_event)
         .then((response) => {
           console.log(response);
         })
         .catch((e) => {
-          console.log(e);
+          console.error(e);
         });
     },
     dbUpdateCompetitionLive(competitions, event_id) {
@@ -243,7 +246,9 @@ export default {
                       .map((result) => {
                         return {
                           race: result.race_id,
-                          value: result.value,
+                          value: `${result.value}${
+                            result.repeat ? " " + result.repeat : ""
+                          }`,
                           status: result.status,
                         };
                       }),
@@ -295,7 +300,7 @@ export default {
             this.live_config.updateLive_Indicator = false;
           }, 192);
           this.live_config.update_live = false;
-          console.log(e);
+          console.error(e);
         });
     },
     setUpdater(competitions, event_id) {

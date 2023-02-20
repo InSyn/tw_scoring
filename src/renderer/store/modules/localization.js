@@ -14,6 +14,7 @@ export default {
             start_protocols: "Заезды",
             scoring: "Скоринг",
             protocols: "Протоколы",
+            aeCodes: "Таблица прыжков",
           },
           event: {
             event_header: "Событие",
@@ -216,6 +217,7 @@ export default {
             start_protocols: "Races",
             scoring: "Scoring",
             protocols: "Protocols",
+            aeCodes: "Jump codes",
           },
           event: {
             event_header: "Event",

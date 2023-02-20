@@ -3,17 +3,18 @@ import Router from "vue-router";
 
 Vue.use(Router);
 
-import Main from "../components/Main";
-import settings from "../components/settings";
+import aeCodes from "../components/aeCodes";
 import competition_settings from "../components/competition_settings";
 import competitors from "../components/competitors";
-import race_list from "../components/race_list";
-import scoring from "../components/scoring";
-import rules from "../components/settings/rules/rules";
-import protocols from "../components/protocols";
 import final_protocols from "../components/final_protocols";
-import start_protocols from "../components/start_protocols";
 import lic_check from "../components/lic_check";
+import Main from "../components/Main";
+import protocols from "../components/protocols";
+import race_list from "../components/race_list";
+import rules from "../components/settings/rules/rules";
+import scoring from "../components/scoring";
+import settings from "../components/settings";
+import start_protocols from "../components/start_protocols";
 import teams from "../components/teams";
 
 export default new Router({
@@ -77,6 +78,11 @@ export default new Router({
           component: final_protocols,
         },
       ],
+    },
+    {
+      path: "/ae_codes",
+      name: "aeCodes",
+      component: aeCodes,
     },
     {
       path: "/lic_check",

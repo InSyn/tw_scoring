@@ -1,4 +1,4 @@
-import { generateId, getAECodes } from "../../../lib/utils";
+import { cutMarks, generateId, getAECodes } from "../../../lib/utils";
 
 export default class EventClass {
   constructor(...args) {
@@ -35,17 +35,13 @@ export default class EventClass {
       { id: "name", title: "Имя" },
       { id: "fullname", title: "Фамилия, Имя" },
       { id: "year", title: "Год" },
-      { id: "country", title: "Страна" },
-      { id: "country_code", title: "Код" },
-      { id: "jump1_code", title: "Прыжок" },
-      { id: "id", title: "ID" },
-      { id: "team_name", title: "Команда" },
-      { id: "team_id", title: "Team ID" },
-      { id: "group", title: "Пол" },
+      { id: "rank", title: "Разряд" },
+      { id: "region", title: "Регион" },
+      { id: "photo", title: "Фото" },
     ],
     competitors: [],
   };
-  is_aerials = true;
+  is_aerials = false;
   is_teams = false;
   mainData = {
     title: {
@@ -376,7 +372,7 @@ export default class EventClass {
         doubleUp_competitors: { 0: null, 1: null },
         lower_marks: 0,
         higher_marks: 0,
-        formula: 2,
+        formula: 0,
         formulas: [
           {
             id: 0,
@@ -444,7 +440,7 @@ export default class EventClass {
           {
             id: 1,
             title: "sum",
-            get_result: (comp_id, race_id, judges, ae_code) => {
+            get_result: (comp_id, race_id, judges) => {
               let marks = [];
 
               judges.forEach((_j) => {
@@ -501,12 +497,14 @@ export default class EventClass {
               const aeCode = this.ae_codes.find(
                 (aeCode) => aeCode.code === ae_code
               );
+
               const ae_coef = aeCode
                 ? parseFloat(
                     aeCode[
                       `value_${
-                        competitor.info_data["group"] ||
-                        this.mainData.title.stage.group
+                        competitor.info_data["group"]
+                          ? competitor.info_data["group"]
+                          : this.mainData.title.stage.group
                       }`
                     ].replace(",", ".")
                   )
@@ -567,9 +565,11 @@ export default class EventClass {
               ) {
                 return this.set_accuracy(
                   ae_coef *
-                    resultArr.reduce((a, b) => {
-                      return +a + +b;
-                    })
+                    this.set_accuracy(
+                      resultArr.reduce((a, b) => {
+                        return +a + +b;
+                      }, 0)
+                    )
                 );
               }
               return 0;
@@ -764,16 +764,24 @@ export default class EventClass {
     const result = competitor.results.find(
       (result) => result.race_id === race.id
     );
+
     return result
       ? result.status
         ? result.status
-        : this.set_accuracy(result.value)
+        : `${this.set_accuracy(result ? result.value : 0)}${
+            result.repeat ? " " + result.repeat : ""
+          }`
       : this.set_accuracy(0);
   }
   getTeamRaceResult(team, race) {
-    const teamResultsArr = team.competitors.map((competitor) =>
-      competitor.results.find((result) => result.race_id === race.id)
-    );
+    const teamResultsArr = team.competitors.map((competitor) => {
+      // console.log(competitor.results);
+      // console.log(race);
+
+      competitor.results.find((result) => result.race_id === race.id);
+    });
+    // console.log(teamResultsArr);
+
     const filteredArr = teamResultsArr.filter((result) => !!result);
 
     return filteredArr.length > 0
@@ -803,7 +811,7 @@ export default class EventClass {
           params.ae_code
         ),
       race_id: params.race_id,
-      repeat: params.rep || "A",
+      repeat: params.rep || null,
       status: params.status || null,
       jump_code: params.ae_code || null,
       degree_difficulty: this.ae_codes.find(
@@ -811,14 +819,19 @@ export default class EventClass {
       )
         ? this.ae_codes
             .find((aeCode) => aeCode.code === params.ae_code)
-            [`value_${this.mainData.title.stage.group}`].replace(",", ".")
+            [
+              `value_${
+                params.competitor.info_data["group"] ||
+                this.mainData.title.stage.group
+              }`
+            ].replace(",", ".")
         : "1,000",
     };
     if (
       !params.competitor.results.some((_res) => _res.race_id === params.race_id)
-    ) {
+    )
       params.competitor.results.push(res);
-    } else {
+    else {
       let _res = params.competitor.results.find(
         (_res) => _res.race_id === params.race_id
       );

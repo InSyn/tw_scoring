@@ -20,6 +20,7 @@ export default {
     ...mapActions("main", {
       exportCSV: "exportCSV",
     }),
+
     getStartList() {
       return this.competition.selected_race._startList
         .map((competitorId) =>
@@ -28,6 +29,49 @@ export default {
           )
         )
         .map((competitor, c_idx) => {
+          const jumpObj = this.competition.ae_codes.find(
+            (jumpCode) => jumpCode.code === competitor.info_data["jump1_code"]
+          );
+          const ddJump1 = parseFloat(
+            jumpObj
+              ? jumpObj[`value_${competitor.info_data["group"]}`].replace(
+                  ",",
+                  "."
+                )
+              : 0
+          );
+          const maxScore = parseFloat(
+            (this.competition.stuff.judges.length -
+              +this.competition.result_formula.types[0].higher_marks -
+              +this.competition.result_formula.types[0].lower_marks) *
+              10 *
+              ddJump1
+          );
+
+          const competitorObject = {
+            id: competitor.info_data["id"] || null,
+            start_order: c_idx + 1,
+            bib: competitor.info_data["bib"] || null,
+            fullname: competitor.info_data["fullname"] || null,
+            lastname: competitor.info_data["lastname"] || null,
+            name: competitor.info_data["name"] || null,
+            fullname_eng: competitor.info_data["fullname_eng"] || null,
+            lastname_eng: competitor.info_data["lastname_eng"] || null,
+            name_eng: competitor.info_data["name_eng"] || null,
+            photo: competitor.info_data["photo"] || null,
+            teamid: null,
+            teamname: null,
+            country: competitor.info_data["country"] || null,
+            country_code: competitor.info_data["country_code"] || null,
+            region: competitor.info_data["region"] || null,
+            jump1_code: competitor.info_data["jump1_code"] || null,
+            jump2_code: competitor.info_data["jump2_code"] || null,
+            dd_1: ddJump1 || null,
+            dd_2: null,
+            max_score_1: maxScore || null,
+            max_score_2: null,
+          };
+
           // TEAM MODE LIST
           if (this.competition.is_teams) {
             const competitorTeam = this.competition.teams.find((team) =>
@@ -37,42 +81,15 @@ export default {
             );
 
             if (competitorTeam) {
-              // const startOrder =
-              //   this.competition.teams.indexOf(competitorTeam) + 1 || 0;
-
-              return {
-                id: competitor.info_data["id"] || null,
-                start_order: c_idx + 1,
-                bib: competitor.info_data["bib"] || null,
-                fullname: competitor.info_data["fullname"] || null,
-                lastname: competitor.info_data["lastname"] || null,
-                name: competitor.info_data["name"] || null,
-                country: competitor.info_data["country"] || null,
-                country_code: competitor.info_data["country_code"] || null,
-                teamid: competitorTeam.id,
-                teamname: competitorTeam.name,
-                jump1_code: competitor.info_data["jump1_code"] || null,
-                jump2_code: competitor.info_data["jump2_code"] || null,
-              };
+              competitorObject.teamid = competitorTeam.id;
+              competitorObject.teamname = competitorTeam.name;
             }
           }
 
-          return {
-            id: competitor.info_data["id"] || null,
-            start_order: c_idx + 1,
-            bib: competitor.info_data["bib"] || null,
-            fullname: competitor.info_data["fullname"] || null,
-            lastname: competitor.info_data["lastname"] || null,
-            name: competitor.info_data["name"] || null,
-            country: competitor.info_data["country"] || null,
-            country_code: competitor.info_data["country_code"] || null,
-            teamid: null,
-            teamname: null,
-            jump1_code: competitor.info_data["jump1_code"] || null,
-            jump2_code: competitor.info_data["jump2_code"] || null,
-          };
+          return competitorObject;
         });
     },
+
     getCompetitorOnStart() {
       return this.competition.selected_race.startList
         .map((competitorId) =>
@@ -81,97 +98,43 @@ export default {
           )
         )
         .map((competitor, c_idx) => {
-          return {
+          const competitorObject = {
             id: competitor.info_data["id"] || null,
             start_order: c_idx + 1,
             bib: competitor.info_data["bib"] || null,
             fullname: competitor.info_data["fullname"] || null,
             lastname: competitor.info_data["lastname"] || null,
             name: competitor.info_data["name"] || null,
-            country: competitor.info_data["country"] || null,
-            country_code: competitor.info_data["country_code"] || null,
+            fullname_eng: competitor.info_data["fullname_eng"] || null,
+            lastname_eng: competitor.info_data["lastname_eng"] || null,
+            name_eng: competitor.info_data["name_eng"] || null,
+            photo: competitor.info_data["photo"] || null,
             teamid: null,
             teamname: null,
+            country: competitor.info_data["country"] || null,
+            country_code: competitor.info_data["country_code"] || null,
+            region: competitor.info_data["region"] || null,
             jump1_code: competitor.info_data["jump1_code"] || null,
             jump2_code: competitor.info_data["jump2_code"] || null,
           };
+
+          if (this.competition.is_teams) {
+            const competitorTeam = this.competition.teams.find((team) =>
+              team.competitors.some(
+                (teamCompetitor) => teamCompetitor.id === competitor.id
+              )
+            );
+
+            if (competitorTeam) {
+              competitorObject.teamid = competitorTeam.id;
+              competitorObject.teamname = competitorTeam.name;
+            }
+          }
+
+          return competitorObject;
         })[0];
     },
-    getFinished() {
-      const list = this.competition.selected_race.finished
-        .map((competitor, competitor_idx) => {
-          return {
-            ...this.competition.competitorsSheet.competitors.find((comp) => {
-              return comp.id === competitor;
-            }),
-            order: competitor_idx,
-          };
-        })
-        .sort((comp1, comp2) => {
-          const statuses = {
-            DNF: -1,
-            DNS: -2,
-            DSQ: -3,
-          };
-          const comp1res = comp1.results_overall.find(
-              (overall) => overall.competition_id === this.competition.id
-            ),
-            comp2res = comp2.results_overall.find(
-              (overall) => overall.competition_id === this.competition.id
-            );
-          return (
-            (comp2res
-              ? comp2res.status
-                ? statuses[comp2res.status]
-                : comp2res.value
-              : 0) -
-            (comp1res
-              ? comp1res.status
-                ? statuses[comp1res.status]
-                : comp1res.value
-              : 0)
-          );
-        });
 
-      list.forEach((_comp, c_idx) => {
-        _comp.rank = c_idx + 1;
-      });
-
-      return list
-        .filter((finishedCompetitor, f_idx, finished) => {
-          return +finishedCompetitor.order === finished.length - 1;
-        })
-        .map((finishedCompetitor) => {
-          let finishedData = {
-            id: finishedCompetitor.info_data["id"] || null,
-            rank: finishedCompetitor.rank || null,
-            bib: finishedCompetitor.info_data["bib"] || null,
-            fullname: finishedCompetitor.info_data["fullname"] || null,
-            lastname: finishedCompetitor.info_data["lastname"] || null,
-            name: finishedCompetitor.info_data["name"] || null,
-            country: finishedCompetitor.info_data["country"] || null,
-            country_code: finishedCompetitor.info_data["country_code"] || null,
-            teamid: null,
-            teamname: null,
-            result:
-              this.competition.getRaceResult(
-                finishedCompetitor,
-                this.competition.selected_race
-              ) || null,
-
-            finishOrder: finishedCompetitor.order,
-          };
-
-          this.competition.races.forEach(
-            (race, race_idx) =>
-              (finishedData[`run_${race_idx + 1}`] =
-                this.competition.getRaceResult(finishedCompetitor, race) ||
-                null)
-          );
-
-          return finishedData;
-        });
-    },
     getResults() {
       const list = this.competition.selected_race.finished
         .map((_comp) => {
@@ -232,15 +195,14 @@ export default {
                 (team1_res, team2_res) =>
                   +team2_res.teamResult - +team1_res.teamResult
               );
-            console.log(rankedTeamsArr);
+
             const competitorTeamRank =
               rankedTeamsArr.indexOf(
                 rankedTeamsArr.find((team) => team.id === competitorTeam.id)
-              ) + 1 || null;
-            const competitorTeamResult =
-              rankedTeamsArr.find(
-                (rankedTeam) => rankedTeam.id === competitorTeam.id
-              ).teamResult || null;
+              ) + 1;
+            const competitorTeamResult = rankedTeamsArr.find(
+              (rankedTeam) => rankedTeam.id === competitorTeam.id
+            ).teamResult;
 
             const teamResultData = {
               id: finishedCompetitor.info_data["id"] || null,
@@ -249,12 +211,15 @@ export default {
               fullname: finishedCompetitor.info_data["fullname"] || null,
               lastname: finishedCompetitor.info_data["lastname"] || null,
               name: finishedCompetitor.info_data["name"] || null,
+              photo: finishedCompetitor.info_data["photo"] || null,
               country: finishedCompetitor.info_data["country"] || null,
               country_code:
                 finishedCompetitor.info_data["country_code"] || null,
-              teamid: competitorTeam.id,
-              teamname: competitorTeam.name,
+              region: finishedCompetitor.info_data["region"] || null,
+              teamid: competitorTeam.id || null,
+              teamname: competitorTeam.name || null,
               result: competitorTeamResult,
+              qualification_mark: "nq",
             };
 
             this.competition.races.forEach(
@@ -275,11 +240,17 @@ export default {
           fullname: finishedCompetitor.info_data["fullname"] || null,
           lastname: finishedCompetitor.info_data["lastname"] || null,
           name: finishedCompetitor.info_data["name"] || null,
+          photo: finishedCompetitor.info_data["photo"] || null,
           country: finishedCompetitor.info_data["country"] || null,
           country_code: finishedCompetitor.info_data["country_code"] || null,
+          region: finishedCompetitor.info_data["region"] || null,
           teamid: null,
           teamname: null,
           result: this.competition.getResult(finishedCompetitor.id) || null,
+          qualification_mark:
+            competitor_idx + 1 <= this.competition.passed_competitors
+              ? "q"
+              : "nq",
         };
 
         this.competition.races.forEach(
@@ -291,6 +262,82 @@ export default {
         return competitorData;
       });
     },
+
+    getFinished() {
+      const list = this.competition.selected_race.finished
+        .map((competitor, competitor_idx) => {
+          return {
+            ...this.competition.competitorsSheet.competitors.find((comp) => {
+              return comp.id === competitor;
+            }),
+            order: competitor_idx,
+          };
+        })
+        .sort((comp1, comp2) => {
+          const statuses = {
+            DNF: -1,
+            DNS: -2,
+            DSQ: -3,
+          };
+          const comp1res = comp1.results_overall.find(
+              (overall) => overall.competition_id === this.competition.id
+            ),
+            comp2res = comp2.results_overall.find(
+              (overall) => overall.competition_id === this.competition.id
+            );
+          return (
+            (comp2res
+              ? comp2res.status
+                ? statuses[comp2res.status]
+                : comp2res.value
+              : 0) -
+            (comp1res
+              ? comp1res.status
+                ? statuses[comp1res.status]
+                : comp1res.value
+              : 0)
+          );
+        });
+
+      list.forEach((_comp, c_idx) => {
+        _comp.rank = c_idx + 1;
+      });
+
+      return list
+        .filter((finishedCompetitor, f_idx, finished) => {
+          return +finishedCompetitor.order === finished.length - 1;
+        })
+        .map((finishedCompetitor) => {
+          let finishedData = {
+            id: finishedCompetitor.info_data["id"] || null,
+            rank: finishedCompetitor.rank || null,
+            bib: finishedCompetitor.info_data["bib"] || null,
+            fullname: finishedCompetitor.info_data["fullname"] || null,
+            lastname: finishedCompetitor.info_data["lastname"] || null,
+            name: finishedCompetitor.info_data["name"] || null,
+            photo: finishedCompetitor.info_data["photo"] || null,
+            country: finishedCompetitor.info_data["country"] || null,
+            country_code: finishedCompetitor.info_data["country_code"] || null,
+            region: finishedCompetitor.info_data["region"] || null,
+            teamid: null,
+            teamname: null,
+            result: this.competition.getResult(finishedCompetitor.id) || null,
+            qualification_mark: "nq",
+
+            finishOrder: finishedCompetitor.order,
+          };
+
+          this.competition.races.forEach(
+            (race, race_idx) =>
+              (finishedData[`run_${race_idx + 1}`] =
+                this.competition.getRaceResult(finishedCompetitor, race) ||
+                null)
+          );
+
+          return finishedData;
+        });
+    },
+
     setUpdater() {
       if (!this.updateCSV) {
         this.saveCSV();
@@ -301,45 +348,46 @@ export default {
         clearInterval(this.updater);
       }
     },
+
     async saveCSV() {
       if (this.competition && this.competition.selected_race) {
         this.updating = true;
 
         const startList = this.getStartList();
-        // this.exportCSV({
-        //   path: `C:\\Users\\InSyn\\Documents\\TW_Translation\\${this.competitionTitlePrefix}_StartList`,
-        //   data: startList,
-        // });
+        this.exportCSV({
+          path: `C:\\Users\\InSyn\\Documents\\TW_Translation\\${this.competitionTitlePrefix}_StartList`,
+          data: startList,
+        });
 
         const onStart = this.getCompetitorOnStart()
           ? [this.getCompetitorOnStart()]
           : [];
-        // this.exportCSV({
-        //   path: `C:\\Users\\InSyn\\Documents\\TW_Translation\\${this.competitionTitlePrefix}_OnStart`,
-        //   data: onStart,
-        // });
+        this.exportCSV({
+          path: `C:\\Users\\InSyn\\Documents\\TW_Translation\\${this.competitionTitlePrefix}_OnStart`,
+          data: onStart,
+        });
 
         const finishedCompetitor = this.getFinished();
-        // this.exportCSV({
-        //   path: `C:\\Users\\InSyn\\Documents\\TW_Translation\\${this.competitionTitlePrefix}_Finished`,
-        //   data: finishedCompetitor,
-        // });
+        this.exportCSV({
+          path: `C:\\Users\\InSyn\\Documents\\TW_Translation\\${this.competitionTitlePrefix}_Finished`,
+          data: finishedCompetitor,
+        });
 
         const results = this.getResults();
-        // await this.exportCSV({
-        //   path: `C:\\Users\\InSyn\\Documents\\TW_Translation\\${this.competitionTitlePrefix}_Results`,
-        //   data: results,
-        // });
-
         await this.exportCSV({
-          path: `C:\\Users\\InSyn\\Documents\\TW_Translation\\${this.competitionTitlePrefix}`,
-          data: {
-            onStart: onStart,
-            finished: finishedCompetitor,
-            startList: startList,
-            results: results,
-          },
+          path: `C:\\Users\\InSyn\\Documents\\TW_Translation\\${this.competitionTitlePrefix}_Results`,
+          data: results,
         });
+
+        // await this.exportCSV({
+        //   path: `C:\\Users\\InSyn\\Documents\\TW_Translation\\${this.competitionTitlePrefix}`,
+        //   data: {
+        //     onStart: onStart,
+        //     finished: finishedCompetitor,
+        //     startList: startList,
+        //     results: results,
+        //   },
+        // });
 
         setTimeout(() => {
           this.updating = false;

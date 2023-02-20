@@ -128,17 +128,7 @@
                       v-for="(race, rr) in competition.races"
                       :key="rr"
                       >{{
-                        `${competition.getRaceResult(competitor, race)} ${
-                          (competition.result_formula.overall_result.type ===
-                            3 &&
-                            competitor.results.find(
-                              (_res) => _res.race_id === race.id
-                            ) &&
-                            competitor.results.find(
-                              (_res) => _res.race_id === race.id
-                            ).repeat) ||
-                          ""
-                        }`
+                        `${competition.getRaceResult(competitor, race)}`
                       }}</v-col
                     ><v-spacer></v-spacer
                     ><v-col
@@ -655,21 +645,19 @@ export default {
         this.competition.publishResult({
           competitor: competitor,
           race_id: race.id,
-          ae_code: competitor.results.find(
-            (result) => result.race_id === race.id
-          ).jump_code,
+          ae_code: competitor.info_data["jump1_code"] || null,
         })
       );
 
       this.changeMarksDialog[competitor.id] = false;
-      this.$store.commit("main/updateEvent");
+      this.updateEvent();
     },
     declineChanges(competitor) {
       competitor.marks.forEach((_mark) => {
         _mark.new_value = null;
       });
       this.changeMarksDialog[competitor.id] = false;
-      this.$store.commit("main/updateEvent");
+      this.updateEvent();
     },
   },
   data() {

@@ -611,8 +611,10 @@
       </v-row>
       <div
         class="mt-2 pa-2"
-        v-if="selectedRace"
-        :key="selectedRace.id"
+        v-if="
+          selectedRace &&
+          competition.races.some((race) => race.id === selectedRace.id)
+        "
         style="border-radius: 6px"
         :style="{
           backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
@@ -1522,9 +1524,7 @@ export default {
   },
   watch: {
     "dialogs.create_race.state": function (val) {
-      val === false
-        ? (this.dialogs.create_race.raceStartListFrom = null)
-        : null;
+      if (!val) this.dialogs.create_race.raceStartListFrom = null;
     },
   },
 };

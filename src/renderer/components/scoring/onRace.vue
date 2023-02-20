@@ -13,9 +13,7 @@
           style="flex: 0 0 auto"
         >
           <div
-            v-if="
-              competition.selected_race && competition.selected_race.onTrack
-            "
+            v-if="competition.selected_race && competitorOnTrack"
             class="pa-2"
             style="
               border-radius: 6px;
@@ -31,29 +29,19 @@
           >
             <div class="competitorName">
               {{
-                `${
-                  competition.competitorsSheet.competitors.find((_comp) => {
-                    return _comp.id === competition.selected_race.onTrack;
-                  }).info_data.bib || ""
-                } ${
-                  competition.competitorsSheet.competitors.find((_comp) => {
-                    return _comp.id === competition.selected_race.onTrack;
-                  }).info_data["lastname"] || ""
-                } ${
-                  competition.competitorsSheet.competitors.find((_comp) => {
-                    return _comp.id === competition.selected_race.onTrack;
-                  }).info_data.name || ""
-                }`
+                `${competitorOnTrack.info_data["bib"] || ""} ${
+                  competitorOnTrack.info_data["lastname"] || ""
+                } ${competitorOnTrack.info_data["name"] || ""}`
               }}
             </div>
 
             <div
               class="d-flex align-center mt-1"
-              v-if="competition.is_aerials && competition.selected_race"
+              v-if="competition.is_aerials && competitorOnTrack"
             >
               <input
                 type="text"
-                v-bind:value="competition.selected_race.ae_code"
+                v-bind:value="competitorOnTrack.info_data['jump1_code']"
                 @change="setAeCode($event)"
                 style="
                   padding: 4px 8px;
@@ -78,13 +66,14 @@
                 {{
                   competition.ae_codes.find(
                     (aeCode) =>
-                      aeCode.code === competition.selected_race.ae_code
+                      aeCode.code === competitorOnTrack.info_data["jump1_code"]
                   )
                     ? parseFloat(
                         competition.ae_codes
                           .find(
                             (aeCode) =>
-                              aeCode.code === competition.selected_race.ae_code
+                              aeCode.code ===
+                              competitorOnTrack.info_data["jump1_code"]
                           )
                           [
                             `value_${
@@ -181,7 +170,7 @@
                     color: $vuetify.theme.themes[appTheme].action_blue,
                   }
                 "
-                @click=""
+                @dblclick="pushMarks"
               >
                 {{ localization[lang].app.scoring.result }}
               </div>
@@ -231,7 +220,7 @@
                           competition.stuff.judges.map((_j) => {
                             return +_j.id;
                           }),
-                          competition.selected_race.ae_code
+                          competitorOnTrack.info_data["jump1_code"]
                         )) ||
                       0
                   )
@@ -247,7 +236,7 @@
             <div
               v-for="i in ['A', 'B', 'C']"
               :key="i"
-              @click="score_repeat = i"
+              @click="setABCValue(i)"
               style="
                 flex: 0 0 auto;
                 display: flex;
@@ -275,7 +264,6 @@
           </div>
 
           <!-- STATUS BUTTONS  -->
-
           <div class="pl-4">
             <v-row class="pa-1" no-gutters>
               <v-col class="d-flex align-center" cols="12">
@@ -311,7 +299,6 @@
                 </v-btn>
 
                 <!-- STATUS DNS  -->
-
                 <v-btn
                   @click="
                     set_raceStatus({
@@ -341,7 +328,6 @@
                 </v-btn>
 
                 <!-- STATUS DNF  -->
-
                 <v-btn
                   @click="
                     set_raceStatus({
@@ -371,14 +357,13 @@
                 </v-btn>
               </v-col>
             </v-row>
-
             <!-- CHANGE MARKS DIALOG -->
 
             <manual-mark_dialog :competition="competition"></manual-mark_dialog>
           </div>
-
           <!-- //STATUS BUTTONS  -->
         </div>
+
         <div
           class="d-flex justify-center align-center"
           style="flex: 1 0 auto; height: 50%"
@@ -396,7 +381,8 @@
               bottom
               open-delay="322"
               :disabled="terminals.listenTerminals"
-              ><template v-slot:activator="{ on, attrs }">
+            >
+              <template v-slot:activator="{ on, attrs }">
                 <v-btn
                   icon
                   tile
@@ -434,10 +420,14 @@
                       color: $vuetify.theme.themes[appTheme].accent_light,
                     },
                   ]"
-                  ><v-icon>mdi-remote</v-icon>
-                </v-btn></template
-              ><span>Listen terminals</span></v-tooltip
-            >
+                >
+                  <v-icon>mdi-remote</v-icon>
+                </v-btn>
+              </template>
+
+              <span>Listen terminals</span>
+            </v-tooltip>
+
             <div
               v-if="competition.result_formula.type === 1"
               style="display: flex; align-items: center; flex-wrap: wrap"
@@ -452,6 +442,7 @@
                 <div style="width: 100%">
                   {{ `Sect. ${s_idx + 1}` }}
                 </div>
+
                 <div style="display: flex; flex-direction: column">
                   <div
                     v-for="judge in section.judges"
@@ -468,6 +459,7 @@
                         `${localization[lang].app.scoring.judge_short} ${judge.id}`
                       }}
                     </div>
+
                     <div style="margin-left: 0.5rem; font-size: 1.1rem">
                       {{
                         `${
@@ -511,6 +503,7 @@
                 </div>
               </div>
             </div>
+
             <div
               v-else
               style="display: flex; align-items: center; flex-wrap: wrap"
@@ -524,12 +517,9 @@
                   class="d-flex justify-center align-center"
                   style="font-size: 1.9rem; font-weight: bold"
                 >
-                  <div>
-                    {{
-                      `${localization[lang].app.scoring.judge_short} ${j + 1}`
-                    }}
-                  </div>
+                  {{ `${localization[lang].app.scoring.judge_short} ${j + 1}` }}
                 </div>
+
                 <div
                   class="d-flex justify-center align-center pa-1"
                   style="
@@ -565,6 +555,7 @@
                       >
                         {{ aeMark.slice(0, 4) }}:&nbsp;
                       </span>
+
                       <span
                         style="
                           margin-left: 8px;
@@ -606,13 +597,12 @@
                                 }).value_ae[aeMark]) ||
                             "0"
                           }`
-                        }}</span
-                      >
+                        }}
+                      </span>
                     </div>
                   </div>
 
                   <!-- CLASSIC MARK -->
-
                   <div
                     v-else
                     class="mark__wrapper d-flex justify-center align-center"
@@ -656,6 +646,7 @@
               </div>
             </div>
           </div>
+
           <div
             style="
               height: 100%;
@@ -708,7 +699,7 @@
                     competition.selected_race.onTrack &&
                     publishResult(
                       competition.selected_race.onTrack,
-                      competition.selected_race.ae_code
+                      competitorOnTrack.info_data['jump1_code']
                     )
                 "
                 :style="{
@@ -722,8 +713,8 @@
           </div>
         </div>
       </div>
-    </div></v-col
-  >
+    </div>
+  </v-col>
 </template>
 
 <script>
@@ -745,68 +736,60 @@ export default {
     //     }
     //   );
     // },
-    // pushMarks() {
-    //   this.competition &&
-    //     this.competition.selected_race &&
-    //     this.competition.selected_race.startList &&
-    //     this.competition.stuff.judges.forEach((_judge, j_idx) => {
-    //       this.competition.selected_race.startList
-    //         .map((_comp) =>
-    //           this.competition.competitorsSheet.competitors.find(
-    //             (_competitor) => _competitor.id === _comp
-    //           )
-    //         )
-    //         .forEach((_comp) => {
-    //           if (
-    //             !_comp.marks.some(
-    //               (_mark) =>
-    //                 _mark.race_id === this.competition.selected_race.id &&
-    //                 _mark.judge_id === _judge._id
-    //             )
-    //           )
-    //             _comp.marks.push(
-    //               new MarkClass(
-    //                 this.competition.selected_race_id,
-    //                 this.competition.selected_race.id,
-    //                 _judge.id,
-    //                 _judge._id,
-    //                 Math.round(30 + Math.random() * 70)
-    //               )
-    //             );
-    //           if (
-    //             !this.competition.selected_race.finished.some((f_comp) => {
-    //               return f_comp === _comp.id;
-    //             }) &&
-    //             this.competition.stuff.judges.length - 1 === j_idx
-    //           ) {
-    //             this.publishResult(_comp.id);
-    //           }
-    //         });
-    //     });
-    //   if (this.competition.selected_race)
-    //     this.competition.selected_race.selectedCompetitor = null;
-    //
-    //   this.updateEvent();
-    // },
-    setSelectedCompetitor(competitor) {
-      this.competition.selected_race.selectedCompetitor =
-        this.competition.selected_race.onStart[competitor];
-      this.socket &&
-        this.socket.connected &&
-        (() => {
-          this.socket.emit("set_selected_competitor", [
-            [
-              this.competition.selected_race.startList[competitor].id,
-              this.competition.selected_race_id,
-            ],
-            this.competition,
-          ]);
-        })();
+
+    pushMarks() {
+      if (
+        this.competition &&
+        this.competition.selected_race &&
+        this.competition.selected_race.startList
+      )
+        this.competition.stuff.judges.forEach((_judge, j_idx) => {
+          this.competition.selected_race.startList
+            .map((_comp) =>
+              this.competition.competitorsSheet.competitors.find(
+                (_competitor) => _competitor.id === _comp
+              )
+            )
+            .forEach((_comp) => {
+              if (
+                !_comp.marks.some(
+                  (_mark) =>
+                    _mark.race_id === this.competition.selected_race.id &&
+                    _mark.judge_id === _judge._id
+                )
+              )
+                _comp.marks.push(
+                  new MarkClass(
+                    this.competition.selected_race_id,
+                    this.competition.selected_race.id,
+                    _judge.id,
+                    _judge._id,
+                    Math.round(30 + Math.random() * 70)
+                  )
+                );
+
+              if (
+                !this.competition.selected_race.finished.some((f_comp) => {
+                  return f_comp === _comp.id;
+                }) &&
+                this.competition.stuff.judges.length - 1 === j_idx
+              ) {
+                this.publishResult(_comp.id);
+              }
+            });
+        });
+
+      if (this.competition.selected_race)
+        this.competition.selected_race.selectedCompetitor = null;
+
+      this.updateEvent();
     },
+
     publishResult(competitor_id, ae_code) {
       const competitor = this.competition.competitorsSheet.competitors.find(
         (_comp) => _comp.id === competitor_id
       );
+
       this.competition.stuff.judges.forEach((_j) => {
         if (
           !competitor.marks.some(
@@ -826,6 +809,7 @@ export default {
           );
         }
       });
+
       this.competition.publishResult({
         competitor: competitor,
         race_id: this.competition.selected_race.id,
@@ -833,10 +817,17 @@ export default {
         status: competitor.race_status,
         ae_code: ae_code,
       });
+
       this.competition.selected_race.finished.push(competitor_id);
+
       competitor.res_accepted = false;
       competitor.race_status = null;
+
+      if (this.competition.result_formula.overall_result.type == 3)
+        this.score_repeat = "A";
+
       this.competition.selected_race.onTrack = null;
+
       if (
         this.competition.selected_race.startList.some((_comp) => {
           return _comp === competitor_id;
@@ -847,25 +838,33 @@ export default {
             return _comp !== competitor_id;
           });
       }
+
       if (this.socket && this.socket.connected)
         this.socket.emit("set_finished_competitor", this.competition);
     },
+
     set_raceStatus(status) {
-      if (competition.selected_race && competition.selected_race.onTrack)
+      if (
+        this.competition.selected_race &&
+        this.competition.selected_race.onTrack
+      )
         this.socket &&
           this.socket.connected &&
           this.socket.emit("set_raceStatus", status);
     },
+
     accept_res(data) {
       this.socket &&
         this.socket.connected &&
         this.socket.emit("accept_res", data);
     },
+
     setAeCode(e) {
-      this.competition.selected_race.ae_code = e.target.value;
+      this.competitorOnTrack.info_data["jump1_code"] = e.target.value;
 
       this.updateEvent();
     },
+
     // setBlinker(val) {
     //   if (this.indicators.blinker === null) {
     //     this.indicators.blinker = setInterval(() => {
@@ -876,6 +875,12 @@ export default {
     //     this.indicators.blinker = null;
     //   }
     // },
+
+    setABCValue(abcValue) {
+      if (abcValue === this.score_repeat) this.score_repeat = null;
+      else this.score_repeat = abcValue;
+    },
+
     setTerminalsListener() {
       if (this.terminals.listenTerminals) {
         clearTimeout(this.terminals.terminalsListener.listener);
@@ -908,6 +913,20 @@ export default {
       socket: "socket",
       terminals: "terminals",
     }),
+    competitorOnTrack() {
+      return (
+        this.competition.competitorsSheet.competitors.find(
+          (_comp) => _comp.id === this.competition.selected_race.onTrack
+        ) || null
+      );
+    },
+  },
+  watch: {
+    score_repeat: function (abcValue) {
+      this.socket &&
+        this.socket.connected &&
+        this.socket.emit("set_abcValue", abcValue);
+    },
   },
 };
 </script>

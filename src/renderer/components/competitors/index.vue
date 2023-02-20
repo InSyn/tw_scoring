@@ -1,6 +1,6 @@
 <template>
-  <v-container fluid v-if="competition"
-    ><div style="display: flex; flex-direction: column">
+  <v-container fluid v-if="competition">
+    <div style="display: flex; flex-direction: column">
       <div
         class="pa-2"
         style="
@@ -13,18 +13,22 @@
         <div style="font-size: 1.4rem; font-weight: bold">
           {{ localization[lang].app.competitors.title }}
         </div>
+
         <v-btn
           @click="load_prev_stages()"
           :color="$vuetify.theme.themes[appTheme].action_blue"
           style="margin-left: auto"
           text
-          ><v-icon
+        >
+          <v-icon
             :color="$vuetify.theme.themes[appTheme].textDefault"
             style="margin-right: 0.5rem"
-            >mdi-page-previous</v-icon
           >
-          {{ localization[lang].app.competitors.from_prev }}</v-btn
-        ><v-btn
+            mdi-page-previous
+          </v-icon>
+          {{ localization[lang].app.competitors.from_prev }}
+        </v-btn>
+        <v-btn
           text
           style="padding: 0"
           :color="$vuetify.theme.themes[appTheme].success"
@@ -37,31 +41,39 @@
             <v-icon
               :color="$vuetify.theme.themes[appTheme].textDefault"
               style="margin-right: 0.5rem"
-              >mdi-file-excel</v-icon
             >
+              mdi-file-excel
+            </v-icon>
             {{ localization[lang].app.competitors.load_from_file }}
-          </label></v-btn
-        >
+          </label>
+        </v-btn>
+
         <input
           type="file"
           accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
           id="startListInput"
-          :key="Math.random()"
           hidden
           @change="load_sheet($event)"
         />
-
-        <v-btn :color="$vuetify.theme.themes[appTheme].action_yellow" text
-          ><v-icon
+        <v-btn :color="$vuetify.theme.themes[appTheme].action_yellow" text>
+          <v-icon
             :color="$vuetify.theme.themes[appTheme].textDefault"
             style="margin-right: 0.5rem"
-            >mdi-arrow-right-bold</v-icon
-          >{{ localization[lang].app.competitors.export_btn }}</v-btn
-        >
+          >
+            mdi-arrow-right-bold
+          </v-icon>
+          {{ localization[lang].app.competitors.export_btn }}
+        </v-btn>
       </div>
+
       <div
         class="ma-2"
-        style="position: relative; flex: 0 0 auto; border-radius: 6px"
+        style="
+          position: relative;
+          flex: 0 0 auto;
+          border-radius: 6px;
+          background: var(--card-background);
+        "
       >
         <v-row
           no-gutters
@@ -83,45 +95,48 @@
               small
               text
               :color="$vuetify.theme.themes[appTheme].accent"
-              ><div
+            >
+              <div
                 :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
               >
                 {{ head.title }}
               </div>
+
               <v-spacer></v-spacer>
-              <v-icon v-show="sortBy.title === head.id" small>{{
-                sortBy.dir === "desc" ? `mdi-chevron-down` : `mdi-chevron-up`
-              }}</v-icon></v-btn
-            ></v-col
-          >
+
+              <v-icon v-show="sortBy.title === head.id" small>
+                {{
+                  sortBy.dir === "desc" ? `mdi-chevron-down` : `mdi-chevron-up`
+                }}
+              </v-icon>
+            </v-btn>
+          </v-col>
         </v-row>
+
         <div
           style="
             position: relative;
             overflow-y: auto;
+            margin-left: -24px;
+            padding-left: 24px;
+            min-height: 600px;
             height: 70vh;
-            padding-bottom: 3rem;
           "
-          :style="{
-            backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
-          }"
         >
-          <table-row
+          <competitor-row
             v-for="(competitor, competitor_idx) in competition.competitorsSheet
               .competitors"
             :key="competitor_idx"
             :competition="competition"
             :competitor="competitor"
             :listIsSorted="sortBy.order"
-          ></table-row>
+          ></competitor-row>
         </div>
+
         <div
           class="d-flex align-center justify-center"
           style="
-            position: absolute;
-            width: 100%;
             height: 3rem;
-            bottom: 0;
             border-bottom-left-radius: 6px;
             border-bottom-right-radius: 6px;
           "
@@ -130,8 +145,8 @@
             backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
           }"
         >
-          <v-dialog width="320" v-model="createCompetitorDialog.state"
-            ><template v-slot:activator="{ on }">
+          <v-dialog width="320" v-model="createCompetitorDialog.state">
+            <template v-slot:activator="{ on }">
               <v-btn
                 v-on="on"
                 text
@@ -139,12 +154,14 @@
                 tile
                 height="100%"
                 :color="$vuetify.theme.themes[appTheme].accent_light"
-                ><v-icon
+              >
+                <v-icon
                   small
                   style="margin-right: 0.5rem"
                   :color="$vuetify.theme.themes[appTheme].textDefault"
-                  >mdi-account-plus</v-icon
                 >
+                  mdi-account-plus
+                </v-icon>
                 {{
                   localization[lang].app.competitors.create_competitor
                 }}</v-btn
@@ -465,7 +482,7 @@
                   {{ localization[lang].app.competitors.d_delete_all }}
                 </div>
                 <v-btn
-                  @click="clearSheet(), (clearDialog = false)"
+                  @click="clearSheet()"
                   small
                   text
                   :color="$vuetify.theme.themes[appTheme].accent"
@@ -506,15 +523,18 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 import XLSX from "read-excel-file/node";
 import CompetitorClass from "../../store/Classes/CompetitorClass";
-import TableRow from "./competitorRow";
+import CompetitorRow from "./competitorRow";
 
 export default {
   name: "competitors",
-  components: { TableRow },
+  components: { CompetitorRow },
   methods: {
+    ...mapActions("main", {
+      updateEvent: "updateEvent",
+    }),
     // autoLoad() {
     //   if (
     //     this.competition &&
@@ -573,11 +593,10 @@ export default {
           });
         });
       });
-      this.socket &&
-        this.socket.connected &&
-        this.socket.emit("set_competition_data", this.competition, (res) => {
-          return res;
-        });
+
+      this.clearDialog = false;
+
+      this.updateEvent();
     },
     closeCreateCompetitorDialog() {
       this.createCompetitorDialog.state = false;
@@ -599,13 +618,11 @@ export default {
       this.competition.competitorsSheet.competitors.push(
         new CompetitorClass(fields)
       );
-      this.socket &&
-        this.socket.connected &&
-        this.socket.emit("set_competition_data", this.competition, (res) => {
-          return res;
-        });
+
       this.createCompetitorDialog.state = false;
       this.createCompetitorDialog.newCompetitor = [];
+
+      this.updateEvent();
     },
     deleteCompetitor(competitor) {
       this.competition.races.forEach((race) => {
@@ -719,11 +736,10 @@ export default {
           });
         });
       });
-      this.socket &&
-        this.socket.connected &&
-        this.socket.emit("set_competition_data", this.competition, (res) => {
-          return res;
-        });
+
+      e.target.value = null;
+
+      this.updateEvent();
     },
     rebuildAllStartLists() {
       this.competition.races.forEach((race) => {
@@ -738,7 +754,7 @@ export default {
     refreshAllStartLists(race) {
       race.startList[0] ? (race.selectedCompetitor = race.startList[0]) : null;
 
-      this.$store.dispatch("main/updateEvent");
+      this.updateEvent();
     },
     sortByCol(list, col) {
       if (this.sortBy.title !== col) {
@@ -808,10 +824,6 @@ export default {
       competitions: "competitions",
       competition: "competition",
       socket: "socket",
-    }),
-    ...mapGetters("roles", {
-      CompetitorClass: "CompetitorClass",
-      MarkClass: "MarkClass",
     }),
   },
 };

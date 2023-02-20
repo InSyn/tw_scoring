@@ -21,6 +21,13 @@
             border-radius: 6px;
           "
         >
+          <input
+            class="jumpCode__input"
+            v-if="competition.is_aerials && selectedCompetitor"
+            type="text"
+            v-bind:value="selectedCompetitor.info_data['jump1_code']"
+            @change="setAeCode($event)"
+          />
           <div
             :style="{
               backgroundColor: $vuetify.theme.themes[appTheme].textDefault,
@@ -37,43 +44,22 @@
               text-align: center;
             "
           >
-            {{
-              competition.selected_race &&
-              competition.selected_race.selectedCompetitor &&
-              competition.competitorsSheet.competitors.find((_comp) => {
-                return (
-                  _comp.id === competition.selected_race.selectedCompetitor
-                );
-              }).info_data["bib"]
-            }}
+            {{ selectedCompetitor && selectedCompetitor.info_data["bib"] }}
           </div>
           <div
             class="d-flex justify-center align-center"
             style="margin-left: 1rem"
           >
             {{
-              competition.selected_race &&
-              competition.selected_race.selectedCompetitor &&
-              competition.competitorsSheet.competitors.find((_comp) => {
-                return (
-                  _comp.id === competition.selected_race.selectedCompetitor
-                );
-              }).info_data["lastname"]
+              selectedCompetitor &&
+              selectedCompetitor.info_data["lastname"].toUpperCase()
             }}
           </div>
           <div
             class="d-flex justify-center align-center"
             style="margin-left: 0.5rem"
           >
-            {{
-              competition.selected_race &&
-              competition.selected_race.selectedCompetitor &&
-              competition.competitorsSheet.competitors.find((_comp) => {
-                return (
-                  _comp.id === competition.selected_race.selectedCompetitor
-                );
-              }).info_data["name"]
-            }}
+            {{ selectedCompetitor && selectedCompetitor.info_data["name"] }}
           </div>
           <v-spacer></v-spacer>
           <div
@@ -130,9 +116,7 @@
                 v-for="competitor in competition.selected_race.startList
                   .map((_comp) => {
                     return competition.competitorsSheet.competitors.find(
-                      (comp) => {
-                        return comp.id === _comp;
-                      }
+                      (comp) => comp && comp.id === _comp
                     );
                   })
                   .filter(
@@ -213,8 +197,14 @@ export default {
     ...mapActions("main", {
       updateEvent: "updateEvent",
     }),
+    setAeCode(e) {
+      this.selectedCompetitor.info_data["jump1_code"] = e.target.value;
+
+      this.updateEvent();
+    },
     setSelectedCompetitor(competitor_id) {
       this.competition.selected_race.selectedCompetitor = competitor_id;
+
       this.socket &&
         this.socket.connected &&
         (() => {
@@ -394,8 +384,34 @@ export default {
       appTheme: "appTheme",
       socket: "socket",
     }),
+    selectedCompetitor() {
+      if (
+        this.competition.selected_race &&
+        this.competition.selected_race.selectedCompetitor
+      )
+        return this.competition.competitorsSheet.competitors.find((_comp) => {
+          return _comp.id === this.competition.selected_race.selectedCompetitor;
+        });
+
+      return null;
+    },
   },
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.jumpCode__input {
+  min-width: 0;
+  width: 6rem;
+  margin-right: 12px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  color: var(--text-default);
+  background: var(--standard-background);
+  border: 1px solid var(--text-default);
+}
+.jumpCode__input:focus {
+  background: var(--subject-background);
+  border: 1px solid var(--accent);
+}
+</style>

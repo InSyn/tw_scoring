@@ -67,10 +67,15 @@ export default {
       showMenu: "showMenu",
     }),
     getMenuList() {
-      if (this.competition && !this.competition.is_teams)
-        return this.appMenu.filter((menuLink) => menuLink.link !== "teams");
+      let menuList = this.appMenu;
 
-      return this.appMenu;
+      if (this.competition && !this.competition.is_teams)
+        menuList = menuList.filter((menuLink) => menuLink.link !== "teams");
+
+      if (this.competition && !this.competition.is_aerials)
+        menuList = menuList.filter((menuLink) => menuLink.link !== "aeCodes");
+
+      return menuList;
     },
   },
 };

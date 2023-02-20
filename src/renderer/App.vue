@@ -444,7 +444,7 @@ export default {
     }
     .window {
       overflow-y: auto;
-      flex-grow: 1;
+      flex: 1 1 auto;
     }
   }
   footer {

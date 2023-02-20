@@ -574,11 +574,13 @@ export default {
   components: { protocol_footer, protocol_header, pdf_controls },
   mounted() {
     this.results.push([...this.flatGrid]);
+
     this.number_of_competitors = this.flatGrid.filter(
       (row) => row.type === "competitorResult"
     ).length;
 
     this.results[this.results.length - 1].unshift({ type: "sheetHeader" });
+
     for (let infoPrintChecksKey in this.results_protocol.infoPrintChecks) {
       if (this.results_protocol.infoPrintChecks[infoPrintChecksKey].state)
         this.results[this.results.length - 1].push({
@@ -591,6 +593,7 @@ export default {
         this.data_paginated_results.push([]);
         let sumHeight = 0;
         let containerHeight = this.$refs["pdf_table_container"][0].offsetHeight;
+
         this.results[0].forEach((gridRow) => {
           let elemHeight =
             gridRow.type === "competitorResult"
@@ -598,14 +601,18 @@ export default {
                   `${gridRow.type}_${gridRow.s_rank ? gridRow.s_rank : 0}`
                 ][0].offsetHeight
               : this.$refs[gridRow.type][0].offsetHeight;
+
           if (sumHeight + elemHeight < containerHeight) {
             this.data_paginated_results[
               this.data_paginated_results.length - 1
             ].push(gridRow);
+
             sumHeight += elemHeight;
           } else {
             sumHeight = 0;
+
             this.data_paginated_results.push([]);
+
             if (
               gridRow.type === "competitorResult" ||
               gridRow.type === "stageTitle"
@@ -613,6 +620,7 @@ export default {
               this.data_paginated_results[
                 this.data_paginated_results.length - 1
               ].push({ type: "sheetHeader" });
+
             sumHeight += this.$refs["sheetHeader"][0].offsetHeight;
 
             this.data_paginated_results[
@@ -621,6 +629,7 @@ export default {
             sumHeight += elemHeight;
           }
         });
+
         this.results = this.paginated_results;
       }, 0);
     });

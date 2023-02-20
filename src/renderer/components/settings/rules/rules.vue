@@ -434,11 +434,23 @@
                           }}
                         </div>
                         <div
-                          v-if="comp.passed_competitors > 0"
+                          v-if="comp"
                           style="flex: 0 0 auto; margin-left: auto"
                         >
-                          {{ comp ? comp.passed_competitors : null
-                          }}<v-icon
+                          <input
+                            class="passedCompetitors__input ml-2"
+                            v-bind:value="comp.passed_competitors"
+                            @change="setPassedCompetitors($event, comp)"
+                            style="
+                              min-width: 0;
+                              width: 2.5rem;
+                              padding: 3px 6px;
+                              border-radius: 6px;
+                              color: var(--text-default);
+                              background: var(--standard-background);
+                            "
+                            type="number"
+                          /><v-icon
                             x-small
                             :color="$vuetify.theme.themes[appTheme].textDefault"
                             >mdi-arrow-right</v-icon
@@ -1754,6 +1766,11 @@ export default {
         [this.competitions.find((comp) => comp.id === competition_id)] || []
       );
     },
+    setPassedCompetitors(event, competition) {
+      competition.passed_competitors = event.target.value;
+
+      this.updateEvent();
+    },
     stageUsed(stage) {
       return (
         this.competition &&
@@ -1772,12 +1789,16 @@ export default {
     updateResults() {
       this.competition.races.forEach((race) => {
         race.finished.forEach((fin_competitor) => {
-          this.competition.publishResult(
-            this.competition.competitorsSheet.competitors.find(
-              (competitor) => competitor.id === fin_competitor
-            ),
-            race.id
+          const competitor = this.competition.competitorsSheet.competitors.find(
+            (competitor) => competitor.id === fin_competitor
           );
+
+          this.competition.publishResult({
+            competitor: competitor,
+            race_id: race.id,
+            status: competitor.race_status,
+            ae_code: competitor.info_data["jump1_code"],
+          });
         });
       });
     },
@@ -1812,5 +1833,9 @@ export default {
 <style scoped>
 * {
   /*border: 1px solid #c3d9ff;*/
+}
+.passedCompetitors__input::-webkit-inner-spin-button,
+.passedCompetitors__input::-webkit-outer-spin-button {
+  display: none;
 }
 </style>

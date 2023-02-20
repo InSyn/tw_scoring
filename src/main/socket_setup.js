@@ -172,6 +172,10 @@ io.on("connection", (socket) => {
     io.sockets.emit("competition_data_updated", competition);
   });
 
+  socket.on("set_abcValue", (abcValue) => {
+    io.sockets.emit("set_abcValue", abcValue);
+  });
+
   socket.on("set_finished_competitor", (data) => {
     for (let _field in competition) {
       competition[_field] !== data[_field]

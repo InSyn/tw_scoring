@@ -178,7 +178,9 @@
                   v-if="gridRow.type && gridRow.type === 'competitorResult'"
                   v-for="(header, h_idx) in competition.protocol_settings
                     .result_protocols.raceResultFields"
-                  ref="competitorResult"
+                  :ref="`competitorResult_${
+                    gridRow.s_rank ? gridRow.s_rank : 0
+                  }`"
                   :key="h_idx"
                   style="
                     flex-shrink: 0;
@@ -576,11 +578,13 @@ export default {
   },
   mounted() {
     this.race_results.push([...this.getRaceResults]);
+
     this.number_of_competitors = this.getRaceResults.length;
 
     this.race_results[this.race_results.length - 1].unshift({
       type: "sheetHeader",
     });
+
     for (let infoPrintChecksKey in this.results_protocol.infoPrintChecks) {
       if (this.results_protocol.infoPrintChecks[infoPrintChecksKey].state)
         this.race_results[this.race_results.length - 1].push({
@@ -593,8 +597,14 @@ export default {
         this.data_paginated_results.push([]);
         let sumHeight = 0;
         let containerHeight = this.$refs["pdf_table_container"][0].offsetHeight;
+
         this.race_results[0].forEach((gridRow) => {
-          let elemHeight = this.$refs[gridRow.type][0].offsetHeight;
+          let elemHeight =
+            gridRow.type === "competitorResult"
+              ? this.$refs[
+                  `${gridRow.type}_${gridRow.s_rank ? gridRow.s_rank : 0}`
+                ][0].offsetHeight
+              : this.$refs[gridRow.type][0].offsetHeight;
 
           if (sumHeight + elemHeight < containerHeight) {
             this.data_paginated_results[
@@ -604,12 +614,14 @@ export default {
             sumHeight += elemHeight;
           } else {
             sumHeight = 0;
+
             this.data_paginated_results.push([]);
 
             if (gridRow.type === "competitorResult")
               this.data_paginated_results[
                 this.data_paginated_results.length - 1
               ].push({ type: "sheetHeader" });
+
             sumHeight = sumHeight + this.$refs["sheetHeader"][0].offsetHeight;
 
             this.data_paginated_results[
@@ -618,6 +630,7 @@ export default {
             sumHeight += sumHeight + elemHeight;
           }
         });
+
         this.race_results = this.paginated_results;
       }, 0);
     });
