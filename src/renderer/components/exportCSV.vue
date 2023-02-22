@@ -321,7 +321,11 @@ export default {
             region: finishedCompetitor.info_data["region"] || null,
             teamid: null,
             teamname: null,
-            result: this.competition.getResult(finishedCompetitor.id) || null,
+            result:
+              this.competition.getRaceResult(
+                finishedCompetitor,
+                this.competition.selected_race
+              ) || null,
             qualification_mark: "nq",
 
             finishOrder: finishedCompetitor.order,

@@ -353,7 +353,11 @@ export default {
         new EventClass(...this.create_competition_dialog.data)
       );
       this.create_competition_dialog.data.forEach((_field) => {
-        if (_field.id === "judges" || _field.id === "competitors")
+        if (
+          _field.id === "judges" ||
+          _field.id === "jury" ||
+          _field.id === "competitors"
+        )
           _field[_field.id] = [];
       });
       this.create_competition_dialog.state = false;
@@ -418,6 +422,7 @@ export default {
             value: null,
             min: null,
           },
+
           {
             id: "stage",
             title: "Stage",
@@ -430,8 +435,16 @@ export default {
               event.target.parentNode.parentNode.parentNode.parentNode.parentNode.focus();
             },
           },
+
+          { id: "country", title: "Country", value: null },
+          { id: "location", title: "Place", value: null },
+          { id: "provider", title: "Organization", value: null },
+          { id: "providerTiming", title: "Timing provider", value: null },
+          { id: "codex", title: "Codex", value: null },
+
           { id: "competitors", competitors: [] },
           { id: "judges", judges: [] },
+          { id: "jury", jury: [] },
         ],
         checks: {
           judgesFromPrevStage: {
@@ -442,6 +455,17 @@ export default {
                 this.create_competition_dialog.data
                   .find((_data) => _data.id === "judges")
                   ["judges"].push(JSON.parse(JSON.stringify($judge)));
+              }
+            },
+          },
+          juryFromPrevStage: {
+            state: true,
+            title: "Move jury",
+            check: () => {
+              for (let $jury of this.competition.stuff.jury) {
+                this.create_competition_dialog.data
+                  .find((_data) => _data.id === "jury")
+                  ["jury"].push(JSON.parse(JSON.stringify($jury)));
               }
             },
           },

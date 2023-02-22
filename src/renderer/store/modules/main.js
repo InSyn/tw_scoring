@@ -372,6 +372,7 @@ export default {
                       });
                   });
                 }
+
                 if (
                   typeof obj1[dataKey] === "object" &&
                   obj1[dataKey] !== null
@@ -542,28 +543,28 @@ export default {
         competition.mainData = evData_competition.mainData;
 
         competition.stuff.judges = [];
-        evData_competition.stuff.judges.forEach((_judge) => {
-          competition.stuff.judges.push(_judge);
+        evData_competition.stuff.judges.forEach((judge) => {
+          competition.stuff.judges.push(judge);
         });
 
         competition.stuff.jury = [];
-        evData_competition.stuff.jury.forEach((_judge) => {
-          competition.stuff.jury.push(_judge);
+        evData_competition.stuff.jury.forEach((jury) => {
+          competition.stuff.jury.push(jury);
         });
 
         competition.stuff.openers = [];
-        evData_competition.stuff.openers.forEach((_judge) => {
-          competition.stuff.openers.push(_judge);
+        evData_competition.stuff.openers.forEach((opener) => {
+          competition.stuff.openers.push(opener);
         });
 
         competition.technicalInfo.records = [];
-        evData_competition.technicalInfo.records.forEach((_tInf) =>
-          competition.technicalInfo.records.push(_tInf)
+        evData_competition.technicalInfo.records.forEach((tInf) =>
+          competition.technicalInfo.records.push(tInf)
         );
 
         competition.weather = [];
-        evData_competition.weather.forEach((_tInf) =>
-          competition.weather.push(_tInf)
+        evData_competition.weather.forEach((wData) =>
+          competition.weather.push(wData)
         );
 
         competition.competitorsSheet.header =

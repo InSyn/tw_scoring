@@ -8,24 +8,31 @@ export default class EventClass {
     this.structure.selected.discipline = 0;
     this.mainData.title.stage.group = "men";
     this.mainData.title.stage.value = this.structure.stages[0];
+
     args.forEach((arg) => {
       if (typeof arg === "object") {
         if (arg.id === "competitors")
           this.competitorsSheet.competitors.push(...arg.competitors);
+
         if (arg.id === "judges") this.stuff.judges.push(...arg.judges);
+        if (arg.id === "jury") this.stuff.jury.push(...arg.jury);
+
         if (arg.id === "stage")
           this.mainData.title.stage.value = JSON.parse(
             JSON.stringify(arg.value)
           );
         else if (arg.hasOwnProperty("min"))
           this.mainData.discipline.min = arg.min;
+
         this.mainData[arg.id] ? (this.mainData[arg.id].value = arg.value) : 0;
       }
     });
+
     this.stages.stage_grid.push({
       title: this.mainData.title.stage.value.value,
       s_competitions: [this.id],
     });
+
     this.ae_codes = getAECodes() || [];
   }
   competitorsSheet = {
@@ -37,7 +44,6 @@ export default class EventClass {
       { id: "year", title: "Год" },
       { id: "rank", title: "Разряд" },
       { id: "region", title: "Регион" },
-      { id: "photo", title: "Фото" },
     ],
     competitors: [],
   };
@@ -128,7 +134,7 @@ export default class EventClass {
     selected: {
       type: "",
       discipline: "",
-      accuracy: 1,
+      accuracy: 2,
     },
     types: [
       { id: 0, title: "Snowboard", disciplines: [0, 1, 2, 100] },
@@ -653,17 +659,7 @@ export default class EventClass {
       name: "",
       lastName: "",
     },
-    jury: [
-      {
-        id: "chief",
-        title: "Chief judge",
-        lastName: "",
-        name: "",
-        loc: "",
-        connected: false,
-        setABC: false,
-      },
-    ],
+    jury: [],
     judges: [],
     openers: [],
   };

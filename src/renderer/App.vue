@@ -311,6 +311,18 @@ export default {
     competitionFirstSetup(competition) {
       competition.mainData.discipline.value = "Discipline";
       competition.mainData.discipline.min = "DSC";
+
+      if (competition.stuff.jury.length < 1)
+        competition.stuff.jury.push({
+          id: "chief",
+          title: "Старший судья",
+          lastName: "",
+          name: "",
+          loc: "",
+          connected: false,
+          setABC: false,
+        });
+
       for (let i = 0; i < 4; i++) {
         competition.stuff.judges.push(new JudgeClass(`Judge ${i + 1}`, i + 1));
       }
