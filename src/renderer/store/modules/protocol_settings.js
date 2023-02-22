@@ -630,7 +630,11 @@ export default {
               id: "race_res",
               title: "Оценка",
             },
-            handler: function (competitor, competition) {
+            handler: function (competitor) {
+              const competition = main.state["competitions"].find(
+                (_comp) => _comp.id === competitor.comp_id
+              );
+
               return competition.races.map((_race) => {
                 return [
                   `${competition.getRaceResult(competitor.competitor, _race)}`,
