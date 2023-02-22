@@ -707,7 +707,7 @@ export default {
       stuffType === "judge"
         ? this.competition.stuff.judges.push(
             new JudgeClass(
-              "Judge",
+              `Судья ${this.competition.stuff.judges.length + 1}`,
               this.competition.stuff.judges.length > 0
                 ? this.competition.stuff.judges[
                     this.competition.stuff.judges.length - 1

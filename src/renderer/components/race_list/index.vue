@@ -1246,12 +1246,7 @@ export default {
     },
     createRace(title, type, discipline, competitors) {
       const race = new RaceClass(
-        title ||
-          `Race ${
-            this.competition.races.length < 1
-              ? "1"
-              : this.competition.races.length + 1
-          }`,
+        title || `Заезд ${this.competition.races.length + 1}`,
         type,
         discipline,
         competitors.map((competitor) => {

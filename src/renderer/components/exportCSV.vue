@@ -1,13 +1,37 @@
 <template>
-  <div class="exportCSV__wrapper mx-2">
-    <v-btn
-      :class="[updateCSV && 'updater-active', updating && 'updater-updating']"
-      @click="setUpdater"
-      color="var(--action-green)"
-      text
-      small
-      >Save CSV</v-btn
-    >
+  <div
+    class="mt-2 d-flex flex-wrap align-center"
+    style="
+      flex: 0 0 auto;
+      padding: 8px;
+      width: 100%;
+      border-radius: 6px;
+      background-color: var(--standard-background);
+    "
+  >
+    <div style="font-size: 1.2rem; font-weight: bold">File Translation</div>
+
+    <div class="exportCSV__wrapper ml-auto">
+      <v-btn
+        :class="[updateCSV && 'updater-active', updating && 'updater-updating']"
+        @click="setUpdater"
+        color="var(--action-green)"
+        text
+        small
+      >
+        Save CSV
+      </v-btn>
+    </div>
+
+    <div class="exportPath__input__wrapper">
+      <span class="exportPath__label">Путь:</span>
+      <input
+        class="exportPath__input"
+        v-bind:value="getFileTranslationService.path"
+        @change="setFileTranslationPath($event.target.value)"
+        type="text"
+      />
+    </div>
   </div>
 </template>
 
@@ -19,6 +43,9 @@ export default {
   methods: {
     ...mapActions("main", {
       exportCSV: "exportCSV",
+    }),
+    ...mapActions("scoring_services", {
+      setFileTranslationPath: "setFileTranslationService_path",
     }),
 
     getStartList() {
@@ -359,7 +386,7 @@ export default {
 
         const startList = this.getStartList();
         this.exportCSV({
-          path: `C:\\Users\\InSyn\\Documents\\TW_Translation\\${this.competitionTitlePrefix}_StartList`,
+          path: `${this.getFileTranslationService.path}\\${this.competitionTitlePrefix}_StartList`,
           data: startList,
         });
 
@@ -367,19 +394,19 @@ export default {
           ? [this.getCompetitorOnStart()]
           : [];
         this.exportCSV({
-          path: `C:\\Users\\InSyn\\Documents\\TW_Translation\\${this.competitionTitlePrefix}_OnStart`,
+          path: `${this.getFileTranslationService.path}\\${this.competitionTitlePrefix}_OnStart`,
           data: onStart,
         });
 
         const finishedCompetitor = this.getFinished();
         this.exportCSV({
-          path: `C:\\Users\\InSyn\\Documents\\TW_Translation\\${this.competitionTitlePrefix}_Finished`,
+          path: `${this.getFileTranslationService.path}\\${this.competitionTitlePrefix}_Finished`,
           data: finishedCompetitor,
         });
 
         const results = this.getResults();
         await this.exportCSV({
-          path: `C:\\Users\\InSyn\\Documents\\TW_Translation\\${this.competitionTitlePrefix}_Results`,
+          path: `${this.getFileTranslationService.path}\\${this.competitionTitlePrefix}_Results`,
           data: results,
         });
 
@@ -410,6 +437,9 @@ export default {
     ...mapGetters("main", {
       competition: "competition",
     }),
+    ...mapGetters("scoring_services", {
+      getFileTranslationService: "getFileTranslationService",
+    }),
     competitionTitlePrefix() {
       return `${this.competition.mainData.title.stage.value.value}`;
     },
@@ -423,5 +453,28 @@ export default {
 }
 .updater-updating {
   background: var(--action-green);
+}
+.exportPath__input__wrapper {
+  flex: 0 0 100%;
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  margin-top: 4px;
+  padding: 8px;
+  background: var(--card-background);
+  border-radius: 6px;
+}
+.exportPath__label {
+  font-weight: bold;
+  font-size: 1.2rem;
+  margin-right: 1rem;
+}
+.exportPath__input {
+  min-width: 0;
+  width: 100%;
+  padding: 4px;
+  background: var(--standard-background);
+  color: var(--text-default);
+  border-radius: 6px;
 }
 </style>

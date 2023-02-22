@@ -6,7 +6,7 @@ export default class EventClass {
     this.live_id = null;
     this.structure.selected.type = 0;
     this.structure.selected.discipline = 0;
-    this.mainData.title.stage.group = "men";
+    this.mainData.title.stage.group = "";
     this.mainData.title.stage.value = this.structure.stages[0];
 
     args.forEach((arg) => {
@@ -44,9 +44,9 @@ export default class EventClass {
       { id: "year", title: "Год" },
       { id: "rank", title: "Разряд" },
       { id: "region", title: "Регион" },
-      { id: "group", title: "Группа" },
-      { id: "jump1_code", title: "Код пр. 1" },
-      { id: "jump2_code", title: "Код пр. 2" },
+      // { id: "group", title: "Группа" },
+      // { id: "jump1_code", title: "Код пр. 1" },
+      // { id: "jump2_code", title: "Код пр. 2" },
     ],
     competitors: [],
   };
@@ -55,7 +55,7 @@ export default class EventClass {
   mainData = {
     title: {
       title: "Title",
-      value: "New competition",
+      value: "Новое соревнование",
       focus: false,
       stage: {
         title: "Stage",
@@ -105,7 +105,7 @@ export default class EventClass {
     },
     providerTiming: {
       title: "Timing provider",
-      value: "",
+      value: "TimingWeb",
       focus: false,
     },
     codex: {
@@ -672,30 +672,30 @@ export default class EventClass {
     change_dialog: false,
     records: [
       {
-        title: "Track name",
+        title: "Трасса",
         value: "",
       },
       {
-        title: "Track length",
+        title: "Длина трассы",
         value: "",
       },
       {
-        title: "Track width",
+        title: "Ширина трассы",
         value: "",
       },
     ],
   };
   weather = [
     {
-      descr1: "Snow Temperature:",
+      descr1: "Температура снега:",
       descr2: "0°",
     },
     {
-      descr1: "Air Temperature:",
+      descr1: "Температура воздуха:",
       descr2: "0°",
     },
     {
-      descr1: "Wind Speed:",
+      descr1: "Скорость ветра:",
       descr2: "",
     },
   ];

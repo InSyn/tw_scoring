@@ -309,7 +309,7 @@ export default {
       }
     },
     competitionFirstSetup(competition) {
-      competition.mainData.discipline.value = "Discipline";
+      competition.mainData.discipline.value = "Дисциплина";
       competition.mainData.discipline.min = "DSC";
 
       if (competition.stuff.jury.length < 1)

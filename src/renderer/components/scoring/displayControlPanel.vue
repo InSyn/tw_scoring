@@ -62,19 +62,8 @@
             >{{ localization[lang].app.scoring.live_update }}</v-btn
           >
         </div>
-        <div
-          class="mt-2 d-flex flex-wrap align-center"
-          :style="{
-            backgroundColor:
-              $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
-          }"
-          style="flex: 0 0 auto; padding: 8px; width: 100%; border-radius: 6px"
-        >
-          <div style="font-size: 1.2rem; font-weight: bold">
-            File Translation
-          </div>
-          <export-c-s-v class="ml-auto"></export-c-s-v>
-        </div>
+
+        <export-c-s-v></export-c-s-v>
       </div>
     </v-container>
   </v-col>

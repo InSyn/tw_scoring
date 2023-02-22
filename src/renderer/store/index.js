@@ -10,6 +10,7 @@ import message_system from "./modules/message_system";
 import protocol_settings from "./modules/protocol_settings";
 import settings from "./modules/settings";
 import aerials from "./modules/aerials";
+import scoring_services from "./modules/scoring_services";
 
 export default new Vuex.Store({
   state: {},
@@ -24,6 +25,7 @@ export default new Vuex.Store({
     protocol_settings,
     settings,
     aerials,
+    scoring_services,
   },
   strict: false,
 });
