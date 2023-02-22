@@ -645,7 +645,10 @@ export default {
         this.competition.publishResult({
           competitor: competitor,
           race_id: race.id,
-          ae_code: competitor.info_data["jump1_code"] || null,
+          ae_code:
+            competitor.info_data[
+              `jump${this.competition.races.indexOf(race) + 1}_code`
+            ] || 0,
         })
       );
 

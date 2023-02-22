@@ -44,6 +44,9 @@ export default class EventClass {
       { id: "year", title: "Год" },
       { id: "rank", title: "Разряд" },
       { id: "region", title: "Регион" },
+      { id: "group", title: "Группа" },
+      { id: "jump1_code", title: "Код пр. 1" },
+      { id: "jump2_code", title: "Код пр. 2" },
     ],
     competitors: [],
   };
@@ -190,7 +193,7 @@ export default class EventClass {
         weatherData: 12,
         raceNotes: 12,
       },
-      protocol_type: "Start-list",
+      protocol_type: "Старт-лист",
       fields: [],
     },
     result_protocols: {
@@ -203,7 +206,7 @@ export default class EventClass {
         weatherData: 12,
         raceNotes: 12,
       },
-      protocol_type: "Results",
+      protocol_type: "Результаты",
       fields: [],
       raceResultFields: [],
     },
@@ -770,22 +773,25 @@ export default class EventClass {
       : this.set_accuracy(0);
   }
   getTeamRaceResult(team, race) {
+    console.log(race);
     const teamResultsArr = team.competitors.map((competitor) => {
-      // console.log(competitor.results);
-      // console.log(race);
-
-      competitor.results.find((result) => result.race_id === race.id);
+      competitor.results.find((result) => {
+        console.log(result);
+        console.log(result.race_id, race.id);
+        console.log(result.race_id === race.id);
+        return result.race_id === race.id;
+      });
     });
-    // console.log(teamResultsArr);
-
-    const filteredArr = teamResultsArr.filter((result) => !!result);
+    console.log("<>-----------------<>");
+    const filteredArr = teamResultsArr.filter((result) => {
+      return !!result;
+    });
 
     return filteredArr.length > 0
       ? this.set_accuracy(
-          filteredArr.reduce(
-            (accumulator, object) => accumulator + +object.value,
-            0
-          )
+          filteredArr.reduce((accumulator, object) => {
+            return +accumulator + +object.value;
+          }, 0)
         )
       : this.set_accuracy(0);
   }

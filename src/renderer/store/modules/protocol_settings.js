@@ -798,27 +798,21 @@ export default {
               },
               handler: function (_competitor, competition) {
                 return competition.races.map((race) => {
-                  const marks = _competitor.competitor.marks
-                    .filter((mark) => mark.race_id === race.id)
-                    .map((_mark) => {
-                      return (
-                        +_mark.value_ae.air +
-                          +_mark.value_ae.form +
-                          +_mark.value_ae.landing || ""
-                      );
-                    });
+                  const marks = _competitor.competitor.marks.filter(
+                    (mark) => mark.race_id === race.id
+                  );
 
-                  const airSum = _competitor.competitor.marks
+                  const airSum = marks
                     .map((_mark) => {
                       return +_mark.value_ae.air || 0;
                     })
                     .reduce((form1, form2) => +form1 + +form2, 0);
-                  const formSum = _competitor.competitor.marks
+                  const formSum = marks
                     .map((_mark) => {
                       return +_mark.value_ae.form || 0;
                     })
                     .reduce((air1, air2) => +air1 + +air2, 0);
-                  const landingSum = _competitor.competitor.marks
+                  const landingSum = marks
                     .map((_mark) => {
                       return +_mark.value_ae.landing || 0;
                     })

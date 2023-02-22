@@ -1797,7 +1797,10 @@ export default {
             competitor: competitor,
             race_id: race.id,
             status: competitor.race_status,
-            ae_code: competitor.info_data["jump1_code"],
+            ae_code:
+              competitor.info_data[
+                `jump${this.competition.races.indexOf(race) + 1}_code`
+              ] || 0,
           });
         });
       });

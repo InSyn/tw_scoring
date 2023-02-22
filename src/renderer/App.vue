@@ -324,7 +324,7 @@ export default {
         });
 
       for (let i = 0; i < 4; i++) {
-        competition.stuff.judges.push(new JudgeClass(`Judge ${i + 1}`, i + 1));
+        competition.stuff.judges.push(new JudgeClass(`Судья ${i + 1}`, i + 1));
       }
     },
     getSysData() {

@@ -41,7 +41,11 @@
             >
               <input
                 type="text"
-                v-bind:value="competitorOnTrack.info_data['jump1_code']"
+                v-bind:value="
+                  competitorOnTrack.info_data[
+                    `jump${competition.selected_race_id + 1}_code`
+                  ]
+                "
                 @change="setAeCode($event)"
                 style="
                   padding: 4px 8px;
@@ -66,14 +70,19 @@
                 {{
                   competition.ae_codes.find(
                     (aeCode) =>
-                      aeCode.code === competitorOnTrack.info_data["jump1_code"]
+                      aeCode.code ===
+                      competitorOnTrack.info_data[
+                        `jump${competition.selected_race_id + 1}_code`
+                      ]
                   )
                     ? parseFloat(
                         competition.ae_codes
                           .find(
                             (aeCode) =>
                               aeCode.code ===
-                              competitorOnTrack.info_data["jump1_code"]
+                              competitorOnTrack.info_data[
+                                `jump${competition.selected_race_id + 1}_code`
+                              ]
                           )
                           [
                             `value_${
@@ -220,7 +229,9 @@
                           competition.stuff.judges.map((_j) => {
                             return +_j.id;
                           }),
-                          competitorOnTrack.info_data["jump1_code"]
+                          competitorOnTrack.info_data[
+                            `jump${competition.selected_race_id + 1}_code`
+                          ]
                         )) ||
                       0
                   )
@@ -699,7 +710,9 @@
                     competition.selected_race.onTrack &&
                     publishResult(
                       competition.selected_race.onTrack,
-                      competitorOnTrack.info_data['jump1_code']
+                      competitorOnTrack.info_data[
+                        `jump${competition.selected_race_id + 1}_code`
+                      ] || 0
                     )
                 "
                 :style="{
@@ -774,7 +787,10 @@ export default {
                 }) &&
                 this.competition.stuff.judges.length - 1 === j_idx
               ) {
-                this.publishResult(_comp.id);
+                this.publishResult(
+                  _comp.id,
+                  `jump${this.competition.selected_race_id + 1}_code`
+                );
               }
             });
         });
@@ -860,7 +876,9 @@ export default {
     },
 
     setAeCode(e) {
-      this.competitorOnTrack.info_data["jump1_code"] = e.target.value;
+      this.competitorOnTrack.info_data[
+        `jump${this.competition.selected_race_id + 1}_code`
+      ] = e.target.value;
 
       this.updateEvent();
     },

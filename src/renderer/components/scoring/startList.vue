@@ -25,7 +25,11 @@
             class="jumpCode__input"
             v-if="competition.is_aerials && selectedCompetitor"
             type="text"
-            v-bind:value="selectedCompetitor.info_data['jump1_code']"
+            v-bind:value="
+              selectedCompetitor.info_data[
+                `jump${competition.selected_race_id + 1}_code`
+              ]
+            "
             @change="setAeCode($event)"
           />
           <div

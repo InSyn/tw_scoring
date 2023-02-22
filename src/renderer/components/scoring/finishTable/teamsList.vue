@@ -56,8 +56,7 @@ export default {
         .sort(
           (team1_res, team2_res) =>
             +team2_res.teamResult - +team1_res.teamResult
-        )
-        .filter((team) => !!+team.teamResult);
+        );
 
       if (rankedTeamsArr) return rankedTeamsArr;
 
