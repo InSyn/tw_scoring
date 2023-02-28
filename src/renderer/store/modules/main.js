@@ -9,7 +9,7 @@ export default {
   namespaced: true,
   state: {
     _licData: {
-      state: false,
+      state: true,
       user: "",
       key: "",
     },
@@ -61,6 +61,7 @@ export default {
     event: {
       id: null,
       event_title: "New event",
+      sport: "Фристайл",
     },
     event_id: null,
     live_config: {
@@ -527,7 +528,7 @@ export default {
       commit("licChecked", lData);
     },
     load_event: ({ state, commit }, evData) => {
-      state.event.id = evData.id;
+      state.event_id = evData.event_id;
       state.event.event_title = evData.title;
 
       state.competitions = [];
@@ -596,7 +597,7 @@ export default {
       if (conf.path) {
         const event_to_save = {
           title: state.event.event_title,
-          id: state.event.event_id,
+          event_id: state.event_id,
           competitions: state.competitions,
         };
         await fs.writeFile(

@@ -202,7 +202,9 @@ export default {
       updateEvent: "updateEvent",
     }),
     setAeCode(e) {
-      this.selectedCompetitor.info_data["jump1_code"] = e.target.value;
+      this.selectedCompetitor.info_data[
+        `jump${this.competition.selected_race_id + 1}_code`
+      ] = e.target.value;
 
       this.updateEvent();
     },

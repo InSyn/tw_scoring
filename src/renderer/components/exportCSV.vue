@@ -11,9 +11,28 @@
   >
     <div style="font-size: 1.2rem; font-weight: bold">File Translation</div>
 
-    <div class="exportCSV__wrapper ml-auto">
+    <v-btn
+      class="ml-auto"
+      @click="setFileSeparation(!fileTranslationService.separated)"
+      color="var(--text-default)"
+      icon
+    >
+      <v-icon>
+        {{
+          fileTranslationService.separated
+            ? icons.fileMultipleIcon
+            : icons.fileIcon
+        }}
+      </v-icon>
+    </v-btn>
+
+    <div class="exportCSV__wrapper">
       <v-btn
-        :class="[updateCSV && 'updater-active', updating && 'updater-updating']"
+        :class="[
+          'updater__btn',
+          updateCSV && 'updater-active',
+          updating && 'updater-updating',
+        ]"
         @click="setUpdater"
         color="var(--action-green)"
         text
@@ -27,7 +46,7 @@
       <span class="exportPath__label">Путь:</span>
       <input
         class="exportPath__input"
-        v-bind:value="getFileTranslationService.path"
+        v-bind:value="fileTranslationService.path"
         @change="setFileTranslationPath($event.target.value)"
         type="text"
       />
@@ -37,6 +56,7 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
+import { mdiFileOutline, mdiFileMultipleOutline } from "@mdi/js";
 
 export default {
   name: "exportCSV",
@@ -46,6 +66,7 @@ export default {
     }),
     ...mapActions("scoring_services", {
       setFileTranslationPath: "setFileTranslationService_path",
+      setFileSeparation: "setFileSeparation",
     }),
 
     getStartList() {
@@ -82,15 +103,20 @@ export default {
             fullname: competitor.info_data["fullname"] || null,
             lastname: competitor.info_data["lastname"] || null,
             name: competitor.info_data["name"] || null,
+            region: competitor.info_data["region"] || null,
+            country: competitor.info_data["country"] || null,
+            country_code: competitor.info_data["country_code"] || null,
+
             fullname_eng: competitor.info_data["fullname_eng"] || null,
             lastname_eng: competitor.info_data["lastname_eng"] || null,
             name_eng: competitor.info_data["name_eng"] || null,
+
             photo: competitor.info_data["photo"] || null,
+            country_flag: competitor.info_data["country_flag"] || null,
+
             teamid: null,
             teamname: null,
-            country: competitor.info_data["country"] || null,
-            country_code: competitor.info_data["country_code"] || null,
-            region: competitor.info_data["region"] || null,
+
             jump1_code: competitor.info_data["jump1_code"] || null,
             jump2_code: competitor.info_data["jump2_code"] || null,
             dd_1: ddJump1 || null,
@@ -132,15 +158,20 @@ export default {
             fullname: competitor.info_data["fullname"] || null,
             lastname: competitor.info_data["lastname"] || null,
             name: competitor.info_data["name"] || null,
-            fullname_eng: competitor.info_data["fullname_eng"] || null,
-            lastname_eng: competitor.info_data["lastname_eng"] || null,
-            name_eng: competitor.info_data["name_eng"] || null,
-            photo: competitor.info_data["photo"] || null,
-            teamid: null,
-            teamname: null,
             country: competitor.info_data["country"] || null,
             country_code: competitor.info_data["country_code"] || null,
             region: competitor.info_data["region"] || null,
+
+            fullname_eng: competitor.info_data["fullname_eng"] || null,
+            lastname_eng: competitor.info_data["lastname_eng"] || null,
+            name_eng: competitor.info_data["name_eng"] || null,
+
+            photo: competitor.info_data["photo"] || null,
+            country_flag: competitor.info_data["country_flag"] || null,
+
+            teamid: null,
+            teamname: null,
+
             jump1_code: competitor.info_data["jump1_code"] || null,
             jump2_code: competitor.info_data["jump2_code"] || null,
           };
@@ -239,6 +270,8 @@ export default {
               lastname: finishedCompetitor.info_data["lastname"] || null,
               name: finishedCompetitor.info_data["name"] || null,
               photo: finishedCompetitor.info_data["photo"] || null,
+              country_flag:
+                finishedCompetitor.info_data["country_flag"] || null,
               country: finishedCompetitor.info_data["country"] || null,
               country_code:
                 finishedCompetitor.info_data["country_code"] || null,
@@ -268,11 +301,13 @@ export default {
           lastname: finishedCompetitor.info_data["lastname"] || null,
           name: finishedCompetitor.info_data["name"] || null,
           photo: finishedCompetitor.info_data["photo"] || null,
+          country_flag: finishedCompetitor.info_data["country_flag"] || null,
           country: finishedCompetitor.info_data["country"] || null,
           country_code: finishedCompetitor.info_data["country_code"] || null,
           region: finishedCompetitor.info_data["region"] || null,
           teamid: null,
           teamname: null,
+
           result: this.competition.getResult(finishedCompetitor.id) || null,
           qualification_mark:
             competitor_idx + 1 <= this.competition.passed_competitors
@@ -343,16 +378,19 @@ export default {
             lastname: finishedCompetitor.info_data["lastname"] || null,
             name: finishedCompetitor.info_data["name"] || null,
             photo: finishedCompetitor.info_data["photo"] || null,
+            country_flag: finishedCompetitor.info_data["country_flag"] || null,
             country: finishedCompetitor.info_data["country"] || null,
             country_code: finishedCompetitor.info_data["country_code"] || null,
             region: finishedCompetitor.info_data["region"] || null,
             teamid: null,
             teamname: null,
+
             result:
               this.competition.getRaceResult(
                 finishedCompetitor,
                 this.competition.selected_race
               ) || null,
+            total: this.competition.getResult(finishedCompetitor.id) || null,
             qualification_mark: "nq",
 
             finishOrder: finishedCompetitor.order,
@@ -385,40 +423,46 @@ export default {
         this.updating = true;
 
         const startList = this.getStartList();
-        this.exportCSV({
-          path: `${this.getFileTranslationService.path}\\${this.competitionTitlePrefix}_StartList`,
-          data: startList,
-        });
 
         const onStart = this.getCompetitorOnStart()
           ? [this.getCompetitorOnStart()]
           : [];
-        this.exportCSV({
-          path: `${this.getFileTranslationService.path}\\${this.competitionTitlePrefix}_OnStart`,
-          data: onStart,
-        });
 
         const finishedCompetitor = this.getFinished();
-        this.exportCSV({
-          path: `${this.getFileTranslationService.path}\\${this.competitionTitlePrefix}_Finished`,
-          data: finishedCompetitor,
-        });
 
         const results = this.getResults();
-        await this.exportCSV({
-          path: `${this.getFileTranslationService.path}\\${this.competitionTitlePrefix}_Results`,
-          data: results,
-        });
 
-        // await this.exportCSV({
-        //   path: `C:\\Users\\InSyn\\Documents\\TW_Translation\\${this.competitionTitlePrefix}`,
-        //   data: {
-        //     onStart: onStart,
-        //     finished: finishedCompetitor,
-        //     startList: startList,
-        //     results: results,
-        //   },
-        // });
+        if (this.fileTranslationService.separated) {
+          this.exportCSV({
+            path: `${this.fileTranslationService.path}\\${this.competitionTitlePrefix}_StartList`,
+            data: startList,
+          });
+
+          this.exportCSV({
+            path: `${this.fileTranslationService.path}\\${this.competitionTitlePrefix}_OnStart`,
+            data: onStart,
+          });
+
+          this.exportCSV({
+            path: `${this.fileTranslationService.path}\\${this.competitionTitlePrefix}_Finished`,
+            data: finishedCompetitor,
+          });
+
+          await this.exportCSV({
+            path: `${this.fileTranslationService.path}\\${this.competitionTitlePrefix}_Results`,
+            data: results,
+          });
+        } else {
+          await this.exportCSV({
+            path: `${this.fileTranslationService.path}\\${this.competitionTitlePrefix}`,
+            data: {
+              onStart: onStart,
+              finished: finishedCompetitor,
+              startList: startList,
+              results: results,
+            },
+          });
+        }
 
         setTimeout(() => {
           this.updating = false;
@@ -431,6 +475,10 @@ export default {
       updateCSV: false,
       updater: null,
       updating: false,
+      icons: {
+        fileIcon: mdiFileOutline,
+        fileMultipleIcon: mdiFileMultipleOutline,
+      },
     };
   },
   computed: {
@@ -438,7 +486,7 @@ export default {
       competition: "competition",
     }),
     ...mapGetters("scoring_services", {
-      getFileTranslationService: "getFileTranslationService",
+      fileTranslationService: "getFileTranslationService",
     }),
     competitionTitlePrefix() {
       return `${this.competition.mainData.title.stage.value.value}`;
@@ -448,6 +496,9 @@ export default {
 </script>
 
 <style scoped>
+.updater__btn {
+  border: 1px solid transparent;
+}
 .updater-active {
   border: 1px solid var(--action-green);
 }

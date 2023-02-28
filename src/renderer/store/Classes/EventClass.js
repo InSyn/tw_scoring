@@ -42,15 +42,27 @@ export default class EventClass {
       { id: "name", title: "Имя" },
       { id: "fullname", title: "Фамилия, Имя" },
       { id: "year", title: "Год" },
-      { id: "rank", title: "Разряд" },
-      { id: "region", title: "Регион" },
-      // { id: "group", title: "Группа" },
-      // { id: "jump1_code", title: "Код пр. 1" },
+      // { id: "rank", title: "Разряд" },
+
+      { id: "county_name", title: "Страна" },
+      { id: "country_code", title: "Код стр." },
+
+      { id: "lastname_eng", title: "Lastname" },
+      { id: "name_eng", title: "Name" },
+      { id: "fullname_eng", title: "Fullname" },
+      { id: "id", title: "ID" },
+
+      // { id: "photo", title: "Фото" },
+      // { id: "country_flag", title: "Флаг" },
+
+      { id: "group", title: "Группа" },
+      { id: "jump1_code", title: "Код пр. 1" },
+      // { id: "team_name", title: "Команда" },
       // { id: "jump2_code", title: "Код пр. 2" },
     ],
     competitors: [],
   };
-  is_aerials = false;
+  is_aerials = true;
   is_teams = false;
   mainData = {
     title: {
@@ -381,7 +393,7 @@ export default class EventClass {
         doubleUp_competitors: { 0: null, 1: null },
         lower_marks: 0,
         higher_marks: 0,
-        formula: 0,
+        formula: 2,
         formulas: [
           {
             id: 0,
@@ -773,27 +785,22 @@ export default class EventClass {
       : this.set_accuracy(0);
   }
   getTeamRaceResult(team, race) {
-    console.log(race);
-    const teamResultsArr = team.competitors.map((competitor) => {
-      competitor.results.find((result) => {
-        console.log(result);
-        console.log(result.race_id, race.id);
-        console.log(result.race_id === race.id);
-        return result.race_id === race.id;
-      });
-    });
-    console.log("<>-----------------<>");
-    const filteredArr = teamResultsArr.filter((result) => {
-      return !!result;
-    });
+    const teamResultsArr = team.competitors.map((competitor) =>
+      competitor.results.find((result) => result.race_id === race.id)
+    );
 
-    return filteredArr.length > 0
-      ? this.set_accuracy(
-          filteredArr.reduce((accumulator, object) => {
-            return +accumulator + +object.value;
-          }, 0)
-        )
-      : this.set_accuracy(0);
+    const filteredArr = teamResultsArr.filter(
+      (result) => result && result.value
+    );
+
+    if (filteredArr.length > 0) {
+      return this.set_accuracy(
+        filteredArr.reduce((accumulator, res2) => {
+          return accumulator + +res2.value;
+        }, 0)
+      );
+    }
+    this.set_accuracy(0);
   }
   publishResult(params) {
     const res = {

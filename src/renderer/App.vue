@@ -323,7 +323,7 @@ export default {
           setABC: false,
         });
 
-      for (let i = 0; i < 4; i++) {
+      for (let i = 0; i < 5; i++) {
         competition.stuff.judges.push(new JudgeClass(`Судья ${i + 1}`, i + 1));
       }
     },

@@ -8,12 +8,39 @@
       <div
         style="
           flex: 0 0 100%;
+          display: flex;
+          align-items: center;
           margin-bottom: 1rem;
           font-size: 1.4rem;
           font-weight: bold;
         "
       >
         {{ localization[lang].app.event.event_header }}
+        <div
+          style="
+            margin-left: auto;
+            padding: 4px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: var(--text-default);
+            background: var(--card-background);
+            border-radius: 6px;
+          "
+        >
+          Event_ID:
+          <input
+            v-model.lazy="event_id"
+            type="text"
+            style="
+              margin-left: 8px;
+              padding: 4px;
+              font-size: 0.9rem;
+              color: var(--text-default);
+              background: var(--standard-background);
+              border-radius: 6px;
+            "
+          />
+        </div>
       </div>
       <div
         style="
@@ -46,6 +73,21 @@
               border-radius: 6px;
               margin-left: 8px;
               padding: 4px;
+            "
+            :style="{
+              backgroundColor:
+                $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
+              color: $vuetify.theme.themes[appTheme].textDefault,
+            }"
+          />
+          <input
+            v-model.lazy="event.sport"
+            style="
+              flex: 0 0 auto;
+              width: 8rem;
+              margin-left: 4px;
+              padding: 4px;
+              border-radius: 6px;
             "
             :style="{
               backgroundColor:
@@ -93,7 +135,28 @@
         :style="{
           color: $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
         }"
-        ><div>Comp_ID: {{ competition.id }}</div>
+        ><div
+          style="
+            padding: 4px;
+            color: var(--text-default);
+            background: var(--card-background);
+            border-radius: 6px;
+          "
+        >
+          Comp_ID:
+          <input
+            v-model.lazy="competition.id"
+            type="text"
+            style="
+              margin-left: 8px;
+              padding: 4px;
+              font-size: 0.9rem;
+              color: var(--text-default);
+              background: var(--standard-background);
+              border-radius: 6px;
+            "
+          />
+        </div>
         <v-dialog
           width="480"
           id="dialog"
@@ -192,6 +255,7 @@ export default {
   computed: {
     ...mapGetters("main", {
       event: "event",
+      event_id: "event_id",
       competition: "competition",
       competitions: "competitions",
       appTheme: "appTheme",
@@ -200,7 +264,6 @@ export default {
       lang: "lang",
       localization: "localization",
     }),
-    ...mapGetters("event", { EventClass: "EventClass" }),
     console: () => console,
   },
 };

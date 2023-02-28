@@ -127,9 +127,7 @@
         }}
       </div>
       <v-hover
-        v-for="(_competition, c_id) in competitions.filter(
-          (_comp) => _comp.id !== competition.id
-        )"
+        v-for="(_competition, c_id) in competitions"
         :key="_competition.id"
         v-slot:default="{ hover }"
       >
@@ -146,6 +144,10 @@
               borderTop: `1px solid ${$vuetify.theme.themes[appTheme].cardBackgroundRGBA}`,
               borderBottom: `1px solid ${$vuetify.theme.themes[appTheme].cardBackgroundRGBA}`,
             },
+            competition.id === _competition.id && {
+              backgroundColor:
+                $vuetify.theme.themes[appTheme].subjectBackgroundRGBA,
+            },
             hover && {
               borderTop: `1px solid ${$vuetify.theme.themes[appTheme].accent}`,
               borderBottom: `1px solid ${$vuetify.theme.themes[appTheme].accent}`,
@@ -153,7 +155,7 @@
                 $vuetify.theme.themes[appTheme].subjectBackgroundRGBA,
             },
             c_id < 1 && { borderTop: `null` },
-            c_id >= competitions.length - 2 && { borderBottom: `null` },
+            c_id >= competitions.length - 1 && { borderBottom: `null` },
           ]"
         >
           {{

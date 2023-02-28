@@ -291,15 +291,18 @@
                         </div>
                       </div>
                     </div>
-                    <div v-if="competition.is_aerials" style="padding: 4px 8px">
-                      <span style="font-weight: bold">jump code</span>
+                    <div
+                      v-if="
+                        competition.is_aerials &&
+                        competitor.results.find(
+                          (result) => result.race_id === race.id
+                        )
+                      "
+                      style="padding: 4px 8px"
+                    >
+                      <span style="font-weight: bold">Jump code</span>
                       <input
-                        v-if="
-                          competitor.results.find(
-                            (result) => result.race_id === race.id
-                          )
-                        "
-                        v-model="
+                        v-model.lazy="
                           competitor.results.find(
                             (result) => result.race_id === race.id
                           ).jump_code
@@ -314,6 +317,42 @@
                           border-radius: 6px;
                         "
                       />
+                      <span
+                        v-if="
+                          competitor.results.find(
+                            (result) => result.race_id === race.id
+                          ).jump_code &&
+                          competition.ae_codes.find(
+                            (aeCode) =>
+                              aeCode.code ===
+                              competitor.results.find(
+                                (result) => result.race_id === race.id
+                              ).jump_code
+                          )
+                        "
+                        style="
+                          display: inline-block;
+                          margin-left: 4px;
+                          padding: 4px 6px;
+                          color: var(--text-default);
+                          background: var(--standard-background);
+                          border-radius: 6px;
+                        "
+                        >{{
+                          competition.ae_codes.find(
+                            (aeCode) =>
+                              aeCode.code ===
+                              competitor.results.find(
+                                (result) => result.race_id === race.id
+                              ).jump_code
+                          )[
+                            `value_${
+                              competitor.info_data["group"] ||
+                              competition.mainData.title.stage.group
+                            }`
+                          ]
+                        }}</span
+                      >
                     </div>
                     <div
                       style="
@@ -641,16 +680,17 @@ export default {
           _mark.new_value = null;
         }
       });
-      this.competition.races.forEach((race) =>
+      this.competition.races.forEach((race) => {
+        const result = competitor.results.find(
+          (result) => result.race_id === race.id
+        );
+
         this.competition.publishResult({
           competitor: competitor,
           race_id: race.id,
-          ae_code:
-            competitor.info_data[
-              `jump${this.competition.races.indexOf(race) + 1}_code`
-            ] || 0,
-        })
-      );
+          ae_code: result ? result.jump_code : null,
+        });
+      });
 
       this.changeMarksDialog[competitor.id] = false;
       this.updateEvent();

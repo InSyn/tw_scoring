@@ -21,7 +21,7 @@
         >
           <div style="font-size: 1.2rem; font-weight: bold">LIVE Scoring</div>
           <v-btn
-            @click="dbSetCompetitionLive(competitions, event_id)"
+            @click="dbSetCompetitionLive(event, competitions, event_id)"
             depressed
             style="
               font-size: 1rem;
@@ -34,7 +34,7 @@
             >{{ localization[lang].app.scoring.turn_live }}</v-btn
           >
           <v-btn
-            @click="setUpdater(competitions, event_id, live_config)"
+            @click="setUpdater(event, competitions, event_id)"
             class="ml-2"
             depressed
             style="
@@ -78,15 +78,15 @@ export default {
   components: { ExportCSV },
   methods: {
     log: (data) => console.log(data),
-    dbSetCompetitionLive: async (competitions, event_id) => {
+    dbSetCompetitionLive: async (event, competitions, event_id) => {
       const live_event = {
         event_id: event_id,
         created_at: new Date().toUTCString(),
         start_at: new Date(
           `${competitions[0].mainData.date.value}:${competitions[0].mainData.date.time}`
         ).toUTCString(),
-        title: competitions[0].mainData.title.value,
-        sport: "Фристайл",
+        title: event.event_title,
+        sport: event.sport,
         discipline: competitions[0].mainData.discipline.value,
         location: competitions[0].mainData.location.value,
         organization: competitions[0].mainData.provider.value,
@@ -179,11 +179,11 @@ export default {
           console.error(e);
         });
     },
-    dbUpdateCompetitionLive(competitions, event_id) {
+    dbUpdateCompetitionLive(event, competitions, event_id) {
       const live_event = {
         event_id: event_id,
-        title: competitions[0].mainData.title.value,
-        sport: "Фристайл",
+        title: event.event_title,
+        sport: event.sport,
         discipline: competitions[0].mainData.discipline.value,
         start_at: new Date(
           `${competitions[0].mainData.date.value}:${competitions[0].mainData.date.time}`
@@ -280,7 +280,7 @@ export default {
           }, 192);
           if (this.live_config.update_live)
             setTimeout(() => {
-              this.dbUpdateCompetitionLive(competitions, event_id);
+              this.dbUpdateCompetitionLive(event, competitions, event_id);
             }, 2560);
         })
         .catch((e) => {
@@ -292,10 +292,10 @@ export default {
           console.error(e);
         });
     },
-    setUpdater(competitions, event_id) {
+    setUpdater(event, competitions, event_id) {
       if (!this.live_config.update_live) {
         this.live_config.update_live = true;
-        this.dbUpdateCompetitionLive(competitions, event_id);
+        this.dbUpdateCompetitionLive(event, competitions, event_id);
       } else this.live_config.update_live = false;
     },
   },
@@ -311,6 +311,7 @@ export default {
     }),
     ...mapGetters("main", {
       live_config: "live_config",
+      event: "event",
       event_id: "event_id",
       competition: "competition",
       competitions: "competitions",

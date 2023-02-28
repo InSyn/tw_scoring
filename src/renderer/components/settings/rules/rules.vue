@@ -1792,15 +1792,15 @@ export default {
           const competitor = this.competition.competitorsSheet.competitors.find(
             (competitor) => competitor.id === fin_competitor
           );
+          const result = competitor.results.find(
+            (result) => result.race_id === race.id
+          );
 
           this.competition.publishResult({
             competitor: competitor,
             race_id: race.id,
             status: competitor.race_status,
-            ae_code:
-              competitor.info_data[
-                `jump${this.competition.races.indexOf(race) + 1}_code`
-              ] || 0,
+            ae_code: result ? result.jump_code : null,
           });
         });
       });

@@ -18,7 +18,7 @@ export default {
 <style scoped>
 .teamCompetitor__wrapper {
   flex: 0 0 auto;
-  margin: 0 4px 4px 0;
+  margin: 0 6px 6px 0;
   padding: 4px 8px;
   font-weight: bold;
   border-radius: 6px;

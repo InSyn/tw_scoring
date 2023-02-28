@@ -5,5 +5,6 @@ export default class TeamClass {
     this.id = generateId();
     this.name = params.name || "";
     this.competitors = params.competitors || [];
+    this.qualified = false;
   }
 }

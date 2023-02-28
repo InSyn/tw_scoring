@@ -44,13 +44,13 @@ export default {
 <style scoped>
 .teamTable__row {
   position: relative;
-  margin-bottom: 4px;
+  margin-top: 8px;
   padding: 6px;
   background: var(--card-background);
   border-radius: 6px;
 }
-.teamTable__row:last-child {
-  margin-bottom: 0;
+.teamTable__row:first-child {
+  margin-top: 0;
 }
 /*.teamTable__row::before {*/
 /*  content: "";*/
@@ -104,7 +104,7 @@ export default {
   position: relative;
   min-height: 32px;
   margin-top: 6px;
-  padding: 4px 0 0 4px;
+  padding: 6px 0 0 6px;
   background: var(--standard-background);
   border-radius: 6px;
 }

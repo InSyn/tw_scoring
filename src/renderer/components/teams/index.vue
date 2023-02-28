@@ -72,8 +72,9 @@ export default {
 .teamsTable__body {
   height: 60vh;
   margin-top: 8px;
-  padding: 4px;
+  padding: 8px;
   background: var(--standard-background);
+  border-radius: 6px;
   overflow-y: auto;
 }
 </style>

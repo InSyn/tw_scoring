@@ -148,8 +148,6 @@ export default {
                 newMark[aeScoreKey] = this.aeScores[mKey][aeScoreKey];
             }
 
-            // console.log(mKey);
-            // console.log(this.competition.stuff.judges);
             competitor.marks.push(
               new MarkClass(
                 this.competition.selected_race_id,
@@ -186,6 +184,8 @@ export default {
             })
           ) {
             //NEW MARK IF NOT EXIST
+            // console.log(mKey);
+            // console.log(this.competition.stuff.judges);
             competitor.marks.push(
               new MarkClass(
                 this.competition.selected_race_id,
@@ -237,7 +237,9 @@ export default {
   },
   watch: {
     "change_marks_dialog.state": function (val) {
-      if (val)
+      if (val) {
+        this.aeScores = {};
+
         this.competition.stuff.judges.forEach(
           (judge) =>
             (this.aeScores[judge._id] = {
@@ -246,6 +248,7 @@ export default {
               landing: null,
             })
         );
+      }
     },
   },
 };

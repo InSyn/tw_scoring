@@ -52,6 +52,7 @@ export default {
               ...team,
               teamResult,
             };
+          return team;
         })
         .sort(
           (team1_res, team2_res) =>
@@ -110,9 +111,10 @@ export default {
 .teamCompetitorBib {
   font-weight: bold;
   font-size: 1.1rem;
-  margin-right: 1rem;
+  margin: 0 6px 0 4px;
 }
 .teamCompetitorLastname {
+  margin-right: 6px;
 }
 .teamCompetitorName {
 }
