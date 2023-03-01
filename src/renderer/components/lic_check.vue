@@ -86,11 +86,23 @@
             color: $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
           }"
         >
-          {{
-            system_data && system_data.platform === "win32"
-              ? system_data.system.uuid
-              : system_data.uuid.os
-          }}
+          <span class="mr-1 pa-1" style="font-weight: bold">ID системы:</span>
+          <span
+            class="pa-1"
+            style="
+              display: inline-block;
+              border-radius: 6px;
+              background: var(--standard-background);
+              color: var(--text-default);
+              font-weight: bold;
+            "
+          >
+            {{
+              system_data && system_data.platform === "win32"
+                ? system_data.system.uuid
+                : system_data.uuid.os
+            }}
+          </span>
         </div>
       </div>
     </div>
@@ -179,7 +191,8 @@ export default {
     license() {
       if (this._licData.state) {
         setTimeout(() => {
-          this.$router.push({ name: "competition_settings" });
+          if (!this.$route.name === "competition_settings")
+            this.$router.push({ name: "competition_settings" });
         }, 750);
       }
       return this._licData;

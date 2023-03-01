@@ -42,27 +42,29 @@ export default class EventClass {
       { id: "name", title: "Имя" },
       { id: "fullname", title: "Фамилия, Имя" },
       { id: "year", title: "Год" },
-      // { id: "rank", title: "Разряд" },
+      { id: "rank", title: "Разряд" },
 
-      { id: "county_name", title: "Страна" },
-      { id: "country_code", title: "Код стр." },
+      { id: "region", title: "Регион" },
+      // { id: "county_name", title: "Страна" },
+      // { id: "country_code", title: "Код стр." },
 
-      { id: "lastname_eng", title: "Lastname" },
-      { id: "name_eng", title: "Name" },
-      { id: "fullname_eng", title: "Fullname" },
-      { id: "id", title: "ID" },
+      // { id: "lastname_eng", title: "Lastname" },
+      // { id: "name_eng", title: "Name" },
+      // { id: "fullname_eng", title: "Fullname" },
+
+      // { id: "id", title: "ID" },
 
       // { id: "photo", title: "Фото" },
       // { id: "country_flag", title: "Флаг" },
 
-      { id: "group", title: "Группа" },
-      { id: "jump1_code", title: "Код пр. 1" },
+      // { id: "group", title: "Группа" },
       // { id: "team_name", title: "Команда" },
+      // { id: "jump1_code", title: "Код пр. 1" },
       // { id: "jump2_code", title: "Код пр. 2" },
     ],
     competitors: [],
   };
-  is_aerials = true;
+  is_aerials = false;
   is_teams = false;
   mainData = {
     title: {
@@ -149,7 +151,7 @@ export default class EventClass {
     selected: {
       type: "",
       discipline: "",
-      accuracy: 2,
+      accuracy: 1,
     },
     types: [
       { id: 0, title: "Snowboard", disciplines: [0, 1, 2, 100] },
@@ -393,7 +395,7 @@ export default class EventClass {
         doubleUp_competitors: { 0: null, 1: null },
         lower_marks: 0,
         higher_marks: 0,
-        formula: 2,
+        formula: 0,
         formulas: [
           {
             id: 0,
