@@ -12,21 +12,26 @@
       </div>
       <div
         class="teamCompetitor"
-        v-for="teamCompetitor in rankedTeam.competitors"
-        :key="teamCompetitor.id"
+        v-for="teamCompetitorId in rankedTeam.competitors"
+        :key="teamCompetitorId"
       >
         <div class="teamCompetitorBib">
-          {{ teamCompetitor.info_data["bib"] }}
+          {{ getCompetitor(teamCompetitorId).info_data["bib"] }}
         </div>
         <div class="teamCompetitorLastname">
-          {{ teamCompetitor.info_data["lastname"].toUpperCase() }}
+          {{
+            getCompetitor(teamCompetitorId).info_data["lastname"].toUpperCase()
+          }}
         </div>
         <div class="teamCompetitorName">
-          {{ teamCompetitor.info_data["name"] }}
+          {{ getCompetitor(teamCompetitorId).info_data["name"] }}
         </div>
         <div class="teamCompetitorResult">
           {{
-            competition.getRaceResult(teamCompetitor, competition.selected_race)
+            competition.getRaceResult(
+              getCompetitor(teamCompetitorId),
+              competition.selected_race
+            )
           }}
         </div>
       </div>
@@ -38,6 +43,14 @@
 export default {
   name: "teamsList",
   props: ["competition"],
+  methods: {
+    getCompetitor(competitorId) {
+      const competitor = this.competition.competitorsSheet.competitors.find(
+        (competitor) => competitor.id === competitorId
+      );
+      return competitor ? competitor : null;
+    },
+  },
   computed: {
     getRankedTeams() {
       const rankedTeamsArr = this.competition.teams

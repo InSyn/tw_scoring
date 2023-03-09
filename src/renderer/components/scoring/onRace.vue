@@ -777,7 +777,12 @@ export default {
                     this.competition.selected_race.id,
                     _judge.id,
                     _judge._id,
-                    Math.round(30 + Math.random() * 70)
+                    Math.round(30 + Math.random() * 70),
+                    {
+                      air: Math.round((0.2 + Math.random() * 2) * 10) / 10,
+                      form: Math.round((0.2 + Math.random() * 5) * 10) / 10,
+                      landing: Math.round((0.2 + Math.random() * 3) * 10) / 10,
+                    }
                   )
                 );
 
@@ -789,7 +794,9 @@ export default {
               ) {
                 this.publishResult(
                   _comp.id,
-                  `jump${this.competition.selected_race_id + 1}_code`
+                  _comp.info_data[
+                    `jump${this.competition.selected_race_id + 1}_code`
+                  ]
                 );
               }
             });

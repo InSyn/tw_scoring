@@ -44,7 +44,7 @@ export default class EventClass {
       { id: "year", title: "Год" },
       { id: "rank", title: "Разряд" },
 
-      { id: "region", title: "Регион" },
+      // { id: "region", title: "Регион" },
       // { id: "county_name", title: "Страна" },
       // { id: "country_code", title: "Код стр." },
 
@@ -57,9 +57,9 @@ export default class EventClass {
       // { id: "photo", title: "Фото" },
       // { id: "country_flag", title: "Флаг" },
 
-      // { id: "group", title: "Группа" },
+      { id: "group", title: "Группа" },
       // { id: "team_name", title: "Команда" },
-      // { id: "jump1_code", title: "Код пр. 1" },
+      { id: "jump1_code", title: "Код пр. 1" },
       // { id: "jump2_code", title: "Код пр. 2" },
     ],
     competitors: [],
@@ -787,9 +787,15 @@ export default class EventClass {
       : this.set_accuracy(0);
   }
   getTeamRaceResult(team, race) {
-    const teamResultsArr = team.competitors.map((competitor) =>
-      competitor.results.find((result) => result.race_id === race.id)
-    );
+    const teamResultsArr = team.competitors.map((competitorId) => {
+      const competitor = this.competitorsSheet.competitors.find(
+        (competitor) => competitor.id === competitorId
+      );
+
+      return competitor
+        ? competitor.results.find((result) => result.race_id === race.id)
+        : null;
+    });
 
     const filteredArr = teamResultsArr.filter(
       (result) => result && result.value
@@ -805,6 +811,7 @@ export default class EventClass {
     this.set_accuracy(0);
   }
   publishResult(params) {
+    console.log(params);
     const res = {
       id: generateId(),
       value: this.result_formula.types[this.result_formula.type].formulas

@@ -129,7 +129,7 @@ export default {
           if (this.competition.is_teams) {
             const competitorTeam = this.competition.teams.find((team) =>
               team.competitors.some(
-                (teamCompetitor) => teamCompetitor.id === competitor.id
+                (teamCompetitorId) => teamCompetitorId === competitor.id
               )
             );
 
@@ -179,7 +179,7 @@ export default {
           if (this.competition.is_teams) {
             const competitorTeam = this.competition.teams.find((team) =>
               team.competitors.some(
-                (teamCompetitor) => teamCompetitor.id === competitor.id
+                (teamCompetitorId) => teamCompetitorId === competitor.id
               )
             );
 
@@ -231,7 +231,7 @@ export default {
         if (this.competition.is_teams) {
           const competitorTeam = this.competition.teams.find((team) =>
             team.competitors.some(
-              (teamCompetitor) => teamCompetitor.id === finishedCompetitor.id
+              (teamCompetitorId) => teamCompetitorId === finishedCompetitor.id
             )
           );
 
@@ -402,6 +402,19 @@ export default {
                 this.competition.getRaceResult(finishedCompetitor, race) ||
                 null)
           );
+
+          if (this.competition.is_teams) {
+            const competitorTeam = this.competition.teams.find((team) =>
+              team.competitors.some(
+                (teamCompetitorId) => teamCompetitorId === finishedCompetitor.id
+              )
+            );
+
+            if (competitorTeam) {
+              finishedData.teamid = competitorTeam.id;
+              finishedData.teamname = competitorTeam.name;
+            }
+          }
 
           return finishedData;
         });

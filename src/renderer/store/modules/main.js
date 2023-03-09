@@ -452,6 +452,9 @@ export default {
           console.log(res);
         });
     },
+    SET_EVENT_ID: (state, id) => {
+      state.event_id = id;
+    },
     SET_IP: (state, ip) => {
       state.server_config.ip = ip;
     },
@@ -543,6 +546,33 @@ export default {
 
         competition.mainData = evData_competition.mainData;
 
+        competition.is_aerials = evData_competition.is_aerials;
+        competition.is_teams = evData_competition.is_teams;
+
+        competition.result_formula.type =
+          evData_competition.result_formula.type;
+
+        competition.result_formula.types.forEach(
+          (resultType, resultTypeIdx) => {
+            resultType.formula =
+              evData_competition.result_formula.types[resultTypeIdx].formula;
+
+            if (resultTypeIdx === 0) {
+              resultType.higher_marks =
+                evData_competition.result_formula.types[
+                  resultTypeIdx
+                ].higher_marks;
+              resultType.lower_marks =
+                evData_competition.result_formula.types[
+                  resultTypeIdx
+                ].lower_marks;
+            }
+          }
+        );
+
+        competition.result_formula.overall_result.type =
+          evData_competition.result_formula.overall_result.type;
+
         competition.stuff.judges = [];
         evData_competition.stuff.judges.forEach((judge) => {
           competition.stuff.judges.push(judge);
@@ -584,8 +614,8 @@ export default {
         );
 
         competition.teams = [];
-        evData_competition.teams.forEach((_race) =>
-          competition.teams.push(_race)
+        evData_competition.teams.forEach((team) =>
+          competition.teams.push(team)
         );
 
         state.competitions.push(competition);
@@ -614,6 +644,10 @@ export default {
     serverLog: ({ commit }) => commit("serverLog"),
     serverSetStatus: ({ commit }, status) => {
       commit("serverSetStatus", status);
+    },
+    setEventID: ({ commit }, id) => {
+      commit("SET_EVENT_ID", id);
+      commit("updateEvent");
     },
     setIp: ({ commit }, ip) => {
       commit("SET_IP", ip);

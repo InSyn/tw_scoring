@@ -1,13 +1,7 @@
 <template>
   <v-dialog width="480px" v-model="dialogState">
     <template v-slot:activator="{ on }">
-      <v-btn
-        class="ml-auto"
-        @click="dialogState = true"
-        color="var(--success)"
-        text
-        small
-      >
+      <v-btn @click="dialogState = true" color="var(--success)" text small>
         Участники
       </v-btn>
     </template>
@@ -38,14 +32,16 @@
         <div class="competitorsList__body">
           <div
             class="competitor teamCompetitor"
-            @click="removeCompetitorFromTeam(competitor)"
-            v-for="competitor in team.competitors"
-            :key="competitor.id"
+            @click="removeCompetitorFromTeam(competitorId)"
+            v-for="competitorId in team.competitors"
+            :key="competitorId"
           >
-            <span class="competitorName">{{
-              `${competitor.info_data["bib"]} ${competitor.info_data[
-                "lastname"
-              ].toUpperCase()} ${competitor.info_data["name"]}`
+            <span v-if="getCompetitor(competitorId)" class="competitorName">{{
+              `${getCompetitor(competitorId).info_data["bib"]} ${getCompetitor(
+                competitorId
+              ).info_data["lastname"].toUpperCase()} ${
+                getCompetitor(competitorId).info_data["name"]
+              }`
             }}</span>
           </div>
         </div>
@@ -65,13 +61,19 @@ export default {
       updateEvent: "updateEvent",
     }),
     addCompetitorToTeam(competitor) {
-      this.team.competitors.push(competitor);
+      if (competitor.id) this.team.competitors.push(competitor.id);
 
       this.updateEvent();
     },
-    removeCompetitorFromTeam(competitor) {
+    getCompetitor(competitorId) {
+      const competitor = this.competition.competitorsSheet.competitors.find(
+        (competitor) => competitor.id === competitorId
+      );
+      return competitor ? competitor : null;
+    },
+    removeCompetitorFromTeam(competitorId) {
       this.team.competitors = this.team.competitors.filter(
-        (teamCompetitor) => competitor.id !== teamCompetitor.id
+        (_competitorId) => _competitorId !== competitorId
       );
 
       this.updateEvent();
@@ -88,7 +90,7 @@ export default {
         (competitor) =>
           !this.competition.teams.some((team) =>
             team.competitors.some(
-              (teamCompetitor) => teamCompetitor.id === competitor.id
+              (teamCompetitorId) => teamCompetitorId === competitor.id
             )
           )
       );

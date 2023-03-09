@@ -29,7 +29,8 @@
         >
           Event_ID:
           <input
-            v-model.lazy="event_id"
+            v-bind:value="event_id"
+            @change="setEventID($event.target.value)"
             type="text"
             style="
               margin-left: 8px;
@@ -227,7 +228,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 import main_data from "./competition_settings/main_data";
 import localization from "./competition_settings/localization";
 import stuff from "./competition_settings/stuff";
@@ -244,7 +245,11 @@ export default {
     track_parameters,
     weather,
   },
-  methods: {},
+  methods: {
+    ...mapActions("main", {
+      setEventID: "setEventID",
+    }),
+  },
   data() {
     return {
       delete_competition_dialog: {
