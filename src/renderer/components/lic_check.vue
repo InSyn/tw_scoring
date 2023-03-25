@@ -173,17 +173,17 @@ export default {
     };
   },
   computed: {
-    ...mapGetters("localization", {
-      localization: "localization",
-      lang: "lang",
-    }),
-    ...mapGetters("main", {
-      appTheme: "appTheme",
-      _licData: "_licData",
-    }),
     ...mapGetters("key", {
       license_panel: "license_panel",
       system_data: "system_data",
+    }),
+    ...mapGetters("localization", {
+      lang: "lang",
+      localization: "localization",
+    }),
+    ...mapGetters("main", {
+      _licData: "_licData",
+      appTheme: "appTheme",
     }),
     license() {
       if (this._licData.state) {
