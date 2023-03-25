@@ -16,24 +16,6 @@ export default {
     },
   },
   actions: {
-    async create_license(store, lic_name) {
-      let response;
-      await axios
-        .post(
-          "http://79.143.30.189:8088/generateNewLicense",
-          { name: lic_name },
-          {
-            headers: { Authorization: "Jx9t9VAjGsgiCrGSrvv8h5E7wtKXQ6L2" },
-          }
-        )
-        .then((_response) => {
-          response = _response.data;
-        })
-        .catch((err) => {
-          if (err) throw err;
-        });
-      return response;
-    },
     async get_licenses() {
       let licenses = [];
       await axios

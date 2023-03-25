@@ -20,6 +20,7 @@
     >
       {{ localization[lang].app.license.activation }}
     </div>
+
     <div
       v-else
       style="border-radius: 6px; transition: all 122ms"
@@ -36,6 +37,7 @@
       <div style="font-weight: bold; font-size: 1.2rem; padding: 8px">
         {{ localization[lang].app.license.activation_title }}
       </div>
+
       <div style="padding: 8px">
         <div
           style="
@@ -65,6 +67,7 @@
           />
         </div>
       </div>
+
       <div
         style="
           display: flex;
@@ -78,8 +81,9 @@
           class="white--text"
           :color="$vuetify.theme.themes[appTheme].accent"
           small
-          >{{ localization[lang].app.license.check }}</v-btn
         >
+          {{ localization[lang].app.license.check }}
+        </v-btn>
         <div
           style="flex: 1 0 auto; font-size: 0.75rem; text-align: right"
           :style="{
@@ -129,7 +133,6 @@ export default {
       licChecked: "licChecked",
     }),
     ...mapActions("key", {
-      create_license: "create_license",
       get_licenses: "get_licenses",
       register_key: "register_key",
       check_lic: "check_lic",
@@ -155,12 +158,6 @@ export default {
         app.emit("save_key", this.user_key);
       }
       this.loading = false;
-    },
-    async createLicense(name) {
-      let response = await this.create_license(name);
-      this.new_license_name = "";
-      await this.getLicenses();
-      console.log(response);
     },
   },
   data() {
@@ -191,8 +188,7 @@ export default {
     license() {
       if (this._licData.state) {
         setTimeout(() => {
-          if (!this.$route.name === "competition_settings")
-            this.$router.push({ name: "competition_settings" });
+          this.$router.push({ name: "competition_settings" });
         }, 750);
       }
       return this._licData;
