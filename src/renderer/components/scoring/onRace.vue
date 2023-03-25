@@ -546,9 +546,26 @@
                       $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
                   }"
                 >
+                  <!-- MOGULS MARKS -->
+                  <div
+                    v-if="competition.is_moguls"
+                    class="aeMarks__wrapper"
+                    style="min-height: 3rem; min-width: 4rem"
+                  >
+                    <div
+                      v-for="mogulsMark in getMogulsMark(
+                        competitorOnTrack,
+                        judge
+                      )"
+                    >
+                      {{ mogulsMark }}
+                    </div>
+                  </div>
+                  <!-- MOGULS MARKS -->
+
                   <!-- AERIALS MARKS -->
                   <div
-                    v-if="competition.is_aerials"
+                    v-else-if="competition.is_aerials"
                     class="aeMarks__wrapper"
                     style="min-height: 3rem; min-width: 4rem"
                   >
@@ -612,7 +629,6 @@
                       </span>
                     </div>
                   </div>
-
                   <!-- CLASSIC MARK -->
                   <div
                     v-else
@@ -734,6 +750,7 @@
 import { mapActions, mapGetters } from "vuex";
 import MarkClass from "../../store/Classes/MarkClass";
 import ManualMark_dialog from "./dialogs/manualMark_dialog";
+import competition from "../../../main/server_competition";
 
 export default {
   name: "onRace",
@@ -749,6 +766,27 @@ export default {
     //     }
     //   );
     // },
+    getMogulsMark(competitor, judge) {
+      const mogulsRole = judge.moguls_role;
+      if (competitor) {
+        const mark = competitor.marks.find((_mark) => {
+          return (
+            _mark.judge == judge.id &&
+            _mark.race_id == this.competition.selected_race.id
+          );
+        });
+
+        if (mogulsRole === "turns" && mark)
+          return [mark.moguls_value.baseScore, mark.moguls_value.deduction];
+        if (mogulsRole === "jumps" && mark)
+          return [
+            `${mark.moguls_value.jump1_score} (${mark.moguls_value.jump1_code})`,
+            `${mark.moguls_value.jump2_score} (${mark.moguls_value.jump2_code})`,
+          ];
+      }
+
+      return "";
+    },
 
     pushMarks() {
       if (

@@ -10,6 +10,8 @@ export default class JudgeClass {
     this.lastName = lastName || "";
     this.location = location || "";
     this.setABC = false;
+
+    this.moguls_role = "turns";
   }
   category = "";
   socket_id = null;

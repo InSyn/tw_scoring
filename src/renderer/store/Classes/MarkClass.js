@@ -11,6 +11,16 @@ export default class MarkClass {
     this.race_id = race_id;
     this.section = 0;
     this.value = value || 0;
+
+    this.moguls_value = {
+      baseScore: null,
+      deduction: null,
+      jump1_code: "",
+      jump1_score: null,
+      jump2_code: "",
+      jump2_score: null,
+    };
+
     this.value_ae = ae_value || {
       air: null,
       form: null,

@@ -992,6 +992,41 @@
                       <span>Aerials</span>
                     </div>
                     <div
+                      @click="toggleMogulsMode()"
+                      style="
+                        display: flex;
+                        align-items: center;
+                        flex-wrap: nowrap;
+                        margin-left: 1rem;
+                        padding: 4px 6px;
+                        font-weight: bold;
+                        cursor: pointer;
+                      "
+                    >
+                      <div
+                        style="
+                          margin-right: 0.5rem;
+                          height: 10px;
+                          width: 10px;
+                          border-radius: 50%;
+                          transition: background-color 112ms, box-shadow 192ms;
+                        "
+                        :style="[
+                          {
+                            backgroundColor:
+                              $vuetify.theme.themes[appTheme]
+                                .standardBackgroundRGBA,
+                          },
+                          competition.is_moguls && {
+                            backgroundColor:
+                              $vuetify.theme.themes[appTheme].accent,
+                            boxShadow: `0 0 12px 0 ${$vuetify.theme.themes[appTheme].accent}`,
+                          },
+                        ]"
+                      ></div>
+                      <span>Moguls</span>
+                    </div>
+                    <div
                       @click="setDoubleUp()"
                       style="
                         display: flex;
@@ -1741,6 +1776,11 @@ export default {
     },
     toggleAerialsMode() {
       this.competition.is_aerials = !this.competition.is_aerials;
+
+      this.updateEvent();
+    },
+    toggleMogulsMode() {
+      this.competition.is_moguls = !this.competition.is_moguls;
 
       this.updateEvent();
     },

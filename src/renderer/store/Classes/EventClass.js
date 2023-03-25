@@ -42,9 +42,9 @@ export default class EventClass {
       { id: "name", title: "Имя" },
       { id: "fullname", title: "Фамилия, Имя" },
       { id: "year", title: "Год" },
-      { id: "rank", title: "Разряд" },
+      // { id: "rank", title: "Разряд" },
 
-      // { id: "region", title: "Регион" },
+      { id: "region", title: "Регион" },
       // { id: "county_name", title: "Страна" },
       // { id: "country_code", title: "Код стр." },
 
@@ -57,14 +57,15 @@ export default class EventClass {
       // { id: "photo", title: "Фото" },
       // { id: "country_flag", title: "Флаг" },
 
-      { id: "group", title: "Группа" },
+      // { id: "group", title: "Группа" },
       // { id: "team_name", title: "Команда" },
-      { id: "jump1_code", title: "Код пр. 1" },
+      // { id: "jump1_code", title: "Код пр. 1" },
       // { id: "jump2_code", title: "Код пр. 2" },
     ],
     competitors: [],
   };
   is_aerials = false;
+  is_moguls = false;
   is_teams = false;
   mainData = {
     title: {
@@ -151,7 +152,7 @@ export default class EventClass {
     selected: {
       type: "",
       discipline: "",
-      accuracy: 1,
+      accuracy: 2,
     },
     types: [
       { id: 0, title: "Snowboard", disciplines: [0, 1, 2, 100] },

@@ -157,6 +157,12 @@ io.on("connection", (socket) => {
       mark_to_overwrite.value = mark.value;
       mark_to_overwrite.value_ae = mark.value_ae;
 
+      for (let mogulsValueKey in mark.moguls_value) {
+        if (mark.moguls_value[mogulsValueKey])
+          mark_to_overwrite.moguls_value[mogulsValueKey] =
+            mark.moguls_value[mogulsValueKey];
+      }
+
       mainWindow
         ? mainWindow.send("info_message", {
             type: "mark_overwrite",

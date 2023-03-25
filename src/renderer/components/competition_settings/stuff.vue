@@ -639,6 +639,19 @@
                     "
                   ></div>
                 </div>
+                <div v-if="competition.is_moguls" class="mogulsRoles__wrapper">
+                  <div
+                    :class="[
+                      'mogulsRole',
+                      judge.moguls_role === role && 'mogulsRole-selected',
+                    ]"
+                    @click="setMogulsRole(judge, role)"
+                    v-for="role in ['turns', 'jumps']"
+                    :key="role"
+                  >
+                    {{ role }}
+                  </div>
+                </div>
               </v-col>
               <v-btn
                 small
@@ -733,6 +746,13 @@ export default {
 
       this.$store.dispatch("main/updateEvent");
     },
+    setMogulsRole(judge, role) {
+      if (judge) {
+        judge.moguls_role = role;
+
+        this.updateEvent();
+      }
+    },
     toggleABC(id) {
       const stuff = this.competition.stuff;
       for (const stuffKey in stuff) {
@@ -756,4 +776,25 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.mogulsRoles__wrapper {
+  display: flex;
+  padding: 6px;
+  margin-left: auto;
+}
+.mogulsRole {
+  margin-right: 6px;
+  padding: 4px;
+  font-weight: bold;
+  border-radius: 6px;
+  background: var(--card-background);
+  cursor: pointer;
+}
+.mogulsRole:last-child {
+  margin-right: 0;
+}
+.mogulsRole.mogulsRole-selected {
+  background: var(--accent);
+  color: var(--text-default);
+}
+</style>
