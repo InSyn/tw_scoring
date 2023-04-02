@@ -199,7 +199,9 @@
         borderTop: `1px solid ${$vuetify.theme.themes[appTheme].accent}`,
       }"
     >
-      <span class="mr-2 font-weight-bold">{{ `V ${getVer}` }}</span>
+      <span class="mr-2 font-weight-bold" :key="getVer || 0">{{
+        `V ${getVer ? getVer : ""}`
+      }}</span>
       <span class="font-weight-bold"
         >Created by TimingWeb &copy; 2020 - {{ getYear }}</span
       >

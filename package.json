@@ -1,4 +1,4 @@
-{
+  {
   "name": "tw_scoring",
   "version": "1.0.3",
   "author": "Insyn, <insyner@gmail.com>",
@@ -63,7 +63,7 @@
       "uninstallerIcon": "build/icons/icon.ico",
       "uninstallDisplayName": "TW Scoring",
       "oneClick": true,
-      "perMachine": false
+      "perMachine": true
     },
     "linux": {
       "icon": "build/icons/icon-256x256.png",
