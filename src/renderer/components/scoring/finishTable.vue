@@ -36,7 +36,14 @@
             v-if="!competition.is_teams"
             class="pa-1"
             no-gutters
-            style="position: absolute; height: 32px; top: 0; right: 0; left: 0"
+            style="
+              position: absolute;
+              height: 32px;
+              top: 0;
+              right: 0;
+              left: 0;
+              user-select: none;
+            "
           >
             <v-col
               class="d-flex justify-center align-center"
@@ -46,24 +53,35 @@
             <v-col
               class="d-flex justify-center align-center"
               style="max-width: 5rem"
-              >{{ localization[lang].app.scoring.t_st_num }}</v-col
             >
-            <v-col class="d-flex align-center" style="max-width: 16rem">{{
-              localization[lang].app.scoring.t_name
-            }}</v-col>
+              {{ localization[lang].app.scoring.t_st_num }}
+            </v-col>
+            <v-col class="d-flex align-center" style="max-width: 16rem">
+              {{ localization[lang].app.scoring.t_name }}
+            </v-col>
             <v-col
               class="d-flex justify-center align-center"
               style="max-width: 5rem"
               v-for="(race, r) in competition.races"
               :key="r"
-              >{{ `${race.title}` }}</v-col
             >
+              {{ `${race.title}` }}
+            </v-col>
             <v-spacer></v-spacer>
             <v-col
-              class="d-flex justify-center align-center"
-              style="max-width: 5rem"
-              >{{ localization[lang].app.scoring.t_result }}</v-col
+              @click="toggleSorting"
+              class="resultSorting__btn d-flex justify-center align-center"
+              style="max-width: 8rem; cursor: pointer"
             >
+              <v-icon
+                class="resultSorting__icon mr-1"
+                color="var(--accent)"
+                small
+              >
+                {{ sortByResult ? sortByResultIcon : sortByFinishIcon }}
+              </v-icon>
+              {{ localization[lang].app.scoring.t_result }}
+            </v-col>
           </v-row>
 
           <teams-list
@@ -84,8 +102,10 @@
           >
             <v-dialog
               v-model="changeMarksDialog[competitor.id]"
-              v-for="competitor in sortedFinishedList"
-              :key="`finished_${competitor.rank}_${competitor.id}`"
+              v-for="(competitor, comp_idx) in sortByResult
+                ? sortedFinishedList
+                : getFinishedList"
+              :key="`${sortByResult} ${comp_idx}_${competitor.id}`"
               width="fit-content"
               ><template v-slot:activator="{ on }">
                 <v-hover v-slot:default="{ hover }">
@@ -598,6 +618,7 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 import TeamsList from "./finishTable/teamsList";
+import { mdiSortClockAscendingOutline, mdiSortVariant } from "@mdi/js";
 export default {
   name: "finishTable",
   components: { TeamsList },
@@ -702,10 +723,16 @@ export default {
       this.changeMarksDialog[competitor.id] = false;
       this.updateEvent();
     },
+    toggleSorting() {
+      this.sortByResult = !this.sortByResult;
+    },
   },
   data() {
     return {
       changeMarksDialog: {},
+      sortByResult: false,
+      sortByResultIcon: mdiSortVariant,
+      sortByFinishIcon: mdiSortClockAscendingOutline,
     };
   },
   computed: {
@@ -714,6 +741,19 @@ export default {
       lang: "lang",
     }),
     ...mapGetters("main", { competition: "competition", appTheme: "appTheme" }),
+    getFinishedList() {
+      let finishedArr = [];
+      if (this.competition.selected_race.finished)
+        finishedArr = this.competition.selected_race.finished
+          .map((finished) =>
+            this.sortedFinishedList.find(
+              (sortedCompetitor) => sortedCompetitor.id === finished
+            )
+          )
+          .reverse();
+
+      return finishedArr;
+    },
     sortedFinishedList() {
       let list = this.competition.selected_race.finished
         .map((_comp) => {
@@ -758,5 +798,11 @@ export default {
 <style scoped>
 * {
   /*border: 1px solid #c3d9ff;*/
+}
+.resultSorting__icon {
+  transition: color 128ms;
+}
+.resultSorting__btn:hover .resultSorting__icon {
+  color: var(--text-default) !important;
 }
 </style>

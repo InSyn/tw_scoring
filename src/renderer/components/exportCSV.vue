@@ -424,7 +424,7 @@ export default {
       if (!this.updateCSV) {
         this.saveCSV();
         this.updateCSV = true;
-        this.updater = setInterval(this.saveCSV, 2150);
+        this.updater = setInterval(this.saveCSV, 1024);
       } else {
         this.updateCSV = false;
         clearInterval(this.updater);

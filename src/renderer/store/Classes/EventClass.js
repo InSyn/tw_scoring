@@ -812,7 +812,6 @@ export default class EventClass {
     this.set_accuracy(0);
   }
   publishResult(params) {
-    console.log(params);
     const res = {
       id: generateId(),
       value: this.result_formula.types[this.result_formula.type].formulas
