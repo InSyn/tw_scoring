@@ -136,7 +136,59 @@
         :style="{
           color: $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
         }"
-        ><div
+      >
+        <v-dialog
+          width="480"
+          id="dialog"
+          v-model="delete_competition_dialog.state"
+          :overlay-color="$vuetify.theme.themes[appTheme].error"
+          overlay-opacity=".05"
+          ><template v-slot:activator="{ on }"
+            ><v-btn
+              v-on="on"
+              style="margin-left: 1rem"
+              :disabled="competitions.length < 2"
+              text
+              small
+              :color="$vuetify.theme.themes[appTheme].error"
+              >Удалить соревнование</v-btn
+            ></template
+          ><v-card
+            :style="{
+              backgroundColor:
+                $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
+              color: $vuetify.theme.themes[appTheme].textDefault,
+            }"
+            ><div style="font-size: 1.2rem; padding: 0.5rem 1rem">
+              Удалить<b>
+                {{
+                  ` ${competition && competition.mainData.title.value} ${
+                    competition && competition.mainData.title.stage.value.value
+                  }?`
+                }}</b
+              >
+            </div>
+            <v-card-actions class="d-flex align-center justify-end"
+              ><v-btn
+                @click="
+                  $store.commit('main/delete_competition', competition.id),
+                    (delete_competition_dialog.state = false)
+                "
+                :color="$vuetify.theme.themes[appTheme].error"
+                small
+                >Удалить</v-btn
+              ><v-btn
+                @click="delete_competition_dialog.state = false"
+                :color="$vuetify.theme.themes[appTheme].accent"
+                small
+                text
+                >Отмена</v-btn
+              ></v-card-actions
+            ></v-card
+          ></v-dialog
+        >
+
+        <div
           style="
             padding: 4px;
             color: var(--text-default);
@@ -157,59 +209,8 @@
               border-radius: 6px;
             "
           />
-        </div>
-        <v-dialog
-          width="480"
-          id="dialog"
-          v-model="delete_competition_dialog.state"
-          :overlay-color="$vuetify.theme.themes[appTheme].error"
-          overlay-opacity=".05"
-          ><template v-slot:activator="{ on }"
-            ><v-btn
-              v-on="on"
-              style="margin-left: 1rem"
-              :disabled="competitions.length < 2"
-              text
-              small
-              :color="$vuetify.theme.themes[appTheme].error"
-              >Delete competition</v-btn
-            ></template
-          ><v-card
-            :style="{
-              backgroundColor:
-                $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
-              color: $vuetify.theme.themes[appTheme].textDefault,
-            }"
-            ><div style="font-size: 1.2rem; padding: 0.5rem 1rem">
-              Delete<b>
-                {{
-                  ` ${competition && competition.mainData.title.value} ${
-                    competition && competition.mainData.title.stage.value.value
-                  }?`
-                }}</b
-              >
-            </div>
-            <v-card-actions class="d-flex align-center justify-end"
-              ><v-btn
-                @click="
-                  $store.commit('main/delete_competition', competition.id),
-                    (delete_competition_dialog.state = false)
-                "
-                :color="$vuetify.theme.themes[appTheme].error"
-                small
-                >Delete</v-btn
-              ><v-btn
-                @click="delete_competition_dialog.state = false"
-                :color="$vuetify.theme.themes[appTheme].accent"
-                small
-                text
-                >Cancel</v-btn
-              ></v-card-actions
-            ></v-card
-          ></v-dialog
-        >
-      </v-col></v-row
-    >
+        </div> </v-col
+    ></v-row>
     <v-row style="margin: 16px 16px" no-gutters>
       <v-col cols="6"><main_data></main_data></v-col>
       <v-col cols="6"><localization></localization></v-col

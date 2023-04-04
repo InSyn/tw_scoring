@@ -27,15 +27,13 @@
         color: $vuetify.theme.themes[appTheme].textDefault,
       }"
     >
-      <v-card-title class="createNewCompetitionMenu__title">
-        Create competition
-      </v-card-title>
+      <div class="createNewCompetitionMenu__title">Создание соревнования</div>
       <div
         style="
           display: flex;
           flex-direction: column;
           border-radius: 6px;
-          margin: 1rem;
+          margin: 0 8px;
         "
         :style="{
           backgroundColor:
@@ -65,7 +63,7 @@
               padding: 4px 0 8px 0;
             "
           >
-            New competition setup
+            Настройка нового соревнования
           </div>
           <div
             v-for="input in create_competition_dialog.data"
@@ -309,6 +307,7 @@
           </v-hover>
         </div>
       </div>
+
       <v-card-actions
         style="
           display: flex;
@@ -322,13 +321,15 @@
           small
           @click="create_competition_dialog.state = false"
           :color="$vuetify.theme.themes[appTheme].error"
-          >Cancel
+        >
+          Cancel
         </v-btn>
         <v-btn
           small
           @click="createNewCompetition()"
           :color="$vuetify.theme.themes[appTheme].success"
-          >Create
+        >
+          Create
         </v-btn>
       </v-card-actions>
     </div>
@@ -418,14 +419,14 @@ export default {
           { id: "title", title: "Competition title", value: null },
           {
             id: "discipline",
-            title: "Discipline",
+            title: "Дисциплина",
             value: null,
             min: null,
           },
 
           {
             id: "stage",
-            title: "Stage",
+            title: "Этап",
             value: null,
             stage_selector: false,
             selectStage: (stage, event) => {
@@ -436,10 +437,10 @@ export default {
             },
           },
 
-          { id: "country", title: "Country", value: null },
-          { id: "location", title: "Place", value: null },
-          { id: "provider", title: "Organization", value: null },
-          { id: "providerTiming", title: "Timing provider", value: null },
+          { id: "country", title: "Страна", value: null },
+          { id: "location", title: "Место", value: null },
+          { id: "provider", title: "Организация", value: null },
+          { id: "providerTiming", title: "Дата-сервис", value: null },
           { id: "codex", title: "Codex", value: null },
 
           { id: "competitors", competitors: [] },
@@ -449,7 +450,7 @@ export default {
         checks: {
           judgesFromPrevStage: {
             state: true,
-            title: "Move judges",
+            title: "Перенести судей",
             check: () => {
               for (let $judge of this.competition.stuff.judges) {
                 this.create_competition_dialog.data
@@ -460,7 +461,7 @@ export default {
           },
           juryFromPrevStage: {
             state: true,
-            title: "Move jury",
+            title: "Перенести жюри",
             check: () => {
               for (let $jury of this.competition.stuff.jury) {
                 this.create_competition_dialog.data
@@ -471,7 +472,7 @@ export default {
           },
           competitorsFromPrevStage: {
             state: false,
-            title: "Move competitors",
+            title: "Перенести участников",
             check: () => {
               for (let $competitor of this.competition.competitorsSheet
                 .competitors) {
@@ -489,4 +490,10 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.createNewCompetitionMenu__title {
+  padding: 8px;
+  font-size: 1.4rem;
+  font-weight: bold;
+}
+</style>
