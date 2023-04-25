@@ -8,7 +8,7 @@
     overlay-color="var(--accent)"
     overlay-opacity="0.1"
   >
-    <template v-slot:activator="{ on, attrs }">
+    <template v-slot:activator="{ on }">
       <v-btn
         class="createNewCompetitionMenu__button"
         @click="initCreateDialog()"

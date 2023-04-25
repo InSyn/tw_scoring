@@ -1,7 +1,7 @@
 <template>
   <div :class="['appMenu__wrapper', !showMenu && 'menu-hidden']">
     <router-link
-      v-slot="{ href, route, navigate, isActive, isExactActive }"
+      v-slot="{ navigate, isActive }"
       custom
       v-for="(page, p) in getMenuList"
       :key="p"
@@ -17,8 +17,9 @@
             :class="['menuIcon', isActive && 'menuIcon-active']"
             size="1.8rem"
             :color="hover || isActive ? 'var(--text-default)' : 'var(--accent)'"
-            v-html="icons[page.icon]"
-          ></v-icon>
+          >
+            {{ icons[page.icon] }}
+          </v-icon>
           <div class="text-no-wrap ml-3">
             {{ localization[lang].app.menu[page.link] }}
           </div>
