@@ -1,5 +1,7 @@
 import main from "./../modules/main";
-import { cutMarks, generateId } from "../../../lib/utils";
+import { cutMarks } from "../../../lib/utils";
+import { ProtocolDataFieldClass } from "../Classes/ProtocolDataFieldClass";
+import { skiRamps } from "./skiRamps";
 
 export default {
   namespaced: true,
@@ -82,70 +84,19 @@ export default {
           img: "",
         },
       },
-      standard_aligns: [
-        { title: "Left", value: "start" },
-        { title: "Center", value: "center" },
-        { title: "Right", value: "end" },
-      ],
+      standard_aligns: ["start", "center", "end"],
       string_lights: {
         odd: "#FFFFFF",
         even: "#D1D1D1",
       },
       strings_at_page: 6,
       title: "",
-      use_grid: false,
       use_string_light: true,
-    },
-    start_list: {},
-    fieldClass: class {
-      constructor(width, font, align, cell_1, cell_2) {
-        this.id = generateId();
-        this.params.width = width || 10;
-        this.params.font = font || 12;
-        this.params.f_weight = "normal";
-        this.params.align = align || { title: "Left", value: "start" };
-
-        this.params.cell_1.id = cell_1.data.id;
-        this.params.cell_1.title = cell_1.data.title;
-        this.params.cell_1.handler = cell_1.handler;
-
-        this.params.cell_2.id =
-          (cell_2 && cell_2.data && cell_2.data.id) || null;
-        this.params.cell_2.title =
-          (cell_2 && cell_2.data && cell_2.data.title) || null;
-        this.params.cell_2.handler =
-          (cell_2 && cell_2.handler && cell_2.handler) ||
-          function () {
-            return 0;
-          };
-      }
-      params = {
-        cell_1: {
-          select_dialog: false,
-          id: null,
-          title: null,
-          handler: function () {
-            return 0;
-          },
-        },
-        cell_2: {
-          select_dialog: false,
-          id: null,
-          title: null,
-          handler: function () {
-            return 0;
-          },
-        },
-        width: null,
-        font: null,
-        align: null,
-      };
     },
   },
   getters: {
     results_protocol: (state) => state.results_protocol,
     export_mode: (state) => state.export_mode,
-    fieldClass: (state) => state.fieldClass,
   },
   mutations: {
     setImage: (state, data) => {
@@ -156,15 +107,13 @@ export default {
 
       //add start number
       result_fields.push(
-        new data.fieldClass(
-          6,
-          12,
-          {
-            title: "Left",
-            value: "start",
-          },
-          {
-            data: { id: "rank", title: "St. №" },
+        new ProtocolDataFieldClass({
+          width: 6,
+          cell_1: {
+            data: {
+              id: "rank",
+              title: "Ст.№",
+            },
             handler: function (_competitor, competition) {
               return [
                 competition.protocol_settings.start_protocols.filters.race_filter._startList.indexOf(
@@ -172,24 +121,22 @@ export default {
                 ) + 1,
               ];
             },
-          }
-        )
+          },
+        })
       );
 
       //add competitors table headers
       data.competition.competitorsSheet.header.forEach((_header) => {
         result_fields.push(
-          new data.fieldClass(
-            12,
-            12,
-            { title: "Left", value: "start" },
-            {
+          new ProtocolDataFieldClass({
+            width: 12,
+            cell_1: {
               data: _header,
               handler: function (_competitor) {
                 return [_competitor.competitor.info_data[_header.id]];
               },
-            }
-          )
+            },
+          })
         );
       });
       data.competition.protocol_settings.start_protocols.fields = result_fields;
@@ -199,164 +146,222 @@ export default {
 
       //add rank
       result_fields.push(
-        new data.fieldClass(
-          5,
-          12,
-          {
-            title: "Left",
-            value: "start",
-          },
-          {
-            data: { id: "rank", title: "Место" },
+        new ProtocolDataFieldClass({
+          width: 5,
+          cell_1: {
+            data: {
+              id: "rank",
+              title: "Место",
+            },
             handler: function (_competitor) {
               return [_competitor.s_rank];
             },
-          }
-        )
+          },
+        })
       );
 
       //add competitors table headers
       data.competition.competitorsSheet.header.forEach((_header) => {
         result_fields.push(
-          new data.fieldClass(
-            8,
-            12,
-            { title: "Left", value: "start" },
-            {
+          new ProtocolDataFieldClass({
+            cell_1: {
               data: _header,
               handler: function (_competitor) {
                 return [_competitor.competitor.info_data[_header.id]];
               },
-            }
-          )
+            },
+          })
         );
       });
+
+      // add ski jumps points
+
+      if (main.state["competition"].is_skiJumps) {
+        result_fields.push(
+          new ProtocolDataFieldClass({
+            width: 6,
+            cell_1: {
+              data: {
+                id: `sjDistance`,
+                title: `Дист.(м)`,
+              },
+              handler: function (_competitor, competition) {
+                return competition.races.map((race) => {
+                  const result = _competitor.competitor.results.find(
+                    (result) => result.race_id === race.id
+                  );
+
+                  if (!result || !result.sjDistance) return ["-"];
+                  return [result.sjDistance];
+                });
+              },
+            },
+          })
+        );
+        result_fields.push(
+          new ProtocolDataFieldClass({
+            width: 6,
+            cell_1: {
+              data: {
+                id: `sjDistance`,
+                title: `Очки д.`,
+              },
+              handler: function (_competitor, competition) {
+                return competition.races.map((race) => {
+                  const result = _competitor.competitor.results.find(
+                    (result) => result.race_id === race.id
+                  );
+
+                  if (!result || !result.sjDistance) return ["-"];
+                  return skiRamps[result.sjRamp]
+                    ? [
+                        competition.set_accuracy(
+                          60 +
+                            skiRamps[result.sjRamp].lengthPoints *
+                              (parseFloat(result.sjDistance) -
+                                skiRamps[result.sjRamp].keyPoint)
+                        ),
+                      ]
+                    : [competition.set_accuracy(0)];
+                });
+              },
+            },
+          })
+        );
+      }
 
       //add AE judges scores
 
       if (main.state["competition"].is_aerials) {
         //ADD AE AIR SCORE
         result_fields.push(
-          new data.fieldClass(
-            6,
-            12,
-            { title: "Left", value: "start" },
-            {
+          new ProtocolDataFieldClass({
+            width: 6,
+            cell_1: {
               data: {
                 id: `ae_air_total`,
                 title: `Air`,
               },
               handler: function (_competitor, competition) {
-                const airMarks = cutMarks(
-                  competition.stuff.judges.map((judge) => {
-                    return _competitor.competitor.marks
-                      .filter((_mark, m_idx, _marks) => {
-                        return _mark.judge === judge.id;
-                      })
-                      .map((_mark) => {
-                        return _mark.value_ae.air;
-                      });
-                  }),
-                  competition.result_formula.types[0].higher_marks,
-                  competition.result_formula.types[0].lower_marks
-                );
+                return competition.races.map((race) => {
+                  const airMarks = cutMarks(
+                    competition.stuff.judges.map((judge) => {
+                      return _competitor.competitor.marks
+                        .filter((_mark, m_idx, _marks) => {
+                          return (
+                            _mark.judge === judge.id &&
+                            _mark.race_id === race.id
+                          );
+                        })
+                        .map((_mark) => {
+                          return _mark.value_ae.air;
+                        });
+                    }),
+                    competition.result_formula.types[0].higher_marks,
+                    competition.result_formula.types[0].lower_marks
+                  );
 
-                if (airMarks.length > 0)
-                  return [
-                    competition.set_accuracy(
-                      airMarks.reduce((air1, air2) => +air1 + +air2, 0)
-                    ),
-                  ];
+                  if (airMarks.length > 0)
+                    return [
+                      competition.set_accuracy(
+                        airMarks.reduce((air1, air2) => +air1 + +air2, 0)
+                      ),
+                    ];
 
-                return [" "];
+                  return [" "];
+                });
               },
-            }
-          )
+            },
+          })
         );
         //ADD AE FORM SCORE
         result_fields.push(
-          new data.fieldClass(
-            6,
-            12,
-            { title: "Left", value: "start" },
-            {
+          new ProtocolDataFieldClass({
+            width: 6,
+            cell_1: {
               data: {
                 id: `ae_form_total`,
                 title: `Form`,
               },
               handler: function (_competitor, competition) {
-                const formMarks = cutMarks(
-                  competition.stuff.judges.map((judge) => {
-                    return _competitor.competitor.marks
-                      .filter((_mark, m_idx, _marks) => {
-                        return _mark.judge === judge.id;
-                      })
-                      .map((_mark) => {
-                        return _mark.value_ae.form;
-                      });
-                  }),
-                  competition.result_formula.types[0].higher_marks,
-                  competition.result_formula.types[0].lower_marks
-                );
+                return competition.races.map((race) => {
+                  const formMarks = cutMarks(
+                    competition.stuff.judges.map((judge) => {
+                      return _competitor.competitor.marks
+                        .filter((_mark, m_idx, _marks) => {
+                          return (
+                            _mark.judge === judge.id &&
+                            _mark.race_id === race.id
+                          );
+                        })
+                        .map((_mark) => {
+                          return _mark.value_ae.form;
+                        });
+                    }),
+                    competition.result_formula.types[0].higher_marks,
+                    competition.result_formula.types[0].lower_marks
+                  );
 
-                if (formMarks.length > 0)
-                  return [
-                    competition.set_accuracy(
-                      formMarks.reduce((air1, air2) => +air1 + +air2, 0)
-                    ),
-                  ];
+                  if (formMarks.length > 0)
+                    return [
+                      competition.set_accuracy(
+                        formMarks.reduce((air1, air2) => +air1 + +air2, 0)
+                      ),
+                    ];
 
-                return [" "];
+                  return [" "];
+                });
               },
-            }
-          )
+            },
+          })
         );
         //ADD AE LANDING SCORE
         result_fields.push(
-          new data.fieldClass(
-            6,
-            12,
-            { title: "Left", value: "start" },
-            {
+          new ProtocolDataFieldClass({
+            width: 6,
+            cell_1: {
               data: {
                 id: `ae_landing_total`,
                 title: `LDG`,
               },
               handler: function (_competitor, competition) {
-                const landingMarks = cutMarks(
-                  competition.stuff.judges.map((judge) => {
-                    return _competitor.competitor.marks
-                      .filter((_mark, m_idx, _marks) => {
-                        return _mark.judge === judge.id;
-                      })
-                      .map((_mark) => {
-                        return _mark.value_ae.landing;
-                      });
-                  }),
-                  competition.result_formula.types[0].higher_marks,
-                  competition.result_formula.types[0].lower_marks
-                );
+                return competition.races.map((race) => {
+                  const landingMarks = cutMarks(
+                    competition.stuff.judges.map((judge) => {
+                      return _competitor.competitor.marks
+                        .filter((_mark, m_idx, _marks) => {
+                          return (
+                            _mark.judge === judge.id &&
+                            _mark.race_id === race.id
+                          );
+                        })
+                        .map((_mark) => {
+                          return _mark.value_ae.landing;
+                        });
+                    }),
+                    competition.result_formula.types[0].higher_marks,
+                    competition.result_formula.types[0].lower_marks
+                  );
 
-                if (landingMarks.length > 0)
-                  return [
-                    competition.set_accuracy(
-                      landingMarks.reduce((air1, air2) => +air1 + +air2, 0)
-                    ),
-                  ];
+                  if (landingMarks.length > 0)
+                    return [
+                      competition.set_accuracy(
+                        landingMarks.reduce((air1, air2) => +air1 + +air2, 0)
+                      ),
+                    ];
 
-                return [" "];
+                  return [" "];
+                });
               },
-            }
-          )
+            },
+          })
         );
 
         //ADD JUMP CODE AND DD
         result_fields.push(
-          new data.fieldClass(
-            6,
-            12,
-            { title: "Left", value: "start" },
-            {
+          new ProtocolDataFieldClass({
+            width: 6,
+            cell_1: {
               data: {
                 id: `jump_code_dd`,
                 title: `Прыжок + DD`,
@@ -369,40 +374,36 @@ export default {
                   "",
                 ]);
               },
-            }
-          )
+            },
+          })
         );
 
         //ADD AE SCORE TYPE
         result_fields.push(
-          new data.fieldClass(
-            6,
-            12,
-            { title: "Left", value: "start" },
-            {
+          new ProtocolDataFieldClass({
+            width: 6,
+            cell_1: {
               data: {
                 id: `ae_score_type`,
                 title: ``,
               },
               handler: function (competitor, competition) {
-                return competition.races.map((race) => [
+                return competition.races.map(() => [
                   "Air",
                   "Form",
                   "LDG",
                   "Total",
                 ]);
               },
-            }
-          )
+            },
+          })
         );
         //ADD AE SCORES ARRAY
         data.competition.stuff.judges.forEach((judge, j_idx) => {
           result_fields.push(
-            new data.fieldClass(
-              6,
-              12,
-              { title: "Left", value: "start" },
-              {
+            new ProtocolDataFieldClass({
+              width: 6,
+              cell_1: {
                 data: {
                   id: `AE Judge ${j_idx + 1}`,
                   title: `AE J${j_idx + 1}`,
@@ -421,33 +422,21 @@ export default {
                       ];
                     });
                 },
-              }
-            )
+              },
+            })
           );
         });
         //ADD AE TOTAL
         result_fields.push(
-          new data.fieldClass(
-            6,
-            12,
-            { title: "Left", value: "start" },
-            {
+          new ProtocolDataFieldClass({
+            width: 6,
+            cell_1: {
               data: {
                 id: `ae_total`,
                 title: `Тотал`,
               },
               handler: function (_competitor, competition) {
-                return competition.races.map((race) => {
-                  const marks = _competitor.competitor.marks
-                    .filter((mark) => mark.race_id === race.id)
-                    .map((_mark) => {
-                      return (
-                        +_mark.value_ae.air +
-                          +_mark.value_ae.form +
-                          +_mark.value_ae.landing || ""
-                      );
-                    });
-
+                return competition.races.map(() => {
                   const airScores = cutMarks(
                     _competitor.competitor.marks.map((_mark) => {
                       return +_mark.value_ae.air || 0;
@@ -490,51 +479,45 @@ export default {
                   return [totalSum];
                 });
               },
-            }
-          )
+            },
+          })
         );
 
         //ADD AE TOTAL ALL
         result_fields.push(
-          new data.fieldClass(
-            6,
-            12,
-            { title: "Left", value: "start" },
-            {
+          new ProtocolDataFieldClass({
+            width: 6,
+            cell_1: {
               data: {
                 id: `ae_total`,
                 title: `Тотал + AFL`,
               },
               handler: function (_competitor, competition) {
                 return competition.races.map((race) => {
-                  const marks = _competitor.competitor.marks
-                    .filter((mark) => mark.race_id === race.id)
-                    .map((_mark) => {
-                      return (
-                        +_mark.value_ae.air +
-                          +_mark.value_ae.form +
-                          +_mark.value_ae.landing || ""
-                      );
-                    });
-
                   const airScores = cutMarks(
-                    _competitor.competitor.marks.map((_mark) => {
-                      return +_mark.value_ae.air || 0;
-                    }),
+                    _competitor.competitor.marks
+                      .filter((mark) => mark.race_id === race.id)
+                      .map((_mark) => {
+                        return +_mark.value_ae.air || 0;
+                      }),
                     competition.result_formula.types[0].higher_marks,
                     competition.result_formula.types[0].lower_marks
                   );
                   const formScores = cutMarks(
-                    _competitor.competitor.marks.map((_mark) => {
-                      return +_mark.value_ae.form || 0;
-                    }),
+                    _competitor.competitor.marks
+                      .filter((mark) => mark.race_id === race.id)
+                      .map((_mark) => {
+                        return +_mark.value_ae.form || 0;
+                      }),
                     competition.result_formula.types[0].higher_marks,
                     competition.result_formula.types[0].lower_marks
                   );
                   const landingScores = cutMarks(
-                    _competitor.competitor.marks.map((_mark) => {
-                      return +_mark.value_ae.landing || 0;
-                    }),
+                    _competitor.competitor.marks
+                      .filter((mark) => mark.race_id === race.id)
+                      .map((_mark) => {
+                        return +_mark.value_ae.landing || 0;
+                      }),
                     competition.result_formula.types[0].higher_marks,
                     competition.result_formula.types[0].lower_marks
                   );
@@ -564,41 +547,40 @@ export default {
                   ];
                 });
               },
-            }
-          )
+            },
+          })
         );
       }
       //CLASSIC SECTION
       else {
         //add race number
         result_fields.push(
-          new data.fieldClass(
-            6,
-            12,
-            {
-              title: "Left",
-              value: "start",
-            },
-            {
-              data: { id: "race", title: "Заезд" },
+          new ProtocolDataFieldClass({
+            width: 6,
+            cell_1: {
+              data: {
+                id: "race",
+                title: "Заезд",
+              },
               handler: function (competitor) {
                 const competition = main.state["competitions"].find(
                   (_comp) => _comp.id === competitor.comp_id
                 );
                 return [...competition.races.map((race) => race.title)];
               },
-            }
-          )
+            },
+          })
         );
         //add judges scores
         data.competition.stuff.judges.forEach((judge, j_idx) => {
           result_fields.push(
-            new data.fieldClass(
-              6,
-              12,
-              { title: "Left", value: "start" },
-              {
-                data: { id: `Judge ${j_idx + 1}`, title: `С${j_idx + 1}` },
+            new ProtocolDataFieldClass({
+              width: 6,
+              cell_1: {
+                data: {
+                  id: `Judge ${j_idx + 1}`,
+                  title: `С${j_idx + 1}`,
+                },
                 handler: function (_competitor) {
                   return (
                     _competitor.competitor.marks
@@ -610,22 +592,17 @@ export default {
                       }) || "-"
                   );
                 },
-              }
-            )
+              },
+            })
           );
         });
       }
 
       //add races scores
       result_fields.push(
-        new data.fieldClass(
-          6,
-          12,
-          {
-            title: "Left",
-            value: "start",
-          },
-          {
+        new ProtocolDataFieldClass({
+          width: 6,
+          cell_1: {
             data: {
               id: "race_res",
               title: "Оценка",
@@ -641,34 +618,26 @@ export default {
                 ];
               });
             },
-          }
-        )
+          },
+        })
       );
 
       //add overall result
       result_fields.push(
-        new data.fieldClass(
-          8,
-          12,
-          {
-            title: "Left",
-            value: "start",
-          },
-          {
-            data: { id: "result", title: "Рез-т" },
+        new ProtocolDataFieldClass({
+          cell_1: {
+            data: {
+              id: "result",
+              title: "Рез-т",
+            },
             handler: function (competitor) {
               const competition = main.state["competitions"].find(
                 (_comp) => _comp.id === competitor.comp_id
               );
-              return [
-                competition.getResult(competitor.competitor.id),
-                " ",
-                " ",
-                " ",
-              ];
+              return [competition.getResult(competitor.competitor.id)];
             },
-          }
-        )
+          },
+        })
       );
 
       data.competition.protocol_settings.result_protocols.fields =
@@ -679,90 +648,75 @@ export default {
 
       //add rank
       result_fields.push(
-        new data.fieldClass(
-          6,
-          12,
-          {
-            title: "Left",
-            value: "start",
-          },
-          {
-            data: { id: "rank", title: "Rank" },
+        new ProtocolDataFieldClass({
+          width: 6,
+          cell_1: {
+            data: {
+              id: "rank",
+              title: "Место",
+            },
             handler: function (_competitor) {
               return [_competitor.s_rank];
             },
-          }
-        )
+          },
+        })
       );
 
       //add competitors table headers
       data.competition.competitorsSheet.header.forEach((_header) => {
         result_fields.push(
-          new data.fieldClass(
-            8,
-            12,
-            { title: "Left", value: "start" },
-            {
+          new ProtocolDataFieldClass({
+            cell_1: {
               data: _header,
               handler: function (_competitor) {
                 return [_competitor.competitor.info_data[_header.id]];
               },
-            }
-          )
+            },
+          })
         );
       });
 
       //add race number
       result_fields.push(
-        new data.fieldClass(
-          8,
-          12,
-          {
-            title: "Left",
-            value: "start",
-          },
-          {
-            data: { id: "race", title: "Race" },
+        new ProtocolDataFieldClass({
+          cell_1: {
+            data: { id: "race", title: "Заезд" },
             handler: function (competitor, competition) {
               return [
                 competition.protocol_settings.result_protocols.filters
                   .race_filter.title,
               ];
             },
-          }
-        )
+          },
+        })
       );
       if (main.state["competition"].structure.is_aerials) {
         //ADD AE SCORE TYPE
         result_fields.push(
-          new data.fieldClass(
-            6,
-            12,
-            { title: "Left", value: "start" },
-            {
+          new ProtocolDataFieldClass({
+            width: 6,
+            cell_1: {
               data: {
                 id: `ae_score_type`,
                 title: ``,
               },
               handler: function (competitor, competition) {
-                return competition.races.map((race) => [
+                return competition.races.map(() => [
                   "Air",
                   "Form",
                   "LDG",
                   "Total",
                 ]);
               },
-            }
-          )
+            },
+          })
         );
         //ADD AE SCORES ARRAY
         data.competition.stuff.judges.forEach((judge, j_idx) => {
           result_fields.push(
-            new data.fieldClass(
-              6,
-              12,
-              { title: "Left", value: "start" },
-              {
+            new ProtocolDataFieldClass({
+              width: 6,
+              cell_1: {
                 data: {
                   id: `AE Judge ${j_idx + 1}`,
                   title: `AE J${j_idx + 1}`,
@@ -781,17 +735,15 @@ export default {
                       ];
                     });
                 },
-              }
-            )
+              },
+            })
           );
         });
         //ADD AE TOTAL
         result_fields.push(
-          new data.fieldClass(
-            6,
-            12,
-            { title: "Left", value: "start" },
-            {
+          new ProtocolDataFieldClass({
+            width: 6,
+            cell_1: {
               data: {
                 id: `ae_total`,
                 title: `Тотал`,
@@ -831,16 +783,14 @@ export default {
                   ];
                 });
               },
-            }
-          )
+            },
+          })
         );
         //ADD JUMP CODE
         result_fields.push(
-          new data.fieldClass(
-            6,
-            12,
-            { title: "Left", value: "start" },
-            {
+          new ProtocolDataFieldClass({
+            width: 6,
+            cell_1: {
               data: {
                 id: `jump_code`,
                 title: `Код`,
@@ -851,19 +801,14 @@ export default {
                   result.degree_difficulty || " ",
                 ]);
               },
-            }
-          )
+            },
+          })
         );
         //add races scores
         result_fields.push(
-          new data.fieldClass(
-            6,
-            12,
-            {
-              title: "Left",
-              value: "start",
-            },
-            {
+          new ProtocolDataFieldClass({
+            width: 6,
+            cell_1: {
               data: {
                 id: "race_res",
                 title: "Score",
@@ -886,20 +831,17 @@ export default {
                   ];
                 });
               },
-            }
-          )
+            },
+          })
         );
         //add overall result
         result_fields.push(
-          new data.fieldClass(
-            8,
-            12,
-            {
-              title: "Left",
-              value: "start",
-            },
-            {
-              data: { id: "result", title: "Result" },
+          new ProtocolDataFieldClass({
+            cell_1: {
+              data: {
+                id: "result",
+                title: "Result",
+              },
               handler: function (competitor) {
                 const competition = main.state["competitions"].find(
                   (_comp) => _comp.id === competitor.comp_id
@@ -913,20 +855,21 @@ export default {
                   " ",
                 ];
               },
-            }
-          )
+            },
+          })
         );
       }
 
       //add judges scores
       data.competition.stuff.judges.forEach((judge, j_idx) => {
         result_fields.push(
-          new data.fieldClass(
-            6,
-            12,
-            { title: "Left", value: "start" },
-            {
-              data: { id: `Judge ${j_idx + 1}`, title: `J${j_idx + 1}` },
+          new ProtocolDataFieldClass({
+            width: 6,
+            cell_1: {
+              data: {
+                id: `Judge ${j_idx + 1}`,
+                title: `J${j_idx + 1}`,
+              },
               handler: function (_competitor, competition) {
                 const race =
                   competition.protocol_settings.result_protocols.filters
@@ -943,21 +886,16 @@ export default {
                     }) || "-"
                 );
               },
-            }
-          )
+            },
+          })
         );
       });
 
       //add races scores
       result_fields.push(
-        new data.fieldClass(
-          6,
-          12,
-          {
-            title: "Left",
-            value: "start",
-          },
-          {
+        new ProtocolDataFieldClass({
+          width: 6,
+          cell_1: {
             data: {
               id: "race_res",
               title: "Result",
@@ -978,8 +916,8 @@ export default {
                   }`,
               ];
             },
-          }
-        )
+          },
+        })
       );
 
       data.competition.protocol_settings.result_protocols.raceResultFields =

@@ -1,9 +1,15 @@
-import { cutMarks, generateId, getAECodes } from "../../../lib/utils";
+import {
+  cutMarks,
+  generateId,
+  getAECodes,
+  getMGCodes,
+} from "../../../lib/utils";
+import { skiRamps } from "../modules/skiRamps";
+import { initTerminalData_chiefJudge } from "../terminalFunctions";
 
 export default class EventClass {
   constructor(...args) {
     this.id = generateId();
-    this.live_id = null;
     this.structure.selected.type = 0;
     this.structure.selected.discipline = 0;
     this.mainData.title.stage.group = "";
@@ -11,18 +17,27 @@ export default class EventClass {
 
     args.forEach((arg) => {
       if (typeof arg === "object") {
-        if (arg.id === "competitors")
+        if (arg.id === "competitorsSheet" && arg.headers.length) {
+          this.competitorsSheet.header = [...arg.headers];
+        }
+        if (arg.id === "competitors") {
           this.competitorsSheet.competitors.push(...arg.competitors);
+        }
 
-        if (arg.id === "judges") this.stuff.judges.push(...arg.judges);
-        if (arg.id === "jury") this.stuff.jury.push(...arg.jury);
+        if (arg.id === "judges") {
+          this.stuff.judges.push(...arg.judges);
+        }
+        if (arg.id === "jury") {
+          this.stuff.jury.push(...arg.jury);
+        }
 
-        if (arg.id === "stage")
+        if (arg.id === "stage") {
           this.mainData.title.stage.value = JSON.parse(
             JSON.stringify(arg.value)
           );
-        else if (arg.hasOwnProperty("min"))
+        } else if (arg.hasOwnProperty("min")) {
           this.mainData.discipline.min = arg.min;
+        }
 
         this.mainData[arg.id] ? (this.mainData[arg.id].value = arg.value) : 0;
       }
@@ -34,7 +49,16 @@ export default class EventClass {
     });
 
     this.ae_codes = getAECodes() || [];
+    this.mg_codes = getMGCodes() || [];
   }
+
+  is_aerials = false;
+  is_moguls = false;
+  is_skiJumps = false;
+  is_teams = false;
+
+  dualMoguls_mode = true;
+
   competitorsSheet = {
     header: [
       { id: "bib", title: "НН" },
@@ -42,9 +66,9 @@ export default class EventClass {
       { id: "name", title: "Имя" },
       { id: "fullname", title: "Фамилия, Имя" },
       { id: "year", title: "Год" },
-      // { id: "rank", title: "Разряд" },
-
+      { id: "rank", title: "Разряд" },
       { id: "region", title: "Регион" },
+
       // { id: "county_name", title: "Страна" },
       // { id: "country_code", title: "Код стр." },
 
@@ -64,9 +88,7 @@ export default class EventClass {
     ],
     competitors: [],
   };
-  is_aerials = false;
-  is_moguls = false;
-  is_teams = false;
+
   mainData = {
     title: {
       title: "Title",
@@ -129,11 +151,13 @@ export default class EventClass {
       focus: false,
     },
   };
+
   stages = {
     lastStageSize: 0,
     prev_stages: [],
     stage_grid: [],
   };
+
   structure = {
     statuses: [
       {
@@ -179,6 +203,7 @@ export default class EventClass {
       { id: "custom", title: "Custom", value: "" },
     ],
   };
+
   passed_competitors = 0;
   get passedCompetitors() {
     if (this.races && this.races[this.races.length - 1]) {
@@ -194,6 +219,7 @@ export default class EventClass {
         : [];
     } else return [];
   }
+
   protocol_fields = [];
   protocol_settings = {
     protocol_type: 1,
@@ -203,10 +229,10 @@ export default class EventClass {
         race_filter: null,
       },
       fonts: {
-        officialsData: 12,
-        openers: 12,
-        weatherData: 12,
-        raceNotes: 12,
+        p_jury_info: 12,
+        p_forerunners: 12,
+        p_weather: 12,
+        p_notations: 12,
       },
       protocol_type: "Старт-лист",
       fields: [],
@@ -216,17 +242,19 @@ export default class EventClass {
         race_filter: null,
       },
       fonts: {
-        officialsData: 12,
-        openers: 12,
-        weatherData: 12,
-        raceNotes: 12,
+        p_jury_info: 12,
+        p_forerunners: 12,
+        p_weather: 12,
+        p_notations: 12,
       },
       protocol_type: "Результаты",
       fields: [],
       raceResultFields: [],
     },
   };
+
   races = [];
+
   result_formula = {
     overall_result: {
       type: 0,
@@ -294,7 +322,7 @@ export default class EventClass {
             return res.length > 0
               ? res.reduce((a, b) => {
                   return +a + +b;
-                })
+                }, 0)
               : 0;
           },
         },
@@ -334,7 +362,7 @@ export default class EventClass {
             return res.length > 0
               ? res.reduce((a, b) => {
                   return +a + +b;
-                }) / res.length
+                }, 0) / res.length
               : 0;
           },
         },
@@ -379,7 +407,7 @@ export default class EventClass {
             return res_arr.length > 0
               ? res_arr.reduce((r1, r2) => {
                   return +r1 + +r2;
-                })
+                }, 0)
               : 0;
           },
         },
@@ -396,7 +424,7 @@ export default class EventClass {
         doubleUp_competitors: { 0: null, 1: null },
         lower_marks: 0,
         higher_marks: 0,
-        formula: 0,
+        formula: 1,
         formulas: [
           {
             id: 0,
@@ -423,21 +451,12 @@ export default class EventClass {
                     )
                   : marks.push(0);
               });
-              let _marks = marks;
-              for (
-                let high = 0;
-                high < +this.result_formula.types[0].higher_marks;
-                high++
-              ) {
-                _marks.splice(_marks.indexOf(Math.max(..._marks)), 1);
-              }
-              for (
-                let low = 0;
-                low < +this.result_formula.types[0].lower_marks;
-                low++
-              ) {
-                _marks.splice(_marks.indexOf(Math.min(..._marks)), 1);
-              }
+              let _marks = cutMarks(
+                [...marks],
+                this.result_formula.types[0].higher_marks,
+                this.result_formula.types[0].lower_marks
+              );
+
               if (this.result_formula.types[0].doubleUp)
                 return (
                   (+this.result_formula.types[0].lower_marks +
@@ -445,17 +464,18 @@ export default class EventClass {
                     marks.length &&
                     _marks.reduce((a, b) => {
                       return +a + +b;
-                    }) /
+                    }, 0) /
                       (_marks.length / 2)) ||
                   0
                 );
+
               return (
                 (+this.result_formula.types[0].lower_marks +
                   +this.result_formula.types[0].higher_marks <
                   marks.length &&
                   _marks.reduce((a, b) => {
                     return +a + +b;
-                  }) /
+                  }, 0) /
                     (_marks.length / this.result_formula.types[0].cof)) ||
                 0
               );
@@ -481,30 +501,23 @@ export default class EventClass {
                     })
                 );
               });
-              for (
-                let high = 0;
-                high < +this.result_formula.types[0].higher_marks;
-                high++
-              ) {
-                marks.splice(marks.indexOf(Math.max(...marks)), 1);
-              }
-              for (
-                let low = 0;
-                low < +this.result_formula.types[0].lower_marks;
-                low++
-              ) {
-                marks.splice(marks.indexOf(Math.min(...marks)), 1);
-              }
+              const _marks = cutMarks(
+                [...marks],
+                this.result_formula.types[0].higher_marks,
+                this.result_formula.types[0].lower_marks
+              );
 
               if (
-                +this.result_formula.types[0].lower_marks +
-                  +this.result_formula.types[0].higher_marks <
+                parseInt(this.result_formula.types[0].lower_marks) +
+                  parseInt(this.result_formula.types[0].higher_marks) >=
                 marks.length
-              )
-                return marks.reduce((a, b) => {
-                  return +a + +b;
-                });
-              return 0;
+              ) {
+                return 0;
+              }
+
+              return _marks.reduce((a, b) => {
+                return +a + +b;
+              }, 0);
             },
           },
           {
@@ -516,6 +529,10 @@ export default class EventClass {
                   return _comp.id === comp_id;
                 }
               );
+              const group = competitor.info_data["group"]
+                ? competitor.info_data["group"]
+                : this.mainData.title.stage.group || "men";
+
               let marks = [];
 
               const aeCode = this.ae_codes.find(
@@ -523,15 +540,7 @@ export default class EventClass {
               );
 
               const ae_coef = aeCode
-                ? parseFloat(
-                    aeCode[
-                      `value_${
-                        competitor.info_data["group"]
-                          ? competitor.info_data["group"]
-                          : this.mainData.title.stage.group
-                      }`
-                    ].replace(",", ".")
-                  )
+                ? parseFloat(aeCode[`value_${group}`]).toFixed(2)
                 : 1;
 
               // FIND MARKS
@@ -583,18 +592,166 @@ export default class EventClass {
               const resultArr = ae_air.concat(ae_form.concat(ae_landing));
 
               if (
+                parseInt(this.result_formula.types[0].lower_marks) +
+                  parseInt(this.result_formula.types[0].higher_marks) >=
+                marks.length
+              ) {
+                return 0;
+              }
+
+              return this.set_accuracy(
+                ae_coef *
+                  this.set_accuracy(
+                    resultArr.reduce((a, b) => {
+                      return +a + +b;
+                    }, 0)
+                  )
+              );
+            },
+          },
+          {
+            id: 3,
+            title: "moguls",
+            get_result: (comp_id, race_id, judges, jump_code) => {
+              const competitor = this.competitorsSheet.competitors.find(
+                (_comp) => {
+                  return _comp.id === comp_id;
+                }
+              );
+              const group = competitor.info_data["group"]
+                ? competitor.info_data["group"]
+                : this.mainData.title.stage.group || "men";
+
+              let marks = [];
+
+              const jumpCodeObj = this.mg_codes.find(
+                (jCode) => jCode.code === jump_code
+              );
+
+              const jump_coef = jumpCodeObj
+                ? parseFloat(jumpCodeObj[`value_${group}`]).toFixed(2)
+                : 1;
+
+              // FIND MARKS
+              judges.forEach((_j) => {
+                marks.push(
+                  ...this.competitorsSheet.competitors
+                    .find((_comp) => {
+                      return _comp.id === comp_id;
+                    })
+                    .marks.filter((_mark) => {
+                      return +_mark.judge === +_j && _mark.race_id === race_id;
+                    })
+                );
+              });
+
+              // SPLIT AE MARKS TO ARRAYS BY MARK TYPE
+              const ae_air = marks.map((mark) => mark.value_ae.air);
+              const ae_form = marks.map((mark) => mark.value_ae.form);
+              const ae_landing = marks.map((mark) => mark.value_ae.landing);
+
+              // CUT HIGHER MARKS
+              for (
+                let high = 0;
+                high < +this.result_formula.types[0].higher_marks;
+                high++
+              ) {
+                ae_air.splice(ae_air.indexOf(Math.max(...ae_air)), 1);
+                ae_form.splice(ae_form.indexOf(Math.max(...ae_form)), 1);
+                ae_landing.splice(
+                  ae_landing.indexOf(Math.max(...ae_landing)),
+                  1
+                );
+              }
+
+              // CUT LOWER MARKS
+              for (
+                let low = 0;
+                low < +this.result_formula.types[0].lower_marks;
+                low++
+              ) {
+                ae_air.splice(ae_air.indexOf(Math.min(...ae_air)), 1);
+                ae_form.splice(ae_form.indexOf(Math.min(...ae_form)), 1);
+                ae_landing.splice(
+                  ae_landing.indexOf(Math.min(...ae_landing)),
+                  1
+                );
+              }
+
+              const resultArr = ae_air.concat(ae_form.concat(ae_landing));
+
+              if (
+                parseInt(this.result_formula.types[0].lower_marks) +
+                  parseInt(this.result_formula.types[0].higher_marks) >=
+                marks.length
+              ) {
+                return 0;
+              }
+
+              return this.set_accuracy(
+                jump_coef *
+                  this.set_accuracy(
+                    resultArr.reduce((a, b) => {
+                      return +a + +b;
+                    }, 0)
+                  )
+              );
+            },
+          },
+          {
+            id: 4,
+            title: "ski_jumps",
+            get_result: (
+              comp_id,
+              race_id,
+              judges,
+              ae_code,
+              sj_distance,
+              sj_ramp
+            ) => {
+              let marks = [];
+              const competitor = this.competitorsSheet.competitors.find(
+                (_comp) => {
+                  return _comp.id === comp_id;
+                }
+              );
+
+              judges.forEach((_j) => {
+                marks.push(
+                  ...this.competitorsSheet.competitors
+                    .find((_comp) => {
+                      return _comp.id === competitor.id;
+                    })
+                    .marks.filter((_mark) => {
+                      return +_mark.judge === +_j && _mark.race_id === race_id;
+                    })
+                    .map((_mark) => {
+                      return +_mark.value;
+                    })
+                );
+              });
+
+              if (
                 +this.result_formula.types[0].lower_marks +
                   +this.result_formula.types[0].higher_marks <
                 marks.length
               ) {
-                return this.set_accuracy(
-                  ae_coef *
-                    this.set_accuracy(
-                      resultArr.reduce((a, b) => {
-                        return +a + +b;
-                      }, 0)
-                    )
+                marks = cutMarks(
+                  [...marks],
+                  this.result_formula.types[0].higher_marks,
+                  this.result_formula.types[0].lower_marks
                 );
+
+                let result = marks.reduce((a, b) => {
+                  return +a + +b;
+                }, 0);
+
+                return result + sj_ramp
+                  ? 60 +
+                      skiRamps[sj_ramp].lengthPoints *
+                        (parseFloat(sj_distance) - skiRamps[sj_ramp].keyPoint) +
+                      result
+                  : 0;
               }
               return 0;
             },
@@ -616,14 +773,13 @@ export default class EventClass {
                 _section.judges.forEach((_judge) => {
                   section.push(
                     (this.competitorsSheet.competitors
-                      .find((_comp) => {
-                        return _comp.id === comp_id;
-                      })
-                      .marks.find((_mark) => {
-                        return (
-                          _mark.race_id === race_id && _mark.judge === _judge.id
-                        );
-                      }) &&
+                      .find((_comp) => _comp.id === comp_id)
+                      .marks.find(
+                        (_mark) =>
+                          _mark.race_id === race_id &&
+                          _mark.judge === _judge.id &&
+                          _mark.section === _section.s_num
+                      ) &&
                       this.competitorsSheet.competitors
                         .find((_comp) => {
                           return _comp.id === comp_id;
@@ -631,26 +787,29 @@ export default class EventClass {
                         .marks.find((_mark) => {
                           return (
                             _mark.race_id === race_id &&
-                            _mark.judge === _judge.id
+                            _mark.judge === _judge.id &&
+                            _mark.section === _section.s_num
                           );
                         }).value) ||
                       0
                   );
                 });
+
                 s_results.push(
                   section.length > 0
                     ? (_section.coefficient *
                         section.reduce((a, b) => {
                           return +a + +b;
-                        })) /
+                        }, 0)) /
                         section.length
                     : 0
                 );
               });
+
               return s_results.length > 0
                 ? s_results.reduce((a, b) => {
                     return +a + +b;
-                  })
+                  }, 0)
                 : 0;
             },
           },
@@ -809,7 +968,7 @@ export default class EventClass {
         }, 0)
       );
     }
-    this.set_accuracy(0);
+    return this.set_accuracy(0);
   }
   publishResult(params) {
     const res = {
@@ -826,7 +985,11 @@ export default class EventClass {
           this.stuff.judges.map((_j) => {
             return +_j.id;
           }),
-          params.ae_code
+          params.ae_code,
+          params.sjDistance,
+          params.sjRamp,
+          params.mgTime,
+          params.mgCode
         ),
       race_id: params.race_id,
       repeat: params.rep || null,
@@ -835,15 +998,21 @@ export default class EventClass {
       degree_difficulty: this.ae_codes.find(
         (aeCode) => aeCode.code === params.ae_code
       )
-        ? this.ae_codes
-            .find((aeCode) => aeCode.code === params.ae_code)
-            [
+        ? parseFloat(
+            this.ae_codes.find((aeCode) => aeCode.code === params.ae_code)[
               `value_${
                 params.competitor.info_data["group"] ||
-                this.mainData.title.stage.group
+                this.mainData.title.stage.group ||
+                "men"
               }`
-            ].replace(",", ".")
-        : "1,000",
+            ]
+          )
+        : 1,
+
+      sjDistance: params.sjDistance || 0,
+      sjRamp: params.sjRamp || 0,
+      sjGate: 0,
+      sjSpeed: 0,
     };
     if (
       !params.competitor.results.some((_res) => _res.race_id === params.race_id)
@@ -858,25 +1027,53 @@ export default class EventClass {
 
     this.calculateOverallResult(params.competitor);
 
+    initTerminalData_chiefJudge({
+      raceId: this.races.indexOf(
+        this.races.find((race) => race.id === params.race_id)
+      ),
+      competitorId: parseInt(params.competitor.info_data["bib"]),
+      competitorNum: parseInt(params.competitor.info_data["bib"]),
+      scoresQuantity: 1,
+      judgesQuantity: this.stuff.judges.length,
+      marks: this.stuff.judges.map((judge) => {
+        return [
+          judge.id,
+          ...params.competitor.marks
+            .filter(
+              (mark) =>
+                mark.judge_id === judge._id && mark.race_id === params.race_id
+            )
+            .map((mark) => {
+              return mark.value
+                ? parseFloat(mark.value).toFixed(1).split(".")
+                : [0, 0];
+            }),
+        ];
+      }),
+      competitorName: params.competitor.info_data["fullname"] || "Empty",
+    });
+
     return params.competitor.results;
   }
   set_accuracy(val) {
-    const acc = this.structure.accuracy[this.structure.selected.accuracy];
+    const accuracy = this.structure.accuracy[this.structure.selected.accuracy];
     if (typeof val === "string") return val;
-    let res = (Math.round(acc.value * +val) / acc.value).toString().split(".");
-    if (acc.digits > 0) {
-      if (res[1]) {
-        for (let i = 0; i < acc.digits - res[1].length; i++) {
-          res[1] += "0";
+    let resultArray = (Math.round(accuracy.value * +val) / accuracy.value)
+      .toString()
+      .split(".");
+    if (accuracy.digits > 0) {
+      if (resultArray[1]) {
+        for (let i = 0; i < accuracy.digits - resultArray[1].length; i++) {
+          resultArray[1] += "0";
         }
       } else {
-        res.push([]);
-        for (let i = 0; i < acc.digits; i++) {
-          res[1] += "0";
+        resultArray.push([]);
+        for (let i = 0; i < accuracy.digits; i++) {
+          resultArray[1] += "0";
         }
       }
-    } else res = res[0];
-    res = res.join(".");
-    return res;
+    } else resultArray = resultArray[0];
+    resultArray = resultArray.join(".");
+    return resultArray;
   }
 }

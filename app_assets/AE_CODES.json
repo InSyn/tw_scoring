@@ -1,727 +1,727 @@
 [
-    {
-        "code": "nj",
-        "value_women": "0,0",
-        "value_men": "0,0"
-    },
-    {
-        "code": "T",
-        "value_women": "1,650",
-        "value_men": "1,650"
-    },
-    {
-        "code": "M",
-        "value_women": "1,650",
-        "value_men": "1,650"
-    },
-    {
-        "code": "S",
-        "value_women": "1,700",
-        "value_men": "1,700"
-    },
-    {
-        "code": "D",
-        "value_women": "1,700",
-        "value_men": "1,700"
-    },
-    {
-        "code": "L",
-        "value_women": "1,700",
-        "value_men": "1,700"
-    },
-    {
-        "code": "H",
-        "value_women": "1,950",
-        "value_men": "1,950"
-    },
-    {
-        "code": "Z",
-        "value_women": "1,650",
-        "value_men": "1,650"
-    },
-    {
-        "code": "Y",
-        "value_women": "1,650",
-        "value_men": "1,650"
-    },
-    {
-        "code": "X",
-        "value_women": "1,650",
-        "value_men": "1,650"
-    },
-    {
-        "code": "K",
-        "value_women": "1,700",
-        "value_men": "1,700"
-    },
-    {
-        "code": "TT",
-        "value_women": "1,800",
-        "value_men": "1,800"
-    },
-    {
-        "code": "TS",
-        "value_women": "1,900",
-        "value_men": "1,900"
-    },
-    {
-        "code": "DT",
-        "value_women": "1,900",
-        "value_men": "1,900"
-    },
-    {
-        "code": "DD",
-        "value_women": "1,900",
-        "value_men": "1,900"
-    },
-    {
-        "code": "BK",
-        "value_women": "1,900",
-        "value_men": "1,900"
-    },
-    {
-        "code": "SS",
-        "value_women": "1,900",
-        "value_men": "1,900"
-    },
-    {
-        "code": "DS",
-        "value_women": "1,950",
-        "value_men": "1,950"
-    },
-    {
-        "code": "DSTS",
-        "value_women": "2,300",
-        "value_men": "2,300"
-    },
-    {
-        "code": "DDDD",
-        "value_women": "2,300",
-        "value_men": "2,300"
-    },
-    {
-        "code": "DDTTT",
-        "value_women": "2,400",
-        "value_men": "2,400"
-    },
-    {
-        "code": "DTTTZ",
-        "value_women": "2,400",
-        "value_men": "2,400"
-    },
-    {
-        "code": "3",
-        "value_women": "1,950",
-        "value_men": "1,950"
-    },
-    {
-        "code": "3DS",
-        "value_women": "2,400",
-        "value_men": "2,400"
-    },
-    {
-        "code": "7",
-        "value_women": "2,400",
-        "value_men": "2,400"
-    },
-    {
-        "code": "HDS",
-        "value_women": "2,400",
-        "value_men": "2,400"
-    },
-    {
-        "code": "HH",
-        "value_women": "2,400",
-        "value_men": "2,400"
-    },
-    {
-        "code": "7D",
-        "value_women": "2,600",
-        "value_men": "2,600"
-    },
-    {
-        "code": "HHD",
-        "value_women": "2,600",
-        "value_men": "2,600"
-    },
-    {
-        "code": "10",
-        "value_women": "2,850",
-        "value_men": "2,850"
-    },
-    {
-        "code": "HHH",
-        "value_women": "2,850",
-        "value_men": "2,850"
-    },
-    {
-        "code": "fT",
-        "value_women": "2,000",
-        "value_men": "2,000"
-    },
-    {
-        "code": "fP",
-        "value_women": "2,000",
-        "value_men": "2,000"
-    },
-    {
-        "code": "fL",
-        "value_women": "2,100",
-        "value_men": "2,100"
-    },
-    {
-        "code": "bT",
-        "value_women": "2,000",
-        "value_men": "2,000"
-    },
-    {
-        "code": "bP",
-        "value_women": "2,000",
-        "value_men": "2,000"
-    },
-    {
-        "code": "bL",
-        "value_women": "2,050",
-        "value_men": "2,050"
-    },
-    {
-        "code": "sT",
-        "value_women": "2,000",
-        "value_men": "2,000"
-    },
-    {
-        "code": "sP",
-        "value_women": "2,000",
-        "value_men": "2,000"
-    },
-    {
-        "code": "sL",
-        "value_women": "2,100",
-        "value_men": "2,100"
-    },
-    {
-        "code": "fTT",
-        "value_women": "2,600",
-        "value_men": "2,600"
-    },
-    {
-        "code": "fPP",
-        "value_women": "2,600",
-        "value_men": "2,600"
-    },
-    {
-        "code": "fTP",
-        "value_women": "2,600",
-        "value_men": "2,600"
-    },
-    {
-        "code": "fLT",
-        "value_women": "2,700",
-        "value_men": "2,700"
-    },
-    {
-        "code": "fLL",
-        "value_women": "2,800",
-        "value_men": "2,800"
-    },
-    {
-        "code": "bTT",
-        "value_women": "2,550",
-        "value_men": "2,550"
-    },
-    {
-        "code": "bPP",
-        "value_women": "2,550",
-        "value_men": "2,550"
-    },
-    {
-        "code": "bTP",
-        "value_women": "2,550",
-        "value_men": "2,550"
-    },
-    {
-        "code": "bLT",
-        "value_women": "2,600",
-        "value_men": "2,600"
-    },
-    {
-        "code": "bLP",
-        "value_women": "2,600",
-        "value_men": "2,600"
-    },
-    {
-        "code": "bLL",
-        "value_women": "2,650",
-        "value_men": "2,650"
-    },
-    {
-        "code": "fTTT",
-        "value_women": "3,300",
-        "value_men": "3,300"
-    },
-    {
-        "code": "fPPP",
-        "value_women": "3,300",
-        "value_men": "3,300"
-    },
-    {
-        "code": "fLTT",
-        "value_women": "3,400",
-        "value_men": "3,400"
-    },
-    {
-        "code": "fLLT",
-        "value_women": "3,500",
-        "value_men": "3,500"
-    },
-    {
-        "code": "fLLL",
-        "value_women": "3,600",
-        "value_men": "3,600"
-    },
-    {
-        "code": "bTTT",
-        "value_women": "3,150",
-        "value_men": "3,150"
-    },
-    {
-        "code": "bPPP",
-        "value_women": "3,150",
-        "value_men": "3,150"
-    },
-    {
-        "code": "bLTT",
-        "value_women": "3,200",
-        "value_men": "3,200"
-    },
-    {
-        "code": "bLLT",
-        "value_women": "3,250",
-        "value_men": "3,250"
-    },
-    {
-        "code": "bLTL",
-        "value_women": "3,250",
-        "value_men": "3,250"
-    },
-    {
-        "code": "bLLL",
-        "value_women": "3,300",
-        "value_men": "3,300"
-    },
-    {
-        "code": "fF",
-        "value_women": "2,400",
-        "value_men": "2,400"
-    },
-    {
-        "code": "fdF",
-        "value_women": "2,900",
-        "value_men": "2,900"
-    },
-    {
-        "code": "bF",
-        "value_women": "2,300",
-        "value_men": "2,300"
-    },
-    {
-        "code": "bdF",
-        "value_women": "2,675",
-        "value_men": "2,675"
-    },
-    {
-        "code": "btF",
-        "value_women": "3,150",
-        "value_men": "3,150"
-    },
-    {
-        "code": "fHH",
-        "value_women": "3,000",
-        "value_men": "3,000"
-    },
-    {
-        "code": "fHIH",
-        "value_women": "3,100",
-        "value_men": "3,100"
-    },
-    {
-        "code": "fFT",
-        "value_women": "3,000",
-        "value_men": "3,000"
-    },
-    {
-        "code": "fFL",
-        "value_women": "3,100",
-        "value_men": "3,100"
-    },
-    {
-        "code": "fFF",
-        "value_women": "3,400",
-        "value_men": "3,400"
-    },
-    {
-        "code": "fTdF",
-        "value_women": "3,500",
-        "value_men": "3,500"
-    },
-    {
-        "code": "fLdF",
-        "value_women": "3,600",
-        "value_men": "3,600"
-    },
-    {
-        "code": "bHH",
-        "value_women": "2,850",
-        "value_men": "2,850"
-    },
-    {
-        "code": "bHIH",
-        "value_women": "2,900",
-        "value_men": "2,900"
-    },
-    {
-        "code": "bFT",
-        "value_women": "2,850",
-        "value_men": "2,850"
-    },
-    {
-        "code": "bFP",
-        "value_women": "2,850",
-        "value_men": "2,850"
-    },
-    {
-        "code": "bTF",
-        "value_women": "2,850",
-        "value_men": "2,850"
-    },
-    {
-        "code": "bFL",
-        "value_women": "2,900",
-        "value_men": "2,900"
-    },
-    {
-        "code": "bLF",
-        "value_women": "2,900",
-        "value_men": "2,900"
-    },
-    {
-        "code": "bFF",
-        "value_women": "3,150",
-        "value_men": "3,150"
-    },
-    {
-        "code": "bRuH",
-        "value_women": "3,175",
-        "value_men": "3,175"
-    },
-    {
-        "code": "bHRu",
-        "value_women": "3,175",
-        "value_men": "3,175"
-    },
-    {
-        "code": "bHIRu",
-        "value_women": "3,225",
-        "value_men": "3,225"
-    },
-    {
-        "code": "bTdF",
-        "value_women": "3,225",
-        "value_men": "3,225"
-    },
-    {
-        "code": "bLdF",
-        "value_women": "3,275",
-        "value_men": "3,275"
-    },
-    {
-        "code": "bdFT",
-        "value_women": "3,225",
-        "value_men": "3,225"
-    },
-    {
-        "code": "bdFL",
-        "value_women": "3,275",
-        "value_men": "3,275"
-    },
-    {
-        "code": "bFdF",
-        "value_women": "3,525",
-        "value_men": "3,525"
-    },
-    {
-        "code": "bdFF",
-        "value_women": "3,525",
-        "value_men": "3,525"
-    },
-    {
-        "code": "bRuRu",
-        "value_women": "3,500",
-        "value_men": "3,500"
-    },
-    {
-        "code": "bHRa",
-        "value_women": "3,625",
-        "value_men": "3,625"
-    },
-    {
-        "code": "bHIRa",
-        "value_women": "3,625",
-        "value_men": "3,625"
-    },
-    {
-        "code": "bRaH",
-        "value_women": "3,550",
-        "value_men": "3,550"
-    },
-    {
-        "code": "bLtF",
-        "value_women": "3,750",
-        "value_men": "3,750"
-    },
-    {
-        "code": "btFL",
-        "value_women": "3,750",
-        "value_men": "3,750"
-    },
-    {
-        "code": "bdFdF",
-        "value_women": "3,900",
-        "value_men": "3,900"
-    },
-    {
-        "code": "bRuRa",
-        "value_women": "3,925",
-        "value_men": "3,925"
-    },
-    {
-        "code": "bFtF",
-        "value_women": "4,000",
-        "value_men": "4,000"
-    },
-    {
-        "code": "bRuH",
-        "value_women": "3,200",
-        "value_men": "3,200"
-    },
-    {
-        "code": "fFTT",
-        "value_women": "3,922",
-        "value_men": "3,700"
-    },
-    {
-        "code": "fFFT",
-        "value_women": "4,346",
-        "value_men": "4,100"
-    },
-    {
-        "code": "bLHH",
-        "value_women": "3,710",
-        "value_men": "3,500"
-    },
-    {
-        "code": "bLHIH",
-        "value_women": "3,763",
-        "value_men": "3,550"
-    },
-    {
-        "code": "bHTH",
-        "value_women": "3,657",
-        "value_men": "3,450"
-    },
-    {
-        "code": "bHITH",
-        "value_women": "3,710",
-        "value_men": "3,500"
-    },
-    {
-        "code": "bFTT",
-        "value_women": "3,657",
-        "value_men": "3,450"
-    },
-    {
-        "code": "bLFT",
-        "value_women": "3,710",
-        "value_men": "3,500"
-    },
-    {
-        "code": "bLTF",
-        "value_women": "3,710",
-        "value_men": "3,500"
-    },
-    {
-        "code": "bLLF",
-        "value_women": "3,763",
-        "value_men": "3,550"
-    },
-    {
-        "code": "bHHF",
-        "value_women": "3,975",
-        "value_men": "3,750"
-    },
-    {
-        "code": "bHFH",
-        "value_women": "3,975",
-        "value_men": "3,750"
-    },
-    {
-        "code": "bFHH",
-        "value_women": "3,975",
-        "value_men": "3,750"
-    },
-    {
-        "code": "bHIHF",
-        "value_women": "4,028",
-        "value_men": "3,800"
-    },
-    {
-        "code": "bHIFH",
-        "value_women": "4,028",
-        "value_men": "3,800"
-    },
-    {
-        "code": "bFHIH",
-        "value_women": "4,028",
-        "value_men": "3,800"
-    },
-    {
-        "code": "bFFT",
-        "value_women": "3,975",
-        "value_men": "3,750"
-    },
-    {
-        "code": "bFTF",
-        "value_women": "3,975",
-        "value_men": "3,750"
-    },
-    {
-        "code": "bLFF",
-        "value_women": "4,028",
-        "value_men": "3,800"
-    },
-    {
-        "code": "bRuTH",
-        "value_women": "4,081",
-        "value_men": "3,850"
-    },
-    {
-        "code": "bFFF",
-        "value_women": "4,293",
-        "value_men": "4,050"
-    },
-    {
-        "code": "bRuFH",
-        "value_women": "4,399",
-        "value_men": "4,150"
-    },
-    {
-        "code": "bHRuF",
-        "value_women": "4,346",
-        "value_men": "4,100"
-    },
-    {
-        "code": "bHIRuF",
-        "value_women": "4,373",
-        "value_men": "4,125"
-    },
-    {
-        "code": "bFdFT",
-        "value_women": "4,373",
-        "value_men": "4,125"
-    },
-    {
-        "code": "bRuTRu",
-        "value_women": "4,346",
-        "value_men": "4,100"
-    },
-    {
-        "code": "bHRaT",
-        "value_women": "4,426",
-        "value_men": "4,175"
-    },
-    {
-        "code": "bHIRaT",
-        "value_women": "4,479",
-        "value_men": "4,225"
-    },
-    {
-        "code": "bHRaL",
-        "value_women": "4,532",
-        "value_men": "4,275"
-    },
-    {
-        "code": "bHIRaL",
-        "value_women": "4,532",
-        "value_men": "4,275"
-    },
-    {
-        "code": "bFdFF",
-        "value_women": "4,691",
-        "value_men": "4,425"
-    },
-    {
-        "code": "bLdFF",
-        "value_women": "4,426",
-        "value_men": "4,175"
-    },
-    {
-        "code": "bRuRuF",
-        "value_women": "4,717",
-        "value_men": "4,450"
-    },
-    {
-        "code": "bdFFF",
-        "value_women": "4,797",
-        "value_men": "4,525"
-    },
-    {
-        "code": "bFFdF",
-        "value_women": "4,797",
-        "value_men": "4,525"
-    },
-    {
-        "code": "bHRaF",
-        "value_women": "4,797",
-        "value_men": "4,525"
-    },
-    {
-        "code": "bHIRaF",
-        "value_women": "4,797",
-        "value_men": "4,525"
-    },
-    {
-        "code": "bFdFdF",
-        "value_women": "5,406",
-        "value_men": "5,100"
-    },
-    {
-        "code": "bFtFT",
-        "value_women": "4,876",
-        "value_men": "4,600"
-    },
-    {
-        "code": "bLtFF",
-        "value_women": "4,929",
-        "value_men": "4,650"
-    },
-    {
-        "code": "bdFdFF",
-        "value_women": "5,406",
-        "value_men": "5,100"
-    },
-    {
-        "code": "bRuRaF",
-        "value_women": "5,168",
-        "value_men": "4,875"
-    },
-    {
-        "code": "btFFF",
-        "value_women": "5,406",
-        "value_men": "5,100"
-    },
-    {
-        "code": "bdFFdF",
-        "value_women": "5,300",
-        "value_men": "5,000"
-    }
+  {
+    "code": "nj",
+    "value_women": "0.000",
+    "value_men": "0.000"
+  },
+  {
+    "code": "T",
+    "value_women": "1.650",
+    "value_men": "1.650"
+  },
+  {
+    "code": "M",
+    "value_women": "1.650",
+    "value_men": "1.650"
+  },
+  {
+    "code": "S",
+    "value_women": "1.700",
+    "value_men": "1.700"
+  },
+  {
+    "code": "D",
+    "value_women": "1.700",
+    "value_men": "1.700"
+  },
+  {
+    "code": "L",
+    "value_women": "1.700",
+    "value_men": "1.700"
+  },
+  {
+    "code": "H",
+    "value_women": "1.950",
+    "value_men": "1.950"
+  },
+  {
+    "code": "Z",
+    "value_women": "1.650",
+    "value_men": "1.650"
+  },
+  {
+    "code": "Y",
+    "value_women": "1.650",
+    "value_men": "1.650"
+  },
+  {
+    "code": "X",
+    "value_women": "1.650",
+    "value_men": "1.650"
+  },
+  {
+    "code": "K",
+    "value_women": "1.700",
+    "value_men": "1.700"
+  },
+  {
+    "code": "TT",
+    "value_women": "1.800",
+    "value_men": "1.800"
+  },
+  {
+    "code": "TS",
+    "value_women": "1.900",
+    "value_men": "1.900"
+  },
+  {
+    "code": "DT",
+    "value_women": "1.900",
+    "value_men": "1.900"
+  },
+  {
+    "code": "DD",
+    "value_women": "1.900",
+    "value_men": "1.900"
+  },
+  {
+    "code": "BK",
+    "value_women": "1.900",
+    "value_men": "1.900"
+  },
+  {
+    "code": "SS",
+    "value_women": "1.900",
+    "value_men": "1.900"
+  },
+  {
+    "code": "DS",
+    "value_women": "1.950",
+    "value_men": "1.950"
+  },
+  {
+    "code": "DSTS",
+    "value_women": "2.300",
+    "value_men": "2.300"
+  },
+  {
+    "code": "DDDD",
+    "value_women": "2.300",
+    "value_men": "2.300"
+  },
+  {
+    "code": "DDTTT",
+    "value_women": "2.400",
+    "value_men": "2.400"
+  },
+  {
+    "code": "DTTTZ",
+    "value_women": "2.400",
+    "value_men": "2.400"
+  },
+  {
+    "code": "3",
+    "value_women": "1.950",
+    "value_men": "1.950"
+  },
+  {
+    "code": "3DS",
+    "value_women": "2.400",
+    "value_men": "2.400"
+  },
+  {
+    "code": "7",
+    "value_women": "2.400",
+    "value_men": "2.400"
+  },
+  {
+    "code": "HDS",
+    "value_women": "2.400",
+    "value_men": "2.400"
+  },
+  {
+    "code": "HH",
+    "value_women": "2.400",
+    "value_men": "2.400"
+  },
+  {
+    "code": "7D",
+    "value_women": "2.600",
+    "value_men": "2.600"
+  },
+  {
+    "code": "HHD",
+    "value_women": "2.600",
+    "value_men": "2.600"
+  },
+  {
+    "code": "10",
+    "value_women": "2.850",
+    "value_men": "2.850"
+  },
+  {
+    "code": "HHH",
+    "value_women": "2.850",
+    "value_men": "2.850"
+  },
+  {
+    "code": "fT",
+    "value_women": "2.000",
+    "value_men": "2.000"
+  },
+  {
+    "code": "fP",
+    "value_women": "2.000",
+    "value_men": "2.000"
+  },
+  {
+    "code": "fL",
+    "value_women": "2.100",
+    "value_men": "2.100"
+  },
+  {
+    "code": "bT",
+    "value_women": "2.000",
+    "value_men": "2.000"
+  },
+  {
+    "code": "bP",
+    "value_women": "2.000",
+    "value_men": "2.000"
+  },
+  {
+    "code": "bL",
+    "value_women": "2.050",
+    "value_men": "2.050"
+  },
+  {
+    "code": "sT",
+    "value_women": "2.000",
+    "value_men": "2.000"
+  },
+  {
+    "code": "sP",
+    "value_women": "2.000",
+    "value_men": "2.000"
+  },
+  {
+    "code": "sL",
+    "value_women": "2.100",
+    "value_men": "2.100"
+  },
+  {
+    "code": "fTT",
+    "value_women": "2.600",
+    "value_men": "2.600"
+  },
+  {
+    "code": "fPP",
+    "value_women": "2.600",
+    "value_men": "2.600"
+  },
+  {
+    "code": "fTP",
+    "value_women": "2.600",
+    "value_men": "2.600"
+  },
+  {
+    "code": "fLT",
+    "value_women": "2.700",
+    "value_men": "2.700"
+  },
+  {
+    "code": "fLL",
+    "value_women": "2.800",
+    "value_men": "2.800"
+  },
+  {
+    "code": "bTT",
+    "value_women": "2.550",
+    "value_men": "2.550"
+  },
+  {
+    "code": "bPP",
+    "value_women": "2.550",
+    "value_men": "2.550"
+  },
+  {
+    "code": "bTP",
+    "value_women": "2.550",
+    "value_men": "2.550"
+  },
+  {
+    "code": "bLT",
+    "value_women": "2.600",
+    "value_men": "2.600"
+  },
+  {
+    "code": "bLP",
+    "value_women": "2.600",
+    "value_men": "2.600"
+  },
+  {
+    "code": "bLL",
+    "value_women": "2.650",
+    "value_men": "2.650"
+  },
+  {
+    "code": "fTTT",
+    "value_women": "3.300",
+    "value_men": "3.300"
+  },
+  {
+    "code": "fPPP",
+    "value_women": "3.300",
+    "value_men": "3.300"
+  },
+  {
+    "code": "fLTT",
+    "value_women": "3.400",
+    "value_men": "3.400"
+  },
+  {
+    "code": "fLLT",
+    "value_women": "3.500",
+    "value_men": "3.500"
+  },
+  {
+    "code": "fLLL",
+    "value_women": "3.600",
+    "value_men": "3.600"
+  },
+  {
+    "code": "bTTT",
+    "value_women": "3.150",
+    "value_men": "3.150"
+  },
+  {
+    "code": "bPPP",
+    "value_women": "3.150",
+    "value_men": "3.150"
+  },
+  {
+    "code": "bLTT",
+    "value_women": "3.200",
+    "value_men": "3.200"
+  },
+  {
+    "code": "bLLT",
+    "value_women": "3.250",
+    "value_men": "3.250"
+  },
+  {
+    "code": "bLTL",
+    "value_women": "3.250",
+    "value_men": "3.250"
+  },
+  {
+    "code": "bLLL",
+    "value_women": "3.300",
+    "value_men": "3.300"
+  },
+  {
+    "code": "fF",
+    "value_women": "2.400",
+    "value_men": "2.400"
+  },
+  {
+    "code": "fdF",
+    "value_women": "2.900",
+    "value_men": "2.900"
+  },
+  {
+    "code": "bF",
+    "value_women": "2.300",
+    "value_men": "2.300"
+  },
+  {
+    "code": "bdF",
+    "value_women": "2.675",
+    "value_men": "2.675"
+  },
+  {
+    "code": "btF",
+    "value_women": "3.150",
+    "value_men": "3.150"
+  },
+  {
+    "code": "fHH",
+    "value_women": "3.000",
+    "value_men": "3.000"
+  },
+  {
+    "code": "fHIH",
+    "value_women": "3.100",
+    "value_men": "3.100"
+  },
+  {
+    "code": "fFT",
+    "value_women": "3.000",
+    "value_men": "3.000"
+  },
+  {
+    "code": "fFL",
+    "value_women": "3.100",
+    "value_men": "3.100"
+  },
+  {
+    "code": "fFF",
+    "value_women": "3.400",
+    "value_men": "3.400"
+  },
+  {
+    "code": "fTdF",
+    "value_women": "3.500",
+    "value_men": "3.500"
+  },
+  {
+    "code": "fLdF",
+    "value_women": "3.600",
+    "value_men": "3.600"
+  },
+  {
+    "code": "bHH",
+    "value_women": "2.850",
+    "value_men": "2.850"
+  },
+  {
+    "code": "bHIH",
+    "value_women": "2.900",
+    "value_men": "2.900"
+  },
+  {
+    "code": "bFT",
+    "value_women": "2.850",
+    "value_men": "2.850"
+  },
+  {
+    "code": "bFP",
+    "value_women": "2.850",
+    "value_men": "2.850"
+  },
+  {
+    "code": "bTF",
+    "value_women": "2.850",
+    "value_men": "2.850"
+  },
+  {
+    "code": "bFL",
+    "value_women": "2.900",
+    "value_men": "2.900"
+  },
+  {
+    "code": "bLF",
+    "value_women": "2.900",
+    "value_men": "2.900"
+  },
+  {
+    "code": "bFF",
+    "value_women": "3.150",
+    "value_men": "3.150"
+  },
+  {
+    "code": "bRuH",
+    "value_women": "3.175",
+    "value_men": "3.175"
+  },
+  {
+    "code": "bHRu",
+    "value_women": "3.175",
+    "value_men": "3.175"
+  },
+  {
+    "code": "bHIRu",
+    "value_women": "3.225",
+    "value_men": "3.225"
+  },
+  {
+    "code": "bTdF",
+    "value_women": "3.225",
+    "value_men": "3.225"
+  },
+  {
+    "code": "bLdF",
+    "value_women": "3.275",
+    "value_men": "3.275"
+  },
+  {
+    "code": "bdFT",
+    "value_women": "3.225",
+    "value_men": "3.225"
+  },
+  {
+    "code": "bdFL",
+    "value_women": "3.275",
+    "value_men": "3.275"
+  },
+  {
+    "code": "bFdF",
+    "value_women": "3.525",
+    "value_men": "3.525"
+  },
+  {
+    "code": "bdFF",
+    "value_women": "3.525",
+    "value_men": "3.525"
+  },
+  {
+    "code": "bRuRu",
+    "value_women": "3.500",
+    "value_men": "3.500"
+  },
+  {
+    "code": "bHRa",
+    "value_women": "3.625",
+    "value_men": "3.625"
+  },
+  {
+    "code": "bHIRa",
+    "value_women": "3.625",
+    "value_men": "3.625"
+  },
+  {
+    "code": "bRaH",
+    "value_women": "3.550",
+    "value_men": "3.550"
+  },
+  {
+    "code": "bLtF",
+    "value_women": "3.750",
+    "value_men": "3.750"
+  },
+  {
+    "code": "btFL",
+    "value_women": "3.750",
+    "value_men": "3.750"
+  },
+  {
+    "code": "bdFdF",
+    "value_women": "3.900",
+    "value_men": "3.900"
+  },
+  {
+    "code": "bRuRa",
+    "value_women": "3.925",
+    "value_men": "3.925"
+  },
+  {
+    "code": "bFtF",
+    "value_women": "4.000",
+    "value_men": "4.000"
+  },
+  {
+    "code": "bRuH",
+    "value_women": "3.200",
+    "value_men": "3.200"
+  },
+  {
+    "code": "fFTT",
+    "value_women": "3.922",
+    "value_men": "3.700"
+  },
+  {
+    "code": "fFFT",
+    "value_women": "4.346",
+    "value_men": "4.100"
+  },
+  {
+    "code": "bLHH",
+    "value_women": "3.710",
+    "value_men": "3.500"
+  },
+  {
+    "code": "bLHIH",
+    "value_women": "3.763",
+    "value_men": "3.550"
+  },
+  {
+    "code": "bHTH",
+    "value_women": "3.657",
+    "value_men": "3.450"
+  },
+  {
+    "code": "bHITH",
+    "value_women": "3.710",
+    "value_men": "3.500"
+  },
+  {
+    "code": "bFTT",
+    "value_women": "3.657",
+    "value_men": "3.450"
+  },
+  {
+    "code": "bLFT",
+    "value_women": "3.710",
+    "value_men": "3.500"
+  },
+  {
+    "code": "bLTF",
+    "value_women": "3.710",
+    "value_men": "3.500"
+  },
+  {
+    "code": "bLLF",
+    "value_women": "3.763",
+    "value_men": "3.550"
+  },
+  {
+    "code": "bHHF",
+    "value_women": "3.975",
+    "value_men": "3.750"
+  },
+  {
+    "code": "bHFH",
+    "value_women": "3.975",
+    "value_men": "3.750"
+  },
+  {
+    "code": "bFHH",
+    "value_women": "3.975",
+    "value_men": "3.750"
+  },
+  {
+    "code": "bHIHF",
+    "value_women": "4.028",
+    "value_men": "3.800"
+  },
+  {
+    "code": "bHIFH",
+    "value_women": "4.028",
+    "value_men": "3.800"
+  },
+  {
+    "code": "bFHIH",
+    "value_women": "4.028",
+    "value_men": "3.800"
+  },
+  {
+    "code": "bFFT",
+    "value_women": "3.975",
+    "value_men": "3.750"
+  },
+  {
+    "code": "bFTF",
+    "value_women": "3.975",
+    "value_men": "3.750"
+  },
+  {
+    "code": "bLFF",
+    "value_women": "4.028",
+    "value_men": "3.800"
+  },
+  {
+    "code": "bRuTH",
+    "value_women": "4.081",
+    "value_men": "3.850"
+  },
+  {
+    "code": "bFFF",
+    "value_women": "4.293",
+    "value_men": "4.050"
+  },
+  {
+    "code": "bRuFH",
+    "value_women": "4.399",
+    "value_men": "4.150"
+  },
+  {
+    "code": "bHRuF",
+    "value_women": "4.346",
+    "value_men": "4.100"
+  },
+  {
+    "code": "bHIRuF",
+    "value_women": "4.373",
+    "value_men": "4.125"
+  },
+  {
+    "code": "bFdFT",
+    "value_women": "4.373",
+    "value_men": "4.125"
+  },
+  {
+    "code": "bRuTRu",
+    "value_women": "4.346",
+    "value_men": "4.100"
+  },
+  {
+    "code": "bHRaT",
+    "value_women": "4.426",
+    "value_men": "4.175"
+  },
+  {
+    "code": "bHIRaT",
+    "value_women": "4.479",
+    "value_men": "4.225"
+  },
+  {
+    "code": "bHRaL",
+    "value_women": "4.532",
+    "value_men": "4.275"
+  },
+  {
+    "code": "bHIRaL",
+    "value_women": "4.532",
+    "value_men": "4.275"
+  },
+  {
+    "code": "bFdFF",
+    "value_women": "4.691",
+    "value_men": "4.425"
+  },
+  {
+    "code": "bLdFF",
+    "value_women": "4.426",
+    "value_men": "4.175"
+  },
+  {
+    "code": "bRuRuF",
+    "value_women": "4.717",
+    "value_men": "4.450"
+  },
+  {
+    "code": "bdFFF",
+    "value_women": "4.797",
+    "value_men": "4.525"
+  },
+  {
+    "code": "bFFdF",
+    "value_women": "4.797",
+    "value_men": "4.525"
+  },
+  {
+    "code": "bHRaF",
+    "value_women": "4.797",
+    "value_men": "4.525"
+  },
+  {
+    "code": "bHIRaF",
+    "value_women": "4.797",
+    "value_men": "4.525"
+  },
+  {
+    "code": "bFdFdF",
+    "value_women": "5.406",
+    "value_men": "5.100"
+  },
+  {
+    "code": "bFtFT",
+    "value_women": "4.876",
+    "value_men": "4.600"
+  },
+  {
+    "code": "bLtFF",
+    "value_women": "4.929",
+    "value_men": "4.650"
+  },
+  {
+    "code": "bdFdFF",
+    "value_women": "5.406",
+    "value_men": "5.100"
+  },
+  {
+    "code": "bRuRaF",
+    "value_women": "5.168",
+    "value_men": "4.875"
+  },
+  {
+    "code": "btFFF",
+    "value_women": "5.406",
+    "value_men": "5.100"
+  },
+  {
+    "code": "bdFFdF",
+    "value_women": "5.300",
+    "value_men": "5.000"
+  }
 ]

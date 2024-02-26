@@ -1,130 +1,87 @@
 <template>
-  <v-col class="pa-2" cols="5"
-    ><div
-      class="pt-14"
-      style="position: relative; height: 100%; border-radius: 6px"
-      :style="{
-        backgroundColor: `${$vuetify.theme.themes[appTheme].cardBackgroundRGBA}`,
-      }"
-    >
-      <div
-        class="pa-2 d-flex flex-wrap align-center"
-        style="position: absolute; top: 0; left: 0; right: 0"
-      >
-        <div
-          class="d-flex align-center flex-wrap"
-          style="
-            border-radius: 6px;
-            overflow-y: auto;
-            width: 100%;
-            max-height: 50px;
-          "
-          :style="{
-            backgroundColor:
-              $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
-          }"
-        >
-          <div class="d-flex flex-column align-center pa-1">
-            <v-icon
-              :color="
+  <div class="chat__container">
+    <div class="chat__wrapper">
+      <div class="chat__users__list">
+        <div class="chat__users__list__userItem">
+          <v-icon
+            class="chat__users__list__userItem__icon"
+            :color="
+              competition.stuff.jury[0].connected
+                ? 'var(--accent)'
+                : 'var(--text-default)'
+            "
+            >{{
+              `${
                 competition.stuff.jury[0].connected
-                  ? $vuetify.theme.themes[appTheme].accent
-                  : $vuetify.theme.themes[appTheme].textDefault
-              "
-              >{{
-                `${
-                  competition.stuff.jury[0].connected
-                    ? "mdi-account"
-                    : "mdi-account-cancel"
-                }`
-              }}</v-icon
-            >
-            <div class="d-flex justify-center align-center">
-              {{ localization[lang].app.scoring.chief_judge }}
-            </div>
+                  ? "mdi-account"
+                  : "mdi-account-cancel"
+              }`
+            }}
+          </v-icon>
+
+          <div class="chat__users__list__userItem__title">
+            {{ localization[lang].app.scoring.chief_judge }}
           </div>
-          <div
-            class="d-flex flex-column align-center pa-1"
-            v-for="(user, u_id) in competition.stuff.judges"
-          >
-            <v-icon
-              :color="
-                user.connected
-                  ? $vuetify.theme.themes[appTheme].accent
-                  : $vuetify.theme.themes[appTheme].textDefault
-              "
-              :style="
-                user.socket_id &&
-                !user.connected && {
-                  color: $vuetify.theme.themes[appTheme].error,
-                }
-              "
-              >{{
-                `${user.connected ? "mdi-account" : "mdi-account-cancel"}`
-              }}</v-icon
-            >
-            <div class="d-flex justify-center align-center">
-              {{ `${localization[lang].app.scoring.judge_full} ${u_id + 1}` }}
-            </div>
+        </div>
+
+        <div
+          class="chat__users__list__userItem"
+          v-for="(user, u_id) in competition.stuff.judges"
+        >
+          <v-icon
+            class="chat__users__list__userItem__icon"
+            :color="user.connected ? 'var(--accent)' : 'var(--text-default)'"
+            :style="
+              user.socket_id &&
+              !user.connected && {
+                color: 'var(--error)',
+              }
+            "
+            >{{ `${user.connected ? "mdi-account" : "mdi-account-cancel"}` }}
+          </v-icon>
+
+          <div class="chat__users__list__userItem__title">
+            {{ `${localization[lang].app.scoring.judge_full} ${u_id + 1}` }}
           </div>
         </div>
       </div>
-      <v-row
-        no-gutters
-        class="pa-2"
-        style="height: calc(100% - 40px); width: 100%"
-        ><div
-          class="pa-1"
-          id="chat_window"
-          style="
-            height: 100%;
-            width: 100%;
-            overflow-y: auto;
-            border-radius: 6px;
-            scroll-behavior: smooth;
-          "
-          :style="{
-            backgroundColor:
-              $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
-          }"
+
+      <div class="chat__messages__wrapper">
+        <div
+          v-for="(mes, m) in messages"
+          :key="m"
+          class="chat__messages__messageItem__value"
         >
-          <v-row no-gutters v-for="(mes, m) in messages" :key="m">{{
-            `${mes[1][0]}:${mes[1][1]} ${mes[2]}: ${mes[0]}`
-          }}</v-row>
-        </div></v-row
-      >
-      <div class="d-flex px-2 py-1" style="height: 40px">
+          {{ `${mes[1][0]}:${mes[1][1]}` }}
+          <b>{{ `${mes[2]}:` }}</b>
+          {{ `${mes[0]}` }}
+        </div>
+      </div>
+
+      <div class="chat__messageForm__wrapper">
         <input
           @keypress.enter="addMessage(message)"
           v-model="message"
+          class="chat__messageForm__input"
           type="text"
-          style="
-            flex: 1 0 auto;
-            height: 100%;
-            padding: 4px;
-            border-radius: 6px;
-            font-size: 1.2rem;
-          "
-          :style="{
-            color: $vuetify.theme.themes[appTheme].textDefault,
-            backgroundColor:
-              $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
-          }"
-        /><v-btn
+        />
+
+        <v-btn
           @click="addMessage(message)"
+          class="chat__messageForm__button-sendMessage"
+          color="var(--accent)"
           text
           small
-          :color="$vuetify.theme.themes[appTheme].accent"
-          style="height: 100%"
-          >{{ localization[lang].app.scoring.chat_send }}</v-btn
-        >
+          >{{ localization[lang].app.scoring.chat_send }}
+        </v-btn>
       </div>
-    </div></v-col
-  >
+    </div>
+  </div>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
+
 export default {
   name: "chat",
   mounted() {
@@ -141,7 +98,6 @@ export default {
       lang: "lang",
     }),
     ...mapGetters("main", {
-      appTheme: "appTheme",
       socket: "socket",
       messages: "messages",
       competition: "competition",
@@ -162,7 +118,7 @@ export default {
     },
   },
   watch: {
-    messages: function (val) {
+    messages: function () {
       this.$nextTick(() => {
         this.setChatScroll();
       });
@@ -171,4 +127,80 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.chat__container {
+  flex: 5 1 0;
+
+  padding: 4px;
+}
+.chat__wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  background-color: var(--card-background);
+  border-radius: 6px;
+}
+.chat__users__list {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+
+  margin: 8px 8px 4px;
+  overflow-y: auto;
+
+  border-radius: 4px;
+  background-color: var(--standard-background);
+}
+.chat__users__list__userItem {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  padding: 4px;
+}
+.chat__users__list__userItem__icon {
+  margin: auto;
+}
+.chat__users__list__userItem__title {
+  text-align: center;
+}
+
+.chat__messages__wrapper {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+
+  margin: 4px 8px 4px;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+
+  background-color: var(--standard-background);
+  border-radius: 4px;
+}
+.chat__messages__messageItem__value {
+  flex: 0 0 auto;
+  padding: 2px 4px;
+}
+
+.chat__messageForm__wrapper {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+
+  margin: 4px 8px 8px;
+}
+.chat__messageForm__input {
+  flex: 1 1 0;
+  padding: 4px;
+
+  font-size: 1.2rem;
+  color: var(--text-default);
+  background-color: var(--standard-background);
+  border-radius: 4px;
+}
+.chat__messageForm__button-sendMessage {
+  margin-left: 8px;
+}
+</style>

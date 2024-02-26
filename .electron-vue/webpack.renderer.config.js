@@ -148,7 +148,7 @@ let rendererConfig = {
 };
 
 /**
- * Adjust rendererConfig for development settings
+ * Adjust rendererConfig for development rulesSetup
  */
 if (process.env.NODE_ENV !== "production") {
   rendererConfig.plugins.push(
@@ -159,7 +159,7 @@ if (process.env.NODE_ENV !== "production") {
 }
 
 /**
- * Adjust rendererConfig for production settings
+ * Adjust rendererConfig for production rulesSetup
  */
 if (process.env.NODE_ENV === "production") {
   rendererConfig.devtool = "";

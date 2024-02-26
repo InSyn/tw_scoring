@@ -1,5 +1,6 @@
-let competition = {
+export const competition = {
   ae_codes: [],
+  mg_codes: [],
   mainData: {
     title: {
       title: "Название",
@@ -109,5 +110,3 @@ let competition = {
   races: [],
   selected_race_id: 0,
 };
-
-export default competition;

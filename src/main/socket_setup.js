@@ -1,21 +1,23 @@
-let competition = require("./server_competition");
+import { createUdpSocket } from "./UDPServer/udpServerFunctions";
+import { serverSetup as udpServerSetup } from "./UDPServer/udpServerSetup";
+import { ipcMain, sendInfoMessage, sendServerMessage } from "./index";
+import { competition } from "./server_competition";
 
 const socketApp = require("express")();
 const http = require("http").Server(socketApp);
-const io = require("socket.io")(http);
-
-import { mainWindow, app } from "./index";
+const io = require("socket.io")(http, {
+  pingInterval: 5000,
+  pingTimeout: 25000,
+});
+let socketServerRunning = false;
 
 io.on("connection", (socket) => {
   socket.emit("serverConnected");
   console.log(`Connected ${socket.id}`);
 
   io.sockets.emit("competition_data_updated", competition);
-  mainWindow &&
-    mainWindow.webContents.send("server_message", [
-      3,
-      `Connected ${socket.id}`,
-    ]);
+
+  sendServerMessage({ color: "green", message: `Connected ${socket.id}` });
 
   socket.on("connect_error", (err) => {
     console.log(`Connect error due to ${err.message}`);
@@ -29,7 +31,7 @@ io.on("connection", (socket) => {
     io.sockets.emit("chat_message", m);
   });
 
-  socket.on("set_competition_data", (data, cb) => {
+  socket.on("set_competition_data", (data) => {
     function compareData(obj1, obj2) {
       Object.keys(obj1).forEach((compKey) => {
         if (obj2[compKey]) {
@@ -56,15 +58,15 @@ io.on("connection", (socket) => {
   socket.on("create_judges", (judges, cb) => {
     competition.stuff.judges = judges;
     cb(competition.stuff.judges);
-    mainWindow &&
-      mainWindow.webContents.send("server_message", [
-        1,
-        `К соревнованию могут подключиться судьи: ${competition.stuff.judges.map(
-          (judge) => {
-            return ` ${judge.id}`;
-          }
-        )}`,
-      ]);
+
+    sendServerMessage({
+      color: "blue",
+      message: `К соревнованию могут подключиться судьи: ${competition.stuff.judges.map(
+        (judge) => {
+          return ` ${judge.id}`;
+        }
+      )}`,
+    });
   });
 
   socket.on("chief_judge_in", (check) => {
@@ -74,11 +76,12 @@ io.on("connection", (socket) => {
       competition.stuff.jury[0].socket_id = socket.id;
 
       io.sockets.emit("competition_data_updated", competition);
-      mainWindow &&
-        mainWindow.webContents.send("server_message", [
-          1,
-          `Главный судья ${competition.stuff.jury[0].surName} ${competition.stuff.jury[0].name} подключился`,
-        ]);
+
+      sendServerMessage({
+        color: "blue",
+        message: `Главный судья ${competition.stuff.jury[0].surName} ${competition.stuff.jury[0].name} подключился`,
+      });
+
       check(true);
     } else {
       check(true);
@@ -99,11 +102,11 @@ io.on("connection", (socket) => {
           judge.connected = true;
 
           io.sockets.emit("competition_data_updated", competition);
-          mainWindow &&
-            mainWindow.webContents.send("server_message", [
-              1,
-              `Судья ${judge.id} ${judge.surName} ${judge.name} подключился. ID: ${judge.socket_id}`,
-            ]);
+
+          sendServerMessage({
+            color: "blue",
+            message: `Судья ${judge.id} ${judge.surName} ${judge.name} подключился. ID: ${judge.socket_id}`,
+          });
         }
       });
       io.sockets.emit("judge_connected", [
@@ -122,57 +125,52 @@ io.on("connection", (socket) => {
     io.sockets.emit("competition_data_updated", competition);
   });
 
-  socket.on("set_mark", (mark) => {
-    let race = competition.races.find((_race) => _race.id === mark.race_id);
+  socket.on("set_mark", (newMark) => {
+    let race = competition.races.find((_race) => _race.id === newMark.race_id);
     let competitor = competition.competitorsSheet.competitors.find((_comp) => {
       return _comp.id === race.onTrack;
     });
 
     if (
       race.onTrack &&
-      !competitor.marks.some((_mark) => {
+      !competitor.marks.some((existingMark) => {
         return (
-          _mark.judge_id === mark.judge_id && _mark.race_id === mark.race_id
+          existingMark.judge_id === newMark.judge_id &&
+          existingMark.race_id === newMark.race_id
         );
       })
     ) {
-      competitor.marks.push(mark);
-      mainWindow
-        ? mainWindow.send("info_message", {
-            type: "new_mark",
-            race: race.id,
-            judge: mark.judge_id,
-            competitor: competitor.id,
-            mark: mark.value,
-          })
-        : null;
-    } else {
-      let mark_to_overwrite = competitor.marks.find((markToChange) => {
-        return (
-          markToChange.judge_id === mark.judge_id &&
-          markToChange.race_id === mark.race_id
-        );
+      competitor.marks.push(newMark);
+
+      sendInfoMessage({
+        type: "new_mark",
+        race: race.id,
+        judge: newMark.judge_id,
+        competitor: competitor.id,
+        mark: newMark,
       });
-      const old_mark = mark_to_overwrite.value;
-      mark_to_overwrite.value = mark.value;
-      mark_to_overwrite.value_ae = mark.value_ae;
+    } else {
+      console.log("overwrite!");
+      let markToOverwrite = competitor.marks.find(
+        (markToChange) =>
+          markToChange.judge_id === newMark.judge_id &&
+          markToChange.race_id === newMark.race_id
+      );
+      const old_mark = { ...markToOverwrite };
 
-      for (let mogulsValueKey in mark.moguls_value) {
-        if (mark.moguls_value[mogulsValueKey])
-          mark_to_overwrite.moguls_value[mogulsValueKey] =
-            mark.moguls_value[mogulsValueKey];
-      }
+      markToOverwrite.value = newMark.value;
+      markToOverwrite.value_ae = { ...newMark.value_ae };
+      markToOverwrite.moguls_value = { ...newMark.moguls_value };
 
-      mainWindow
-        ? mainWindow.send("info_message", {
-            type: "mark_overwrite",
-            race: race.id,
-            judge: mark.judge_id,
-            competitor: competitor.id,
-            old_mark: old_mark,
-            mark: mark_to_overwrite.value,
-          })
-        : null;
+      console.log(old_mark, markToOverwrite);
+      sendInfoMessage({
+        type: "mark_overwrite",
+        race: race.id,
+        judge: newMark.judge_id,
+        competitor: competitor.id,
+        old_mark: old_mark,
+        mark: markToOverwrite,
+      });
     }
 
     io.sockets.emit("competition_data_updated", competition);
@@ -190,6 +188,7 @@ io.on("connection", (socket) => {
     }
     io.sockets.emit("competition_data_updated", competition);
   });
+
   socket.on("set_mark_to_corr", (data) => {
     let competitor = competition.competitorsSheet.competitors.find((_comp) => {
       return _comp.id === data[1];
@@ -266,11 +265,10 @@ io.on("connection", (socket) => {
       if (socket.id === socket_id) {
         socket.disconnect(true);
 
-        mainWindow &&
-          mainWindow.webContents.send("server_message", [
-            0,
-            `Судья ID:${socket_id} отключен`,
-          ]);
+        sendServerMessage({
+          color: "orange",
+          message: `Судья ID:${socket_id} отключен`,
+        });
       }
     });
     io.sockets.emit("competition_data_updated", competition);
@@ -285,55 +283,75 @@ io.on("connection", (socket) => {
     delete io.sockets.sockets[socket.id];
 
     io.sockets.emit("competition_data_updated", competition);
-    mainWindow &&
-      mainWindow.webContents.send("server_message", [
-        4,
-        `${reason} ${socket.id}`,
-      ]);
+
+    sendServerMessage({ color: "red", message: `${reason} ${socket.id}` });
   });
 });
 
-app.on("startSocketServer", (config) => {
-  if (http && http["_handle"]) {
-    mainWindow &&
-      mainWindow.webContents.send("server_message", [
-        2,
-        `Server already started on ${http.address().address} ${
+ipcMain.on("start-socket-server", async (event, { ip, port }) => {
+  if (socketServerRunning) {
+    sendServerMessage({
+      color: "yellow",
+      message: `Server already started on ${http.address().address} ${
+        http.address().port
+      }`,
+    });
+  } else {
+    await http.listen(port, ip, async () => {
+      socketServerRunning = true;
+
+      sendServerMessage({
+        color: "blue",
+        message: `Listening on ${http.address().address} ${
           http.address().port
         }`,
-      ]);
+      });
+    });
 
-    http.close();
-    mainWindow &&
-      mainWindow.webContents.send("server_message", [0, `Server shut down`]);
+    http.once("error", async (err) => {
+      sendServerMessage({
+        color: "red",
+        message: `Connection error: ${err}`,
+      });
+      await http.close();
+      socketServerRunning = false;
+    });
+  }
+
+  if (!udpServerSetup.isServerRunning) {
+    udpServerSetup.udpServer = createUdpSocket();
+    udpServerSetup.udpServer.bind(2000, ip, () => {
+      udpServerSetup.isServerRunning = true;
+      console.log("UDP server started.");
+    });
   } else {
-    http &&
-      http.listen(config[1], config[0], () => {
-        mainWindow &&
-          mainWindow.webContents.send("server_message", [
-            1,
-            `Listening on ${http.address().address} ${http.address().port}`,
-          ]);
-      });
-    http &&
-      http.once("error", (err) => {
-        mainWindow &&
-          mainWindow.webContents.send("server_message", [
-            4,
-            `Connection error: ${err}`,
-          ]);
-        http.close();
-      });
+    console.log("UDP server is already running.");
   }
 });
 
-app.on("close_server", () => {
-  if (http && http["_handle"]) {
-    mainWindow &&
-      mainWindow.webContents.send("server_message", [0, `Server shut down`]);
-    http.close();
+ipcMain.on("close-server", async (event) => {
+  if (socketServerRunning) {
+    await http.close();
+    socketServerRunning = false;
+
+    sendServerMessage({
+      color: "orange",
+      message: "Server shut down",
+    });
   } else {
-    mainWindow &&
-      mainWindow.webContents.send("server_message", [0, `No started server`]);
+    sendServerMessage({
+      color: "orange",
+      message: "No started server",
+    });
+  }
+
+  if (udpServerSetup.isServerRunning) {
+    udpServerSetup.udpServer.close(() => {
+      udpServerSetup.isServerRunning = false;
+      udpServerSetup.udpServer = null;
+      console.log("UDP server stopped.");
+    });
+  } else {
+    console.log("UDP server is not running.");
   }
 });

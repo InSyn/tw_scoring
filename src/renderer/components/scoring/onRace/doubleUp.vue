@@ -134,13 +134,13 @@ export default {
           )
         ) {
           competitor.marks.push(
-            new MarkClass(
-              this.competition.selected_race_id,
-              this.competition.selected_race.id,
-              _j.id,
-              _j._id,
-              0
-            )
+            new MarkClass({
+              race: this.competition.selected_race_id,
+              race_id: this.competition.selected_race.id,
+              judge: _j.id,
+              judge_id: _j._id,
+              value: 0,
+            })
           );
         }
       });
@@ -177,7 +177,6 @@ export default {
       socket: "socket",
       terminals: "terminals",
     }),
-    ...mapGetters("roles", { MarkClass: "MarkClass" }),
     corridors() {
       return this.competition.result_formula.types[0].doubleUp_corridors;
     },

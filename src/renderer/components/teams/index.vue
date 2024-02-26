@@ -24,7 +24,7 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 import TeamTableRow from "./teamTableRow";
-import TeamClass from "../../store/classes/TeamClass";
+import TeamClass from "../../store/Classes/TeamClass";
 
 export default {
   name: "teams",

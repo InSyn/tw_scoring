@@ -1,18 +1,15 @@
 import { generateId } from "../../../lib/utils";
 
 export default class RaceClass {
-  constructor(title, type, discipline, competitors) {
+  constructor(params) {
     this.id = generateId();
-    this.title = title || "Race";
-    this.race_dialog = false;
-    this.type = type;
-    this.discipline = discipline;
-    this.startList = competitors || [];
-    this._startList = competitors || [];
-    this.selectedCompetitor = competitors[0] || null;
+    this.title = params.title || "Заезд";
+    this.type = params.type;
+    this.discipline = params.discipline;
+    this.startList = params.competitors || [];
+    this._startList = params.competitors || [];
+    this.selectedCompetitor = params.competitors[0] || null;
+    this.finished = [];
+    this.onTrack = null;
   }
-
-  del_dialog = false;
-  finished = [];
-  onTrack = null;
 }

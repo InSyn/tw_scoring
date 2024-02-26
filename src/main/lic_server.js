@@ -1,8 +1,8 @@
-import { mainWindow, app } from "./index";
+import { mainWindow, ipcMain } from "./index";
 
 const fs = require("fs");
 
-app.on("save_key", (key) => {
+ipcMain.on("save-key", (event, key) => {
   try {
     if (!fs.existsSync("./lic"))
       fs.writeFile("./lic", key, { encoding: "utf8" }, (err) => {
@@ -13,12 +13,12 @@ app.on("save_key", (key) => {
   }
 });
 
-app.on("check_key", () => {
+ipcMain.on("check-key", (event) => {
   try {
     fs.readFile("./lic", (err, key) => {
-      if (err) mainWindow.webContents.send("checked_key", false);
+      if (err) mainWindow.webContents.send("checked-key", false);
       else {
-        mainWindow.webContents.send("checked_key", key.toString());
+        mainWindow.webContents.send("checked-key", key.toString());
       }
     });
   } catch (err) {

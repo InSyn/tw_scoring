@@ -41,7 +41,7 @@
 
 <script>
 import { mapGetters } from "vuex";
-import AddCode_dialog from "./dialogs/addCode_dialog";
+import AddCode_dialog from "./dialogs/addCode-dialog.vue";
 import fs from "fs";
 
 export default {

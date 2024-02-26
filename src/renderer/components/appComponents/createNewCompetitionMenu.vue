@@ -1,9 +1,9 @@
 <template>
   <v-dialog
-    class="createNewCompetitionMenu__dialog"
+    @keydown.enter.prevent="createNewCompetition()"
     v-if="competition"
     v-model="create_competition_dialog.state"
-    @keydown.enter.prevent="createNewCompetition()"
+    class="createNewCompetitionMenu__dialog"
     width="540"
     overlay-color="var(--accent)"
     overlay-opacity="0.1"
@@ -255,56 +255,50 @@
             backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
           }"
         >
-          <v-hover
+          <v-btn
             v-for="(check, ch_idx) in create_competition_dialog.checks"
             :key="ch_idx"
-            v-slot:default="{ hover }"
+            @click="check.state = !check.state"
+            style="
+              flex: 0 1 calc(50% - 8px);
+              display: flex;
+              justify-content: flex-start;
+              align-items: center;
+              flex-wrap: nowrap;
+              cursor: pointer;
+              margin: 0 8px 4px 0;
+            "
+            :color="$vuetify.theme.themes[appTheme].success"
+            text
+            small
           >
-            <v-btn
-              text
-              small
-              retain-focus-on-click
-              @click="check.state = !check.state"
+            <div
               style="
-                display: flex;
-                flex-wrap: nowrap;
-                align-items: center;
-                cursor: pointer;
-                margin-right: 0.5rem;
+                flex: 0 0 auto;
+                border-radius: 50%;
+                width: 10px;
+                height: 10px;
+                transition: box-shadow 0.122s, background-color 0.122s;
               "
-              :color="$vuetify.theme.themes[appTheme].success"
+              :style="[
+                {
+                  boxShadow: `0 0 0 2px ${$vuetify.theme.themes[appTheme].textDefault}`,
+                },
+                check.state && {
+                  boxShadow: `0 0 2px 1px ${$vuetify.theme.themes[appTheme].success}`,
+                  backgroundColor: $vuetify.theme.themes[appTheme].success,
+                },
+              ]"
+            ></div>
+            <div
+              style="margin-left: 0.5rem"
+              :style="{
+                color: $vuetify.theme.themes[appTheme].textDefault,
+              }"
             >
-              <div
-                style="
-                  flex: 0 0 auto;
-                  border-radius: 50%;
-                  width: 10px;
-                  height: 10px;
-                  transition: box-shadow 0.122s, background-color 0.122s;
-                "
-                :style="[
-                  {
-                    boxShadow: `0 0 0 2px ${$vuetify.theme.themes[appTheme].textDefault}`,
-                  },
-                  hover && {
-                    boxShadow: `0 0 2px 1px ${$vuetify.theme.themes[appTheme].success}`,
-                  },
-                  check.state && {
-                    boxShadow: `0 0 2px 1px ${$vuetify.theme.themes[appTheme].success}`,
-                    backgroundColor: $vuetify.theme.themes[appTheme].success,
-                  },
-                ]"
-              ></div>
-              <div
-                style="margin-left: 0.5rem"
-                :style="{
-                  color: $vuetify.theme.themes[appTheme].textDefault,
-                }"
-              >
-                {{ check.title }}
-              </div>
-            </v-btn>
-          </v-hover>
+              {{ check.title }}
+            </div>
+          </v-btn>
         </div>
       </div>
 
@@ -322,14 +316,14 @@
           @click="create_competition_dialog.state = false"
           :color="$vuetify.theme.themes[appTheme].error"
         >
-          Cancel
+          {{ localization[lang].app.dialogs.d_cancel }}
         </v-btn>
         <v-btn
           small
           @click="createNewCompetition()"
           :color="$vuetify.theme.themes[appTheme].success"
         >
-          Create
+          {{ localization[lang].app.dialogs.d_create }}
         </v-btn>
       </v-card-actions>
     </div>
@@ -349,10 +343,12 @@ export default {
       for (let $check in this.create_competition_dialog.checks)
         if (this.create_competition_dialog.checks[$check].state)
           this.create_competition_dialog.checks[$check].check();
+
       this.$store.commit(
         "main/createCompetition",
         new EventClass(...this.create_competition_dialog.data)
       );
+
       this.create_competition_dialog.data.forEach((_field) => {
         if (
           _field.id === "judges" ||
@@ -360,9 +356,13 @@ export default {
           _field.id === "competitors"
         )
           _field[_field.id] = [];
+
+        if (_field.id === "competitorsSheet") _field["headers"] = [];
       });
+
       this.create_competition_dialog.state = false;
-      if (this.$route.name !== "competition_settings")
+
+      if (this.$route.name !== "competitionSettings")
         this.$router.push("/competition_settings");
     },
     handleInputState(event, type) {
@@ -443,6 +443,7 @@ export default {
           { id: "providerTiming", title: "Дата-сервис", value: null },
           { id: "codex", title: "Codex", value: null },
 
+          { id: "competitorsSheet", headers: [] },
           { id: "competitors", competitors: [] },
           { id: "judges", judges: [] },
           { id: "jury", jury: [] },
@@ -470,6 +471,17 @@ export default {
               }
             },
           },
+          competitorsSheetFromPrevStage: {
+            state: true,
+            title: "Перенести таблицу участников",
+            check: () => {
+              for (let $header of this.competition.competitorsSheet.header) {
+                this.create_competition_dialog.data
+                  .find((_data) => _data.id === "competitorsSheet")
+                  ["headers"].push(JSON.parse(JSON.stringify($header)));
+              }
+            },
+          },
           competitorsFromPrevStage: {
             state: false,
             title: "Перенести участников",
@@ -486,7 +498,13 @@ export default {
       },
     };
   },
-  computed: { ...mapGetters("main", { appTheme: "appTheme" }) },
+  computed: {
+    ...mapGetters("main", { appTheme: "appTheme" }),
+    ...mapGetters("localization", {
+      lang: "lang",
+      localization: "localization",
+    }),
+  },
 };
 </script>
 

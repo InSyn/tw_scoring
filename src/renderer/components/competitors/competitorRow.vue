@@ -1,8 +1,7 @@
 <template>
-  <v-row
-    class="competitorRow"
+  <div
+    class="competitorRow__wrapper"
     @click="openEditCompetitorDialog(competitor)"
-    no-gutters
   >
     <competitor-data-dialog
       :competition="competition"
@@ -11,7 +10,7 @@
       @toggleDialogState="editCompetitorDataDialog = !editCompetitorDataDialog"
     ></competitor-data-dialog>
 
-    <v-col
+    <div
       class="competitorDataCell"
       v-for="(dataCell, key, index) in competition.competitorsSheet.header"
       :key="key"
@@ -21,7 +20,7 @@
           ? competitor.info_data[dataCell.id]
           : null
       }}
-    </v-col>
+    </div>
 
     <div class="switchCompetitorButtons">
       <div @click.stop="moveCompetitorUp" class="switchCompetitor-btn">
@@ -32,7 +31,7 @@
         <v-icon class="switchCompetitor-icon" small>mdi-chevron-down</v-icon>
       </div>
     </div>
-  </v-row>
+  </div>
 </template>
 
 <script>
@@ -104,36 +103,36 @@ export default {
 </script>
 
 <style scoped>
-.competitorRow {
+.competitorRow__wrapper {
   position: relative;
-  height: 32px;
+  display: flex;
+  flex-wrap: nowrap;
+
   background: var(--standard-background);
   border: 1px solid var(--standard-background);
   cursor: pointer;
   user-select: none;
 }
-.competitorRow:nth-child(odd) {
+.competitorRow__wrapper:nth-child(odd) {
   border: 1px solid var(--card-background);
   background: var(--card-background);
 }
-.competitorRow:hover {
+.competitorRow__wrapper:hover {
   background: var(--card-background);
   border: 1px solid var(--accent);
 }
 .competitorDataCell {
-  padding-left: 6px !important;
-  line-height: 30px;
+  flex: 1 1 0;
+  padding: 6px 0 6px 12px;
   overflow: hidden;
   white-space: nowrap;
 }
 .switchCompetitorButtons {
   position: absolute;
-  z-index: 999;
   top: 0;
-  /*left: 0;*/
-  left: -24px;
-  height: 100%;
-  width: 24px;
+  bottom: 0;
+  left: -17px;
+  width: 16px;
 }
 .switchCompetitor-btn {
   display: none;
@@ -142,7 +141,7 @@ export default {
   height: 50%;
   width: 100%;
 }
-.competitorRow:hover .switchCompetitor-btn {
+.competitorRow__wrapper:hover .switchCompetitor-btn {
   display: flex;
 }
 .switchCompetitorButtons:hover .switchCompetitor-btn {
@@ -150,7 +149,7 @@ export default {
 }
 .switchCompetitor-icon {
   color: var(--accent);
-  transition: color 64ms;
+  transition: color 112ms;
 }
 .switchCompetitor-btn:hover .switchCompetitor-icon {
   color: var(--text-default);

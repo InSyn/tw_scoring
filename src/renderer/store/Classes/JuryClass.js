@@ -1,8 +1,9 @@
 export default class JuryClass {
-  constructor(title, lastName, name, loc) {
+  constructor(title, lastName, name, location) {
     this.title = title || "";
     this.name = name || "";
     this.lastName = lastName || "";
-    this.loc = loc || "";
+    this.location = location || "";
   }
+  category = "";
 }

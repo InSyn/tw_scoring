@@ -4,6 +4,7 @@ export default {
     fileTranslationService: {
       path: "C:/TW_Translation",
       separated: false,
+      updater_id: null,
     },
   },
   getters: {
@@ -16,6 +17,9 @@ export default {
     SET_FILE_SEPARATION: (state, value) => {
       state.fileTranslationService.separated = value;
     },
+    SET_FILE_UPDATER: (state, value) => {
+      state.fileTranslationService.updater_id = value;
+    },
   },
   actions: {
     setFileTranslationService_path: ({ commit }, path) => {
@@ -23,6 +27,9 @@ export default {
     },
     setFileSeparation: ({ commit }, value) => {
       commit("SET_FILE_SEPARATION", value);
+    },
+    setFileUpdater: ({ commit }, value) => {
+      commit("SET_FILE_UPDATER", value);
     },
   },
 };

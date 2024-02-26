@@ -43,7 +43,7 @@ let mainConfig = {
 };
 
 /**
- * Adjust mainConfig for development settings
+ * Adjust mainConfig for development rulesSetup
  */
 if (process.env.NODE_ENV !== "production") {
   mainConfig.plugins.push(
@@ -54,7 +54,7 @@ if (process.env.NODE_ENV !== "production") {
 }
 
 /**
- * Adjust mainConfig for production settings
+ * Adjust mainConfig for production rulesSetup
  */
 if (process.env.NODE_ENV === "production") {
   mainConfig.plugins.push(

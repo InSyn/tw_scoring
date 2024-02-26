@@ -114,7 +114,7 @@ let webConfig = {
 };
 
 /**
- * Adjust webConfig for production settings
+ * Adjust webConfig for production rulesSetup
  */
 if (process.env.NODE_ENV === "production") {
   webConfig.devtool = "";

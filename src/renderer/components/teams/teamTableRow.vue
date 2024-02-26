@@ -52,9 +52,9 @@ export default {
       return competitor ? competitor : null;
     },
     logTeamRes(team) {
-      console.log(
-        this.competition.getTeamRaceResult(team, this.competition.selected_race)
-      );
+      // console.log(
+      //   this.competition.getTeamRaceResult(team, this.competition.selected_race)
+      // );
     },
     removeTeam(teamToRemove) {
       this.competition.teams = this.competition.teams.filter(

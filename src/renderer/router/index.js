@@ -4,17 +4,16 @@ import Router from "vue-router";
 Vue.use(Router);
 
 import aeCodes from "../components/aeCodes";
-import competition_settings from "../components/competition_settings";
+import competition_settings from "../components/competitionSettings/index.vue";
 import competitors from "../components/competitors";
-import final_protocols from "../components/final_protocols";
-import lic_check from "../components/lic_check";
-import Main from "../components/Main";
-import protocols from "../components/protocols";
-import race_list from "../components/race_list";
-import rules from "../components/settings/rules/rules";
+import final_protocols from "../components/protocols/protocols.vue";
+import lic_check from "../components/licCheck.vue";
+import Main from "../components/TWLogoPage.vue";
+import protocols from "../components/protocols/index.vue";
+import race_list from "../components/raceList";
+import rulesSetup from "../components/rulesSetup/index.vue";
 import scoring from "../components/scoring";
-import settings from "../components/settings";
-import start_protocols from "../components/start_protocols";
+import start_protocols from "../components/protocols/start_protocols.vue";
 import teams from "../components/teams";
 
 export default new Router({
@@ -25,21 +24,13 @@ export default new Router({
       component: Main,
     },
     {
-      path: "/settings",
-      redirect: { name: "rules" },
-      name: "settings",
-      component: settings,
-      children: [
-        {
-          name: "rules",
-          path: "rules",
-          component: rules,
-        },
-      ],
+      path: "/rules_setup",
+      name: "rulesSetup",
+      component: rulesSetup,
     },
     {
       path: "/competition_settings",
-      name: "competition_settings",
+      name: "competitionSettings",
       component: competition_settings,
     },
     {
@@ -53,7 +44,7 @@ export default new Router({
       component: teams,
     },
     {
-      path: "/start_protocols",
+      path: "/startProtocols",
       name: "start_protocols",
       component: race_list,
     },

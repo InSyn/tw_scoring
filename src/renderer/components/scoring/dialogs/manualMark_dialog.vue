@@ -1,22 +1,24 @@
 <template>
   <v-dialog
-    width="fit-content"
+    v-model="change_marks_dialog.state"
+    @keydown.enter="setMarksFromChanged()"
     :disabled="
       !(competition.selected_race && competition.selected_race.onTrack)
     "
-    v-model="change_marks_dialog.state"
+    width="fit-content"
   >
     <template v-slot:activator="{ on }">
-      <div class="manualMarkButton__wrapper" style="padding: 4px">
+      <div>
         <v-btn
-          depressed
           v-on="on"
+          class="manualMarkButton"
           style="width: 100%"
-          height="2rem"
-          color="var(--accent)"
           :style="{
             color: $vuetify.theme.themes[appTheme].textDefault,
           }"
+          color="var(--accent)"
+          height="2rem"
+          depressed
         >
           {{ localization[lang].app.scoring.change_marks }}
         </v-btn>
@@ -36,7 +38,51 @@
 
       <div class="manualMarkDialog__body">
         <div
+          v-if="
+            is_sections &&
+            competition.result_formula.types[1].sections.length > 0
+          "
+          class="sectionInputs__wrapper"
+        >
+          <div
+            v-for="(section, section_idx) in competition.result_formula.types[1]
+              .sections"
+            :key="`section_${section_idx}`"
+            class="sectionMarks__wrapper"
+          >
+            <div class="sectionMark__sectionTitle">
+              {{ `Секц. ${section.s_num + 1}` }}
+            </div>
+            <div
+              class="sectionMark__wrapper"
+              v-for="judge in section.judges.map((sectionJudge) =>
+                competition.stuff.judges.find(
+                  (competition_judge) =>
+                    competition_judge.id === sectionJudge.id
+                )
+              )"
+              :key="`judge_${judge._id}`"
+            >
+              <div class="sectionMark__judge">
+                {{
+                  `${localization[lang].app.scoring.judge_full} ${
+                    competition.stuff.judges.indexOf(judge) + 1
+                  }`
+                }}
+              </div>
+
+              <input
+                type="text"
+                class="sectionMark__input"
+                v-model="scoresToChange[`${section.s_num}_${judge._id}`]"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div
           class="manualMark__wrapper"
+          v-show="!is_sections"
           v-for="judge in competition &&
           competition.selected_race &&
           competition.selected_race.onTrack &&
@@ -112,11 +158,12 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 import MarkClass from "../../../store/Classes/MarkClass";
+import { initTerminalData_chiefJudge } from "../../../store/terminalFunctions";
 
 export default {
   name: "manualMark_dialog",
   props: ["competition"],
-  activated() {
+  mounted() {
     this.competition.stuff.judges.forEach(
       (judge) =>
         (this.aeScores[judge._id] = { air: null, form: null, landing: null })
@@ -149,14 +196,18 @@ export default {
             }
 
             competitor.marks.push(
-              new MarkClass(
-                this.competition.selected_race_id,
-                this.competition.selected_race.id,
-                this.competition.stuff.judges.find((_j) => _j._id === mKey).id,
-                this.competition.stuff.judges.find((_j) => _j._id === mKey)._id,
-                0,
-                newMark
-              )
+              new MarkClass({
+                race: this.competition.selected_race_id,
+                race_id: this.competition.selected_race.id,
+                judge: this.competition.stuff.judges.find(
+                  (_j) => _j._id === mKey
+                ).id,
+                judge_id: this.competition.stuff.judges.find(
+                  (_j) => _j._id === mKey
+                )._id,
+                value: 0,
+                ae_value: newMark,
+              })
             );
           } else {
             const existingMark = competitor.marks.find((_m) => {
@@ -172,6 +223,44 @@ export default {
             }
           }
         }
+      } else if (this.competition.result_formula.type === 1) {
+        //SECTIONS MARKS
+        for (const markKey in this.scoresToChange) {
+          if (
+            !competitor.marks.some((mark) => {
+              return (
+                mark.judge_id === markKey.split("_")[1] &&
+                +mark.section === +markKey.split("_")[0] &&
+                mark.race_id === this.competition.selected_race.id
+              );
+            })
+          ) {
+            //NEW MARK IF NOT EXIST
+            competitor.marks.push(
+              new MarkClass({
+                race: this.competition.selected_race_id,
+                race_id: this.competition.selected_race.id,
+                judge: +this.competition.stuff.judges.find(
+                  (_j) => _j._id === markKey.split("_")[1]
+                ).id,
+                judge_id: this.competition.stuff.judges.find(
+                  (_j) => _j._id === markKey.split("_")[1]
+                )._id,
+                value: this.scoresToChange[markKey],
+                section: +markKey.split("_")[0],
+              })
+            );
+          } else {
+            //REPLACE MARK VALUE IF ALREADY EXIST
+            competitor.marks.find((mark) => {
+              return (
+                mark.judge_id === markKey.split("_")[1] &&
+                +mark.section === +markKey.split("_")[0] &&
+                mark.race_id === this.competition.selected_race.id
+              );
+            }).value = this.scoresToChange[markKey];
+          }
+        }
       } else {
         for (let mKey in this.scoresToChange) {
           //SET CLASSIC MARK
@@ -184,16 +273,18 @@ export default {
             })
           ) {
             //NEW MARK IF NOT EXIST
-            // console.log(mKey);
-            // console.log(this.competition.stuff.judges);
             competitor.marks.push(
-              new MarkClass(
-                this.competition.selected_race_id,
-                this.competition.selected_race.id,
-                this.competition.stuff.judges.find((_j) => _j._id === mKey).id,
-                this.competition.stuff.judges.find((_j) => _j._id === mKey)._id,
-                this.scoresToChange[mKey]
-              )
+              new MarkClass({
+                race: this.competition.selected_race_id,
+                race_id: this.competition.selected_race.id,
+                judge: this.competition.stuff.judges.find(
+                  (_j) => _j._id === mKey
+                ).id,
+                judge_id: this.competition.stuff.judges.find(
+                  (_j) => _j._id === mKey
+                )._id,
+                value: this.scoresToChange[mKey],
+              })
             );
           } else {
             //REPLACE MARK VALUE IF ALREADY EXIST
@@ -205,6 +296,30 @@ export default {
             }).value = this.scoresToChange[mKey];
           }
         }
+
+        initTerminalData_chiefJudge({
+          raceId: this.competition.selected_race.id,
+          competitorId: competitor.info_data["bib"],
+          competitorNum: competitor.info_data["bib"],
+          scoresQuantity: 1,
+          judgesQuantity: this.competition.stuff.judges.length,
+          marks: this.competition.stuff.judges.map((judge) => {
+            const judgeMark = competitor.marks.find(
+              (mark) =>
+                mark.judge_id === judge._id &&
+                mark.race_id === this.competition.selected_race.id
+            );
+            return judgeMark
+              ? [
+                  judge.id,
+                  judgeMark.value
+                    ? parseFloat(judgeMark.value).toFixed(1).split(".")
+                    : [0, 0],
+                ]
+              : [judge.id, [0, 0]];
+          }),
+          competitorName: competitor.info_data["fullname"] || "Empty",
+        });
       }
 
       //CLEAR DIALOG DATA
@@ -234,6 +349,13 @@ export default {
     ...mapGetters("main", {
       appTheme: "appTheme",
     }),
+    is_sections() {
+      if (!this.competition && !this.competition.selected_race) return false;
+
+      return this.competition.result_formula.types[
+        this.competition.result_formula.type
+      ].sections;
+    },
   },
   watch: {
     "change_marks_dialog.state": function (val) {
@@ -255,6 +377,10 @@ export default {
 </script>
 
 <style scoped>
+.manualMarkButton {
+  margin-bottom: 8px;
+}
+
 .manualMarkDialog__wrapper {
   max-width: 480px;
 }
@@ -277,6 +403,45 @@ export default {
   font-size: 1.1rem;
   text-align: center;
 }
+
+.sectionInputs__wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+.sectionMarks__wrapper {
+  flex: 0 0 auto;
+  padding: 4px;
+}
+.sectionMarks__wrapper:not(:first-child) {
+  border-left: 2px solid var(--standard-background);
+}
+.sectionMark__sectionTitle {
+  padding: 0 8px 0;
+  font-weight: bold;
+}
+.sectionMark__wrapper {
+  display: flex;
+  align-items: center;
+  padding: 8px 6px 0;
+}
+.sectionMark__judge {
+  font-weight: bold;
+}
+.sectionMark__input {
+  margin-left: 6px;
+  padding: 2px 6px;
+  width: 5rem;
+  color: var(--text-default);
+  background: var(--standard-background);
+  border-radius: 2px;
+  font-size: 1.2rem;
+  transition: box-shadow 112ms;
+}
+.sectionMark__input:focus {
+  box-shadow: inset 0 0 0 1px var(--text-default);
+}
+
 .aeMarks__wrapper {
 }
 .aeMark__wrapper {

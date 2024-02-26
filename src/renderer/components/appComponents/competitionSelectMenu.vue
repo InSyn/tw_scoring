@@ -7,9 +7,9 @@
       position: relative;
       min-width: 200px;
       margin-left: 0.5rem;
+      border-radius: 4px;
       z-index: 1001;
       outline: none;
-      border-radius: 4px;
     "
     :style="{
       backgroundColor: $vuetify.theme.themes[appTheme].standardBackgroundRGBA,

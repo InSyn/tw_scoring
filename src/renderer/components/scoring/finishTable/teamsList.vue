@@ -10,38 +10,49 @@
         <div class="teamName">{{ rankedTeam.name }}</div>
         <div class="teamResult">{{ rankedTeam.teamResult }}</div>
       </div>
-      <div
-        class="teamCompetitor"
-        v-for="teamCompetitorId in rankedTeam.competitors"
-        :key="teamCompetitorId"
-      >
-        <div class="teamCompetitorBib">
-          {{ getCompetitor(teamCompetitorId).info_data["bib"] }}
-        </div>
-        <div class="teamCompetitorLastname">
-          {{
-            getCompetitor(teamCompetitorId).info_data["lastname"].toUpperCase()
-          }}
-        </div>
-        <div class="teamCompetitorName">
-          {{ getCompetitor(teamCompetitorId).info_data["name"] }}
-        </div>
-        <div class="teamCompetitorResult">
-          {{
-            competition.getRaceResult(
-              getCompetitor(teamCompetitorId),
-              competition.selected_race
-            )
-          }}
-        </div>
-      </div>
+      <competitor-results-dialog
+        v-for="teamCompetitor in rankedTeam.competitors.map((competitorId) =>
+          getCompetitor(competitorId)
+        )"
+        :key="teamCompetitor.id"
+        :competition="competition"
+        :competitor="teamCompetitor"
+      ></competitor-results-dialog>
+      <!--      <div-->
+      <!--        class="teamCompetitor"-->
+      <!--        v-for="teamCompetitorId in rankedTeam.competitors"-->
+      <!--        :key="teamCompetitorId"-->
+      <!--      >-->
+      <!--        <div class="teamCompetitorBib">-->
+      <!--          {{ getCompetitor(teamCompetitorId).info_data["bib"] }}-->
+      <!--        </div>-->
+      <!--        <div class="teamCompetitorLastname">-->
+      <!--          {{-->
+      <!--            getCompetitor(teamCompetitorId).info_data["lastname"].toUpperCase()-->
+      <!--          }}-->
+      <!--        </div>-->
+      <!--        <div class="teamCompetitorName">-->
+      <!--          {{ getCompetitor(teamCompetitorId).info_data["name"] }}-->
+      <!--        </div>-->
+      <!--        <div class="teamCompetitorResult">-->
+      <!--          {{-->
+      <!--            competition.getRaceResult(-->
+      <!--              getCompetitor(teamCompetitorId),-->
+      <!--              competition.selected_race-->
+      <!--            )-->
+      <!--          }}-->
+      <!--        </div>-->
+      <!--      </div>-->
     </div>
   </div>
 </template>
 
 <script>
+import CompetitorResultsDialog from "./competitorResults-dialog.vue";
+
 export default {
   name: "teamsList",
+  components: { CompetitorResultsDialog },
   props: ["competition"],
   methods: {
     getCompetitor(competitorId) {

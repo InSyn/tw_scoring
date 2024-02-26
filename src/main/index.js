@@ -1,5 +1,5 @@
 import "v8-compile-cache";
-import { app, BrowserWindow } from "electron";
+import { app, ipcMain, BrowserWindow } from "electron";
 
 import fs from "fs";
 const si = require("systeminformation");
@@ -13,20 +13,8 @@ if (process.env.NODE_ENV !== "development") {
     .join(__dirname, "/static")
     .replace(/\\/g, "\\\\");
 }
-
-// var fs = require("fs");
-// var util = require("util");
-// var log_file = fs.createWriteStream(process.cwd() + "/debug.log", {
-//   flags: "w",
-// });
-// var log_stdout = process.stdout;
-//
-// function log(d) {
-//   //
-//   log_file.write(util.format(d) + "\n");
-//   log_stdout.write(util.format(d) + "\n");
-
 let mainWindow;
+
 const winURL =
   process.env.NODE_ENV === "development"
     ? `http://localhost:9080`
@@ -39,6 +27,8 @@ function createWindow() {
   mainWindow = new BrowserWindow({
     width: 1650,
     height: 900,
+    x: 1920,
+    y: 0,
     webPreferences: {
       webSecurity: false,
       nodeIntegration: true,
@@ -56,30 +46,6 @@ function createWindow() {
 
 app.on("ready", createWindow);
 
-app.on("getSysData", () => {
-  const platform = process.platform;
-  si.get({
-    system: "*",
-    uuid: "*",
-  })
-    .then((data) => {
-      mainWindow.webContents.send("sysData", { ...data, platform: platform });
-      try {
-        fs.readFile("./lic", (err, key) => {
-          if (err) mainWindow.webContents.send("checked_key", false);
-          else {
-            mainWindow.webContents.send("checked_key", key.toString());
-          }
-        });
-      } catch (err) {
-        if (err) console.log(err);
-      }
-    })
-    .catch((err) => {
-      throw err;
-    });
-});
-
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") {
     app.quit();
@@ -92,10 +58,55 @@ app.on("activate", () => {
   }
 });
 
-export { mainWindow, app };
+function sendServerMessage({ color, message }) {
+  mainWindow && mainWindow.webContents.send("server-message", [color, message]);
+}
+function sendInfoMessage(markData) {
+  mainWindow && mainWindow.webContents.send("info-message", markData);
+}
+function sendUdpMessage({ messageType, data }) {
+  mainWindow && mainWindow.webContents.send(messageType, data);
+}
+
+ipcMain.on("get-sys-data", (event) => {
+  const platform = process.platform;
+  si.get({
+    system: "*",
+    uuid: "*",
+  })
+    .then((data) => {
+      mainWindow &&
+        mainWindow.webContents.send("sys-data", {
+          ...data,
+          platform: platform,
+        });
+      try {
+        fs.readFile("./lic", (err, key) => {
+          if (err) mainWindow.webContents.send("checked-key", false);
+          else {
+            mainWindow.webContents.send("checked-key", key.toString());
+          }
+        });
+      } catch (err) {
+        if (err) console.log(err);
+      }
+    })
+    .catch((err) => {
+      throw err;
+    });
+});
+
+export {
+  ipcMain,
+  mainWindow,
+  sendServerMessage,
+  sendInfoMessage,
+  sendUdpMessage,
+};
 
 import "./lic_server";
 import "./socket_setup";
+import "./timingServer/timingDeviceServerSetup";
 
 /**
  * Auto Updater

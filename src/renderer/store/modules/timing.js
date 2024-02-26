@@ -1,36 +1,80 @@
+import store from "../index";
+const { ipcRenderer } = require("electron");
+
+ipcRenderer.on("connected_devices", (event, devices) => {
+  console.log(devices);
+  store.dispatch("timing/UpdateDevices", devices).catch();
+});
+ipcRenderer.on("newTime", (event, timeMessage) => {
+  const competition = store.getters["main/competition"];
+  if (
+    !competition ||
+    !competition.selected_race ||
+    !competition.selected_race.onTrack
+  )
+    return;
+
+  const activeTimer = competition.selected_race.onTrack.timer;
+
+  const timeChannel = timeMessage[0].split("")[timeMessage[0].length - 1];
+  // const timeValue = timeMessage[1];
+
+  if (timeChannel.toString() === "1") {
+    activeTimer.startTimer();
+  } else {
+    activeTimer.stopTimer();
+
+    switch (timeChannel.toString()) {
+      case "3": {
+        const redCourseCompetitor = activeTimer.run.competitors[1];
+
+        if (activeTimer.competitors.length === 0) {
+          activeTimer.addCompetitor(redCourseCompetitor.info_data["bib"]);
+          activeTimer.startCompetitorTimer(activeTimer.competitors[0]);
+        } else {
+          activeTimer.stopCompetitorTimer(activeTimer.competitors[0]);
+        }
+
+        break;
+      }
+      case "4": {
+        const blueCourseCompetitor = activeTimer.run.competitors[0];
+
+        if (activeTimer.competitors.length === 0) {
+          activeTimer.addCompetitor(blueCourseCompetitor.info_data["bib"]);
+          activeTimer.startCompetitorTimer(activeTimer.competitors[0]);
+        } else {
+          activeTimer.stopCompetitorTimer(activeTimer.competitors[0]);
+        }
+
+        break;
+      }
+      default:
+        return;
+    }
+  }
+});
+
 export default {
   namespaced: true,
   state: {
-    intermediates: [
-      { id: "st", title: "Start" },
-      { id: "i1", title: "Int1" },
-      { id: "i2", title: "Int2" },
-      { id: "fin", title: "Finish" },
-    ],
-    times: [],
-    TimeClass: class {
-      constructor(competition_id, bib, int_id, time) {
-        this._id = Math.random().toString(36).substr(2, 9);
-        this.created_at = Date.now();
-        this.competition_id = competition_id || null;
-        this.bib = bib || null;
-        this.int_id = int_id || null;
-        this.time = time || null;
-        this.isValid = true;
-      }
+    connectedDevices: [],
+    setup: {
+      enableManual: true,
     },
   },
   getters: {
-    intermediates: (state) => state.intermediates,
+    connectedDevices: (state) => state.connectedDevices,
     times: (state) => state.times,
-    TimeClass: (state) => state.TimeClass,
-    getResults: (state) =>
-      state.times
-        .filter((_time) => {
-          return _time.int_id === "fin";
-        })
-        .map((_time) => {
-          return { bib: _time.bib, created: _time.created, time: _time.time };
-        }),
+  },
+  mutations: {
+    updateDevices: (state, devices) => {
+      state.connectedDevices = devices;
+    },
+  },
+  actions: {
+    UpdateDevices: ({ commit }, devices) => {
+      commit("updateDevices", devices);
+    },
   },
 };

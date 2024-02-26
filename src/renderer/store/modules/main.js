@@ -1,9 +1,9 @@
 import io from "socket.io-client";
 import fs from "fs";
 import router from "./../../router";
-import { stringify } from "csv";
 
 import EventClass from "../Classes/EventClass";
+import { generateId } from "../../../lib/utils";
 
 export default {
   namespaced: true,
@@ -17,12 +17,12 @@ export default {
       {
         icon: "viewDashboard",
         title: "Event",
-        link: "competition_settings",
+        link: "competitionSettings",
       },
       {
         icon: "cog",
         title: "Settings",
-        link: "settings",
+        link: "rulesSetup",
       },
       {
         icon: "accountGroup",
@@ -69,11 +69,12 @@ export default {
       update_live: false,
       updateLive_Indicator: false,
       _id: null,
+      updaterId: null,
     },
     messages: [],
     opened_sockets: [],
     server_config: {
-      ip: "127.0.0.1",
+      ip: process.env.COMPUTERNAME || "127.0.0.1",
       port: "8080",
     },
     serverStatus: false,
@@ -82,13 +83,6 @@ export default {
     showPreview: false,
     showMenu: true,
     socket: null,
-    terminals: {
-      listenTerminals: false,
-      terminalsListener: {
-        listener: null,
-        indicator: null,
-      },
-    },
     timer: {
       sec: null,
       min: null,
@@ -152,126 +146,116 @@ export default {
         }, []);
       }
       return state.competition.stages.stage_grid
-        ? state.competition.stages.stage_grid
-            .map((stage) => {
-              return {
-                title: { type: "stageTitle", title: stage.title },
-                s_competitors: stage.s_competitions.map((_competition) =>
-                  state.competitions.find(
-                    (competition) => competition.id === _competition
-                  ).races.length > 0
-                    ? state.competitions
+        .map((stage) => {
+          return {
+            title: { type: "stageTitle", title: stage.title },
+            s_competitors: stage.s_competitions.map((_competition) =>
+              state.competitions.find(
+                (competition) => competition.id === _competition
+              ).races.length > 0
+                ? state.competitions
+                    .find((competition) => competition.id === _competition)
+                    .getSortedByRank(
+                      state.competitions
                         .find((competition) => competition.id === _competition)
-                        .getSortedByRank(
+                        .races[
+                          state.competitions.find(
+                            (competition) => competition.id === _competition
+                          ).races.length - 1
+                        ].finished.map((c_id) =>
                           state.competitions
                             .find(
                               (competition) => competition.id === _competition
                             )
-                            .races[
-                              state.competitions.find(
-                                (competition) => competition.id === _competition
-                              ).races.length - 1
-                            ].finished.map((c_id) =>
-                              state.competitions
-                                .find(
-                                  (competition) =>
-                                    competition.id === _competition
-                                )
-                                .competitorsSheet.competitors.find(
-                                  (_competitor) => _competitor.id === c_id
-                                )
+                            .competitorsSheet.competitors.find(
+                              (_competitor) => _competitor.id === c_id
                             )
                         )
-                        .map((competitor) => {
-                          return {
-                            type: "competitorResult",
-                            comp_id: _competition,
-                            competitor: competitor,
-                            s_rank: null,
-                            result: competitor.results_overall.find(
-                              (overall) =>
-                                overall.competition_id ===
-                                state.competitions.find(
-                                  (competition) =>
-                                    competition.id === _competition
-                                ).id
-                            ),
-                          };
-                        })
-                    : []
-                ),
+                    )
+                    .map((competitor) => {
+                      return {
+                        type: "competitorResult",
+                        comp_id: _competition,
+                        competitor: competitor,
+                        s_rank: null,
+                        result: competitor.results_overall.find(
+                          (overall) =>
+                            overall.competition_id ===
+                            state.competitions.find(
+                              (competition) => competition.id === _competition
+                            ).id
+                        ),
+                      };
+                    })
+                : []
+            ),
+          };
+        })
+        .map((_stage) => {
+          _stage.s_competitors = flatten(_stage.s_competitors).sort(
+            (comp1, comp2) => {
+              const statuses = {
+                DNF: -1,
+                DNS: -2,
+                DSQ: -3,
               };
-            })
-            .map((_stage) => {
-              _stage.s_competitors = flatten(_stage.s_competitors).sort(
-                (comp1, comp2) => {
-                  const statuses = {
-                    DNF: -1,
-                    DNS: -2,
-                    DSQ: -3,
-                  };
-                  return (
-                    (comp2.result
-                      ? comp2.result.status
-                        ? statuses[comp2.result.status]
-                        : comp2.result.value
-                      : 0) -
-                    (comp1.result
-                      ? comp1.result.status
-                        ? statuses[comp1.result.status]
-                        : comp1.result.value
-                      : 0)
-                  );
-                }
+              return (
+                (comp2.result
+                  ? comp2.result.status
+                    ? statuses[comp2.result.status]
+                    : comp2.result.value
+                  : 0) -
+                (comp1.result
+                  ? comp1.result.status
+                    ? statuses[comp1.result.status]
+                    : comp1.result.value
+                  : 0)
               );
-              return _stage;
-            })
-            .map((_stage, s_idx, grid) => {
-              _stage.s_competitors = _stage.s_competitors.filter(
-                (_competitor) =>
-                  grid[s_idx + 1]
-                    ? !grid[s_idx + 1].s_competitors.some(
-                        (_competitor_to_compare) => {
-                          if (
-                            _competitor.competitor.info_data["bib"] &&
-                            _competitor_to_compare.competitor.info_data["bib"]
-                          ) {
-                            return (
-                              _competitor_to_compare.competitor.info_data[
-                                "bib"
-                              ] === _competitor.competitor.info_data["bib"] ||
-                              _competitor_to_compare.competitor.id ===
-                                _competitor.competitor.id
-                            );
-                          } else {
-                            return (
-                              _competitor_to_compare.competitor.id ===
-                              _competitor.competitor.id
-                            );
-                          }
-                        }
-                      )
-                    : true
-              );
-              return _stage;
-            })
-            .reverse()
-            .map((_stage, s_idx, grid) => {
-              _stage.s_competitors.forEach((_competitor) => {
-                _competitor.s_rank =
-                  _stage.s_competitors.indexOf(_competitor) +
-                  1 +
-                  (grid[s_idx - 1]
-                    ? grid[s_idx - 1].s_competitors.length > 0
-                      ? grid[s_idx - 1].s_competitors[
-                          grid[s_idx - 1].s_competitors.length - 1
-                        ].s_rank
-                      : 0
-                    : 0);
-              });
-              return _stage;
-            })
-        : [];
+            }
+          );
+          return _stage;
+        })
+        .map((stage, s_idx, grid) => {
+          stage.s_competitors = stage.s_competitors.filter((competitor) =>
+            grid[s_idx + 1]
+              ? !grid[s_idx + 1].s_competitors.some((competitorToCompare) => {
+                  if (
+                    competitor.competitor.info_data["bib"] &&
+                    competitorToCompare.competitor.info_data["bib"]
+                  ) {
+                    return (
+                      competitorToCompare.competitor.info_data["bib"] ===
+                        competitor.competitor.info_data["bib"] ||
+                      competitorToCompare.competitor.id ===
+                        competitor.competitor.id
+                    );
+                  } else {
+                    return (
+                      competitorToCompare.competitor.id ===
+                      competitor.competitor.id
+                    );
+                  }
+                })
+              : true
+          );
+          return stage;
+        })
+        .reverse()
+        .map((_stage, s_idx, grid) => {
+          _stage.s_competitors.forEach((_competitor) => {
+            _competitor.s_rank =
+              _stage.s_competitors.indexOf(_competitor) +
+              1 +
+              (grid[s_idx - 1]
+                ? grid[s_idx - 1].s_competitors.length > 0
+                  ? grid[s_idx - 1].s_competitors[
+                      grid[s_idx - 1].s_competitors.length - 1
+                    ].s_rank
+                  : 0
+                : 0);
+          });
+          return _stage;
+        });
     },
     startList: (state) => {
       return (
@@ -283,10 +267,12 @@ export default {
         []
       );
     },
-    terminals: (state) => state.terminals,
     timer: (state) => state.timer,
   },
   mutations: {
+    clearServerMessages: (state) => {
+      state.serverMessages = [];
+    },
     changeMenuState: (state) => {
       state.showMenu = !state.showMenu;
     },
@@ -300,13 +286,11 @@ export default {
       state.socket = null;
     },
     checkEventID: (state) => {
-      state.event_id === null
-        ? (state.event_id = Math.random().toString(36).substr(2, 9))
-        : null;
+      state.event_id === null ? (state.event_id = generateId()) : null;
     },
     connect_socket: (state, config) => {
       if (!state.socket) {
-        state.socket = io(`http://${config[0]}:${config[1]}`);
+        state.socket = io(`http://${config.ip}:${config.port}`);
 
         state.socket.on("server_log", (data) => {
           console.log(data);
@@ -391,14 +375,13 @@ export default {
       }
     },
     createServerChecker: (state) => {
-      state.serverStatusChecker === null
-        ? (state.serverStatusChecker = setInterval(() => {
-            if (state.socket)
-              state.socket.connected
-                ? (state.serverStatus = true)
-                : (state.serverStatus = false);
-          }, 3000))
-        : null;
+      if (state.serverStatusChecker === null)
+        state.serverStatusChecker = setInterval(() => {
+          if (state.socket)
+            state.socket.connected
+              ? (state.serverStatus = true)
+              : (state.serverStatus = false);
+        }, 3000);
     },
     createCompetition: (state, competition) => {
       state.competitions.push(competition);
@@ -426,7 +409,6 @@ export default {
       state.socket &&
         state.socket.connected &&
         state.socket.emit("force_disconnect", user_id);
-      console.log(user_id);
     },
     licChecked: (state, lData) => {
       state._licData.user = lData.user;
@@ -435,9 +417,6 @@ export default {
     },
     pushServerMessage: (state, message) => {
       state.serverMessages.push(message);
-    },
-    serverLog: (state, data) => {
-      console.log(data);
     },
     serverSetStatus: (state, status) => (state.serverStatus = status),
     setCompetition: (state, competition) => {
@@ -459,6 +438,7 @@ export default {
       state.server_config.ip = ip;
     },
     SET_PORT: (state, port) => {
+      if (typeof port !== "number") port = parseInt(port);
       state.server_config.port = port;
     },
     setStatusChecker: (state, checker) => {
@@ -487,6 +467,9 @@ export default {
     },
   },
   actions: {
+    CLEAR_SERVER_MESSAGES: ({ commit }) => {
+      commit("clearServerMessages");
+    },
     changeMenuState: ({ commit }) => {
       commit("changeMenuState");
     },
@@ -533,6 +516,7 @@ export default {
     load_event: ({ state, commit }, evData) => {
       state.event_id = evData.event_id;
       state.event.event_title = evData.title;
+      state.event.sport = evData.sport;
 
       state.competitions = [];
 
@@ -548,6 +532,9 @@ export default {
 
         competition.is_aerials = evData_competition.is_aerials;
         competition.is_teams = evData_competition.is_teams;
+
+        competition.is_skiJumps = evData_competition.is_skiJumps;
+        competition.dualMoguls_mode = evData_competition.dualMoguls_mode;
 
         competition.result_formula.type =
           evData_competition.result_formula.type;
@@ -627,21 +614,24 @@ export default {
       if (conf.path) {
         const event_to_save = {
           title: state.event.event_title,
+          sport: state.event.sport,
           event_id: state.event_id,
           competitions: state.competitions,
         };
-        await fs.writeFile(
-          conf.path,
-          JSON.stringify(event_to_save),
-          "utf-8",
-          (err) => {
-            if (err) console.log(`Error: ${err}`);
-            else console.log(`File saved to: ${conf.path}`);
-          }
-        );
+        try {
+          await fs.writeFile(
+            conf.path,
+            JSON.stringify(event_to_save),
+            "utf-8",
+            (err) => {
+              if (err) console.error(new Error(`Error: ${err}`));
+            }
+          );
+        } catch (e) {
+          console.error(new Error(e));
+        }
       }
     },
-    serverLog: ({ commit }) => commit("serverLog"),
     serverSetStatus: ({ commit }, status) => {
       commit("serverSetStatus", status);
     },

@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="showDialog" width="380px">
+  <v-dialog v-model="showDialog" min-width="380px" max-width="480px">
     <div class="editFrame-wrapper">
       <div class="editFrame-header">
         <span class="competitorName">{{
@@ -18,6 +18,7 @@
           {{ localization[lang].app.competitors.d_competitor_info }}
         </div>
       </div>
+
       <div class="editFrame-body">
         <div
           v-for="(field, f_key) in competition.competitorsSheet.header"
@@ -35,25 +36,27 @@
           />
         </div>
       </div>
+
       <div class="editFrameActions">
         <v-btn
-          class="action-btn delete"
           @click="deleteCompetitor(competitor)"
+          class="action-btn delete"
           small
-          text
           color="var(--action-red)"
           >{{ localization[lang].app.dialogs.d_delete }}
         </v-btn>
+
         <v-btn
-          class="action-btn close"
           @click="$emit('toggleDialogState')"
+          class="action-btn close"
+          text
           small
           color="var(--accent)"
           >{{ localization[lang].app.dialogs.d_close }}
         </v-btn>
       </div>
-    </div></v-dialog
-  >
+    </div>
+  </v-dialog>
 </template>
 
 <script>
@@ -137,55 +140,71 @@ export default {
   border-radius: 6px;
   overflow: hidden;
 }
+
 .editFrame-header {
   display: flex;
+  margin-bottom: 8px;
   font-size: 1.2rem;
   font-weight: bold;
   color: var(--text-default);
   background: var(--card-background);
 }
+
 .competitorName {
   flex: 0 0 auto;
-  padding: 8px;
+  padding: 4px 8px;
   background: var(--accent);
   border-bottom-right-radius: 6px;
 }
+
 .editFrame-title {
   flex: 1 0 auto;
   text-align: end;
-  padding: 8px;
+  padding: 4px 8px;
 }
+
 .editFrame-body {
   padding: 0 16px;
   max-height: 300px;
+  margin-bottom: 8px;
   overflow-y: auto;
 }
+
 .competitorDataUnit-row {
   display: flex;
   align-items: baseline;
   margin-top: 8px;
 }
+
 .competitorDataUnit-key {
-  flex: 0 0 auto;
-  min-width: 72px;
+  flex: 2 1 0;
+  overflow: hidden;
+
+  white-space: nowrap;
   font-weight: bold;
 }
+
 .competitorDataUnit-input {
-  flex: 0 0 auto;
+  flex: 5 1 0;
   min-width: 0;
-  width: 160px;
+  margin-left: 8px;
   padding: 4px;
+  overflow: hidden;
+
   color: var(--text-default);
   background: var(--standard-background);
   border-radius: 6px;
 }
+
 .editFrameActions {
   display: flex;
   padding: 8px;
 }
+
 .action-btn {
   color: var(--text-default);
 }
+
 .action-btn.close {
   margin-left: auto;
 }
