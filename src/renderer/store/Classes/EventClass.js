@@ -57,7 +57,7 @@ export default class EventClass {
   is_skiJumps = false;
   is_teams = false;
 
-  dualMoguls_mode = true;
+  dualMoguls_mode = false;
 
   competitorsSheet = {
     header: [
@@ -424,7 +424,7 @@ export default class EventClass {
         doubleUp_competitors: { 0: null, 1: null },
         lower_marks: 0,
         higher_marks: 0,
-        formula: 1,
+        formula: 0,
         formulas: [
           {
             id: 0,
@@ -557,37 +557,21 @@ export default class EventClass {
               });
 
               // SPLIT AE MARKS TO ARRAYS BY MARK TYPE
-              const ae_air = marks.map((mark) => mark.value_ae.air);
-              const ae_form = marks.map((mark) => mark.value_ae.form);
-              const ae_landing = marks.map((mark) => mark.value_ae.landing);
-
-              // CUT HIGHER MARKS
-              for (
-                let high = 0;
-                high < +this.result_formula.types[0].higher_marks;
-                high++
-              ) {
-                ae_air.splice(ae_air.indexOf(Math.max(...ae_air)), 1);
-                ae_form.splice(ae_form.indexOf(Math.max(...ae_form)), 1);
-                ae_landing.splice(
-                  ae_landing.indexOf(Math.max(...ae_landing)),
-                  1
-                );
-              }
-
-              // CUT LOWER MARKS
-              for (
-                let low = 0;
-                low < +this.result_formula.types[0].lower_marks;
-                low++
-              ) {
-                ae_air.splice(ae_air.indexOf(Math.min(...ae_air)), 1);
-                ae_form.splice(ae_form.indexOf(Math.min(...ae_form)), 1);
-                ae_landing.splice(
-                  ae_landing.indexOf(Math.min(...ae_landing)),
-                  1
-                );
-              }
+              const ae_air = cutMarks(
+                marks.map((mark) => mark.value_ae.air),
+                this.result_formula.types[0].higher_marks,
+                this.result_formula.types[0].lower_marks
+              );
+              const ae_form = cutMarks(
+                marks.map((mark) => mark.value_ae.form),
+                this.result_formula.types[0].higher_marks,
+                this.result_formula.types[0].lower_marks
+              );
+              const ae_landing = cutMarks(
+                marks.map((mark) => mark.value_ae.landing),
+                this.result_formula.types[0].higher_marks,
+                this.result_formula.types[0].lower_marks
+              );
 
               const resultArr = ae_air.concat(ae_form.concat(ae_landing));
 
@@ -601,11 +585,9 @@ export default class EventClass {
 
               return this.set_accuracy(
                 ae_coef *
-                  this.set_accuracy(
-                    resultArr.reduce((a, b) => {
-                      return +a + +b;
-                    }, 0)
-                  )
+                  resultArr.reduce((a, b) => {
+                    return +a + +b;
+                  }, 0)
               );
             },
           },
@@ -1058,7 +1040,7 @@ export default class EventClass {
   set_accuracy(val) {
     const accuracy = this.structure.accuracy[this.structure.selected.accuracy];
     if (typeof val === "string") return val;
-    let resultArray = (Math.round(accuracy.value * +val) / accuracy.value)
+    let resultArray = (Math.floor(accuracy.value * +val) / accuracy.value)
       .toString()
       .split(".");
     if (accuracy.digits > 0) {

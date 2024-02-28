@@ -21,18 +21,18 @@
 
       <div class="editFrame-body">
         <div
-          v-for="(field, f_key) in competition.competitorsSheet.header"
+          v-for="(field, f_key) in competitor.info_data"
           class="competitorDataUnit-row"
           :key="f_key"
         >
           <div class="competitorDataUnit-key">
-            {{ field.id }}
+            {{ f_key }}
           </div>
           <input
             class="competitorDataUnit-input"
             type="text"
-            @change="setDataValue($event, competitor, field)"
-            v-bind:value="competitor.info_data[field.id]"
+            @change="setDataValue($event, competitor, f_key)"
+            v-bind:value="competitor.info_data[f_key]"
           />
         </div>
       </div>
@@ -106,7 +106,7 @@ export default {
       this.updateEvent();
     },
     setDataValue(e, competitor, dataField) {
-      competitor.info_data[dataField.id] = e.target.value;
+      competitor.info_data[dataField] = e.target.value;
 
       this.updateEvent();
     },

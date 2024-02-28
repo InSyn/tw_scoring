@@ -30,8 +30,8 @@
       <v-btn
         :class="[
           'updater__btn',
-          updateCSV && 'updater-active',
-          updating && 'updater-updating',
+          fileTranslationService.updateData && 'updater-active',
+          fileTranslationService.updatingInProgress && 'updater-updating',
         ]"
         @click="setUpdater"
         color="var(--action-green)"
@@ -68,7 +68,10 @@ export default {
     ...mapActions("scoring_services", {
       setFileTranslationPath: "setFileTranslationService_path",
       setFileSeparation: "setFileSeparation",
-      setUpdater: "setFileUpdater",
+      setFileUpdater: "setFileUpdater",
+      clearFileUpdater: "clearFileUpdater",
+      switchFileUpdateService: "switchFileUpdateService",
+      switchUpdatingState: "switchUpdatingState",
     }),
 
     createCompetitorTranslationObj(competitor, competition, options) {
@@ -133,23 +136,35 @@ export default {
             );
           });
 
-          const jump_dd = parseFloat(
-            jumpObj ? jumpObj[`value_${competitorObject.group}`] : 0
+          const jump_name = jumpObj ? jumpObj["jump_name"] : " ";
+
+          const jump_dd = roundNumber(
+            jumpObj ? jumpObj[`value_${competitorObject.group}`] : 0,
+            3
           ).toFixed(3);
 
-          const jump_maxScore = parseFloat(
-            (competition.stuff.judges.length -
-              parseInt(competition.result_formula.types[0].higher_marks) -
-              parseInt(competition.result_formula.types[0].lower_marks)) *
-              10 *
-              jump_dd
+          const jump_maxScore = competition.set_accuracy(
+            parseFloat(
+              (competition.stuff.judges.length -
+                parseInt(competition.result_formula.types[0].higher_marks) -
+                parseInt(competition.result_formula.types[0].lower_marks)) *
+                10 *
+                jump_dd
+            )
           );
 
           competitorObject = {
             ...competitorObject,
-            [`jump${idx + 1}_code`]: jumpObj ? jumpObj.code : "nj",
+            [`jump${idx + 1}_code`]: jump_name,
             [`jump${idx + 1}_dd`]: jump_dd,
             [`jump${idx + 1}_maxScore`]: jump_maxScore,
+            [`jump${idx + 1}_animation`]: jumpObj
+              ? "C:\\\\animations\\" +
+                jumpObj.code +
+                "\\" +
+                jumpObj.code +
+                "00001.png"
+              : "nj",
           };
         });
       }
@@ -160,18 +175,11 @@ export default {
             (teamCompetitorId) => teamCompetitorId === competitor.id
           )
         );
-        if (!competitorTeam) {
-          competitorObject = {
-            ...competitorObject,
-            teamid: null,
-            teamname: null,
-          };
-        }
 
         competitorObject = {
           ...competitorObject,
-          teamid: competitorTeam.id,
-          teamname: competitorTeam.name,
+          teamid: competitorTeam ? competitorTeam.id : null,
+          teamname: competitorTeam ? competitorTeam.name : null,
         };
 
         if (options.forResults) {
@@ -217,7 +225,7 @@ export default {
       return competitorObject;
     },
     createTeamTranslationObj(team, competition, options) {
-      if (!team) throw new Error("No competitor passed");
+      if (!team) throw new Error("Unable to create team data object");
 
       const teamFlags = team.competitors.map((competitorId) => {
         const competitor = competition.competitorsSheet.competitors.find(
@@ -230,6 +238,21 @@ export default {
       });
       const teamFlag = teamFlags.length > 0 ? teamFlags[0] : "";
 
+      let teamCompetitors = {};
+      team.competitors.forEach((teamCompetitorId, idx) => {
+        const teamCompetitor = competition.competitorsSheet.competitors.find(
+          (competitor) => competitor.id === teamCompetitorId
+        );
+        if (!teamCompetitor) teamCompetitors[`team_competitor_${idx + 1}`] = "";
+
+        teamCompetitors[`team_competitor_${idx + 1}`] = teamCompetitor
+          .info_data["fullname"]
+          ? teamCompetitor.info_data["fullname"]
+          : teamCompetitor.info_data["lastname"] +
+            " " +
+            teamCompetitor.info_data["name"];
+      });
+
       const teamCompetitorsString = team.competitors
         .map((competitorId) => {
           const competitor = competition.competitorsSheet.competitors.find(
@@ -240,18 +263,18 @@ export default {
         .join(" | ");
 
       let teamObject = {
-        id: team.id || null,
-        bib: team.id || "0",
-        lastname: teamCompetitorsString || null,
-        name: team.name || null,
+        team_number: team.id || null,
+        team_name: team.name || null,
         flag: teamFlag,
+        competitors_string: teamCompetitorsString || null,
+        ...teamCompetitors,
       };
 
       if (options.forResults) {
         teamObject = {
           ...teamObject,
-          rank: team._index + 1,
-          result:
+          team_rank: team._index + 1,
+          team_result:
             competition.getTeamRaceResult(team, competition.selected_race) ||
             null,
         };
@@ -263,8 +286,8 @@ export default {
       if (!competitor) return null;
 
       const competitorNum = competitor.info_data["bib"] || 0;
-      const competitorName = competitor.info_data["name"] || "";
-      const competitorLastname = competitor.info_data["lastname"] || "";
+      const competitorName = competitor.info_data["name"] || "empty";
+      const competitorLastname = competitor.info_data["lastname"] || "empty";
 
       if (!(competitorNum && competitorName && competitorLastname)) return null;
 
@@ -476,28 +499,27 @@ export default {
     },
 
     setUpdater() {
-      if (!this.updateCSV) {
+      if (!this.fileTranslationService.updateData) {
         this.saveCSV();
-        this.updateCSV = true;
-        this.updater = setInterval(this.saveCSV, 1024);
+        this.switchFileUpdateService(true);
+        this.setFileUpdater(setInterval(this.saveCSV, 1024));
       } else {
-        this.updateCSV = false;
-        clearInterval(this.updater);
+        this.switchFileUpdateService(false);
+        this.clearFileUpdater();
       }
     },
 
     async saveCSV() {
       if (!this.competition || !this.competition.selected_race) {
-        this.updating = false;
+        await this.switchUpdatingState(false);
         return;
       }
 
-      this.updating = true;
+      await this.switchUpdatingState(true);
 
       if (this.fileTranslationService.separated) {
         if (this.competition.dualMoguls_mode) {
           const brackets = this.getDMBrackets();
-          console.log(brackets);
 
           await this.exportCSV({
             path: `${this.fileTranslationService.path}\\DMO Brackets`,
@@ -505,7 +527,7 @@ export default {
           });
 
           setTimeout(() => {
-            this.updating = false;
+            this.switchUpdatingState(false);
           }, 200);
           return;
         }
@@ -563,15 +585,12 @@ export default {
       }
 
       setTimeout(() => {
-        this.updating = false;
+        this.switchUpdatingState(false);
       }, 200);
     },
   },
   data() {
     return {
-      updateCSV: false,
-      updater: null,
-      updating: false,
       icons: {
         fileIcon: mdiFileOutline,
         fileMultipleIcon: mdiFileMultipleOutline,
@@ -585,9 +604,6 @@ export default {
     ...mapGetters("scoring_services", {
       fileTranslationService: "getFileTranslationService",
     }),
-  },
-  beforeDestroy() {
-    clearInterval(this.updater);
   },
 };
 </script>

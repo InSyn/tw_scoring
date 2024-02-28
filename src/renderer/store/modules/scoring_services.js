@@ -3,8 +3,10 @@ export default {
   state: {
     fileTranslationService: {
       path: "C:/TW_Translation",
-      separated: false,
+      separated: true,
+      updateData: false,
       updater_id: null,
+      updatingInProgress: false,
     },
   },
   getters: {
@@ -20,6 +22,15 @@ export default {
     SET_FILE_UPDATER: (state, value) => {
       state.fileTranslationService.updater_id = value;
     },
+    CLEAR_FILE_UPDATER: (state) => {
+      clearTimeout(state.fileTranslationService.updater_id);
+    },
+    SWITCH_FILE_UPDATE_SERVICE: (state, value) => {
+      state.fileTranslationService.updateData = value;
+    },
+    SWITCH_UPDATING_STATE: (state, value) => {
+      state.fileTranslationService.updatingInProgress = value;
+    },
   },
   actions: {
     setFileTranslationService_path: ({ commit }, path) => {
@@ -30,6 +41,15 @@ export default {
     },
     setFileUpdater: ({ commit }, value) => {
       commit("SET_FILE_UPDATER", value);
+    },
+    clearFileUpdater: ({ commit }) => {
+      commit("CLEAR_FILE_UPDATER");
+    },
+    switchFileUpdateService: ({ commit }, state) => {
+      commit("SWITCH_FILE_UPDATE_SERVICE", state);
+    },
+    switchUpdatingState: ({ commit }, state) => {
+      commit("SWITCH_UPDATING_STATE", state);
     },
   },
 };

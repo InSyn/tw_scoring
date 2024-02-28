@@ -51,10 +51,10 @@
 
       <div
         class="competitorRow__infoData_dataItem"
-        v-for="(field, f) in competitor ? competitor.info_data : []"
+        v-for="(field, f) in competition.competitorsSheet.header"
         :key="f"
       >
-        {{ field }}
+        {{ competitor.info_data[field.id] }}
       </div>
     </div>
   </div>

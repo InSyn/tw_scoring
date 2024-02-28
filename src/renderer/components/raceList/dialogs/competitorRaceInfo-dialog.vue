@@ -116,8 +116,8 @@ export default {
     "competition",
     "competitor",
     "selectedRace",
-    "dialogStateProp",
     "section",
+    "dialogStateProp",
   ],
   methods: {
     clearCompetitorRace(competitor, race) {
@@ -140,7 +140,7 @@ export default {
       if (!race.startList.includes(competitor.id))
         race.startList.unshift(competitor.id);
 
-      competitor.info_dialog.state = false;
+      this.dialogState = false;
 
       this.rebuildStartList(race);
     },
@@ -148,9 +148,7 @@ export default {
       this.$emit("rebuild-start-list", race);
     },
     removeCompetitor(competitor_id, _race) {
-      this.competition.competitorsSheet.competitors.find((_comp) => {
-        return _comp.id === competitor_id;
-      }).info_dialog.state = false;
+      this.dialogState = false;
 
       _race.startList = _race.startList.filter((_comp) => {
         return !(_comp === competitor_id);
@@ -172,8 +170,8 @@ export default {
       get() {
         return this.dialogStateProp;
       },
-      set(value) {
-        this.$emit("toggle-dialog-state", value);
+      set() {
+        this.$emit("toggle-dialog-state");
       },
     },
   },

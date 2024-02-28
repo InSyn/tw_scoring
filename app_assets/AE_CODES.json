@@ -1,726 +1,871 @@
 [
   {
     "code": "nj",
+    "jump_name": "",
     "value_women": "0.000",
     "value_men": "0.000"
   },
   {
     "code": "T",
+    "jump_name": "",
     "value_women": "1.650",
     "value_men": "1.650"
   },
   {
     "code": "M",
+    "jump_name": "",
     "value_women": "1.650",
     "value_men": "1.650"
   },
   {
     "code": "S",
+    "jump_name": "",
     "value_women": "1.700",
     "value_men": "1.700"
   },
   {
     "code": "D",
+    "jump_name": "",
     "value_women": "1.700",
     "value_men": "1.700"
   },
   {
     "code": "L",
+    "jump_name": "",
     "value_women": "1.700",
     "value_men": "1.700"
   },
   {
     "code": "H",
+    "jump_name": "",
     "value_women": "1.950",
     "value_men": "1.950"
   },
   {
     "code": "Z",
+    "jump_name": "",
     "value_women": "1.650",
     "value_men": "1.650"
   },
   {
     "code": "Y",
+    "jump_name": "",
     "value_women": "1.650",
     "value_men": "1.650"
   },
   {
     "code": "X",
+    "jump_name": "",
     "value_women": "1.650",
     "value_men": "1.650"
   },
   {
     "code": "K",
+    "jump_name": "",
     "value_women": "1.700",
     "value_men": "1.700"
   },
   {
     "code": "TT",
+    "jump_name": "",
     "value_women": "1.800",
     "value_men": "1.800"
   },
   {
     "code": "TS",
+    "jump_name": "",
     "value_women": "1.900",
     "value_men": "1.900"
   },
   {
     "code": "DT",
+    "jump_name": "",
     "value_women": "1.900",
     "value_men": "1.900"
   },
   {
     "code": "DD",
+    "jump_name": "",
     "value_women": "1.900",
     "value_men": "1.900"
   },
   {
     "code": "BK",
+    "jump_name": "",
     "value_women": "1.900",
     "value_men": "1.900"
   },
   {
     "code": "SS",
+    "jump_name": "",
     "value_women": "1.900",
     "value_men": "1.900"
   },
   {
     "code": "DS",
+    "jump_name": "",
     "value_women": "1.950",
     "value_men": "1.950"
   },
   {
     "code": "DSTS",
+    "jump_name": "",
     "value_women": "2.300",
     "value_men": "2.300"
   },
   {
     "code": "DDDD",
+    "jump_name": "",
     "value_women": "2.300",
     "value_men": "2.300"
   },
   {
     "code": "DDTTT",
+    "jump_name": "",
     "value_women": "2.400",
     "value_men": "2.400"
   },
   {
     "code": "DTTTZ",
+    "jump_name": "",
     "value_women": "2.400",
     "value_men": "2.400"
   },
   {
     "code": "3",
+    "jump_name": "",
     "value_women": "1.950",
     "value_men": "1.950"
   },
   {
     "code": "3DS",
+    "jump_name": "",
     "value_women": "2.400",
     "value_men": "2.400"
   },
   {
     "code": "7",
+    "jump_name": "",
     "value_women": "2.400",
     "value_men": "2.400"
   },
   {
     "code": "HDS",
+    "jump_name": "",
     "value_women": "2.400",
     "value_men": "2.400"
   },
   {
     "code": "HH",
+    "jump_name": "",
     "value_women": "2.400",
     "value_men": "2.400"
   },
   {
     "code": "7D",
+    "jump_name": "",
     "value_women": "2.600",
     "value_men": "2.600"
   },
   {
     "code": "HHD",
+    "jump_name": "",
     "value_women": "2.600",
     "value_men": "2.600"
   },
   {
     "code": "10",
+    "jump_name": "",
     "value_women": "2.850",
     "value_men": "2.850"
   },
   {
     "code": "HHH",
+    "jump_name": "",
     "value_women": "2.850",
     "value_men": "2.850"
   },
   {
     "code": "fT",
+    "jump_name": "",
     "value_women": "2.000",
     "value_men": "2.000"
   },
   {
     "code": "fP",
+    "jump_name": "",
     "value_women": "2.000",
     "value_men": "2.000"
   },
   {
     "code": "fL",
+    "jump_name": "",
     "value_women": "2.100",
     "value_men": "2.100"
   },
   {
     "code": "bT",
+    "jump_name": "Back Tuck",
     "value_women": "2.000",
     "value_men": "2.000"
   },
   {
     "code": "bP",
+    "jump_name": "Back Pike",
     "value_women": "2.000",
     "value_men": "2.000"
   },
   {
     "code": "bL",
+    "jump_name": "Back Lay",
     "value_women": "2.050",
     "value_men": "2.050"
   },
   {
     "code": "sT",
+    "jump_name": "",
     "value_women": "2.000",
     "value_men": "2.000"
   },
   {
     "code": "sP",
+    "jump_name": "",
     "value_women": "2.000",
     "value_men": "2.000"
   },
   {
     "code": "sL",
+    "jump_name": "",
     "value_women": "2.100",
     "value_men": "2.100"
   },
   {
     "code": "fTT",
+    "jump_name": "",
     "value_women": "2.600",
     "value_men": "2.600"
   },
   {
     "code": "fPP",
+    "jump_name": "",
     "value_women": "2.600",
     "value_men": "2.600"
   },
   {
     "code": "fTP",
+    "jump_name": "",
     "value_women": "2.600",
     "value_men": "2.600"
   },
   {
     "code": "fLT",
+    "jump_name": "",
     "value_women": "2.700",
     "value_men": "2.700"
   },
   {
     "code": "fLL",
+    "jump_name": "",
     "value_women": "2.800",
     "value_men": "2.800"
   },
   {
     "code": "bTT",
+    "jump_name": "Back Tuck-Tuck",
     "value_women": "2.550",
     "value_men": "2.550"
   },
   {
     "code": "bPP",
+    "jump_name": "",
     "value_women": "2.550",
     "value_men": "2.550"
   },
   {
     "code": "bTP",
+    "jump_name": "",
     "value_women": "2.550",
     "value_men": "2.550"
   },
   {
     "code": "bLT",
+    "jump_name": "Back Lay–Tuck",
     "value_women": "2.600",
     "value_men": "2.600"
   },
   {
     "code": "bLP",
+    "jump_name": "Back Lay-Pike",
     "value_women": "2.600",
     "value_men": "2.600"
   },
   {
     "code": "bLL",
+    "jump_name": "Back Lay-Lay",
     "value_women": "2.650",
     "value_men": "2.650"
   },
   {
     "code": "fTTT",
+    "jump_name": "",
     "value_women": "3.300",
     "value_men": "3.300"
   },
   {
     "code": "fPPP",
+    "jump_name": "",
     "value_women": "3.300",
     "value_men": "3.300"
   },
   {
     "code": "fLTT",
+    "jump_name": "",
     "value_women": "3.400",
     "value_men": "3.400"
   },
   {
     "code": "fLLT",
+    "jump_name": "",
     "value_women": "3.500",
     "value_men": "3.500"
   },
   {
     "code": "fLLL",
+    "jump_name": "",
     "value_women": "3.600",
     "value_men": "3.600"
   },
   {
     "code": "bTTT",
+    "jump_name": "",
     "value_women": "3.150",
     "value_men": "3.150"
   },
   {
     "code": "bPPP",
+    "jump_name": "",
     "value_women": "3.150",
     "value_men": "3.150"
   },
   {
     "code": "bLTT",
+    "jump_name": "Back Lay-Tuck-Tuck",
     "value_women": "3.200",
     "value_men": "3.200"
   },
   {
     "code": "bLLT",
+    "jump_name": "",
     "value_women": "3.250",
     "value_men": "3.250"
   },
   {
     "code": "bLTL",
+    "jump_name": "",
     "value_women": "3.250",
     "value_men": "3.250"
   },
   {
     "code": "bLLL",
+    "jump_name": "",
     "value_women": "3.300",
     "value_men": "3.300"
   },
   {
     "code": "fF",
+    "jump_name": "",
     "value_women": "2.400",
     "value_men": "2.400"
   },
   {
     "code": "fdF",
+    "jump_name": "",
     "value_women": "2.900",
     "value_men": "2.900"
   },
   {
     "code": "bF",
+    "jump_name": "Back Full",
     "value_women": "2.300",
     "value_men": "2.300"
   },
   {
     "code": "bdF",
+    "jump_name": "Back Double Full",
     "value_women": "2.675",
     "value_men": "2.675"
   },
   {
     "code": "btF",
+    "jump_name": "",
     "value_women": "3.150",
     "value_men": "3.150"
   },
   {
     "code": "fHH",
+    "jump_name": "",
     "value_women": "3.000",
     "value_men": "3.000"
   },
   {
     "code": "fHIH",
+    "jump_name": "",
     "value_women": "3.100",
     "value_men": "3.100"
   },
   {
     "code": "fFT",
+    "jump_name": "",
     "value_women": "3.000",
     "value_men": "3.000"
   },
   {
     "code": "fFL",
+    "jump_name": "",
     "value_women": "3.100",
     "value_men": "3.100"
   },
   {
     "code": "fFF",
+    "jump_name": "",
     "value_women": "3.400",
     "value_men": "3.400"
   },
   {
     "code": "fTdF",
+    "jump_name": "",
     "value_women": "3.500",
     "value_men": "3.500"
   },
   {
     "code": "fLdF",
+    "jump_name": "",
     "value_women": "3.600",
     "value_men": "3.600"
   },
   {
     "code": "bHH",
+    "jump_name": "",
     "value_women": "2.850",
     "value_men": "2.850"
   },
   {
     "code": "bHIH",
+    "jump_name": "",
     "value_women": "2.900",
     "value_men": "2.900"
   },
   {
     "code": "bFT",
+    "jump_name": "Back Full-Tuck",
     "value_women": "2.850",
     "value_men": "2.850"
   },
   {
     "code": "bFP",
+    "jump_name": "",
     "value_women": "2.850",
     "value_men": "2.850"
   },
   {
     "code": "bTF",
+    "jump_name": "",
     "value_women": "2.850",
     "value_men": "2.850"
   },
   {
     "code": "bFL",
+    "jump_name": "",
     "value_women": "2.900",
     "value_men": "2.900"
   },
   {
     "code": "bLF",
+    "jump_name": "Back Lay-Full",
     "value_women": "2.900",
     "value_men": "2.900"
   },
   {
     "code": "bFF",
+    "jump_name": "Back Full-Full",
     "value_women": "3.150",
     "value_men": "3.150"
   },
   {
     "code": "bRuH",
+    "jump_name": "",
     "value_women": "3.175",
     "value_men": "3.175"
   },
   {
     "code": "bHRu",
+    "jump_name": "",
     "value_women": "3.175",
     "value_men": "3.175"
   },
   {
     "code": "bHIRu",
+    "jump_name": "",
     "value_women": "3.225",
     "value_men": "3.225"
   },
   {
     "code": "bTdF",
+    "jump_name": "",
     "value_women": "3.225",
     "value_men": "3.225"
   },
   {
     "code": "bLdF",
+    "jump_name": "Back Lay-Double Full",
     "value_women": "3.275",
     "value_men": "3.275"
   },
   {
     "code": "bdFT",
+    "jump_name": "Back Double Full-Tuck",
     "value_women": "3.225",
     "value_men": "3.225"
   },
   {
     "code": "bdFL",
+    "jump_name": "",
     "value_women": "3.275",
     "value_men": "3.275"
   },
   {
     "code": "bFdF",
+    "jump_name": "Back Full-Double Full",
     "value_women": "3.525",
     "value_men": "3.525"
   },
   {
     "code": "bdFF",
+    "jump_name": "Back Double Full-Full",
     "value_women": "3.525",
     "value_men": "3.525"
   },
   {
     "code": "bRuRu",
+    "jump_name": "",
     "value_women": "3.500",
     "value_men": "3.500"
   },
   {
     "code": "bHRa",
+    "jump_name": "",
     "value_women": "3.625",
     "value_men": "3.625"
   },
   {
     "code": "bHIRa",
+    "jump_name": "",
     "value_women": "3.625",
     "value_men": "3.625"
   },
   {
     "code": "bRaH",
+    "jump_name": "",
     "value_women": "3.550",
     "value_men": "3.550"
   },
   {
     "code": "bLtF",
+    "jump_name": "Back Lay-Triple Full",
     "value_women": "3.750",
     "value_men": "3.750"
   },
   {
     "code": "btFL",
+    "jump_name": "",
     "value_women": "3.750",
     "value_men": "3.750"
   },
   {
     "code": "bdFdF",
+    "jump_name": "Back Double Full-Double Full",
     "value_women": "3.900",
     "value_men": "3.900"
   },
   {
     "code": "bRuRa",
+    "jump_name": "",
     "value_women": "3.925",
     "value_men": "3.925"
   },
   {
     "code": "bFtF",
+    "jump_name": "Back Full-Triple Full",
     "value_women": "4.000",
     "value_men": "4.000"
   },
   {
     "code": "bRuH",
+    "jump_name": "",
     "value_women": "3.200",
     "value_men": "3.200"
   },
   {
     "code": "fFTT",
+    "jump_name": "",
     "value_women": "3.922",
     "value_men": "3.700"
   },
   {
     "code": "fFFT",
+    "jump_name": "",
     "value_women": "4.346",
     "value_men": "4.100"
   },
   {
     "code": "bLHH",
+    "jump_name": "",
     "value_women": "3.710",
     "value_men": "3.500"
   },
   {
     "code": "bLHIH",
+    "jump_name": "",
     "value_women": "3.763",
     "value_men": "3.550"
   },
   {
     "code": "bHTH",
+    "jump_name": "",
     "value_women": "3.657",
     "value_men": "3.450"
   },
   {
     "code": "bHITH",
+    "jump_name": "",
     "value_women": "3.710",
     "value_men": "3.500"
   },
   {
     "code": "bFTT",
+    "jump_name": "",
     "value_women": "3.657",
     "value_men": "3.450"
   },
   {
     "code": "bLFT",
+    "jump_name": "Back Lay-Full-Tuck",
     "value_women": "3.710",
     "value_men": "3.500"
   },
   {
     "code": "bLTF",
+    "jump_name": "Back Lay-Tuck-Full",
     "value_women": "3.710",
     "value_men": "3.500"
   },
   {
     "code": "bLLF",
+    "jump_name": "",
     "value_women": "3.763",
     "value_men": "3.550"
   },
   {
     "code": "bHHF",
+    "jump_name": "",
     "value_women": "3.975",
     "value_men": "3.750"
   },
   {
     "code": "bHFH",
+    "jump_name": "",
     "value_women": "3.975",
     "value_men": "3.750"
   },
   {
     "code": "bFHH",
+    "jump_name": "",
     "value_women": "3.975",
     "value_men": "3.750"
   },
   {
     "code": "bHIHF",
+    "jump_name": "",
     "value_women": "4.028",
     "value_men": "3.800"
   },
   {
     "code": "bHIFH",
+    "jump_name": "",
     "value_women": "4.028",
     "value_men": "3.800"
   },
   {
     "code": "bFHIH",
+    "jump_name": "",
     "value_women": "4.028",
     "value_men": "3.800"
   },
   {
     "code": "bFFT",
+    "jump_name": "",
     "value_women": "3.975",
     "value_men": "3.750"
   },
   {
     "code": "bFTF",
+    "jump_name": "Back Full-Tuck-Full",
     "value_women": "3.975",
     "value_men": "3.750"
   },
   {
     "code": "bLFF",
+    "jump_name": "Back Lay-Full-Full",
     "value_women": "4.028",
     "value_men": "3.800"
   },
   {
     "code": "bRuTH",
+    "jump_name": "",
     "value_women": "4.081",
     "value_men": "3.850"
   },
   {
     "code": "bFFF",
+    "jump_name": "Back Full-Full-Full",
     "value_women": "4.293",
     "value_men": "4.050"
   },
   {
     "code": "bRuFH",
+    "jump_name": "",
     "value_women": "4.399",
     "value_men": "4.150"
   },
   {
     "code": "bHRuF",
+    "jump_name": "",
     "value_women": "4.346",
     "value_men": "4.100"
   },
   {
     "code": "bHIRuF",
+    "jump_name": "",
     "value_women": "4.373",
     "value_men": "4.125"
   },
   {
     "code": "bFdFT",
+    "jump_name": "Back Full-Double Full-Tuck",
     "value_women": "4.373",
     "value_men": "4.125"
   },
   {
     "code": "bRuTRu",
+    "jump_name": "",
     "value_women": "4.346",
     "value_men": "4.100"
   },
   {
     "code": "bHRaT",
+    "jump_name": "",
     "value_women": "4.426",
     "value_men": "4.175"
   },
   {
     "code": "bHIRaT",
+    "jump_name": "",
     "value_women": "4.479",
     "value_men": "4.225"
   },
   {
     "code": "bHRaL",
+    "jump_name": "",
     "value_women": "4.532",
     "value_men": "4.275"
   },
   {
     "code": "bHIRaL",
+    "jump_name": "",
     "value_women": "4.532",
     "value_men": "4.275"
   },
   {
     "code": "bFdFF",
+    "jump_name": "Back Full-Double Full-Full",
     "value_women": "4.691",
     "value_men": "4.425"
   },
   {
     "code": "bLdFF",
+    "jump_name": "Back Lay-Double Full-Full",
     "value_women": "4.426",
     "value_men": "4.175"
   },
   {
     "code": "bRuRuF",
+    "jump_name": "",
     "value_women": "4.717",
     "value_men": "4.450"
   },
   {
     "code": "bdFFF",
+    "jump_name": "Back Double Full-Full-Full",
     "value_women": "4.797",
     "value_men": "4.525"
   },
   {
     "code": "bFFdF",
+    "jump_name": "Back Full-Full-Double Full",
     "value_women": "4.797",
     "value_men": "4.525"
   },
   {
     "code": "bHRaF",
+    "jump_name": "",
     "value_women": "4.797",
     "value_men": "4.525"
   },
   {
     "code": "bHIRaF",
+    "jump_name": "",
     "value_women": "4.797",
     "value_men": "4.525"
   },
   {
     "code": "bFdFdF",
+    "jump_name": "Back Full-double Full-Double Full",
     "value_women": "5.406",
     "value_men": "5.100"
   },
   {
     "code": "bFtFT",
+    "jump_name": "",
     "value_women": "4.876",
     "value_men": "4.600"
   },
   {
     "code": "bLtFF",
+    "jump_name": "Back Lay-Triple Full-Full",
     "value_women": "4.929",
     "value_men": "4.650"
   },
   {
     "code": "bdFdFF",
+    "jump_name": "Back Double Full-Double Full-Full",
     "value_women": "5.406",
     "value_men": "5.100"
   },
   {
     "code": "bRuRaF",
+    "jump_name": "",
     "value_women": "5.168",
     "value_men": "4.875"
   },
   {
     "code": "btFFF",
+    "jump_name": "",
     "value_women": "5.406",
     "value_men": "5.100"
   },
   {
     "code": "bdFFdF",
+    "jump_name": "Back Double Full-Full-Double Full",
     "value_women": "5.300",
     "value_men": "5.000"
   }

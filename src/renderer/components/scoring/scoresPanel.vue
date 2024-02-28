@@ -542,7 +542,7 @@ export default {
         return this.competition.set_accuracy(0);
       }
 
-      return this.competition.set_accuracy(result);
+      return result;
     },
     pushMarks() {
       if (
