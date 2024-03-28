@@ -36,7 +36,7 @@ export default {
       );
       if (!competitor) return "Участник не найден";
 
-      return `Gap: ${run[`${course}CourseGap`]} |
+      return `${competitor.info_data["bib"]} Gap: ${run[`${course}CourseGap`]} |
       Result: ${this.competition.getResult(competitor.id)}`;
     },
   },

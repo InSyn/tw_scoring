@@ -277,13 +277,13 @@
   },
   {
     "code": "bPP",
-    "jump_name": "",
+    "jump_name": "Back Pike-Pike",
     "value_women": "2.550",
     "value_men": "2.550"
   },
   {
     "code": "bTP",
-    "jump_name": "",
+    "jump_name": "Back Tuck-Pike",
     "value_women": "2.550",
     "value_men": "2.550"
   },
@@ -350,7 +350,7 @@
   {
     "code": "bLTT",
     "jump_name": "Back Lay-Tuck-Tuck",
-    "value_women": "3.200",
+    "value_women": "3.392",
     "value_men": "3.200"
   },
   {
@@ -397,7 +397,7 @@
   },
   {
     "code": "btF",
-    "jump_name": "",
+    "jump_name": "Back Triple Full",
     "value_women": "3.150",
     "value_men": "3.150"
   },
@@ -788,13 +788,13 @@
   {
     "code": "bFdFF",
     "jump_name": "Back Full-Double Full-Full",
-    "value_women": "4.691",
+    "value_women": "4.690",
     "value_men": "4.425"
   },
   {
     "code": "bLdFF",
     "jump_name": "Back Lay-Double Full-Full",
-    "value_women": "4.426",
+    "value_women": "4.425",
     "value_men": "4.175"
   },
   {
@@ -806,13 +806,13 @@
   {
     "code": "bdFFF",
     "jump_name": "Back Double Full-Full-Full",
-    "value_women": "4.797",
+    "value_women": "4.796",
     "value_men": "4.525"
   },
   {
     "code": "bFFdF",
     "jump_name": "Back Full-Full-Double Full",
-    "value_women": "4.797",
+    "value_women": "4.796",
     "value_men": "4.525"
   },
   {
@@ -868,5 +868,53 @@
     "jump_name": "Back Double Full-Full-Double Full",
     "value_women": "5.300",
     "value_men": "5.000"
+  },
+  {
+    "code": "bTTs",
+    "jump_name": "",
+    "value_women": "2.300",
+    "value_men": "2.300"
+  },
+  {
+    "code": "btFF",
+    "jump_name": "",
+    "value_women": "4.000",
+    "value_men": "4.000"
+  },
+  {
+    "code": "bLPF",
+    "jump_name": "",
+    "value_women": "3.710",
+    "value_men": "3.500"
+  },
+  {
+    "code": "bLFdF",
+    "jump_name": "",
+    "value_women": "4.531",
+    "value_men": "4.275"
+  },
+  {
+    "code": "bFtFF",
+    "jump_name": "",
+    "value_women": "5.512",
+    "value_men": "5.200"
+  },
+  {
+    "code": "bFFtF",
+    "jump_name": "",
+    "value_women": "5.618",
+    "value_men": "5.300"
+  },
+  {
+    "code": "bdFdFdF",
+    "jump_name": "",
+    "value_women": "6.0155",
+    "value_men": "5.675"
+  },
+  {
+    "code": "bFtFdF",
+    "jump_name": "",
+    "value_women": "6.1215",
+    "value_men": "5.755"
   }
 ]

@@ -6,6 +6,7 @@
     style="
       position: relative;
       min-width: 200px;
+      max-width: 320px;
       margin-left: 0.5rem;
       border-radius: 4px;
       z-index: 1001;
@@ -22,6 +23,8 @@
           display: flex;
           align-items: center;
           flex-wrap: nowrap;
+          max-width: 100%;
+          overflow: hidden;
           font-weight: bold;
           border-radius: 6px;
           white-space: nowrap;

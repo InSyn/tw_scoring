@@ -263,7 +263,9 @@ export default {
     createRace() {
       let race,
         params = {
-          title: this.dialogRaceTitle,
+          title:
+            this.dialogRaceTitle ||
+            `Заезд ${this.competition.races.length + 1}`,
           type: this.competition.structure.types[
             this.competition.structure.selected.type
           ],

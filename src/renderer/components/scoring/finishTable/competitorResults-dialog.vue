@@ -1,35 +1,43 @@
 <template>
   <v-dialog v-model="dialog_state" width="fit-content">
     <template v-slot:activator="{ on }">
-      <v-row v-on="on" no-gutters class="finishedCompetitor__wrapper">
-        <v-col
+      <div v-on="on" class="finishedCompetitor__wrapper">
+        <div
+          @click="console.log(competitor)"
           class="d-flex justify-center align-center"
-          style="max-width: 5rem"
-          >{{ (competitor.rank && competitor.rank) || 0 }}
-        </v-col>
-        <v-col
+          style="flex: 1 1 0; max-width: 5rem; padding: 4px"
+        >
+          {{ (competitor.rank && competitor.rank) || 0 }}
+        </div>
+        <div
           class="d-flex justify-center align-center"
-          style="max-width: 5rem"
-          >{{ `${competitor.info_data.bib}` }}
-        </v-col>
-        <v-col class="d-flex align-center" style="max-width: 16rem"
-          >{{ `${competitor.info_data.lastname} ${competitor.info_data.name}` }}
-        </v-col>
-        <v-col
+          style="flex: 1 1 0; max-width: 5rem; padding: 4px"
+        >
+          {{ `${competitor.info_data.bib}` }}
+        </div>
+        <div
+          class="d-flex align-center"
+          style="flex: 1 1 0; max-width: 16rem; padding: 4px"
+        >
+          {{ `${competitor.info_data.lastname} ${competitor.info_data.name}` }}
+        </div>
+        <div
           class="d-flex justify-center align-center"
-          style="max-width: 5rem"
+          style="flex: 1 1 0; max-width: 5rem; padding: 4px"
           v-for="(race, rr) in competition.races"
           :key="rr"
-          >{{ `${competition.getRaceResult(competitor, race)}` }}
-        </v-col>
+        >
+          {{ `${competition.getRaceResult(competitor, race)}` }}
+        </div>
         <v-spacer></v-spacer>
-        <v-col
+        <div
           class="d-flex justify-center align-center"
           :class="checkTie(competitor) && 'resultTie'"
-          style="max-width: 5rem"
-          >{{ competition.getResult(competitor.id) }}
-        </v-col>
-      </v-row>
+          style="flex: 1 1 0; max-width: 5rem; padding: 4px"
+        >
+          {{ competition.getResult(competitor.id) }}
+        </div>
+      </div>
     </template>
 
     <v-card
@@ -121,6 +129,16 @@
                   "
                 />
               </div>
+
+              <div v-if="competition.is_moguls" class="mgMarks__wrapper">
+                <input
+                  v-for="(mgMark, mgMarkKey) in mark.moguls_value"
+                  :key="`${mark.id}_${mgMarkKey}`"
+                  v-model.lazy="mark.moguls_value[mgMarkKey]"
+                  class="mgMark__value"
+                />
+              </div>
+
               <div v-else class="classicMarks__wrapper ml-auto">
                 <input
                   type="text"
@@ -153,6 +171,58 @@
               </div>
             </div>
           </div>
+
+          <div
+            v-if="competition.is_moguls && getCompetitorResult(race)"
+            class="mogulsParams__wrapper"
+          >
+            <div class="mgParam__wrapper">
+              <span style="font-weight: bold">Jump 1 code</span>
+              <input
+                v-model.lazy="getCompetitorResult(race).mgRunParams.jump1_code"
+                style="
+                  min-width: 0;
+                  width: 5rem;
+                  margin-left: 8px;
+                  padding: 4px 6px;
+                  color: var(--text-default);
+                  background: var(--standard-background);
+                  border-radius: 6px;
+                "
+              />
+            </div>
+            <div class="mgParam__wrapper">
+              <span style="font-weight: bold">Jump 2 code</span>
+              <input
+                v-model.lazy="getCompetitorResult(race).mgRunParams.jump2_code"
+                style="
+                  min-width: 0;
+                  width: 5rem;
+                  margin-left: 8px;
+                  padding: 4px 6px;
+                  color: var(--text-default);
+                  background: var(--standard-background);
+                  border-radius: 6px;
+                "
+              />
+            </div>
+            <div class="mgParam__wrapper">
+              <span style="font-weight: bold">Run Time</span>
+              <input
+                v-model.lazy="getCompetitorResult(race).mgRunParams.runTime"
+                style="
+                  min-width: 0;
+                  width: 5rem;
+                  margin-left: 8px;
+                  padding: 4px 6px;
+                  color: var(--text-default);
+                  background: var(--standard-background);
+                  border-radius: 6px;
+                "
+              />
+            </div>
+          </div>
+
           <div
             v-if="
               competition.is_aerials &&
@@ -360,7 +430,7 @@
             <div
               style="font-size: 1.4rem; font-weight: bold; margin-left: 1rem"
             >
-              {{ competition.set_accuracy(getOverall(competitor)) }}
+              {{ getOverall(competitor) }}
             </div>
           </div>
         </div>
@@ -428,11 +498,15 @@ export default {
       const overall = competitor.results_overall.find(
         (overall) => overall.competition_id === this.competition.id
       );
-      return overall
-        ? overall.status
-          ? overall.status
-          : this.competition.set_accuracy(overall.value)
-        : 0;
+      return overall ? (overall.status ? overall.status : overall.value) : 0;
+    },
+    getCompetitorResult(race) {
+      const result = this.competitor.results.find(
+        (result) => result.race_id === race.id
+      );
+      if (!result) return;
+
+      return result;
     },
     setCompetitorRaceStatus(status, competitor, race) {
       const result = competitor.results.find((res) => res.race_id === race.id);
@@ -490,10 +564,9 @@ export default {
           competitor: competitor,
           race_id: race.id,
           ae_code: result ? result.jump_code : null,
+          mg_parameters: result ? { ...result.mgRunParams } : null,
           sjDistance: result ? result.sjDistance : null,
           sjRamp: result ? result.sjRamp : null,
-          mgTime: result ? result.mgTime : null,
-          mgCode: result ? result.mgCode : null,
         });
       });
 
@@ -519,13 +592,19 @@ export default {
       localization: "localization",
     }),
     ...mapGetters("main", { appTheme: "appTheme" }),
+    ...mapGetters("moguls", {
+      mgParameters: "getMgParameters",
+      mgRunData: "getMgRunData",
+    }),
   },
 };
 </script>
 
 <style scoped>
 .finishedCompetitor__wrapper {
-  height: 2rem;
+  flex: 0 0 auto;
+  display: flex;
+  flex-wrap: nowrap;
   cursor: pointer;
   border-bottom: 1px solid var(--standard-background);
 }
@@ -533,9 +612,36 @@ export default {
   background: var(--subject-background);
 }
 
+.mgMarks__wrapper {
+  display: flex;
+  flex-wrap: nowrap;
+}
+.mgMark__value {
+  flex: 0 0 auto;
+  min-width: 0;
+  width: 3.75rem;
+  padding: 3px 6px;
+  border-radius: 4px;
+  color: var(--text-default);
+  background: var(--standard-background);
+  font-weight: bold;
+}
+.mgMark__value:not(:last-child) {
+  margin-right: 4px;
+}
+
 /*noinspection CssUnusedSymbol*/
 .resultTie {
   color: var(--error);
   font-weight: bold;
+}
+
+.mogulsParams__wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 8px;
+}
+.mgParam__wrapper {
+  flex: 0 0 auto;
 }
 </style>

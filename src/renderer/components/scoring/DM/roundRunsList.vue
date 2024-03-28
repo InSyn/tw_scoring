@@ -2,27 +2,49 @@
   <div class="roundRuns__container">
     <div class="roundRuns__wrapper">
       <div class="nextRun__wrapper">
-        <div v-if="!nextRun" class="emptyRun">Проезд не выбран</div>
+        <div
+          v-if="
+            !competition.selected_race &&
+            !competition.selected_race.selectedCompetitor
+          "
+          class="emptyRun"
+        >
+          Проезд не выбран
+        </div>
 
-        <div v-else class="nextRun__controls">
+        <div v-else-if="competition.selected_race" class="nextRun__controls">
           <div class="runPrefix">
-            {{ `RUN ${nextRun.number}` }}
+            {{
+              `RUN ${
+                getRunById(competition.selected_race.selectedCompetitor).number
+              }`
+            }}
             <arrow-icon class="arrow-icon"></arrow-icon>
           </div>
 
           <div class="nextRunParticipants">
             <div class="nextRunParticipant course-blue">
-              {{ getCompetitorInfoById(nextRun.blueCourse) }}
+              {{
+                getCompetitorInfoById(
+                  getRunById(competition.selected_race.selectedCompetitor)
+                    .blueCourse
+                )
+              }}
             </div>
             <div class="nextRunParticipant course-red">
-              {{ getCompetitorInfoById(nextRun.redCourse) }}
+              {{
+                getCompetitorInfoById(
+                  getRunById(competition.selected_race.selectedCompetitor)
+                    .redCourse
+                )
+              }}
             </div>
           </div>
 
           <v-btn
-            @click="startNextRun()"
+            @click="startNextRun"
             class="startNextRun__button"
-            :disabled="!this.nextRun"
+            :disabled="!competition.selected_race.selectedCompetitor"
             color="var(--accent)"
             text
             small
@@ -36,7 +58,7 @@
         <div
           v-for="run in getFilteredRoundRuns"
           :key="`run_${run.number}`"
-          @dblclick="setNextRun(run)"
+          @dblclick="setNextRun(run.id)"
           class="runList__item"
           tabindex="0"
         >
@@ -59,16 +81,27 @@
 import ArrowIcon from "../../../assets/icons/arrow-icon.vue";
 import { initTerminalData_judge } from "../../../store/terminalFunctions";
 import TimerClass from "../../../store/Classes/TimerClass";
+import { mapActions } from "vuex";
 
 export default {
   name: "roundRunsList",
   components: { ArrowIcon },
   props: ["competition"],
   mounted() {
-    if (this.getFilteredRoundRuns.length > 0)
-      this.nextRun = this.getFilteredRoundRuns[0];
+    if (this.getFilteredRoundRuns.length > 0) {
+      const firstRun = this.getFilteredRoundRuns[0];
+      if (!firstRun) return;
+
+      this.setNextRun(firstRun.id);
+
+      this.competition.selected_race.selectedCompetitor = firstRun.id;
+      console.log(this.competition.selected_race.selectedCompetitor);
+    }
   },
   methods: {
+    ...mapActions("main", {
+      updateEvent: "updateEvent",
+    }),
     getCompetitorInfoById(competitorId) {
       const competitor = this.competition.competitorsSheet.competitors.find(
         (competitor) => competitor.id === competitorId
@@ -77,24 +110,58 @@ export default {
 
       return `${competitor.info_data["bib"]} ${competitor.info_data["lastname"]} ${competitor.info_data["name"]}`;
     },
+    getRunById(id) {
+      const emptyRun = {
+        number: null,
+        competitors: null,
+        blueCourse: null,
+        redCourse: null,
+        timer: null,
+        runTime: null,
+        blueCourseGap: null,
+        redCourseGap: null,
+      };
+      if (!this.competition.selected_race) return emptyRun;
+
+      const run = this.competition.selected_race.runs.find(
+        (run) => run.id === id
+      );
+      if (!run) return emptyRun;
+
+      return run;
+    },
     setNextRun(run) {
-      this.nextRun = run;
+      if (!this.competition.selected_race) return;
+      this.competition.selected_race.selectedCompetitor = run;
     },
     startNextRun() {
       if (this.competition.selected_race.onTrack) {
-        this.competition.selected_race.onTrack.timer = null;
+        const prevRun = this.getRunById(this.competition.selected_race.onTrack);
+        if (!prevRun) return;
+
+        prevRun.timer = null;
       }
 
-      this.competition.selected_race.onTrack = this.nextRun;
-      this.competition.selected_race.onTrack.timer = new TimerClass(
+      this.competition.selected_race.onTrack =
+        this.competition.selected_race.selectedCompetitor;
+
+      const currentRun = this.getRunById(
         this.competition.selected_race.onTrack
       );
+      if (!currentRun) return;
 
-      this.sendTerminalsData(this.nextRun);
+      currentRun.timer = new TimerClass(currentRun);
 
-      if (this.getFilteredRoundRuns.length > 0)
-        this.nextRun = this.getFilteredRoundRuns[0];
-      else this.nextRun = null;
+      this.sendTerminalsData(currentRun);
+
+      if (this.getFilteredRoundRuns.length > 0) {
+        const firstRun = this.getFilteredRoundRuns[0];
+        if (!firstRun) return;
+
+        this.competition.selected_race.selectedCompetitor = firstRun.id;
+      } else this.competition.selected_race.selectedCompetitor = null;
+
+      this.updateEvent();
     },
     sendTerminalsData(data) {
       const blueCourseCompetitor =
@@ -118,31 +185,21 @@ export default {
       initTerminalData_judge(terminalPackage_judge);
     },
   },
-  data() {
-    return {
-      nextRun: null,
-    };
-  },
   computed: {
     getFilteredRoundRuns() {
       if (!this.competition.selected_race) return [];
 
+      const activeRunObj = this.competition.selected_race.runs.find(
+        (run) => run.id === this.competition.selected_race.onTrack
+      );
+
       return this.competition.selected_race.runs.filter((roundRun) => {
-        if (
-          this.nextRun &&
-          roundRun.number.toString() === this.nextRun.number.toString()
-        )
-          return false;
-
-        if (
-          this.competition.selected_race.onTrack &&
-          roundRun.number.toString() ===
-            this.competition.selected_race.onTrack.number.toString()
-        )
-          return false;
-
-        return !this.competition.selected_race.finished.some(
-          (finishedRun) => finishedRun === roundRun.id
+        return (
+          roundRun.id !== this.competition.selected_race.selectedCompetitor &&
+          !(activeRunObj && roundRun.id === activeRunObj.id) &&
+          !this.competition.selected_race.finished.some(
+            (finishedRun) => finishedRun === roundRun.id
+          )
         );
       });
     },

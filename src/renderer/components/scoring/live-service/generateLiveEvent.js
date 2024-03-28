@@ -141,7 +141,9 @@ export const generateLiveEvent = (
     title: event.event_title,
     sport: event.sport,
     discipline: competitions[0].mainData.discipline.value,
-    created_at: new Date().toUTCString(),
+    created_at: new Date(
+      `${competitions[0].mainData.date.value}:${competitions[0].mainData.date.time}`
+    ).toUTCString(),
     start_at: new Date(
       `${competitions[0].mainData.date.value}:${competitions[0].mainData.date.time}`
     ).toUTCString(),

@@ -52,7 +52,7 @@ export default {
       {
         icon: "",
         title: "Jumps",
-        link: "aeCodes",
+        link: "jumpCodes",
       },
     ],
     appTheme: "dark",
@@ -491,7 +491,10 @@ export default {
         jsonData,
         { encoding: "utf-8" },
         (err) => {
-          if (err) console.error(err);
+          if (err) {
+            if (err.code === "EBUSY") return;
+            throw new Error(err.message);
+          }
         }
       );
 
@@ -645,7 +648,14 @@ export default {
     setPort: ({ commit }, port) => {
       commit("SET_PORT", port);
     },
-    updateEvent: ({ commit }) => commit("updateEvent"),
+    updateEvent: ({ commit }) => {
+      try {
+        commit("updateEvent");
+      } catch (err) {
+        console.log("err");
+        throw new Error(err.message);
+      }
+    },
     xml_export: async (s, data) => {
       const object = data[0],
         competition = data[1];

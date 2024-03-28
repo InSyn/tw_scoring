@@ -127,6 +127,11 @@ export default {
       competitor.results = competitor.results.filter(
         (result) => result.race_id !== race.id
       );
+      competitor.results_overall = competitor.results_overall.filter(
+        (overallResult) => overallResult.competition_id !== this.competition.id
+      );
+
+      this.competition.calculateOverallResult(competitor);
 
       race.finished = race.finished.filter(
         (_competitor) => _competitor !== competitor.id

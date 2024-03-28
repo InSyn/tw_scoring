@@ -1,5 +1,4 @@
 export const stringifyInfoMsg = (competition, msg) => {
-  console.log(msg);
   const competitor = competition.competitorsSheet.competitors.find(
     (comp) => comp.id === msg.competitor
   );
@@ -7,6 +6,8 @@ export const stringifyInfoMsg = (competition, msg) => {
     (judge) => judge._id === msg.judge
   );
   const race = competition.races.find((race) => race.id === msg.race);
+
+  if (!competitor || !race || !judge) return;
 
   const msgPrefix = `${competitor.info_data["bib"]} ${race.title}: ${judge.title} ->`;
 
@@ -22,8 +23,7 @@ export const stringifyInfoMsg = (competition, msg) => {
 
   switch (msg.type) {
     case "new_mark": {
-      if (markType === "moguls")
-        return `${msgPrefix} ${JSON.stringify(msg.mark)}`;
+      if (markType === "moguls") return `${msgPrefix} mg_dev`;
 
       if (markType === "aerials")
         return `${msgPrefix} AIR: ${msg.mark.value_ae.air} | FORM: ${msg.mark.value_ae.form} | LAND: ${msg.mark.value_ae.landing}`;
@@ -32,10 +32,7 @@ export const stringifyInfoMsg = (competition, msg) => {
     }
 
     case "mark_overwrite": {
-      if (markType === "moguls")
-        return `${msgPrefix} ${JSON.stringify(
-          msg.old_mark
-        )} ->  ${JSON.stringify(msg.mark)}`;
+      if (markType === "moguls") return `${msgPrefix} mg_dev -> mg_dev`;
 
       if (markType === "aerials")
         return `${msgPrefix} 

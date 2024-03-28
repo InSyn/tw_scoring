@@ -22,7 +22,7 @@
             @click="
               dbSetCompetitionLive(event, event_id, competitions, competition)
             "
-            color="var(--action-green)"
+            color="var(--accent-light)"
             style="
               font-size: 1rem;
               border-radius: 2px;
@@ -40,22 +40,26 @@
             :color="
               live_config.updateLive_Indicator
                 ? live_config.updateLive_Indicator === 'ok'
-                  ? 'var(--success)'
+                  ? 'var(--accent-light)'
                   : 'var(--error)'
                 : 'var(--standard-background)'
             "
             style="
-              font-size: 1rem;
               border-radius: 2px;
-              color: var(--text-default);
+              color: var(--accent-light);
               border: 1px solid var(--standard-background);
-              transition: background-color 192ms;
+              font-size: 1rem;
+              font-weight: bold;
+              transition: background-color 192ms, color 192ms;
             "
-            :style="
+            :style="[
               live_config.update_live && {
-                border: `1px solid var(--success)`,
-              }
-            "
+                border: `1px solid var(--accent-light)`,
+              },
+              live_config.updateLive_Indicator && {
+                color: `var(--text-default) important`,
+              },
+            ]"
             depressed
             small
             >{{ localization[lang].app.scoring.live_update }}

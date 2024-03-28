@@ -146,6 +146,7 @@ import {
   initTerminalData_judge,
 } from "../../store/terminalFunctions";
 import AerialsControls from "./scoresPanel/aerialsControls.vue";
+import { convertCyrillicToLatin } from "../../../lib/utils";
 
 export default {
   name: "startList",

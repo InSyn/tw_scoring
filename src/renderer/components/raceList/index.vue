@@ -73,8 +73,6 @@ export default {
     }),
     ...mapGetters("main", {
       competition: "competition",
-      appTheme: "appTheme",
-      socket: "socket",
     }),
   },
   watch: {

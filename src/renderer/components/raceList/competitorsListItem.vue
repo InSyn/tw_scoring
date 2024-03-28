@@ -54,7 +54,7 @@
         v-for="(field, f) in competition.competitorsSheet.header"
         :key="f"
       >
-        {{ competitor.info_data[field.id] }}
+        {{ competitor ? competitor.info_data[field.id] : null }}
       </div>
     </div>
   </div>

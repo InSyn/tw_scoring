@@ -1,7 +1,7 @@
 <template>
   <v-dialog
     v-model="dialogState"
-    @keydown.enter.prevent="addRoundRun()"
+    @keydown.enter.prevent="addRoundRun(false)"
     width="420px"
   >
     <template v-slot:activator="{ on }">
@@ -110,7 +110,7 @@ export default {
     addRunCompetitor(competitor, course) {
       this.runParticipants[course] = competitor.id;
     },
-    addRoundRun() {
+    addRoundRun(closeDialog = true) {
       if (this.selectedRace.runs === undefined)
         throw new Error("Wrong race type");
 
@@ -136,7 +136,7 @@ export default {
       this.runParticipants.blue = null;
       this.runParticipants.red = null;
 
-      this.closeDialog();
+      closeDialog && this.closeDialog();
       this.updateEvent();
     },
     closeDialog() {

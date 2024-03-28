@@ -156,6 +156,12 @@ export default {
         competitor.results = competitor.results.filter(
           (result) => result.race_id !== _race.id
         );
+        competitor.results_overall = competitor.results_overall.filter(
+          (overallResult) =>
+            overallResult.competition_id !== this.competition.id
+        );
+
+        this.competition.calculateOverallResult(competitor);
       });
 
       _race.finished = [];

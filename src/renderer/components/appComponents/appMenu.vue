@@ -73,8 +73,12 @@ export default {
       if (this.competition && !this.competition.is_teams)
         menuList = menuList.filter((menuLink) => menuLink.link !== "teams");
 
-      if (this.competition && !this.competition.is_aerials)
-        menuList = menuList.filter((menuLink) => menuLink.link !== "aeCodes");
+      if (
+        this.competition &&
+        !this.competition.is_aerials &&
+        !this.competition.is_moguls
+      )
+        menuList = menuList.filter((menuLink) => menuLink.link !== "jumpCodes");
 
       return menuList;
     },

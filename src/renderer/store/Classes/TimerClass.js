@@ -1,5 +1,6 @@
 import fs from "fs";
 import { roundNumber } from "../../../lib/utils";
+import store from "../index";
 
 export default class TimerClass {
   constructor(run) {
@@ -15,8 +16,6 @@ export default class TimerClass {
 
   startTimer() {
     if (this.run) {
-      this.resetTimer();
-
       this.run.blueCourseGap = 0;
       this.run.redCourseGap = 0;
     }
@@ -32,11 +31,18 @@ export default class TimerClass {
     );
   }
 
-  stopTimer() {
+  stopTimer(timeValue) {
     this.stopTime = new Date();
     this.isRunning = false;
+
     clearInterval(this.writeFileIntervalId);
-    setTimeout(() => this.writeCompetitorsTimeToFile());
+
+    store
+      .dispatch("moguls/SET_MG_RUN_DATA", {
+        runTime: timeValue,
+      })
+      .catch();
+    setTimeout(() => this.writeCompetitorsTimeToFile(timeValue));
   }
 
   resetTimer() {
@@ -84,9 +90,24 @@ export default class TimerClass {
       );
     });
   }
-  stopCompetitorTimer(competitor) {
+  stopCompetitorTimer(competitor, time) {
+    if (this.run) {
+      const competitorObj = this.run.competitors.find(
+        (runCompetitor) => runCompetitor.info_data["bib"] === competitor.number
+      );
+      if (!competitorObj) return;
+
+      const course = this.run.redCourse === competitorObj.id ? "red" : "blue";
+
+      this.run[`${course}CourseGap`] = time;
+    }
+
     competitor.stopTime = new Date();
     cancelAnimationFrame(competitor.animationLoopId);
+
+    setTimeout(() => {
+      console.log(competitor);
+    });
   }
   competitorAnimationLoop(competitor) {
     const now = performance.now();
@@ -158,29 +179,31 @@ export default class TimerClass {
     )}`;
   }
 
-  writeCompetitorsTimeToFile() {
-    try {
-      fs.writeFile(
-        `C:\\\\TW_Translation\\timer.txt`,
-        roundNumber(this.passingTime, 2).toFixed(2),
-        // this.competitors
-        //   .map(
-        //     (competitor) =>
-        //       `${competitor.number}||${competitor.passingTime.toFixed(2)}`
-        //   )
-        //   .join("\n"),
-        { encoding: "utf-8" },
-        (err) => {
-          if (err) {
-            err.error === "EBUSY"
-              ? console.log("busy")
-              : console.error("Error writing to file:", err.message);
-            // Handle the error as needed
-          }
+  writeCompetitorsTimeToFile(timerWriteTime) {
+    const minutes = Math.floor(this.passingTime / 60);
+    const timeString = timerWriteTime
+      ? timerWriteTime
+      : `${minutes ? minutes + ":" : ""}${roundNumber(
+          this.passingTime - minutes * 60,
+          2
+        ).toFixed(2)}`;
+
+    fs.writeFile(
+      `C:\\\\TW_Translation\\timer.txt`,
+      timeString,
+      // this.competitors
+      //   .map(
+      //     (competitor) =>
+      //       `${competitor.number}||${competitor.passingTime.toFixed(2)}`
+      //   )
+      //   .join("\n"),
+      { encoding: "utf-8" },
+      (err) => {
+        if (err) {
+          if (err.code === "EBUSY") return;
+          throw new Error(err.message);
         }
-      );
-    } catch (e) {
-      console.log(e.message);
-    }
+      }
+    );
   }
 }

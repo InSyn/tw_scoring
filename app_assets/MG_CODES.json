@@ -1,392 +1,260 @@
 [
-	{
-		"code": "nj",
-		"value_women": "0.00",
-		"value_men": "0.00"
-	},
-	{
-		"code": "JNS",
-		"value_women": "0.00",
-		"value_men": "0.00"
-	},
-	{
-		"code": "A",
-		"value_women": "0.12",
-		"value_men": "0.10"
-	},
-	{
-		"code": "T",
-		"value_women": "0.48",
-		"value_men": "0.38"
-	},
-	{
-		"code": "S",
-		"value_women": "0.48",
-		"value_men": "0.38"
-	},
-	{
-		"code": "D",
-		"value_women": "0.51",
-		"value_men": "0.41"
-	},
-	{
-		"code": "M",
-		"value_women": "0.51",
-		"value_men": "0.41"
-	},
-	{
-		"code": "Y",
-		"value_women": "0.51",
-		"value_men": "0.41"
-	},
-	{
-		"code": "X",
-		"value_women": "0.51",
-		"value_men": "0.41"
-	},
-	{
-		"code": "Z",
-		"value_women": "0.50",
-		"value_men": "0.40"
-	},
-	{
-		"code": "K",
-		"value_women": "0.51",
-		"value_men": "0.41"
-	},
-	{
-		"code": "TT",
-		"value_women": "0.59",
-		"value_men": "0.49"
-	},
-	{
-		"code": "TS",
-		"value_women": "0.59",
-		"value_men": "0.49"
-	},
-	{
-		"code": "DS",
-		"value_women": "0.62",
-		"value_men": "0.52"
-	},
-	{
-		"code": "DT",
-		"value_women": "0.62",
-		"value_men": "0.52"
-	},
-	{
-		"code": "DD",
-		"value_women": "0.65",
-		"value_men": "0.55"
-	},
-	{
-		"code": "YK",
-		"value_women": "0.65",
-		"value_men": "0.55"
-	},
-	{
-		"code": "SS",
-		"value_women": "0.59",
-		"value_men": "0.49"
-	},
-	{
-		"code": "KX",
-		"value_women": "0.65",
-		"value_men": "0.55"
-	},
-	{
-		"code": "XK",
-		"value_women": "0.65",
-		"value_men": "0.55"
-	},
-	{
-		"code": "TTT",
-		"value_women": "0.69",
-		"value_men": "0.59"
-	},
-	{
-		"code": "TTS",
-		"value_women": "0.69",
-		"value_men": "0.59"
-	},
-	{
-		"code": "DTS",
-		"value_women": "0.72",
-		"value_men": "0.62"
-	},
-	{
-		"code": "DDD",
-		"value_women": "0.78",
-		"value_men": "0.68"
-	},
-	{
-		"code": "XKX",
-		"value_women": "0.78",
-		"value_men": "0.68"
-	},
-	{
-		"code": "SSS",
-		"value_women": "0.69",
-		"value_men": "0.59"
-	},
-	{
-		"code": "TTTT",
-		"value_women": "0.78",
-		"value_men": "0.68"
-	},
-	{
-		"code": "TTTS",
-		"value_women": "0.78",
-		"value_men": "0.68"
-	},
-	{
-		"code": "STTS",
-		"value_women": "0.78",
-		"value_men": "0.68"
-	},
-	{
-		"code": "DTTS",
-		"value_women": "0.81",
-		"value_men": "0.71"
-	},
-	{
-		"code": "DDDD",
-		"value_women": "0.90",
-		"value_men": "0.80"
-	},
-	{
-		"code": "TTTTT",
-		"value_women": "0.86",
-		"value_men": "0.76"
-	},
-	{
-		"code": "DTTTS",
-		"value_women": "0.89",
-		"value_men": "0.79"
-	},
-	{
-		"code": "DDDDD",
-		"value_women": "1.01",
-		"value_men": "0.91"
-	},
-	{
-		"code": "l",
-		"value_women": "0.78",
-		"value_men": "0.68"
-	},
-	{
-		"code": "lp",
-		"value_women": "0.81",
-		"value_men": "0.71"
-	},
-	{
-		"code": "lG",
-		"value_women": "0.92",
-		"value_men": "0.82"
-	},
-	{
-		"code": "lF",
-		"value_women": "0.95",
-		"value_men": "0.85"
-	},
-	{
-		"code": "lGF",
-		"value_women": "1.11",
-		"value_men": "1.01"
-	},
-	{
-		"code": "lpF",
-		"value_women": "0.98",
-		"value_men": "0.88"
-	},
-	{
-		"code": "fL",
-		"value_women": "0.81",
-		"value_men": "0.71"
-	},
-	{
-		"code": "fT",
-		"value_women": "0.78",
-		"value_men": "0.68"
-	},
-	{
-		"code": "fp",
-		"value_women": "0.81",
-		"value_men": "0.71"
-	},
-	{
-		"code": "fG",
-		"value_women": "0.92",
-		"value_men": "0.82"
-	},
-	{
-		"code": "fF",
-		"value_women": "0.98",
-		"value_men": "0.88"
-	},
-	{
-		"code": "fFp",
-		"value_women": "1.01",
-		"value_men": "0.91"
-	},
-	{
-		"code": "fdF",
-		"value_women": "1.15",
-		"value_men": "1.05"
-	},
-	{
-		"code": "ftF",
-		"value_women": "1.32",
-		"value_men": "1.22"
-	},
-	{
-		"code": "bL",
-		"value_women": "0.81",
-		"value_men": "0.71"
-	},
-	{
-		"code": "bT",
-		"value_women": "0.78",
-		"value_men": "0.68"
-	},
-	{
-		"code": "bLp",
-		"value_women": "0.84",
-		"value_men": "0.74"
-	},
-	{
-		"code": "bp",
-		"value_women": "0.81",
-		"value_men": "0.71"
-	},
-	{
-		"code": "bG",
-		"value_women": "0.92",
-		"value_men": "0.82"
-	},
-	{
-		"code": "bF",
-		"value_women": "0.98",
-		"value_men": "0.88"
-	},
-	{
-		"code": "bdF",
-		"value_women": "1.15",
-		"value_men": "1.05"
-	},
-	{
-		"code": "btF",
-		"value_women": "1.32",
-		"value_men": "1.22"
-	},
-	{
-		"code": "fP",
-		"value_women": "0.78",
-		"value_men": "0.68"
-	},
-	{
-		"code": "bP",
-		"value_women": "0.78",
-		"value_men": "0.68"
-	},
-	{
-		"code": "3",
-		"value_women": "0.78",
-		"value_men": "0.68"
-	},
-	{
-		"code": "3p",
-		"value_women": "0.81",
-		"value_men": "0.71"
-	},
-	{
-		"code": "3G",
-		"value_women": "0.92",
-		"value_men": "0.82"
-	},
-	{
-		"code": "3pp",
-		"value_women": "0.84",
-		"value_men": "0.74"
-	},
-	{
-		"code": "7",
-		"value_women": "0.95",
-		"value_men": "0.85"
-	},
-	{
-		"code": "7p",
-		"value_women": "0.98",
-		"value_men": "0.88"
-	},
-	{
-		"code": "7pp",
-		"value_women": "1.01",
-		"value_men": "0.91"
-	},
-	{
-		"code": "7G",
-		"value_women": "1.11",
-		"value_men": "1.01"
-	},
-	{
-		"code": "10",
-		"value_women": "1.12",
-		"value_men": "1.02"
-	},
-	{
-		"code": "10p",
-		"value_women": "1.15",
-		"value_men": "1.05"
-	},
-	{
-		"code": "10pp",
-		"value_women": "1.18",
-		"value_men": "1.08"
-	},
-	{
-		"code": "10G",
-		"value_women": "1.30",
-		"value_men": "1.20"
-	},
-	{
-		"code": "3op",
-		"value_women": "0.81",
-		"value_men": "0.71"
-	},
-	{
-		"code": "3oG",
-		"value_women": "0.92",
-		"value_men": "0.82"
-	},
-	{
-		"code": "7op",
-		"value_women": "0.98",
-		"value_men": "0.88"
-	},
-	{
-		"code": "7oG",
-		"value_women": "1.11",
-		"value_men": "1.01"
-	},
-	{
-		"code": "10op",
-		"value_women": "1.15",
-		"value_men": "1.05"
-	},
-	{
-		"code": "10oG",
-		"value_women": "1.30",
-		"value_men": "1.20"
-	},
-	{
-		"code": "14oG",
-		"value_women": "1.49",
-		"value_men": "1.39"
-	},
-	{
-		"code": "14op",
-		"value_women": "1.32",
-		"value_men": "1.22"
-	}
+  { "code": "nj", "jump_name": "", "value_women": "0.00", "value_men": "0.00" },
+  {
+    "code": "JNS",
+    "jump_name": "",
+    "value_women": "0.00",
+    "value_men": "0.00"
+  },
+  { "code": "A", "jump_name": "", "value_women": "0.12", "value_men": "0.10" },
+  { "code": "T", "jump_name": "", "value_women": "0.48", "value_men": "0.38" },
+  { "code": "S", "jump_name": "", "value_women": "0.48", "value_men": "0.38" },
+  { "code": "D", "jump_name": "", "value_women": "0.51", "value_men": "0.41" },
+  { "code": "M", "jump_name": "", "value_women": "0.51", "value_men": "0.41" },
+  { "code": "Y", "jump_name": "", "value_women": "0.51", "value_men": "0.41" },
+  { "code": "X", "jump_name": "", "value_women": "0.51", "value_men": "0.41" },
+  { "code": "Z", "jump_name": "", "value_women": "0.50", "value_men": "0.40" },
+  { "code": "K", "jump_name": "", "value_women": "0.51", "value_men": "0.41" },
+  { "code": "TT", "jump_name": "", "value_women": "0.59", "value_men": "0.49" },
+  { "code": "TS", "jump_name": "", "value_women": "0.59", "value_men": "0.49" },
+  { "code": "DS", "jump_name": "", "value_women": "0.62", "value_men": "0.52" },
+  { "code": "DT", "jump_name": "", "value_women": "0.62", "value_men": "0.52" },
+  { "code": "DD", "jump_name": "", "value_women": "0.65", "value_men": "0.55" },
+  { "code": "YK", "jump_name": "", "value_women": "0.65", "value_men": "0.55" },
+  { "code": "SS", "jump_name": "", "value_women": "0.59", "value_men": "0.49" },
+  { "code": "KX", "jump_name": "", "value_women": "0.65", "value_men": "0.55" },
+  { "code": "XK", "jump_name": "", "value_women": "0.65", "value_men": "0.55" },
+  {
+    "code": "TTT",
+    "jump_name": "",
+    "value_women": "0.69",
+    "value_men": "0.59"
+  },
+  {
+    "code": "TTS",
+    "jump_name": "",
+    "value_women": "0.69",
+    "value_men": "0.59"
+  },
+  {
+    "code": "DTS",
+    "jump_name": "",
+    "value_women": "0.72",
+    "value_men": "0.62"
+  },
+  {
+    "code": "DDD",
+    "jump_name": "",
+    "value_women": "0.78",
+    "value_men": "0.68"
+  },
+  {
+    "code": "XKX",
+    "jump_name": "",
+    "value_women": "0.78",
+    "value_men": "0.68"
+  },
+  {
+    "code": "SSS",
+    "jump_name": "",
+    "value_women": "0.69",
+    "value_men": "0.59"
+  },
+  {
+    "code": "TTTT",
+    "jump_name": "",
+    "value_women": "0.78",
+    "value_men": "0.68"
+  },
+  {
+    "code": "TTTS",
+    "jump_name": "",
+    "value_women": "0.78",
+    "value_men": "0.68"
+  },
+  {
+    "code": "STTS",
+    "jump_name": "",
+    "value_women": "0.78",
+    "value_men": "0.68"
+  },
+  {
+    "code": "DTTS",
+    "jump_name": "",
+    "value_women": "0.81",
+    "value_men": "0.71"
+  },
+  {
+    "code": "DDDD",
+    "jump_name": "",
+    "value_women": "0.90",
+    "value_men": "0.80"
+  },
+  {
+    "code": "TTTTT",
+    "jump_name": "",
+    "value_women": "0.86",
+    "value_men": "0.76"
+  },
+  {
+    "code": "DTTTS",
+    "jump_name": "",
+    "value_women": "0.89",
+    "value_men": "0.79"
+  },
+  {
+    "code": "DDDDD",
+    "jump_name": "",
+    "value_women": "1.01",
+    "value_men": "0.91"
+  },
+  { "code": "l", "jump_name": "", "value_women": "0.78", "value_men": "0.68" },
+  { "code": "lp", "jump_name": "", "value_women": "0.81", "value_men": "0.71" },
+  { "code": "lG", "jump_name": "", "value_women": "0.92", "value_men": "0.82" },
+  { "code": "lF", "jump_name": "", "value_women": "0.95", "value_men": "0.85" },
+  {
+    "code": "lGF",
+    "jump_name": "",
+    "value_women": "1.11",
+    "value_men": "1.01"
+  },
+  {
+    "code": "lpF",
+    "jump_name": "",
+    "value_women": "0.98",
+    "value_men": "0.88"
+  },
+  { "code": "fL", "jump_name": "", "value_women": "0.81", "value_men": "0.71" },
+  { "code": "fT", "jump_name": "", "value_women": "0.78", "value_men": "0.68" },
+  { "code": "fp", "jump_name": "", "value_women": "0.81", "value_men": "0.71" },
+  { "code": "fG", "jump_name": "", "value_women": "0.92", "value_men": "0.82" },
+  { "code": "fF", "jump_name": "", "value_women": "0.98", "value_men": "0.88" },
+  {
+    "code": "fFp",
+    "jump_name": "",
+    "value_women": "1.01",
+    "value_men": "0.91"
+  },
+  {
+    "code": "fdF",
+    "jump_name": "",
+    "value_women": "1.15",
+    "value_men": "1.05"
+  },
+  {
+    "code": "ftF",
+    "jump_name": "",
+    "value_women": "1.32",
+    "value_men": "1.22"
+  },
+  { "code": "bL", "jump_name": "", "value_women": "0.81", "value_men": "0.71" },
+  { "code": "bT", "jump_name": "", "value_women": "0.78", "value_men": "0.68" },
+  {
+    "code": "bLp",
+    "jump_name": "",
+    "value_women": "0.84",
+    "value_men": "0.74"
+  },
+  { "code": "bp", "jump_name": "", "value_women": "0.81", "value_men": "0.71" },
+  { "code": "bG", "jump_name": "", "value_women": "0.92", "value_men": "0.82" },
+  { "code": "bF", "jump_name": "", "value_women": "0.98", "value_men": "0.88" },
+  {
+    "code": "bdF",
+    "jump_name": "",
+    "value_women": "1.15",
+    "value_men": "1.05"
+  },
+  {
+    "code": "btF",
+    "jump_name": "",
+    "value_women": "1.32",
+    "value_men": "1.22"
+  },
+  { "code": "fP", "jump_name": "", "value_women": "0.78", "value_men": "0.68" },
+  { "code": "bP", "jump_name": "", "value_women": "0.78", "value_men": "0.68" },
+  { "code": "3", "jump_name": "", "value_women": "0.78", "value_men": "0.68" },
+  { "code": "3p", "jump_name": "", "value_women": "0.81", "value_men": "0.71" },
+  { "code": "3G", "jump_name": "", "value_women": "0.92", "value_men": "0.82" },
+  {
+    "code": "3pp",
+    "jump_name": "",
+    "value_women": "0.84",
+    "value_men": "0.74"
+  },
+  { "code": "7", "jump_name": "", "value_women": "0.95", "value_men": "0.85" },
+  { "code": "7p", "jump_name": "", "value_women": "0.98", "value_men": "0.88" },
+  {
+    "code": "7pp",
+    "jump_name": "",
+    "value_women": "1.01",
+    "value_men": "0.91"
+  },
+  { "code": "7G", "jump_name": "", "value_women": "1.11", "value_men": "1.01" },
+  { "code": "10", "jump_name": "", "value_women": "1.12", "value_men": "1.02" },
+  {
+    "code": "10p",
+    "jump_name": "",
+    "value_women": "1.15",
+    "value_men": "1.05"
+  },
+  {
+    "code": "10pp",
+    "jump_name": "",
+    "value_women": "1.18",
+    "value_men": "1.08"
+  },
+  {
+    "code": "10G",
+    "jump_name": "",
+    "value_women": "1.30",
+    "value_men": "1.20"
+  },
+  {
+    "code": "3op",
+    "jump_name": "",
+    "value_women": "0.81",
+    "value_men": "0.71"
+  },
+  {
+    "code": "3oG",
+    "jump_name": "",
+    "value_women": "0.92",
+    "value_men": "0.82"
+  },
+  {
+    "code": "7op",
+    "jump_name": "",
+    "value_women": "0.98",
+    "value_men": "0.88"
+  },
+  {
+    "code": "7oG",
+    "jump_name": "",
+    "value_women": "1.11",
+    "value_men": "1.01"
+  },
+  {
+    "code": "10op",
+    "jump_name": "",
+    "value_women": "1.15",
+    "value_men": "1.05"
+  },
+  {
+    "code": "10oG",
+    "jump_name": "",
+    "value_women": "1.30",
+    "value_men": "1.20"
+  },
+  {
+    "code": "14oG",
+    "jump_name": "",
+    "value_women": "1.49",
+    "value_men": "1.39"
+  },
+  {
+    "code": "14op",
+    "jump_name": "",
+    "value_women": "1.32",
+    "value_men": "1.22"
+  }
 ]

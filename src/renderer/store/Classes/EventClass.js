@@ -3,6 +3,7 @@ import {
   generateId,
   getAECodes,
   getMGCodes,
+  roundNumber,
 } from "../../../lib/utils";
 import { skiRamps } from "../modules/skiRamps";
 import { initTerminalData_chiefJudge } from "../terminalFunctions";
@@ -321,7 +322,7 @@ export default class EventClass {
               })();
             return res.length > 0
               ? res.reduce((a, b) => {
-                  return +a + +b;
+                  return Number(a) + Number(b);
                 }, 0)
               : 0;
           },
@@ -361,7 +362,7 @@ export default class EventClass {
               })();
             return res.length > 0
               ? res.reduce((a, b) => {
-                  return +a + +b;
+                  return Number(a) + Number(b);
                 }, 0) / res.length
               : 0;
           },
@@ -399,14 +400,16 @@ export default class EventClass {
                   : [0]
               )
               .map((_repeated) => Math.max(..._repeated));
+
             if (res_arr.length > 2)
               res_arr = res_arr.filter(
                 (_result_to_filter) =>
                   _result_to_filter !== Math.min(...res_arr)
               );
+
             return res_arr.length > 0
               ? res_arr.reduce((r1, r2) => {
-                  return +r1 + +r2;
+                  return Number(r1) + Number(r2);
                 }, 0)
               : 0;
           },
@@ -463,7 +466,7 @@ export default class EventClass {
                     +this.result_formula.types[0].higher_marks <
                     marks.length &&
                     _marks.reduce((a, b) => {
-                      return +a + +b;
+                      return Number(a) + Number(b);
                     }, 0) /
                       (_marks.length / 2)) ||
                   0
@@ -473,10 +476,12 @@ export default class EventClass {
                 (+this.result_formula.types[0].lower_marks +
                   +this.result_formula.types[0].higher_marks <
                   marks.length &&
-                  _marks.reduce((a, b) => {
-                    return +a + +b;
-                  }, 0) /
-                    (_marks.length / this.result_formula.types[0].cof)) ||
+                  this.set_accuracy(
+                    _marks.reduce((a, b) => {
+                      return Number(a) + Number(b);
+                    }, 0) /
+                      (_marks.length / this.result_formula.types[0].cof)
+                  )) ||
                 0
               );
             },
@@ -515,9 +520,11 @@ export default class EventClass {
                 return 0;
               }
 
-              return _marks.reduce((a, b) => {
-                return +a + +b;
-              }, 0);
+              return this.set_accuracy(
+                _marks.reduce((a, b) => {
+                  return Number(a) + Number(b);
+                }, 0)
+              );
             },
           },
           {
@@ -529,6 +536,7 @@ export default class EventClass {
                   return _comp.id === comp_id;
                 }
               );
+
               const group = competitor.info_data["group"]
                 ? competitor.info_data["group"]
                 : this.mainData.title.stage.group || "men";
@@ -538,63 +546,78 @@ export default class EventClass {
               const aeCode = this.ae_codes.find(
                 (aeCode) => aeCode.code === ae_code
               );
-
               const ae_coef = aeCode
-                ? parseFloat(aeCode[`value_${group}`]).toFixed(2)
+                ? Number(parseFloat(aeCode[`value_${group}`]))
                 : 1;
 
-              // FIND MARKS
-              judges.forEach((_j) => {
+              judges.forEach((judge) => {
                 marks.push(
-                  ...this.competitorsSheet.competitors
-                    .find((_comp) => {
-                      return _comp.id === comp_id;
-                    })
-                    .marks.filter((_mark) => {
-                      return +_mark.judge === +_j && _mark.race_id === race_id;
-                    })
+                  ...competitor.marks.filter((mark) => {
+                    return (
+                      mark.judge.toString() === judge.toString() &&
+                      mark.race_id === race_id
+                    );
+                  })
                 );
               });
 
-              // SPLIT AE MARKS TO ARRAYS BY MARK TYPE
-              const ae_air = cutMarks(
-                marks.map((mark) => mark.value_ae.air),
-                this.result_formula.types[0].higher_marks,
+              const minMarksCount = Number(
                 this.result_formula.types[0].lower_marks
               );
-              const ae_form = cutMarks(
-                marks.map((mark) => mark.value_ae.form),
-                this.result_formula.types[0].higher_marks,
-                this.result_formula.types[0].lower_marks
-              );
-              const ae_landing = cutMarks(
-                marks.map((mark) => mark.value_ae.landing),
-                this.result_formula.types[0].higher_marks,
-                this.result_formula.types[0].lower_marks
+              const maxMarksCount = Number(
+                this.result_formula.types[0].higher_marks
               );
 
-              const resultArr = ae_air.concat(ae_form.concat(ae_landing));
+              const airScores = cutMarks(
+                marks.map((_mark) => {
+                  return Number(_mark.value_ae.air) || 0;
+                }),
+                maxMarksCount,
+                minMarksCount
+              );
+              const formScores = cutMarks(
+                marks.map((_mark) => {
+                  return Number(_mark.value_ae.form) || 0;
+                }),
+                maxMarksCount,
+                minMarksCount
+              );
+              const landingScores = cutMarks(
+                marks.map((_mark) => {
+                  return Number(_mark.value_ae.landing) || 0;
+                }),
+                maxMarksCount,
+                minMarksCount
+              );
 
-              if (
-                parseInt(this.result_formula.types[0].lower_marks) +
-                  parseInt(this.result_formula.types[0].higher_marks) >=
-                marks.length
-              ) {
+              const airSum = airScores.reduce(
+                (form1, form2) => Number(form1) + Number(form2),
+                0
+              );
+              const formSum = formScores.reduce(
+                (air1, air2) => Number(air1) + Number(air2),
+                0
+              );
+              const landingSum = landingScores.reduce(
+                (landing1, landing2) => Number(landing1) + Number(landing2),
+                0
+              );
+
+              const totalSum = roundNumber(airSum + formSum + landingSum, 1);
+
+              if (minMarksCount + maxMarksCount >= marks.length) {
                 return 0;
               }
 
-              return this.set_accuracy(
-                ae_coef *
-                  resultArr.reduce((a, b) => {
-                    return +a + +b;
-                  }, 0)
-              );
+              return this.set_accuracy(ae_coef * totalSum);
             },
           },
           {
             id: 3,
             title: "moguls",
-            get_result: (comp_id, race_id, judges, jump_code) => {
+            get_result: (comp_id, race_id, judges, runParameters) => {
+              if (!runParameters) return;
+
               const competitor = this.competitorsSheet.competitors.find(
                 (_comp) => {
                   return _comp.id === comp_id;
@@ -603,81 +626,115 @@ export default class EventClass {
               const group = competitor.info_data["group"]
                 ? competitor.info_data["group"]
                 : this.mainData.title.stage.group || "men";
+              if (!competitor || !group) return "err";
 
               let marks = [];
 
-              const jumpCodeObj = this.mg_codes.find(
-                (jCode) => jCode.code === jump_code
+              const minMarksCount = Number(
+                this.result_formula.types[0].lower_marks
+              );
+              const maxMarksCount = Number(
+                this.result_formula.types[0].higher_marks
               );
 
-              const jump_coef = jumpCodeObj
-                ? parseFloat(jumpCodeObj[`value_${group}`]).toFixed(2)
-                : 1;
-
-              // FIND MARKS
-              judges.forEach((_j) => {
+              judges.forEach((judge) => {
                 marks.push(
-                  ...this.competitorsSheet.competitors
-                    .find((_comp) => {
-                      return _comp.id === comp_id;
-                    })
-                    .marks.filter((_mark) => {
-                      return +_mark.judge === +_j && _mark.race_id === race_id;
-                    })
+                  ...competitor.marks.filter((mark) => {
+                    return (
+                      mark.judge.toString() === judge.toString() &&
+                      mark.race_id === race_id
+                    );
+                  })
                 );
               });
 
-              // SPLIT AE MARKS TO ARRAYS BY MARK TYPE
-              const ae_air = marks.map((mark) => mark.value_ae.air);
-              const ae_form = marks.map((mark) => mark.value_ae.form);
-              const ae_landing = marks.map((mark) => mark.value_ae.landing);
+              const paceTime = runParameters[`paceTime_${group}`] || 0;
+              const runTime = runParameters.runTime
+                ? runParameters.runTime
+                : 999;
 
-              // CUT HIGHER MARKS
-              for (
-                let high = 0;
-                high < +this.result_formula.types[0].higher_marks;
-                high++
-              ) {
-                ae_air.splice(ae_air.indexOf(Math.max(...ae_air)), 1);
-                ae_form.splice(ae_form.indexOf(Math.max(...ae_form)), 1);
-                ae_landing.splice(
-                  ae_landing.indexOf(Math.max(...ae_landing)),
-                  1
-                );
-              }
+              const runTimePointsSum = 48 - (32 * runTime) / paceTime;
+              const runTimePoints =
+                runTimePointsSum >= 20
+                  ? this.set_accuracy(20)
+                  : runTimePointsSum <= 0
+                  ? this.set_accuracy(0)
+                  : this.set_accuracy(48 - (32 * runTime) / paceTime);
 
-              // CUT LOWER MARKS
-              for (
-                let low = 0;
-                low < +this.result_formula.types[0].lower_marks;
-                low++
-              ) {
-                ae_air.splice(ae_air.indexOf(Math.min(...ae_air)), 1);
-                ae_form.splice(ae_form.indexOf(Math.min(...ae_form)), 1);
-                ae_landing.splice(
-                  ae_landing.indexOf(Math.min(...ae_landing)),
-                  1
-                );
-              }
+              const turnScores = cutMarks(
+                marks
+                  .map((mark) => mark.moguls_value.baseScore || 0)
+                  .filter((mark) => !!mark),
+                maxMarksCount,
+                minMarksCount
+              ).reduce((acc, val) => roundNumber(acc + Number(val), 1), 0);
 
-              const resultArr = ae_air.concat(ae_form.concat(ae_landing));
+              const turnsDeductions = cutMarks(
+                marks
+                  .map((mark) => mark.moguls_value.deduction || 0)
+                  .filter((mark) => !!mark),
+                maxMarksCount,
+                minMarksCount
+              ).reduce((acc, val) => roundNumber(acc + Number(val), 1), 0);
 
-              if (
-                parseInt(this.result_formula.types[0].lower_marks) +
-                  parseInt(this.result_formula.types[0].higher_marks) >=
-                marks.length
-              ) {
-                return 0;
-              }
-
-              return this.set_accuracy(
-                jump_coef *
-                  this.set_accuracy(
-                    resultArr.reduce((a, b) => {
-                      return +a + +b;
-                    }, 0)
-                  )
+              const turnsSum = this.set_accuracy(
+                Number(turnScores) - Number(turnsDeductions)
               );
+
+              const jump1Code = this.mg_codes.find(
+                (jCode) => jCode.code === runParameters.jump1_code
+              );
+              const jump1_coef = jump1Code
+                ? Number(jump1Code[`value_${group}`])
+                : 0;
+
+              const jump2Code = this.mg_codes.find(
+                (jCode) => jCode.code === runParameters.jump2_code
+              );
+              const jump2_coef = jump2Code
+                ? Number(jump2Code[`value_${group}`])
+                : 0;
+
+              const jump1_scores = marks
+                .map((mark) =>
+                  mark.moguls_value.jump1_score
+                    ? this.set_accuracy(
+                        mark.moguls_value.jump1_score * jump1_coef
+                      )
+                    : 0
+                )
+                .filter((mark) => !!mark);
+              const jump2_scores = marks
+                .map((mark) =>
+                  mark.moguls_value.jump2_score
+                    ? this.set_accuracy(
+                        mark.moguls_value.jump2_score * jump2_coef
+                      )
+                    : 0
+                )
+                .filter((mark) => !!mark);
+
+              let judge1_jumpSum = [
+                jump1_scores[0] || 0,
+                jump2_scores[0] || 0,
+              ].reduce((acc, val) => roundNumber(acc + Number(val), 2), 0);
+              if (judge1_jumpSum >= 20) judge1_jumpSum = 20;
+
+              let judge2_jumpSum = [
+                jump1_scores[1] || 0,
+                jump2_scores[1] || 0,
+              ].reduce((acc, val) => roundNumber(acc + Number(val), 2), 0);
+              if (judge2_jumpSum >= 20) judge2_jumpSum = 20;
+
+              const jumpsSum = this.set_accuracy(
+                (judge1_jumpSum + judge2_jumpSum) / 2
+              );
+
+              return (
+                Number(runTimePoints) +
+                Number(turnsSum) +
+                Number(jumpsSum)
+              ).toFixed(2);
             },
           },
           {
@@ -789,9 +846,11 @@ export default class EventClass {
               });
 
               return s_results.length > 0
-                ? s_results.reduce((a, b) => {
-                    return +a + +b;
-                  }, 0)
+                ? this.set_accuracy(
+                    s_results.reduce((a, b) => {
+                      return +a + +b;
+                    }, 0)
+                  )
                 : 0;
             },
           },
@@ -860,9 +919,11 @@ export default class EventClass {
     const overallResult = {
       competition_id: this.id,
       competitor_id: competitor.id,
-      value: this.result_formula.overall_result.types
-        .find((_f) => _f.id === this.result_formula.overall_result.type)
-        .result(competitor.id),
+      value: this.set_accuracy(
+        this.result_formula.overall_result.types
+          .find((_f) => _f.id === this.result_formula.overall_result.type)
+          .result(competitor.id)
+      ),
       status: null,
     };
     let existedResult =
@@ -912,7 +973,7 @@ export default class EventClass {
     return overall
       ? overall.status
         ? overall.status
-        : this.set_accuracy(overall.value)
+        : overall.value
       : this.set_accuracy(0);
   }
   getRaceResult(competitor, race) {
@@ -923,7 +984,7 @@ export default class EventClass {
     return result
       ? result.status
         ? result.status
-        : `${this.set_accuracy(result ? result.value : 0)}${
+        : `${result ? result.value : 0}${
             result.repeat ? " " + result.repeat : ""
           }`
       : this.set_accuracy(0);
@@ -946,7 +1007,7 @@ export default class EventClass {
     if (filteredArr.length > 0) {
       return this.set_accuracy(
         filteredArr.reduce((accumulator, res2) => {
-          return accumulator + +res2.value;
+          return accumulator + Number(res2.value);
         }, 0)
       );
     }
@@ -967,11 +1028,13 @@ export default class EventClass {
           this.stuff.judges.map((_j) => {
             return +_j.id;
           }),
-          params.ae_code,
+          this.is_aerials
+            ? params.ae_code
+            : this.is_moguls
+            ? params.mg_parameters
+            : null,
           params.sjDistance,
-          params.sjRamp,
-          params.mgTime,
-          params.mgCode
+          params.sjRamp
         ),
       race_id: params.race_id,
       repeat: params.rep || null,
@@ -991,16 +1054,18 @@ export default class EventClass {
           )
         : 1,
 
+      mgRunParams: params.mg_parameters,
       sjDistance: params.sjDistance || 0,
       sjRamp: params.sjRamp || 0,
       sjGate: 0,
       sjSpeed: 0,
     };
+
     if (
       !params.competitor.results.some((_res) => _res.race_id === params.race_id)
-    )
+    ) {
       params.competitor.results.push(res);
-    else {
+    } else {
       let _res = params.competitor.results.find(
         (_res) => _res.race_id === params.race_id
       );
@@ -1037,25 +1102,35 @@ export default class EventClass {
 
     return params.competitor.results;
   }
-  set_accuracy(val) {
-    const accuracy = this.structure.accuracy[this.structure.selected.accuracy];
+  set_accuracy(val, digits) {
+    const precision = digits
+      ? digits
+      : this.structure.accuracy[this.structure.selected.accuracy].digits;
+
     if (typeof val === "string") return val;
-    let resultArray = (Math.floor(accuracy.value * +val) / accuracy.value)
+
+    let resultArray = (
+      Math.floor(Math.pow(10, precision) * Number(val)) /
+      Math.pow(10, precision)
+    )
       .toString()
       .split(".");
-    if (accuracy.digits > 0) {
+
+    if (precision > 0) {
       if (resultArray[1]) {
-        for (let i = 0; i < accuracy.digits - resultArray[1].length; i++) {
+        for (let i = 0; i < precision - resultArray[1].length; i++) {
           resultArray[1] += "0";
         }
       } else {
         resultArray.push([]);
-        for (let i = 0; i < accuracy.digits; i++) {
+        for (let i = 0; i < precision; i++) {
           resultArray[1] += "0";
         }
       }
-    } else resultArray = resultArray[0];
-    resultArray = resultArray.join(".");
-    return resultArray;
+    } else {
+      resultArray = resultArray[0];
+    }
+
+    return resultArray.join(".");
   }
 }

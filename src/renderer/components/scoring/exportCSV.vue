@@ -15,9 +15,11 @@
       class="ml-auto"
       @click="setFileSeparation(!fileTranslationService.separated)"
       color="var(--text-default)"
-      icon
+      width="48"
+      text
+      small
     >
-      <v-icon>
+      <v-icon size="18">
         {{
           fileTranslationService.separated
             ? icons.fileMultipleIcon
@@ -34,7 +36,7 @@
           fileTranslationService.updatingInProgress && 'updater-updating',
         ]"
         @click="setUpdater"
-        color="var(--action-green)"
+        color="var(--accent-light)"
         text
         small
       >
@@ -73,6 +75,55 @@ export default {
       switchFileUpdateService: "switchFileUpdateService",
       switchUpdatingState: "switchUpdatingState",
     }),
+
+    getCompetitionJuryData() {
+      if (!this.competition) return { judges: [], jury: [] };
+
+      const juryData = {
+        judges: this.competition.stuff.judges.map((judge) => {
+          return {
+            title: judge.title || " ",
+            name: judge.name || " ",
+            region: judge.location || " ",
+            mark: "-",
+          };
+        }),
+        jury: this.competition.stuff.jury.map((jury) => {
+          return {
+            title: jury.title || " ",
+            name: jury.name || " ",
+            region: jury.location || " ",
+          };
+        }),
+      };
+
+      if (this.competition.selected_race) {
+        if (!this.competition.selected_race.onTrack) return juryData;
+
+        this.competition.stuff.judges.map((judge, idx) => {
+          const competitor = this.competition.competitorsSheet.competitors.find(
+            (competitor) =>
+              competitor.id === this.competition.selected_race.onTrack
+          );
+          if (!competitor) {
+            juryData.judges[idx].mark = "-";
+            return;
+          }
+
+          const mark = competitor.marks.find(
+            (mark) => mark.judge_id === judge._id
+          );
+          if (!mark) {
+            juryData.judges[idx].mark = "-";
+            return;
+          }
+
+          juryData.judges[idx].mark = mark.value;
+        });
+      }
+
+      return juryData;
+    },
 
     createCompetitorTranslationObj(competitor, competition, options) {
       if (!competitor) throw new Error("No competitor passed");
@@ -138,10 +189,9 @@ export default {
 
           const jump_name = jumpObj ? jumpObj["jump_name"] : " ";
 
-          const jump_dd = roundNumber(
-            jumpObj ? jumpObj[`value_${competitorObject.group}`] : 0,
-            3
-          ).toFixed(3);
+          const jump_dd = jumpObj
+            ? jumpObj[`value_${competitorObject.group}`]
+            : Number(0).toFixed(3);
 
           const jump_maxScore = competition.set_accuracy(
             parseFloat(
@@ -167,6 +217,18 @@ export default {
               : "nj",
           };
         });
+      }
+      if (competition.is_moguls) {
+        const raceResult = competitor.results.find(
+          (result) => result.race_id === competition.selected_race.id
+        );
+
+        competitorObject = {
+          ...competitorObject,
+          run_time: raceResult
+            ? parseFloat(raceResult.mgRunParams.runTime).toFixed(2)
+            : Number(0).toFixed(2),
+        };
       }
 
       if (competition.is_teams) {
@@ -271,8 +333,24 @@ export default {
       };
 
       if (options.forResults) {
+        let teamCompetitorsResults = {};
+        team.competitors.forEach((teamCompetitorId, idx) => {
+          const teamCompetitor = competition.competitorsSheet.competitors.find(
+            (competitor) => competitor.id === teamCompetitorId
+          );
+          if (!teamCompetitor)
+            teamCompetitors[`team_competitor_result_${idx + 1}`] = "";
+
+          teamCompetitorsResults[`team_competitor_result_${idx + 1}`] =
+            this.competition.getRaceResult(
+              teamCompetitor,
+              this.competition.selected_race
+            );
+        });
+
         teamObject = {
           ...teamObject,
+          ...teamCompetitorsResults,
           team_rank: team._index + 1,
           team_result:
             competition.getTeamRaceResult(team, competition.selected_race) ||
@@ -439,6 +517,116 @@ export default {
       return [];
     },
 
+    getDMOnStart() {
+      if (
+        !this.competition.selected_race ||
+        !this.competition.selected_race.selectedCompetitor
+      )
+        return [];
+
+      const runOnStart = this.competition.selected_race.runs.find(
+        (run) => run.id === this.competition.selected_race.selectedCompetitor
+      );
+      if (!runOnStart) return [];
+
+      const courseCompetitor_blue =
+        this.competition.competitorsSheet.competitors.find(
+          (competitor) => competitor.id === runOnStart.blueCourse
+        );
+      const courseCompetitorObj_blue = courseCompetitor_blue
+        ? {
+            ...this.createCompetitorTranslationObj(
+              courseCompetitor_blue,
+              this.competition,
+              {}
+            ),
+            course: "BLUE",
+          }
+        : null;
+
+      const courseCompetitor_red =
+        this.competition.competitorsSheet.competitors.find(
+          (competitor) => competitor.id === runOnStart.redCourse
+        );
+      const courseCompetitorObj_red = courseCompetitor_red
+        ? {
+            ...this.createCompetitorTranslationObj(
+              courseCompetitor_red,
+              this.competition,
+              {}
+            ),
+            course: "RED",
+          }
+        : null;
+
+      return [courseCompetitorObj_blue, courseCompetitorObj_red];
+    },
+    getDMFinished() {
+      if (
+        !this.competition.selected_race &&
+        this.competition.selected_race.finished.length === 0
+      )
+        return [];
+
+      const finishedRunId = this.competition.selected_race.finished[0];
+      const finishedRun = this.competition.selected_race.runs.find(
+        (run) => run.id === finishedRunId
+      );
+      if (!finishedRun) return [];
+
+      const courseCompetitor_blue =
+        this.competition.competitorsSheet.competitors.find(
+          (competitor) => competitor.id === finishedRun.blueCourse
+        );
+      const courseCompetitorObj_blue = courseCompetitor_blue
+        ? {
+            ...this.createCompetitorTranslationObj(
+              courseCompetitor_blue,
+              this.competition,
+              { forResults: true }
+            ),
+            course: "BLUE",
+          }
+        : null;
+      const result_blue =
+        this.competition.getRaceResult(
+          courseCompetitor_blue,
+          this.competition.selected_race
+        ) || roundNumber(0, 2).toFixed(0);
+      const gap_blue = finishedRun[`blueCourseGap`] || Number(0).toFixed(2);
+
+      const courseCompetitor_red =
+        this.competition.competitorsSheet.competitors.find(
+          (competitor) => competitor.id === finishedRun.redCourse
+        );
+      const courseCompetitorObj_red = courseCompetitor_red
+        ? {
+            ...this.createCompetitorTranslationObj(
+              courseCompetitor_red,
+              this.competition,
+              { forResults: true }
+            ),
+            course: "RED",
+          }
+        : null;
+      const result_red =
+        this.competition.getRaceResult(
+          courseCompetitor_red,
+          this.competition.selected_race
+        ) || roundNumber(0, 2).toFixed(0);
+      const gap_red = finishedRun[`redCourseGap`] || Number(0).toFixed(2);
+
+      return [
+        {
+          ...courseCompetitorObj_blue,
+          result: result_blue ? result_blue.split(".")[0] : Number(0),
+        },
+        {
+          ...courseCompetitorObj_red,
+          result: result_red ? result_red.split(".")[0] : Number(0),
+        },
+      ];
+    },
     getDMBrackets() {
       return this.competition.races.map((round) => {
         const stage = round.title;
@@ -467,9 +655,9 @@ export default {
               const flag = "";
               const result =
                 this.competition.getRaceResult(runCompetitor, round) ||
-                roundNumber(0, 2).toFixed(2);
+                roundNumber(0, 2).toFixed(0);
               const gap =
-                roundRun[`${course}CourseGap`] || roundNumber(0, 2).toFixed(2);
+                roundRun[`${course}CourseGap`] || Number(0).toFixed(2);
 
               return {
                 course,
@@ -502,7 +690,6 @@ export default {
       if (!this.fileTranslationService.updateData) {
         this.saveCSV();
         this.switchFileUpdateService(true);
-        this.setFileUpdater(setInterval(this.saveCSV, 1024));
       } else {
         this.switchFileUpdateService(false);
         this.clearFileUpdater();
@@ -520,17 +707,33 @@ export default {
       if (this.fileTranslationService.separated) {
         if (this.competition.dualMoguls_mode) {
           const brackets = this.getDMBrackets();
+          const runOnStart = this.getDMOnStart();
+          const finishedRun = this.getDMFinished();
 
           await this.exportCSV({
             path: `${this.fileTranslationService.path}\\DMO Brackets`,
             data: brackets,
           });
+          await this.exportCSV({
+            path: `${this.fileTranslationService.path}\\DMO OnStart`,
+            data: runOnStart,
+          });
+          await this.exportCSV({
+            path: `${this.fileTranslationService.path}\\DMO Finished`,
+            data: finishedRun,
+          });
 
+          await this.setFileUpdater(setTimeout(this.saveCSV, 1536));
           setTimeout(() => {
             this.switchUpdatingState(false);
-          }, 200);
+          }, 176);
           return;
         }
+
+        const competitionStuff = this.getCompetitionJuryData();
+
+        const juryData = competitionStuff ? competitionStuff.jury : [];
+        const judgesData = competitionStuff ? competitionStuff.judges : [];
 
         const startList = this.getStartList();
         const onStart = this.getCompetitorOnStart();
@@ -538,20 +741,26 @@ export default {
         const results = this.getResults();
 
         await this.exportCSV({
+          path: `${this.fileTranslationService.path}\\TW_JuryData`,
+          data: juryData,
+        });
+        await this.exportCSV({
+          path: `${this.fileTranslationService.path}\\TW_JudgesData`,
+          data: judgesData,
+        });
+
+        await this.exportCSV({
           path: `${this.fileTranslationService.path}\\TW_Competition_StartList`,
           data: startList,
         });
-
         await this.exportCSV({
           path: `${this.fileTranslationService.path}\\TW_Competition_OnStart`,
           data: onStart,
         });
-
         await this.exportCSV({
           path: `${this.fileTranslationService.path}\\TW_Competition_Finished`,
           data: finishedCompetitor,
         });
-
         await this.exportCSV({
           path: `${this.fileTranslationService.path}\\TW_Competition_Results`,
           data: results,
@@ -584,9 +793,10 @@ export default {
         });
       }
 
+      await this.setFileUpdater(setTimeout(this.saveCSV, 1536));
       setTimeout(() => {
         this.switchUpdatingState(false);
-      }, 200);
+      }, 176);
     },
   },
   data() {
@@ -611,18 +821,20 @@ export default {
 <style scoped>
 .updater__btn {
   border: 1px solid transparent;
-  font-size: 1.2rem;
+  font-size: 1rem;
+  font-weight: bold;
   letter-spacing: 1px;
 
-  transition: border 92ms, background-color 92ms;
+  transition: border 92ms, background-color 92ms, color 112ms;
 }
 /*noinspection CssUnusedSymbol*/
 .updater-active {
-  border: 1px solid var(--action-green);
+  border: 1px solid var(--accent-light);
 }
 /*noinspection CssUnusedSymbol*/
 .updater-updating {
-  background: var(--action-green);
+  color: var(--text-default) !important;
+  background: var(--accent-light);
 }
 
 .exportPath__input__wrapper {

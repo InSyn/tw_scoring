@@ -3,7 +3,7 @@ import Router from "vue-router";
 
 Vue.use(Router);
 
-import aeCodes from "../components/aeCodes";
+import jumpCodes from "../components/jumpCodes";
 import competition_settings from "../components/competitionSettings/index.vue";
 import competitors from "../components/competitors";
 import final_protocols from "../components/protocols/protocols.vue";
@@ -71,9 +71,9 @@ export default new Router({
       ],
     },
     {
-      path: "/ae_codes",
-      name: "aeCodes",
-      component: aeCodes,
+      path: "/jump_codes",
+      name: "jumpCodes",
+      component: jumpCodes,
     },
     {
       path: "/lic_check",

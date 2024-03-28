@@ -191,8 +191,14 @@ export default {
           ) {
             const newMark = { air: 0, form: 0, landing: 0 };
             for (let aeScoreKey in this.aeScores[mKey]) {
-              if (this.aeScores[mKey][aeScoreKey])
-                newMark[aeScoreKey] = this.aeScores[mKey][aeScoreKey];
+              if (
+                this.aeScores[mKey][aeScoreKey] ||
+                this.aeScores[mKey][aeScoreKey] === 0
+              )
+                newMark[aeScoreKey] = this.competition.set_accuracy(
+                  this.aeScores[mKey][aeScoreKey],
+                  1
+                );
             }
 
             competitor.marks.push(
@@ -217,9 +223,15 @@ export default {
               );
             });
             for (let aeScoreKey in this.aeScores[mKey]) {
-              if (this.aeScores[mKey][aeScoreKey])
+              if (
+                this.aeScores[mKey][aeScoreKey] ||
+                this.aeScores[mKey][aeScoreKey] === 0
+              )
                 existingMark.value_ae[aeScoreKey] =
-                  this.aeScores[mKey][aeScoreKey];
+                  this.competition.set_accuracy(
+                    this.aeScores[mKey][aeScoreKey],
+                    1
+                  );
             }
           }
         }

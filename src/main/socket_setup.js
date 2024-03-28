@@ -131,8 +131,9 @@ io.on("connection", (socket) => {
       return _comp.id === race.onTrack;
     });
 
+    if (!race.onTrack) return;
+
     if (
-      race.onTrack &&
       !competitor.marks.some((existingMark) => {
         return (
           existingMark.judge_id === newMark.judge_id &&
@@ -150,7 +151,6 @@ io.on("connection", (socket) => {
         mark: newMark,
       });
     } else {
-      console.log("overwrite!");
       let markToOverwrite = competitor.marks.find(
         (markToChange) =>
           markToChange.judge_id === newMark.judge_id &&
@@ -162,7 +162,6 @@ io.on("connection", (socket) => {
       markToOverwrite.value_ae = { ...newMark.value_ae };
       markToOverwrite.moguls_value = { ...newMark.moguls_value };
 
-      console.log(old_mark, markToOverwrite);
       sendInfoMessage({
         type: "mark_overwrite",
         race: race.id,

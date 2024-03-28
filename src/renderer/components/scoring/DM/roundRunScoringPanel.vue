@@ -9,7 +9,9 @@
           <div class="runParticipant__result">
             {{ getCourseResult("blue") }}
           </div>
-          <div class="participantGap gap-blue">{{ getCourseGap("blue") }}</div>
+          <div class="participantGap gap-blue">
+            Gap:&nbsp;{{ getCourseGap("blue") }}
+          </div>
         </div>
 
         <div class="runTime__wrapper">
@@ -27,7 +29,9 @@
           <div class="runParticipant__info">
             {{ getCompetitorOnCourseInfo("red") }}
           </div>
-          <div class="participantGap gap-red">{{ getCourseGap("red") }}</div>
+          <div class="participantGap gap-red">
+            Gap:&nbsp;{{ getCourseGap("red") }}
+          </div>
         </div>
 
         <div class="runControls">
@@ -88,49 +92,73 @@ export default {
     setJudgeMark(e, judge, course) {
       if (
         !this.competition.selected_race ||
-        !this.competition.selected_race.onTrack
+        !this.competition.selected_race.onTrack ||
+        !this.getActiveRun
       ) {
         e.target.value = "";
         return;
       }
 
       const mark = e.target.value;
+
       const competitor =
         course === "blue"
-          ? this.competition.selected_race.onTrack.competitors[0]
-          : this.competition.selected_race.onTrack.competitors[1];
+          ? this.getActiveRun.competitors[0]
+          : this.getActiveRun.competitors[1];
+      const competitor_2 =
+        course === "blue"
+          ? this.getActiveRun.competitors[1]
+          : this.getActiveRun.competitors[0];
 
-      const existingMark = competitor.marks.find(
-        (mark) =>
-          parseInt(mark.judge) === parseInt(judge.id) &&
-          parseInt(mark.race) === parseInt(this.competition.selected_race_id)
-      );
-      if (existingMark) {
-        existingMark.value = mark;
-      } else {
-        competitor.marks.push(
-          new MarkClass({
-            race: this.competition.selected_race_id,
-            race_id: this.competition.selected_race.id,
-            judge: judge.id,
-            judge_id: judge._id,
-            value: mark,
-          })
+      [competitor, competitor_2].forEach((competitor, idx) => {
+        if (!competitor) return;
+
+        const existingMark = competitor.marks.find(
+          (mark) =>
+            parseInt(mark.judge) === parseInt(judge.id) &&
+            parseInt(mark.race) === parseInt(this.competition.selected_race_id)
         );
-      }
+        if (existingMark) {
+          existingMark.value =
+            idx > 0 ? 5 - Number(mark) : Number(mark).toFixed(1);
+        } else {
+          competitor.marks.push(
+            new MarkClass({
+              race: this.competition.selected_race_id,
+              race_id: this.competition.selected_race.id,
+              judge: judge.id,
+              judge_id: judge._id,
+              value:
+                idx > 0
+                  ? (5 - Number(mark)).toFixed(1)
+                  : Number(mark).toFixed(1),
+            })
+          );
+        }
+      });
+
       e.target.value = "";
+    },
+    getRunById(id) {
+      if (!this.competition.selected_race) return null;
+
+      const run = this.competition.selected_race.runs.find(
+        (run) => run.id === id
+      );
+      if (!run) return null;
+
+      return run;
     },
     getCompetitorOnCourseInfo(course) {
       if (
         !this.competition.selected_race ||
-        !this.competition.selected_race.onTrack
+        !this.competition.selected_race.onTrack ||
+        !this.getActiveRun
       )
         return "Ожидание участника";
 
       const competitor = this.competition.competitorsSheet.competitors.find(
-        (competitor) =>
-          competitor.id ===
-          this.competition.selected_race.onTrack[`${course}Course`]
+        (competitor) => competitor.id === this.getActiveRun[`${course}Course`]
       );
       if (!competitor) return "";
 
@@ -139,19 +167,20 @@ export default {
     getJudgeMark(course, judge) {
       if (
         !this.competition.selected_race ||
-        !this.competition.selected_race.onTrack
-      )
-        return 0;
+        !this.competition.selected_race.onTrack ||
+        !this.getActiveRun
+      ) {
+        return Number(0).toFixed(1);
+      }
 
       const competitor = this.competition.competitorsSheet.competitors.find(
         (_competitor) => {
-          return (
-            _competitor.id ===
-            this.competition.selected_race.onTrack[`${course}Course`]
-          );
+          return _competitor.id === this.getActiveRun[`${course}Course`];
         }
       );
-      if (!competitor) return 0;
+      {
+        if (!competitor) return Number(0).toFixed(1);
+      }
 
       const judgeMark = competitor.marks.find((mark) => {
         return (
@@ -159,23 +188,27 @@ export default {
           mark.race_id === this.competition.selected_race.id
         );
       });
-      if (!judgeMark) return 0;
+      {
+        if (!judgeMark) return Number(0).toFixed(1);
+      }
 
       return judgeMark.value;
     },
     getCourseGap(course) {
       if (
         !this.competition.selected_race ||
-        !this.competition.selected_race.onTrack
+        !this.competition.selected_race.onTrack ||
+        !this.getActiveRun
       )
         return roundNumber(0, 2);
 
-      return this.competition.selected_race.onTrack[`${course}CourseGap`];
+      return this.getActiveRun[`${course}CourseGap`];
     },
     getCourseResult(course) {
       if (
         !this.competition.selected_race ||
-        !this.competition.selected_race.onTrack
+        !this.competition.selected_race.onTrack ||
+        !this.getActiveRun
       )
         return this.competition.set_accuracy(0);
 
@@ -191,9 +224,7 @@ export default {
       if (!resultFormula) return this.competition.set_accuracy(0);
 
       const competitor = this.competition.competitorsSheet.competitors.find(
-        (competitor) =>
-          competitor.id ===
-          this.competition.selected_race.onTrack[`${course}Course`]
+        (competitor) => competitor.id === this.getActiveRun[`${course}Course`]
       );
       if (!competitor) return this.competition.set_accuracy(0);
 
@@ -213,22 +244,24 @@ export default {
     getRunTime() {
       if (
         !this.competition.selected_race ||
-        !this.competition.selected_race.onTrack
+        !this.competition.selected_race.onTrack ||
+        !this.getActiveRun
       )
         return 0;
 
-      return this.competition.selected_race.onTrack.runTime;
+      return this.getActiveRun.runTime;
     },
     switchRunTimer() {
       if (
         !this.competition.selected_race ||
-        !this.competition.selected_race.onTrack
+        !this.competition.selected_race.onTrack ||
+        !this.getActiveRun
       )
         return;
 
-      this.competition.selected_race.onTrack.timer.isRunning
-        ? this.competition.selected_race.onTrack.timer.stopTimer()
-        : this.competition.selected_race.onTrack.timer.startTimer();
+      this.getActiveRun.timer.isRunning
+        ? this.getActiveRun.timer.stopTimer()
+        : this.getActiveRun.timer.startTimer();
     },
     publishCompetitorResult(competitor_id) {
       const competitor = this.competition.competitorsSheet.competitors.find(
@@ -268,27 +301,35 @@ export default {
     publishRun() {
       if (
         !this.competition.selected_race ||
-        !this.competition.selected_race.onTrack
+        !this.competition.selected_race.onTrack ||
+        !this.getActiveRun
       )
         return;
 
-      this.competition.selected_race.onTrack.competitors.forEach(
-        (competitor) => {
-          if (!competitor) return;
+      this.getActiveRun.competitors.forEach((competitor) => {
+        if (!competitor) return;
 
-          this.publishCompetitorResult(competitor.id);
-        }
-      );
+        this.publishCompetitorResult(competitor.id);
+      });
 
-      this.competition.selected_race.onTrack.timer = null;
-      this.competition.selected_race.finished.push(
-        this.competition.selected_race.onTrack.id
-      );
+      this.getActiveRun.timer = null;
+      this.competition.selected_race.finished.push(this.getActiveRun.id);
       this.competition.selected_race.onTrack = null;
     },
   },
   data() {
     return { timerIcon: mdiTimerOutline };
+  },
+  computed: {
+    getActiveRun() {
+      const currentRun = this.getRunById(
+        this.competition.selected_race.onTrack
+      );
+      if (!currentRun) return null;
+
+      console.log(currentRun);
+      return currentRun;
+    },
   },
 };
 </script>
@@ -358,20 +399,22 @@ export default {
   position: absolute;
   top: 100%;
   min-width: 4rem;
-  padding: 4px 6px;
+  padding: 2px 8px;
 
-  color: var(--standard-background);
-  background: var(--text-default);
+  background: var(--standard-background);
   border-radius: 0 0 4px 4px;
 
   text-align: center;
+  font-size: 1.2rem;
   font-weight: bold;
 }
 .gap-blue {
-  right: 2rem;
+  left: 2rem;
+  box-shadow: 0 0 0 4px var(--dmo-blue);
 }
 .gap-red {
-  left: 2rem;
+  right: 2rem;
+  box-shadow: 0 0 0 4px var(--dmo-red);
 }
 
 .publishRun__button {

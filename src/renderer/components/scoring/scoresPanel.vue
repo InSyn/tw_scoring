@@ -31,6 +31,15 @@
             :competitor-on-track="getCompetitorOnTrack"
             :show-d-d="true"
           ></aerials-controls>
+
+          <moguls-controls
+            v-if="competition.is_moguls && getCompetitorOnTrack"
+            :key="getCompetitorOnTrack.id"
+            @update-mg-run-params="updateMgRunData"
+            :competition="competition"
+            :competitor-on-track="getCompetitorOnTrack"
+            :run-data="mgRunData"
+          ></moguls-controls>
         </div>
 
         <div v-else class="emptyCompetitor__placeholder">
@@ -256,13 +265,29 @@
                   class="mgMarks__wrapper"
                   style="min-height: 3rem; min-width: 4rem"
                 >
-                  <div
-                    v-for="mogulsMark in getMogulsMark(
-                      getCompetitorOnTrack,
-                      judge
-                    )"
-                  >
-                    {{ mogulsMark }}
+                  <div class="mgMarks__value__wrapper">
+                    <div class="mgMarks__value__item">
+                      <span class="mgMarks__value__item__label">
+                        {{ judge.moguls_role === "turns" ? "Sc." : "Jp. 1" }}
+                      </span>
+                      <div class="mgMarks__value__item__value">
+                        {{
+                          getMogulsMark(getCompetitorOnTrack, judge)[0] ||
+                          Number(0).toFixed(1)
+                        }}
+                      </div>
+                    </div>
+                    <div class="mgMarks__value__item">
+                      <span class="mgMarks__value__item__label">
+                        {{ judge.moguls_role === "turns" ? "DD" : "Jp. 2" }}
+                      </span>
+                      <div class="mgMarks__value__item__value">
+                        {{
+                          getMogulsMark(getCompetitorOnTrack, judge)[1] ||
+                          Number(0).toFixed(1)
+                        }}
+                      </div>
+                    </div>
                   </div>
                 </div>
 
@@ -444,10 +469,12 @@ import SkiJumpControls from "./scoresPanel/skiJumpControls.vue";
 import AerialsControls from "./scoresPanel/aerialsControls.vue";
 import JudgeTerminalIcon from "../../assets/icons/judgeTerminal-icon.vue";
 import JudgeTerminalControl from "./scoresPanel/judgeTerminal-control.vue";
+import MogulsControls from "./scoresPanel/mogulsControls.vue";
 
 export default {
   name: "scoresPanel",
   components: {
+    MogulsControls,
     JudgeTerminalControl,
     JudgeTerminalIcon,
     AerialsControls,
@@ -457,6 +484,9 @@ export default {
   methods: {
     ...mapActions("main", {
       updateEvent: "updateEvent",
+    }),
+    ...mapActions("moguls", {
+      setMgRunData: "SET_MG_RUN_DATA",
     }),
     getSectionMark(section, judge) {
       if (
@@ -486,24 +516,39 @@ export default {
     },
     getMogulsMark(competitor, judge) {
       const mogulsRole = judge.moguls_role;
-      if (competitor) {
-        const mark = competitor.marks.find((_mark) => {
-          return (
-            _mark.judge == judge.id &&
-            _mark.race_id == this.competition.selected_race.id
-          );
-        });
 
-        if (mogulsRole === "turns" && mark)
-          return [mark.moguls_value.baseScore, mark.moguls_value.deduction];
-        if (mogulsRole === "jumps" && mark)
-          return [
-            `${mark.moguls_value.jump1_score} (${mark.moguls_value.jump1_code})`,
-            `${mark.moguls_value.jump2_score} (${mark.moguls_value.jump2_code})`,
-          ];
+      if (!competitor) return [Number(0).toFixed(1), Number(0).toFixed(1)];
+
+      const mark = competitor.marks.find((_mark) => {
+        return (
+          _mark.judge == judge.id &&
+          _mark.race_id == this.competition.selected_race.id
+        );
+      });
+
+      if (!mark) {
+        switch (mogulsRole) {
+          case "turns":
+            return [Number(0).toFixed(1), Number(0).toFixed(1)];
+          case "jumps":
+            return [Number(0).toFixed(1), ""];
+        }
       }
 
-      return "";
+      if (mogulsRole === "turns" && mark)
+        return [
+          mark.moguls_value.baseScore || Number(0).toFixed(1),
+          mark.moguls_value.deduction || Number(0).toFixed(1),
+        ];
+      if (mogulsRole === "jumps" && mark)
+        return [
+          `${mark.moguls_value.jump1_score || Number(0).toFixed(1)} (${
+            mark.moguls_value.jump1_code
+          })`,
+          `${mark.moguls_value.jump2_score || Number(0).toFixed(1)} (${
+            mark.moguls_value.jump2_code
+          })`,
+        ];
     },
     getRaceResult() {
       if (
@@ -532,11 +577,16 @@ export default {
         this.competition.stuff.judges.map((judge) => {
           return parseInt(judge.id);
         }),
-        this.getCompetitorOnTrack.info_data[
-          `jump${this.competition.selected_race_id + 1}_code`
-        ],
-        this.sjDistance,
-        this.sjRamp
+        this.competition.is_aerials
+          ? this.getCompetitorOnTrack.info_data[
+              `jump${this.competition.selected_race_id + 1}_code`
+            ]
+          : this.competition.is_moguls
+          ? { ...this.mgRunData, ...this.mgParameters }
+          : null,
+
+        this.competition.is_skiJumps ? this.sjDistance : null,
+        this.competition.is_skiJumps ? this.sjRamp : null
       );
       if (!result) {
         return this.competition.set_accuracy(0);
@@ -576,6 +626,26 @@ export default {
                       air: Math.round((0.2 + Math.random() * 2) * 10) / 10,
                       form: Math.round((0.2 + Math.random() * 5) * 10) / 10,
                       landing: Math.round((0.2 + Math.random() * 3) * 10) / 10,
+                    },
+                    moguls_value: {
+                      baseScore:
+                        _judge.moguls_role === "turns"
+                          ? (Math.random() * 20).toFixed(1)
+                          : null,
+                      deduction:
+                        _judge.moguls_role === "turns"
+                          ? (Math.random() * 4).toFixed(1)
+                          : null,
+                      jump1_code: "",
+                      jump1_score:
+                        _judge.moguls_role === "jumps"
+                          ? (Math.random() * 10).toFixed(1)
+                          : null,
+                      jump2_code: "",
+                      jump2_score:
+                        _judge.moguls_role === "jumps"
+                          ? (Math.random() * 10).toFixed(1)
+                          : null,
                     },
                   })
                 );
@@ -634,6 +704,7 @@ export default {
         rep: this.score_repeat,
         status: competitor.race_status,
         ae_code: ae_code,
+        mg_parameters: { ...this.mgRunData, ...this.mgParameters },
         sjDistance: sjDistance,
         sjRamp: sjRamp,
         mgTime: mgTime,
@@ -644,6 +715,14 @@ export default {
 
       competitor.res_accepted = false;
       competitor.race_status = null;
+
+      if (this.competition.is_moguls) {
+        this.setMgRunData({
+          jump1_code: " ",
+          jump2_code: " ",
+          runTime: "0",
+        });
+      }
 
       if (this.competition.result_formula.overall_result.type == 3)
         this.score_repeat = "A";
@@ -703,6 +782,9 @@ export default {
       if (abcValue === this.score_repeat) this.score_repeat = null;
       else this.score_repeat = abcValue;
     },
+    updateMgRunData(data) {
+      this.setMgRunData({ ...this.mgRunData, ...data });
+    },
   },
   data() {
     return {
@@ -727,6 +809,10 @@ export default {
       competition: "competition",
       appTheme: "appTheme",
       socket: "socket",
+    }),
+    ...mapGetters("moguls", {
+      mgParameters: "getMgParameters",
+      mgRunData: "getMgRunData",
     }),
     getCompetitorOnTrack() {
       const competitorOnTrack =
@@ -921,6 +1007,34 @@ export default {
   padding: 2px 6px;
   background: var(--standard-background);
   border-radius: 4px;
+  font-weight: bold;
+}
+
+.mgMarks__wrapper {
+  display: flex;
+  flex-direction: column;
+}
+.mgMarks__value__wrapper {
+  flex: 0 0 auto;
+}
+.mgMarks__value__item {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+}
+.mgMarks__value__item:not(:last-child) {
+  margin-bottom: 4px;
+}
+.mgMarks__value__item__label {
+  font-size: 1.1rem;
+  width: 2.5rem;
+}
+.mgMarks__value__item__value {
+  margin-left: 4px;
+  padding: 3px 6px;
+  border-radius: 4px;
+  background: var(--standard-background);
+  font-size: 1.2rem;
   font-weight: bold;
 }
 

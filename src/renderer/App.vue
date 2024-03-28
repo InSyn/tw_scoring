@@ -55,7 +55,9 @@
       ></competition-select-menu>
 
       <timing-device-settings
-        v-if="competition && competition.dualMoguls_mode"
+        v-if="
+          competition && (competition.dualMoguls_mode || competition.is_moguls)
+        "
       />
 
       <div class="appIcon__wrapper">

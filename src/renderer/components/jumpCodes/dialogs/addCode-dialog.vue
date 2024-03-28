@@ -12,7 +12,7 @@
       <div class="addCodeDialog__body">
         <div class="input__wrapper">
           <div class="input__title">Код</div>
-          <input class="codeName__input" v-model="codeName" type="text" />
+          <input class="codeName__input" v-model="code" type="text" />
         </div>
 
         <div class="input__wrapper">
@@ -23,6 +23,11 @@
         <div class="input__wrapper">
           <div class="input__title">М</div>
           <input class="codeValue__input" v-model="menValue" type="text" />
+        </div>
+
+        <div class="input__wrapper">
+          <div class="input__title">Название</div>
+          <input class="codeName__input" v-model="jumpName" type="text" />
         </div>
       </div>
 
@@ -47,11 +52,12 @@
 <script>
 export default {
   name: "addCode_dialog",
-  props: ["aeCodes"],
+  props: ["jumpCodes"],
   methods: {
     addCode() {
-      this.aeCodes.push({
-        code: this.codeName,
+      this.$emit("add-new-jump-code", {
+        code: this.code,
+        jump_name: this.jumpName,
         value_women: this.womenValue,
         value_men: this.menValue,
       });
@@ -59,7 +65,8 @@ export default {
       this.closeDialog();
     },
     closeDialog() {
-      this.codeName = "";
+      this.code = "";
+      this.jumpName = "";
       this.womenValue = "";
       this.menValue = "";
 
@@ -69,7 +76,8 @@ export default {
   data() {
     return {
       dialogState: false,
-      codeName: "",
+      code: "",
+      jumpName: "",
       womenValue: "",
       menValue: "",
     };

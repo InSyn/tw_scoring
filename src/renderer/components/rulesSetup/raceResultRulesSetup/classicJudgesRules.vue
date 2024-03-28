@@ -71,6 +71,10 @@
               v-if="competition.result_formula.types[0].doubleUp"
               :competition="competition"
             ></double-up-settings>
+
+            <mg-parameters-settings
+              v-if="competition.is_moguls"
+            ></mg-parameters-settings>
           </div>
 
           <div class="raceModes__wrapper">
@@ -166,10 +170,11 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 import DoubleUpSettings from "./doubleUpSettings.vue";
+import MgParametersSettings from "./mgParametersSettings.vue";
 
 export default {
   name: "classicJudgesRules",
-  components: { DoubleUpSettings },
+  components: { MgParametersSettings, DoubleUpSettings },
   props: ["competition"],
   methods: {
     ...mapActions("main", {

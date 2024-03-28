@@ -1,7 +1,16 @@
 import { generateId } from "../../../lib/utils";
 
 export default class MarkClass {
-  constructor({ race, race_id, judge, judge_id, value, ae_value, section }) {
+  constructor({
+    race,
+    race_id,
+    judge,
+    judge_id,
+    value,
+    ae_value,
+    mg_value,
+    section,
+  }) {
     this.id = generateId();
 
     this.judge = judge;
@@ -12,7 +21,7 @@ export default class MarkClass {
     this.section = section || 0;
     this.value = value || 0;
 
-    this.moguls_value = {
+    this.moguls_value = mg_value || {
       baseScore: null,
       deduction: null,
       jump1_code: "",
