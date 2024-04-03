@@ -25,7 +25,7 @@
             color="var(--accent-light)"
             style="
               font-size: 1rem;
-              border-radius: 2px;
+              border-radius: 4px;
               margin-left: auto;
               color: var(--text-default);
             "
@@ -45,7 +45,7 @@
                 : 'var(--standard-background)'
             "
             style="
-              border-radius: 2px;
+              border-radius: 4px;
               color: var(--accent-light);
               border: 1px solid var(--standard-background);
               font-size: 1rem;

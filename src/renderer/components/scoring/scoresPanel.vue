@@ -40,6 +40,24 @@
             :competitor-on-track="getCompetitorOnTrack"
             :run-data="mgRunData"
           ></moguls-controls>
+
+          <div
+            v-if="competition.selected_race && getCompetitorOnTrack"
+            class="competitorResults__list"
+          >
+            <div
+              v-for="race in competition.races"
+              :key="race.id"
+              class="competitorResults__list__item"
+            >
+              <div class="competitorResults__list__item__race">
+                {{ race.title }}
+              </div>
+              <div class="competitorResults__list__item__value">
+                {{ competition.getRaceResult(getCompetitorOnTrack, race) }}
+              </div>
+            </div>
+          </div>
         </div>
 
         <div v-else class="emptyCompetitor__placeholder">
@@ -68,22 +86,13 @@
 
         <div
           v-if="competition.result_formula.overall_result.type == 3"
-          style="display: flex; flex-direction: column; margin-left: 8px"
+          class="jumpRepeat__wrapper"
         >
           <div
             v-for="i in ['A', 'B', 'C']"
             :key="i"
-            style="
-              flex: 0 0 auto;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              height: 33%;
-              font-size: 1rem;
-              border-radius: 2px;
-              background: var(--standard-background);
-              cursor: pointer;
-            "
+            class="jumpRepeat__value"
+            style=""
             :style="
               i === score_repeat && {
                 background: 'var(--text-default)',
@@ -924,6 +933,36 @@ export default {
   font-weight: bold;
   font-size: 1.6rem;
 }
+
+.competitorResults__list {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+.competitorResults__list__item {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  padding: 4px;
+  color: var(--text-default);
+  background: var(--standard-background);
+}
+.competitorResults__list__item:not(:last-child) {
+  margin-right: 8px;
+}
+.competitorResults__list__item__race {
+  flex: 0 0 auto;
+  margin-bottom: 4px;
+  font-size: 0.95rem;
+  font-weight: bold;
+}
+.competitorResults__list__item__value {
+  text-align: end;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
 .raceResult__wrapper {
   display: flex;
   align-items: center;
@@ -948,6 +987,26 @@ export default {
   background-color: var(--card-background);
   border-radius: 6px;
   overflow: hidden;
+}
+
+.jumpRepeat__wrapper {
+  display: flex;
+  flex-direction: column;
+  margin-left: 8px;
+}
+.jumpRepeat__value {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 33%;
+  font-size: 1rem;
+  border-radius: 2px;
+  background: var(--standard-background);
+  cursor: pointer;
+}
+.jumpRepeat__value:not(:last-child) {
+  margin-bottom: 2px;
 }
 
 .resultControls__wrapper {

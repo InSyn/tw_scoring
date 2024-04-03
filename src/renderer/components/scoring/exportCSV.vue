@@ -821,6 +821,7 @@ export default {
 <style scoped>
 .updater__btn {
   border: 1px solid transparent;
+  border-radius: 4px;
   font-size: 1rem;
   font-weight: bold;
   letter-spacing: 1px;

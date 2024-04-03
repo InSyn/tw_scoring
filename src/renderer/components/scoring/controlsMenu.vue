@@ -111,137 +111,113 @@
           style="display: flex; align-items: center; margin-left: 8px"
         >
           <v-btn
-            @click="switchRace(-1)"
             :color="$vuetify.theme.themes[appTheme].action_blue"
             max-width="40px"
             min-width="0"
             small
             text
+            @click="switchRace(-1)"
           >
             <v-icon>mdi-chevron-left</v-icon>
           </v-btn>
 
-          <v-hover
+          <div
             v-if="competition.races.length > 0"
-            v-slot:default="{ hover }"
+            :class="[
+              'selectRace__wrapper',
+              menu.state && 'selectRace__wrapper-menuOpen',
+            ]"
+            style=""
+            tabindex="0"
+            @blur="menu.state = false"
+            @click="menu.state = !menu.state"
           >
-            <div
-              :style="[
-                {
-                  backgroundColor:
-                    $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
-                },
-                hover && {
-                  backgroundColor:
-                    $vuetify.theme.themes[appTheme].subjectBackgroundRGBA,
-                },
-                menu.state
-                  ? {
-                      borderRadius: 0,
-                    }
-                  : {
-                      borderRadius: `6px`,
-                    },
-              ]"
-              class="pa-2 d-flex justify-center align-center"
-              style="
-                position: relative;
-                margin: 0 4px;
-                font-weight: bold;
-                cursor: pointer;
-                outline: none;
-              "
-              tabindex="0"
-              @blur="menu.state = false"
-              @click="menu.state = !menu.state"
-            >
-              <div>
-                {{
-                  competition.races[competition.selected_race_id]
-                    ? competition.races[competition.selected_race_id].title
-                    : localization[lang].no_selected_race
-                }}
-              </div>
-              <div
-                v-if="menu.state"
-                :style="{
-                  backgroundColor:
-                    $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
-                }"
-                class="d-flex flex-column align-center"
-                style="
-                  position: absolute;
-                  bottom: 100%;
-                  left: 0;
-                  right: 0;
-                  border-top-right-radius: 6px;
-                  border-top-left-radius: 6px;
-                  overflow: hidden;
-                "
-              >
-                <v-hover
-                  v-for="(prevRace, prIdx) in competition.races.filter(
-                    (race, raceIdx) => raceIdx < competition.selected_race_id
-                  )"
-                  :key="prIdx"
-                  v-slot:default="{ hover }"
-                >
-                  <div
-                    :style="
-                      hover && {
-                        backgroundColor:
-                          $vuetify.theme.themes[appTheme].subjectBackgroundRGBA,
-                      }
-                    "
-                    class="pa-2"
-                    style="width: 100%"
-                    @click="selectRace(prevRace)"
-                  >
-                    {{ prevRace.title }}
-                  </div>
-                </v-hover>
-              </div>
-              <div
-                v-if="menu.state"
-                :style="{
-                  backgroundColor:
-                    $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
-                }"
-                class="d-flex flex-column align-center"
-                style="
-                  position: absolute;
-                  top: 100%;
-                  left: 0;
-                  right: 0;
-                  border-bottom-right-radius: 6px;
-                  border-bottom-left-radius: 6px;
-                  overflow: hidden;
-                "
-              >
-                <v-hover
-                  v-for="(nextRace, nrIdx) in competition.races.filter(
-                    (race, raceIdx) => raceIdx > competition.selected_race_id
-                  )"
-                  :key="nrIdx"
-                  v-slot:default="{ hover }"
-                >
-                  <div
-                    :style="
-                      hover && {
-                        backgroundColor:
-                          $vuetify.theme.themes[appTheme].subjectBackgroundRGBA,
-                      }
-                    "
-                    class="pa-2"
-                    style="width: 100%"
-                    @click="selectRace(nextRace)"
-                  >
-                    {{ nextRace.title }}
-                  </div>
-                </v-hover>
-              </div>
+            <div>
+              {{
+                competition.races[competition.selected_race_id]
+                  ? competition.races[competition.selected_race_id].title
+                  : localization[lang].no_selected_race
+              }}
             </div>
-          </v-hover>
+            <div
+              v-if="menu.state"
+              :style="{
+                backgroundColor:
+                  $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
+              }"
+              class="d-flex flex-column align-center"
+              style="
+                position: absolute;
+                bottom: 100%;
+                left: 0;
+                right: 0;
+                border-top-right-radius: 6px;
+                border-top-left-radius: 6px;
+                overflow: hidden;
+              "
+            >
+              <v-hover
+                v-for="(prevRace, prIdx) in competition.races.filter(
+                  (race, raceIdx) => raceIdx < competition.selected_race_id
+                )"
+                :key="prIdx"
+                v-slot:default="{ hover }"
+              >
+                <div
+                  :style="
+                    hover && {
+                      backgroundColor:
+                        $vuetify.theme.themes[appTheme].subjectBackgroundRGBA,
+                    }
+                  "
+                  class="pa-2"
+                  style="width: 100%"
+                  @click="selectRace(prevRace)"
+                >
+                  {{ prevRace.title }}
+                </div>
+              </v-hover>
+            </div>
+            <div
+              v-if="menu.state"
+              :style="{
+                backgroundColor:
+                  $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
+              }"
+              class="d-flex flex-column align-center"
+              style="
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                border-bottom-right-radius: 6px;
+                border-bottom-left-radius: 6px;
+                overflow: hidden;
+              "
+            >
+              <v-hover
+                v-for="(nextRace, nrIdx) in competition.races.filter(
+                  (race, raceIdx) => raceIdx > competition.selected_race_id
+                )"
+                :key="nrIdx"
+                v-slot:default="{ hover }"
+              >
+                <div
+                  :style="
+                    hover && {
+                      backgroundColor:
+                        $vuetify.theme.themes[appTheme].subjectBackgroundRGBA,
+                    }
+                  "
+                  class="pa-2"
+                  style="width: 100%"
+                  @click="selectRace(nextRace)"
+                >
+                  {{ nextRace.title }}
+                </div>
+              </v-hover>
+            </div>
+          </div>
           <div
             v-else
             :style="{
@@ -249,7 +225,7 @@
                 $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
             }"
             class="pa-2"
-            style="margin: 0 4px; font-weight: bold; border-radius: 6px"
+            style="margin: 0 4px; font-weight: bold; border-radius: 4px"
           >
             {{ localization[lang].app.scoring.no_created_races }}
           </div>
@@ -376,5 +352,31 @@ export default {
 /*noinspection CssUnusedSymbol*/
 .serverStatus__wrapper.server-inactive {
   color: var(--text-default);
+}
+
+.selectRace__wrapper {
+  position: relative;
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: center;
+
+  margin: 0 4px;
+  padding: 4px 8px;
+  background: var(--standard-background);
+  border-radius: 4px;
+
+  font-weight: bold;
+  cursor: pointer;
+  outline: none;
+}
+.selectRace__wrapper:hover {
+  background: var(--subject-background);
+}
+
+/*noinspection CssUnusedSymbol*/
+.selectRace__wrapper-menuOpen {
+  box-shadow: 0 0 0 2px var(--accent-light);
+  border-radius: 0;
 }
 </style>

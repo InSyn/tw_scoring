@@ -25,6 +25,7 @@
           <span class="d-block" style="min-width: 11rem; font-weight: bold">{{
             localization[lang].app.event.main_data[md]
           }}</span>
+
           <v-dialog
             v-if="md === 'date'"
             v-model="mainData.dialog"
@@ -54,23 +55,26 @@
                 ></div>
               </v-hover>
             </template>
+
             <v-date-picker
               v-model="mainData.value"
+              :dark="appTheme === 'dark'"
+              width="100%"
               :color="$vuetify.theme.themes[appTheme].accent"
               :header-color="$vuetify.theme.themes[appTheme].cardBackgroundRGBA"
               locale="ru"
             ></v-date-picker>
+
             <v-btn
-              :color="$vuetify.theme.themes[appTheme].textDefault"
-              :style="{
-                backgroundColor:
-                  $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
-              }"
-              text
               @click="mainData.dialog = false"
-              >Accept
+              class="acceptTime__button mt-2"
+              :style="{ color: 'var(--text-default)' }"
+              color="var(--accent)"
+            >
+              Accept
             </v-btn>
           </v-dialog>
+
           <v-dialog
             v-if="md === 'date'"
             v-model="mainData.time_dialog"
@@ -100,21 +104,22 @@
                 ></div>
               </v-hover>
             </template>
+
             <v-time-picker
               v-model="mainData.time"
+              :dark="appTheme === 'dark'"
+              width="100%"
               :color="$vuetify.theme.themes[appTheme].accent"
               :header-color="$vuetify.theme.themes[appTheme].cardBackgroundRGBA"
               format="24hr"
               locale="ru"
             ></v-time-picker>
+
             <v-btn
-              :color="$vuetify.theme.themes[appTheme].textDefault"
-              :style="{
-                backgroundColor:
-                  $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
-              }"
-              text
               @click="mainData.time_dialog = false"
+              class="acceptTime__button mt-2"
+              :style="{ color: 'var(--text-default)' }"
+              color="var(--accent)"
             >
               Accept
             </v-btn>

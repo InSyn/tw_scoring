@@ -70,15 +70,16 @@ export default {
     getMenuList() {
       let menuList = this.appMenu;
 
-      if (this.competition && !this.competition.is_teams)
+      if (this.competition && !this.competition.is_teams) {
         menuList = menuList.filter((menuLink) => menuLink.link !== "teams");
-
+      }
       if (
         this.competition &&
         !this.competition.is_aerials &&
         !this.competition.is_moguls
-      )
+      ) {
         menuList = menuList.filter((menuLink) => menuLink.link !== "jumpCodes");
+      }
 
       return menuList;
     },
@@ -97,6 +98,8 @@ export default {
   background: var(--card-background);
   border-right: 1px solid var(--subject-background);
 }
+
+/*noinspection CssUnusedSymbol*/
 .menu-hidden {
   min-width: 0;
   width: 0;
@@ -114,6 +117,8 @@ export default {
 .appMenu__menuItem:hover {
   background: var(--accent);
 }
+
+/*noinspection CssUnusedSymbol*/
 .appMenu__menuItem.menuItem-active {
   background: var(--accent);
 }

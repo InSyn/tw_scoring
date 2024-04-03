@@ -81,6 +81,20 @@
               </div>
             </div>
           </div>
+
+          <div
+            :class="[
+              'competitorRaceInfo__dialog__competitorRaceInfo__section__result__wrapper',
+              race.id === selectedRace.id &&
+                'competitorRaceInfo__dialog__competitorRaceInfo__section__result__wrapper-active',
+            ]"
+          >
+            <div
+              class="competitorRaceInfo__dialog__competitorRaceInfo__section__result__value"
+            >
+              {{ competition.getRaceResult(competitor, race) }}
+            </div>
+          </div>
         </div>
       </div>
 
@@ -218,6 +232,8 @@ export default {
   margin-top: 8px;
 }
 .competitorRaceInfo__dialog__competitorRaceInfo__section {
+  display: flex;
+  flex-direction: column;
   flex: 0 0 auto;
   margin-bottom: 4px;
 }
@@ -225,6 +241,7 @@ export default {
   margin-bottom: 0;
 }
 .competitorRaceInfo__dialog__competitorRaceInfo__section__title {
+  flex: 0 0 auto;
   display: inline-block;
   font-weight: bold;
   padding: 0 1rem;
@@ -239,6 +256,7 @@ export default {
   padding-left: 2rem;
 }
 .competitorRaceInfo__dialog__competitorRaceInfo__section__body {
+  flex: 0 0 auto;
   display: flex;
   flex-wrap: wrap;
   padding: 4px 8px;
@@ -264,7 +282,25 @@ export default {
 .competitorRaceInfo__dialog__competitorRaceInfo__section__raceMarks__markValue {
   font-weight: bold;
 }
+
+.competitorRaceInfo__dialog__competitorRaceInfo__section__result__wrapper {
+  align-items: center;
+  justify-content: flex-end;
+  margin-left: auto;
+  padding: 3px 6px;
+  border-radius: 0 0 4px 4px;
+  background: var(--accent);
+}
+.competitorRaceInfo__dialog__competitorRaceInfo__section__result__wrapper-active {
+  background: var(--accent-light);
+}
+.competitorRaceInfo__dialog__competitorRaceInfo__section__result__value {
+  font-weight: bold;
+  color: var(--text-default);
+}
+
 .competitorRaceInfo__dialog__footer {
+  flex: 0 0 auto;
   display: flex;
   align-items: center;
   padding: 8px;
