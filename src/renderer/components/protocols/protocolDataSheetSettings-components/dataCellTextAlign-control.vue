@@ -40,6 +40,7 @@ export default {
 
 <style scoped>
 .cellAlignControl__wrapper {
+  flex: 0 0 auto;
   display: flex;
   justify-content: center;
   align-items: center;

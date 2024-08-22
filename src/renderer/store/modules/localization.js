@@ -198,6 +198,10 @@ export default {
             activation: "Проверка лицензии...",
             key: "Ключ продукта",
             check: "Проверить",
+            serial: "Серийный номер",
+            user: "Эл. почта",
+            activate: "Активировать",
+            enter: "Войти",
           },
           dialogs: {
             d_accept: "Принять",
@@ -407,6 +411,10 @@ export default {
             activation: "Checking license...",
             key: "Product key",
             check: "Check",
+            serial: "Serial number",
+            user: "Email",
+            activate: "Activate",
+            enter: "Enter",
           },
           dialogs: {
             d_accept: "Accept",

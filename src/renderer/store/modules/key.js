@@ -16,26 +16,9 @@ export default {
     },
   },
   actions: {
-    async get_licenses() {
-      let licenses = [];
-      await axios
-        .get("http://79.143.30.189:8088/getKeys", {
-          headers: { Authorization: "Jx9t9VAjGsgiCrGSrvv8h5E7wtKXQ6L2" },
-        })
-        .then((response) => {
-          // console.log(response.data);
-          licenses = response.data;
-        })
-        .catch((err) => {
-          if (err) console.log("AJAX Err: " + err);
-        });
-      return licenses;
-    },
     async register_key(store, license) {
       await axios
-        .post("http://79.143.30.189:8088/registerKey", license, {
-          headers: { Authorization: "Jx9t9VAjGsgiCrGSrvv8h5E7wtKXQ6L2" },
-        })
+        .post("http://79.143.30.189:8088/registerKey", license)
         .then((response) => console.log(response))
         .catch((err) => {
           if (err) console.log("AJAX Err: " + err);
@@ -43,18 +26,13 @@ export default {
     },
     async check_lic(store, license_data) {
       let validated = false;
+
       await axios
-        .post(
-          "http://79.143.30.189:8088/validate",
-          {
-            key: license_data.key,
-            serial: license_data.serial,
-            salt: license_data.salt,
-          },
-          {
-            headers: { Authorization: "Jx9t9VAjGsgiCrGSrvv8h5E7wtKXQ6L2" },
-          }
-        )
+        .post("http://79.143.30.189:8088/validate", {
+          key: license_data.key,
+          serial: license_data.serial,
+          salt: license_data.salt,
+        })
         .then((response) => {
           if (
             response.data.body.status === "ok" &&
@@ -65,6 +43,7 @@ export default {
         .catch((err) => {
           if (err) console.log("Check err: " + err);
         });
+
       return validated;
     },
   },

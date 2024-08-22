@@ -256,8 +256,9 @@ export default {
 }
 
 .protocolTitle__input {
-  flex: 1 0 auto;
+  flex: 0 1 auto;
 
+  min-width: 0;
   margin-left: 8px;
   padding: 4px 6px;
 
@@ -267,7 +268,7 @@ export default {
 }
 
 .protocolTypeSettings__wrapper {
-  flex: 1 1 auto;
+  flex: 0 1 auto;
   display: flex;
   align-items: center;
   margin-left: 2rem;
@@ -279,8 +280,9 @@ export default {
 }
 
 .protocolType__input {
-  flex: 1 0 auto;
+  flex: 0 1 auto;
 
+  min-width: 0;
   margin-left: 8px;
   padding: 4px 6px;
 

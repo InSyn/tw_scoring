@@ -29,7 +29,7 @@ export default {
 
 <style scoped>
 .cellFontSizeControl__wrapper {
-  flex: 1 0 0;
+  flex: 0 0 auto;
   display: flex;
   flex-wrap: nowrap;
   align-items: center;

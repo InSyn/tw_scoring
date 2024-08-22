@@ -129,12 +129,13 @@ export default {
 .jumpCodes__wrapper {
   display: flex;
   flex-direction: column;
-  height: 100%;
+  max-width: 900px;
+  width: 100%;
   padding: 8px 16px;
 }
 
 .jumpCodes__title {
-  margin-bottom: 16px;
+  margin-bottom: 8px;
   font-size: 1.4rem;
   font-weight: bold;
 }
@@ -181,7 +182,7 @@ export default {
 }
 
 .jumpCodes__item {
-  padding: 2px 4px;
+  padding: 3px 6px;
 }
 
 .jumpCode {

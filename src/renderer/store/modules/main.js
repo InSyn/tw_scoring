@@ -12,6 +12,7 @@ export default {
       state: true,
       user: "",
       key: "",
+      serial: "",
     },
     appMenu: [
       {
@@ -59,12 +60,13 @@ export default {
     competition: null,
     competitions: [],
     event: {
-      id: null,
       event_title: "New event",
       sport: "Фристайл",
     },
     event_id: null,
     live_config: {
+      live_id: "",
+      live_id_validated: false,
       status: false,
       update_live: false,
       updateLive_Indicator: false,
@@ -138,13 +140,14 @@ export default {
     showPreview: (state) => state.showPreview,
     socket: (state) => state.socket,
     stageGrid: (state) => {
-      function flatten(arr) {
+      const flatten = (arr) => {
         return arr.reduce((flat, toFlatten) => {
           return flat.concat(
             Array.isArray(toFlatten) ? flatten(toFlatten) : toFlatten
           );
         }, []);
-      }
+      };
+
       return state.competition.stages.stage_grid
         .map((stage) => {
           return {
@@ -162,7 +165,7 @@ export default {
                           state.competitions.find(
                             (competition) => competition.id === _competition
                           ).races.length - 1
-                        ].finished.map((c_id) =>
+                        ]._startList.map((c_id) =>
                           state.competitions
                             .find(
                               (competition) => competition.id === _competition
@@ -413,6 +416,7 @@ export default {
     licChecked: (state, lData) => {
       state._licData.user = lData.user;
       state._licData.key = lData.key;
+      state._licData.serial = lData.serial;
       state._licData.state = true;
     },
     pushServerMessage: (state, message) => {
@@ -440,6 +444,9 @@ export default {
     SET_PORT: (state, port) => {
       if (typeof port !== "number") port = parseInt(port);
       state.server_config.port = port;
+    },
+    setLiveData: (state, liveData) => {
+      state.live_config = { ...state.live_config, ...liveData };
     },
     setStatusChecker: (state, checker) => {
       state.serverStatusChecker = checker;
@@ -647,6 +654,9 @@ export default {
     },
     setPort: ({ commit }, port) => {
       commit("SET_PORT", port);
+    },
+    SET_LIVE_DATA: ({ commit }, liveData) => {
+      commit("setLiveData", liveData);
     },
     updateEvent: ({ commit }) => {
       try {

@@ -1,29 +1,11 @@
 <template>
-  <div
-    style="
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100%;
-      width: 100%;
-      padding: 1rem 2rem;
-    "
-  >
-    <div
-      v-if="loading"
-      class="loader"
-      style="padding: 8px; border-radius: 6px; font-weight: bold"
-      :style="{
-        backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
-        border: `1px solid ${$vuetify.theme.themes[appTheme].accent}`,
-      }"
-    >
+  <div class="licensePage__wrapper">
+    <div v-if="loading" class="licensePage__loader">
       {{ localization[lang].app.license.activation }}
     </div>
 
     <div
       v-else
-      style="border-radius: 6px; transition: all 122ms"
       :style="[
         {
           border: `2px solid ${$vuetify.theme.themes[appTheme].cardBackgroundRGBA}`,
@@ -33,17 +15,67 @@
           ? { border: `2px solid ${$vuetify.theme.themes[appTheme].success}` }
           : { border: `2px solid ${$vuetify.theme.themes[appTheme].error}` },
       ]"
+      style="border-radius: 6px; transition: all 122ms"
     >
       <div style="font-weight: bold; font-size: 1.2rem; padding: 8px">
         {{ localization[lang].app.license.activation_title }}
       </div>
 
-      <div style="padding: 8px">
+      <div style="margin-top: 8px; padding: 8px 16px">
+        <div style="display: flex; align-items: center; min-width: 400px">
+          <div style="flex: 0 0 auto">
+            {{ localization[lang].app.license.user }}
+          </div>
+          <input
+            v-model="licenseData.user"
+            :style="{
+              backgroundColor:
+                $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
+              color: $vuetify.theme.themes[appTheme].textDefault,
+            }"
+            style="
+              flex: 0 0 auto;
+              margin-left: auto;
+              padding: 3px 6px;
+              border-radius: 6px;
+            "
+            type="text"
+          />
+        </div>
+
         <div
           style="
             display: flex;
             align-items: center;
-            width: 50vw;
+            min-width: 400px;
+            margin-top: 12px;
+          "
+        >
+          <div style="flex: 0 0 auto">
+            {{ localization[lang].app.license.serial }}
+          </div>
+          <input
+            v-model="licenseData.serial"
+            :style="{
+              backgroundColor:
+                $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
+              color: $vuetify.theme.themes[appTheme].textDefault,
+            }"
+            style="
+              flex: 0 1 32ch;
+              margin-left: auto;
+              padding: 3px 6px;
+              border-radius: 6px;
+            "
+            type="text"
+          />
+        </div>
+
+        <div
+          style="
+            display: flex;
+            align-items: center;
+            margin-top: 6px;
             min-width: 400px;
           "
         >
@@ -51,19 +83,19 @@
             {{ localization[lang].app.license.key }}
           </div>
           <input
-            v-model="user_key"
-            type="text"
-            style="
-              flex: 1 0 auto;
-              margin-left: 1rem;
-              padding: 6px;
-              border-radius: 6px;
-            "
+            v-model="licenseData.key"
             :style="{
               backgroundColor:
                 $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
               color: $vuetify.theme.themes[appTheme].textDefault,
             }"
+            style="
+              flex: 0 1 32ch;
+              margin-left: auto;
+              padding: 3px 6px;
+              border-radius: 6px;
+            "
+            type="text"
           />
         </div>
       </div>
@@ -73,41 +105,28 @@
           display: flex;
           flex-wrap: wrap;
           align-items: center;
+          margin-top: 8px;
           padding: 8px;
         "
       >
         <v-btn
-          @click="validate()"
+          @click="validateProduct(licenseData)"
           class="white--text"
           :color="$vuetify.theme.themes[appTheme].accent"
           small
         >
-          {{ localization[lang].app.license.check }}
+          {{ localization[lang].app.license.enter }}
         </v-btn>
-        <div
-          style="flex: 1 0 auto; font-size: 0.75rem; text-align: right"
-          :style="{
-            color: $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
-          }"
+
+        <v-btn
+          @click="activateProduct()"
+          class="ml-auto"
+          color="var(--success)"
+          text
+          small
         >
-          <span class="mr-1 pa-1" style="font-weight: bold">ID системы:</span>
-          <span
-            class="pa-1"
-            style="
-              display: inline-block;
-              border-radius: 6px;
-              background: var(--standard-background);
-              color: var(--text-default);
-              font-weight: bold;
-            "
-          >
-            {{
-              system_data && system_data.platform === "win32"
-                ? system_data.system.uuid
-                : system_data.uuid.os
-            }}
-          </span>
-        </div>
+          {{ localization[lang].app.license.activate }}
+        </v-btn>
       </div>
     </div>
   </div>
@@ -115,16 +134,25 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
+import { v4 as uuid } from "uuid";
 
 const { ipcRenderer } = require("electron");
-const uuid = require("uuid").v4;
-
 export default {
   name: "lic_check",
   mounted() {
-    this.getLicenses();
-    ipcRenderer.on("checked-key", (e, key) => {
-      key ? this.validate(key) : (this.loading = false);
+    ipcRenderer.on("checked-key", (event, licenseData) => {
+      for (let licenseDataKey in licenseData) {
+        if (licenseData[licenseDataKey]) {
+          this.licenseData[licenseDataKey] = licenseData[licenseDataKey];
+        }
+      }
+
+      if (!!sessionStorage.getItem("authorized") !== true) {
+        this.validateProduct(licenseData);
+      } else {
+        this.licChecked({ ...this.licenseData, state: true });
+        this.loading = false;
+      }
     });
   },
   methods: {
@@ -132,43 +160,64 @@ export default {
       licChecked: "licChecked",
     }),
     ...mapActions("key", {
-      get_licenses: "get_licenses",
       register_key: "register_key",
       check_lic: "check_lic",
     }),
-    async getLicenses() {
-      this.licenses = await this.get_licenses();
+    async activateProduct() {
+      try {
+        await this.register_key({
+          key: this.licenseData.key,
+          serial:
+            this.licenseData.serial.toString().split(":").length > 1
+              ? this.licenseData.serial
+              : `${this.licenseData.serial}:${
+                  this.system_data.platform === "win32"
+                    ? this.system_data.system.uuid
+                    : this.system_data.uuid.os
+                }`,
+        });
+      } catch (e) {
+        if (e) throw new Error(e.message);
+      }
     },
-    async validate(key) {
-      key ? (this.user_key = key) : null;
+    async validateProduct(data) {
+      const serialKey = data.serial
+        ? data.serial.toString()
+        : this.licenseData.serial.toString();
+      const serialNumber =
+        serialKey.split(":").length > 1
+          ? serialKey
+          : `${serialKey}:${
+              this.system_data.platform === "win32"
+                ? this.system_data.system.uuid
+                : this.system_data.uuid.os
+            }`;
+
       const license_data = {
-        key: this.user_key || key,
-        serial:
-          this.system_data.platform === "win32"
-            ? this.system_data.system.uuid
-            : this.system_data.uuid.os,
+        user: data.user ? data.user : this.licenseData.user,
+        key: data.key ? data.key : this.licenseData.key,
+        serial: serialNumber,
         salt: uuid(),
       };
+
       if (await this.check_lic(license_data)) {
-        await this.licChecked({
-          user: this.user_mail,
-          key: this.user_key,
-        });
-        ipcRenderer.send("save-key", this.user_key);
+        await this.licChecked(license_data);
+
+        ipcRenderer.send("save-key", license_data);
+        sessionStorage.setItem("authorized", "true");
       }
+
       this.loading = false;
     },
   },
   data() {
     return {
-      lic_socket: null,
-      user_name: "",
-      user_mail: "",
-      user_key: "",
-      licenses: [],
-      new_license_name: "",
+      licenseData: {
+        user: "",
+        serial: "",
+        key: "",
+      },
       loading: true,
-      t: null,
     };
   },
   computed: {
@@ -187,8 +236,8 @@ export default {
     license() {
       if (this._licData.state) {
         setTimeout(() => {
-          this.$router.push({ name: "competition_settings" });
-        }, 750);
+          this.$router.push({ name: "main" });
+        }, 1256);
       }
       return this._licData;
     },
@@ -196,16 +245,34 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
+.licensePage__wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  padding: 1rem 2rem;
+}
+.licensePage__loader {
+  padding: 8px;
+  border-radius: 6px;
+  font-weight: bold;
+  background-color: var(--card-background);
+  border: 1px solid var(--accent);
+}
+
 input,
 textarea {
   &:focus {
     box-shadow: 0 0 0 1px #3b70a9;
   }
 }
+
 .loader {
   animation: loader infinite alternate 1536ms;
 }
+
 @keyframes loader {
   0% {
     background-color: #232323;

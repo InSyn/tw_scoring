@@ -81,10 +81,13 @@ ipcMain.on("get-sys-data", (event) => {
           platform: platform,
         });
       try {
-        fs.readFile("./lic", (err, key) => {
+        fs.readFile("./app_assets/license.json", (err, data) => {
           if (err) mainWindow.webContents.send("checked-key", false);
           else {
-            mainWindow.webContents.send("checked-key", key.toString());
+            mainWindow.webContents.send(
+              "checked-key",
+              JSON.parse(data.toString())
+            );
           }
         });
       } catch (err) {
@@ -107,6 +110,7 @@ export {
 import "./lic_server";
 import "./socket_setup";
 import "./timingServer/timingDeviceServerSetup";
+import "./liveService/live-service";
 
 /**
  * Auto Updater

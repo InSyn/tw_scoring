@@ -7,6 +7,15 @@ export default {
       updateData: false,
       updater_id: null,
       updatingInProgress: false,
+
+      paginator: {
+        is_enabled: false,
+        current_page: 0,
+        flip_time_ms: 7200,
+        page_length: 8,
+
+        paginatorTimeoutId: null,
+      },
     },
   },
   getters: {
@@ -31,6 +40,12 @@ export default {
     SWITCH_UPDATING_STATE: (state, value) => {
       state.fileTranslationService.updatingInProgress = value;
     },
+    SET_PAGINATOR_PARAMETERS: (state, parameters) => {
+      state.fileTranslationService.paginator = {
+        ...state.fileTranslationService.paginator,
+        ...parameters,
+      };
+    },
   },
   actions: {
     setFileTranslationService_path: ({ commit }, path) => {
@@ -50,6 +65,9 @@ export default {
     },
     switchUpdatingState: ({ commit }, state) => {
       commit("SWITCH_UPDATING_STATE", state);
+    },
+    setPaginatorParameters({ commit }, parameters) {
+      commit("SET_PAGINATOR_PARAMETERS", parameters);
     },
   },
 };

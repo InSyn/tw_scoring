@@ -490,6 +490,10 @@ export default {
     SkiJumpControls,
     ManualMark_dialog,
   },
+  mounted() {
+    if (this.competition.result_formula.overall_result.type == 3)
+      this.score_repeat = "A";
+  },
   methods: {
     ...mapActions("main", {
       updateEvent: "updateEvent",
@@ -710,7 +714,10 @@ export default {
       this.competition.publishResult({
         competitor: competitor,
         race_id: this.competition.selected_race.id,
-        rep: this.score_repeat,
+        rep:
+          this.competition.result_formula.overall_result.type == 3
+            ? this.score_repeat
+            : null,
         status: competitor.race_status,
         ae_code: ae_code,
         mg_parameters: { ...this.mgRunData, ...this.mgParameters },

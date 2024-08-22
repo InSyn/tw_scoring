@@ -1,34 +1,25 @@
 <template>
-  <div
-    class="mt-2 d-flex flex-wrap align-center"
-    style="
-      flex: 0 0 auto;
-      padding: 8px;
-      width: 100%;
-      border-radius: 6px;
-      background-color: var(--standard-background);
-    "
-  >
-    <div style="font-size: 1.2rem; font-weight: bold">File Translation</div>
+  <div class="exportCSV__wrapper">
+    <div class="exportCSV__header">
+      File Translation
 
-    <v-btn
-      class="ml-auto"
-      @click="setFileSeparation(!fileTranslationService.separated)"
-      color="var(--text-default)"
-      width="48"
-      text
-      small
-    >
-      <v-icon size="18">
-        {{
-          fileTranslationService.separated
-            ? icons.fileMultipleIcon
-            : icons.fileIcon
-        }}
-      </v-icon>
-    </v-btn>
+      <v-btn
+        class="ml-auto"
+        @click="setFileSeparation(!fileTranslationService.separated)"
+        color="var(--text-default)"
+        width="48"
+        text
+        small
+      >
+        <v-icon size="18">
+          {{
+            fileTranslationService.separated
+              ? icons.fileMultipleIcon
+              : icons.fileIcon
+          }}
+        </v-icon>
+      </v-btn>
 
-    <div class="exportCSV__wrapper">
       <v-btn
         :class="[
           'updater__btn',
@@ -44,11 +35,16 @@
       </v-btn>
     </div>
 
+    <file-paginator
+      :competition="competition"
+      :file-translation-service="fileTranslationService"
+    ></file-paginator>
+
     <div class="exportPath__input__wrapper">
       <span class="exportPath__label">Путь:</span>
       <input
         class="exportPath__input"
-        v-bind:value="fileTranslationService.path"
+        :value="fileTranslationService.path"
         @change="setFileTranslationPath($event.target.value)"
         type="text"
       />
@@ -59,10 +55,12 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 import { mdiFileOutline, mdiFileMultipleOutline } from "@mdi/js";
-import { roundNumber } from "../../../lib/utils";
+import { roundNumber } from "../../../../lib/utils";
+import FilePaginator from "./filePaginator.vue";
 
 export default {
   name: "exportCSV",
+  components: { FilePaginator },
   methods: {
     ...mapActions("main", {
       exportCSV: "exportCSV",
@@ -74,8 +72,20 @@ export default {
       clearFileUpdater: "clearFileUpdater",
       switchFileUpdateService: "switchFileUpdateService",
       switchUpdatingState: "switchUpdatingState",
+      setPaginatorParameters: "setPaginatorParameters",
     }),
 
+    getCompetitionData() {
+      if (!this.competition) return {};
+
+      return {
+        title: this.competition.mainData.title.value || " ",
+        discipline: this.competition.mainData.discipline.value || " ",
+        country: this.competition.mainData.country.value || " ",
+        location: this.competition.mainData.location.value || " ",
+        stage: this.competition.mainData.title.stage.value.value || " ",
+      };
+    },
     getCompetitionJuryData() {
       if (!this.competition) return { judges: [], jury: [] };
 
@@ -126,6 +136,27 @@ export default {
     },
 
     createCompetitorTranslationObj(competitor, competition, options) {
+      if (options.createFillerObject) {
+        return {
+          id: " ",
+          photo: " ",
+          bib: " ",
+          fullname: " ",
+          lastname: " ",
+          name: " ",
+          group: " ",
+          country: " ",
+          country_code: " ",
+          region: " ",
+          region_code: " ",
+          flag: "C:\\\\reg_flags\\filler.png",
+          organization: " ",
+          fullname_eng: " ",
+          lastname_eng: " ",
+          name_eng: " ",
+        };
+      }
+
       if (!competitor) throw new Error("No competitor passed");
 
       let competitorObject = {
@@ -379,7 +410,7 @@ export default {
     },
 
     getStartList() {
-      return this.competition.selected_race._startList
+      let startList = this.competition.selected_race._startList
         .map((competitorId) =>
           this.competition.competitorsSheet.competitors.find(
             (competitor) => competitor.id === competitorId
@@ -394,6 +425,35 @@ export default {
             }
           )
         );
+
+      if (this.fileTranslationService.paginator.page_length > 0) {
+        const startIndex =
+          this.fileTranslationService.paginator.current_page *
+          this.fileTranslationService.paginator.page_length;
+
+        startList = startList.slice(
+          startIndex,
+          startIndex + this.fileTranslationService.paginator.page_length
+        );
+
+        if (
+          startList.length < this.fileTranslationService.paginator.page_length
+        ) {
+          const fillersCount =
+            this.fileTranslationService.paginator.page_length -
+            startList.length;
+
+          for (let i = 0; i < fillersCount; i++) {
+            startList.push(
+              this.createCompetitorTranslationObj(null, null, {
+                createFillerObject: true,
+              })
+            );
+          }
+        }
+      }
+
+      return startList;
     },
     getCompetitorOnStart() {
       const competitorOnStart = this.competition.selected_race.startList
@@ -416,10 +476,10 @@ export default {
 
       return competitorOnStart.length > 0 ? [competitorOnStart[0]] : [];
     },
-    getResults() {
+    getResults({ disablePagination }) {
       if (!this.competition.selected_race) return [];
 
-      const sortedFinishedArray = this.competition.selected_race.finished
+      let sortedFinishedArray = this.competition.selected_race.finished
         .map((competitor, idx) => {
           return {
             ...this.competition.competitorsSheet.competitors.find(
@@ -454,20 +514,52 @@ export default {
                 : comp1res.value
               : 0)
           );
+        })
+        .map((competitor, idx) => {
+          return this.createCompetitorTranslationObj(
+            { ...competitor, _index: idx },
+            this.competition,
+            {
+              forResults: true,
+            }
+          );
         });
 
-      return sortedFinishedArray.map((competitor, idx) => {
-        return this.createCompetitorTranslationObj(
-          { ...competitor, _index: idx },
-          this.competition,
-          {
-            forResults: true,
-          }
+      if (
+        !disablePagination &&
+        this.fileTranslationService.paginator.page_length > 0
+      ) {
+        const startIndex =
+          this.fileTranslationService.paginator.current_page *
+          this.fileTranslationService.paginator.page_length;
+
+        sortedFinishedArray = sortedFinishedArray.slice(
+          startIndex,
+          startIndex + this.fileTranslationService.paginator.page_length
         );
-      });
+
+        if (
+          sortedFinishedArray.length <
+          this.fileTranslationService.paginator.page_length
+        ) {
+          const fillersCount =
+            this.fileTranslationService.paginator.page_length -
+            sortedFinishedArray.length;
+
+          for (let i = 0; i < fillersCount; i++) {
+            sortedFinishedArray.push(
+              this.createCompetitorTranslationObj(null, null, {
+                createFillerObject: true,
+              })
+            );
+          }
+        }
+      }
+
+      return sortedFinishedArray;
     },
     getFinished() {
-      return this.getResults().filter(
+      return this.getResults({ disablePagination: true }).filter(
         (competitor, idx, finishedArray) =>
           parseInt(competitor.finish_order) === finishedArray.length
       );
@@ -730,24 +822,30 @@ export default {
           return;
         }
 
-        const competitionStuff = this.getCompetitionJuryData();
-
-        const juryData = competitionStuff ? competitionStuff.jury : [];
-        const judgesData = competitionStuff ? competitionStuff.judges : [];
+        const competitionInfo = this.getCompetitionData();
+        // const competitionStuff = this.getCompetitionJuryData();
+        //
+        // const juryData = competitionStuff ? competitionStuff.jury : [];
+        // const judgesData = competitionStuff ? competitionStuff.judges : [];
 
         const startList = this.getStartList();
         const onStart = this.getCompetitorOnStart();
         const finishedCompetitor = this.getFinished();
-        const results = this.getResults();
+        const results = this.getResults({ disablePagination: false });
 
         await this.exportCSV({
-          path: `${this.fileTranslationService.path}\\TW_JuryData`,
-          data: juryData,
+          path: `${this.fileTranslationService.path}\\TW_CompetitionInfo`,
+          data: competitionInfo,
         });
-        await this.exportCSV({
-          path: `${this.fileTranslationService.path}\\TW_JudgesData`,
-          data: judgesData,
-        });
+
+        // await this.exportCSV({
+        //   path: `${this.fileTranslationService.path}\\TW_JuryData`,
+        //   data: juryData,
+        // });
+        // await this.exportCSV({
+        //   path: `${this.fileTranslationService.path}\\TW_JudgesData`,
+        //   data: judgesData,
+        // });
 
         await this.exportCSV({
           path: `${this.fileTranslationService.path}\\TW_Competition_StartList`,
@@ -780,7 +878,7 @@ export default {
         const startList = this.getStartList();
         const onStart = this.getCompetitorOnStart();
         const finishedCompetitor = this.getFinished();
-        const results = this.getResults();
+        const results = this.getResults({ disablePagination: false });
 
         await this.exportCSV({
           path: `${this.fileTranslationService.path}\\TW_Competition`,
@@ -819,6 +917,22 @@ export default {
 </script>
 
 <style scoped>
+.exportCSV__wrapper {
+  flex: 0 0 auto;
+  flex-direction: column;
+  margin-top: 8px;
+  padding: 8px;
+  border-radius: 6px;
+  background-color: var(--standard-background);
+}
+.exportCSV__header {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
 .updater__btn {
   border: 1px solid transparent;
   border-radius: 4px;
@@ -839,26 +953,30 @@ export default {
 }
 
 .exportPath__input__wrapper {
-  flex: 0 0 100%;
+  flex: 0 0 auto;
   display: flex;
   align-items: center;
   flex-wrap: nowrap;
-  margin-top: 4px;
+  margin-top: 6px;
   padding: 8px;
   background: var(--card-background);
-  border-radius: 6px;
+  border-radius: 4px;
 }
 .exportPath__label {
+  flex: 0 0 auto;
   font-weight: bold;
-  font-size: 1.2rem;
   margin-right: 1rem;
 }
 .exportPath__input {
+  flex: 1 1 16ch;
   min-width: 0;
-  width: 100%;
-  padding: 4px;
+  padding: 2px 4px;
   background: var(--standard-background);
   color: var(--text-default);
-  border-radius: 6px;
+  border-radius: 4px;
+  transition: box-shadow 92ms;
+}
+.exportPath__input:focus {
+  box-shadow: inset 0 0 0 1px var(--accent);
 }
 </style>
