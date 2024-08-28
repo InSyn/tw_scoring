@@ -195,13 +195,30 @@ export default {
   props: ["competition"],
   methods: {
     acceptCols() {
-      this.dialogColumnToDel.forEach((col) => {
-        this.competition.competitorsSheet.header =
-          this.competition.competitorsSheet.header.filter((header) => {
-            return header.id !== col.id;
+      this.competitions.forEach((competition) => {
+        const idsToDelete = new Set(
+          this.dialogColumnToDel.map((col) => col.id)
+        );
+        competition.competitorsSheet.header =
+          competition.competitorsSheet.header.filter(
+            (header) => !idsToDelete.has(header.id)
+          );
+        competition.competitorsSheet.header.push(...this.dialogColumnToAdd);
+
+        competition.competitorsSheet.competitors.forEach((competitor) => {
+          this.dialogColumnToDel.forEach((col) => {
+            if (competitor.info_data.hasOwnProperty(col.id)) {
+              delete competitor.info_data[col.id];
+            }
           });
+          this.dialogColumnToAdd.forEach((col) => {
+            if (!competitor.info_data.hasOwnProperty(col.id)) {
+              competitor.info_data[col.id] = null;
+            }
+          });
+        });
       });
-      this.competition.competitorsSheet.header.push(...this.dialogColumnToAdd);
+
       this.dialogColumnToDel = [];
       this.dialogColumnToAdd = [];
       this.dialogState = false;
@@ -229,6 +246,9 @@ export default {
     ...mapGetters("localization", {
       lang: "lang",
       localization: "localization",
+    }),
+    ...mapGetters("main", {
+      competitions: "competitions",
     }),
   },
 };

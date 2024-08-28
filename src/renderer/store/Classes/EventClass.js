@@ -62,6 +62,7 @@ export default class EventClass {
 
   competitorsSheet = {
     header: [
+      { id: "ffr_id", title: "FFR-ID" },
       { id: "bib", title: "НН" },
       { id: "lastname", title: "Фамилия" },
       { id: "name", title: "Имя" },

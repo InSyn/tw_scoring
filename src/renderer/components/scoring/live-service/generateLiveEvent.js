@@ -185,7 +185,7 @@ export const generateLiveEvent = ({ event, competitions }, options) => {
 
     const juryList = competitions[0].stuff.jury.map((jury) => {
       return {
-        jury_id: jury.jury_id || "",
+        jury_code: jury.jury_code || "",
         role: jury.title,
         name: jury.name,
         lastname: jury.lastName,
@@ -194,7 +194,7 @@ export const generateLiveEvent = ({ event, competitions }, options) => {
     });
     const judgesList = competitions[0].stuff.judges.map((judge) => {
       return {
-        jury_id: judge.jury_id || "",
+        jury_code: judge.jury_code || "",
         role: judge.title,
         name: judge.name,
         lastname: judge.lastName,

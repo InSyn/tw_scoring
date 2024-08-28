@@ -13,6 +13,7 @@ export default class JudgeClass {
 
     this.moguls_role = "turns";
   }
+  jury_code = "";
   category = "";
   socket_id = null;
   connected = false;

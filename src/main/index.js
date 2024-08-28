@@ -110,7 +110,6 @@ export {
 import "./lic_server";
 import "./socket_setup";
 import "./timingServer/timingDeviceServerSetup";
-import "./liveService/live-service";
 
 /**
  * Auto Updater

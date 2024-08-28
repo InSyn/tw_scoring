@@ -351,11 +351,19 @@
               Online
             </div>
             <div class="stuffDataField__wrapper" data-fieldType="id">
-              <div class="stuffParameter__title">ID:</div>
+              <div class="stuffParameter__title">T-ID:</div>
               <input
                 class="stuffParameter__input"
                 type="text"
                 v-model="competition.stuff.judges[jd].id"
+              />
+            </div>
+            <div class="stuffDataField__wrapper" data-fieldType="ffr-id">
+              <div class="stuffParameter__title">FFR-ID:</div>
+              <input
+                class="stuffParameter__input"
+                type="text"
+                v-model="competition.stuff.judges[jd].jury_code"
               />
             </div>
 
@@ -608,34 +616,42 @@ export default {
   flex-wrap: wrap;
   padding-top: 24px;
   background: var(--card-background);
-  border-radius: 6px;
+  border-radius: 4px;
   font-size: 0.9rem;
 }
 .stuffCard__wrapper:not(:last-child) {
   margin-bottom: 8px;
 }
 .stuffDataField__wrapper {
-  flex: 1 1 auto;
+  flex: 1 0 auto;
   display: flex;
+  flex-wrap: nowrap;
   align-items: center;
-  padding: 4px 8px;
-}
-.stuffParameter__title {
-  font-weight: bold;
+  padding: 3px 6px;
+  /*border: 1px solid cornflowerblue;*/
 }
 .stuffDataField__wrapper[data-fieldType="id"] {
-  max-width: 8rem;
+  width: 6rem;
+}
+.stuffDataField__wrapper[data-fieldType="ffr-id"] {
+  width: 10rem;
+}
+.stuffParameter__title {
+  flex: 0 0 auto;
+  font-weight: bold;
+  white-space: nowrap;
 }
 .stuffParameter__input {
-  width: 100%;
-  padding: 3px 6px;
+  flex: 1 1 3rem;
+  min-width: 0;
+  padding: 2px 6px;
   margin-left: 8px;
 
   color: var(--text-default);
   background: var(--standard-background);
   font-weight: bold;
 
-  border-radius: 6px;
+  border-radius: 4px;
   border-bottom: 1px solid transparent;
 
   transition: border-bottom-color 92ms;
