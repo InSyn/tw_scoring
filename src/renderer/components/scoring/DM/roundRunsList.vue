@@ -2,66 +2,31 @@
   <div class="roundRuns__container">
     <div class="roundRuns__wrapper">
       <div class="nextRun__wrapper">
-        <div
-          v-if="
-            !competition.selected_race &&
-            !competition.selected_race.selectedCompetitor
-          "
-          class="emptyRun"
-        >
-          Проезд не выбран
-        </div>
+        <div v-if="!competition.selected_race || !competition.selected_race.selectedCompetitor" class="emptyRun">Проезд не выбран</div>
 
         <div v-else-if="competition.selected_race" class="nextRun__controls">
           <div class="runPrefix">
-            {{
-              `RUN ${
-                getRunById(competition.selected_race.selectedCompetitor).number
-              }`
-            }}
+            {{ `RUN ${getRunById(competition.selected_race.selectedCompetitor).number}` }}
             <arrow-icon class="arrow-icon"></arrow-icon>
           </div>
 
           <div class="nextRunParticipants">
             <div class="nextRunParticipant course-blue">
-              {{
-                getCompetitorInfoById(
-                  getRunById(competition.selected_race.selectedCompetitor)
-                    .blueCourse
-                )
-              }}
+              {{ getCompetitorInfoById(getRunById(competition.selected_race.selectedCompetitor).blueCourse) }}
             </div>
             <div class="nextRunParticipant course-red">
-              {{
-                getCompetitorInfoById(
-                  getRunById(competition.selected_race.selectedCompetitor)
-                    .redCourse
-                )
-              }}
+              {{ getCompetitorInfoById(getRunById(competition.selected_race.selectedCompetitor).redCourse) }}
             </div>
           </div>
 
-          <v-btn
-            @click="startNextRun"
-            class="startNextRun__button"
-            :disabled="!competition.selected_race.selectedCompetitor"
-            color="var(--accent)"
-            text
-            small
-          >
+          <v-btn @click="startNextRun" class="startNextRun__button" :disabled="!competition.selected_race.selectedCompetitor" color="var(--accent)" text small>
             <v-icon class="startNextRun__icon">mdi-play</v-icon>
           </v-btn>
         </div>
       </div>
 
       <div class="runsList">
-        <div
-          v-for="run in getFilteredRoundRuns"
-          :key="`run_${run.number}`"
-          @dblclick="setNextRun(run.id)"
-          class="runList__item"
-          tabindex="0"
-        >
+        <div v-for="run in getFilteredRoundRuns" :key="`run_${run.number}`" @dblclick="setNextRun(run.id)" class="runList__item" tabindex="0">
           <div class="runParticipant course-blue">
             {{ getCompetitorInfoById(run.blueCourse) }}
           </div>
@@ -78,15 +43,15 @@
 </template>
 
 <script>
-import ArrowIcon from "../../../assets/icons/arrow-icon.vue";
-import { initTerminalData_judge } from "../../../store/terminalFunctions";
-import TimerClass from "../../../store/Classes/TimerClass";
-import { mapActions } from "vuex";
+import ArrowIcon from '../../../assets/icons/arrow-icon.vue';
+import { initTerminalData_judge } from '../../../utils/terminals-utils';
+import TimerClass from '../../../store/classes/TimerClass';
+import { mapActions } from 'vuex';
 
 export default {
-  name: "roundRunsList",
+  name: 'roundRunsList',
   components: { ArrowIcon },
-  props: ["competition"],
+  props: ['competition'],
   mounted() {
     if (this.getFilteredRoundRuns.length > 0) {
       const firstRun = this.getFilteredRoundRuns[0];
@@ -95,20 +60,19 @@ export default {
       this.setNextRun(firstRun.id);
 
       this.competition.selected_race.selectedCompetitor = firstRun.id;
-      console.log(this.competition.selected_race.selectedCompetitor);
     }
   },
   methods: {
-    ...mapActions("main", {
-      updateEvent: "updateEvent",
+    ...mapActions('main', {
+      updateEvent: 'updateEvent',
     }),
     getCompetitorInfoById(competitorId) {
-      const competitor = this.competition.competitorsSheet.competitors.find(
-        (competitor) => competitor.id === competitorId
-      );
-      if (!competitor) return "Участник не найден";
+      const competitor = this.competition.competitorsSheet.competitors.find((competitor) => competitor.id === competitorId);
+      if (!competitor) return 'Участник не найден';
 
-      return `${competitor.info_data["bib"]} ${competitor.info_data["lastname"]} ${competitor.info_data["name"]}`;
+      const { bib, name, lastname } = competitor.info_data;
+
+      return `${bib || ''} ${lastname || ''} ${name ? name.toString()[0].toUpperCase() + '.' : ''}`;
     },
     getRunById(id) {
       const emptyRun = {
@@ -123,9 +87,7 @@ export default {
       };
       if (!this.competition.selected_race) return emptyRun;
 
-      const run = this.competition.selected_race.runs.find(
-        (run) => run.id === id
-      );
+      const run = this.competition.selected_race.runs.find((run) => run.id === id);
       if (!run) return emptyRun;
 
       return run;
@@ -142,12 +104,9 @@ export default {
         prevRun.timer = null;
       }
 
-      this.competition.selected_race.onTrack =
-        this.competition.selected_race.selectedCompetitor;
+      this.competition.selected_race.onTrack = this.competition.selected_race.selectedCompetitor;
 
-      const currentRun = this.getRunById(
-        this.competition.selected_race.onTrack
-      );
+      const currentRun = this.getRunById(this.competition.selected_race.onTrack);
       if (!currentRun) return;
 
       currentRun.timer = new TimerClass(currentRun);
@@ -164,22 +123,16 @@ export default {
       this.updateEvent();
     },
     sendTerminalsData(data) {
-      const blueCourseCompetitor =
-          this.competition.competitorsSheet.competitors.find(
-            (competitor) => competitor.id === data.blueCourse
-          ),
-        redCourseCompetitor =
-          this.competition.competitorsSheet.competitors.find(
-            (competitor) => competitor.id === data.redCourse
-          );
+      const blueCourseCompetitor = this.competition.competitorsSheet.competitors.find((competitor) => competitor.id === data.blueCourse),
+        redCourseCompetitor = this.competition.competitorsSheet.competitors.find((competitor) => competitor.id === data.redCourse);
       if (!blueCourseCompetitor || !redCourseCompetitor) return;
 
       const terminalPackage_judge = {
         raceId: this.competition.races.indexOf(this.competition.selected_race),
-        competitorId: blueCourseCompetitor.info_data["bib"],
-        competitorNum: blueCourseCompetitor.info_data["bib"],
+        competitorId: blueCourseCompetitor.info_data['bib'],
+        competitorNum: blueCourseCompetitor.info_data['bib'],
         scoresQuantity: 1,
-        competitorName: `BLUE | RED ${redCourseCompetitor.info_data["bib"]}`,
+        competitorName: `BLUE | RED ${redCourseCompetitor.info_data['bib']}`,
         isABC: 0,
       };
       initTerminalData_judge(terminalPackage_judge);
@@ -189,17 +142,13 @@ export default {
     getFilteredRoundRuns() {
       if (!this.competition.selected_race) return [];
 
-      const activeRunObj = this.competition.selected_race.runs.find(
-        (run) => run.id === this.competition.selected_race.onTrack
-      );
+      const activeRunObj = this.competition.selected_race.runs.find((run) => run.id === this.competition.selected_race.onTrack);
 
       return this.competition.selected_race.runs.filter((roundRun) => {
         return (
           roundRun.id !== this.competition.selected_race.selectedCompetitor &&
           !(activeRunObj && roundRun.id === activeRunObj.id) &&
-          !this.competition.selected_race.finished.some(
-            (finishedRun) => finishedRun === roundRun.id
-          )
+          !this.competition.selected_race.finished.some((finishedRun) => finishedRun === roundRun.id)
         );
       });
     },
@@ -220,7 +169,7 @@ export default {
   height: 100%;
   padding: 8px;
 
-  background-color: var(--card-background);
+  background-color: var(--background-card);
   border-radius: 6px;
 }
 .nextRun__wrapper {
@@ -292,7 +241,7 @@ export default {
   flex-wrap: nowrap;
   padding: 8px;
 
-  background: var(--card-background);
+  background: var(--background-card);
   outline: transparent;
   border-radius: 4px;
   cursor: pointer;

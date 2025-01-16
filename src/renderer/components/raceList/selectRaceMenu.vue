@@ -1,32 +1,16 @@
 <template>
   <div class="selectRaceMenu__wrapper">
-    <v-btn
-      @click="turn_race('left')"
-      class="switchRace__button"
-      color="var(--accent)"
-      min-width="0"
-      max-width="42px"
-      max-height="32px"
-      text
-    >
+    <v-btn @click="turn_race('left')" class="switchRace__button" color="var(--accent)" min-width="0" max-width="42px" max-height="32px" text>
       <v-icon class="switchRace__button__icon">mdi-chevron-double-left </v-icon>
     </v-btn>
 
     <div class="raceList__wrapper">
-      <div
-        v-if="!competition.races.length"
-        class="raceSelect__button emptyRaces"
-      >
+      <div v-if="!competition.races.length" class="raceSelect__button emptyRaces">
         {{ localization[lang].app.races.no_races }}
       </div>
 
       <div
-        :class="[
-          'raceSelect__button',
-          selectedRace &&
-            race.id === selectedRace.id &&
-            'raceSelect__button-active',
-        ]"
+        :class="['raceSelect__button', selectedRace && race.id === selectedRace.id && 'raceSelect__button-active']"
         @click="selectRace(race)"
         v-for="race in competition.races"
         :key="race.id"
@@ -36,52 +20,35 @@
           {{ race.title }}
         </div>
 
-        <delete-race-dialog
-          @select-race="selectRace"
-          :competition="competition"
-          :race="race"
-        ></delete-race-dialog>
+        <delete-race-dialog @select-race="selectRace" :competition="competition" :race="race"></delete-race-dialog>
       </div>
     </div>
 
-    <v-btn
-      @click="turn_race('right')"
-      class="switchRace__button"
-      color="var(--accent)"
-      min-width="0"
-      max-width="42px"
-      max-height="32px"
-      text
-    >
-      <v-icon class="switchRace__button__icon"
-        >mdi-chevron-double-right
-      </v-icon>
+    <v-btn @click="turn_race('right')" class="switchRace__button" color="var(--accent)" min-width="0" max-width="42px" max-height="32px" text>
+      <v-icon class="switchRace__button__icon">mdi-chevron-double-right </v-icon>
     </v-btn>
 
-    <create-race-dialog
-      @select-race="selectRace"
-      :competition="competition"
-    ></create-race-dialog>
+    <create-race-dialog @select-race="selectRace" :competition="competition"></create-race-dialog>
   </div>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-import DeleteRaceDialog from "./dialogs/deleteRace-dialog.vue";
-import ChangeRaceTitleDialog from "./dialogs/changeRaceTitle-dialog.vue";
-import CreateRaceDialog from "./dialogs/createRace-dialog.vue";
+import { mapGetters } from 'vuex';
+import DeleteRaceDialog from './dialogs/deleteRace-dialog.vue';
+import ChangeRaceTitleDialog from './dialogs/changeRaceTitle-dialog.vue';
+import CreateRaceDialog from './dialogs/createRace-dialog.vue';
 
 export default {
-  name: "selectRaceMenu",
+  name: 'selectRaceMenu',
   components: { CreateRaceDialog, ChangeRaceTitleDialog, DeleteRaceDialog },
-  props: ["competition", "selectedRace"],
+  props: ['competition', 'selectedRace'],
   methods: {
     selectRace(race) {
-      this.$emit("menu-select-race", race);
+      this.$emit('menu-select-race', race);
     },
     turn_race(to) {
       let race_idx = this.competition.races.indexOf(this.selectedRace);
-      if (to === "right")
+      if (to === 'right')
         if (race_idx + 1 < this.competition.races.length) {
           this.selectRace(this.competition.races[race_idx + 1]);
         } else {
@@ -91,9 +58,7 @@ export default {
         if (race_idx - 1 >= 0) {
           this.selectRace(this.competition.races[race_idx - 1]);
         } else {
-          this.selectRace(
-            this.competition.races[this.competition.races.length - 1]
-          );
+          this.selectRace(this.competition.races[this.competition.races.length - 1]);
         }
       }
     },
@@ -103,7 +68,7 @@ export default {
       dialogs: {
         create_race: {
           state: false,
-          title: "",
+          title: '',
           competitors: [],
           raceStartListFrom: null,
           raceStartListFromSelector: false,
@@ -112,9 +77,9 @@ export default {
     };
   },
   computed: {
-    ...mapGetters("localization", {
-      lang: "lang",
-      localization: "localization",
+    ...mapGetters('localization', {
+      lang: 'lang',
+      localization: 'localization',
     }),
   },
 };
@@ -127,8 +92,8 @@ export default {
   flex-wrap: nowrap;
   align-items: center;
   padding: 6px 8px;
-  border-radius: 6px;
-  background: var(--card-background);
+  border-radius: 4px;
+  background: var(--background-card);
   user-select: none;
 }
 
@@ -138,17 +103,18 @@ export default {
 }
 
 .raceList__wrapper {
-  flex: 1 1 auto;
+  flex: 1 1 200px;
   display: flex;
   flex-wrap: nowrap;
   margin: 0 4px;
   padding: 2px 4px;
   border-radius: 6px;
   overflow: auto;
-  background: var(--standard-background);
+  background: var(--background-deep);
 }
 
 .raceSelect__button {
+  flex: 0 0 auto;
   position: relative;
   display: flex;
   justify-content: center;
@@ -162,6 +128,7 @@ export default {
   border-radius: 6px;
 
   font-weight: bold;
+  white-space: nowrap;
   cursor: pointer;
 
   transition: background-color 92ms, color 92ms;

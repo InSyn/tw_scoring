@@ -3,22 +3,13 @@
     <v-dialog v-model="fieldSettings_dialog" width="500">
       <template v-slot:activator="{ on, attrs }">
         <div v-on="on" v-bind="attrs" class="dataCell__dialog__button">
-          {{ `${dataField.params[propertyKey].title || "пусто"}` }}
+          {{ `${dataField.params[propertyKey].title || 'пусто'}` }}
         </div>
       </template>
-      <v-card
-        style="
-          color: var(--text-default);
-          background-color: var(--card-background);
-        "
-      >
+      <v-card style="color: var(--text-default); background-color: var(--background-card)">
         <v-card-title style="padding: 8px 16px">
           {{ localization[lang].app.protocols.cell_settings }}
-          <v-btn
-            @click="fieldSettings_dialog = false"
-            style="margin-left: auto"
-            icon
-          >
+          <v-btn @click="fieldSettings_dialog = false" style="margin-left: auto" icon>
             <v-icon color="red"> mdi-close </v-icon>
           </v-btn>
         </v-card-title>
@@ -26,30 +17,16 @@
         <div style="display: flex; flex-wrap: wrap; padding: 0 16px">
           <div style="width: 100%">
             {{ localization[lang].app.protocols.current_val }}
-            <v-btn
-              @click="clearField(fieldProperty)"
-              text
-              small
-              color="var(--accent)"
-              style="margin-left: 1rem"
-            >
+            <v-btn @click="clearField(fieldProperty)" text small color="var(--accent)" style="margin-left: 1rem">
               {{ localization[lang].app.dialogs.d_clear }}
             </v-btn>
           </div>
 
-          <div
-            v-if="fieldProperty.id"
-            style="width: 100%; display: flex; font-weight: bold"
-          >
+          <div v-if="fieldProperty.id" style="width: 100%; display: flex; font-weight: bold">
             <input
               type="text"
               v-model="fieldProperty.id"
-              style="
-                border-radius: 6px;
-                padding: 2px 4px;
-                background-color: var(--standard-background);
-                color: var(--text-default);
-              "
+              style="border-radius: 6px; padding: 2px 4px; background-color: var(--standard-background); color: var(--text-default)"
             />
             <input
               type="text"
@@ -68,29 +45,12 @@
             {{ localization[lang].app.protocols.empty_cell }}
           </div>
         </div>
-        <div
-          style="
-            display: flex;
-            flex-wrap: wrap;
-            max-height: 600px;
-            padding: 8px 16px;
-            overflow-y: auto;
-          "
-        >
+        <div style="display: flex; flex-wrap: wrap; max-height: 600px; padding: 8px 16px; overflow-y: auto">
           <div
-            v-for="(standard_header, sh_idx) in competition.protocol_settings
-              .result_protocols[protocolFields]"
+            v-for="(standard_header, sh_idx) in competition.protocol_settings.result_protocols[protocolFields]"
             :key="sh_idx"
             @click="setField(fieldProperty, standard_header)"
-            style="
-              display: flex;
-              flex-wrap: nowrap;
-              flex: 0 0 auto;
-              width: 18rem;
-              margin: 0 0.5rem 0.5rem 0;
-              cursor: pointer;
-              background-color: var(--accent);
-            "
+            style="display: flex; flex-wrap: nowrap; flex: 0 0 auto; width: 18rem; margin: 0 0.5rem 0.5rem 0; cursor: pointer; background-color: var(--accent)"
           >
             <div
               style="
@@ -100,6 +60,7 @@
                 padding: 4px 0.5rem;
                 background-color: var(--accent);
                 color: var(--text-default);
+                white-space: nowrap;
               "
             >
               {{ `${standard_header.params.cell_1.id}:` }}
@@ -110,7 +71,8 @@
                 font-weight: bold;
                 padding: 4px 0.5rem;
                 background-color: var(--text-default);
-                color: var(--card-background);
+                color: var(--background-card);
+                white-space: nowrap;
               "
             >
               {{ `${standard_header.params.cell_1.title}` }}
@@ -123,17 +85,11 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters } from 'vuex';
 
 export default {
-  name: "dataCell-dialog",
-  props: [
-    "competition",
-    "dataField",
-    "fieldProperty",
-    "propertyKey",
-    "protocolFields",
-  ],
+  name: 'dataCell-dialog',
+  props: ['competition', 'dataField', 'fieldProperty', 'propertyKey', 'protocolFields'],
   methods: {
     clearField(field) {
       field.id = null;
@@ -156,9 +112,9 @@ export default {
     };
   },
   computed: {
-    ...mapGetters("localization", {
-      lang: "lang",
-      localization: "localization",
+    ...mapGetters('localization', {
+      lang: 'lang',
+      localization: 'localization',
     }),
   },
 };
@@ -179,7 +135,7 @@ export default {
 
   font-weight: bold;
   background: var(--standard-background);
-  border-radius: 6px;
+  border-radius: 2px;
   cursor: pointer;
 
   transition: background 112ms;

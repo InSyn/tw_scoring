@@ -7,9 +7,7 @@
     </template>
 
     <div class="changeRaceTitle__dialog__wrapper">
-      <div class="changeRaceTitle__dialog__title">
-        {{ localization[lang].app.races.d_title }}:
-      </div>
+      <div class="changeRaceTitle__dialog__title">{{ localization[lang].app.races.d_title }}:</div>
 
       <div class="raceTitle__input__wrapper">
         <input class="raceTitle__input" size="16" v-model="race.title" />
@@ -19,20 +17,20 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters } from 'vuex';
 
 export default {
-  name: "changeRaceTitle-dialog",
-  props: ["race"],
+  name: 'changeRaceTitle-dialog',
+  props: ['race'],
   data() {
     return {
       dialogState: false,
     };
   },
   computed: {
-    ...mapGetters("localization", {
-      lang: "lang",
-      localization: "localization",
+    ...mapGetters('localization', {
+      lang: 'lang',
+      localization: 'localization',
     }),
   },
 };
@@ -43,7 +41,7 @@ export default {
   display: flex;
   align-items: center;
   padding: 8px;
-  background-color: var(--card-background);
+  background-color: var(--background-card);
 }
 .changeRaceTitle__dialog__title {
   font-size: 1.4rem;

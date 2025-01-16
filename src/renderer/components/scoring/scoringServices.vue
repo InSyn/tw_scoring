@@ -14,17 +14,17 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-import ExportCSV from "./services/exportCSV.vue";
-import LiveResultsService from "./services/liveResultsService.vue";
+import { mapGetters } from 'vuex';
+import ExportCSV from './services/exportCSV.vue';
+import LiveResultsService from './services/liveResultsService.vue';
 
 export default {
-  name: "scoringServices",
+  name: 'scoringServices',
   components: { LiveResultsService, ExportCSV },
   computed: {
-    ...mapGetters("localization", {
-      localization: "localization",
-      lang: "lang",
+    ...mapGetters('localization', {
+      localization: 'localization',
+      lang: 'lang',
     }),
   },
 };
@@ -39,7 +39,7 @@ export default {
   display: flex;
   flex-direction: column;
   height: 100%;
-  background: var(--card-background);
+  background: var(--background-card);
   border-radius: 6px;
 }
 .scoringServices__title {

@@ -1,0 +1,11 @@
+.drag-drop-item {
+    cursor: grab !important;
+    transition: background-color 0.92ms;
+}
+.drag-drop-item.dragging {
+    opacity: 0.5 !important;
+    background-color: var(--action-darkYellow) !important;
+}
+.drag-drop-item.dragOver {
+    border: 2px dashed var(--accent) !important;
+}

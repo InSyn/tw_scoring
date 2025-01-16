@@ -1,13 +1,6 @@
 <template>
   <div class="messageConsole__container">
-    <div
-      class="py-2 px-2"
-      style="
-        height: 100%;
-        border-radius: 6px;
-        background-color: var(--card-background);
-      "
-    >
+    <div class="py-2 px-2" style="height: 100%; border-radius: 6px; background-color: var(--background-card)">
       <div
         style="
           display: flex;
@@ -19,11 +12,7 @@
           background-color: var(--standard-background);
         "
       >
-        <v-hover
-          v-slot:default="{ hover }"
-          v-for="(message, m_idx) in competitionLog"
-          :key="m_idx"
-        >
+        <v-hover v-slot:default="{ hover }" v-for="(message, m_idx) in competitionLog" :key="m_idx">
           <div
             class="scoring_log_message"
             :style="
@@ -33,7 +22,7 @@
             "
           >
             <div class="msgDate">
-              {{ `${message.msgDate.toLocaleTimeString("ru-RU")}` }}
+              {{ `${message.msgDate.toLocaleTimeString('ru-RU')}` }}
             </div>
             <div class="msgType">{{ message.msgType }}</div>
             <div class="msgText">{{ message.msgText }}</div>
@@ -45,17 +34,17 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
+import { mapActions, mapGetters } from 'vuex';
 
 export default {
-  name: "messageConsole",
+  name: 'messageConsole',
   methods: {
-    ...mapActions("message_system", {
-      addCompetitionLogMessage: "addCompetitionLogMessage",
+    ...mapActions('message_system', {
+      addCompetitionLogMessage: 'addCompetitionLogMessage',
     }),
   },
   computed: {
-    ...mapGetters("message_system", { competitionLog: "competitionLog" }),
+    ...mapGetters('message_system', { competitionLog: 'competitionLog' }),
   },
 };
 </script>

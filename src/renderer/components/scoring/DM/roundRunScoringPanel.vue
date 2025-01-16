@@ -1,232 +1,132 @@
-<template>
-  <div class="roundRunScoringPanel__container">
-    <div class="roundRunScoringPanel__wrapper">
-      <div class="runParticipants__wrapper">
-        <div class="runParticipant__wrapper course-blue">
-          <div class="runParticipant__info">
-            {{ getCompetitorOnCourseInfo("blue") }}
-          </div>
-          <div class="runParticipant__result">
-            {{ getCourseResult("blue") }}
-          </div>
-          <div class="participantGap gap-blue">
-            Gap:&nbsp;{{ getCourseGap("blue") }}
-          </div>
-        </div>
-
-        <div class="runTime__wrapper">
-          <div class="runTime__value">
-            {{ getRunTime() }}
-          </div>
-
-          <v-btn @click="switchRunTimer()" color="var(--accent)" text small>
-            <v-icon>{{ timerIcon }}</v-icon>
-          </v-btn>
-        </div>
-
-        <div class="runParticipant__wrapper course-red">
-          <div class="runParticipant__result">{{ getCourseResult("red") }}</div>
-          <div class="runParticipant__info">
-            {{ getCompetitorOnCourseInfo("red") }}
-          </div>
-          <div class="participantGap gap-red">
-            Gap:&nbsp;{{ getCourseGap("red") }}
-          </div>
-        </div>
-
-        <div class="runControls">
-          <v-btn
-            @click="publishRun()"
-            class="publishRun__button"
-            color="var(--accent)"
-            >Опубликовать</v-btn
-          >
-          <judge-terminal-control
-            :competition="competition"
-          ></judge-terminal-control>
-        </div>
-      </div>
-
-      <div class="runMarks__wrapper">
-        <div
-          class="runMarks__item"
-          v-for="judge in competition.stuff.judges"
-          :key="judge._id"
-        >
-          <div class="judgeTitle">{{ judge.title }}</div>
-
-          <div class="judgeRunMarks__wrapper">
-            <div class="judgeRunMark course-blue">
-              <input
-                @change="setJudgeMark($event, judge, 'blue')"
-                type="number"
-                class="judgeRunMark__input"
-              />
-              {{ getJudgeMark("blue", judge) }}
-            </div>
-            <div class="judgeRunMark course-red">
-              <input
-                @change="setJudgeMark($event, judge, 'red')"
-                type="number"
-                class="judgeRunMark__input"
-              />
-              {{ getJudgeMark("red", judge) }}
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</template>
-
 <script>
-import { mdiTimerOutline } from "@mdi/js";
-import { roundNumber } from "../../../../lib/utils";
-import MarkClass from "../../../store/Classes/MarkClass";
-import JudgeTerminalControl from "../scoresPanel/judgeTerminal-control.vue";
+import { mdiTimerOutline } from '@mdi/js';
+import { roundNumber } from '../../../utils/utils';
+import MarkClass from '../../../store/classes/MarkClass';
+import JudgeTerminalControl from '../scoresPanel/judgeTerminal-control.vue';
+import Timer from './timer.vue';
+import { getCompetitorById } from '../../../utils/competition-utils';
+import { mapGetters } from 'vuex';
 export default {
-  name: "roundRunScoringPanel",
-  components: { JudgeTerminalControl },
-  props: ["competition"],
+  name: 'roundRunScoringPanel',
+  components: { Timer, JudgeTerminalControl },
+  props: ['competition'],
+  data() {
+    return { timerIcon: mdiTimerOutline };
+  },
+  computed: {
+    getActiveRun() {
+      const currentRun = this.getRunById(this.competition.selected_race.onTrack);
+      if (!currentRun) return null;
+
+      return currentRun;
+    },
+  },
   methods: {
-    setJudgeMark(e, judge, course) {
-      if (
-        !this.competition.selected_race ||
-        !this.competition.selected_race.onTrack ||
-        !this.getActiveRun
-      ) {
-        e.target.value = "";
+    setJudgeMark(input, judge, course) {
+      if (!this.competition.selected_race || !this.competition.selected_race.onTrack || !this.getActiveRun) {
+        input.value = '';
+        console.warn('No active run');
+        return;
+      }
+      if (isNaN(Number(input.value))) {
+        input.value = '';
+        console.warn('Wrong mark format');
         return;
       }
 
-      const mark = e.target.value;
+      let mark;
 
-      const competitor =
-        course === "blue"
-          ? this.getActiveRun.competitors[0]
-          : this.getActiveRun.competitors[1];
-      const competitor_2 =
-        course === "blue"
-          ? this.getActiveRun.competitors[1]
-          : this.getActiveRun.competitors[0];
+      Number(input.value) > 5 ? (input.value = 5) : Number(input.value) < 0 ? (input.value = 0) : null;
+      mark = Number(input.value);
+
+      const competitor = course === 'blue' ? this.getActiveRun.competitors[0] : this.getActiveRun.competitors[1];
+      const competitor_2 = course === 'blue' ? this.getActiveRun.competitors[1] : this.getActiveRun.competitors[0];
 
       [competitor, competitor_2].forEach((competitor, idx) => {
-        if (!competitor) return;
+        const athlete = getCompetitorById(this.competition, competitor.id);
+        if (!athlete) {
+          input.value = '';
+          console.warn('No athlete found');
+          return;
+        }
 
-        const existingMark = competitor.marks.find(
-          (mark) =>
-            parseInt(mark.judge) === parseInt(judge.id) &&
-            parseInt(mark.race) === parseInt(this.competition.selected_race_id)
+        const existingMark = athlete.marks.find(
+          (mark) => mark.judge.toString() === judge.id.toString() && mark.race.toString() === this.competition.selected_race_id.toString()
         );
         if (existingMark) {
-          existingMark.value =
-            idx > 0 ? 5 - Number(mark) : Number(mark).toFixed(1);
+          existingMark.value = this.competition.roundWithPrecision(idx > 0 ? 5 - Number(mark) : Number(mark));
         } else {
-          competitor.marks.push(
+          athlete.marks.push(
             new MarkClass({
               race: this.competition.selected_race_id,
               race_id: this.competition.selected_race.id,
               judge: judge.id,
               judge_id: judge._id,
-              value:
-                idx > 0
-                  ? (5 - Number(mark)).toFixed(1)
-                  : Number(mark).toFixed(1),
+              value: roundNumber(idx > 0 ? 5 - Number(mark) : Number(mark)),
             })
           );
+          console.log(athlete.marks[athlete.marks.length]);
         }
       });
 
-      e.target.value = "";
+      input.value = '';
     },
     getRunById(id) {
       if (!this.competition.selected_race) return null;
 
-      const run = this.competition.selected_race.runs.find(
-        (run) => run.id === id
-      );
+      const run = this.competition.selected_race.runs.find((run) => run.id === id);
       if (!run) return null;
 
       return run;
     },
     getCompetitorOnCourseInfo(course) {
-      if (
-        !this.competition.selected_race ||
-        !this.competition.selected_race.onTrack ||
-        !this.getActiveRun
-      )
-        return "Ожидание участника";
+      if (!this.competition.selected_race || !this.competition.selected_race.onTrack || !this.getActiveRun) return 'Ожидание участника';
 
-      const competitor = this.competition.competitorsSheet.competitors.find(
-        (competitor) => competitor.id === this.getActiveRun[`${course}Course`]
-      );
-      if (!competitor) return "";
+      const competitor = this.competition.competitorsSheet.competitors.find((competitor) => competitor.id === this.getActiveRun[`${course}Course`]);
+      if (!competitor) return '';
 
-      return `${competitor.info_data["bib"]} ${competitor.info_data["lastname"]} ${competitor.info_data["name"]}`;
+      return `${competitor.info_data['bib']} ${competitor.info_data['lastname']} ${competitor.info_data['name']}`;
     },
     getJudgeMark(course, judge) {
-      if (
-        !this.competition.selected_race ||
-        !this.competition.selected_race.onTrack ||
-        !this.getActiveRun
-      ) {
-        return Number(0).toFixed(1);
+      if (!this.competition.selected_race || !this.competition.selected_race.onTrack || !this.getActiveRun) {
+        return this.competition.roundWithPrecision(0);
       }
 
-      const competitor = this.competition.competitorsSheet.competitors.find(
-        (_competitor) => {
-          return _competitor.id === this.getActiveRun[`${course}Course`];
-        }
-      );
-      {
-        if (!competitor) return Number(0).toFixed(1);
-      }
+      const competitor = this.competition.competitorsSheet.competitors.find((_competitor) => {
+        return _competitor.id === this.getActiveRun[`${course}Course`];
+      });
+      if (!competitor) return this.competition.roundWithPrecision(0);
 
       const judgeMark = competitor.marks.find((mark) => {
-        return (
-          mark.judge_id === judge._id &&
-          mark.race_id === this.competition.selected_race.id
-        );
+        return mark.judge_id === judge._id && mark.race_id === this.competition.selected_race.id;
       });
       {
-        if (!judgeMark) return Number(0).toFixed(1);
+        if (!judgeMark) return this.competition.roundWithPrecision(0);
       }
 
       return judgeMark.value;
     },
     getCourseGap(course) {
-      if (
-        !this.competition.selected_race ||
-        !this.competition.selected_race.onTrack ||
-        !this.getActiveRun
-      )
-        return roundNumber(0, 2);
+      if (!this.competition.selected_race || !this.competition.selected_race.onTrack || !this.getActiveRun) return roundNumber(0, 2);
 
-      return this.getActiveRun[`${course}CourseGap`];
+      const gap = this.getActiveRun[`${course}CourseGap`];
+      if (gap !== undefined) {
+        return roundNumber(gap, 2);
+      } else {
+        return roundNumber(0, 2);
+      }
     },
     getCourseResult(course) {
-      if (
-        !this.competition.selected_race ||
-        !this.competition.selected_race.onTrack ||
-        !this.getActiveRun
-      )
-        return this.competition.set_accuracy(0);
+      if (!this.competition.selected_race || !this.competition.selected_race.onTrack || !this.getActiveRun) return this.competition.roundWithPrecision(0);
 
-      const resultFormula = this.competition.result_formula.types[
-        this.competition.result_formula.type
-      ].formulas.find(
-        (formula) =>
-          formula.id ===
-          this.competition.result_formula.types[
-            this.competition.result_formula.type
-          ].formula
+      const resultFormula = this.competition.result_formula.types[this.competition.result_formula.type].formulas.find(
+        (formula) => formula.id === this.competition.result_formula.types[this.competition.result_formula.type].formula
       );
-      if (!resultFormula) return this.competition.set_accuracy(0);
+      if (!resultFormula) return this.competition.roundWithPrecision(0);
 
-      const competitor = this.competition.competitorsSheet.competitors.find(
-        (competitor) => competitor.id === this.getActiveRun[`${course}Course`]
-      );
-      if (!competitor) return this.competition.set_accuracy(0);
+      const competitor = this.competition.competitorsSheet.competitors.find((competitor) => competitor.id === this.getActiveRun[`${course}Course`]);
+      console.log(competitor || 'No athlete found');
+      if (!competitor) return this.competition.roundWithPrecision(0);
 
       const result = resultFormula.get_result(
         competitor.id,
@@ -236,46 +136,27 @@ export default {
         })
       );
       if (!result) {
-        return this.competition.set_accuracy(0);
+        return this.competition.roundWithPrecision(0);
       }
 
-      return this.competition.set_accuracy(result);
+      return this.competition.roundWithPrecision(result);
     },
     getRunTime() {
-      if (
-        !this.competition.selected_race ||
-        !this.competition.selected_race.onTrack ||
-        !this.getActiveRun
-      )
-        return 0;
+      if (!this.competition.selected_race || !this.competition.selected_race.onTrack || !this.getActiveRun) return 0;
 
       return this.getActiveRun.runTime;
     },
     switchRunTimer() {
-      if (
-        !this.competition.selected_race ||
-        !this.competition.selected_race.onTrack ||
-        !this.getActiveRun
-      )
-        return;
+      if (!this.competition.selected_race || !this.competition.selected_race.onTrack || !this.getActiveRun) return;
 
-      this.getActiveRun.timer.isRunning
-        ? this.getActiveRun.timer.stopTimer()
-        : this.getActiveRun.timer.startTimer();
+      this.getActiveRun.timer.isRunning ? this.getActiveRun.timer.stopTimer() : this.getActiveRun.timer.startTimer();
     },
     publishCompetitorResult(competitor_id) {
-      const competitor = this.competition.competitorsSheet.competitors.find(
-        (_comp) => _comp.id === competitor_id
-      );
+      const competitor = this.competition.competitorsSheet.competitors.find((_comp) => _comp.id === competitor_id);
+      if (!competitor) return;
 
       this.competition.stuff.judges.forEach((_j) => {
-        if (
-          !competitor.marks.some(
-            (_mark) =>
-              _mark.judge_id === _j._id &&
-              _mark.race_id === this.competition.selected_race.id
-          )
-        ) {
+        if (!competitor.marks.some((_mark) => _mark.judge_id === _j._id && _mark.race_id === this.competition.selected_race.id)) {
           competitor.marks.push(
             new MarkClass({
               race: this.competition.selected_race_id,
@@ -292,19 +173,14 @@ export default {
         competitor: competitor,
         race_id: this.competition.selected_race.id,
         status: competitor.race_status,
-        rep: "",
+        rep: '',
       });
 
       competitor.res_accepted = false;
       competitor.race_status = null;
     },
     publishRun() {
-      if (
-        !this.competition.selected_race ||
-        !this.competition.selected_race.onTrack ||
-        !this.getActiveRun
-      )
-        return;
+      if (!this.competition.selected_race || !this.competition.selected_race.onTrack || !this.getActiveRun) return;
 
       this.getActiveRun.competitors.forEach((competitor) => {
         if (!competitor) return;
@@ -317,22 +193,60 @@ export default {
       this.competition.selected_race.onTrack = null;
     },
   },
-  data() {
-    return { timerIcon: mdiTimerOutline };
-  },
-  computed: {
-    getActiveRun() {
-      const currentRun = this.getRunById(
-        this.competition.selected_race.onTrack
-      );
-      if (!currentRun) return null;
-
-      console.log(currentRun);
-      return currentRun;
-    },
-  },
 };
 </script>
+
+<template>
+  <div class="roundRunScoringPanel__container">
+    <div class="roundRunScoringPanel__wrapper">
+      <div class="runParticipants__wrapper">
+        <div class="runParticipant__wrapper course-blue">
+          <div class="runParticipant__info">{{ getCompetitorOnCourseInfo('blue') }}</div>
+          <div class="runParticipant__result">{{ getCourseResult('blue') }}</div>
+          <div class="participantGap gap-blue">Gap:&nbsp;{{ getCourseGap('blue') }}</div>
+        </div>
+
+        <div class="runTime__wrapper">
+          <div class="runTime__value">
+            {{ getRunTime() }}
+          </div>
+
+          <v-btn @click="switchRunTimer()" color="var(--accent)" text small>
+            <v-icon>{{ timerIcon }}</v-icon>
+          </v-btn>
+        </div>
+
+        <div class="runParticipant__wrapper course-red">
+          <div class="runParticipant__result">{{ getCourseResult('red') }}</div>
+          <div class="runParticipant__info">{{ getCompetitorOnCourseInfo('red') }}</div>
+          <div class="participantGap gap-red">Gap:&nbsp;{{ getCourseGap('red') }}</div>
+        </div>
+
+        <div class="runControls">
+          <v-btn @click="publishRun()" class="publishRun__button" color="var(--accent)">Опубликовать</v-btn>
+          <judge-terminal-control :competition="competition"></judge-terminal-control>
+        </div>
+      </div>
+
+      <div class="runMarks__wrapper">
+        <div class="runMarks__item" v-for="judge in competition.stuff.judges" :key="judge._id">
+          <div class="judgeTitle">{{ judge.title }}</div>
+
+          <div class="judgeRunMarks__wrapper">
+            <div class="judgeRunMark course-blue">
+              <input @input="setJudgeMark($event.target, judge, 'blue')" type="number" class="judgeRunMark__input" />
+              {{ getJudgeMark('blue', judge) }}
+            </div>
+            <div class="judgeRunMark course-red">
+              <input @input="setJudgeMark($event.target, judge, 'red')" type="number" class="judgeRunMark__input" tabindex="-1" />
+              {{ getJudgeMark('red', judge) }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
 
 <style scoped>
 .roundRunScoringPanel__container {
@@ -344,7 +258,7 @@ export default {
   flex-direction: column;
   height: 100%;
   padding: 8px;
-  background-color: var(--card-background);
+  background-color: var(--background-card);
   border-radius: 6px;
 }
 
@@ -353,6 +267,7 @@ export default {
   display: flex;
   flex-wrap: nowrap;
   align-items: center;
+  padding-bottom: 1.75rem;
 }
 .runParticipant__wrapper {
   position: relative;
@@ -433,7 +348,7 @@ export default {
   min-width: 5rem;
   margin: 0 4px 8px;
   padding: 2px 6px;
-  color: var(--card-background);
+  color: var(--background-card);
   background: var(--text-default);
   border-radius: 6px;
   text-align: center;
@@ -442,25 +357,25 @@ export default {
 }
 
 .runMarks__wrapper {
-  flex: 0 0 auto;
+  flex: 0 1 auto;
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
+  align-items: flex-start;
+
   margin-top: auto;
-  padding: 8px;
+  padding: 8px calc(8px - 0.75rem) calc(8px - 0.25rem) 8px;
+  overflow-y: auto;
 
   background: var(--standard-background);
   border-radius: 6px;
 }
 .runMarks__item {
-  display: flex;
-  flex-direction: column;
+  flex: 0 0 auto;
+  margin-right: 0.75rem;
+  margin-bottom: 0.25rem;
   padding: 4px;
-  background: var(--card-background);
-  border-radius: 6px;
-}
-.runMarks__item:not(:last-child) {
-  margin-right: 8px;
+  background: var(--background-card);
+  border-radius: 4px;
 }
 .judgeTitle {
   flex: 0 0 auto;
@@ -476,6 +391,7 @@ export default {
 }
 .judgeRunMark {
   display: flex;
+  align-items: center;
   justify-content: center;
   padding: 4px 8px;
   min-width: 3rem;
@@ -483,7 +399,7 @@ export default {
   font-weight: bold;
 }
 .judgeRunMark__input {
-  width: 2rem;
+  width: 2.25rem;
   margin-right: 8px;
   padding: 2px 4px;
   color: var(--text-default);

@@ -1,21 +1,12 @@
 <template>
   <v-dialog width="320px" v-model="dialogState">
     <template v-slot:activator="{ on }">
-      <v-btn
-        v-on="on"
-        class="clearCompetitorsSheet__dialog__button"
-        color="var(--action-red)"
-        text
-        small
-        tile
+      <v-btn v-on="on" class="clearCompetitorsSheet__dialog__button" color="var(--action-red)" text small tile
         >{{ localization[lang].app.competitors.clear_table }}
       </v-btn>
     </template>
 
-    <div
-      class="clearCompetitorsSheet__dialog__wrapper"
-      style="background: var(--card-background); color: var(--text-default)"
-    >
+    <div class="clearCompetitorsSheet__dialog__wrapper" style="background: var(--background-card); color: var(--text-default)">
       <div class="clearCompetitorsSheet__dialog__title">
         {{ localization[lang].app.competitors.clear_table }}
       </div>
@@ -26,13 +17,9 @@
         </div>
 
         <div class="clearCompetitorsSheet__dialog__body__actions">
-          <v-btn @click="clearSheet" color="var(--accent)" small text
-            >{{ localization[lang].app.dialogs.d_yes }}
-          </v-btn>
+          <v-btn @click="clearSheet" color="var(--accent)" small text>{{ localization[lang].app.dialogs.d_yes }} </v-btn>
 
-          <v-btn @click="closeDialog" color="var(--action-red)" small text
-            >{{ localization[lang].app.dialogs.d_cancel }}
-          </v-btn>
+          <v-btn @click="closeDialog" color="var(--action-red)" small text>{{ localization[lang].app.dialogs.d_cancel }} </v-btn>
         </div>
       </div>
     </div>
@@ -40,20 +27,19 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
+import { mapActions, mapGetters } from 'vuex';
 
 export default {
-  name: "clearCompetitors-dialog",
-  props: ["competition"],
+  name: 'clearCompetitors-dialog',
+  props: ['competition'],
   methods: {
-    ...mapActions("main", {
-      updateEvent: "updateEvent",
+    ...mapActions('main', {
+      updateEvent: 'updateEvent',
     }),
     clearSheet() {
-      this.competition.competitorsSheet.competitors =
-        this.competition.competitorsSheet.competitors.filter((_c) => {
-          return 0;
-        });
+      this.competition.competitorsSheet.competitors = this.competition.competitorsSheet.competitors.filter((_c) => {
+        return 0;
+      });
       this.competition.races.forEach((_race) => {
         _race.startList = _race.startList.filter((_comp) => {
           return this.competition.competitorsSheet.competitors.some((comp) => {
@@ -93,9 +79,9 @@ export default {
     };
   },
   computed: {
-    ...mapGetters("localization", {
-      lang: "lang",
-      localization: "localization",
+    ...mapGetters('localization', {
+      lang: 'lang',
+      localization: 'localization',
     }),
   },
 };
@@ -107,7 +93,7 @@ export default {
 }
 .clearCompetitorsSheet__dialog__wrapper {
   color: var(--text-default);
-  background: var(--card-background);
+  background: var(--background-card);
   border-radius: 6px;
 }
 .clearCompetitorsSheet__dialog__title {

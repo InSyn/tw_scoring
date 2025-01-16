@@ -1,80 +1,32 @@
 <template>
-  <div
-    class="d-flex flex-column pa-2"
-    style="border-radius: 6px; width: 100%; height: 100%; overflow-y: auto"
-    :style="{
-      backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
-    }"
-  >
+  <div class="d-flex flex-column pa-2" style="border-radius: 6px; width: 50%; height: 100%; background-color: var(--background-card); overflow-y: auto">
     <div class="pa-2 d-flex align-center flex-nowrap">
       <div style="display: flex; align-items: center; width: 50%">
-        <label
-          for="prot_title"
-          class="font-weight-bold"
-          style="flex: 0 0 auto"
-          >{{ localization[lang].app.protocols.title }}</label
-        >
+        <label for="prot_title" class="font-weight-bold" style="flex: 0 0 auto">{{ localization[lang].app.protocols.title }}</label>
         <input
           class="flex-grow-1 ml-4 pa-1"
           id="prot_title"
-          style="flex: 0 0 auto; border-radius: 6px"
+          style="flex: 0 0 auto; border-radius: 6px; background-color: var(--background-card); color: var(--text-default)"
           v-model="results_protocol.title"
           :placeholder="competition.mainData.title.value"
-          :style="{
-            backgroundColor:
-              $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
-            color: $vuetify.theme.themes[appTheme].textDefault,
-          }"
           type="text"
         />
       </div>
-      <div
-        style="
-          display: flex;
-          align-items: center;
-          width: 50%;
-          margin-left: 1rem;
-        "
-      >
-        <label
-          for="prot_type"
-          class="font-weight-bold"
-          style="flex: 0 0 auto"
-          >{{ localization[lang].app.protocols.protocol_type }}</label
-        >
+      <div style="display: flex; align-items: center; width: 50%; margin-left: 1rem">
+        <label for="prot_type" class="font-weight-bold" style="flex: 0 0 auto">{{ localization[lang].app.protocols.protocol_type }}</label>
         <input
           class="flex-grow-1 ml-4 pa-1"
           id="prot_type"
-          style="flex: 0 0 auto; border-radius: 6px"
+          style="flex: 0 0 auto; border-radius: 6px; background-color: var(--standard-background); color: var(--text-default)"
           v-model="competition.protocol_settings.start_protocols.protocol_type"
-          placeholder="Type..."
-          :style="{
-            backgroundColor:
-              $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
-            color: $vuetify.theme.themes[appTheme].textDefault,
-          }"
+          placeholder="Тип протокола"
           type="text"
         />
       </div>
     </div>
     <div style="display: flex; flex-wrap: wrap">
-      <div
-        style="
-          display: flex;
-          flex-wrap: nowrap;
-          align-items: stretch;
-          padding: 0.5rem 4px;
-        "
-      >
-        <div
-          style="
-            flex: 0 0 auto;
-            display: flex;
-            align-items: center;
-            padding: 2px 4px;
-            font-weight: bold;
-          "
-        >
+      <div style="display: flex; flex-wrap: nowrap; align-items: stretch; padding: 0.5rem 4px">
+        <div style="flex: 0 0 auto; display: flex; align-items: center; padding: 2px 4px; font-weight: bold">
           {{ localization[lang].app.protocols.choose_race }}
         </div>
         <div
@@ -89,15 +41,10 @@
             min-width: 4rem;
           "
           :style="{
-            backgroundColor:
-              $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
+            backgroundColor: $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
           }"
         >
-          <v-hover
-            v-for="race in competition.races"
-            :key="race.id"
-            v-slot:default="{ hover }"
-          >
+          <v-hover v-for="race in competition.races" :key="race.id" v-slot:default="{ hover }">
             <div
               style="
                 flex: 0 0 auto;
@@ -111,30 +58,20 @@
               "
               :style="hover && { backgroundColor: `rgba(255,255,255,.2)` }"
               @click="
-                competition.protocol_settings.start_protocols.filters
-                  .race_filter === race
-                  ? (competition.protocol_settings.start_protocols.filters.race_filter =
-                      null)
-                  : (competition.protocol_settings.start_protocols.filters.race_filter =
-                      race)
+                competition.protocol_settings.start_protocols.filters.race_filter === race
+                  ? (competition.protocol_settings.start_protocols.filters.race_filter = null)
+                  : (competition.protocol_settings.start_protocols.filters.race_filter = race)
               "
             >
               <div
-                style="
-                  border-radius: 50%;
-                  height: 12px;
-                  width: 12px;
-                  transition: background-color 0.112s;
-                "
+                style="border-radius: 50%; height: 12px; width: 12px; transition: background-color 0.112s"
                 :style="
-                  (competition.protocol_settings.start_protocols.filters
-                    .race_filter === race && {
+                  (competition.protocol_settings.start_protocols.filters.race_filter === race && {
                     border: `2px solid ${$vuetify.theme.themes[appTheme].accent}`,
                     backgroundColor: $vuetify.theme.themes[appTheme].accent,
                   }) || {
                     border: `2px solid ${$vuetify.theme.themes[appTheme].accent}`,
-                    backgroundColor:
-                      $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
+                    backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
                   }
                 "
               ></div>
@@ -148,11 +85,7 @@
     </div>
     <div class="pa-2 d-flex flex-column flex-grow-1">
       <div class="d-flex flex-nowrap align-end">
-        <v-hover
-          v-slot:default="{ hover }"
-          v-for="(button, b_idx) in field_buttons"
-          :key="b_idx"
-        >
+        <v-hover v-slot:default="{ hover }" v-for="(button, b_idx) in field_buttons" :key="b_idx">
           <v-btn
             @click="button.action()"
             depressed
@@ -168,13 +101,7 @@
             {{ localization[lang].app.protocols[button.id] }}
           </v-btn>
         </v-hover>
-        <v-btn
-          text
-          small
-          :color="this.$vuetify.theme.themes[appTheme].accent"
-          style="margin-left: auto"
-          @click="refreshFields()"
-        >
+        <v-btn text small :color="this.$vuetify.theme.themes[appTheme].accent" style="margin-left: auto" @click="refreshFields()">
           <v-icon>mdi-refresh</v-icon>
         </v-btn>
       </div>
@@ -182,8 +109,7 @@
         class="d-flex pa-2 flex-column"
         style="flex: 1 0 auto; border-radius: 0 6px 6px 6px"
         :style="{
-          backgroundColor:
-            $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
+          backgroundColor: $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
         }"
       >
         <v-row
@@ -195,17 +121,8 @@
           no-gutters
         >
           <div style="width: 2rem"></div>
-          <v-col
-            style="height: 100%"
-            class="d-flex pa-1 align-center justify-center"
-          >
-            {{ localization[lang].app.protocols.t_cell }} 1
-          </v-col>
-          <v-col
-            style="height: 100%"
-            class="d-flex pa-1 align-center justify-center"
-            >{{ localization[lang].app.protocols.t_cell }} 2</v-col
-          >
+          <v-col style="height: 100%" class="d-flex pa-1 align-center justify-center"> {{ localization[lang].app.protocols.t_cell }} 1 </v-col>
+          <v-col style="height: 100%" class="d-flex pa-1 align-center justify-center">{{ localization[lang].app.protocols.t_cell }} 2</v-col>
           <v-col
             style="height: 100%"
             class="d-flex pa-1 align-center justify-center"
@@ -220,29 +137,17 @@
           >
             {{ `${localization[lang].app.protocols.t_width}(${sum_width}%)` }}
           </v-col>
-          <v-col
-            style="height: 100%"
-            class="d-flex pa-1 align-center justify-center"
-          >
-            {{ localization[lang].app.protocols.t_font }}(px)
-          </v-col>
-          <v-col
-            style="height: 100%"
-            class="d-flex pa-1 align-center justify-center"
-          >
+          <v-col style="height: 100%" class="d-flex pa-1 align-center justify-center"> {{ localization[lang].app.protocols.t_font }}(px) </v-col>
+          <v-col style="height: 100%" class="d-flex pa-1 align-center justify-center">
             {{ localization[lang].app.protocols.t_align }}
           </v-col>
-          <v-col
-            style="height: 100%"
-            class="d-flex pa-1 align-center justify-center"
-          >
+          <v-col style="height: 100%" class="d-flex pa-1 align-center justify-center">
             {{ localization[lang].app.protocols.t_weight }}
           </v-col>
         </v-row>
         <div style="flex: 1 0 auto; overflow-y: auto">
           <v-row
-            v-for="(field, f_idx) in competition.protocol_settings
-              .start_protocols.fields"
+            v-for="(field, f_idx) in competition.protocol_settings.start_protocols.fields"
             :key="f_idx"
             style="font-size: 0.8rem; padding: 0; margin: 0"
             :style="[
@@ -252,21 +157,16 @@
               selected_fields.some((sel_field) => {
                 return sel_field === field.id;
               }) && {
-                backgroundColor:
-                  $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
+                backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
                 border: `1px solid ${$vuetify.theme.themes[appTheme].accent}`,
               },
             ]"
           >
-            <div
-              class="d-flex justify-center align-center"
-              style="width: 2rem; padding: 0 1px"
-            >
+            <div class="d-flex justify-center align-center" style="width: 2rem; padding: 0 1px">
               <div
                 style="width: 100%; position: relative"
                 :style="{
-                  backgroundColor:
-                    $vuetify.theme.themes[appTheme].subjectBackgroundRGBA,
+                  backgroundColor: $vuetify.theme.themes[appTheme].subjectBackgroundRGBA,
                 }"
                 class="d-flex align-center justify-center flex-column"
               >
@@ -316,15 +216,12 @@
                       <div
                         :style="[
                           {
-                            backgroundColor:
-                              $vuetify.theme.themes[appTheme]
-                                .cardBackgroundRGBA,
+                            backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
                           },
                           selected_fields.some((sel_field) => {
                             return sel_field === field.id;
                           }) && {
-                            backgroundColor:
-                              $vuetify.theme.themes[appTheme].textDefault,
+                            backgroundColor: $vuetify.theme.themes[appTheme].textDefault,
                           },
                         ]"
                         style="width: 100%; height: 100%"
@@ -332,11 +229,7 @@
                     </div>
                   </div>
                 </v-hover>
-                <v-btn
-                  @click="shift(field, 'up')"
-                  icon
-                  style="height: 12px; width: 100%; border-radius: 0"
-                >
+                <v-btn @click="shift(field, 'up')" icon style="height: 12px; width: 100%; border-radius: 0">
                   <v-icon
                     class="d-flex justify-center"
                     :style="{
@@ -347,11 +240,7 @@
                     mdi-chevron-up
                   </v-icon>
                 </v-btn>
-                <v-btn
-                  @click="shift(field, 'down')"
-                  icon
-                  style="height: 12px; width: 100%; border-radius: 0"
-                >
+                <v-btn @click="shift(field, 'down')" icon style="height: 12px; width: 100%; border-radius: 0">
                   <v-icon
                     class="d-flex justify-center"
                     :style="{
@@ -364,105 +253,57 @@
                 </v-btn>
               </div>
             </div>
-            <v-hover
-              v-for="(f_prop, p_key) in field.params"
-              :key="p_key"
-              v-slot:default="{ hover }"
-            >
+            <v-hover v-for="(f_prop, p_key) in field.params" :key="p_key" v-slot:default="{ hover }">
               <v-col
                 class="pa-0 d-flex justify-start"
                 style="align-items: center; font-weight: bold; cursor: pointer"
                 :style="
                   hover && {
-                    backgroundColor:
-                      $vuetify.theme.themes[appTheme].subjectBackgroundRGBA,
+                    backgroundColor: $vuetify.theme.themes[appTheme].subjectBackgroundRGBA,
                   }
                 "
               >
-                <v-dialog
-                  v-if="p_key.split('_')[0] === 'cell'"
-                  v-model="f_prop.select_dialog"
-                  width="500"
-                >
-                  <template
-                    v-slot:activator="{ on, attrs }"
-                    style="border: 1px solid #232323"
-                  >
-                    <div
-                      v-on="on"
-                      v-bind="attrs"
-                      style="
-                        display: flex;
-                        align-items: center;
-                        cursor: pointer;
-                        width: 100%;
-                        height: 100%;
-                        padding-left: 36px;
-                      "
-                    >
-                      {{ `${field.params[p_key].title || "пусто"}` }}
+                <v-dialog v-if="p_key.split('_')[0] === 'cell'" v-model="f_prop.select_dialog" width="500">
+                  <template v-slot:activator="{ on, attrs }" style="border: 1px solid #232323">
+                    <div v-on="on" v-bind="attrs" style="display: flex; align-items: center; cursor: pointer; width: 100%; height: 100%; padding-left: 36px">
+                      {{ `${field.params[p_key].title || 'пусто'}` }}
                     </div>
                   </template>
                   <v-card
                     :style="{
                       color: $vuetify.theme.themes[appTheme].textDefault,
-                      backgroundColor:
-                        $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
+                      backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
                     }"
                   >
                     <v-card-title style="padding: 8px 16px">
                       {{ localization[lang].app.protocols.cell_settings }}
-                      <v-btn
-                        @click="f_prop.select_dialog = false"
-                        style="margin-left: auto"
-                        icon
-                      >
+                      <v-btn @click="f_prop.select_dialog = false" style="margin-left: auto" icon>
                         <v-icon color="red">mdi-close</v-icon>
                       </v-btn>
                     </v-card-title>
-                    <div
-                      style="display: flex; flex-wrap: wrap; padding: 0 16px"
-                    >
+                    <div style="display: flex; flex-wrap: wrap; padding: 0 16px">
                       <div style="width: 100%">
                         {{ localization[lang].app.protocols.current_val }}
-                        <v-btn
-                          @click="clearField(f_prop)"
-                          text
-                          small
-                          :color="$vuetify.theme.themes[appTheme].accent"
-                          style="margin-left: 1rem"
-                        >
+                        <v-btn @click="clearField(f_prop)" text small :color="$vuetify.theme.themes[appTheme].accent" style="margin-left: 1rem">
                           {{ localization[lang].app.dialogs.d_clear }}
                         </v-btn>
                       </div>
-                      <div
-                        v-if="f_prop.id"
-                        style="width: 100%; display: flex; font-weight: bold"
-                      >
+                      <div v-if="f_prop.id" style="width: 100%; display: flex; font-weight: bold">
                         <input
                           type="text"
                           v-model="f_prop.id"
                           style="border-radius: 6px; padding: 2px 4px"
                           :style="{
-                            backgroundColor:
-                              $vuetify.theme.themes[appTheme]
-                                .standardBackgroundRGBA,
+                            backgroundColor: $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
                             color: $vuetify.theme.themes[appTheme].textDefault,
                           }"
                         />
                         <input
                           type="text"
                           v-model="f_prop.title"
-                          style="
-                            margin-left: 1rem;
-                            border-radius: 6px;
-                            padding: 2px 4px;
-                            font-weight: bold;
-                          "
+                          style="margin-left: 1rem; border-radius: 6px; padding: 2px 4px; font-weight: bold"
                           :style="{
-                            backgroundColor:
-                              $vuetify.theme.themes[appTheme]
-                                .standardBackgroundRGBA,
+                            backgroundColor: $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
                             color: $vuetify.theme.themes[appTheme].textDefault,
                           }"
                         />
@@ -471,18 +312,9 @@
                         {{ localization[lang].app.protocols.empty_cell }}
                       </div>
                     </div>
-                    <div
-                      style="
-                        display: flex;
-                        flex-wrap: wrap;
-                        max-height: 600px;
-                        padding: 8px 16px;
-                        overflow-y: auto;
-                      "
-                    >
+                    <div style="display: flex; flex-wrap: wrap; max-height: 600px; padding: 8px 16px; overflow-y: auto">
                       <div
-                        v-for="(standard_header, sh_idx) in competition
-                          .protocol_settings.start_protocols.fields"
+                        v-for="(standard_header, sh_idx) in competition.protocol_settings.start_protocols.fields"
                         :key="sh_idx"
                         @click="setField(f_prop, standard_header)"
                         style="
@@ -504,12 +336,7 @@
                         "
                       >
                         <div
-                          style="
-                            flex: 0 0 auto;
-                            width: 6rem;
-                            font-weight: bold;
-                            padding: 4px 0.5rem;
-                          "
+                          style="flex: 0 0 auto; width: 6rem; font-weight: bold; padding: 4px 0.5rem"
                           :style="{
                             color: $vuetify.theme.themes[appTheme].textDefault,
                           }"
@@ -517,17 +344,10 @@
                           {{ `${standard_header.params.cell_1.id}:` }}
                         </div>
                         <div
-                          style="
-                            flex: 1 0 auto;
-                            font-weight: bold;
-                            padding: 4px 0.5rem;
-                          "
+                          style="flex: 1 0 auto; font-weight: bold; padding: 4px 0.5rem"
                           :style="{
-                            backgroundColor:
-                              $vuetify.theme.themes[appTheme].textDefault,
-                            color:
-                              $vuetify.theme.themes[appTheme]
-                                .cardBackgroundRGBA,
+                            backgroundColor: $vuetify.theme.themes[appTheme].textDefault,
+                            color: $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
                           }"
                         >
                           {{ `${standard_header.params.cell_1.title}` }}
@@ -538,10 +358,7 @@
                 </v-dialog>
                 <input
                   v-if="p_key === 'width' || p_key === 'font'"
-                  v-model="
-                    competition.protocol_settings.start_protocols.fields[f_idx]
-                      .params[p_key]
-                  "
+                  v-model="competition.protocol_settings.start_protocols.fields[f_idx].params[p_key]"
                   style="font-weight: bold; text-align: center; cursor: pointer"
                   :style="{
                     color: $vuetify.theme.themes[appTheme].textDefault,
@@ -550,58 +367,36 @@
                 />
                 <select
                   v-if="p_key === 'align'"
-                  style="
-                    outline: none;
-                    height: 100%;
-                    width: 100%;
-                    padding: 2px 4px;
-                    cursor: pointer;
-                  "
+                  style="outline: none; height: 100%; width: 100%; padding: 2px 4px; cursor: pointer"
                   :style="{
                     color: $vuetify.theme.themes[appTheme].textDefault,
                   }"
-                  v-model.lazy="
-                    competition.protocol_settings.start_protocols.fields[f_idx]
-                      .params.align
-                  "
+                  v-model.lazy="competition.protocol_settings.start_protocols.fields[f_idx].params.align"
                 >
                   <option
                     style="padding: 2px 4px"
                     :style="{
-                      backgroundColor:
-                        $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
+                      backgroundColor: $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
                     }"
-                    v-for="(
-                      align_type, at_idx
-                    ) in results_protocol.standard_aligns"
+                    v-for="(align_type, at_idx) in results_protocol.standard_aligns"
                     :key="at_idx"
                     :value="align_type"
                   >
-                    {{ align_type.title }}
+                    {{ align_type }}
                   </option>
                 </select>
                 <select
                   v-if="p_key === 'f_weight'"
-                  style="
-                    outline: none;
-                    height: 100%;
-                    width: 100%;
-                    padding: 2px 4px;
-                    cursor: pointer;
-                  "
+                  style="outline: none; height: 100%; width: 100%; padding: 2px 4px; cursor: pointer"
                   :style="{
                     color: $vuetify.theme.themes[appTheme].textDefault,
                   }"
-                  v-model.lazy="
-                    competition.protocol_settings.start_protocols.fields[f_idx]
-                      .params.f_weight
-                  "
+                  v-model.lazy="competition.protocol_settings.start_protocols.fields[f_idx].params.f_weight"
                 >
                   <option
                     style="padding: 2px 4px"
                     :style="{
-                      backgroundColor:
-                        $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
+                      backgroundColor: $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
                     }"
                     v-for="weight in ['normal', 'bold']"
                     :key="weight"
@@ -620,12 +415,12 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters } from 'vuex';
 export default {
-  name: "fp_main",
+  name: 'fp_main',
   mounted() {
     if (this.competition.protocol_settings.start_protocols.fields.length < 1)
-      this.$store.commit("protocol_settings/initStartProtocolFields", {
+      this.$store.commit('protocol_settings/initStartProtocolFields', {
         competition: this.competition,
       });
   },
@@ -647,69 +442,39 @@ export default {
       field.handler = header.params.cell_1.handler;
     },
     remove_fields() {
-      this.competition.protocol_settings.start_protocols.fields =
-        this.competition.protocol_settings.start_protocols.fields.filter(
-          (protocol_field) => {
-            return !this.selected_fields.some((selected_field) => {
-              return selected_field === protocol_field.id;
-            });
-          }
-        );
+      this.competition.protocol_settings.start_protocols.fields = this.competition.protocol_settings.start_protocols.fields.filter((protocol_field) => {
+        return !this.selected_fields.some((selected_field) => {
+          return selected_field === protocol_field.id;
+        });
+      });
     },
     shift(field, to) {
       let next_field;
-      if (to === "up") {
-        if (
-          this.competition.protocol_settings.start_protocols.fields.indexOf(
-            field
-          ) > 0
-        ) {
-          next_field =
-            this.competition.protocol_settings.start_protocols.fields[
-              this.competition.protocol_settings.start_protocols.fields.indexOf(
-                field
-              ) - 1
-            ];
+      if (to === 'up') {
+        if (this.competition.protocol_settings.start_protocols.fields.indexOf(field) > 0) {
+          next_field = this.competition.protocol_settings.start_protocols.fields[this.competition.protocol_settings.start_protocols.fields.indexOf(field) - 1];
           this.$set(
             this.competition.protocol_settings.start_protocols.fields,
-            this.competition.protocol_settings.start_protocols.fields.indexOf(
-              field
-            ) - 1,
+            this.competition.protocol_settings.start_protocols.fields.indexOf(field) - 1,
             field
           );
           this.$set(
             this.competition.protocol_settings.start_protocols.fields,
-            this.competition.protocol_settings.start_protocols.fields.indexOf(
-              field
-            ) + 1,
+            this.competition.protocol_settings.start_protocols.fields.indexOf(field) + 1,
             next_field
           );
         }
-      } else if (to === "down") {
-        if (
-          this.competition.protocol_settings.start_protocols.fields.indexOf(
-            field
-          ) <
-          this.competition.protocol_settings.start_protocols.fields.length - 1
-        ) {
-          next_field =
-            this.competition.protocol_settings.start_protocols.fields[
-              this.competition.protocol_settings.start_protocols.fields.indexOf(
-                field
-              ) + 1
-            ];
+      } else if (to === 'down') {
+        if (this.competition.protocol_settings.start_protocols.fields.indexOf(field) < this.competition.protocol_settings.start_protocols.fields.length - 1) {
+          next_field = this.competition.protocol_settings.start_protocols.fields[this.competition.protocol_settings.start_protocols.fields.indexOf(field) + 1];
           this.$set(
             this.competition.protocol_settings.start_protocols.fields,
-            this.competition.protocol_settings.start_protocols.fields.indexOf(
-              field
-            ) + 1,
+            this.competition.protocol_settings.start_protocols.fields.indexOf(field) + 1,
             field
           );
           this.$set(
             this.competition.protocol_settings.start_protocols.fields,
-            this.competition.protocol_settings.start_protocols.fields.indexOf(
-              field
-            ),
+            this.competition.protocol_settings.start_protocols.fields.indexOf(field),
             next_field
           );
         }
@@ -725,7 +490,7 @@ export default {
       return field;
     },
     refreshFields() {
-      this.$store.commit("protocol_settings/initStartProtocolFields", {
+      this.$store.commit('protocol_settings/initStartProtocolFields', {
         competition: this.competition,
       });
     },
@@ -735,43 +500,41 @@ export default {
       selected_fields: [],
       field_buttons: [
         {
-          id: "b_add",
-          color: "action_green",
+          id: 'b_add',
+          color: 'action_green',
 
           action: function () {
             return 0;
           },
         },
         {
-          id: "b_edit",
-          color: "action_yellow",
+          id: 'b_edit',
+          color: 'action_yellow',
 
           action: function () {
             return 0;
           },
         },
-        { id: "b_remove", color: "action_red", action: this.remove_fields },
+        { id: 'b_remove', color: 'action_red', action: this.remove_fields },
       ],
     };
   },
   computed: {
-    ...mapGetters("localization", {
-      localization: "localization",
-      lang: "lang",
+    ...mapGetters('localization', {
+      localization: 'localization',
+      lang: 'lang',
     }),
-    ...mapGetters("main", { competition: "competition", appTheme: "appTheme" }),
-    ...mapGetters("protocol_settings", {
-      results_protocol: "results_protocol",
-      fieldClass: "fieldClass",
+    ...mapGetters('main', { competition: 'competition', appTheme: 'appTheme' }),
+    ...mapGetters('protocol_settings', {
+      results_protocol: 'results_protocol',
+      fieldClass: 'fieldClass',
     }),
     sum_width() {
       let sum = 0;
 
-      const arr = this.competition.protocol_settings.start_protocols.fields.map(
-        (_field) => {
-          return _field.params.width;
-        }
-      );
+      const arr = this.competition.protocol_settings.start_protocols.fields.map((_field) => {
+        return _field.params.width;
+      });
 
       for (let i = 0; i < arr.length; i++) {
         sum += +arr[i];

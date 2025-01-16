@@ -1,13 +1,6 @@
 <template>
   <div class="protocolImages__container">
-    <div
-      style="
-        flex: 0 0 auto;
-        font-size: 1.2rem;
-        font-weight: bold;
-        margin: 0 6px 8px;
-      "
-    >
+    <div style="flex: 0 0 auto; font-size: 1.2rem; font-weight: bold; margin: 0 6px 8px">
       {{ localization[lang].app.protocols.images }}
     </div>
     <v-spacer></v-spacer>
@@ -34,18 +27,11 @@
           margin: 0 6px 6px 0;
           max-width: 33%;
           overflow: hidden;
-          background-color: var(--card-background);
+          background-color: var(--background-card);
           border-radius: 6px;
         "
       >
-        <div
-          style="
-            display: flex;
-            align-items: center;
-            font-weight: bold;
-            padding: 4px;
-          "
-        >
+        <div style="display: flex; align-items: center; font-weight: bold; padding: 4px">
           {{ localization[lang].app.protocols[logo.title] }}
         </div>
         <div style="display: flex; align-items: center; padding: 4px">
@@ -54,9 +40,7 @@
             accept="image/jpeg,image/jpg,image/png"
             :id="l_key"
             hidden
-            @change="
-              $store.commit('protocol_settings/setImage', [l_key, $event])
-            "
+            @change="$store.commit('protocol_settings/setImage', [l_key, $event])"
           /><v-hover v-slot:default="{ hover }"
             ><label
               style="
@@ -78,9 +62,7 @@
               "
               :for="l_key"
               >{{
-                (results_protocol.assets[l_key] &&
-                  results_protocol.assets[l_key].file &&
-                  results_protocol.assets[l_key].file.name) ||
+                (results_protocol.assets[l_key] && results_protocol.assets[l_key].file && results_protocol.assets[l_key].file.name) ||
                 localization[lang].app.dialogs.d_choose
               }}</label
             ></v-hover
@@ -92,16 +74,16 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters } from 'vuex';
 export default {
-  name: "protocolImages",
+  name: 'protocolImages',
   computed: {
-    ...mapGetters("localization", {
-      localization: "localization",
-      lang: "lang",
+    ...mapGetters('localization', {
+      localization: 'localization',
+      lang: 'lang',
     }),
-    ...mapGetters("main", ["appTheme"]),
-    ...mapGetters("protocol_settings", ["results_protocol"]),
+    ...mapGetters('main', ['appTheme']),
+    ...mapGetters('protocol_settings', ['results_protocol']),
   },
 };
 </script>
@@ -116,7 +98,7 @@ export default {
   padding: 8px;
 
   border-radius: 6px;
-  background-color: var(--card-background);
+  background-color: var(--background-card);
 
   overflow-y: auto;
 }

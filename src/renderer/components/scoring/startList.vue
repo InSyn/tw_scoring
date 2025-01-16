@@ -9,17 +9,6 @@
           :competitor-on-track="selectedCompetitor"
           :show-d-d="false"
         ></aerials-controls>
-        <!--        <input-->
-        <!--          class="jumpCode__input"-->
-        <!--          v-if="competition.is_aerials && selectedCompetitor"-->
-        <!--          type="text"-->
-        <!--          v-bind:value="-->
-        <!--            selectedCompetitor.info_data[-->
-        <!--              `jump${competition.selected_race_id + 1}_code`-->
-        <!--            ]-->
-        <!--          "-->
-        <!--          @change="setAeCode($event)"-->
-        <!--        />-->
         <div
           style="
             display: flex;
@@ -30,43 +19,25 @@
             border-radius: 4px;
             min-width: 3rem;
             text-align: center;
+            color: var(--background-card);
             background-color: var(--text-default);
-            color: var(--card-background);
           "
         >
-          {{ selectedCompetitor && selectedCompetitor.info_data["bib"] }}
+          {{ selectedCompetitor && selectedCompetitor.info_data['bib'] }}
         </div>
-        <div
-          class="d-flex justify-center align-center"
-          style="margin-left: 1rem"
-        >
-          {{
-            selectedCompetitor &&
-            selectedCompetitor.info_data["lastname"].toUpperCase()
-          }}
+        <div class="d-flex justify-center align-center" style="margin-left: 1rem">
+          {{ selectedCompetitor && selectedCompetitor.info_data['lastname'].toUpperCase() }}
         </div>
-        <div
-          class="d-flex justify-center align-center"
-          style="margin-left: 0.5rem"
-        >
-          {{ selectedCompetitor && selectedCompetitor.info_data["name"] }}
+        <div class="d-flex justify-center align-center" style="margin-left: 0.5rem">
+          {{ selectedCompetitor && selectedCompetitor.info_data['name'] }}
         </div>
         <v-spacer></v-spacer>
-        <div
-          style="display: flex; flex-direction: column"
-          v-if="competition.result_formula.types[0].doubleUp"
-        >
+        <div style="display: flex; flex-direction: column" v-if="competition.result_formula.types[0].doubleUp">
           <v-btn
-            v-for="(cor_button, cb_idx) in competition.result_formula.types[0]
-              .doubleUp_corridors"
+            v-for="(_, cb_idx) in competition.result_formula.types[0].doubleUp_corridors"
             :key="cb_idx"
             @click="
-              competition.selected_race &&
-                competition.selected_race.selectedCompetitor &&
-                setToCorridor(
-                  competition.selected_race.selectedCompetitor,
-                  cb_idx
-                )
+              competition.selected_race && competition.selected_race.selectedCompetitor && setToCorridor(competition.selected_race.selectedCompetitor, cb_idx)
             "
             text
             small
@@ -77,11 +48,7 @@
         </div>
         <v-btn
           v-else
-          @click="
-            competition.selected_race &&
-              competition.selected_race.selectedCompetitor &&
-              setToTrack(competition.selected_race.selectedCompetitor)
-          "
+          @click="competition.selected_race && competition.selected_race.selectedCompetitor && setToTrack(competition.selected_race.selectedCompetitor)"
           text
           small
           color="var(--success)"
@@ -90,18 +57,14 @@
         </v-btn>
       </div>
       <div class="startList__competitorsList__wrapper">
-        <div
-          class="startList__competitor__wrapper"
-          v-for="competitor in getRaceStartList"
-          :key="competitor.id"
-        >
+        <div class="startList__competitor__wrapper" v-for="competitor in getRaceStartList" :key="competitor.id">
           <div
             class="d-flex flex-nowrap"
             tabindex="0"
             @focus="setFocused($event)"
             @blur="setBlur($event)"
             @dblclick="setSelectedCompetitor(competitor.id)"
-            @keypress.enter="setSelectedCompetitor(competitor.id)"
+            @keydown.enter="setSelectedCompetitor(competitor.id)"
             style="border-radius: 4px; cursor: pointer; outline: none"
           >
             <div
@@ -115,20 +78,10 @@
                 font-weight: bold;
               "
             >
-              {{ competitor.info_data["bib"] }}
+              {{ competitor.info_data['bib'] }}
             </div>
-            <div
-              class="d-flex flex-nowrap align-center overflow-hidden"
-              style="
-                margin-left: 4px;
-                padding: 2px 4px;
-                font-weight: bold;
-                white-space: nowrap;
-              "
-            >
-              {{
-                `${competitor.info_data["lastname"]} ${competitor.info_data["name"]}`
-              }}
+            <div class="d-flex flex-nowrap align-center overflow-hidden" style="margin-left: 4px; padding: 2px 4px; font-weight: bold; white-space: nowrap">
+              {{ `${competitor.info_data['lastname']} ${competitor.info_data['name']}` }}
             </div>
           </div>
         </div>
@@ -138,61 +91,39 @@
 </template>
 
 <script>
-// import axios from "axios";
-
-import { mapActions, mapGetters } from "vuex";
-import {
-  initTerminalData_chiefJudge,
-  initTerminalData_judge,
-} from "../../store/terminalFunctions";
-import AerialsControls from "./scoresPanel/aerialsControls.vue";
-import { convertCyrillicToLatin } from "../../../lib/utils";
+import { mapActions, mapGetters } from 'vuex';
+import { initTerminalData_chiefJudge, initTerminalData_judge } from '../../utils/terminals-utils';
+import AerialsControls from './scoresPanel/aerialsControls.vue';
 
 export default {
-  name: "startList",
+  name: 'startList',
   components: { AerialsControls },
   methods: {
-    ...mapActions("main", {
-      updateEvent: "updateEvent",
+    ...mapActions('main', {
+      updateEvent: 'updateEvent',
     }),
-    setAeCode(e) {
-      this.selectedCompetitor.info_data[
-        `jump${this.competition.selected_race_id + 1}_code`
-      ] = e.target.value;
-
-      this.updateEvent();
-    },
     setSelectedCompetitor(competitor_id) {
       this.competition.selected_race.selectedCompetitor = competitor_id;
 
       this.updateEvent();
     },
     setToTrack(competitor_id) {
-      const competitor = this.competition.competitorsSheet.competitors.find(
-        (competitor) => competitor.id === competitor_id
-      );
+      const competitor = this.competition.competitorsSheet.competitors.find((competitor) => competitor.id === competitor_id);
 
-      if (this.competition.selected_race.onTrack !== null)
-        this.competition.selected_race.startList.unshift(
-          this.competition.selected_race.onTrack
-        );
+      if (this.competition.selected_race.onTrack !== null) this.competition.selected_race.startList.unshift(this.competition.selected_race.onTrack);
 
       this.competition.selected_race.onTrack = competitor_id;
-      this.competition.selected_race.startList =
-        this.competition.selected_race.startList.filter((_competitor) => {
-          return _competitor !== competitor_id;
-        });
-      this.competition.selected_race.selectedCompetitor = this.competition
-        .selected_race.startList[0]
-        ? this.competition.selected_race.startList[0]
-        : null;
+      this.competition.selected_race.startList = this.competition.selected_race.startList.filter((_competitor) => {
+        return _competitor !== competitor_id;
+      });
+      this.competition.selected_race.selectedCompetitor = this.competition.selected_race.startList[0] ? this.competition.selected_race.startList[0] : null;
 
       const terminalPackage_judge = {
         raceId: this.competition.races.indexOf(this.competition.selected_race),
-        competitorId: competitor.info_data["bib"],
-        competitorNum: competitor.info_data["bib"],
+        competitorId: competitor.info_data['bib'],
+        competitorNum: competitor.info_data['bib'],
         scoresQuantity: 1,
-        competitorName: competitor.info_data["fullname"],
+        competitorName: competitor.info_data['fullname'],
         isABC: 0,
       };
       const terminalPackage_chiefJudge = {
@@ -209,12 +140,8 @@ export default {
           judgeSections.push([
             judge.id,
 
-            this.competition.result_formula.types[1].sections.filter(
-              (section) =>
-                section.judges.some(
-                  (sectionJudge) =>
-                    parseInt(judge.id) === parseInt(sectionJudge.id)
-                )
+            this.competition.result_formula.types[1].sections.filter((section) =>
+              section.judges.some((sectionJudge) => parseInt(judge.id) === parseInt(sectionJudge.id))
             ).length || 1,
           ]);
         });
@@ -228,64 +155,41 @@ export default {
       this.updateEvent();
     },
     setToCorridor(comp_id, cor_idx) {
-      if (
-        this.competition.result_formula.types[0].doubleUp_competitors[
-          cor_idx
-        ] !== null
-      )
-        this.competition.selected_race.startList.unshift(
-          this.competition.result_formula.types[0].doubleUp_competitors[cor_idx]
-        );
+      if (this.competition.result_formula.types[0].doubleUp_competitors[cor_idx] !== null)
+        this.competition.selected_race.startList.unshift(this.competition.result_formula.types[0].doubleUp_competitors[cor_idx]);
 
-      this.competition.result_formula.types[0].doubleUp_competitors[cor_idx] =
-        comp_id;
-      this.competition.selected_race.startList =
-        this.competition.selected_race.startList.filter((_competitor) => {
-          return _competitor !== comp_id;
-        });
-      this.competition.selected_race.selectedCompetitor = this.competition
-        .selected_race.startList[0]
-        ? this.competition.selected_race.startList[0]
-        : null;
+      this.competition.result_formula.types[0].doubleUp_competitors[cor_idx] = comp_id;
+      this.competition.selected_race.startList = this.competition.selected_race.startList.filter((_competitor) => {
+        return _competitor !== comp_id;
+      });
+      this.competition.selected_race.selectedCompetitor = this.competition.selected_race.startList[0] ? this.competition.selected_race.startList[0] : null;
 
       this.updateEvent();
     },
     setFocused(e) {
-      e.target.style.backgroundColor = `${
-        this.$vuetify.theme.themes[this.appTheme].subjectBackgroundRGBA
-      }`;
+      e.target.style.backgroundColor = `${this.$vuetify.theme.themes[this.appTheme].subjectBackgroundRGBA}`;
     },
     setBlur(e) {
-      e.target.style.backgroundColor = `${
-        this.$vuetify.theme.themes[this.appTheme].standardBackgroundRGBA
-      }`;
+      e.target.style.backgroundColor = `${this.$vuetify.theme.themes[this.appTheme].standardBackgroundRGBA}`;
     },
   },
   computed: {
-    ...mapGetters("main", {
-      competition: "competition",
-      appTheme: "appTheme",
-      socket: "socket",
+    ...mapGetters('main', {
+      competition: 'competition',
+      appTheme: 'appTheme',
+      socket: 'socket',
     }),
     getRaceStartList() {
       if (!this.competition.selected_race) return [];
 
       return this.competition.selected_race.startList
         .map((_comp) => {
-          return this.competition.competitorsSheet.competitors.find(
-            (comp) => comp && comp.id === _comp
-          );
+          return this.competition.competitorsSheet.competitors.find((comp) => comp && comp.id === _comp);
         })
-        .filter(
-          (_competitor) =>
-            _competitor.id !== this.competition.selected_race.selectedCompetitor
-        );
+        .filter((_competitor) => _competitor.id !== this.competition.selected_race.selectedCompetitor);
     },
     selectedCompetitor() {
-      if (
-        this.competition.selected_race &&
-        this.competition.selected_race.selectedCompetitor
-      )
+      if (this.competition.selected_race && this.competition.selected_race.selectedCompetitor)
         return this.competition.competitorsSheet.competitors.find((_comp) => {
           return _comp.id === this.competition.selected_race.selectedCompetitor;
         });
@@ -307,7 +211,7 @@ export default {
   height: 100%;
   padding: 8px;
 
-  background-color: var(--card-background);
+  background-color: var(--background-card);
   border-radius: 6px;
 }
 
@@ -319,21 +223,6 @@ export default {
   font-weight: bold;
   border-radius: 4px;
   background-color: var(--standard-background);
-}
-.jumpCode__input {
-  min-width: 0;
-  width: 6rem;
-  margin-right: 12px;
-  padding: 4px 8px;
-  border-radius: 4px;
-  color: var(--text-default);
-  background: var(--standard-background);
-  box-shadow: inset 0 0 0 1px var(--text-default);
-}
-
-.jumpCode__input:focus {
-  background: var(--subject-background);
-  box-shadow: inset 0 0 0 1px var(--accent);
 }
 
 .startList__competitorsList__wrapper {

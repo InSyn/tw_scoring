@@ -2,59 +2,41 @@
   <button @click="sendTerminalsData" class="judgeTerminal__button">
     <span>M</span>
     <judge-terminal-icon
-      :class="[
-        'judgeTerminal__button__icon',
-        processingDataTransmission && 'isProcessing',
-        processingDataError && 'transmissionError',
-      ]"
+      :class="['judgeTerminal__button__icon', processingDataTransmission && 'isProcessing', processingDataError && 'transmissionError']"
     ></judge-terminal-icon>
   </button>
 </template>
 
 <script>
-import JudgeTerminalIcon from "../../../assets/icons/judgeTerminal-icon.vue";
-import {
-  initTerminalData_chiefJudge,
-  initTerminalData_judge,
-} from "../../../store/terminalFunctions";
+import JudgeTerminalIcon from '../../../assets/icons/judgeTerminal-icon.vue';
+import { initTerminalData_chiefJudge, initTerminalData_judge } from '../../../utils/terminals-utils';
+import { checkCompetitionDiscipline } from '../../../data/sports';
 
 export default {
-  name: "judgeTerminal-control",
+  name: 'judgeTerminal-control',
   components: { JudgeTerminalIcon },
-  props: ["competition"],
+  props: ['competition'],
   methods: {
     async sendTerminalsData() {
       clearTimeout(this.processingDataTransmission_timeoutId);
 
-      if (
-        !this.competition.selected_race ||
-        !this.competition.selected_race.onTrack
-      )
-        return;
+      if (!this.competition.selected_race || !this.competition.selected_race.onTrack) return;
 
-      if (this.competition.dualMoguls_mode) {
-        const blueCourseCompetitor =
-            this.competition.competitorsSheet.competitors.find(
-              (competitor) =>
-                competitor.id ===
-                this.competition.selected_race.onTrack.blueCourse
-            ),
-          redCourseCompetitor =
-            this.competition.competitorsSheet.competitors.find(
-              (competitor) =>
-                competitor.id ===
-                this.competition.selected_race.onTrack.redCourse
-            );
+      if (checkCompetitionDiscipline(this.competition, ['DMO'])) {
+        const blueCourseCompetitor = this.competition.competitorsSheet.competitors.find(
+            (competitor) => competitor.id === this.competition.selected_race.onTrack.blueCourse
+          ),
+          redCourseCompetitor = this.competition.competitorsSheet.competitors.find(
+            (competitor) => competitor.id === this.competition.selected_race.onTrack.redCourse
+          );
         if (!blueCourseCompetitor || !redCourseCompetitor) return;
 
         const terminalPackage_judge = {
-          raceId: this.competition.races.indexOf(
-            this.competition.selected_race
-          ),
-          competitorId: blueCourseCompetitor.info_data["bib"],
-          competitorNum: blueCourseCompetitor.info_data["bib"],
+          raceId: this.competition.races.indexOf(this.competition.selected_race),
+          competitorId: blueCourseCompetitor.info_data['bib'],
+          competitorNum: blueCourseCompetitor.info_data['bib'],
           scoresQuantity: 1,
-          competitorName: `BLUE | RED ${redCourseCompetitor.info_data["bib"]}`,
+          competitorName: `BLUE | RED ${redCourseCompetitor.info_data['bib']}`,
           isABC: 0,
         };
 
@@ -82,17 +64,16 @@ export default {
       }
 
       const competitor = this.competition.competitorsSheet.competitors.find(
-        (competitionCompetitor) =>
-          competitionCompetitor.id === this.competition.selected_race.onTrack
+        (competitionCompetitor) => competitionCompetitor.id === this.competition.selected_race.onTrack
       );
       if (!competitor) return;
 
       const terminalPackage_judge = {
         raceId: this.competition.races.indexOf(this.competition.selected_race),
-        competitorId: competitor.info_data["bib"],
-        competitorNum: competitor.info_data["bib"],
+        competitorId: competitor.info_data['bib'],
+        competitorNum: competitor.info_data['bib'],
         scoresQuantity: 1,
-        competitorName: competitor.info_data["fullname"],
+        competitorName: competitor.info_data['fullname'],
         isABC: 0,
       };
 
@@ -100,16 +81,12 @@ export default {
         const judgeMarksPackage = [
           judge.id,
           ...competitor.marks
-            .filter(
-              (mark) =>
-                mark.judge_id === judge._id &&
-                mark.race_id === this.competition.selected_race.id
-            )
+            .filter((mark) => mark.judge_id === judge._id && mark.race_id === this.competition.selected_race.id)
             .map((mark) => {
               return mark.value
                 ? parseFloat(mark.value)
                     .toFixed(1)
-                    .split(".")
+                    .split('.')
                     .map((markPart) => parseInt(markPart))
                 : [0, 0];
             }),
@@ -132,12 +109,8 @@ export default {
           judgeSections.push([
             judge.id,
 
-            this.competition.result_formula.types[1].sections.filter(
-              (section) =>
-                section.judges.some(
-                  (sectionJudge) =>
-                    parseInt(judge.id) === parseInt(sectionJudge.id)
-                )
+            this.competition.result_formula.types[1].sections.filter((section) =>
+              section.judges.some((sectionJudge) => parseInt(judge.id) === parseInt(sectionJudge.id))
             ).length || 1,
           ]);
         });

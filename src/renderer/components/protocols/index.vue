@@ -1,21 +1,16 @@
 <template>
   <div v-if="competition" class="protocolsPage__wrapper">
-    <start_protocols
-      v-if="!competition.protocol_settings.protocol_type"
-    ></start_protocols>
-    <final_protocols
-      v-else
-      :protocol-type="competition.protocol_settings.protocol_type"
-    ></final_protocols>
+    <start_protocols v-if="!competition.protocol_settings.protocol_type"></start_protocols>
+    <final_protocols v-else :protocol-type="competition.protocol_settings.protocol_type"></final_protocols>
   </div>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-import start_protocols from "./start_protocols.vue";
-import final_protocols from "./protocols.vue";
+import { mapGetters } from 'vuex';
+import start_protocols from './start_protocols.vue';
+import final_protocols from './protocols.vue';
 export default {
-  name: "protocols",
+  name: 'protocols',
   components: {
     start_protocols,
     final_protocols,
@@ -24,9 +19,9 @@ export default {
     return {};
   },
   computed: {
-    ...mapGetters("main", {
-      appTheme: "appTheme",
-      competition: "competition",
+    ...mapGetters('main', {
+      appTheme: 'appTheme',
+      competition: 'competition',
     }),
   },
 };
@@ -34,6 +29,6 @@ export default {
 
 <style scoped>
 .protocolsPage__wrapper {
-  /*padding: 16px;*/
+  flex: 1 1 0;
 }
 </style>

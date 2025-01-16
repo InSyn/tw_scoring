@@ -2,53 +2,34 @@
   <div class="teamTable__row" @click="logTeamRes(team)">
     <div class="teamName__wrapper">
       <span class="teamName__label">Название</span>
-      <input
-        class="teamName__input"
-        v-model.lazy.trim="team.name"
-        type="text"
-      />
+      <input class="teamName__input" v-model.lazy.trim="team.name" type="text" />
       <span class="teamId__label">Team ID</span>
       <input class="teamId__input" v-model.lazy.trim="team.id" type="text" />
-      <team-competitors_dialog
-        :competition="competition"
-        :team="team"
-      ></team-competitors_dialog>
-      <v-btn
-        class="ml-auto"
-        @click="removeTeam(team)"
-        color="var(--error)"
-        small
-        icon
-      >
+      <team-competitors_dialog :competition="competition" :team="team"></team-competitors_dialog>
+      <v-btn class="ml-auto" @click="removeTeam(team)" color="var(--error)" small icon>
         <v-icon>
           {{ deleteIcon }}
         </v-icon>
       </v-btn>
     </div>
     <div class="teamCompetitors__wrapper">
-      <team-competitor
-        v-for="competitorId in team.competitors"
-        :key="competitorId"
-        :competitor="getCompetitor(competitorId)"
-      ></team-competitor>
+      <team-competitor v-for="competitorId in team.competitors" :key="competitorId" :competitor="getCompetitor(competitorId)"></team-competitor>
     </div>
   </div>
 </template>
 
 <script>
-import TeamCompetitor from "./teamCompetitor";
-import TeamCompetitors_dialog from "./dialogs/teamCompetitors_dialog";
-import { mdiDeleteForever } from "@mdi/js";
+import TeamCompetitor from './teamCompetitor';
+import TeamCompetitors_dialog from './dialogs/teamCompetitors_dialog';
+import { mdiDeleteForever } from '@mdi/js';
 
 export default {
-  name: "teamTableRow",
-  props: ["competition", "team"],
+  name: 'teamTableRow',
+  props: ['competition', 'team'],
   components: { TeamCompetitors_dialog, TeamCompetitor },
   methods: {
     getCompetitor(competitorId) {
-      const competitor = this.competition.competitorsSheet.competitors.find(
-        (competitor) => competitor.id === competitorId
-      );
+      const competitor = this.competition.competitorsSheet.competitors.find((competitor) => competitor.id === competitorId);
       return competitor ? competitor : null;
     },
     logTeamRes(team) {
@@ -57,9 +38,7 @@ export default {
       // );
     },
     removeTeam(teamToRemove) {
-      this.competition.teams = this.competition.teams.filter(
-        (team) => team.id !== teamToRemove.id
-      );
+      this.competition.teams = this.competition.teams.filter((team) => team.id !== teamToRemove.id);
     },
   },
   data() {
@@ -75,7 +54,7 @@ export default {
   position: relative;
   margin-top: 8px;
   padding: 6px;
-  background: var(--card-background);
+  background: var(--background-card);
   border-radius: 6px;
 }
 .teamTable__row:first-child {

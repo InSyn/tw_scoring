@@ -58,10 +58,6 @@ export default {
 
     el.__resizeHandler__ = resizeHandler;
 
-    // You might want to debounce the resize event for performance reasons
-    window.addEventListener("resize", el.__resizeHandler__);
-
-    // Optionally, you can call the handler immediately after binding
     resizeHandler();
   },
   unbind(el) {

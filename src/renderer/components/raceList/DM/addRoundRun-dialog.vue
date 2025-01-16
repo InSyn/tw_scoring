@@ -1,134 +1,81 @@
 <template>
-  <v-dialog
-    v-model="dialogState"
-    @keydown.enter.prevent="addRoundRun(false)"
-    width="420px"
-  >
+  <v-dialog v-model="dialogState" @keydown.enter.prevent="addRoundRun(false)" width="420px">
     <template v-slot:activator="{ on }">
-      <v-btn v-on="on" class="addRun__button" color="var(--accent)" text>
-        Создать
-      </v-btn>
+      <v-btn v-on="on" class="addRun__button" color="var(--accent)" text> Создать </v-btn>
     </template>
 
     <div class="addRoundRun__dialog__wrapper">
-      <div class="addRoundRun__dialog__title">Добавить проезд</div>
+      <div class="addRoundRun__dialog__title">
+        Добавить &nbsp;<b>Проезд {{ selectedRace.runs.length + 1 }}</b>
+      </div>
 
       <div class="availableCompetitors__list__wrapper">
-        <div
-          v-for="(availableCompetitorId, idx) in gatAvailableCompetitors"
-          :key="idx"
-          class="availableCompetitors__list__item"
-        >
+        <div v-for="(availableCompetitorId, idx) in gatAvailableCompetitors" :key="idx" class="availableCompetitors__list__item">
           <div class="competitorName">
             {{
-              `${getRaceCompetitor(availableCompetitorId).info_data["bib"]} ${
-                getRaceCompetitor(availableCompetitorId).info_data["lastname"]
-              } ${getRaceCompetitor(availableCompetitorId).info_data["name"]}`
+              `${getRaceCompetitor(availableCompetitorId).info_data['bib']} ${getRaceCompetitor(availableCompetitorId).info_data['lastname']} ${
+                getRaceCompetitor(availableCompetitorId).info_data['name']
+              }`
             }}
           </div>
-          <button
-            @click="
-              addRunCompetitor(getRaceCompetitor(availableCompetitorId), 'blue')
-            "
-            class="addRunCompetitor__button course-blue"
-          >
-            B
-          </button>
-          <button
-            @click="
-              addRunCompetitor(getRaceCompetitor(availableCompetitorId), 'red')
-            "
-            class="addRunCompetitor__button course-red"
-          >
-            R
-          </button>
+          <button @click="addRunCompetitor(getRaceCompetitor(availableCompetitorId), 'blue')" class="addRunCompetitor__button course-blue">B</button>
+          <button @click="addRunCompetitor(getRaceCompetitor(availableCompetitorId), 'red')" class="addRunCompetitor__button course-red">R</button>
         </div>
       </div>
 
       <div class="runCourses__wrapper">
         <div class="runCourse course-blue">
-          {{ getCompetitorNameOnCourse("blue") }}
+          {{ getCompetitorNameOnCourse('blue') }}
 
-          <button
-            v-if="runParticipants.blue"
-            class="removeCompetitorFromRace__button"
-            @click="removeCompetitorFromCourse('blue')"
-          >
+          <button v-if="runParticipants.blue" class="removeCompetitorFromRace__button" @click="removeCompetitorFromCourse('blue')">
             <trash-bin-icon class="removeCompetitorFromRace__icon" />
           </button>
         </div>
 
         <div class="runCourse course-red">
-          {{ getCompetitorNameOnCourse("red") }}
+          {{ getCompetitorNameOnCourse('red') }}
 
-          <button
-            v-if="runParticipants.red"
-            class="removeCompetitorFromRace__button"
-            @click="removeCompetitorFromCourse('red')"
-          >
+          <button v-if="runParticipants.red" class="removeCompetitorFromRace__button" @click="removeCompetitorFromCourse('red')">
             <trash-bin-icon class="removeCompetitorFromRace__icon" />
           </button>
         </div>
       </div>
 
       <div class="addRoundRun__dialog__actions">
-        <v-btn
-          @click="addRoundRun()"
-          class="createRoundRun__button"
-          color="var(--accent)"
-          small
-        >
-          Принять
-        </v-btn>
-        <v-btn
-          @click="closeDialog()"
-          class="closeDialog__button"
-          color="var(--text-default)"
-          text
-          small
-        >
-          Отмена
-        </v-btn>
+        <v-btn @click="addRoundRun()" class="createRoundRun__button" color="var(--accent)" small> Принять </v-btn>
+        <v-btn @click="cancel()" class="closeDialog__button" color="var(--text-default)" text small> Отмена </v-btn>
       </div>
     </div>
   </v-dialog>
 </template>
 
 <script>
-import DMRunClass from "../../../store/Classes/DM/DMRunClass";
-import { mapActions } from "vuex";
-import TrashBinIcon from "../../../assets/icons/trashBin-icon.vue";
+import DMRunClass from '../../../store/classes/DM/DMRunClass';
+import { mapActions } from 'vuex';
+import TrashBinIcon from '../../../assets/icons/trashBin-icon.vue';
+import { generateEmptyCompetitor } from '../../../store/classes/CompetitorClass';
 
 export default {
-  name: "addRoundRun-dialog",
+  name: 'addRoundRun-dialog',
   components: { TrashBinIcon },
-  props: ["competition", "selectedRace"],
+  props: ['competition', 'selectedRace'],
   methods: {
-    ...mapActions("main", {
-      updateEvent: "updateEvent",
+    ...mapActions('main', {
+      updateEvent: 'updateEvent',
     }),
     addRunCompetitor(competitor, course) {
+      if (this.runParticipants[course]) return;
       this.runParticipants[course] = competitor.id;
     },
-    addRoundRun(closeDialog = true) {
-      if (this.selectedRace.runs === undefined)
-        throw new Error("Wrong race type");
+    addRoundRun() {
+      if (this.selectedRace.runs === undefined) throw new Error('Wrong race type');
 
-      const blueCourseCompetitor =
-          this.competition.competitorsSheet.competitors.find(
-            (competitor) => competitor.id === this.runParticipants.blue
-          ),
-        redCourseCompetitor =
-          this.competition.competitorsSheet.competitors.find(
-            (competitor) => competitor.id === this.runParticipants.red
-          );
+      const blueCourseCompetitor = this.competition.competitorsSheet.competitors.find((competitor) => competitor.id === this.runParticipants.blue),
+        redCourseCompetitor = this.competition.competitorsSheet.competitors.find((competitor) => competitor.id === this.runParticipants.red);
 
       const runParams = {
         number: this.selectedRace.runs.length + 1,
-        competitors: [
-          blueCourseCompetitor || null,
-          redCourseCompetitor || null,
-        ],
+        competitors: [blueCourseCompetitor || { ...generateEmptyCompetitor() }, redCourseCompetitor || { ...generateEmptyCompetitor() }],
       };
 
       this.selectedRace.runs.push(new DMRunClass(runParams));
@@ -136,26 +83,25 @@ export default {
       this.runParticipants.blue = null;
       this.runParticipants.red = null;
 
-      closeDialog && this.closeDialog();
+      this.dialogState = false;
       this.updateEvent();
     },
-    closeDialog() {
+    cancel() {
+      this.runParticipants.blue = null;
+      this.runParticipants.red = null;
       this.dialogState = false;
     },
     getRaceCompetitor(id) {
-      return this.competition.competitorsSheet.competitors.find(
-        (competitor) => competitor.id === id
-      );
+      return this.competition.competitorsSheet.competitors.find((competitor) => competitor.id === id);
     },
     getCompetitorNameOnCourse(course) {
       const competitor = this.getRaceCompetitor(this.runParticipants[course]);
-      if (!competitor) return "Не выбран";
+      if (!competitor) return 'Не выбран';
 
-      return `${competitor.info_data["bib"]} ${competitor.info_data["lastname"]} ${competitor.info_data["name"]}`;
+      return `${competitor.info_data['bib']} ${competitor.info_data['lastname']} ${competitor.info_data['name']}`;
     },
     removeCompetitorFromCourse(course) {
       this.runParticipants[course] = null;
-      console.log(this.runParticipants);
     },
   },
   data() {
@@ -185,12 +131,12 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .addRun__button {
-  margin-left: auto;
+  height: 100%;
 }
 .addRoundRun__dialog__wrapper {
-  background: var(--card-background);
+  background: var(--background-card);
   border-radius: 6px;
 
   user-select: none;
@@ -198,7 +144,6 @@ export default {
 .addRoundRun__dialog__title {
   padding: 8px 16px;
   font-size: 1.2rem;
-  font-weight: bold;
 }
 .availableCompetitors__list__wrapper {
   display: flex;

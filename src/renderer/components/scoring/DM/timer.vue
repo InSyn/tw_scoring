@@ -1,14 +1,8 @@
 <template>
   <div class="timer__wrapper">
-    <div class="timeStartedAt">
-      Таймер запущен: {{ timerService.formatTime(timerService.startTime) }}
-    </div>
-    <div class="timeStoppedAt">
-      Таймер остановлен: {{ timerService.formatTime(timerService.stopTime) }}
-    </div>
-    <div class="timeElapsed">
-      Времени прошло: {{ timerService.calculateElapsedTime() }} сек.
-    </div>
+    <div class="timeStartedAt">Таймер запущен: {{ timerService.formatTime(timerService.startTime) }}</div>
+    <div class="timeStoppedAt">Таймер остановлен: {{ timerService.formatTime(timerService.stopTime) }}</div>
+    <div class="timeElapsed">Времени прошло: {{ timerService.calculateElapsedTime() }} сек.</div>
 
     <div class="passingTimeDisplay">
       Текущее время:
@@ -19,33 +13,12 @@
     </div>
 
     <div class="timerButtons__wrapper">
-      <button
-        @click="timerService.startTimer()"
-        v-if="!timerService.isRunning"
-        class="timerButton button-start"
-      >
-        Старт
-      </button>
-      <button
-        @click="timerService.stopTimer()"
-        v-if="timerService.isRunning"
-        class="timerButton button-stop"
-      >
-        Стоп
-      </button>
-      <button
-        v-if="timerService.competitors.length > 0"
-        @click="timerService.startAllCompetitorsTimer()"
-        class="timerButton button-start"
-      >
+      <button @click="timerService.startTimer()" v-if="!timerService.isRunning" class="timerButton button-start">Старт</button>
+      <button @click="timerService.stopTimer()" v-if="timerService.isRunning" class="timerButton button-stop">Стоп</button>
+      <button v-if="timerService.competitors.length > 0" @click="timerService.startAllCompetitorsTimer()" class="timerButton button-start">
         Старт участников
       </button>
-      <button
-        @click="timerService.resetTimer()"
-        class="timerButton button-reset"
-      >
-        Сброс
-      </button>
+      <button @click="timerService.resetTimer()" class="timerButton button-reset">Сброс</button>
     </div>
 
     <div class="competitorsDisplay">
@@ -60,53 +33,36 @@
             Участник {{ competitor.number }}:
 
             <div class="passingTimeDisplay__value">
-              {{ competitor.passingTime.toFixed(2) }}
+              {{ roundNumber(competitor.passingTime, 2) }}
             </div>
           </div>
 
           <div class="competitorTimer__competitorControls">
-            <button
-              class="timerButton button-start"
-              @click="startCompetitorTimer(competitor)"
-            >
-              Старт
-            </button>
-            <button
-              class="timerButton button-stop"
-              @click="stopCompetitorTimer(competitor)"
-            >
-              Стоп
-            </button>
+            <button class="timerButton button-start" @click="startCompetitorTimer(competitor)">Старт</button>
+            <button class="timerButton button-stop" @click="stopCompetitorTimer(competitor)">Стоп</button>
           </div>
         </div>
       </div>
     </div>
 
     <div class="addCompetitor">
-      <input
-        class="competitorNumber__input"
-        v-model="newCompetitorNumber"
-        placeholder="Номер уч..."
-      />
-      <button
-        @click="addCompetitor(newCompetitorNumber)"
-        class="timerButton button-addCompetitor"
-      >
-        Добавить участника
-      </button>
+      <input class="competitorNumber__input" v-model="newCompetitorNumber" placeholder="Номер уч..." />
+      <button @click="addCompetitor(newCompetitorNumber)" class="timerButton button-addCompetitor">Добавить участника</button>
     </div>
   </div>
 </template>
 
 <script>
-import TimerClass from "../../../store/Classes/TimerClass";
+import TimerClass from '../../../store/classes/TimerClass';
+import { roundNumber } from '../../../utils/utils';
 
 export default {
-  name: "timer",
+  name: 'timer',
   methods: {
+    roundNumber,
     addCompetitor(competitorNumber) {
       this.timerService.addCompetitor(competitorNumber);
-      this.newCompetitorNumber = "";
+      this.newCompetitorNumber = '';
     },
     startCompetitorTimer(competitor) {
       this.timerService.startCompetitorTimer(competitor);
@@ -119,7 +75,7 @@ export default {
   data() {
     return {
       timerService: new TimerClass(),
-      newCompetitorNumber: "",
+      newCompetitorNumber: '',
     };
   },
   beforeDestroy() {
@@ -130,7 +86,9 @@ export default {
 
 <style scoped>
 .timer__wrapper {
-  margin-top: 8px;
+  position: absolute;
+  top: 0;
+  right: 0;
   padding: 4px;
   background: var(--standard-background);
   border-radius: 4px;
@@ -138,19 +96,19 @@ export default {
 .timeStartedAt {
   margin: 4px;
   padding: 4px;
-  background: var(--card-background);
+  background: var(--background-card);
   border-radius: 4px;
 }
 .timeStoppedAt {
   margin: 4px;
   padding: 4px;
-  background: var(--card-background);
+  background: var(--background-card);
   border-radius: 4px;
 }
 .timeElapsed {
   margin: 4px;
   padding: 4px;
-  background: var(--card-background);
+  background: var(--background-card);
   border-radius: 4px;
 }
 .passingTimeDisplay {
@@ -159,7 +117,7 @@ export default {
   margin: 4px;
   padding: 4px;
   font-weight: bold;
-  background: var(--card-background);
+  background: var(--background-card);
   border-radius: 4px;
 }
 .passingTimeDisplay__value {
@@ -172,7 +130,7 @@ export default {
 .competitorsDisplay {
   margin-top: 8px;
   padding: 4px;
-  background: var(--card-background);
+  background: var(--background-card);
   border-radius: 6px;
 }
 .competitorsDisplay__list {
@@ -190,7 +148,7 @@ export default {
   display: flex;
   align-items: baseline;
   padding: 4px;
-  background: var(--card-background);
+  background: var(--background-card);
   border-radius: 4px;
 }
 .competitorTimer:not(:last-child) {
@@ -215,7 +173,7 @@ export default {
   flex-wrap: nowrap;
   margin-top: 8px;
   padding: 4px;
-  background: var(--card-background);
+  background: var(--background-card);
   border-radius: 6px;
 }
 .competitorNumber__input {

@@ -1,21 +1,8 @@
 <template>
   <v-dialog width="320" v-model="dialogState">
     <template v-slot:activator="{ on }">
-      <v-btn
-        v-on="on"
-        class="createCompetitor__dialog__button"
-        color="var(--accent-light)"
-        text
-        small
-        tile
-      >
-        <v-icon
-          class="createCompetitor__dialog__button__icon"
-          color="var(--text-default)"
-          small
-        >
-          mdi-account-plus
-        </v-icon>
+      <v-btn v-on="on" class="createCompetitor__dialog__button" color="var(--accent-light)" text small tile>
+        <v-icon class="createCompetitor__dialog__button__icon" color="var(--text-default)" small> mdi-account-plus </v-icon>
         {{ localization[lang].app.competitors.create_competitor }}
       </v-btn>
     </template>
@@ -24,42 +11,23 @@
       <div class="createCompetitor__dialog__header">
         {{ localization[lang].app.competitors.d_new_competitor }}
 
-        <v-btn
-          @click="closeCreateCompetitorDialog()"
-          class="createCompetitor__dialog__header__button-close"
-          color="var(--action-red)"
-          small
-          icon
-        >
+        <v-btn @click="closeCreateCompetitorDialog()" class="createCompetitor__dialog__header__button-close" color="var(--action-red)" small icon>
           <v-icon>mdi-close</v-icon>
         </v-btn>
       </div>
 
       <div class="createCompetitor__dialog__body">
-        <div
-          class="createCompetitor__dialog__dataItem"
-          v-for="(field, fd) in competition.competitorsSheet.header"
-          :key="fd"
-        >
+        <div class="createCompetitor__dialog__dataItem" v-for="(field, fd) in competition.competitorsSheet.header" :key="fd">
           <div class="createCompetitor__dialog__dataItem__label">
             {{ field.title }}
           </div>
 
-          <input
-            v-model="dialogNewCompetitor[fd]"
-            class="createCompetitor__dialog__dataItem__input"
-            type="text"
-          />
+          <input v-model="dialogNewCompetitor[fd]" class="createCompetitor__dialog__dataItem__input" type="text" />
         </div>
       </div>
 
       <div class="createCompetitor__dialog__footer">
-        <v-btn
-          @click="createCompetitor(dialogNewCompetitor)"
-          class="createCompetitor__dialog__footer__button-createCompetitor"
-          color="var(--accent)"
-          text
-          small
+        <v-btn @click="createCompetitor(dialogNewCompetitor)" class="createCompetitor__dialog__footer__button-createCompetitor" color="var(--accent)" text small
           >{{ localization[lang].app.dialogs.d_create }}
         </v-btn>
       </div>
@@ -68,15 +36,15 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
-import CompetitorClass from "../../../store/Classes/CompetitorClass";
+import { mapActions, mapGetters } from 'vuex';
+import CompetitorClass from '../../../store/classes/CompetitorClass';
 
 export default {
-  name: "createCompetitor-dialog",
-  props: ["competition"],
+  name: 'createCompetitor-dialog',
+  props: ['competition'],
   methods: {
-    ...mapActions("main", {
-      updateEvent: "updateEvent",
+    ...mapActions('main', {
+      updateEvent: 'updateEvent',
     }),
     closeCreateCompetitorDialog() {
       this.dialogState = false;
@@ -85,15 +53,8 @@ export default {
 
     createCompetitor(data) {
       let fields = [];
-      this.competition.competitorsSheet.header.map((col) =>
-        fields.push([
-          col.id,
-          data[this.competition.competitorsSheet.header.indexOf(col)] || "",
-        ])
-      );
-      this.competition.competitorsSheet.competitors.push(
-        new CompetitorClass(fields)
-      );
+      this.competition.competitorsSheet.header.map((col) => fields.push([col.id, data[this.competition.competitorsSheet.header.indexOf(col)] || '']));
+      this.competition.competitorsSheet.competitors.push(new CompetitorClass(fields));
 
       this.dialogState = false;
       this.dialogNewCompetitor = [];
@@ -108,9 +69,9 @@ export default {
     };
   },
   computed: {
-    ...mapGetters("localization", {
-      lang: "lang",
-      localization: "localization",
+    ...mapGetters('localization', {
+      lang: 'lang',
+      localization: 'localization',
     }),
   },
 };
@@ -124,7 +85,7 @@ export default {
 }
 .createCompetitor__dialog__wrapper {
   color: var(--text-default);
-  background: var(--card-background);
+  background: var(--background-card);
 }
 .createCompetitor__dialog__header {
   display: flex;

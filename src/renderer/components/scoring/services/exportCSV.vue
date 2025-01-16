@@ -3,29 +3,14 @@
     <div class="exportCSV__header">
       File Translation
 
-      <v-btn
-        class="ml-auto"
-        @click="setFileSeparation(!fileTranslationService.separated)"
-        color="var(--text-default)"
-        width="48"
-        text
-        small
-      >
+      <v-btn class="ml-auto" @click="setFileSeparation(!fileTranslationService.separated)" color="var(--text-default)" width="48" text small>
         <v-icon size="18">
-          {{
-            fileTranslationService.separated
-              ? icons.fileMultipleIcon
-              : icons.fileIcon
-          }}
+          {{ fileTranslationService.separated ? icons.fileMultipleIcon : icons.fileIcon }}
         </v-icon>
       </v-btn>
 
       <v-btn
-        :class="[
-          'updater__btn',
-          fileTranslationService.updateData && 'updater-active',
-          fileTranslationService.updatingInProgress && 'updater-updating',
-        ]"
+        :class="['updater__btn', fileTranslationService.updateData && 'updater-active', fileTranslationService.updatingInProgress && 'updater-updating']"
         @click="setUpdater"
         color="var(--accent-light)"
         text
@@ -35,55 +20,66 @@
       </v-btn>
     </div>
 
-    <file-paginator
-      :competition="competition"
-      :file-translation-service="fileTranslationService"
-    ></file-paginator>
+    <file-paginator :competition="competition" :file-translation-service="fileTranslationService"></file-paginator>
 
     <div class="exportPath__input__wrapper">
       <span class="exportPath__label">Путь:</span>
-      <input
-        class="exportPath__input"
-        :value="fileTranslationService.path"
-        @change="setFileTranslationPath($event.target.value)"
-        type="text"
-      />
+      <input class="exportPath__input" :value="fileTranslationService.path" @change="setFileTranslationPath($event.target.value)" type="text" />
     </div>
   </div>
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
-import { mdiFileOutline, mdiFileMultipleOutline } from "@mdi/js";
-import { roundNumber } from "../../../../lib/utils";
-import FilePaginator from "./filePaginator.vue";
+import { mapActions, mapGetters } from 'vuex';
+import { mdiFileOutline, mdiFileMultipleOutline } from '@mdi/js';
+import FilePaginator from './filePaginator.vue';
+// import { generateFinishedHTML, generateOnStartHTML, generateResultsHTML, generateStartListHTML } from '../../../utils/generateHTML-utils';
+import { checkCompetitionDiscipline } from '../../../data/sports';
+import CompetitorClass from '../../../store/classes/CompetitorClass';
 
 export default {
-  name: "exportCSV",
+  name: 'exportCSV',
   components: { FilePaginator },
-  methods: {
-    ...mapActions("main", {
-      exportCSV: "exportCSV",
+  data() {
+    return {
+      icons: {
+        fileIcon: mdiFileOutline,
+        fileMultipleIcon: mdiFileMultipleOutline,
+      },
+    };
+  },
+  computed: {
+    ...mapGetters('main', {
+      competition: 'competition',
     }),
-    ...mapActions("scoring_services", {
-      setFileTranslationPath: "setFileTranslationService_path",
-      setFileSeparation: "setFileSeparation",
-      setFileUpdater: "setFileUpdater",
-      clearFileUpdater: "clearFileUpdater",
-      switchFileUpdateService: "switchFileUpdateService",
-      switchUpdatingState: "switchUpdatingState",
-      setPaginatorParameters: "setPaginatorParameters",
+    ...mapGetters('scoring_services', {
+      fileTranslationService: 'getFileTranslationService',
+    }),
+  },
+  methods: {
+    ...mapActions('main', {
+      exportCSV: 'exportCSV',
+      exportHTML: 'exportHTML',
+    }),
+    ...mapActions('scoring_services', {
+      setFileTranslationPath: 'setFileTranslationService_path',
+      setFileSeparation: 'setFileSeparation',
+      setFileUpdater: 'setFileUpdater',
+      clearFileUpdater: 'clearFileUpdater',
+      switchFileUpdateService: 'switchFileUpdateService',
+      switchUpdatingState: 'switchUpdatingState',
+      setPaginatorParameters: 'setPaginatorParameters',
     }),
 
     getCompetitionData() {
       if (!this.competition) return {};
 
       return {
-        title: this.competition.mainData.title.value || " ",
-        discipline: this.competition.mainData.discipline.value || " ",
-        country: this.competition.mainData.country.value || " ",
-        location: this.competition.mainData.location.value || " ",
-        stage: this.competition.mainData.title.stage.value.value || " ",
+        title: this.competition.mainData.title.value || ' ',
+        discipline: this.competition.mainData.discipline.value || ' ',
+        country: this.competition.mainData.country.value || ' ',
+        location: this.competition.mainData.location.value || ' ',
+        stage: this.competition.mainData.title.stage.value.value || ' ',
       };
     },
     getCompetitionJuryData() {
@@ -92,17 +88,17 @@ export default {
       const juryData = {
         judges: this.competition.stuff.judges.map((judge) => {
           return {
-            title: judge.title || " ",
-            name: judge.name || " ",
-            region: judge.location || " ",
-            mark: "-",
+            title: judge.title || ' ',
+            name: judge.name || ' ',
+            region: judge.location || ' ',
+            mark: '-',
           };
         }),
         jury: this.competition.stuff.jury.map((jury) => {
           return {
-            title: jury.title || " ",
-            name: jury.name || " ",
-            region: jury.location || " ",
+            title: jury.title || ' ',
+            name: jury.name || ' ',
+            region: jury.location || ' ',
           };
         }),
       };
@@ -111,20 +107,15 @@ export default {
         if (!this.competition.selected_race.onTrack) return juryData;
 
         this.competition.stuff.judges.map((judge, idx) => {
-          const competitor = this.competition.competitorsSheet.competitors.find(
-            (competitor) =>
-              competitor.id === this.competition.selected_race.onTrack
-          );
+          const competitor = this.competition.competitorsSheet.competitors.find((competitor) => competitor.id === this.competition.selected_race.onTrack);
           if (!competitor) {
-            juryData.judges[idx].mark = "-";
+            juryData.judges[idx].mark = '-';
             return;
           }
 
-          const mark = competitor.marks.find(
-            (mark) => mark.judge_id === judge._id
-          );
+          const mark = competitor.marks.find((mark) => mark.judge_id === judge._id);
           if (!mark) {
-            juryData.judges[idx].mark = "-";
+            juryData.judges[idx].mark = '-';
             return;
           }
 
@@ -137,49 +128,58 @@ export default {
 
     createCompetitorTranslationObj(competitor, competition, options) {
       if (options.createFillerObject) {
-        return {
-          id: " ",
-          photo: " ",
-          bib: " ",
-          fullname: " ",
-          lastname: " ",
-          name: " ",
-          group: " ",
-          country: " ",
-          country_code: " ",
-          region: " ",
-          region_code: " ",
-          flag: "C:\\\\reg_flags\\filler.png",
-          organization: " ",
-          fullname_eng: " ",
-          lastname_eng: " ",
-          name_eng: " ",
+        const emptyAthlete = {
+          bib: ' ',
+          ffr_id: ' ',
+          fullname: ' ',
+          lastname: ' ',
+          name: ' ',
+          group: ' ',
+          country: ' ',
+          country_code: ' ',
+          region: ' ',
+          region_code: ' ',
+          flag: ' ',
+          organization: ' ',
+          fullname_eng: ' ',
+          lastname_eng: ' ',
+          name_eng: ' ',
+          photo_url: ' ',
+          photo_tv_url: ' ',
+          finish_order: ' ',
+          rank: ' ',
+          result: ' ',
+          run_result: ' ',
+          qualification_mark: ' ',
+          run1_result: ' ',
+          run_time: ' ',
         };
+        return emptyAthlete;
       }
 
-      if (!competitor) throw new Error("No competitor passed");
+      if (!competitor) throw new Error('No competitor passed');
 
       let competitorObject = {
         id: this.generateCompetitorId(competitor),
-        photo: competitor.info_data["photo"] || null,
-        bib: competitor.info_data["bib"] || null,
-        fullname: competitor.info_data["fullname"] || null,
-        lastname: competitor.info_data["lastname"] || null,
-        name: competitor.info_data["name"] || null,
-        group:
-          competitor.info_data["group"] ||
-          competition.mainData.title.stage.group ||
-          null,
-        country: competitor.info_data["country"] || null,
-        country_code: competitor.info_data["country_code"] || null,
-        region: competitor.info_data["region"] || null,
-        region_code: competitor.info_data["region_code"] || null,
-        flag: competitor.info_data["flag"] || null,
-        organization: competitor.info_data["organization"] || null,
+        bib: competitor.info_data['bib'] || null,
+        ffr_id: competitor.info_data['ffr_id'] || null,
+        fullname: competitor.info_data['fullname'] || null,
+        lastname: competitor.info_data['lastname'] || null,
+        name: competitor.info_data['name'] || null,
+        group: competitor.info_data['group'] || competition.mainData.title.stage.group || null,
+        country: competitor.info_data['country'] || null,
+        country_code: competitor.info_data['country_code'] || null,
+        region: competitor.info_data['region'] || null,
+        region_code: competitor.info_data['region_code'] || null,
+        flag: competitor.info_data['flag'] || null,
+        organization: competitor.info_data['organization'] || null,
 
-        fullname_eng: competitor.info_data["fullname_eng"] || null,
-        lastname_eng: competitor.info_data["lastname_eng"] || null,
-        name_eng: competitor.info_data["name_eng"] || null,
+        fullname_eng: competitor.info_data['fullname_eng'] || null,
+        lastname_eng: competitor.info_data['lastname_eng'] || null,
+        name_eng: competitor.info_data['name_eng'] || null,
+
+        photo_url: competitor.info_data['photo_url'] || null,
+        photo_tv_url: competitor.info_data['photo_tv_url'] || null,
       };
 
       if (options.forStartlist) {
@@ -194,37 +194,27 @@ export default {
           ...competitorObject,
           finish_order: competitor.finish_order,
           rank: competitor._index + 1,
-          result: competition.getResult(competitor.id) || null,
-          run_result:
-            competition.getRaceResult(competitor, competition.selected_race) ||
-            null,
-          qualification_mark:
-            competitor._index + 1 <= competition.passed_competitors
-              ? "q"
-              : "nq",
+          result: competition.getOverallResult(competitor.id) || null,
+          run_result: competition.getRaceResult(competitor, competition.selected_race) || null,
+          qualification_mark: competitor._index + 1 <= competition.passed_competitors ? 'q' : 'nq',
         };
 
         competition.races.forEach((race, race_idx) => {
-          competitorObject[`run${race_idx + 1}_result`] =
-            competition.getRaceResult(competitor, race) || null;
+          competitorObject[`run${race_idx + 1}_result`] = competition.getRaceResult(competitor, race) || null;
         });
       }
 
       if (competition.is_aerials) {
         competition.races.forEach((race, idx) => {
           const jumpObj = competition.ae_codes.find((jumpCode) => {
-            return (
-              jumpCode.code === competitor.info_data[`jump${idx + 1}_code`]
-            );
+            return jumpCode.code === competitor.info_data[`jump${idx + 1}_code`];
           });
 
-          const jump_name = jumpObj ? jumpObj["jump_name"] : " ";
+          const jump_code = jumpObj ? jumpObj['code'] : ' ';
 
-          const jump_dd = jumpObj
-            ? jumpObj[`value_${competitorObject.group}`]
-            : Number(0).toFixed(3);
+          const jump_dd = jumpObj ? jumpObj[`value_${competitorObject.group}`] : Number(0).toFixed(3);
 
-          const jump_maxScore = competition.set_accuracy(
+          const jump_maxScore = competition.roundWithPrecision(
             parseFloat(
               (competition.stuff.judges.length -
                 parseInt(competition.result_formula.types[0].higher_marks) -
@@ -236,38 +226,24 @@ export default {
 
           competitorObject = {
             ...competitorObject,
-            [`jump${idx + 1}_code`]: jump_name,
+            [`jump${idx + 1}_code`]: jump_code,
             [`jump${idx + 1}_dd`]: jump_dd,
             [`jump${idx + 1}_maxScore`]: jump_maxScore,
-            [`jump${idx + 1}_animation`]: jumpObj
-              ? "C:\\\\animations\\" +
-                jumpObj.code +
-                "\\" +
-                jumpObj.code +
-                "00001.png"
-              : "nj",
+            [`jump${idx + 1}_animation`]: jumpObj ? 'C:\\\\animations\\' + jumpObj.code + '\\' + jumpObj.code + '00001.png' : 'nj',
           };
         });
       }
-      if (competition.is_moguls) {
-        const raceResult = competitor.results.find(
-          (result) => result.race_id === competition.selected_race.id
-        );
+      if (checkCompetitionDiscipline(competition, ['MO'])) {
+        const raceResult = competitor.results.find((result) => result.race_id === competition.selected_race.id);
 
         competitorObject = {
           ...competitorObject,
-          run_time: raceResult
-            ? parseFloat(raceResult.mgRunParams.runTime).toFixed(2)
-            : Number(0).toFixed(2),
+          run_time: raceResult ? parseFloat(raceResult.mgRunParams.runTime).toFixed(2) : Number(0).toFixed(2),
         };
       }
 
       if (competition.is_teams) {
-        const competitorTeam = competition.teams.find((team) =>
-          team.competitors.some(
-            (teamCompetitorId) => teamCompetitorId === competitor.id
-          )
-        );
+        const competitorTeam = competition.teams.find((team) => team.competitors.some((teamCompetitorId) => teamCompetitorId === competitor.id));
 
         competitorObject = {
           ...competitorObject,
@@ -278,29 +254,18 @@ export default {
         if (options.forResults) {
           const rankedTeamsArr = competition.teams
             .map((team) => {
-              const teamResult = competition.getTeamRaceResult(
-                team,
-                competition.selected_race
-              );
+              const teamResult = competition.getTeamRaceResult(team, competition.selected_race);
 
               return {
                 ...team,
                 teamResult: +teamResult || 0,
               };
             })
-            .sort(
-              (team1_result, team2_result) =>
-                team2_result.teamResult - team1_result.teamResult
-            );
+            .sort((team1_result, team2_result) => team2_result.teamResult - team1_result.teamResult);
 
-          const competitorTeamRank =
-            rankedTeamsArr.indexOf(
-              rankedTeamsArr.find((team) => team.id === competitorTeam.id)
-            ) + 1;
+          const competitorTeamRank = rankedTeamsArr.indexOf(rankedTeamsArr.find((team) => team.id === competitorTeam.id)) + 1;
 
-          const competitorTeamResult = rankedTeamsArr.find(
-            (rankedTeam) => rankedTeam.id === competitorTeam.id
-          ).teamResult;
+          const competitorTeamResult = rankedTeamsArr.find((rankedTeam) => rankedTeam.id === competitorTeam.id).teamResult;
 
           competitorObject = {
             ...competitorObject,
@@ -309,8 +274,7 @@ export default {
           };
 
           competition.races.forEach((race, race_idx) => {
-            competitorObject[`run${race_idx + 1}_result_team`] =
-              competition.getRaceResult(competitor, race) || null;
+            competitorObject[`run${race_idx + 1}_result_team`] = competition.getRaceResult(competitor, race) || null;
           });
         }
       }
@@ -318,42 +282,32 @@ export default {
       return competitorObject;
     },
     createTeamTranslationObj(team, competition, options) {
-      if (!team) throw new Error("Unable to create team data object");
+      if (!team) throw new Error('Unable to create team data object');
 
       const teamFlags = team.competitors.map((competitorId) => {
-        const competitor = competition.competitorsSheet.competitors.find(
-          (competitor) =>
-            competitor.id === competitorId && !!competitor.info_data["flag"]
-        );
+        const competitor = competition.competitorsSheet.competitors.find((competitor) => competitor.id === competitorId && !!competitor.info_data['flag']);
         if (!competitor) return false;
 
         return competitor.info_data.flag;
       });
-      const teamFlag = teamFlags.length > 0 ? teamFlags[0] : "";
+      const teamFlag = teamFlags.length > 0 ? teamFlags[0] : '';
 
       let teamCompetitors = {};
       team.competitors.forEach((teamCompetitorId, idx) => {
-        const teamCompetitor = competition.competitorsSheet.competitors.find(
-          (competitor) => competitor.id === teamCompetitorId
-        );
-        if (!teamCompetitor) teamCompetitors[`team_competitor_${idx + 1}`] = "";
+        const teamCompetitor = competition.competitorsSheet.competitors.find((competitor) => competitor.id === teamCompetitorId);
+        if (!teamCompetitor) teamCompetitors[`team_competitor_${idx + 1}`] = '';
 
-        teamCompetitors[`team_competitor_${idx + 1}`] = teamCompetitor
-          .info_data["fullname"]
-          ? teamCompetitor.info_data["fullname"]
-          : teamCompetitor.info_data["lastname"] +
-            " " +
-            teamCompetitor.info_data["name"];
+        teamCompetitors[`team_competitor_${idx + 1}`] = teamCompetitor.info_data['fullname']
+          ? teamCompetitor.info_data['fullname']
+          : teamCompetitor.info_data['lastname'] + ' ' + teamCompetitor.info_data['name'];
       });
 
       const teamCompetitorsString = team.competitors
         .map((competitorId) => {
-          const competitor = competition.competitorsSheet.competitors.find(
-            (competitor) => competitor.id === competitorId
-          );
-          return competitor.info_data["lastname"] || "";
+          const competitor = competition.competitorsSheet.competitors.find((competitor) => competitor.id === competitorId);
+          return competitor.info_data['lastname'] || '';
         })
-        .join(" | ");
+        .join(' | ');
 
       let teamObject = {
         team_number: team.id || null,
@@ -366,26 +320,17 @@ export default {
       if (options.forResults) {
         let teamCompetitorsResults = {};
         team.competitors.forEach((teamCompetitorId, idx) => {
-          const teamCompetitor = competition.competitorsSheet.competitors.find(
-            (competitor) => competitor.id === teamCompetitorId
-          );
-          if (!teamCompetitor)
-            teamCompetitors[`team_competitor_result_${idx + 1}`] = "";
+          const teamCompetitor = competition.competitorsSheet.competitors.find((competitor) => competitor.id === teamCompetitorId);
+          if (!teamCompetitor) teamCompetitors[`team_competitor_result_${idx + 1}`] = '';
 
-          teamCompetitorsResults[`team_competitor_result_${idx + 1}`] =
-            this.competition.getRaceResult(
-              teamCompetitor,
-              this.competition.selected_race
-            );
+          teamCompetitorsResults[`team_competitor_result_${idx + 1}`] = this.competition.getRaceResult(teamCompetitor, this.competition.selected_race);
         });
 
         teamObject = {
           ...teamObject,
           ...teamCompetitorsResults,
           team_rank: team._index + 1,
-          team_result:
-            competition.getTeamRaceResult(team, competition.selected_race) ||
-            null,
+          team_result: competition.getTeamRaceResult(team, competition.selected_race) || null,
         };
       }
       return teamObject;
@@ -394,54 +339,35 @@ export default {
     generateCompetitorId(competitor) {
       if (!competitor) return null;
 
-      const competitorNum = competitor.info_data["bib"] || 0;
-      const competitorName = competitor.info_data["name"] || "empty";
-      const competitorLastname = competitor.info_data["lastname"] || "empty";
+      const competitorNum = competitor.info_data['bib'] || 0;
+      const competitorName = competitor.info_data['name'] || 'empty';
+      const competitorLastname = competitor.info_data['lastname'] || 'empty';
 
       if (!(competitorNum && competitorName && competitorLastname)) return null;
 
-      const generatedId = parseInt(
-        competitorNum.toString() +
-          competitorName.charCodeAt(0) +
-          competitorLastname.charCodeAt(competitorLastname.length - 1)
-      );
+      const generatedId = parseInt(competitorNum.toString() + competitorName.charCodeAt(0) + competitorLastname.charCodeAt(competitorLastname.length - 1));
 
       return generatedId;
     },
 
     getStartList() {
       let startList = this.competition.selected_race._startList
-        .map((competitorId) =>
-          this.competition.competitorsSheet.competitors.find(
-            (competitor) => competitor.id === competitorId
-          )
-        )
+        .map((competitorId) => this.competition.competitorsSheet.competitors.find((competitor) => competitor.id === competitorId))
         .map((competitor, idx) =>
-          this.createCompetitorTranslationObj(
-            { ...competitor, _index: idx },
-            this.competition,
-            {
-              forStartlist: true,
-            }
-          )
+          this.createCompetitorTranslationObj({ ...competitor, _index: idx }, this.competition, {
+            forStartlist: true,
+          })
         );
 
       if (this.fileTranslationService.paginator.page_length > 0) {
-        const startIndex =
-          this.fileTranslationService.paginator.current_page *
-          this.fileTranslationService.paginator.page_length;
+        console.log(this.fileTranslationService.paginator);
+        const startIndex = this.fileTranslationService.paginator.current_page * this.fileTranslationService.paginator.page_length;
 
-        startList = startList.slice(
-          startIndex,
-          startIndex + this.fileTranslationService.paginator.page_length
-        );
+        startList = startList.slice(startIndex, startIndex + this.fileTranslationService.paginator.page_length);
 
-        if (
-          startList.length < this.fileTranslationService.paginator.page_length
-        ) {
-          const fillersCount =
-            this.fileTranslationService.paginator.page_length -
-            startList.length;
+        if (startList.length < this.fileTranslationService.paginator.page_length) {
+          const fillersCount = this.fileTranslationService.paginator.page_length - startList.length;
+          console.log(fillersCount);
 
           for (let i = 0; i < fillersCount; i++) {
             startList.push(
@@ -457,19 +383,11 @@ export default {
     },
     getCompetitorOnStart() {
       const competitorOnStart = this.competition.selected_race.startList
-        .map((competitorId) =>
-          this.competition.competitorsSheet.competitors.find(
-            (competitor) => competitor.id === competitorId
-          )
-        )
+        .map((competitorId) => this.competition.competitorsSheet.competitors.find((competitor) => competitor.id === competitorId))
         .map((competitor, idx) => {
-          const competitorObject = this.createCompetitorTranslationObj(
-            { ...competitor, _index: idx },
-            this.competition,
-            {
-              forStartlist: true,
-            }
-          );
+          const competitorObject = this.createCompetitorTranslationObj({ ...competitor, _index: idx }, this.competition, {
+            forStartlist: true,
+          });
 
           return competitorObject;
         });
@@ -482,9 +400,7 @@ export default {
       let sortedFinishedArray = this.competition.selected_race.finished
         .map((competitor, idx) => {
           return {
-            ...this.competition.competitorsSheet.competitors.find(
-              (comp) => comp.id === competitor
-            ),
+            ...this.competition.competitorsSheet.competitors.find((comp) => comp.id === competitor),
             finish_order: idx + 1,
           };
         })
@@ -495,56 +411,27 @@ export default {
             DSQ: -3,
           };
 
-          const comp1res = comp1.results_overall.find(
-              (overall) => overall.competition_id === this.competition.id
-            ),
-            comp2res = comp2.results_overall.find(
-              (overall) => overall.competition_id === this.competition.id
-            );
+          const comp1res = comp1.results_overall.find((overall) => overall.competition_id === this.competition.id),
+            comp2res = comp2.results_overall.find((overall) => overall.competition_id === this.competition.id);
 
           return (
-            (comp2res
-              ? comp2res.status
-                ? statuses[comp2res.status]
-                : comp2res.value
-              : 0) -
-            (comp1res
-              ? comp1res.status
-                ? statuses[comp1res.status]
-                : comp1res.value
-              : 0)
+            (comp2res ? (comp2res.status ? statuses[comp2res.status] : comp2res.value) : 0) -
+            (comp1res ? (comp1res.status ? statuses[comp1res.status] : comp1res.value) : 0)
           );
         })
         .map((competitor, idx) => {
-          return this.createCompetitorTranslationObj(
-            { ...competitor, _index: idx },
-            this.competition,
-            {
-              forResults: true,
-            }
-          );
+          return this.createCompetitorTranslationObj({ ...competitor, _index: idx, createFillerObject: true }, this.competition, {
+            forResults: true,
+          });
         });
 
-      if (
-        !disablePagination &&
-        this.fileTranslationService.paginator.page_length > 0
-      ) {
-        const startIndex =
-          this.fileTranslationService.paginator.current_page *
-          this.fileTranslationService.paginator.page_length;
+      if (!disablePagination && this.fileTranslationService.paginator.page_length > 0) {
+        const startIndex = this.fileTranslationService.paginator.current_page * this.fileTranslationService.paginator.page_length;
 
-        sortedFinishedArray = sortedFinishedArray.slice(
-          startIndex,
-          startIndex + this.fileTranslationService.paginator.page_length
-        );
+        sortedFinishedArray = sortedFinishedArray.slice(startIndex, startIndex + this.fileTranslationService.paginator.page_length);
 
-        if (
-          sortedFinishedArray.length <
-          this.fileTranslationService.paginator.page_length
-        ) {
-          const fillersCount =
-            this.fileTranslationService.paginator.page_length -
-            sortedFinishedArray.length;
+        if (sortedFinishedArray.length < this.fileTranslationService.paginator.page_length) {
+          const fillersCount = this.fileTranslationService.paginator.page_length - sortedFinishedArray.length;
 
           for (let i = 0; i < fillersCount; i++) {
             sortedFinishedArray.push(
@@ -560,8 +447,7 @@ export default {
     },
     getFinished() {
       return this.getResults({ disablePagination: true }).filter(
-        (competitor, idx, finishedArray) =>
-          parseInt(competitor.finish_order) === finishedArray.length
+        (competitor, idx, finishedArray) => parseInt(competitor.finish_order) === finishedArray.length
       );
     },
 
@@ -578,10 +464,7 @@ export default {
       if (!this.competition.is_teams) return [];
       const rankedTeamsArr = this.competition.teams
         .map((team) => {
-          const teamResult = this.competition.getTeamRaceResult(
-            team,
-            this.competition.selected_race
-          );
+          const teamResult = this.competition.getTeamRaceResult(team, this.competition.selected_race);
 
           if (teamResult)
             return {
@@ -590,18 +473,11 @@ export default {
             };
           return team;
         })
-        .sort(
-          (team1_res, team2_res) =>
-            +team2_res.teamResult - +team1_res.teamResult
-        )
+        .sort((team1_res, team2_res) => +team2_res.teamResult - +team1_res.teamResult)
         .map((team, idx) =>
-          this.createTeamTranslationObj(
-            { ...team, _index: idx },
-            this.competition,
-            {
-              forResults: true,
-            }
-          )
+          this.createTeamTranslationObj({ ...team, _index: idx }, this.competition, {
+            forResults: true,
+          })
         );
 
       if (rankedTeamsArr) return rankedTeamsArr;
@@ -610,159 +486,117 @@ export default {
     },
 
     getDMOnStart() {
-      if (
-        !this.competition.selected_race ||
-        !this.competition.selected_race.selectedCompetitor
-      )
-        return [];
+      if (!this.competition.selected_race || !this.competition.selected_race.selectedCompetitor) return [];
 
-      const runOnStart = this.competition.selected_race.runs.find(
-        (run) => run.id === this.competition.selected_race.selectedCompetitor
-      );
+      const runOnStart = this.competition.selected_race.runs.find((run) => run.id === this.competition.selected_race.selectedCompetitor);
       if (!runOnStart) return [];
 
-      const courseCompetitor_blue =
-        this.competition.competitorsSheet.competitors.find(
-          (competitor) => competitor.id === runOnStart.blueCourse
-        );
+      const courseCompetitor_blue = this.competition.competitorsSheet.competitors.find((competitor) => competitor.id === runOnStart.blueCourse);
       const courseCompetitorObj_blue = courseCompetitor_blue
         ? {
-            ...this.createCompetitorTranslationObj(
-              courseCompetitor_blue,
-              this.competition,
-              {}
-            ),
-            course: "BLUE",
+            ...this.createCompetitorTranslationObj(courseCompetitor_blue, this.competition, {}),
+            course: 'BLUE',
           }
         : null;
 
-      const courseCompetitor_red =
-        this.competition.competitorsSheet.competitors.find(
-          (competitor) => competitor.id === runOnStart.redCourse
-        );
+      const courseCompetitor_red = this.competition.competitorsSheet.competitors.find((competitor) => competitor.id === runOnStart.redCourse);
       const courseCompetitorObj_red = courseCompetitor_red
         ? {
-            ...this.createCompetitorTranslationObj(
-              courseCompetitor_red,
-              this.competition,
-              {}
-            ),
-            course: "RED",
+            ...this.createCompetitorTranslationObj(courseCompetitor_red, this.competition, {}),
+            course: 'RED',
           }
         : null;
 
       return [courseCompetitorObj_blue, courseCompetitorObj_red];
     },
     getDMFinished() {
-      if (
-        !this.competition.selected_race &&
-        this.competition.selected_race.finished.length === 0
-      )
-        return [];
+      if (!this.competition.selected_race && this.competition.selected_race.finished.length === 0) return [];
 
       const finishedRunId = this.competition.selected_race.finished[0];
-      const finishedRun = this.competition.selected_race.runs.find(
-        (run) => run.id === finishedRunId
-      );
+      const finishedRun = this.competition.selected_race.runs.find((run) => run.id === finishedRunId);
       if (!finishedRun) return [];
 
-      const courseCompetitor_blue =
-        this.competition.competitorsSheet.competitors.find(
-          (competitor) => competitor.id === finishedRun.blueCourse
-        );
+      const courseCompetitor_blue = this.competition.competitorsSheet.competitors.find((competitor) => competitor.id === finishedRun.blueCourse);
       const courseCompetitorObj_blue = courseCompetitor_blue
         ? {
-            ...this.createCompetitorTranslationObj(
-              courseCompetitor_blue,
-              this.competition,
-              { forResults: true }
-            ),
-            course: "BLUE",
+            ...this.createCompetitorTranslationObj(courseCompetitor_blue, this.competition, { forResults: true }),
+            course: 'BLUE',
           }
         : null;
-      const result_blue =
-        this.competition.getRaceResult(
-          courseCompetitor_blue,
-          this.competition.selected_race
-        ) || roundNumber(0, 2).toFixed(0);
+      const result_blue = this.competition.getRaceResult(courseCompetitor_blue, this.competition.selected_race) || Number(0).toString();
       const gap_blue = finishedRun[`blueCourseGap`] || Number(0).toFixed(2);
 
-      const courseCompetitor_red =
-        this.competition.competitorsSheet.competitors.find(
-          (competitor) => competitor.id === finishedRun.redCourse
-        );
+      const courseCompetitor_red = this.competition.competitorsSheet.competitors.find((competitor) => competitor.id === finishedRun.redCourse);
       const courseCompetitorObj_red = courseCompetitor_red
         ? {
-            ...this.createCompetitorTranslationObj(
-              courseCompetitor_red,
-              this.competition,
-              { forResults: true }
-            ),
-            course: "RED",
+            ...this.createCompetitorTranslationObj(courseCompetitor_red, this.competition, { forResults: true }),
+            course: 'RED',
           }
         : null;
-      const result_red =
-        this.competition.getRaceResult(
-          courseCompetitor_red,
-          this.competition.selected_race
-        ) || roundNumber(0, 2).toFixed(0);
+      const result_red = this.competition.getRaceResult(courseCompetitor_red, this.competition.selected_race) || Number(0).toString();
       const gap_red = finishedRun[`redCourseGap`] || Number(0).toFixed(2);
 
       return [
         {
           ...courseCompetitorObj_blue,
-          result: result_blue ? result_blue.split(".")[0] : Number(0),
+          result: result_blue ? result_blue.split('.')[0] : Number(0),
+          gap: gap_red,
         },
         {
           ...courseCompetitorObj_red,
-          result: result_red ? result_red.split(".")[0] : Number(0),
+          result: result_red ? result_red.split('.')[0] : Number(0),
+          gap: gap_blue,
         },
       ];
     },
     getDMBrackets() {
       return this.competition.races.map((round) => {
         const stage = round.title;
-        const group = this.competition.mainData.title.stage.group || "";
+        const group = this.competition.mainData.title.stage.group || '';
         const runs = round.runs.map((roundRun) => {
           const runNum = roundRun.number;
-          const runParticipants = roundRun.competitors.map(
-            (runCompetitor, idx) => {
-              if (!runCompetitor)
-                return {
-                  course: "",
-                  bib: "",
-                  name: "",
-                  region: "",
-                  photo: "",
-                  flag: "",
-                  result: "",
-                  gap: "",
-                };
-
-              const course = idx === 0 ? "blue" : "red";
-              const bib = runCompetitor.info_data["bib"] || "";
-              const name = runCompetitor.info_data["fullname"] || "";
-              const region = runCompetitor.info_data["region"] || "";
-              const photo = "";
-              const flag = "";
-              const result =
-                this.competition.getRaceResult(runCompetitor, round) ||
-                roundNumber(0, 2).toFixed(0);
-              const gap =
-                roundRun[`${course}CourseGap`] || Number(0).toFixed(2);
-
+          const runParticipants = roundRun.competitors.map((runCompetitor, idx) => {
+            if (!runCompetitor || !runCompetitor.info_data) {
               return {
-                course,
-                bib,
-                name,
-                region,
-                photo,
-                flag,
-                result,
-                gap,
+                course: ' ',
+                bib: ' ',
+                name: ' ',
+                region: ' ',
+                photo: ' ',
+                flag: ' ',
+                photo_url: ' ',
+                photo_tv_url: ' ',
+                score: ' ',
+                result: ' ',
+                gap: ' ',
               };
             }
-          );
+
+            const runResult = runCompetitor.results.find((result) => result.race_id === round.id);
+            const course = idx === 0 ? 'blue' : 'red';
+            const bib = runCompetitor.info_data['bib'] || ' ';
+            const name = runCompetitor.info_data['fullname'] || ' ';
+            const region = runCompetitor.info_data['region'] || ' ';
+            const flag = runCompetitor.info_data['flag'] || ' ';
+            const photo_url = runCompetitor.info_data['photo_url'] || ' ';
+            const photo_tv_url = runCompetitor.info_data['photo_tv_url'] || ' ';
+            const score = runResult && runResult.value ? runResult.value : ' ';
+            const result = roundRun.results[idx] || this.competition.roundWithPrecision(' ');
+            const gap = roundRun[`${course}CourseGap`] || this.competition.roundWithPrecision(0, 2);
+
+            return {
+              course,
+              bib,
+              name,
+              region,
+              flag,
+              photo_url,
+              photo_tv_url,
+              score,
+              result,
+              gap,
+            };
+          });
 
           return {
             run_num: runNum,
@@ -797,7 +631,7 @@ export default {
       await this.switchUpdatingState(true);
 
       if (this.fileTranslationService.separated) {
-        if (this.competition.dualMoguls_mode) {
+        if (checkCompetitionDiscipline(this.competition, ['DMO'])) {
           const brackets = this.getDMBrackets();
           const runOnStart = this.getDMOnStart();
           const finishedRun = this.getDMFinished();
@@ -864,6 +698,28 @@ export default {
           data: results,
         });
 
+        // const startListHTML = generateStartListHTML(startList, competitionInfo);
+        // const onStartHTML = generateOnStartHTML(onStart, competitionInfo);
+        // const finishedHTML = generateFinishedHTML(finishedCompetitor, competitionInfo);
+        // const resultsHTML = generateResultsHTML(results, competitionInfo);
+        //
+        // await this.exportHTML({
+        //   path: `${this.fileTranslationService.path}\\StartList.html`,
+        //   data: startListHTML,
+        // });
+        // await this.exportHTML({
+        //   path: `${this.fileTranslationService.path}\\OnStart.html`,
+        //   data: onStartHTML,
+        // });
+        // await this.exportHTML({
+        //   path: `${this.fileTranslationService.path}\\Finished.html`,
+        //   data: finishedHTML,
+        // });
+        // await this.exportHTML({
+        //   path: `${this.fileTranslationService.path}\\Results.html`,
+        //   data: resultsHTML,
+        // });
+
         if (this.competition.is_teams) {
           await this.exportCSV({
             path: `${this.fileTranslationService.path}\\TW_Competition_TEAM_StartList`,
@@ -897,22 +753,6 @@ export default {
       }, 176);
     },
   },
-  data() {
-    return {
-      icons: {
-        fileIcon: mdiFileOutline,
-        fileMultipleIcon: mdiFileMultipleOutline,
-      },
-    };
-  },
-  computed: {
-    ...mapGetters("main", {
-      competition: "competition",
-    }),
-    ...mapGetters("scoring_services", {
-      fileTranslationService: "getFileTranslationService",
-    }),
-  },
 };
 </script>
 
@@ -929,6 +769,7 @@ export default {
   flex: 0 0 auto;
   display: flex;
   align-items: center;
+  margin: 0 0.5rem 0;
   font-size: 1.2rem;
   font-weight: bold;
 }
@@ -959,7 +800,7 @@ export default {
   flex-wrap: nowrap;
   margin-top: 6px;
   padding: 8px;
-  background: var(--card-background);
+  background: var(--background-card);
   border-radius: 4px;
 }
 .exportPath__label {

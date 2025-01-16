@@ -1,48 +1,31 @@
 <template>
   <div :class="['appMenu__wrapper', !showMenu && 'menu-hidden']">
-    <router-link
-      v-slot="{ navigate, isActive }"
-      custom
-      v-for="(page, p) in getMenuList"
-      :key="p"
-      :to="{ name: page.link }"
-      tag="div"
-    >
+    <router-link v-slot="{ navigate, isActive }" custom v-for="(page, p) in getMenuList" :key="p" :to="{ name: page.link }" tag="div">
       <v-hover v-slot:default="{ hover }">
-        <div
-          :class="['appMenu__menuItem', isActive && 'menuItem-active']"
-          @click="navigate"
-        >
-          <v-icon
-            :class="['menuIcon', isActive && 'menuIcon-active']"
-            size="1.8rem"
-            :color="hover || isActive ? 'var(--text-default)' : 'var(--accent)'"
-          >
+        <div :class="['appMenu__menuItem', { 'menuItem-active': isActive }]" @click="navigate">
+          <v-icon :class="['menuIcon', isActive && 'menuIcon-active']" size="1.8rem" :color="hover || isActive ? 'var(--text-default)' : 'var(--accent)'">
             {{ icons[page.icon] }}
           </v-icon>
           <div class="text-no-wrap ml-3">
-            {{ localization[lang].app.menu[page.link] }}
+            {{ localization[lang].app.menu[page.title] }}
           </div>
         </div>
       </v-hover>
     </router-link>
+
+    <competition-import class="import__btn" @import-competition="importCompetition"></competition-import>
   </div>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-import {
-  mdiAccountGroup,
-  mdiAccountMultiple,
-  mdiClipboardList,
-  mdiCog,
-  mdiNumeric10BoxMultiple,
-  mdiTrophyVariant,
-  mdiViewDashboard,
-} from "@mdi/js";
+import { mapGetters } from 'vuex';
+import { mdiAccountGroup, mdiAccountMultiple, mdiClipboardList, mdiCog, mdiNumeric10BoxMultiple, mdiTrophyVariant, mdiViewDashboard } from '@mdi/js';
+import { checkCompetitionDiscipline } from '../../data/sports';
+import CompetitionImport from './competitionImport.vue';
 
 export default {
-  name: "appMenu",
+  name: 'appMenu',
+  components: { CompetitionImport },
   props: [],
   data() {
     return {
@@ -58,45 +41,53 @@ export default {
     };
   },
   computed: {
-    ...mapGetters("localization", {
-      lang: "lang",
-      localization: "localization",
+    ...mapGetters('localization', {
+      lang: 'lang',
+      localization: 'localization',
     }),
-    ...mapGetters("main", {
-      appMenu: "appMenu",
-      competition: "competition",
-      showMenu: "showMenu",
+    ...mapGetters('main', {
+      appMenu: 'appMenu',
+      competition: 'competition',
+      showMenu: 'showMenu',
     }),
     getMenuList() {
       let menuList = this.appMenu;
 
       if (this.competition && !this.competition.is_teams) {
-        menuList = menuList.filter((menuLink) => menuLink.link !== "teams");
+        menuList = menuList.filter((menuLink) => menuLink.link !== 'teams');
       }
-      if (
-        this.competition &&
-        !this.competition.is_aerials &&
-        !this.competition.is_moguls
-      ) {
-        menuList = menuList.filter((menuLink) => menuLink.link !== "jumpCodes");
+      if (this.competition && !checkCompetitionDiscipline(this.competition, ['AE', 'AET']) && !checkCompetitionDiscipline(this.competition, ['MO'])) {
+        menuList = menuList.filter((menuLink) => menuLink.link !== 'jumpCodes');
       }
 
       return menuList;
     },
   },
+  methods: {
+    importCompetition(competition) {
+      this.$emit('import-competition', competition);
+    },
+  },
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .appMenu__wrapper {
   z-index: 2;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
   min-width: 220px;
   width: 220px;
   overflow: hidden;
   user-select: none;
-  background: var(--card-background);
+  background: var(--background-card);
   border-right: 1px solid var(--subject-background);
+
+  & > * {
+    flex-shrink: 0;
+  }
 }
 
 /*noinspection CssUnusedSymbol*/
@@ -113,9 +104,17 @@ export default {
   padding: 8px;
   font-size: 1.3rem;
   font-weight: bold;
+
+  &:last-child {
+    margin-bottom: auto;
+  }
 }
 .appMenu__menuItem:hover {
   background: var(--accent);
+}
+
+.import__btn {
+  margin-top: auto;
 }
 
 /*noinspection CssUnusedSymbol*/
@@ -124,5 +123,10 @@ export default {
 }
 .menuIcon {
   transition: color 256ms;
+}
+
+.disabled {
+  pointer-events: none;
+  opacity: 0.5;
 }
 </style>

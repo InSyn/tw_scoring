@@ -3,412 +3,133 @@
     <div style="display: flex">
       <div class="stuffSection__wrapper">
         <div class="stuffSection__header">
-          <v-dialog
-            v-model="competition.stuff.settings.jury.change_dialog"
-            overlay-opacity="100%"
-            width="320px"
-          >
+          <v-dialog v-model="competition.stuff.settings.jury.change_dialog" overlay-opacity="100%" width="320px">
             <template v-slot:activator="{ on }">
-              <v-btn
-                v-on="on"
-                small
-                icon
-                :color="$vuetify.theme.themes[appTheme].accent_light"
-              >
+              <v-btn v-on="on" small icon :color="$vuetify.theme.themes[appTheme].accent_light">
                 <v-icon small>mdi-tools</v-icon>
               </v-btn>
             </template>
 
             <v-card
               :style="{
-                backgroundColor:
-                  $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
+                backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
                 color: $vuetify.theme.themes[appTheme].textDefault,
               }"
             >
-              <v-card-title class="pa-2" style="font-size: 1.2rem">
-                Изменить название
-              </v-card-title>
+              <v-card-title class="pa-2" style="font-size: 1.2rem"> Изменить название </v-card-title>
 
               <div class="pa-2" style="font-size: 1.1rem">
-                <input
-                  type="text"
-                  style="
-                    padding: 2px 4px;
-                    font-size: 1.1rem;
-                    border-radius: 2px;
-                  "
-                  :style="{
-                    backgroundColor:
-                      $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
-                    color: $vuetify.theme.themes[appTheme].textDefault,
-                  }"
-                  v-model.lazy="competition.stuff.settings.jury.title"
-                />
+                <input type="text" style="padding: 2px 4px; font-size: 1.1rem; border-radius: 2px" v-model.lazy="competition.stuff.settings.jury.title" />
               </div>
 
               <v-card-actions class="d-flex justify-end pa-1">
-                <v-btn
-                  small
-                  @click.stop="
-                    competition.stuff.settings.jury.change_dialog = false
-                  "
-                  :color="$vuetify.theme.themes[appTheme].textDefault"
-                >
+                <v-btn small @click.stop="competition.stuff.settings.jury.change_dialog = false" :color="$vuetify.theme.themes[appTheme].textDefault">
                   Close
                 </v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>
-          <div
-            :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
-            style="font-weight: bold; font-size: 1.4rem"
-          >
+          <div :style="{ color: $vuetify.theme.themes[appTheme].textDefault }" style="font-weight: bold; font-size: 1.4rem">
             {{ competition.stuff.settings.jury.title }}
           </div>
-          <v-btn
-            @click="addStuff('jury')"
-            text
-            :color="$vuetify.theme.themes[appTheme].accent"
-            style="margin-left: auto"
-          >
+          <v-btn @click="addStuff('jury')" text :color="$vuetify.theme.themes[appTheme].accent" style="margin-left: auto">
             <v-icon>mdi-account-plus</v-icon>
           </v-btn>
         </div>
         <div class="stuff__list">
-          <div
-            v-for="(jury, jr) in competition.stuff.jury"
-            :key="jr"
-            class="stuffCard__wrapper"
-            style=""
-            :style="
-              jury.connected !== undefined && {
-                border: `1px solid ${$vuetify.theme.themes[appTheme].accent}`,
-              }
-            "
-          >
-            <div class="stuffDataField__wrapper" data-fieldType="position">
-              <div class="stuffParameter__title">Позиция</div>
-              <input
-                class="stuffParameter__input"
-                type="text"
-                v-model="competition.stuff.jury[jr].title"
-              />
-            </div>
-
-            <div class="stuffDataField__wrapper" data-fieldType="lastname">
-              <div class="stuffParameter__title">Фамилия</div>
-              <input
-                class="stuffParameter__input"
-                type="text"
-                v-model="competition.stuff.jury[jr].lastName"
-              />
-            </div>
-
-            <div class="stuffDataField__wrapper" data-fieldType="name">
-              <div class="stuffParameter__title">Имя</div>
-              <input
-                class="stuffParameter__input"
-                type="text"
-                v-model="competition.stuff.jury[jr].name"
-              />
-            </div>
-
-            <div class="stuffDataField__wrapper" data-fieldType="region">
-              <div class="stuffParameter__title">Регион</div>
-              <input
-                class="stuffParameter__input"
-                type="text"
-                v-model="competition.stuff.jury[jr].location"
-              />
-            </div>
-
-            <div class="stuffDataField__wrapper" data-fieldType="category">
-              <div class="stuffParameter__title">Кат.</div>
-              <input
-                class="stuffParameter__input"
-                type="text"
-                v-model="competition.stuff.jury[jr].category"
-              />
-            </div>
-
-            <div v-if="jury.id === 'chief'" class="stuffActions__wrapper">
-              <div
-                @click="toggleABC(jury.id)"
-                style="
-                  display: flex;
-                  flex-wrap: nowrap;
-                  align-items: center;
-                  padding: 4px 8px;
-                  background: var(--standard-background);
-                  border-radius: 6px;
-                  font-size: 1rem;
-                  font-weight: bold;
-                  cursor: pointer;
-                  user-select: none;
-                "
-              >
-                ABC
-                <div
-                  style="
-                    margin-left: 1rem;
-                    height: 12px;
-                    width: 12px;
-                    border-radius: 50%;
-                    transition: 122ms;
-                  "
-                  :style="
-                    (jury.setABC && {
-                      backgroundColor: $vuetify.theme.themes[appTheme].success,
-                      boxShadow: `0 0 2px 2px ${$vuetify.theme.themes[appTheme].success}`,
-                    }) || {
-                      backgroundColor:
-                        $vuetify.theme.themes[appTheme].subjectBackgroundRGBA,
-                      boxShadow: `0 0 0 0 ${$vuetify.theme.themes[appTheme].success}`,
-                    }
-                  "
-                ></div>
-              </div>
-            </div>
-
-            <div
-              v-if="jury.connected !== undefined"
-              style="
-                position: absolute;
-                top: 4px;
-                left: 8px;
-                font-weight: bold;
-                font-size: 0.9rem;
-              "
-              :style="[
-                { color: $vuetify.theme.themes[appTheme].cardBackgroundRGBA },
-                jury.connected && {
-                  color: $vuetify.theme.themes[appTheme].accent,
-                },
-              ]"
-            >
-              Online
-            </div>
-
-            <div
-              v-if="jury.connected !== undefined"
-              style="
-                position: absolute;
-                top: 4px;
-                right: 32px;
-                color: var(--accent);
-                font-size: 1.25rem;
-                font-weight: bold;
-                letter-spacing: 2px;
-              "
-            >
-              CJ
-            </div>
-
-            <v-btn
-              small
-              icon
-              style="position: absolute; top: 2px; right: 4px"
-              :disabled="jury.connected !== undefined"
-              @click="
-                competition.stuff.jury.splice(
-                  competition.stuff.jury.indexOf(jury),
-                  1
-                )
-              "
-              :color="$vuetify.theme.themes[appTheme].action_red"
-            >
-              <v-icon small>mdi-close</v-icon>
-            </v-btn>
-            <span
-              v-if="jury.connected !== undefined"
-              style="
-                display: block;
-                transition: background-color 192ms, box-shadow 192ms;
-                position: absolute;
-                border-radius: 4px;
-                bottom: 8px;
-                left: 50%;
-                transform: translateX(-50%);
-                height: 4px;
-                width: 48px;
-              "
-              :style="
-                competition.stuff.jury[jr].connected
-                  ? {
-                      backgroundColor: $vuetify.theme.themes[appTheme].success,
-                      boxShadow: `0 0 3px 1px ${$vuetify.theme.themes[appTheme].success}`,
-                    }
-                  : {
-                      backgroundColor:
-                        $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
-                      boxShadow: `none`,
-                    }
-              "
-            ></span>
-          </div>
+          <personal-item
+            v-for="(jury, idx) in competition.stuff.jury"
+            :key="idx"
+            :competition="competition"
+            :jury-obj="jury"
+            :index="idx"
+            @toggle-abc="toggleABC"
+            :drag-index="idx"
+            :drag-items="competition.stuff.jury"
+            :class="['drag-drop-item', { dragging: dragIndex === idx, dragOver: dragOverIndex === idx }]"
+            @dragstart="onDragStart($event, idx)"
+            @dragover="onDragOver($event, idx)"
+            @drop="onDrop($event, idx, competition.stuff.jury)"
+          ></personal-item>
         </div>
       </div>
 
       <div class="stuffSection__wrapper">
         <div class="stuffSection__header">
-          <v-dialog
-            v-model="competition.stuff.settings.judges.change_dialog"
-            overlay-opacity="100%"
-            width="320px"
-          >
+          <v-dialog v-model="competition.stuff.settings.judges.change_dialog" overlay-opacity="100%" width="320px">
             <template v-slot:activator="{ on }">
-              <v-btn
-                v-on="on"
-                small
-                icon
-                :color="$vuetify.theme.themes[appTheme].accent_light"
-              >
+              <v-btn v-on="on" small icon :color="$vuetify.theme.themes[appTheme].accent_light">
                 <v-icon small>mdi-tools</v-icon>
               </v-btn>
             </template>
 
-            <v-card
-              :style="{
-                backgroundColor:
-                  $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
-                color: $vuetify.theme.themes[appTheme].textDefault,
-              }"
-            >
-              <v-card-title class="pa-2" style="font-size: 1.2rem">
-                Изменить название
-              </v-card-title>
+            <v-card class="section-container">
+              <v-card-title class="pa-2" style="font-size: 1.2rem"> Изменить название </v-card-title>
 
               <div class="pa-2" style="font-size: 1.1rem">
-                <input
-                  type="text"
-                  style="
-                    padding: 2px 4px;
-                    font-size: 1.1rem;
-                    border-radius: 2px;
-                  "
-                  :style="{
-                    backgroundColor:
-                      $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
-                    color: $vuetify.theme.themes[appTheme].textDefault,
-                  }"
-                  v-model.lazy="competition.stuff.settings.judges.title"
-                />
+                <input type="text" style="padding: 2px 4px; font-size: 1.1rem; border-radius: 2px" v-model.lazy="competition.stuff.settings.judges.title" />
               </div>
 
               <v-card-actions class="d-flex justify-end pa-1">
-                <v-btn
-                  small
-                  @click.stop="
-                    competition.stuff.settings.judges.change_dialog = false
-                  "
-                  :color="$vuetify.theme.themes[appTheme].textDefault"
-                >
+                <v-btn small @click.stop="competition.stuff.settings.judges.change_dialog = false" :color="$vuetify.theme.themes[appTheme].textDefault">
                   Close
                 </v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>
 
-          <div
-            :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
-            style="font-weight: bold; font-size: 1.4rem"
-          >
+          <div :style="{ color: $vuetify.theme.themes[appTheme].textDefault }" style="font-weight: bold; font-size: 1.4rem">
             {{ competition.stuff.settings.judges.title }}
           </div>
-          <v-btn
-            @click="addStuff('judge')"
-            text
-            :color="$vuetify.theme.themes[appTheme].accent"
-            style="margin-left: auto"
-          >
+          <v-btn @click="addStuff('judge')" text color="var(--accent)" style="margin-left: auto">
             <v-icon>mdi-account-plus</v-icon>
           </v-btn>
         </div>
 
         <div class="stuff__list">
-          <div
-            class="stuffCard__wrapper"
-            v-for="(judge, jd) in competition.stuff.judges"
-            :key="jd"
-          >
+          <div class="stuffCard__wrapper" v-for="(judge, jd) in competition.stuff.judges" :key="jd">
             <div
               v-if="judge.connected !== undefined"
-              style="
-                position: absolute;
-                top: 4px;
-                left: 8px;
-                font-weight: bold;
-                font-size: 0.9rem;
-              "
-              :style="[
-                { color: $vuetify.theme.themes[appTheme].cardBackgroundRGBA },
+              style="position: absolute; top: 4px; left: 8px; font-weight: bold; font-size: 0.9rem; background-color: var(--background-card)"
+              :style="
                 judge.connected && {
                   color: $vuetify.theme.themes[appTheme].accent,
-                },
-              ]"
+                }
+              "
             >
               Online
             </div>
             <div class="stuffDataField__wrapper" data-fieldType="id">
               <div class="stuffParameter__title">T-ID:</div>
-              <input
-                class="stuffParameter__input"
-                type="text"
-                v-model="competition.stuff.judges[jd].id"
-              />
+              <input class="stuffParameter__input" type="text" v-model="competition.stuff.judges[jd].id" />
             </div>
             <div class="stuffDataField__wrapper" data-fieldType="ffr-id">
               <div class="stuffParameter__title">FFR-ID:</div>
-              <input
-                class="stuffParameter__input"
-                type="text"
-                v-model="competition.stuff.judges[jd].jury_code"
-              />
+              <input class="stuffParameter__input" type="text" v-model="competition.stuff.judges[jd].jury_code" />
             </div>
 
             <div class="stuffDataField__wrapper" data-fieldType="judgeTitle">
-              <input
-                class="stuffParameter__input"
-                type="text"
-                v-model="competition.stuff.judges[jd].title"
-              />
+              <input class="stuffParameter__input" type="text" v-model="competition.stuff.judges[jd].title" />
             </div>
 
             <div class="stuffDataField__wrapper" data-fieldType="lastname">
               <div class="stuffParameter__title">Фамилия</div>
-              <input
-                class="stuffParameter__input"
-                type="text"
-                v-model="competition.stuff.judges[jd].lastName"
-              />
+              <input class="stuffParameter__input" type="text" v-model="competition.stuff.judges[jd].lastName" />
             </div>
 
             <div class="stuffDataField__wrapper" data-fieldType="name">
               <div class="stuffParameter__title">Имя</div>
-              <input
-                class="stuffParameter__input"
-                type="text"
-                v-model="competition.stuff.judges[jd].name"
-              />
+              <input class="stuffParameter__input" type="text" v-model="competition.stuff.judges[jd].name" />
             </div>
 
             <div class="stuffDataField__wrapper" data-fieldType="region">
               <div class="stuffParameter__title">Регион</div>
-              <input
-                class="stuffParameter__input"
-                type="text"
-                v-model="competition.stuff.judges[jd].location"
-              />
+              <input class="stuffParameter__input" type="text" v-model="competition.stuff.judges[jd].location" />
             </div>
 
             <div class="stuffDataField__wrapper" data-fieldType="category">
               <div class="stuffParameter__title">Кат.</div>
-              <input
-                class="stuffParameter__input"
-                type="text"
-                v-model="competition.stuff.judges[jd].category"
-              />
+              <input class="stuffParameter__input" type="text" v-model="competition.stuff.judges[jd].category" />
             </div>
 
             <v-col class="stuffActions__wrapper">
@@ -419,7 +140,7 @@
                   flex-wrap: nowrap;
                   align-items: center;
                   padding: 4px 8px;
-                  background: var(--standard-background);
+                  background: var(--background-deep);
                   border-radius: 6px;
                   font-size: 1rem;
                   font-weight: bold;
@@ -429,31 +150,21 @@
               >
                 ABC
                 <div
-                  style="
-                    margin-left: 1rem;
-                    height: 12px;
-                    width: 12px;
-                    border-radius: 50%;
-                    transition: 122ms;
-                  "
+                  style="margin-left: 1rem; height: 12px; width: 12px; border-radius: 50%; transition: 122ms"
                   :style="
                     (judge.setABC && {
                       backgroundColor: $vuetify.theme.themes[appTheme].success,
                       boxShadow: `0 0 2px 2px ${$vuetify.theme.themes[appTheme].success}`,
                     }) || {
-                      backgroundColor:
-                        $vuetify.theme.themes[appTheme].subjectBackgroundRGBA,
+                      backgroundColor: $vuetify.theme.themes[appTheme].subjectBackgroundRGBA,
                       boxShadow: `0 0 0 0 ${$vuetify.theme.themes[appTheme].success}`,
                     }
                   "
                 ></div>
               </div>
-              <div v-if="competition.is_moguls" class="mogulsRoles__wrapper">
+              <div v-if="checkCompetitionDiscipline(competition, ['MO'])" class="mogulsRoles__wrapper">
                 <div
-                  :class="[
-                    'mogulsRole',
-                    judge.moguls_role === role && 'mogulsRole-selected',
-                  ]"
+                  :class="['mogulsRole', judge.moguls_role === role && 'mogulsRole-selected']"
                   @click="setMogulsRole(judge, role)"
                   v-for="role in ['turns', 'jumps']"
                   :key="role"
@@ -486,18 +197,13 @@
                 transform: translateX(-50%);
                 height: 4px;
                 width: 48px;
+                background-color: var(--background-deep);
               "
               :style="
-                competition.stuff.judges[jd].connected
-                  ? {
-                      backgroundColor: $vuetify.theme.themes[appTheme].success,
-                      boxShadow: `0 0 3px 1px ${$vuetify.theme.themes[appTheme].success}`,
-                    }
-                  : {
-                      backgroundColor:
-                        $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
-                      boxShadow: `none`,
-                    }
+                competition.stuff.judges[jd].connected && {
+                  backgroundColor: $vuetify.theme.themes[appTheme].success,
+                  boxShadow: `0 0 3px 1px ${$vuetify.theme.themes[appTheme].success}`,
+                }
               "
             ></span>
           </div>
@@ -508,57 +214,58 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
-import JudgeClass from "../../store/Classes/JudgeClass";
-import JuryClass from "../../store/Classes/JuryClass";
+import { mapActions, mapGetters } from 'vuex';
+import JudgeClass from '../../store/classes/JudgeClass';
+import JuryClass from '../../store/classes/JuryClass';
+import PersonalItem from './personal-item.vue';
+import MDragAndDrop from '../mixins/MDragAndDrop';
+import DataCellSettingsRow from '../protocols/protocolDataSheetSettings-components/dataCellSettings-row.vue';
+import { checkCompetitionDiscipline } from '../../data/sports';
 
 export default {
-  name: "stuff",
+  name: 'stuff',
+  components: { DataCellSettingsRow, PersonalItem },
+  mixins: [MDragAndDrop],
   methods: {
-    ...mapActions("main", {
-      updateEvent: "updateEvent",
+    checkCompetitionDiscipline,
+    ...mapActions('main', {
+      updateEvent: 'updateEvent',
     }),
     async force_disconnect(judge) {
-      await this.$store.commit("main/force_disconnect", judge.socket_id);
+      this.$store.commit('main/force_disconnect', judge.socket_id);
 
       if (judge.connected) judge.connected = false;
       await this.updateEvent();
     },
     addStuff(stuffType) {
       switch (stuffType) {
-        case "judge": {
+        case 'judge': {
           this.competition.stuff.judges.push(
             new JudgeClass(
               `Судья ${this.competition.stuff.judges.length + 1}`,
-              this.competition.stuff.judges.length > 0
-                ? this.competition.stuff.judges[
-                    this.competition.stuff.judges.length - 1
-                  ].id + 1
-                : 1
+              this.competition.stuff.judges.length > 0 ? this.competition.stuff.judges[this.competition.stuff.judges.length - 1].id + 1 : 1
             )
           );
           break;
         }
-        case "jury": {
+        case 'jury': {
           this.competition.stuff[stuffType].push(new JuryClass());
         }
       }
 
-      this.$store.dispatch("main/updateEvent");
+      this.$store.dispatch('main/updateEvent');
     },
     remove_judge(judge_id) {
-      this.competition.stuff.judges = this.competition.stuff.judges.filter(
-        (_judge) => {
-          return _judge._id !== judge_id;
-        }
-      );
+      this.competition.stuff.judges = this.competition.stuff.judges.filter((_judge) => {
+        return _judge._id !== judge_id;
+      });
       this.competition.competitorsSheet.competitors.forEach((_competitor) => {
         _competitor.marks = _competitor.marks.filter((_mark) => {
           return _mark.judge_id !== judge_id;
         });
       });
 
-      this.$store.dispatch("main/updateEvent");
+      this.$store.dispatch('main/updateEvent');
     },
     setMogulsRole(judge, role) {
       if (judge) {
@@ -572,22 +279,22 @@ export default {
       for (const stuffKey in stuff) {
         if (Array.isArray(stuff[stuffKey]))
           stuff[stuffKey].forEach((employee) => {
-            if (employee["setABC"] !== undefined && employee.id === id) {
-              employee["setABC"] = !employee["setABC"];
+            if (employee['setABC'] !== undefined && employee.id === id) {
+              employee['setABC'] = !employee['setABC'];
             }
           });
       }
 
-      this.$store.dispatch("main/updateEvent");
+      this.$store.dispatch('main/updateEvent');
     },
   },
   computed: {
-    ...mapGetters("main", { competition: "competition", appTheme: "appTheme" }),
+    ...mapGetters('main', { competition: 'competition', appTheme: 'appTheme' }),
   },
 };
 </script>
 
-<style scoped>
+<style lang="scss">
 .stuffSection__wrapper {
   flex: 1 1 0;
   display: flex;
@@ -597,7 +304,7 @@ export default {
   margin-right: 8px;
 
   border-radius: 6px;
-  background: var(--card-background);
+  background: var(--background-card);
 }
 .stuffSection__header {
   display: flex;
@@ -607,7 +314,7 @@ export default {
 .stuff__list {
   margin: 8px;
   padding: 8px;
-  background: var(--standard-background);
+  background: var(--background-deep);
   border-radius: 6px;
 }
 .stuffCard__wrapper {
@@ -615,9 +322,10 @@ export default {
   display: flex;
   flex-wrap: wrap;
   padding-top: 24px;
-  background: var(--card-background);
+  background: var(--background-card);
   border-radius: 4px;
   font-size: 0.9rem;
+  cursor: move;
 }
 .stuffCard__wrapper:not(:last-child) {
   margin-bottom: 8px;
@@ -630,10 +338,10 @@ export default {
   padding: 3px 6px;
   /*border: 1px solid cornflowerblue;*/
 }
-.stuffDataField__wrapper[data-fieldType="id"] {
+.stuffDataField__wrapper[data-fieldType='id'] {
   width: 6rem;
 }
-.stuffDataField__wrapper[data-fieldType="ffr-id"] {
+.stuffDataField__wrapper[data-fieldType='ffr-id'] {
   width: 10rem;
 }
 .stuffParameter__title {
@@ -646,14 +354,8 @@ export default {
   min-width: 0;
   padding: 2px 6px;
   margin-left: 8px;
-
-  color: var(--text-default);
-  background: var(--standard-background);
   font-weight: bold;
-
   border-radius: 4px;
-  border-bottom: 1px solid transparent;
-
   transition: border-bottom-color 92ms;
 }
 .stuffParameter__input:focus {
@@ -681,7 +383,7 @@ export default {
 
   font-weight: bold;
   border-radius: 6px;
-  background: var(--card-background);
+  background: var(--background-card);
 
   cursor: pointer;
 }

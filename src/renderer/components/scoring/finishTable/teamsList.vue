@@ -1,64 +1,31 @@
 <template>
   <div class="teamsList__wrapper">
-    <div
-      class="teamWrapper"
-      v-for="rankedTeam in getRankedTeams"
-      :key="rankedTeam.id"
-    >
+    <div class="teamWrapper" v-for="rankedTeam in getRankedTeams" :key="rankedTeam.id">
       <div class="teamResult__header">
         <div class="teamRank">{{ getRankedTeams.indexOf(rankedTeam) + 1 }}</div>
         <div class="teamName">{{ rankedTeam.name }}</div>
         <div class="teamResult">{{ rankedTeam.teamResult }}</div>
       </div>
       <competitor-results-dialog
-        v-for="teamCompetitor in rankedTeam.competitors.map((competitorId) =>
-          getCompetitor(competitorId)
-        )"
+        v-for="teamCompetitor in rankedTeam.competitors.map((competitorId) => getCompetitor(competitorId))"
         :key="teamCompetitor.id"
         :competition="competition"
         :competitor="teamCompetitor"
       ></competitor-results-dialog>
-      <!--      <div-->
-      <!--        class="teamCompetitor"-->
-      <!--        v-for="teamCompetitorId in rankedTeam.competitors"-->
-      <!--        :key="teamCompetitorId"-->
-      <!--      >-->
-      <!--        <div class="teamCompetitorBib">-->
-      <!--          {{ getCompetitor(teamCompetitorId).info_data["bib"] }}-->
-      <!--        </div>-->
-      <!--        <div class="teamCompetitorLastname">-->
-      <!--          {{-->
-      <!--            getCompetitor(teamCompetitorId).info_data["lastname"].toUpperCase()-->
-      <!--          }}-->
-      <!--        </div>-->
-      <!--        <div class="teamCompetitorName">-->
-      <!--          {{ getCompetitor(teamCompetitorId).info_data["name"] }}-->
-      <!--        </div>-->
-      <!--        <div class="teamCompetitorResult">-->
-      <!--          {{-->
-      <!--            competition.getRaceResult(-->
-      <!--              getCompetitor(teamCompetitorId),-->
-      <!--              competition.selected_race-->
-      <!--            )-->
-      <!--          }}-->
-      <!--        </div>-->
-      <!--      </div>-->
     </div>
   </div>
 </template>
 
 <script>
-import CompetitorResultsDialog from "./competitorResults-dialog.vue";
+import CompetitorResultsDialog from './competitorResults-dialog.vue';
 
 export default {
-  name: "teamsList",
+  name: 'teamsList',
   components: { CompetitorResultsDialog },
-  props: ["competition"],
+  props: ['competition'],
   methods: {
     getCompetitor(competitorId) {
-      const competitor = this.competition.competitorsSheet.competitors.find(
-        (competitor) => competitor.id === competitorId
-      );
+      const competitor = this.competition.competitorsSheet.competitors.find((competitor) => competitor.id === competitorId);
       return competitor ? competitor : null;
     },
   },
@@ -66,10 +33,7 @@ export default {
     getRankedTeams() {
       const rankedTeamsArr = this.competition.teams
         .map((team) => {
-          const teamResult = this.competition.getTeamRaceResult(
-            team,
-            this.competition.selected_race
-          );
+          const teamResult = this.competition.getTeamRaceResult(team, this.competition.selected_race);
 
           if (teamResult)
             return {
@@ -78,10 +42,7 @@ export default {
             };
           return team;
         })
-        .sort(
-          (team1_res, team2_res) =>
-            +team2_res.teamResult - +team1_res.teamResult
-        );
+        .sort((team1_res, team2_res) => +team2_res.teamResult - +team1_res.teamResult);
 
       if (rankedTeamsArr) return rankedTeamsArr;
 
@@ -101,7 +62,7 @@ export default {
 }
 .teamWrapper {
   margin-bottom: 4px;
-  background: var(--card-background);
+  background: var(--background-card);
   border: 2px solid var(--text-default);
   border-radius: 6px;
 }

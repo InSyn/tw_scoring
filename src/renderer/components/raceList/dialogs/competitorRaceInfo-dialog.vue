@@ -3,37 +3,26 @@
     <div class="competitorRaceInfo__dialog__wrapper">
       <div class="competitorRaceInfo__dialog__title">
         <div class="competitorRaceInfo__dialog__title__competitorNumber">
-          {{ competitor.info_data["bib"] }}
+          {{ competitor.info_data['bib'] }}
         </div>
         <span class="competitorRaceInfo__dialog__title__competitorName">
           {{
-            `${competitor.info_data["lastname"] + "&nbsp" || ""}
-                        ${competitor.info_data["name"] || ""}`
+            `${competitor.info_data['lastname'] + '&nbsp' || ''}
+                        ${competitor.info_data['name'] || ''}`
           }}
         </span>
 
-        <v-btn
-          @click="dialogState = false"
-          class="competitorRaceInfo__dialog__button-close"
-          color="var(--action-red)"
-          icon
-          small
-        >
+        <v-btn @click="dialogState = false" class="competitorRaceInfo__dialog__button-close" color="var(--action-red)" icon small>
           <v-icon small>mdi-close</v-icon>
         </v-btn>
       </div>
 
       <div class="competitorRaceInfo__dialog__body">
-        <div
-          v-for="race in competition.races"
-          :key="race.id"
-          class="competitorRaceInfo__dialog__competitorRaceInfo__section"
-        >
+        <div v-for="race in competition.races" :key="race.id" class="competitorRaceInfo__dialog__competitorRaceInfo__section">
           <div
             :class="[
               'competitorRaceInfo__dialog__competitorRaceInfo__section__title',
-              race.id === selectedRace.id &&
-                'competitorRaceInfo__dialog__competitorRaceInfo__section__title-active',
+              race.id === selectedRace.id && 'competitorRaceInfo__dialog__competitorRaceInfo__section__title-active',
             ]"
           >
             {{ `${race.title}` }}
@@ -42,15 +31,11 @@
           <div
             :class="[
               'competitorRaceInfo__dialog__competitorRaceInfo__section__body',
-              race.id === selectedRace.id &&
-                'competitorRaceInfo__dialog__competitorRaceInfo__section__body-active',
+              race.id === selectedRace.id && 'competitorRaceInfo__dialog__competitorRaceInfo__section__body-active',
             ]"
           >
             <div
-              v-if="
-                competitor.marks.filter((_mark) => _mark.race_id === race.id)
-                  .length < 1
-              "
+              v-if="competitor.marks.filter((_mark) => _mark.race_id === race.id).length < 1"
               class="competitorRaceInfo__dialog__competitorRaceInfo__section__raceMarks-empty"
             >
               {{ localization[lang].app.races.d_no_marks }}
@@ -66,17 +51,11 @@
               :key="mark.id"
               class="competitorRaceInfo__dialog__competitorRaceInfo__section__raceMarks__mark__wrapper"
             >
-              <div
-                class="competitorRaceInfo__dialog__competitorRaceInfo__section__raceMarks__markJudge"
-              >
-                {{
-                  `${localization[lang].app.scoring.judge_full} ${mark.judge}:`
-                }}
+              <div class="competitorRaceInfo__dialog__competitorRaceInfo__section__raceMarks__markJudge">
+                {{ `${localization[lang].app.scoring.judge_full} ${mark.judge}:` }}
               </div>
 
-              <div
-                class="competitorRaceInfo__dialog__competitorRaceInfo__section__raceMarks__markValue"
-              >
+              <div class="competitorRaceInfo__dialog__competitorRaceInfo__section__raceMarks__markValue">
                 {{ mark.value }}
               </div>
             </div>
@@ -85,13 +64,10 @@
           <div
             :class="[
               'competitorRaceInfo__dialog__competitorRaceInfo__section__result__wrapper',
-              race.id === selectedRace.id &&
-                'competitorRaceInfo__dialog__competitorRaceInfo__section__result__wrapper-active',
+              race.id === selectedRace.id && 'competitorRaceInfo__dialog__competitorRaceInfo__section__result__wrapper-active',
             ]"
           >
-            <div
-              class="competitorRaceInfo__dialog__competitorRaceInfo__section__result__value"
-            >
+            <div class="competitorRaceInfo__dialog__competitorRaceInfo__section__result__value">
               {{ competition.getRaceResult(competitor, race) }}
             </div>
           </div>
@@ -122,49 +98,33 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters } from 'vuex';
 
 export default {
-  name: "competitorRaceInfo-dialog",
-  props: [
-    "competition",
-    "competitor",
-    "selectedRace",
-    "section",
-    "dialogStateProp",
-  ],
+  name: 'competitorRaceInfo-dialog',
+  props: ['competition', 'competitor', 'selectedRace', 'section', 'dialogStateProp'],
   methods: {
     clearCompetitorRace(competitor, race) {
-      competitor.marks = competitor.marks.filter(
-        (mark) => mark.race_id !== race.id
-      );
-      competitor.results = competitor.results.filter(
-        (result) => result.race_id !== race.id
-      );
-      competitor.results_overall = competitor.results_overall.filter(
-        (overallResult) => overallResult.competition_id !== this.competition.id
-      );
+      competitor.marks = competitor.marks.filter((mark) => mark.race_id !== race.id);
+      competitor.results = competitor.results.filter((result) => result.race_id !== race.id);
+      competitor.results_overall = competitor.results_overall.filter((overallResult) => overallResult.competition_id !== this.competition.id);
 
       this.competition.calculateOverallResult(competitor);
 
-      race.finished = race.finished.filter(
-        (_competitor) => _competitor !== competitor.id
-      );
+      race.finished = race.finished.filter((_competitor) => _competitor !== competitor.id);
 
-      if (race.selectedCompetitor === competitor.id)
-        race.selectedCompetitor = null;
+      if (race.selectedCompetitor === competitor.id) race.selectedCompetitor = null;
 
       if (race.onTrack === competitor.id) race.onTrack = null;
 
-      if (!race.startList.includes(competitor.id))
-        race.startList.unshift(competitor.id);
+      if (!race.startList.includes(competitor.id)) race.startList.unshift(competitor.id);
 
       this.dialogState = false;
 
       this.rebuildStartList(race);
     },
     rebuildStartList(race) {
-      this.$emit("rebuild-start-list", race);
+      this.$emit('rebuild-start-list', race);
     },
     removeCompetitor(competitor_id, _race) {
       this.dialogState = false;
@@ -173,24 +133,22 @@ export default {
         return !(_comp === competitor_id);
       });
 
-      _race.selectedCompetitor === competitor_id
-        ? (_race.selectedCompetitor = null)
-        : null;
+      _race.selectedCompetitor === competitor_id ? (_race.selectedCompetitor = null) : null;
 
       this.rebuildStartList(_race);
     },
   },
   computed: {
-    ...mapGetters("localization", {
-      lang: "lang",
-      localization: "localization",
+    ...mapGetters('localization', {
+      lang: 'lang',
+      localization: 'localization',
     }),
     dialogState: {
       get() {
         return this.dialogStateProp;
       },
       set() {
-        this.$emit("toggle-dialog-state");
+        this.$emit('toggle-dialog-state');
       },
     },
   },
@@ -200,7 +158,7 @@ export default {
 <style scoped>
 .competitorRaceInfo__dialog__wrapper {
   color: var(--text-default);
-  background-color: var(--card-background);
+  background-color: var(--background-card);
   user-select: none;
 }
 .competitorRaceInfo__dialog__title {

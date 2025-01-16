@@ -1,0 +1,13 @@
+.section-container {
+  padding: 1rem;
+  background-color: var(--background-card);
+  border-radius: 4px;
+}
+
+.scrollable-container {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  background-color: var(--background-deep);
+}

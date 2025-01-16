@@ -1,25 +1,20 @@
 <template>
   <div class="cellWidthControl__wrapper">
     <data-field-width-icon class="fontWidth__icon"></data-field-width-icon>
-    <input
-      :value="cellParams['width']"
-      @change="setWidth($event.target.value, cellParams)"
-      class="data__input"
-      type="number"
-    />
+    <input :value="cellParams['width']" @change="setWidth($event.target.value, cellParams)" class="data__input" type="number" />
   </div>
 </template>
 
 <script>
-import DataFieldWidthIcon from "../../../assets/icons/dataFieldWidth-icon.vue";
+import DataFieldWidthIcon from '../../../assets/icons/dataFieldWidth-icon.vue';
 
 export default {
-  name: "dataCellWidth-control",
+  name: 'dataCellWidth-control',
   components: { DataFieldWidthIcon },
-  props: ["cellParams"],
+  props: ['cellParams'],
   methods: {
     setWidth(val, cellParams) {
-      cellParams["width"] = val;
+      cellParams['width'] = val;
     },
   },
 };
@@ -48,7 +43,7 @@ export default {
 
   color: var(--text-default);
   background-color: var(--standard-background);
-  border-radius: 6px;
+  border-radius: 2px;
 
   font-weight: bold;
   text-align: center;

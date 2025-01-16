@@ -3,20 +3,8 @@
     <div class="chat__wrapper">
       <div class="chat__users__list">
         <div class="chat__users__list__userItem">
-          <v-icon
-            class="chat__users__list__userItem__icon"
-            :color="
-              competition.stuff.jury[0].connected
-                ? 'var(--accent)'
-                : 'var(--text-default)'
-            "
-            >{{
-              `${
-                competition.stuff.jury[0].connected
-                  ? "mdi-account"
-                  : "mdi-account-cancel"
-              }`
-            }}
+          <v-icon class="chat__users__list__userItem__icon" :color="competition.stuff.jury[0].connected ? 'var(--accent)' : 'var(--text-default)'"
+            >{{ `${competition.stuff.jury[0].connected ? 'mdi-account' : 'mdi-account-cancel'}` }}
           </v-icon>
 
           <div class="chat__users__list__userItem__title">
@@ -24,10 +12,7 @@
           </div>
         </div>
 
-        <div
-          class="chat__users__list__userItem"
-          v-for="(user, u_id) in competition.stuff.judges"
-        >
+        <div class="chat__users__list__userItem" v-for="(user, u_id) in competition.stuff.judges">
           <v-icon
             class="chat__users__list__userItem__icon"
             :color="user.connected ? 'var(--accent)' : 'var(--text-default)'"
@@ -37,7 +22,7 @@
                 color: 'var(--error)',
               }
             "
-            >{{ `${user.connected ? "mdi-account" : "mdi-account-cancel"}` }}
+            >{{ `${user.connected ? 'mdi-account' : 'mdi-account-cancel'}` }}
           </v-icon>
 
           <div class="chat__users__list__userItem__title">
@@ -47,11 +32,7 @@
       </div>
 
       <div class="chat__messages__wrapper">
-        <div
-          v-for="(mes, m) in messages"
-          :key="m"
-          class="chat__messages__messageItem__value"
-        >
+        <div v-for="(mes, m) in messages" :key="m" class="chat__messages__messageItem__value">
           {{ `${mes[1][0]}:${mes[1][1]}` }}
           <b>{{ `${mes[2]}:` }}</b>
           {{ `${mes[0]}` }}
@@ -59,19 +40,9 @@
       </div>
 
       <div class="chat__messageForm__wrapper">
-        <input
-          @keypress.enter="addMessage(message)"
-          v-model="message"
-          class="chat__messageForm__input"
-          type="text"
-        />
+        <input @keypress.enter="addMessage(message)" v-model="message" class="chat__messageForm__input" type="text" />
 
-        <v-btn
-          @click="addMessage(message)"
-          class="chat__messageForm__button-sendMessage"
-          color="var(--accent)"
-          text
-          small
+        <v-btn @click="addMessage(message)" class="chat__messageForm__button-sendMessage" color="var(--accent)" text small
           >{{ localization[lang].app.scoring.chat_send }}
         </v-btn>
       </div>
@@ -80,40 +51,40 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters } from 'vuex';
 
 export default {
-  name: "chat",
+  name: 'chat',
   mounted() {
     this.setChatScroll();
   },
   data() {
     return {
-      message: "",
+      message: '',
     };
   },
   computed: {
-    ...mapGetters("localization", {
-      localization: "localization",
-      lang: "lang",
+    ...mapGetters('localization', {
+      localization: 'localization',
+      lang: 'lang',
     }),
-    ...mapGetters("main", {
-      socket: "socket",
-      messages: "messages",
-      competition: "competition",
-      timer: "timer",
+    ...mapGetters('main', {
+      socket: 'socket',
+      messages: 'messages',
+      competition: 'competition',
+      timer: 'timer',
     }),
   },
   methods: {
     addMessage(m) {
       if (this.socket) {
         const time = [this.timer.hrs, this.timer.min];
-        m !== "" && this.socket.emit("chat_message", [m, time, "Secretary"]);
-        this.message = "";
-      } else console.log("server not started");
+        m !== '' && this.socket.emit('chat_message', [m, time, 'Secretary']);
+        this.message = '';
+      } else console.log('server not started');
     },
     setChatScroll() {
-      const chatWindow = document.querySelector("#chat_window");
+      const chatWindow = document.querySelector('#chat_window');
       if (chatWindow) chatWindow.scrollTop = chatWindow.scrollHeight;
     },
   },
@@ -138,7 +109,7 @@ export default {
   flex-direction: column;
   height: 100%;
 
-  background-color: var(--card-background);
+  background-color: var(--background-card);
   border-radius: 6px;
 }
 .chat__users__list {

@@ -1,43 +1,26 @@
 <template>
   <div class="aeCodesFilter__wrapper">
     <div class="aeCodesFilter__title">Фильтр прыжков</div>
-    <input
-      class="aeCodesFilter__input"
-      type="text"
-      v-bind:value="filterValue"
-      @input="setFilterValue($event.target.value)"
-    />
+    <input class="aeCodesFilter__input" type="text" v-bind:value="filterValue" @input="setFilterValue($event.target.value)" />
     <div class="fullMatchCheck__wrapper">
-      <label
-        @click="setFullMatch"
-        :class="[
-          'fullMatchCheck__button',
-          isFullMatch && 'fullMatchCheck__button-active',
-        ]"
-        for="fullMatchCheck__checkbox"
-      >
+      <label @click="setFullMatch" :class="['fullMatchCheck__button', isFullMatch && 'fullMatchCheck__button-active']" for="fullMatchCheck__checkbox">
         Полное совпадение
       </label>
-      <input
-        v-bind:value="isFullMatch"
-        id="fullMatchCheck__checkbox"
-        hidden
-        type="checkbox"
-      />
+      <input v-bind:value="isFullMatch" id="fullMatchCheck__checkbox" hidden type="checkbox" />
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: "aeCodesFilter",
-  props: ["filterValue", "isFullMatch"],
+  name: 'aeCodesFilter',
+  props: ['filterValue', 'isFullMatch'],
   methods: {
     setFilterValue(value) {
-      this.$emit("set-filter-value", value.toString().trim());
+      this.$emit('set-filter-value', value.toString().trim());
     },
     setFullMatch() {
-      this.$emit("set-full-match-mode", !this.isFullMatch);
+      this.$emit('set-full-match-mode', !this.isFullMatch);
     },
   },
 };
@@ -51,7 +34,7 @@ export default {
   align-items: center;
   margin-bottom: 16px;
   padding: 8px 16px;
-  background: var(--card-background);
+  background: var(--background-card);
   border-radius: 6px;
 }
 
@@ -80,7 +63,7 @@ export default {
   user-select: none;
 }
 .fullMatchCheck__button::before {
-  content: "";
+  content: '';
   position: absolute;
   right: calc(100% + 8px);
   top: 50%;

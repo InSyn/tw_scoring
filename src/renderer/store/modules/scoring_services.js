@@ -2,7 +2,7 @@ export default {
   namespaced: true,
   state: {
     fileTranslationService: {
-      path: "C:/TW_Translation",
+      path: '\\\\chelsea.lan\\TW_Translation',
       separated: true,
       updateData: false,
       updater_id: null,
@@ -49,25 +49,25 @@ export default {
   },
   actions: {
     setFileTranslationService_path: ({ commit }, path) => {
-      commit("SET_FILE_TRANSLATION_SERVICE_PATH", path);
+      commit('SET_FILE_TRANSLATION_SERVICE_PATH', path);
     },
     setFileSeparation: ({ commit }, value) => {
-      commit("SET_FILE_SEPARATION", value);
+      commit('SET_FILE_SEPARATION', value);
     },
     setFileUpdater: ({ commit }, value) => {
-      commit("SET_FILE_UPDATER", value);
+      commit('SET_FILE_UPDATER', value);
     },
     clearFileUpdater: ({ commit }) => {
-      commit("CLEAR_FILE_UPDATER");
+      commit('CLEAR_FILE_UPDATER');
     },
     switchFileUpdateService: ({ commit }, state) => {
-      commit("SWITCH_FILE_UPDATE_SERVICE", state);
+      commit('SWITCH_FILE_UPDATE_SERVICE', state);
     },
     switchUpdatingState: ({ commit }, state) => {
-      commit("SWITCH_UPDATING_STATE", state);
+      commit('SWITCH_UPDATING_STATE', state);
     },
     setPaginatorParameters({ commit }, parameters) {
-      commit("SET_PAGINATOR_PARAMETERS", parameters);
+      commit('SET_PAGINATOR_PARAMETERS', parameters);
     },
   },
 };

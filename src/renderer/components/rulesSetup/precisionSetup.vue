@@ -1,12 +1,5 @@
 <template>
-  <div
-    class="pa-2 d-flex flex-column"
-    style="
-      margin-top: 16px;
-      background: var(--card-background);
-      border-radius: 6px;
-    "
-  >
+  <div class="precisionSetup__wrapper section-container" style="margin-top: 16px">
     <div style="margin-bottom: 8px; font-size: 1.2rem; font-weight: bold">
       {{ localization[lang].app.settings.precision.result_precision }}
     </div>
@@ -16,7 +9,7 @@
         @change="updateEvent"
         v-model="competition.structure.selected.accuracy"
         class="ma-0 pa-0"
-        style="border-radius: 6px; background: var(--standard-background)"
+        style="border-radius: 6px; background: var(--background-deep)"
         row
         hide-details
       >
@@ -26,11 +19,7 @@
           :value="acc_lvl.id"
           :label="acc_lvl.title"
           class="pa-2 ma-1"
-          style="
-            color: var(--text-default);
-            background: var(--card-background);
-            border-radius: 6px;
-          "
+          style="color: var(--text-default); background: var(--background-card); border-radius: 6px"
           color="var(--accent)"
           :dark="appTheme === 'dark'"
         ></v-radio>
@@ -40,29 +29,32 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
+import { mapActions, mapGetters } from 'vuex';
 
 export default {
-  name: "precisionSetup",
-  props: ["competition"],
+  name: 'precisionSetup',
+  props: ['competition'],
   methods: {
-    ...mapActions("main", {
-      updateEvent: "updateEvent",
+    ...mapActions('main', {
+      updateEvent: 'updateEvent',
     }),
   },
   data() {
     return {};
   },
   computed: {
-    ...mapGetters("main", {
-      appTheme: "appTheme",
+    ...mapGetters('main', {
+      appTheme: 'appTheme',
     }),
-    ...mapGetters("localization", {
-      lang: "lang",
-      localization: "localization",
+    ...mapGetters('localization', {
+      lang: 'lang',
+      localization: 'localization',
     }),
   },
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.precisionSetup__wrapper {
+}
+</style>

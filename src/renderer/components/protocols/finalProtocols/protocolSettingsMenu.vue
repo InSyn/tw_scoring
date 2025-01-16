@@ -36,18 +36,11 @@
         </span>
       </v-btn>
     </div>
-    <div
-      style="
-        flex: 1 0 0;
-        display: flex;
-        justify-content: flex-end;
-        padding: 0 4px;
-      "
-    >
+    <div style="flex: 1 0 0; display: flex; justify-content: flex-end; padding: 0 4px">
       <div
         @click="setExportMode(0)"
         class="exportMenu_button ml-4 py-1 px-2"
-        style="background: var(--card-background); color: var(--text-default)"
+        style="background: var(--background-card); color: var(--text-default)"
         :style="
           export_mode.selected === 0 && {
             transform: 'translateY(8px)',
@@ -56,15 +49,13 @@
           }
         "
       >
-        <v-icon style="margin-right: 0.5rem" color="var(--action-green)"
-          >mdi-file-excel</v-icon
-        >
+        <v-icon style="margin-right: 0.5rem" color="var(--action-green)">mdi-file-excel</v-icon>
         <div>Excel</div>
       </div>
       <div
         @click="setExportMode(1)"
         class="exportMenu_button ml-4 py-1 px-2"
-        style="background: var(--card-background); color: var(--text-default)"
+        style="background: var(--background-card); color: var(--text-default)"
         :style="
           export_mode.selected === 1 && {
             transform: 'translateY(8px)',
@@ -73,15 +64,13 @@
           }
         "
       >
-        <v-icon style="margin-right: 0.5rem" color="var(--accent)">
-          mdi-xml
-        </v-icon>
+        <v-icon style="margin-right: 0.5rem" color="var(--accent)"> mdi-xml </v-icon>
         <div>XML</div>
       </div>
       <div
         @click="setExportMode(2)"
         class="exportMenu_button ml-4 py-1 px-2"
-        style="background: var(--card-background); color: var(--text-default)"
+        style="background: var(--background-card); color: var(--text-default)"
         :style="
           export_mode.selected === 2 && {
             transform: 'translateY(8px)',
@@ -90,9 +79,7 @@
           }
         "
       >
-        <v-icon style="margin-right: 0.5rem" color="var(--action-red)">
-          mdi-file-pdf
-        </v-icon>
+        <v-icon style="margin-right: 0.5rem" color="var(--action-red)"> mdi-file-pdf </v-icon>
         <div>PDF</div>
       </div>
     </div>
@@ -100,22 +87,22 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
+import { mapActions, mapGetters } from 'vuex';
 export default {
-  name: "protocolSettingsMenu",
-  props: ["competition"],
+  name: 'protocolSettingsMenu',
+  props: ['competition'],
   methods: {
-    ...mapActions("protocol_settings", {
-      setExportMode: "setExportMode",
+    ...mapActions('protocol_settings', {
+      setExportMode: 'setExportMode',
     }),
   },
   computed: {
-    ...mapGetters("localization", {
-      localization: "localization",
-      lang: "lang",
+    ...mapGetters('localization', {
+      localization: 'localization',
+      lang: 'lang',
     }),
-    ...mapGetters("protocol_settings", {
-      export_mode: "export_mode",
+    ...mapGetters('protocol_settings', {
+      export_mode: 'export_mode',
     }),
   },
 };

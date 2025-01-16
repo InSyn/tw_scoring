@@ -2,15 +2,12 @@
   <div class="scoringPanel__container">
     <div class="scoringPanel__wrapper">
       <div class="competitorFrame__wrapper">
-        <div
-          v-if="competition.selected_race && getCompetitorOnTrack"
-          class="competitorInfo__wrapper"
-        >
+        <div v-if="competition.selected_race && getCompetitorOnTrack" class="competitorInfo__wrapper">
           <div class="competitorInfo__name">
             {{
-              `${getCompetitorOnTrack.info_data["bib"] || ""} ${
-                getCompetitorOnTrack.info_data["lastname"] || ""
-              } ${getCompetitorOnTrack.info_data["name"] || ""}`
+              `${getCompetitorOnTrack.info_data['bib'] || ''} ${getCompetitorOnTrack.info_data['lastname'] || ''} ${
+                getCompetitorOnTrack.info_data['name'] || ''
+              }`
             }}
           </div>
 
@@ -33,7 +30,7 @@
           ></aerials-controls>
 
           <moguls-controls
-            v-if="competition.is_moguls && getCompetitorOnTrack"
+            v-if="checkCompetitionDiscipline(competition, ['MO']) && getCompetitorOnTrack"
             :key="getCompetitorOnTrack.id"
             @update-mg-run-params="updateMgRunData"
             :competition="competition"
@@ -41,15 +38,8 @@
             :run-data="mgRunData"
           ></moguls-controls>
 
-          <div
-            v-if="competition.selected_race && getCompetitorOnTrack"
-            class="competitorResults__list"
-          >
-            <div
-              v-for="race in competition.races"
-              :key="race.id"
-              class="competitorResults__list__item"
-            >
+          <div v-if="competition.selected_race && getCompetitorOnTrack" class="competitorResults__list">
+            <div v-for="race in competition.races" :key="race.id" class="competitorResults__list__item">
               <div class="competitorResults__list__item__race">
                 {{ race.title }}
               </div>
@@ -61,20 +51,14 @@
         </div>
 
         <div v-else class="emptyCompetitor__placeholder">
-          <v-icon
-            lass="emptyCompetitor__placeholder__icon"
-            color="var(--text-default)"
-            size="24px"
-          >
-            mdi-snowboard
-          </v-icon>
+          <v-icon lass="emptyCompetitor__placeholder__icon" color="var(--text-default)" size="24px"> mdi-snowboard </v-icon>
 
           <div class="emptyCompetitor__placeholder__text">
             {{ localization[lang].app.scoring.waiting_competitor }}
           </div>
         </div>
 
-        <div class="raceResult__wrapper" :style="getCompetitorRaceStatusStyles">
+        <div v-if="!isSXQualification(competition)" class="raceResult__wrapper" :style="getCompetitorRaceStatusStyles">
           <div @dblclick="pushMarks" class="raceResult__title">
             {{ localization[lang].app.scoring.result }}
           </div>
@@ -83,11 +67,12 @@
             {{ getRaceResult() }}
           </div>
         </div>
+        <div v-if="isSXQualification(competition)" class="manualResult__control">
+          <span>Время:</span>
+          <input :value="manualResult" @change="handleManualTimeInput($event.target.value)" type="text" />
+        </div>
 
-        <div
-          v-if="competition.result_formula.overall_result.type == 3"
-          class="jumpRepeat__wrapper"
-        >
+        <div v-if="competition.result_formula.overall_result.type == 3" class="jumpRepeat__wrapper">
           <div
             v-for="i in ['A', 'B', 'C']"
             :key="i"
@@ -96,7 +81,7 @@
             :style="
               i === score_repeat && {
                 background: 'var(--text-default)',
-                color: 'var(--card-background)',
+                color: 'var(--background-card)',
                 fontWeight: 'bold',
               }
             "
@@ -173,46 +158,22 @@
 
           <manual-mark_dialog :competition="competition"></manual-mark_dialog>
 
-          <judge-terminal-control
-            :competition="competition"
-          ></judge-terminal-control>
+          <judge-terminal-control :competition="competition"></judge-terminal-control>
         </div>
         <!-- //STATUS BUTTONS  -->
       </div>
 
       <div class="scoresFrame__wrapper">
-        <div
-          class=""
-          style="
-            flex: 1 1 auto;
-            display: flex;
-            align-items: flex-end;
-            padding: 8px;
-          "
-        >
-          <div
-            v-if="competition.result_formula.type === 1"
-            class="judgesMarks__wrapper-sections"
-          >
-            <div
-              v-for="(section, s_idx) in competition.result_formula.types[
-                competition.result_formula.type
-              ].sections"
-              :key="s_idx"
-              class="sections__wrapper"
-            >
+        <div v-if="!isSXQualification(competition)" class="" style="flex: 1 1 auto; display: flex; align-items: flex-end; padding: 8px">
+          <div v-if="competition.result_formula.type === 1" class="judgesMarks__wrapper-sections">
+            <div v-for="(section, s_idx) in competition.result_formula.types[competition.result_formula.type].sections" :key="s_idx" class="sections__wrapper">
               <div class="section__title">
                 {{ `Секция ${s_idx + 1}` }}
               </div>
 
-              <div
-                v-for="judge in section.judges"
-                class="section__judgeMark__wrapper"
-              >
+              <div v-for="judge in section.judges" class="section__judgeMark__wrapper">
                 <div class="section__judgeMark__judge">
-                  {{
-                    `${localization[lang].app.scoring.judge_short} ${judge.id}`
-                  }}
+                  {{ `${localization[lang].app.scoring.judge_short} ${judge.id}` }}
                 </div>
 
                 <div class="section__judgeMark__value">
@@ -239,77 +200,38 @@
               v-for="(judge, j) in competition.stuff.judges"
               :key="judge._id"
               class="judgesMarks__markUnit__wrapper"
-              style="
-                margin: 0 8px 8px 0;
-                background: var(--card-background);
-                border-radius: 4px;
-                overflow: hidden;
-              "
+              style="margin: 0 8px 8px 0; background: var(--background-card); border-radius: 4px; overflow: hidden"
             >
-              <div
-                class="judgesMarks__markUnit__title"
-                style="
-                  display: flex;
-                  justify-content: center;
-                  padding: 4px;
-                  font-size: 1.4rem;
-                  font-weight: bold;
-                "
-              >
+              <div class="judgesMarks__markUnit__title" style="display: flex; justify-content: center; padding: 4px; font-size: 1.4rem; font-weight: bold">
                 {{ `${localization[lang].app.scoring.judge_short} ${j + 1}` }}
               </div>
 
-              <div
-                class="judgesMarks__markUnit__value"
-                style="
-                  margin: 0 4px 4px;
-                  border-radius: 0 0 4px 4px;
-                  font-size: 2rem;
-                  font-weight: bold;
-                "
-              >
+              <div class="judgesMarks__markUnit__value" style="margin: 0 4px 4px; border-radius: 0 0 4px 4px; font-size: 2rem; font-weight: bold">
                 <!-- MOGULS MARKS -->
-                <div
-                  v-if="competition.is_moguls"
-                  class="mgMarks__wrapper"
-                  style="min-height: 3rem; min-width: 4rem"
-                >
+                <div v-if="checkCompetitionDiscipline(competition, ['MO'])" class="mgMarks__wrapper" style="min-height: 3rem; min-width: 4rem">
                   <div class="mgMarks__value__wrapper">
                     <div class="mgMarks__value__item">
                       <span class="mgMarks__value__item__label">
-                        {{ judge.moguls_role === "turns" ? "Sc." : "Jp. 1" }}
+                        {{ judge.moguls_role === 'turns' ? 'Sc.' : 'Jp. 1' }}
                       </span>
                       <div class="mgMarks__value__item__value">
-                        {{
-                          getMogulsMark(getCompetitorOnTrack, judge)[0] ||
-                          Number(0).toFixed(1)
-                        }}
+                        {{ getMogulsMark(getCompetitorOnTrack, judge)[0] || Number(0).toFixed(1) }}
                       </div>
                     </div>
                     <div class="mgMarks__value__item">
                       <span class="mgMarks__value__item__label">
-                        {{ judge.moguls_role === "turns" ? "DD" : "Jp. 2" }}
+                        {{ judge.moguls_role === 'turns' ? 'DD' : 'Jp. 2' }}
                       </span>
                       <div class="mgMarks__value__item__value">
-                        {{
-                          getMogulsMark(getCompetitorOnTrack, judge)[1] ||
-                          Number(0).toFixed(1)
-                        }}
+                        {{ getMogulsMark(getCompetitorOnTrack, judge)[1] || Number(0).toFixed(1) }}
                       </div>
                     </div>
                   </div>
                 </div>
 
                 <!-- AERIALS MARKS -->
-                <div
-                  v-else-if="competition.is_aerials"
-                  class="aeMarks__wrapper"
-                >
-                  <div
-                    v-for="aeMark in ['air', 'form', 'landing']"
-                    :key="aeMark"
-                    class="aeMark__item"
-                  >
+                <div v-else-if="competition.is_aerials" class="aeMarks__wrapper">
+                  <div v-for="aeMark in ['air', 'form', 'landing']" :key="aeMark" class="aeMark__item">
                     <span class="aeMark__item__type">
                       {{ aeMark.slice(0, 4) }}
                     </span>
@@ -321,31 +243,19 @@
                             competition.selected_race.onTrack &&
                             competition.competitorsSheet.competitors
                               .find((_competitor) => {
-                                return (
-                                  _competitor.id ===
-                                  competition.selected_race.onTrack
-                                );
+                                return _competitor.id === competition.selected_race.onTrack;
                               })
                               .marks.find((mark) => {
-                                return (
-                                  mark.judge_id === judge._id &&
-                                  mark.race_id === competition.selected_race.id
-                                );
+                                return mark.judge_id === judge._id && mark.race_id === competition.selected_race.id;
                               }) &&
                             competition.competitorsSheet.competitors
                               .find((_competitor) => {
-                                return (
-                                  _competitor.id ===
-                                  competition.selected_race.onTrack
-                                );
+                                return _competitor.id === competition.selected_race.onTrack;
                               })
                               .marks.find((mark) => {
-                                return (
-                                  mark.judge_id === judge._id &&
-                                  mark.race_id === competition.selected_race.id
-                                );
+                                return mark.judge_id === judge._id && mark.race_id === competition.selected_race.id;
                               }).value_ae[aeMark]) ||
-                          "0"
+                          '0'
                         }`
                       }}
                     </div>
@@ -356,13 +266,7 @@
                 <div
                   v-else
                   class="mark__wrapper d-flex justify-center align-center"
-                  style="
-                    height: 3rem;
-                    min-width: 4rem;
-                    padding: 4px 8px;
-                    background: var(--standard-background);
-                    border-radius: 4px;
-                  "
+                  style="height: 3rem; min-width: 4rem; padding: 4px 8px; background: var(--standard-background); border-radius: 4px"
                 >
                   {{
                     `${
@@ -370,31 +274,19 @@
                         competition.selected_race.onTrack &&
                         competition.competitorsSheet.competitors
                           .find((_competitor) => {
-                            return (
-                              _competitor.id ===
-                              competition.selected_race.onTrack
-                            );
+                            return _competitor.id === competition.selected_race.onTrack;
                           })
                           .marks.find((mark) => {
-                            return (
-                              mark.judge_id === judge._id &&
-                              mark.race_id === competition.selected_race.id
-                            );
+                            return mark.judge_id === judge._id && mark.race_id === competition.selected_race.id;
                           }) &&
                         competition.competitorsSheet.competitors
                           .find((_competitor) => {
-                            return (
-                              _competitor.id ===
-                              competition.selected_race.onTrack
-                            );
+                            return _competitor.id === competition.selected_race.onTrack;
                           })
                           .marks.find((mark) => {
-                            return (
-                              mark.judge_id === judge._id &&
-                              mark.race_id === competition.selected_race.id
-                            );
+                            return mark.judge_id === judge._id && mark.race_id === competition.selected_race.id;
                           }).value) ||
-                      "0"
+                      '0'
                     }`
                   }}
                 </div>
@@ -403,19 +295,8 @@
           </div>
         </div>
 
-        <div
-          style="
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            padding: 8px;
-          "
-        >
-          <div
-            class="d-flex justify-center align-center flex-nowrap"
-            style="flex: 0 0 auto; font-size: 1.2rem; margin-bottom: 8px"
-          >
+        <div style="height: 100%; display: flex; flex-direction: column; align-items: flex-end; margin-left: auto; padding: 8px">
+          <div class="d-flex justify-center align-center flex-nowrap" style="flex: 0 0 auto; font-size: 1.2rem; margin-bottom: 8px">
             <div>{{ localization[lang].app.scoring.chief_judge }}</div>
             <div
               :style="
@@ -430,29 +311,19 @@
                 }
               "
               class="ml-2 px-2 py-1 d-flex justify-center align-center"
-              style="
-                border-radius: 3px;
-                user-select: none;
-                color: var(--text-default);
-                cursor: pointer;
-              "
+              style="border-radius: 3px; user-select: none; color: var(--text-default); cursor: pointer"
             >
               <div>OK</div>
             </div>
           </div>
-          <div
-            class="d-flex justify-center align-center"
-            style="flex: 0 0 auto; font-size: 1.2rem"
-          >
+          <div class="d-flex justify-center align-center" style="flex: 0 0 auto; font-size: 1.2rem">
             <v-btn
               @click="
                 competition.selected_race &&
                   competition.selected_race.onTrack &&
                   publishResult(
                     competition.selected_race.onTrack,
-                    getCompetitorOnTrack.info_data[
-                      `jump${competition.selected_race_id + 1}_code`
-                    ] || 0,
+                    getCompetitorOnTrack.info_data[`jump${competition.selected_race_id + 1}_code`] || 0,
                     sjDistance,
                     sjRamp
                   )
@@ -471,17 +342,20 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
-import MarkClass from "../../store/Classes/MarkClass";
-import ManualMark_dialog from "./dialogs/manualMark_dialog";
-import SkiJumpControls from "./scoresPanel/skiJumpControls.vue";
-import AerialsControls from "./scoresPanel/aerialsControls.vue";
-import JudgeTerminalIcon from "../../assets/icons/judgeTerminal-icon.vue";
-import JudgeTerminalControl from "./scoresPanel/judgeTerminal-control.vue";
-import MogulsControls from "./scoresPanel/mogulsControls.vue";
+import { mapActions, mapGetters } from 'vuex';
+import MarkClass from '../../store/classes/MarkClass';
+import ManualMark_dialog from './dialogs/manualMark_dialog';
+import SkiJumpControls from './scoresPanel/skiJumpControls.vue';
+import AerialsControls from './scoresPanel/aerialsControls.vue';
+import JudgeTerminalIcon from '../../assets/icons/judgeTerminal-icon.vue';
+import JudgeTerminalControl from './scoresPanel/judgeTerminal-control.vue';
+import MogulsControls from './scoresPanel/mogulsControls.vue';
+import { checkCompetitionDiscipline, isSXQualification } from '../../data/sports';
+import { getCompetitorById } from '../../utils/competition-utils';
+import { roundNumber } from '../../utils/utils';
 
 export default {
-  name: "scoresPanel",
+  name: 'scoresPanel',
   components: {
     MogulsControls,
     JudgeTerminalControl,
@@ -490,35 +364,99 @@ export default {
     SkiJumpControls,
     ManualMark_dialog,
   },
-  mounted() {
-    if (this.competition.result_formula.overall_result.type == 3)
-      this.score_repeat = "A";
+  data() {
+    return {
+      ae_code: '',
+      indicators: {
+        timeout: 812,
+        blinker: null,
+        red: true,
+        green: false,
+      },
+      score_repeat: null,
+      sjDistance: 0,
+      sjRamp: 'hs20',
+      manualResult: null,
+    };
+  },
+  computed: {
+    ...mapGetters('localization', {
+      localization: 'localization',
+      lang: 'lang',
+    }),
+    ...mapGetters('main', {
+      competition: 'competition',
+      appTheme: 'appTheme',
+      socket: 'socket',
+    }),
+    ...mapGetters('moguls', {
+      mgParameters: 'getMgParameters',
+      mgRunData: 'getMgRunData',
+    }),
+    getCompetitorOnTrack() {
+      const competitorOnTrack = this.competition.competitorsSheet.competitors.find((_comp) => _comp.id === this.competition.selected_race.onTrack);
+
+      return competitorOnTrack || null;
+    },
+    getCompetitorRaceStatusStyles() {
+      const selectedRace = this.competition.selected_race;
+      let competitorId = null;
+
+      if (selectedRace) competitorId = selectedRace.onTrack;
+
+      if (!selectedRace || !competitorId) return { backgroundColor: 'var(--standard-background)' };
+
+      const competitorOnTrack = this.competition.competitorsSheet.competitors.find((_comp) => {
+        return _comp.id === competitorId;
+      });
+
+      if (competitorOnTrack.res_accepted) {
+        return {
+          backgroundColor: 'var(--success)',
+        };
+      }
+
+      if (!competitorOnTrack.race_status) {
+        return { backgroundColor: 'var(--standard-background)' };
+      }
+
+      switch (competitorOnTrack.race_status) {
+        case 'DSQ':
+          return {
+            backgroundColor: 'var(--action-red)',
+          };
+        case 'DNS':
+          return {
+            backgroundColor: 'var(--action-yellow)',
+          };
+        case 'DNF':
+          return {
+            backgroundColor: 'var(--action-darkYellow)',
+          };
+        default:
+          return { backgroundColor: 'var(--standard-background)' };
+      }
+    },
   },
   methods: {
-    ...mapActions("main", {
-      updateEvent: "updateEvent",
+    checkCompetitionDiscipline,
+    isSXQualification,
+    ...mapActions('main', {
+      updateEvent: 'updateEvent',
     }),
-    ...mapActions("moguls", {
-      setMgRunData: "SET_MG_RUN_DATA",
+    ...mapActions('moguls', {
+      setMgRunData: 'SET_MG_RUN_DATA',
     }),
     getSectionMark(section, judge) {
-      if (
-        !this.competition.selected_race ||
-        !this.competition.selected_race.onTrack
-      ) {
+      if (!this.competition.selected_race || !this.competition.selected_race.onTrack) {
         return 0;
       }
 
-      const competitor = this.competition.competitorsSheet.competitors.find(
-        (_competitor) => {
-          return _competitor.id === this.competition.selected_race.onTrack;
-        }
-      );
+      const competitor = this.competition.competitorsSheet.competitors.find((_competitor) => {
+        return _competitor.id === this.competition.selected_race.onTrack;
+      });
       const mark = competitor.marks.find(
-        (mark) =>
-          mark.judge === judge.id &&
-          mark.race_id === this.competition.selected_race.id &&
-          mark.section === section.s_num
+        (mark) => mark.judge === judge.id && mark.race_id === this.competition.selected_race.id && mark.section === section.s_num
       );
 
       if (!mark) {
@@ -533,55 +471,35 @@ export default {
       if (!competitor) return [Number(0).toFixed(1), Number(0).toFixed(1)];
 
       const mark = competitor.marks.find((_mark) => {
-        return (
-          _mark.judge == judge.id &&
-          _mark.race_id == this.competition.selected_race.id
-        );
+        return _mark.judge == judge.id && _mark.race_id == this.competition.selected_race.id;
       });
 
       if (!mark) {
         switch (mogulsRole) {
-          case "turns":
+          case 'turns':
             return [Number(0).toFixed(1), Number(0).toFixed(1)];
-          case "jumps":
-            return [Number(0).toFixed(1), ""];
+          case 'jumps':
+            return [Number(0).toFixed(1), ''];
         }
       }
 
-      if (mogulsRole === "turns" && mark)
+      if (mogulsRole === 'turns' && mark) return [mark.moguls_value.baseScore || Number(0).toFixed(1), mark.moguls_value.deduction || Number(0).toFixed(1)];
+      if (mogulsRole === 'jumps' && mark)
         return [
-          mark.moguls_value.baseScore || Number(0).toFixed(1),
-          mark.moguls_value.deduction || Number(0).toFixed(1),
-        ];
-      if (mogulsRole === "jumps" && mark)
-        return [
-          `${mark.moguls_value.jump1_score || Number(0).toFixed(1)} (${
-            mark.moguls_value.jump1_code
-          })`,
-          `${mark.moguls_value.jump2_score || Number(0).toFixed(1)} (${
-            mark.moguls_value.jump2_code
-          })`,
+          `${mark.moguls_value.jump1_score || Number(0).toFixed(1)} (${mark.moguls_value.jump1_code})`,
+          `${mark.moguls_value.jump2_score || Number(0).toFixed(1)} (${mark.moguls_value.jump2_code})`,
         ];
     },
     getRaceResult() {
-      if (
-        !this.competition.selected_race ||
-        !this.competition.selected_race.onTrack
-      ) {
-        return this.competition.set_accuracy(0);
+      if (!this.competition.selected_race || !this.competition.selected_race.onTrack) {
+        return this.competition.roundWithPrecision(0);
       }
 
-      const resultFormula = this.competition.result_formula.types[
-        this.competition.result_formula.type
-      ].formulas.find(
-        (formula) =>
-          formula.id ===
-          this.competition.result_formula.types[
-            this.competition.result_formula.type
-          ].formula
+      const resultFormula = this.competition.result_formula.types[this.competition.result_formula.type].formulas.find(
+        (formula) => formula.id === this.competition.result_formula.types[this.competition.result_formula.type].formula
       );
       if (!resultFormula) {
-        return this.competition.set_accuracy(0);
+        return this.competition.roundWithPrecision(0);
       }
 
       const result = resultFormula.get_result(
@@ -591,10 +509,8 @@ export default {
           return parseInt(judge.id);
         }),
         this.competition.is_aerials
-          ? this.getCompetitorOnTrack.info_data[
-              `jump${this.competition.selected_race_id + 1}_code`
-            ]
-          : this.competition.is_moguls
+          ? this.getCompetitorOnTrack.info_data[`jump${this.competition.selected_race_id + 1}_code`]
+          : checkCompetitionDiscipline(this.competition, ['MO'])
           ? { ...this.mgRunData, ...this.mgParameters }
           : null,
 
@@ -602,32 +518,18 @@ export default {
         this.competition.is_skiJumps ? this.sjRamp : null
       );
       if (!result) {
-        return this.competition.set_accuracy(0);
+        return this.competition.roundWithPrecision(0);
       }
 
       return result;
     },
     pushMarks() {
-      if (
-        this.competition &&
-        this.competition.selected_race &&
-        this.competition.selected_race.startList
-      )
+      if (this.competition && this.competition.selected_race && this.competition.selected_race.startList)
         this.competition.stuff.judges.forEach((_judge, j_idx) => {
           this.competition.selected_race.startList
-            .map((_comp) =>
-              this.competition.competitorsSheet.competitors.find(
-                (_competitor) => _competitor.id === _comp
-              )
-            )
+            .map((_comp) => this.competition.competitorsSheet.competitors.find((_competitor) => _competitor.id === _comp))
             .forEach((_comp) => {
-              if (
-                !_comp.marks.some(
-                  (_mark) =>
-                    _mark.race_id === this.competition.selected_race.id &&
-                    _mark.judge_id === _judge._id
-                )
-              )
+              if (!_comp.marks.some((_mark) => _mark.race_id === this.competition.selected_race.id && _mark.judge_id === _judge._id))
                 _comp.marks.push(
                   new MarkClass({
                     race: this.competition.selected_race_id,
@@ -641,24 +543,12 @@ export default {
                       landing: Math.round((0.2 + Math.random() * 3) * 10) / 10,
                     },
                     moguls_value: {
-                      baseScore:
-                        _judge.moguls_role === "turns"
-                          ? (Math.random() * 20).toFixed(1)
-                          : null,
-                      deduction:
-                        _judge.moguls_role === "turns"
-                          ? (Math.random() * 4).toFixed(1)
-                          : null,
-                      jump1_code: "",
-                      jump1_score:
-                        _judge.moguls_role === "jumps"
-                          ? (Math.random() * 10).toFixed(1)
-                          : null,
-                      jump2_code: "",
-                      jump2_score:
-                        _judge.moguls_role === "jumps"
-                          ? (Math.random() * 10).toFixed(1)
-                          : null,
+                      baseScore: _judge.moguls_role === 'turns' ? (Math.random() * 20).toFixed(1) : null,
+                      deduction: _judge.moguls_role === 'turns' ? (Math.random() * 4).toFixed(1) : null,
+                      jump1_code: '',
+                      jump1_score: _judge.moguls_role === 'jumps' ? (Math.random() * 10).toFixed(1) : null,
+                      jump2_code: '',
+                      jump2_score: _judge.moguls_role === 'jumps' ? (Math.random() * 10).toFixed(1) : null,
                     },
                   })
                 );
@@ -669,36 +559,56 @@ export default {
                 }) &&
                 this.competition.stuff.judges.length - 1 === j_idx
               ) {
-                this.publishResult(
-                  _comp.id,
-                  _comp.info_data[
-                    `jump${this.competition.selected_race_id + 1}_code`
-                  ],
-                  this.sjDistance,
-                  this.sjRamp
-                );
+                this.publishResult(_comp.id, _comp.info_data[`jump${this.competition.selected_race_id + 1}_code`], this.sjDistance, this.sjRamp);
               }
             });
         });
 
-      if (this.competition.selected_race)
-        this.competition.selected_race.selectedCompetitor = null;
+      if (this.competition.selected_race) this.competition.selected_race.selectedCompetitor = null;
 
       this.updateEvent();
     },
+    publishManualResult(competitor_id, result) {
+      const competitor = getCompetitorById(this.competition, competitor_id);
+      if (!competitor) return;
+
+      this.competition.publishResult({
+        competitor: competitor,
+        race_id: this.competition.selected_race.id,
+        status: competitor.race_status,
+        manualResult: result,
+      });
+
+      this.competition.selected_race.finished.push(competitor_id);
+
+      competitor.res_accepted = false;
+      competitor.race_status = null;
+
+      this.competition.selected_race.onTrack = null;
+      this.manualResult = null;
+
+      if (
+        this.competition.selected_race.startList.some((_comp) => {
+          return _comp === competitor_id;
+        })
+      ) {
+        this.competition.selected_race.startList = this.competition.selected_race.startList.filter((_comp) => {
+          return _comp !== competitor_id;
+        });
+      }
+
+      if (this.socket && this.socket.connected) this.socket.emit('set_finished_competitor', this.competition);
+    },
     publishResult(competitor_id, ae_code, sjDistance, sjRamp, mgTime, mgCode) {
-      const competitor = this.competition.competitorsSheet.competitors.find(
-        (_comp) => _comp.id === competitor_id
-      );
+      if (this.manualResult) {
+        this.publishManualResult(competitor_id, this.manualResult);
+        return;
+      }
+
+      const competitor = this.competition.competitorsSheet.competitors.find((_comp) => _comp.id === competitor_id);
 
       this.competition.stuff.judges.forEach((_j) => {
-        if (
-          !competitor.marks.some(
-            (_mark) =>
-              _mark.judge_id === _j._id &&
-              _mark.race_id === this.competition.selected_race.id
-          )
-        ) {
+        if (!competitor.marks.some((_mark) => _mark.judge_id === _j._id && _mark.race_id === this.competition.selected_race.id)) {
           competitor.marks.push(
             new MarkClass({
               race: this.competition.selected_race_id,
@@ -714,10 +624,7 @@ export default {
       this.competition.publishResult({
         competitor: competitor,
         race_id: this.competition.selected_race.id,
-        rep:
-          this.competition.result_formula.overall_result.type == 3
-            ? this.score_repeat
-            : null,
+        rep: this.competition.result_formula.overall_result.type == 3 ? this.score_repeat : null,
         status: competitor.race_status,
         ae_code: ae_code,
         mg_parameters: { ...this.mgRunData, ...this.mgParameters },
@@ -732,16 +639,15 @@ export default {
       competitor.res_accepted = false;
       competitor.race_status = null;
 
-      if (this.competition.is_moguls) {
+      if (checkCompetitionDiscipline(this.competition, ['MO'])) {
         this.setMgRunData({
-          jump1_code: " ",
-          jump2_code: " ",
-          runTime: "0",
+          jump1_code: ' ',
+          jump2_code: ' ',
+          runTime: '0',
         });
       }
 
-      if (this.competition.result_formula.overall_result.type == 3)
-        this.score_repeat = "A";
+      if (this.competition.result_formula.overall_result.type == 3) this.score_repeat = 'A';
 
       this.competition.selected_race.onTrack = null;
 
@@ -750,18 +656,24 @@ export default {
           return _comp === competitor_id;
         })
       ) {
-        this.competition.selected_race.startList =
-          this.competition.selected_race.startList.filter((_comp) => {
-            return _comp !== competitor_id;
-          });
+        this.competition.selected_race.startList = this.competition.selected_race.startList.filter((_comp) => {
+          return _comp !== competitor_id;
+        });
       }
 
       if (this.competition.is_skiJumps) {
         this.sjDistance = 0;
       }
 
-      if (this.socket && this.socket.connected)
-        this.socket.emit("set_finished_competitor", this.competition);
+      if (this.socket && this.socket.connected) this.socket.emit('set_finished_competitor', this.competition);
+    },
+    handleManualTimeInput(timeVal) {
+      if (isNaN(Number(timeVal))) {
+        this.manualResult = null;
+        return;
+      }
+
+      this.manualResult = this.competition.roundWithPrecision(timeVal);
     },
     setSJDistance(value) {
       this.sjDistance = value;
@@ -776,23 +688,17 @@ export default {
       if (selectedRace) competitorId = selectedRace.onTrack;
 
       if (selectedRace && competitorId) {
-        const competitor = this.competition.competitorsSheet.competitors.find(
-          (comp) => comp.id === competitorId
-        );
+        const competitor = this.competition.competitorsSheet.competitors.find((comp) => comp.id === competitorId);
 
         if (competitor) {
-          competitor.race_status === status
-            ? (competitor.race_status = "")
-            : (competitor.race_status = status);
+          competitor.race_status === status ? (competitor.race_status = '') : (competitor.race_status = status);
         }
       }
 
       this.updateEvent();
     },
     accept_res(data) {
-      this.socket &&
-        this.socket.connected &&
-        this.socket.emit("accept_res", data);
+      this.socket && this.socket.connected && this.socket.emit('accept_res', data);
     },
     setABCValue(abcValue) {
       if (abcValue === this.score_repeat) this.score_repeat = null;
@@ -802,95 +708,19 @@ export default {
       this.setMgRunData({ ...this.mgRunData, ...data });
     },
   },
-  data() {
-    return {
-      ae_code: "",
-      indicators: {
-        timeout: 812,
-        blinker: null,
-        red: true,
-        green: false,
-      },
-      score_repeat: null,
-      sjDistance: 0,
-      sjRamp: "hs20",
-    };
-  },
-  computed: {
-    ...mapGetters("localization", {
-      localization: "localization",
-      lang: "lang",
-    }),
-    ...mapGetters("main", {
-      competition: "competition",
-      appTheme: "appTheme",
-      socket: "socket",
-    }),
-    ...mapGetters("moguls", {
-      mgParameters: "getMgParameters",
-      mgRunData: "getMgRunData",
-    }),
-    getCompetitorOnTrack() {
-      const competitorOnTrack =
-        this.competition.competitorsSheet.competitors.find(
-          (_comp) => _comp.id === this.competition.selected_race.onTrack
-        );
 
-      return competitorOnTrack || null;
-    },
-    getCompetitorRaceStatusStyles() {
-      const selectedRace = this.competition.selected_race;
-      let competitorId = null;
-
-      if (selectedRace) competitorId = selectedRace.onTrack;
-
-      if (!selectedRace || !competitorId)
-        return { backgroundColor: "var(--standard-background)" };
-
-      const competitorOnTrack =
-        this.competition.competitorsSheet.competitors.find((_comp) => {
-          return _comp.id === competitorId;
-        });
-
-      if (competitorOnTrack.res_accepted) {
-        return {
-          backgroundColor: "var(--success)",
-        };
-      }
-
-      if (!competitorOnTrack.race_status) {
-        return { backgroundColor: "var(--standard-background)" };
-      }
-
-      switch (competitorOnTrack.race_status) {
-        case "DSQ":
-          return {
-            backgroundColor: "var(--action-red)",
-          };
-        case "DNS":
-          return {
-            backgroundColor: "var(--action-yellow)",
-          };
-        case "DNF":
-          return {
-            backgroundColor: "var(--action-darkYellow)",
-          };
-        default:
-          return { backgroundColor: "var(--standard-background)" };
-      }
-    },
+  mounted() {
+    if (this.competition.result_formula.overall_result.type == 3) this.score_repeat = 'A';
   },
   watch: {
     score_repeat: function (abcValue) {
-      this.socket &&
-        this.socket.connected &&
-        this.socket.emit("set_abcValue", abcValue);
+      this.socket && this.socket.connected && this.socket.emit('set_abcValue', abcValue);
     },
   },
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 * {
   user-select: none;
   /*box-shadow: inset 0 0 1px 0 #2ce98f;*/
@@ -903,7 +733,7 @@ export default {
   display: flex;
   flex-direction: column;
   height: 100%;
-  background-color: var(--card-background);
+  background-color: var(--background-card);
   border-radius: 6px;
   overflow: hidden;
 }
@@ -917,7 +747,7 @@ export default {
 .competitorInfo__wrapper {
   overflow: hidden;
   color: var(--text-default);
-  background-color: var(--card-background);
+  background-color: var(--background-card);
   border-radius: 6px;
   font-size: 1.6rem;
   font-weight: bold;
@@ -991,7 +821,7 @@ export default {
   margin-left: 12px;
   padding: 4px 8px;
   color: var(--text-default);
-  background-color: var(--card-background);
+  background-color: var(--background-card);
   border-radius: 6px;
   overflow: hidden;
 }
@@ -1020,7 +850,7 @@ export default {
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
-  margin-left: 8px;
+  margin-left: auto;
 }
 .resultControls__statusButtons {
   margin-bottom: 8px;
@@ -1048,7 +878,7 @@ export default {
 }
 .sections__wrapper {
   padding: 4px;
-  background: var(--card-background);
+  background: var(--background-card);
   border-radius: 4px;
 }
 .sections__wrapper:not(:last-child) {
@@ -1130,5 +960,22 @@ export default {
   font-size: 1.2rem;
   font-weight: bold;
   text-align: center;
+}
+
+.manualResult__control {
+  display: flex;
+  align-items: center;
+  padding: 8px 1.25rem;
+  font-size: 1.1rem;
+  font-weight: bold;
+
+  span {
+    font-size: 1.6rem;
+  }
+  input {
+    width: 12ch;
+    margin-left: 0.75rem;
+    font-size: 1.2rem;
+  }
 }
 </style>

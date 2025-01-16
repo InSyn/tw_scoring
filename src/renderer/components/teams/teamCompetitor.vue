@@ -1,17 +1,13 @@
 <template>
   <div class="teamCompetitor__wrapper">
-    {{
-      `${competitor.info_data["bib"]} ${competitor.info_data[
-        "lastname"
-      ].toUpperCase()} ${competitor.info_data["name"]}`
-    }}
+    {{ `${competitor.info_data['bib']} ${competitor.info_data['lastname'].toUpperCase()} ${competitor.info_data['name']}` }}
   </div>
 </template>
 
 <script>
 export default {
-  name: "teamCompetitor",
-  props: ["competitor"],
+  name: 'teamCompetitor',
+  props: ['competitor'],
 };
 </script>
 
@@ -22,6 +18,6 @@ export default {
   padding: 4px 8px;
   font-weight: bold;
   border-radius: 6px;
-  background: var(--card-background);
+  background: var(--background-card);
 }
 </style>

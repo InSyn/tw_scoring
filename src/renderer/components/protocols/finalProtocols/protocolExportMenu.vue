@@ -7,21 +7,21 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters } from 'vuex';
 
-import export_excel from "../../protocolExportSettings/exportExcel.vue";
-import export_xml from "../../protocolExportSettings/exportXml.vue";
-import export_pdf from "../../protocolExportSettings/exportPdf.vue";
+import export_excel from '../protocolExportSettings/exportExcel.vue';
+import export_xml from '../protocolExportSettings/exportXml.vue';
+import export_pdf from '../protocolExportSettings/exportPdf.vue';
 
 export default {
-  name: "protocolExportMenu",
+  name: 'protocolExportMenu',
   components: { export_excel, export_xml, export_pdf },
   computed: {
-    ...mapGetters("main", {
-      appTheme: "appTheme",
+    ...mapGetters('main', {
+      appTheme: 'appTheme',
     }),
-    ...mapGetters("protocol_settings", {
-      export_mode: "export_mode",
+    ...mapGetters('protocol_settings', {
+      export_mode: 'export_mode',
     }),
   },
 };

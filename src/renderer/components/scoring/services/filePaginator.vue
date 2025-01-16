@@ -43,9 +43,7 @@
 
       <div class="paginationSettings__pageLength__wrapper">
         <input
-          @change="
-            setPaginatorParameters({ page_length: Number($event.target.value) })
-          "
+          @change="setPaginatorParameters({ page_length: Number($event.target.value) })"
           :value="fileTranslationService.paginator.page_length"
           class="paginationSettings__pageLength__input"
           type="number"
@@ -66,35 +64,26 @@
       </div>
     </div>
 
-    <button
-      @click="togglePaginator"
-      :class="[
-        'pagination__switchButton',
-        fileTranslationService.paginator.is_enabled && 'pagination-active',
-      ]"
-    ></button>
+    <button @click="togglePaginator" :class="['pagination__switchButton', fileTranslationService.paginator.is_enabled && 'pagination-active']"></button>
   </div>
 </template>
 
 <script>
-import { mdiChevronLeft, mdiChevronRight } from "@mdi/js";
-import { mapActions } from "vuex";
+import { mdiChevronLeft, mdiChevronRight } from '@mdi/js';
+import { mapActions } from 'vuex';
 
 export default {
-  name: "filePaginator",
-  props: ["competition", "fileTranslationService"],
+  name: 'filePaginator',
+  props: ['competition', 'fileTranslationService'],
   methods: {
-    ...mapActions("scoring_services", {
-      setPaginatorParameters: "setPaginatorParameters",
+    ...mapActions('scoring_services', {
+      setPaginatorParameters: 'setPaginatorParameters',
     }),
 
     getPagesNumber() {
       if (!this.competition || !this.competition.selected_race) return;
 
-      return Math.ceil(
-        this.competition.selected_race._startList.length /
-          this.fileTranslationService.paginator.page_length
-      );
+      return Math.ceil(this.competition.selected_race._startList.length / this.fileTranslationService.paginator.page_length);
     },
     togglePaginator() {
       if (this.fileTranslationService.paginator.is_enabled) {
@@ -110,17 +99,14 @@ export default {
         is_enabled: true,
       });
       this.setPaginatorParameters({
-        paginatorTimeoutId: setInterval(
-          () => this.flipPage("next"),
-          this.fileTranslationService.paginator.flip_time_ms
-        ),
+        paginatorTimeoutId: setInterval(() => this.flipPage('next'), this.fileTranslationService.paginator.flip_time_ms),
       });
     },
     flipPage(to) {
       if (!this.getPagesNumber()) return;
 
       switch (to) {
-        case "prev": {
+        case 'prev': {
           if (this.fileTranslationService.paginator.current_page - 1 < 0) {
             this.setPaginatorParameters({
               current_page: this.getPagesNumber() - 1,
@@ -130,17 +116,13 @@ export default {
           }
 
           this.setPaginatorParameters({
-            current_page:
-              this.fileTranslationService.paginator.current_page - 1,
+            current_page: this.fileTranslationService.paginator.current_page - 1,
           });
           break;
         }
 
-        case "next": {
-          if (
-            this.fileTranslationService.paginator.current_page + 1 >
-            this.getPagesNumber() - 1
-          ) {
+        case 'next': {
+          if (this.fileTranslationService.paginator.current_page + 1 > this.getPagesNumber() - 1) {
             this.setPaginatorParameters({
               current_page: 0,
             });
@@ -149,8 +131,7 @@ export default {
           }
 
           this.setPaginatorParameters({
-            current_page:
-              this.fileTranslationService.paginator.current_page + 1,
+            current_page: this.fileTranslationService.paginator.current_page + 1,
           });
           break;
         }
@@ -181,12 +162,8 @@ export default {
 
   margin-top: 8px;
   padding: 8px;
-  background: var(--card-background);
+  background: var(--background-card);
   border-radius: 4px;
-}
-.paginationSettings__header {
-  display: flex;
-  align-items: center;
 }
 .paginationSettings__title {
   font-weight: bold;
@@ -214,7 +191,7 @@ export default {
 
   color: var(--text-default);
   background: var(--standard-background);
-  border-radius: 4px;
+  border-radius: 2px;
 
   text-align: center;
   font-weight: bold;
@@ -230,7 +207,7 @@ export default {
 
   color: var(--text-default);
   background: var(--standard-background);
-  border-radius: 4px;
+  border-radius: 2px;
 
   font-weight: bold;
 }
@@ -244,7 +221,7 @@ export default {
   padding: 2px 4px;
   color: var(--text-default);
   background: var(--standard-background);
-  border-radius: 4px;
+  border-radius: 2px;
 
   font-weight: bold;
 }
@@ -258,7 +235,7 @@ export default {
   color: transparent;
   background: var(--standard-background);
   border: 2px solid var(--accent);
-  border-radius: 4px;
+  border-radius: 2px;
 
   transition: border 192ms, background-color 192ms;
 }

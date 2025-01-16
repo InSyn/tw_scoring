@@ -7,8 +7,8 @@ export default {
       paceTime_women: 26.33,
     },
     mgRunData: {
-      jump1_code: "",
-      jump2_code: "",
+      jump1_code: '',
+      jump2_code: '',
       runTime: 0,
     },
   },
@@ -24,15 +24,13 @@ export default {
     },
     setMgRunData: (state, runData) => {
       for (let runDataKey in runData) {
-        if (!runData[runDataKey]) return;
-
-        state.mgRunData[runDataKey] = runData[runDataKey];
+        if (runData[runDataKey] !== undefined) state.mgRunData[runDataKey] = runData[runDataKey];
       }
     },
   },
   actions: {
-    SET_MG_CODES: ({ commit }, codes) => commit("setMgCodes", codes),
-    SET_MG_PARAMETERS: ({ commit }, params) => commit("setParameters", params),
-    SET_MG_RUN_DATA: ({ commit }, data) => commit("setMgRunData", data),
+    SET_MG_CODES: ({ commit }, codes) => commit('setMgCodes', codes),
+    SET_MG_PARAMETERS: ({ commit }, params) => commit('setParameters', params),
+    SET_MG_RUN_DATA: ({ commit }, data) => commit('setMgRunData', data),
   },
 };

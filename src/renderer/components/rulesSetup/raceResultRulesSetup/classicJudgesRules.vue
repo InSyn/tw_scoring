@@ -1,42 +1,21 @@
 <template>
   <div class="rulesSection__wrapper judgesClassic">
     <div class="rulesSections__title">
-      <div
-        @click="setRaceResultFormula(0)"
-        :class="[
-          'selectedRules__check',
-          competition.result_formula.type === 0 &&
-            'selectedRules__check-checked',
-        ]"
-      ></div>
+      <div @click="setRaceResultFormula(0)" :class="['selectedRules__check', competition.result_formula.type === 0 && 'selectedRules__check-checked']"></div>
       <div class="rulesSections__title__value">
-        {{
-          localization[lang].app.settings.race_results[
-            competition.result_formula.types[0].title
-          ].title
-        }}
+        {{ localization[lang].app.settings.race_results[competition.result_formula.types[0].title].title }}
       </div>
     </div>
 
     <div class="rulesSection__body">
       <div class="stuffAndModes__wrapper">
         <div class="judges__list">
-          <div
-            v-for="(judge, jd) in competition.stuff.judges"
-            :key="`judge_${jd}`"
-            class="judges__list__item"
-          >
+          <div v-for="(judge, jd) in competition.stuff.judges" :key="`judge_${jd}`" class="judges__list__item">
             <div class="judges__list__item__title">
               {{ judge.title }}
             </div>
             <div class="judges__list__item__info">
-              {{
-                judge.lastName
-                  ? `${judge.lastName} ${
-                      judge.name ? judge.name.toString()[0].toUpperCase() : ""
-                    }`
-                  : "Empty name"
-              }}
+              {{ judge.lastName ? `${judge.lastName} ${judge.name ? judge.name.toString()[0].toUpperCase() : ''}` : 'Empty name' }}
             </div>
           </div>
         </div>
@@ -49,90 +28,32 @@
               class="raceFormula__item"
               @click="selectRaceResultFormula(formula)"
             >
-              <div
-                :class="[
-                  'raceResultFormula__check',
-                  formula.id === competition.result_formula.types[0].formula &&
-                    'resultFormula-active',
-                ]"
-              ></div>
+              <div :class="['raceResultFormula__check', formula.id === competition.result_formula.types[0].formula && 'resultFormula-active']"></div>
               <div class="raceFormula__item__title">
-                {{
-                  localization[lang].app.settings.race_results.by_judge[
-                    formula.title
-                  ]
-                }}
+                {{ localization[lang].app.settings.race_results.by_judge[formula.title] }}
               </div>
             </div>
           </div>
 
           <div class="additionalModeSettings__wrapper">
-            <double-up-settings
-              v-if="competition.result_formula.types[0].doubleUp"
-              :competition="competition"
-            ></double-up-settings>
+            <double-up-settings v-if="competition.result_formula.types[0].doubleUp" :competition="competition"></double-up-settings>
 
-            <mg-parameters-settings
-              v-if="competition.is_moguls"
-            ></mg-parameters-settings>
+            <mg-parameters-settings v-if="checkCompetitionDiscipline(competition, ['MO'])"></mg-parameters-settings>
           </div>
 
           <div class="raceModes__wrapper">
             <button @click="toggleTeamsMode()" class="raceMode__item">
-              <span
-                :class="[
-                  'raceMode__checkbox',
-                  competition.is_teams && 'raceMode-active',
-                ]"
-              ></span>
+              <span :class="['raceMode__checkbox', competition.is_teams && 'raceMode-active']"></span>
               <span>Teams</span>
             </button>
             <button @click="toggleAerialsMode()" class="raceMode__item">
-              <span
-                :class="[
-                  'raceMode__checkbox',
-                  competition.is_aerials && 'raceMode-active',
-                ]"
-              ></span>
+              <span :class="['raceMode__checkbox', competition.is_aerials && 'raceMode-active']"></span>
               <span>Aerials</span>
             </button>
             <button @click="toggleSkiJumpMode()" class="raceMode__item">
-              <span
-                :class="[
-                  'raceMode__checkbox',
-                  competition.is_skiJumps && 'raceMode-active',
-                ]"
-              ></span>
+              <span :class="['raceMode__checkbox', competition.is_skiJumps && 'raceMode-active']"></span>
               <span>Ski jumps</span>
             </button>
-            <button @click="toggleMogulsMode()" class="raceMode__item">
-              <span
-                :class="[
-                  'raceMode__checkbox',
-                  competition.is_moguls && 'raceMode-active',
-                ]"
-              ></span>
-              <span>Moguls</span>
-            </button>
-            <button @click="toggleDualMogulsMode()" class="raceMode__item">
-              <span
-                :class="[
-                  'raceMode__checkbox',
-                  competition.dualMoguls_mode && 'raceMode-active',
-                ]"
-              ></span>
-              <span>DMoguls</span>
-            </button>
-            <!--            <button @click="setDoubleUp()" class="raceMode__item">-->
-            <!--              <span-->
-            <!--                :class="[-->
-            <!--                  'raceMode__checkbox',-->
-            <!--                  competition.result_formula.types[0].doubleUp &&-->
-            <!--                    'raceMode-active',-->
-            <!--                ]"-->
-            <!--              ></span>-->
-            <!--              {{ localization[lang].app.settings.race_results.by_judge.d_up }}-->
-            <!--            </button>-->
           </div>
         </div>
       </div>
@@ -168,43 +89,41 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
-import DoubleUpSettings from "./doubleUpSettings.vue";
-import MgParametersSettings from "./mgParametersSettings.vue";
+import { mapActions, mapGetters } from 'vuex';
+import DoubleUpSettings from './doubleUpSettings.vue';
+import MgParametersSettings from './mgParametersSettings.vue';
+import { checkCompetitionDiscipline } from '../../../data/sports';
 
 export default {
-  name: "classicJudgesRules",
+  name: 'classicJudgesRules',
   components: { MgParametersSettings, DoubleUpSettings },
-  props: ["competition"],
+  props: ['competition'],
   methods: {
-    ...mapActions("main", {
-      updateEvent: "updateEvent",
+    checkCompetitionDiscipline,
+    ...mapActions('main', {
+      updateEvent: 'updateEvent',
     }),
     selectRaceResultFormula(formula) {
       this.competition.result_formula.types[0].formula = formula.id;
 
       switch (formula.title) {
-        case "ae": {
+        case 'ae': {
           this.competition.is_aerials = true;
-          this.competition.is_moguls = false;
           this.competition.is_skiJumps = false;
           break;
         }
-        case "moguls": {
+        case 'moguls': {
           this.competition.is_aerials = false;
-          this.competition.is_moguls = true;
           this.competition.is_skiJumps = false;
           break;
         }
-        case "ski_jumps": {
+        case 'ski_jumps': {
           this.competition.is_aerials = false;
-          this.competition.is_moguls = false;
           this.competition.is_skiJumps = true;
           break;
         }
         default: {
           this.competition.is_aerials = false;
-          this.competition.is_moguls = false;
           this.competition.is_skiJumps = false;
         }
       }
@@ -213,19 +132,10 @@ export default {
       this.updateEvent();
     },
     setDoubleUp() {
-      this.competition.result_formula.types[0].doubleUp =
-        !this.competition.result_formula.types[0].doubleUp;
+      this.competition.result_formula.types[0].doubleUp = !this.competition.result_formula.types[0].doubleUp;
     },
     toggleAerialsMode() {
       this.competition.is_aerials = !this.competition.is_aerials;
-      this.updateEvent();
-    },
-    toggleMogulsMode() {
-      this.competition.is_moguls = !this.competition.is_moguls;
-      this.updateEvent();
-    },
-    toggleDualMogulsMode() {
-      this.competition.dualMoguls_mode = !this.competition.dualMoguls_mode;
       this.updateEvent();
     },
     toggleSkiJumpMode() {
@@ -237,19 +147,19 @@ export default {
       this.updateEvent();
     },
     setRaceResultFormula(formulaId) {
-      this.$emit("set-race-result-formula", formulaId);
+      this.$emit('set-race-result-formula', formulaId);
     },
     updateResults() {
-      this.$emit("update-results");
+      this.$emit('update-results');
     },
   },
   data() {
     return {};
   },
   computed: {
-    ...mapGetters("localization", {
-      lang: "lang",
-      localization: "localization",
+    ...mapGetters('localization', {
+      lang: 'lang',
+      localization: 'localization',
     }),
   },
 };
@@ -268,13 +178,13 @@ export default {
   flex-direction: column;
   padding: 4px;
   border-radius: 6px;
-  background: var(--standard-background);
+  background: var(--background-deep);
 }
 .rulesSections__title {
   display: flex;
   align-items: center;
   padding: 4px;
-  background: var(--card-background);
+  background: var(--background-card);
   border-radius: 6px 6px 0 0;
   font-weight: bold;
   font-size: 1.4rem;
@@ -304,15 +214,14 @@ export default {
   flex: 1 1 auto;
 }
 .judges__list {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  min-height: 6rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(75px, calc(25% - 4px)));
+  grid-gap: 4px;
+  min-height: 50px;
+  border-bottom: 4px solid var(--background-deep);
 }
 .judges__list__item {
-  flex: 0 0 calc(25% - 4px);
-  margin: 0 4px 4px 0;
-  background: var(--card-background);
+  background: var(--background-card);
 }
 .judges__list__item__title {
   padding: 4px 8px;
@@ -325,7 +234,7 @@ export default {
 .modes__wrapper {
   border-radius: 0 0 0 6px;
   margin-top: auto;
-  background: var(--card-background);
+  background: var(--background-card);
   border-right: 4px solid var(--standard-background);
 }
 .raceResultFormulas__wrapper {
@@ -400,7 +309,7 @@ export default {
 .edgeMarksSettings__wrapper {
   flex: 0 1 0;
   padding: 4px;
-  background: var(--card-background);
+  background: var(--background-card);
   border-radius: 0 0 6px 0;
 }
 .edgeMarksSettings__section {

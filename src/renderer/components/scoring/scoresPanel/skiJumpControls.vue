@@ -2,51 +2,33 @@
   <div class="skiJumpsControls__wrapper">
     <div class="skiJumpParam__wrapper">
       <span class="skiJumpParam__title">Дист.</span>
-      <input
-        class="skiJumpParam__input sjDistance"
-        type="number"
-        v-bind:value="sjDistance"
-        @change="setSJDistance($event)"
-      />
+      <input class="skiJumpParam__input sjDistance" type="number" v-bind:value="sjDistance" @change="setSJDistance($event)" />
     </div>
     <div class="skiJumpParam__wrapper">
       <span class="skiJumpParam__title">Трамп.</span>
-      <input
-        class="skiJumpParam__input sjRamp"
-        type="text"
-        v-bind:value="sjRamp"
-        @change="setSJRamp($event)"
-      />
+      <input class="skiJumpParam__input sjRamp" type="text" v-bind:value="sjRamp" @change="setSJRamp($event)" />
     </div>
     <div class="skiJumpParam__wrapper">
       <span class="skiJumpParam__title">Очки</span>
       <div class="skiJumpParam__value">
-        {{
-          competition.set_accuracy(
-            skiRamps[sjRamp]
-              ? 60 +
-                  skiRamps[sjRamp].lengthPoints *
-                    (sjDistance - skiRamps[sjRamp].keyPoint)
-              : 0
-          )
-        }}
+        {{ competition.roundWithPrecision(skiRamps[sjRamp] ? 60 + skiRamps[sjRamp].lengthPoints * (sjDistance - skiRamps[sjRamp].keyPoint) : 0) }}
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { skiRamps } from "../../../store/modules/skiRamps";
+import { skiRamps } from '../../../store/modules/skiRamps';
 
 export default {
-  name: "skiJumpControls",
-  props: ["competition", "sjDistance", "sjRamp"],
+  name: 'skiJumpControls',
+  props: ['competition', 'sjDistance', 'sjRamp'],
   methods: {
     setSJDistance(e) {
-      this.$emit("set-sj-distance", e.target.value);
+      this.$emit('set-sj-distance', e.target.value);
     },
     setSJRamp(e) {
-      this.$emit("set-sj-ramp", e.target.value);
+      this.$emit('set-sj-ramp', e.target.value);
     },
   },
   data() {
@@ -96,10 +78,7 @@ export default {
   box-shadow: inset 0 0 0 1px var(--text-default);
   pointer-events: none;
 }
-.skiJumpParam__wrapper
-  .skiJumpParam__input:focus
-  ~ .skiJumpParam__wrapperS
-  .skiJumpParam__value {
+.skiJumpParam__wrapper .skiJumpParam__input:focus ~ .skiJumpParam__wrapperS .skiJumpParam__value {
   box-shadow: inset 0 0 0 2px var(--accent) !important;
 }
 </style>

@@ -1,8 +1,5 @@
 <template>
-  <div
-    class="competitorRow__wrapper"
-    @click="openEditCompetitorDialog(competitor)"
-  >
+  <div class="competitorRow__wrapper" @click="openEditCompetitorDialog(competitor)">
     <competitor-data-dialog
       :competition="competition"
       :competitor="competitor"
@@ -10,16 +7,8 @@
       @toggleDialogState="editCompetitorDataDialog = !editCompetitorDataDialog"
     ></competitor-data-dialog>
 
-    <div
-      class="competitorDataCell"
-      v-for="(dataCell, key, index) in competition.competitorsSheet.header"
-      :key="key"
-    >
-      {{
-        competitor.info_data[dataCell.id]
-          ? competitor.info_data[dataCell.id]
-          : null
-      }}
+    <div class="competitorDataCell" v-for="(dataCell, key, index) in competition.competitorsSheet.header" :key="key">
+      {{ competitor.info_data[dataCell.id] ? competitor.info_data[dataCell.id] : null }}
     </div>
 
     <div class="switchCompetitorButtons">
@@ -35,65 +24,43 @@
 </template>
 
 <script>
-import CompetitorDataDialog from "./dialogs/competitorDataDialog";
-import { mapActions } from "vuex";
+import CompetitorDataDialog from './dialogs/competitorDataDialog';
+import { mapActions } from 'vuex';
 
 export default {
-  name: "competitorRow",
+  name: 'competitorRow',
   components: { CompetitorDataDialog },
-  props: ["competition", "competitor", "competitors", "listIsSorted"],
+  props: ['competition', 'competitor', 'competitors', 'listIsSorted'],
   data() {
     return {
       editCompetitorDataDialog: false,
     };
   },
   methods: {
-    ...mapActions("main", {
-      updateEvent: "updateEvent",
+    ...mapActions('main', {
+      updateEvent: 'updateEvent',
     }),
     openEditCompetitorDialog() {
       this.editCompetitorDataDialog = true;
     },
     moveCompetitorUp() {
-      const id = this.competition.competitorsSheet.competitors.indexOf(
-        this.competitor
-      );
+      const id = this.competition.competitorsSheet.competitors.indexOf(this.competitor);
 
       if (id > 0) {
-        let competitorToCheck =
-          this.competition.competitorsSheet.competitors[id - 1];
-        this.$set(
-          this.competition.competitorsSheet.competitors,
-          id - 1,
-          this.competition.competitorsSheet.competitors[id]
-        );
-        this.$set(
-          this.competition.competitorsSheet.competitors,
-          id,
-          competitorToCheck
-        );
+        let competitorToCheck = this.competition.competitorsSheet.competitors[id - 1];
+        this.$set(this.competition.competitorsSheet.competitors, id - 1, this.competition.competitorsSheet.competitors[id]);
+        this.$set(this.competition.competitorsSheet.competitors, id, competitorToCheck);
       }
 
       this.updateEvent();
     },
     moveCompetitorDown() {
-      const id = this.competition.competitorsSheet.competitors.indexOf(
-        this.competitor
-      );
+      const id = this.competition.competitorsSheet.competitors.indexOf(this.competitor);
 
       if (id < this.competition.competitorsSheet.competitors.length - 1) {
-        let competitorToCheck =
-          this.competition.competitorsSheet.competitors[id + 1];
-        this.$set(
-          this.competition.competitorsSheet.competitors,
-          id + 1,
-          this.competition.competitorsSheet.competitors[id]
-        );
-        this.$set(
-          this.competition.competitorsSheet.competitors,
-          id,
-          competitorToCheck
-        );
+        let competitorToCheck = this.competition.competitorsSheet.competitors[id + 1];
+        this.$set(this.competition.competitorsSheet.competitors, id + 1, this.competition.competitorsSheet.competitors[id]);
+        this.$set(this.competition.competitorsSheet.competitors, id, competitorToCheck);
       }
 
       this.updateEvent();
@@ -114,11 +81,11 @@ export default {
   user-select: none;
 }
 .competitorRow__wrapper:nth-child(odd) {
-  border: 1px solid var(--card-background);
-  background: var(--card-background);
+  border: 1px solid var(--background-card);
+  background: var(--background-card);
 }
 .competitorRow__wrapper:hover {
-  background: var(--card-background);
+  background: var(--background-card);
   border: 1px solid var(--accent);
 }
 .competitorDataCell {

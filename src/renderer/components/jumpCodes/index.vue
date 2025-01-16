@@ -13,35 +13,22 @@
     <div class="jumpCodes__table">
       <div class="jumpCodes__header">
         <div class="jumpCodes__header__item jumpCode">Код</div>
-        <div class="jumpCodes__header__item dd">Женщины</div>
         <div class="jumpCodes__header__item dd">Мужчины</div>
+        <div class="jumpCodes__header__item dd">Женщины</div>
         <div class="jumpCodes__header__item jumpName">Название</div>
 
-        <add-code_dialog
-          @add-new-jump-code="addNewJumpCode"
-          :ae-codes="getJumpCodesList"
-        ></add-code_dialog>
-        <v-btn
-          class="saveCodes__button"
-          color="var(--accent)"
-          text
-          @click="saveCodesToFile"
-          >Сохранить
-        </v-btn>
+        <add-code_dialog @add-new-jump-code="addNewJumpCode" :ae-codes="getJumpCodesList"></add-code_dialog>
+        <v-btn class="saveCodes__button" color="var(--accent)" text @click="saveCodesToFile">Сохранить </v-btn>
       </div>
 
       <div class="jumpCodes__body">
-        <div
-          v-for="jumpCode in getFilteredAeCodes"
-          :key="jumpCode['jump']"
-          class="jumpCode__wrapper"
-        >
+        <div v-for="jumpCode in getFilteredAeCodes" :key="jumpCode['jump']" class="jumpCode__wrapper">
           <div class="jumpCodes__item jumpCode">{{ jumpCode.code }}</div>
           <div class="jumpCodes__item dd">
-            <input v-model.lazy.trim="jumpCode['value_women']" type="text" />
+            <input v-model.lazy.trim="jumpCode['value_men']" type="text" />
           </div>
           <div class="jumpCodes__item dd">
-            <input v-model.lazy.trim="jumpCode['value_men']" type="text" />
+            <input v-model.lazy.trim="jumpCode['value_women']" type="text" />
           </div>
           <div class="jumpCodes__item jumpName">
             <input v-model.lazy.trim="jumpCode['jump_name']" type="text" />
@@ -53,31 +40,28 @@
 </template>
 
 <script>
-import fs from "fs";
-import { mapGetters } from "vuex";
-import AddCode_dialog from "./dialogs/addCode-dialog.vue";
-import AeCodesFilter from "./jumpCodesFilter.vue";
+import fs from 'fs';
+import { mapGetters } from 'vuex';
+import AddCode_dialog from './dialogs/addCode-dialog.vue';
+import AeCodesFilter from './jumpCodesFilter.vue';
+import { checkCompetitionDiscipline } from '../../data/sports';
 
 export default {
-  name: "jumpCodes",
+  name: 'jumpCodes',
   components: { AeCodesFilter, AddCode_dialog },
   methods: {
     addNewJumpCode(codeObj) {
-      if (!this.competition.is_aerials && !this.competition.is_moguls) return;
+      if (!this.competition.is_aerials && !checkCompetitionDiscipline(this.competition, ['MO'])) return;
 
-      this.competition.is_aerials
-        ? this.competition.ae_codes.push(codeObj)
-        : this.competition.mg_codes.push(codeObj);
+      this.competition.is_aerials ? this.competition.ae_codes.push(codeObj) : this.competition.mg_codes.push(codeObj);
     },
     saveCodesToFile() {
-      if (!this.competition.is_aerials && !this.competition.is_moguls) return;
+      if (!checkCompetitionDiscipline(this.competition, ['AE']) && !checkCompetitionDiscipline(this.competition, ['MO'])) return;
 
       fs.writeFile(
-        `${process.cwd()}/app_assets/${
-          this.competition.is_aerials ? "AE_CODES" : "MG_CODES"
-        }.json`,
+        `${process.cwd()}/app_assets/${this.competition.is_aerials ? 'AE_CODES' : 'MG_CODES'}.json`,
         JSON.stringify(this.getJumpCodesList),
-        { encoding: "utf-8" },
+        { encoding: 'utf-8' },
         (err) => {
           if (err) throw new Error(err.message);
         }
@@ -92,34 +76,29 @@ export default {
   },
   data() {
     return {
-      codesFilter: "",
+      codesFilter: '',
       codesFilter_fullMatch: false,
     };
   },
   computed: {
-    ...mapGetters("localization", {
-      lang: "lang",
-      localization: "localization",
+    ...mapGetters('localization', {
+      lang: 'lang',
+      localization: 'localization',
     }),
-    ...mapGetters("main", {
-      competition: "competition",
+    ...mapGetters('main', {
+      competition: 'competition',
     }),
     getJumpCodesList() {
-      if (!this.competition.is_aerials && !this.competition.is_moguls)
-        return [];
+      if (!this.competition.is_aerials && !checkCompetitionDiscipline(this.competition, ['MO'])) return [];
 
-      return this.competition.is_aerials
-        ? this.competition.ae_codes
-        : this.competition.mg_codes;
+      return this.competition.is_aerials ? this.competition.ae_codes : this.competition.mg_codes;
     },
     getFilteredAeCodes() {
       if (!this.codesFilter) return this.getJumpCodesList;
 
       return this.codesFilter_fullMatch
         ? this.getJumpCodesList.filter((code) => code.code === this.codesFilter)
-        : this.getJumpCodesList.filter((code) =>
-            code.code.includes(this.codesFilter)
-          );
+        : this.getJumpCodesList.filter((code) => code.code.includes(this.codesFilter));
     },
   },
 };
@@ -143,7 +122,7 @@ export default {
 .jumpCodes__table {
   flex: 1 1 0;
   min-height: 600px;
-  background: var(--card-background);
+  background: var(--background-card);
   border-radius: 6px;
   overflow: hidden;
 }

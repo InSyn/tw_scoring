@@ -1,37 +1,29 @@
 <template>
-  <div class="raceResultRules__wrapper">
+  <div class="raceResultRules__wrapper section-container">
     <div class="raceResultRules__title">
       {{ localization[lang].app.settings.race_results.title }}
     </div>
 
     <div class="raceResultRules__body">
-      <classic-judges-rules
-        @set-race-result-formula="setRaceResultFormula"
-        @update-results="updateResults"
-        :competition="competition"
-      ></classic-judges-rules>
+      <classic-judges-rules @set-race-result-formula="setRaceResultFormula" @update-results="updateResults" :competition="competition"></classic-judges-rules>
 
-      <sections-judges-rules
-        @set-race-result-formula="setRaceResultFormula"
-        @update-results="updateResults"
-        :competition="competition"
-      ></sections-judges-rules>
+      <sections-judges-rules @set-race-result-formula="setRaceResultFormula" @update-results="updateResults" :competition="competition"></sections-judges-rules>
     </div>
   </div>
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
-import ClassicJudgesRules from "./raceResultRulesSetup/classicJudgesRules.vue";
-import SectionsJudgesRules from "./raceResultRulesSetup/sectionsJudgesRules.vue";
+import { mapActions, mapGetters } from 'vuex';
+import ClassicJudgesRules from './raceResultRulesSetup/classicJudgesRules.vue';
+import SectionsJudgesRules from './raceResultRulesSetup/sectionsJudgesRules.vue';
 
 export default {
-  name: "raceResultRulesSetup",
+  name: 'raceResultRulesSetup',
   components: { SectionsJudgesRules, ClassicJudgesRules },
-  props: ["competition"],
+  props: ['competition'],
   methods: {
-    ...mapActions("main", {
-      updateEvent: "updateEvent",
+    ...mapActions('main', {
+      updateEvent: 'updateEvent',
     }),
     setRaceResultFormula(type) {
       this.competition.result_formula.type = type;
@@ -39,28 +31,19 @@ export default {
       this.updateEvent();
     },
     updateResults() {
-      this.$emit("update-results");
+      this.$emit('update-results');
     },
   },
   computed: {
-    ...mapGetters("localization", {
-      lang: "lang",
-      localization: "localization",
+    ...mapGetters('localization', {
+      lang: 'lang',
+      localization: 'localization',
     }),
   },
 };
 </script>
 
 <style scoped>
-* {
-  /*box-shadow: inset 0 0 1px 0 lightskyblue;*/
-}
-.raceResultRules__wrapper {
-  margin-top: 16px;
-  padding: 8px;
-  background: var(--card-background);
-  border-radius: 6px;
-}
 .raceResultRules__title {
   margin-bottom: 8px;
   font-size: 1.2rem;

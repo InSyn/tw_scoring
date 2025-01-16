@@ -1,0 +1,53 @@
+button {
+  outline: transparent;
+}
+
+button.tw-button {
+  border-radius: 2px;
+  padding: .3rem 1.2rem;
+  color: white;
+  background-color: var(--accent);
+  cursor: pointer;
+  font-family: inherit;
+  border: none;
+  outline: transparent;
+  font-size: .9rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  transition: background-color 92ms, opacity 92ms, transform 64ms, box-shadow 64ms;
+
+  &-tiny {
+    @extend .tw-button;
+    padding: 2px 6px;
+    font-size: .76rem;
+  }
+  &-small {
+    @extend .tw-button;
+    padding: 3px 9px;
+    font-size: .82rem;
+  }
+  &-big {
+    @extend .tw-button;
+    border-radius: 4px;
+    padding: 4px 12px;
+    font-size: 1.05rem;
+  }
+  &.warn {
+    background-color:  var(--action-darkYellow);
+  }
+  &.danger {
+    background-color:  var(--error);
+  }
+
+  &:hover {
+    opacity: .8;
+  }
+  &:active {
+    box-shadow: 0 0 0 1px white inset;
+    transform: scale(0.94);
+  }
+  &:disabled {
+    opacity: .5;
+    pointer-events: none;
+  }
+}

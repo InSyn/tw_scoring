@@ -5,33 +5,26 @@
     </div>
     <div class="teamsTable__wrapper">
       <div class="teamsTable__actions">
-        <v-btn @click="addTeam" color="var(--accent)" text>
-          Добавить команду
-        </v-btn>
+        <v-btn @click="addTeam" color="var(--accent)" text> Добавить команду </v-btn>
       </div>
       <div class="teamsTable__body">
-        <team-table-row
-          v-for="team in competition.teams"
-          :key="team.id"
-          :competition="competition"
-          :team="team"
-        ></team-table-row>
+        <team-table-row v-for="team in competition.teams" :key="team.id" :competition="competition" :team="team"></team-table-row>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
-import TeamTableRow from "./teamTableRow";
-import TeamClass from "../../store/Classes/TeamClass";
+import { mapActions, mapGetters } from 'vuex';
+import TeamTableRow from './teamTableRow';
+import TeamClass from '../../store/classes/TeamClass';
 
 export default {
-  name: "teams",
+  name: 'teams',
   components: { TeamTableRow },
   methods: {
-    ...mapActions("main", {
-      updateEvent: "updateEvent",
+    ...mapActions('main', {
+      updateEvent: 'updateEvent',
     }),
     addTeam() {
       this.competition.teams.push(new TeamClass({}));
@@ -40,8 +33,8 @@ export default {
     },
   },
   computed: {
-    ...mapGetters("main", {
-      competition: "competition",
+    ...mapGetters('main', {
+      competition: 'competition',
     }),
   },
 };
@@ -63,7 +56,7 @@ export default {
 .teamsTable__wrapper {
   margin-top: 12px;
   padding: 8px;
-  background: var(--card-background);
+  background: var(--background-card);
   border-radius: 6px;
 }
 .teamsTable__actions {

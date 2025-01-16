@@ -1,4 +1,4 @@
-import { CompetitionLogMessageClass } from "../Classes/CompetitionLogMessageClass";
+import { CompetitionLogMessageClass } from '../classes/CompetitionLogMessageClass';
 
 export default {
   namespaced: true,
@@ -21,7 +21,7 @@ export default {
   },
   actions: {
     addCompetitionLogMessage: ({ commit }, msg) => {
-      commit("addCompetitionLogMessage", msg);
+      commit('addCompetitionLogMessage', msg);
     },
   },
 };

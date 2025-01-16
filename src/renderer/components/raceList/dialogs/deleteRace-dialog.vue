@@ -7,8 +7,7 @@
     </template>
     <div class="deleteRace__dialog__wrapper">
       <div class="deleteRace__dialog__title">
-        {{ localization[lang].app.dialogs.d_delete }}&nbsp;
-        <b> {{ race.title }} </b>?
+        {{ localization[lang].app.dialogs.d_delete }}&nbsp; <b> {{ race.title }} </b>?
       </div>
 
       <div class="deleteRace__dialog__text">
@@ -16,9 +15,7 @@
       </div>
 
       <div class="deleteRace__dialog__actions">
-        <v-btn text @click="del_race(race)" color="var(--action-red)" small
-          >{{ localization[lang].app.dialogs.d_delete }}
-        </v-btn>
+        <v-btn text @click="del_race(race)" color="var(--action-red)" small>{{ localization[lang].app.dialogs.d_delete }} </v-btn>
         <v-btn @click="dialogState = false" small>
           {{ localization[lang].app.dialogs.d_cancel }}
         </v-btn>
@@ -28,11 +25,11 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters } from 'vuex';
 
 export default {
-  name: "deleteRace-dialog",
-  props: ["competition", "race"],
+  name: 'deleteRace-dialog',
+  props: ['competition', 'race'],
   methods: {
     del_race(_race) {
       this.dialogState = false;
@@ -50,15 +47,13 @@ export default {
         });
       });
 
-      this.competition.races[0]
-        ? this.selectRace(this.competition.races[0])
-        : this.selectRace(null);
+      this.competition.races[0] ? this.selectRace(this.competition.races[0]) : this.selectRace(null);
       this.competition.selected_race_id = 0;
 
-      this.$store.dispatch("main/updateEvent");
+      this.$store.dispatch('main/updateEvent');
     },
     selectRace(race) {
-      this.$emit("select-race", race);
+      this.$emit('select-race', race);
     },
   },
   data() {
@@ -67,9 +62,9 @@ export default {
     };
   },
   computed: {
-    ...mapGetters("localization", {
-      lang: "lang",
-      localization: "localization",
+    ...mapGetters('localization', {
+      lang: 'lang',
+      localization: 'localization',
     }),
   },
 };
@@ -86,13 +81,13 @@ export default {
   height: 14px;
   width: 14px;
   border-radius: 4px;
-  background: var(--card-background);
+  background: var(--background-card);
 }
 .deleteRace__button:hover {
   background: var(--action-red);
 }
 .deleteRace__dialog__wrapper {
-  background-color: var(--card-background);
+  background-color: var(--background-card);
   color: var(--text-default);
 }
 .deleteRace__dialog__title {

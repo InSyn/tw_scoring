@@ -1,0 +1,42 @@
+:root {
+    --accent: #3b70a9;
+    --accent-light: #3a82ba;
+    --action-blue: #2474d9;
+    --action-darkYellow: #d98e3d;
+    --action-green: #139030;
+    --action-red: #d25748;
+    --action-yellow: #d9bb23;
+
+    --dmo-blue: #6066bf;
+    --dmo-red: #aa333a;
+
+    --athlete-blue: #6165b8;
+    --athlete-red: #9c3f40;
+    --athlete-green: #2ba260;
+    --athlete-yellow: #C7AD38;
+}
+
+:root .app_dark {
+    --background-card: #262729;
+    --background-card-nested: #1e1e20;
+    --standard-background: #1B1C1F;
+    --background-deep: #161619;
+    --subject-background: #353639;
+
+    --error: #ff5252;
+    --success: #2abe6a;
+    --success-light: #2ce98f;
+    --text-default: #d2d2d2;
+}
+:root .app_light {
+    --background-card: #dcdce4;
+    --background-card-nested: #e4e4ef;
+    --standard-background: #aaaab5;
+    --background-deep: #bdbdc9;
+    --subject-background: #b2b2bb;
+
+    --error: #ff5252;
+    --success: #2abe6a;
+    --success-light: #2ce98f;
+    --text-default: #2d2d2d;
+}

@@ -1,18 +1,19 @@
-import Vue from "vue";
-import Vuex from "vuex";
+import Vue from 'vue';
+import Vuex from 'vuex';
 
 Vue.use(Vuex);
 
-import key from "./modules/key";
-import localization from "./modules/localization";
-import main from "./modules/main";
-import message_system from "./modules/message_system";
-import protocol_settings from "./modules/protocol_settings";
-import scoring_services from "./modules/scoring_services";
-import terminalsUdpService from "./modules/terminalsUdpService";
-import aerials from "./modules/aerials";
-import moguls from "./modules/moguls";
-import timing from "./modules/timing";
+import key from './modules/key';
+import localization from './modules/localization';
+import main from './modules/main';
+import message_system from './modules/message_system';
+import protocol_settings from './modules/protocol_settings';
+import scoring_services from './modules/scoring_services';
+import terminalsUdpService from './modules/terminalsUdpService';
+import aerials from './modules/aerials';
+import moguls from './modules/moguls';
+import timing from './modules/timing';
+import protocols from './modules/protocols';
 
 export default new Vuex.Store({
   state: {},
@@ -30,6 +31,7 @@ export default new Vuex.Store({
     aerials,
     moguls,
     timing,
+    protocols,
   },
   strict: false,
 });

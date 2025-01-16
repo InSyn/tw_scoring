@@ -1,0 +1,20 @@
+@import "theme.css";
+@import "shared/dragAndDrop.css";
+
+
+*::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+*::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+    background: #3b70a9;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+    background: #3a82ba;
+}

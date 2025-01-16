@@ -1,9 +1,7 @@
 <template>
   <v-dialog v-model="dialogState" width="480">
     <template v-slot:activator="{ on }">
-      <v-btn class="addCode__button" v-on="on" color="var(--success)" text>
-        Добавить
-      </v-btn>
+      <v-btn class="addCode__button" v-on="on" color="var(--success)" text> Добавить </v-btn>
     </template>
 
     <div class="addCodeDialog__wrapper">
@@ -32,18 +30,9 @@
       </div>
 
       <div class="addCodeDialog__actions">
-        <v-btn color="var(--success)" @click="addCode" small text>
-          Применить
-        </v-btn>
+        <v-btn color="var(--success)" @click="addCode" small text> Применить </v-btn>
 
-        <v-btn
-          class="ml-2"
-          color="var(--text-default)"
-          @click="closeDialog"
-          small
-        >
-          Отмена
-        </v-btn>
+        <v-btn class="ml-2" color="var(--text-default)" @click="closeDialog" small> Отмена </v-btn>
       </div>
     </div>
   </v-dialog>
@@ -51,11 +40,11 @@
 
 <script>
 export default {
-  name: "addCode_dialog",
-  props: ["jumpCodes"],
+  name: 'addCode_dialog',
+  props: ['jumpCodes'],
   methods: {
     addCode() {
-      this.$emit("add-new-jump-code", {
+      this.$emit('add-new-jump-code', {
         code: this.code,
         jump_name: this.jumpName,
         value_women: this.womenValue,
@@ -65,10 +54,10 @@ export default {
       this.closeDialog();
     },
     closeDialog() {
-      this.code = "";
-      this.jumpName = "";
-      this.womenValue = "";
-      this.menValue = "";
+      this.code = '';
+      this.jumpName = '';
+      this.womenValue = '';
+      this.menValue = '';
 
       this.dialogState = false;
     },
@@ -76,10 +65,10 @@ export default {
   data() {
     return {
       dialogState: false,
-      code: "",
-      jumpName: "",
-      womenValue: "",
-      menValue: "",
+      code: '',
+      jumpName: '',
+      womenValue: '',
+      menValue: '',
     };
   },
 };
@@ -91,7 +80,7 @@ export default {
   max-height: 100%;
 }
 .addCodeDialog__wrapper {
-  background: var(--card-background);
+  background: var(--background-card);
   border-radius: 6px;
   overflow: hidden;
 }

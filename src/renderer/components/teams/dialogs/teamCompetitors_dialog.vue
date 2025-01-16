@@ -1,9 +1,7 @@
 <template>
   <v-dialog width="480px" v-model="dialogState">
     <template v-slot:activator="{ on }">
-      <v-btn @click="dialogState = true" color="var(--success)" text small>
-        Участники
-      </v-btn>
+      <v-btn @click="dialogState = true" color="var(--success)" text small> Участники </v-btn>
     </template>
 
     <div class="teamCompetitorsDialog__wrapper">
@@ -11,16 +9,9 @@
         <div class="competitorsList__title">Участники</div>
 
         <div class="competitorsList__body">
-          <div
-            class="competitor availableCompetitor"
-            @click="addCompetitorToTeam(competitor)"
-            v-for="competitor in availableCompetitors"
-            :key="competitor.id"
-          >
+          <div class="competitor availableCompetitor" @click="addCompetitorToTeam(competitor)" v-for="competitor in availableCompetitors" :key="competitor.id">
             <span class="competitorName">{{
-              `${competitor.info_data["bib"]} ${competitor.info_data[
-                "lastname"
-              ].toUpperCase()} ${competitor.info_data["name"]}`
+              `${competitor.info_data['bib']} ${competitor.info_data['lastname'].toUpperCase()} ${competitor.info_data['name']}`
             }}</span>
           </div>
         </div>
@@ -30,17 +21,10 @@
         <div class="competitorsList__title">Участники команды</div>
 
         <div class="competitorsList__body">
-          <div
-            class="competitor teamCompetitor"
-            @click="removeCompetitorFromTeam(competitorId)"
-            v-for="competitorId in team.competitors"
-            :key="competitorId"
-          >
+          <div class="competitor teamCompetitor" @click="removeCompetitorFromTeam(competitorId)" v-for="competitorId in team.competitors" :key="competitorId">
             <span v-if="getCompetitor(competitorId)" class="competitorName">{{
-              `${getCompetitor(competitorId).info_data["bib"]} ${getCompetitor(
-                competitorId
-              ).info_data["lastname"].toUpperCase()} ${
-                getCompetitor(competitorId).info_data["name"]
+              `${getCompetitor(competitorId).info_data['bib']} ${getCompetitor(competitorId).info_data['lastname'].toUpperCase()} ${
+                getCompetitor(competitorId).info_data['name']
               }`
             }}</span>
           </div>
@@ -51,14 +35,14 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapActions } from 'vuex';
 
 export default {
-  name: "teamCompetitors_dialog",
-  props: ["competition", "team"],
+  name: 'teamCompetitors_dialog',
+  props: ['competition', 'team'],
   methods: {
-    ...mapActions("main", {
-      updateEvent: "updateEvent",
+    ...mapActions('main', {
+      updateEvent: 'updateEvent',
     }),
     addCompetitorToTeam(competitor) {
       if (competitor.id) this.team.competitors.push(competitor.id);
@@ -66,15 +50,11 @@ export default {
       this.updateEvent();
     },
     getCompetitor(competitorId) {
-      const competitor = this.competition.competitorsSheet.competitors.find(
-        (competitor) => competitor.id === competitorId
-      );
+      const competitor = this.competition.competitorsSheet.competitors.find((competitor) => competitor.id === competitorId);
       return competitor ? competitor : null;
     },
     removeCompetitorFromTeam(competitorId) {
-      this.team.competitors = this.team.competitors.filter(
-        (_competitorId) => _competitorId !== competitorId
-      );
+      this.team.competitors = this.team.competitors.filter((_competitorId) => _competitorId !== competitorId);
 
       this.updateEvent();
     },
@@ -87,12 +67,7 @@ export default {
   computed: {
     availableCompetitors() {
       return this.competition.competitorsSheet.competitors.filter(
-        (competitor) =>
-          !this.competition.teams.some((team) =>
-            team.competitors.some(
-              (teamCompetitorId) => teamCompetitorId === competitor.id
-            )
-          )
+        (competitor) => !this.competition.teams.some((team) => team.competitors.some((teamCompetitorId) => teamCompetitorId === competitor.id))
       );
     },
   },
@@ -103,7 +78,7 @@ export default {
 .teamCompetitorsDialog__wrapper {
   height: 480px;
   padding: 8px;
-  background: var(--card-background);
+  background: var(--background-card);
   border-radius: 6px;
 }
 .availableCompetitors__wrapper {
@@ -129,7 +104,7 @@ export default {
   cursor: pointer;
 }
 .competitor::before {
-  content: "";
+  content: '';
   position: absolute;
   top: 0;
   right: 0;

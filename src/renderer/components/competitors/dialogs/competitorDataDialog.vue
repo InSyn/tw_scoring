@@ -3,15 +3,9 @@
     <div class="editFrame-wrapper">
       <div class="editFrame-header">
         <span class="competitorName">{{
-          `${
-            (competitor.info_data["bib"] && competitor.info_data["bib"]) || ""
-          } ${
-            (competitor.info_data["lastname"] &&
-              competitor.info_data["lastname"]) ||
-            ""
-          } ${
-            (competitor.info_data["name"] && competitor.info_data["name"]) || ""
-          }`
+          `${(competitor.info_data['bib'] && competitor.info_data['bib']) || ''} ${
+            (competitor.info_data['lastname'] && competitor.info_data['lastname']) || ''
+          } ${(competitor.info_data['name'] && competitor.info_data['name']) || ''}`
         }}</span>
 
         <div class="editFrame-title">
@@ -20,38 +14,20 @@
       </div>
 
       <div class="editFrame-body">
-        <div
-          v-for="(field, f_key) in competitor.info_data"
-          class="competitorDataUnit-row"
-          :key="f_key"
-        >
+        <div v-for="(field, f_key) in competitor.info_data" class="competitorDataUnit-row" :key="f_key">
           <div class="competitorDataUnit-key">
             {{ f_key }}
           </div>
-          <input
-            class="competitorDataUnit-input"
-            type="text"
-            @change="setDataValue($event, competitor, f_key)"
-            v-bind:value="competitor.info_data[f_key]"
-          />
+          <input class="competitorDataUnit-input" type="text" @change="setDataValue($event, competitor, f_key)" v-bind:value="competitor.info_data[f_key]" />
         </div>
       </div>
 
       <div class="editFrameActions">
-        <v-btn
-          @click="deleteCompetitor(competitor)"
-          class="action-btn delete"
-          small
-          color="var(--action-red)"
+        <v-btn @click="deleteCompetitor(competitor)" class="action-btn delete" small color="var(--action-red)"
           >{{ localization[lang].app.dialogs.d_delete }}
         </v-btn>
 
-        <v-btn
-          @click="$emit('toggleDialogState')"
-          class="action-btn close"
-          text
-          small
-          color="var(--accent)"
+        <v-btn @click="$emit('toggleDialogState')" class="action-btn close" text small color="var(--accent)"
           >{{ localization[lang].app.dialogs.d_close }}
         </v-btn>
       </div>
@@ -60,35 +36,27 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
-import { mdiAccountEdit } from "@mdi/js";
+import { mapActions, mapGetters } from 'vuex';
+import { mdiAccountEdit } from '@mdi/js';
 
 export default {
-  name: "competitorDataDialog",
-  props: ["competition", "competitor", "dialogState"],
+  name: 'competitorDataDialog',
+  props: ['competition', 'competitor', 'dialogState'],
   methods: {
-    ...mapActions("main", {
-      updateEvent: "updateEvent",
+    ...mapActions('main', {
+      updateEvent: 'updateEvent',
     }),
     deleteCompetitor(competitor) {
       this.competition.races.forEach((race) => {
-        race.startList = race.startList.filter(
-          (_competitor) => _competitor !== competitor.id
-        );
-        if (race.selectedCompetitor === competitor.id)
-          race.selectedCompetitor = null;
+        race.startList = race.startList.filter((_competitor) => _competitor !== competitor.id);
+        if (race.selectedCompetitor === competitor.id) race.selectedCompetitor = null;
         if (race.onTrack === competitor.id) race.onTrack = null;
-        race.finished = race.finished.filter(
-          (_competitor) => _competitor !== competitor.id
-        );
+        race.finished = race.finished.filter((_competitor) => _competitor !== competitor.id);
       });
 
-      this.competition.competitorsSheet.competitors =
-        this.competition.competitorsSheet.competitors.filter(
-          (_competitor) => _competitor.id !== competitor.id
-        );
+      this.competition.competitorsSheet.competitors = this.competition.competitorsSheet.competitors.filter((_competitor) => _competitor.id !== competitor.id);
 
-      this.$emit("toggleDialogState");
+      this.$emit('toggleDialogState');
       this.rebuildAllStartLists();
     },
     rebuildAllStartLists() {
@@ -117,16 +85,16 @@ export default {
     };
   },
   computed: {
-    ...mapGetters("localization", {
-      localization: "localization",
-      lang: "lang",
+    ...mapGetters('localization', {
+      localization: 'localization',
+      lang: 'lang',
     }),
     showDialog: {
       get() {
         return this.dialogState;
       },
       set() {
-        this.$emit("toggleDialogState");
+        this.$emit('toggleDialogState');
       },
     },
   },
@@ -135,7 +103,7 @@ export default {
 
 <style scoped>
 .editFrame-wrapper {
-  background: var(--card-background);
+  background: var(--background-card);
   color: var(--text-default);
   border-radius: 6px;
   overflow: hidden;
@@ -147,7 +115,7 @@ export default {
   font-size: 1.2rem;
   font-weight: bold;
   color: var(--text-default);
-  background: var(--card-background);
+  background: var(--background-card);
 }
 
 .competitorName {

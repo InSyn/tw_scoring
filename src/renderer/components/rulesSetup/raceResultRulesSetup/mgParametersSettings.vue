@@ -1,47 +1,46 @@
 <template>
-  <div class="mgParameters__wrapper">
-    <div class="paceTime__parameter__wrapper">
-      <label class="paceTime__parameter__label" for="paceTime-men">
-        Pace Time M
-      </label>
-      <input
-        @change="setMgParameters($event.target.value, 'men')"
-        :value="mgParameters.paceTime_men"
-        id="paceTime-men"
-        class="paceTime__parameter__input"
-        type="number"
-        min="0"
-        max="40"
-        step="0.01"
-      />
-    </div>
+  <div class="mgParameters__section">
+    <div class="mgParameters__date"></div>
+    <div class="paceTime__parameters__wrapper">
+      <div class="paceTime__parameter__wrapper">
+        <label class="paceTime__parameter__label" for="paceTime-men"> Pace Time M </label>
+        <input
+          @change="setMgParameters($event.target.value, 'men')"
+          :value="mgParameters.paceTime_men"
+          id="paceTime-men"
+          class="paceTime__parameter__input"
+          type="number"
+          min="0"
+          max="40"
+          step="0.01"
+        />
+      </div>
 
-    <div class="paceTime__parameter__wrapper">
-      <label class="paceTime__parameter__label" for="paceTime-women">
-        Pace Time W
-      </label>
-      <input
-        @change="setMgParameters($event.target.value, 'women')"
-        :value="mgParameters.paceTime_women"
-        id="paceTime-women"
-        class="paceTime__parameter__input"
-        type="number"
-        min="0"
-        max="40"
-        step="0.01"
-      />
+      <div class="paceTime__parameter__wrapper">
+        <label class="paceTime__parameter__label" for="paceTime-women"> Pace Time W </label>
+        <input
+          @change="setMgParameters($event.target.value, 'women')"
+          :value="mgParameters.paceTime_women"
+          id="paceTime-women"
+          class="paceTime__parameter__input"
+          type="number"
+          min="0"
+          max="40"
+          step="0.01"
+        />
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
+import { mapActions, mapGetters } from 'vuex';
 
 export default {
-  name: "mgParametersSettings",
+  name: 'mgParametersSettings',
   methods: {
-    ...mapActions("moguls", {
-      setParameters: "SET_MG_PARAMETERS",
+    ...mapActions('moguls', {
+      setParameters: 'SET_MG_PARAMETERS',
     }),
     setMgParameters(value, group) {
       if (!value || !group) return;
@@ -53,22 +52,40 @@ export default {
     },
   },
   computed: {
-    ...mapGetters("moguls", {
-      mgParameters: "getMgParameters",
+    ...mapGetters('moguls', {
+      mgParameters: 'getMgParameters',
     }),
   },
 };
 </script>
 
-<style scoped>
-.mgParameters__wrapper {
+<style scoped lang="scss">
+.mgParameters__section {
   flex: 0 0 auto;
   display: flex;
-  align-items: center;
+  flex-direction: column;
   padding: 8px;
+
+  & > * {
+    flex-shrink: 0;
+  }
 }
 
-.paceTime__parameter__wrapper {
+.paceTime__parameters__wrapper {
+  display: flex;
+  align-items: center;
+  & > * {
+    margin-right: 8px;
+  }
+  .paceTime__parameter__wrapper {
+    display: flex;
+    align-items: center;
+    label {
+      flex: 0 0 auto;
+      margin-right: 4px;
+      font-weight: bold;
+    }
+  }
 }
 
 .paceTime__parameter__wrapper:not(:last-child) {

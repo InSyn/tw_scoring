@@ -5,13 +5,7 @@
         <label class="protocolTitleInput__label" for="protocol_title">
           {{ localization[lang].app.protocols.title }}
         </label>
-        <input
-          id="protocol_title"
-          v-model="results_protocol.title"
-          :placeholder="competition.mainData.title.value"
-          class="protocolTitle__input"
-          type="text"
-        />
+        <input id="protocol_title" v-model="results_protocol.title" :placeholder="competition.mainData.title.value" class="protocolTitle__input" type="text" />
       </div>
 
       <div class="protocolTypeSettings__wrapper">
@@ -33,18 +27,12 @@
         {{ localization[lang].app.protocols.choose_race }}
       </div>
       <div class="raceSettings__menu">
-        <div v-if="!competition.races.length" class="emptyRaces__placeholder">
-          Нет заездов
-        </div>
+        <div v-if="!competition.races.length" class="emptyRaces__placeholder">Нет заездов</div>
         <div
           v-for="race in competition.races"
           :key="race.id"
           @click="selectRaceFilter(race)"
-          :class="[
-            'selectRace__button__wrapper',
-            competition.protocol_settings.result_protocols.filters
-              .race_filter === race && 'selectRace__button__active',
-          ]"
+          :class="['selectRace__button__wrapper', competition.protocol_settings.result_protocols.filters.race_filter === race && 'selectRace__button__active']"
         >
           <div class="selectRace__button__circle"></div>
           <div class="selectRace__button__title">
@@ -68,54 +56,37 @@
           {{ localization[lang].app.protocols[button.id] }}
         </v-btn>
 
-        <v-btn
-          class="settingsControls__button loadTemplate__button"
-          color="var(--text-default)"
-          small
-          text
-        >
+        <!-- Hidden file input -->
+        <input type="file" ref="fileInput" accept=".json,.twe" style="display: none" @change="onFileSelected" />
+
+        <v-btn class="settingsControls__button loadTemplate__button" color="var(--text-default)" small text @click="openFileDialog">
           <v-icon>mdi-download</v-icon>
         </v-btn>
-        <v-btn
-          class="settingsControls__button saveTemplate__button"
-          color="var(--text-default)"
-          small
-          text
-        >
+        <v-btn class="settingsControls__button saveTemplate__button" color="var(--text-default)" small text @click="exportProtocol">
           <v-icon>mdi-content-save</v-icon>
         </v-btn>
       </div>
-
       <div class="protocolFieldsSheet__container">
         <data-cell-settings-row
-          v-for="(field, f_idx) in competition.protocol_settings
-            .result_protocols[protocol_fields]"
+          :class="['drag-drop-item', { dragging: dragIndex === f_idx, dragOver: dragOverIndex === f_idx }]"
+          v-for="(field, f_idx) in getProtocolTableFields(protocolType)"
           :key="f_idx"
           :competition="competition"
-          :data-field="field"
           :field-index="f_idx"
-          :protocol-fields="protocol_fields"
+          :data-field="field"
+          :protocol-type="protocolType"
+          :drag-index="f_idx"
+          :drag-items="getProtocolTableFields(protocolType)"
+          @dragstart="onDragStart($event, f_idx)"
+          @dragover="onDragOver($event, f_idx)"
+          @drop="onDrop($event, f_idx, getProtocolTableFields(protocolType))"
         ></data-cell-settings-row>
       </div>
 
       <div class="infoPanel__container">
-        <v-btn
-          class="refreshButton"
-          color="var(--action-darkYellow)"
-          small
-          text
-          @click="refreshFields()"
-        >
-          Сбросить
-        </v-btn>
+        <v-btn class="refreshButton" color="var(--action-darkYellow)" small text @click="refreshFields()"> Сбросить </v-btn>
 
-        <div
-          :style="[
-            sum_width === 100 && { color: 'var(--success)' },
-            sum_width > 100 && { color: 'var(--error)' },
-          ]"
-          class="sumWidth__wrapper"
-        >
+        <div :style="[sum_width === 100 && { color: 'var(--success)' }, sum_width > 100 && { color: 'var(--error)' }]" class="sumWidth__wrapper">
           <data-field-width-icon class="sumWidth__icon" />
           {{ `${sum_width} %` }}
         </div>
@@ -125,51 +96,22 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-import DataCellSettingsRow from "../protocolDataSheetSettings-components/dataCellSettings-row.vue";
-import DataFieldWidthIcon from "../../../assets/icons/dataFieldWidth-icon.vue";
+import { mapGetters } from 'vuex';
+import DataCellSettingsRow from '../protocolDataSheetSettings-components/dataCellSettings-row.vue';
+import DataFieldWidthIcon from '../../../assets/icons/dataFieldWidth-icon.vue';
+import MDragAndDrop from '../../mixins/MDragAndDrop';
+import CompetitorsListItem from '../../raceList/competitorsListItem.vue';
 
 export default {
-  name: "protocolMainSettings",
-  components: { DataFieldWidthIcon, DataCellSettingsRow },
-  mounted() {
-    if (
-      this.competition.protocol_settings.result_protocols[this.protocol_fields]
-        .length < 1
-    ) {
-      this.$store.commit("protocol_settings/initResultProtocolFields", {
-        competition: this.competition,
-      });
-      this.$store.commit("protocol_settings/initRaceResultProtocolFields", {
-        competition: this.competition,
-      });
-    }
-  },
-  methods: {
-    selectRaceFilter(race) {
-      this.competition.protocol_settings.result_protocols.filters
-        .race_filter === race
-        ? (this.competition.protocol_settings.result_protocols.filters.race_filter =
-            null)
-        : (this.competition.protocol_settings.result_protocols.filters.race_filter =
-            race);
-    },
-    refreshFields() {
-      this.protocol_fields === "fields"
-        ? this.$store.commit("protocol_settings/initResultProtocolFields", {
-            competition: this.competition,
-          })
-        : this.$store.commit("protocol_settings/initRaceResultProtocolFields", {
-            competition: this.competition,
-          });
-    },
-  },
+  name: 'protocolMainSettings',
+  components: { CompetitorsListItem, DataFieldWidthIcon, DataCellSettingsRow },
+  mixins: [MDragAndDrop],
   data() {
     return {
       field_buttons: [
         {
-          id: "b_add",
-          color: "var(--accent)",
+          id: 'b_add',
+          color: 'var(--accent)',
 
           action: function () {
             return 0;
@@ -179,25 +121,20 @@ export default {
     };
   },
   computed: {
-    ...mapGetters("localization", {
-      localization: "localization",
-      lang: "lang",
+    ...mapGetters('localization', {
+      localization: 'localization',
+      lang: 'lang',
     }),
-    ...mapGetters("main", { competition: "competition", appTheme: "appTheme" }),
-    ...mapGetters("protocol_settings", {
-      results_protocol: "results_protocol",
+    ...mapGetters('main', { competition: 'competition', appTheme: 'appTheme' }),
+    ...mapGetters('protocol_settings', {
+      results_protocol: 'results_protocol',
     }),
     sum_width() {
       let sum = 0;
       let arr = this.competition.protocol_settings.result_protocols[
-        `${
-          this.competition.protocol_settings.result_protocols.filters
-            .race_filter
-            ? "raceResultFields"
-            : "fields"
-        }`
+        `${this.competition.protocol_settings.result_protocols.filters.race_filter ? 'raceResultFields' : 'fields'}`
       ].map((_field) => {
-        return _field.params.width;
+        return _field && _field.params ? _field.params.width : null;
       });
 
       for (let i = 0; i < arr.length; i++) {
@@ -206,21 +143,63 @@ export default {
 
       return sum;
     },
-    protocol_fields() {
-      return this.competition.protocol_settings.result_protocols.filters
-        .race_filter
-        ? "raceResultFields"
-        : "fields";
+    protocolType() {
+      return this.competition.protocol_settings.result_protocols.filters.race_filter ? 'raceResultFields' : 'fields';
     },
+  },
+  methods: {
+    selectRaceFilter(race) {
+      this.competition.protocol_settings.result_protocols.filters.race_filter === race
+        ? (this.competition.protocol_settings.result_protocols.filters.race_filter = null)
+        : (this.competition.protocol_settings.result_protocols.filters.race_filter = race);
+    },
+    getProtocolTableFields(fieldsSetType) {
+      return this.competition.protocol_settings.result_protocols[fieldsSetType];
+    },
+    refreshFields() {
+      this.protocolType === 'fields'
+        ? this.$store.commit('protocol_settings/initResultProtocolFields', {
+            competition: this.competition,
+          })
+        : this.$store.commit('protocol_settings/initRaceResultProtocolFields', {
+            competition: this.competition,
+          });
+    },
+    openFileDialog() {
+      this.$refs.fileInput.click();
+    },
+    onFileSelected(event) {
+      const file = event.target.files[0];
+      if (file) {
+        this.importProtocol(file);
+      }
+    },
+
+    importProtocol(file) {
+      this.$store.dispatch('main/import_protocol', {
+        file,
+        competitionId: this.competition.id,
+      });
+    },
+    exportProtocol() {
+      this.$store.dispatch('main/export_protocol', this.competition.id);
+    },
+  },
+
+  mounted() {
+    if (this.competition.protocol_settings.result_protocols[this.protocolType].length < 1) {
+      this.$store.commit('protocol_settings/initResultProtocolFields', {
+        competition: this.competition,
+      });
+      this.$store.commit('protocol_settings/initRaceResultProtocolFields', {
+        competition: this.competition,
+      });
+    }
   },
 };
 </script>
 
 <style scoped>
-* {
-  /*box-shadow: inset 0 0 1px 0 white;*/
-}
-
 .protocolMainSettings__wrapper {
   flex: 1 0 auto;
   display: flex;
@@ -231,7 +210,7 @@ export default {
   padding: 6px;
 
   border-radius: 6px;
-  background-color: var(--card-background);
+  background-color: var(--background-card);
 }
 
 .protocolMainSettings__header {
@@ -352,7 +331,7 @@ export default {
 
 /*noinspection CssUnusedSymbol*/
 .selectRace__button__wrapper.selectRace__button__active {
-  background: var(--card-background);
+  background: var(--background-card);
 }
 
 .selectRace__button__circle {
@@ -360,7 +339,7 @@ export default {
   height: 12px;
   width: 12px;
   transition: background-color 0.112s;
-  background: var(--card-background);
+  background: var(--background-card);
   border: 2px solid var(--accent);
 }
 
@@ -450,5 +429,13 @@ export default {
   color: white;
   margin-right: 6px;
   font-size: 1.8rem;
+}
+
+.dragging {
+  opacity: 0.5;
+  background-color: var(--action-darkYellow);
+}
+.dragOver {
+  border: 2px dashed var(--accent);
 }
 </style>

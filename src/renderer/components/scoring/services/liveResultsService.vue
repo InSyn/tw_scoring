@@ -3,29 +3,16 @@
     <div class="liveResults__title">LIVE Scoring</div>
 
     <div class="liveResults__body">
-      <div class="liveResults__liveId__wrapper">
-        <label for="live_id" class="liveResults__liveId__label">
-          Live ID:&nbsp;
-        </label>
-        <input
-          @change="setEventLiveId"
-          :value="live_config.live_id"
-          id="live_id"
-          class="liveResults__liveId__input"
-          type="text"
-          :style="liveEventStatus_style"
-        />
+      <div class="liveResults__liveId__wrapper" :style="liveEventStatus_style">
+        <label for="live_id" class="liveResults__liveId__label"> Live ID:&nbsp; </label>
+        <input @change="setEventLiveId" :value="live_config.live_id" id="live_id" class="liveResults__liveId__input" type="text" />
       </div>
 
       <v-btn
         @click="setUpdater()"
         class="updateLiveResults__button"
         :color="
-          live_config.updateLive_Indicator
-            ? live_config.updateLive_Indicator === 'ok'
-              ? 'var(--accent-light)'
-              : 'var(--error)'
-            : 'var(--standard-background)'
+          live_config.updateLive_Indicator ? (live_config.updateLive_Indicator === 'ok' ? 'var(--accent-light)' : 'var(--error)') : 'var(--standard-background)'
         "
         style="
           flex: 0 0 auto;
@@ -53,53 +40,56 @@
 </template>
 
 <script>
-import axios from "axios";
-import { generateLiveEvent } from "../live-service/generateLiveEvent";
-import { mapActions, mapGetters } from "vuex";
-import { databaseUrl } from "../../../store/constants";
+import axios from 'axios';
+import { generateLiveEvent } from '../live-service/generateLiveEvent';
+import { mapActions, mapGetters } from 'vuex';
+import { databaseUrl } from '../../../store/constants';
 
 export default {
-  name: "liveResultsService",
+  name: 'liveResultsService',
   methods: {
-    ...mapActions("main", {
-      setLiveData: "SET_LIVE_DATA",
+    ...mapActions('main', {
+      setLiveData: 'SET_LIVE_DATA',
     }),
-    setEventLiveId(event) {
-      axios
-        .get(databaseUrl + "/events/" + event.target.value)
-        .then((response) => {
-          if (response.status === 200) {
-            const liveEvent = response.data.data;
+    async setEventLiveId(e) {
+      console.log(`${databaseUrl}/events/${e.target.value}`);
+      try {
+        const response = await axios.get(`${databaseUrl}/events/${e.target.value}`);
+        if (response.status === 200) {
+          const eventData = response.data.event;
 
-            if (liveEvent.length > 0) {
-              this.setLiveData({
-                live_id: event.target.value,
-                live_id_validated: true,
-              });
-            } else {
-              this.setLiveData({
-                live_id: event.target.value,
-                live_id_validated: false,
-              });
-            }
+          if (eventData && eventData.event_id === e.target.value) {
+            await this.setLiveData({
+              live_id: e.target.value,
+              live_id_validated: true,
+            });
+            return;
           }
-        })
-        .catch((err) => {
-          if (err) console.log(`Err: ${err.response.message}`);
+
+          await this.setLiveData({
+            live_id: e.target.value,
+            live_id_validated: false,
+          });
+        }
+      } catch (e) {
+        await this.setLiveData({
+          live_id: e.target.value,
+          live_id_validated: false,
         });
+      }
     },
-    dbUpdateCompetitionLive(initializeEventInfo) {
+    async dbUpdateCompetitionLive(initializeEventInfo) {
       const live_event = generateLiveEvent(
         { event: this.live_config, competitions: this.competitions },
         { is_teams: this.competition.is_teams, initialize: initializeEventInfo }
       );
-      if (!(this.live_config.live_id && this.live_config.live_id_validated))
-        return;
+      console.log(live_event);
+      if (!(this.live_config.live_id && this.live_config.live_id_validated)) return;
 
-      axios
+      await axios
         .patch(`${databaseUrl}/events/${live_event.event_id}`, live_event)
         .then((response) => {
-          this.live_config.updateLive_Indicator = "ok";
+          this.live_config.updateLive_Indicator = 'ok';
           setTimeout(() => {
             this.live_config.updateLive_Indicator = false;
           }, 192);
@@ -110,7 +100,7 @@ export default {
           }
         })
         .catch((e) => {
-          this.live_config.updateLive_Indicator = "err";
+          this.live_config.updateLive_Indicator = 'err';
           setTimeout(() => {
             this.live_config.updateLive_Indicator = false;
           }, 192);
@@ -133,30 +123,28 @@ export default {
     return {};
   },
   computed: {
-    ...mapGetters("localization", {
-      localization: "localization",
-      lang: "lang",
+    ...mapGetters('localization', {
+      localization: 'localization',
+      lang: 'lang',
     }),
-    ...mapGetters("main", {
-      live_config: "live_config",
-      event: "event",
-      event_id: "event_id",
-      competition: "competition",
-      competitions: "competitions",
+    ...mapGetters('main', {
+      live_config: 'live_config',
+      event: 'event',
+      event_id: 'event_id',
+      competition: 'competition',
+      competitions: 'competitions',
     }),
     liveEventStatus_style() {
       if (this.live_config.live_id && this.live_config.live_id_validated)
         return {
-          border: `1px solid var(--success)`,
+          boxShadow: `0 0 0 2px var(--success) inset`,
         };
       else if (this.live_config.live_id && !this.live_config.live_id_validated)
         return {
-          border: `1px solid var(--error)`,
+          boxShadow: `0 0 0 2px var(--error) inset`,
         };
 
-      return {
-        border: `1px solid transparent`,
-      };
+      return {};
     },
   },
 };
@@ -172,9 +160,9 @@ export default {
 }
 .liveResults__title {
   flex: 1 0 100%;
+  margin: 0 0.5rem 6px;
   font-size: 1.2rem;
   font-weight: bold;
-  margin-bottom: 6px;
 }
 .liveResults__body {
   display: flex;
@@ -187,16 +175,18 @@ export default {
   display: flex;
   align-items: center;
   padding: 6px 12px;
-  background-color: var(--card-background);
+  background-color: var(--background-card);
   border-radius: 4px;
+  font-weight: bold;
+  transition: box-shadow 92ms;
 }
 .liveResults__liveId__input {
   flex: 0 0 auto;
-  margin-left: auto;
+  margin-left: 1rem;
   padding: 2px 6px;
   color: var(--text-default);
   background-color: var(--standard-background);
-  border-radius: 4px;
+  border-radius: 2px;
   transition: box-shadow 92ms;
 }
 .liveResults__liveId__input:focus {
