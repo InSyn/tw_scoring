@@ -1,6 +1,7 @@
 <script>
-import { mdiPlus, mdiMinus } from '@mdi/js/commonjs/mdi';
+import { mdiMagnifyPlusOutline, mdiMagnifyMinusOutline } from '@mdi/js/commonjs/mdi';
 import { ProtocolDocument } from '../../../store/classes/Protocol/ProtocolDocument';
+import { mapActions } from 'vuex';
 
 export default {
   name: 'preview',
@@ -13,10 +14,15 @@ export default {
       type: Object,
       default: () => ({}),
     },
+    competitionId: {
+      type: String,
+      default: null,
+    },
   },
   data() {
     return {
       isRendering: false,
+      renderedProtocol: '',
 
       scale: 1,
       offsetX: 0,
@@ -28,19 +34,10 @@ export default {
       maxZoom: 4.5,
       minZoom: 0.25,
 
-      icons: { mdiPlus, mdiMinus },
+      icons: { zoomIn: mdiMagnifyPlusOutline, zoomOut: mdiMagnifyMinusOutline },
     };
   },
   computed: {
-    renderedProtocol() {
-      if (!this.protocol) return 'No protocol data available.';
-      try {
-        return this.protocol.render();
-      } catch (e) {
-        console.error('Error rendering protocol:', e);
-        return '<div style="color: var(--error);">Error rendering preview</div>';
-      }
-    },
     transformStyles() {
       return {
         transform: `scale(${this.scale}) translate(${this.offsetX / this.scale}px, ${this.offsetY / this.scale}px)`,
@@ -49,6 +46,18 @@ export default {
     },
   },
   methods: {
+    ...mapActions('protocols', {
+      reapplyTemplate: 'applyTemplate',
+    }),
+
+    updateRenderedProtocol() {
+      if (!this.protocol) return;
+      this.renderedProtocol = this.protocol.render();
+      this.$nextTick(() => {
+        this.shrinkToFit();
+      });
+    },
+
     zoomIn() {
       this.scale = Math.min(this.scale + 0.1, this.maxZoom);
     },
@@ -78,7 +87,6 @@ export default {
       this.scale = Math.min(Math.max(this.scale + zoomDelta, this.minZoom), this.maxZoom);
     },
     autoFit() {
-      return;
       this.$nextTick(() => {
         const container = this.$refs.previewContent;
         const protocol = this.$refs.protocolContent;
@@ -99,56 +107,58 @@ export default {
       });
     },
 
-    shrinkToFit(el) {
-      requestAnimationFrame(() => {
-        const container = el.parentElement;
-        if (!container) return;
+    shrinkToFit() {
+      const shrinkCells = document.querySelectorAll('.shrink-cell');
+      this.$nextTick(() => {
+        shrinkCells.forEach((el) => {
+          const container = el.parentElement;
+          if (!container) return;
 
-        const containerStyle = window.getComputedStyle(container);
-        const contentStyle = window.getComputedStyle(el);
+          const containerStyle = window.getComputedStyle(container);
+          const contentStyle = window.getComputedStyle(el);
 
-        const containerWidth = container.clientWidth - parseFloat(containerStyle.paddingLeft) - parseFloat(containerStyle.paddingRight);
-        const containerHeight = container.clientHeight - parseFloat(containerStyle.paddingTop) - parseFloat(containerStyle.paddingBottom);
+          const containerWidth = container.clientWidth - parseFloat(containerStyle.paddingLeft) - parseFloat(containerStyle.paddingRight);
 
-        const contentWidth = el.scrollWidth + parseFloat(contentStyle.paddingLeft) + parseFloat(contentStyle.paddingRight);
-        const contentHeight = el.scrollHeight + parseFloat(contentStyle.paddingTop) + parseFloat(contentStyle.paddingBottom);
+          const contentWidth = el.scrollWidth + parseFloat(contentStyle.paddingLeft) + parseFloat(contentStyle.paddingRight);
 
-        const baseFontSize = parseFloat(contentStyle.fontSize) || 12;
+          const baseFontSize = parseFloat(contentStyle.fontSize);
 
-        const widthRatio = containerWidth / contentWidth;
-        const heightRatio = containerHeight / contentHeight;
+          const widthRatio = containerWidth / contentWidth;
 
-        const scaleFactor = Math.min(widthRatio, heightRatio);
+          const scaleFactor = widthRatio;
 
-        const newFontSize = Math.max(baseFontSize * scaleFactor, 5);
-        el.style.fontSize = `${newFontSize}px`;
+          const newFontSize = Math.max(baseFontSize * scaleFactor, 4);
+          el.style.fontSize = `${newFontSize}px`;
+          el.classList.remove('shrink-cell');
+        });
       });
     },
   },
   watch: {
-    protocol: {
-      handler() {
-        this.$nextTick(() => {
-          this.autoFit();
-        });
+    'protocol.updateIsReady': {
+      handler(val) {
+        if (val) {
+          this.updateRenderedProtocol();
+        }
+      },
+      immediate: true,
+      deep: true,
+    },
+    competitionId: {
+      handler(val) {
+        if (val) {
+          this.updateRenderedProtocol();
+        }
       },
     },
-    renderedProtocol: {
-      handler() {
-        this.$nextTick(() => {
-          const cellElements = this.$el.querySelectorAll('.shrink-cell');
+  },
 
-          if (cellElements.length) cellElements.forEach((cell) => this.shrinkToFit(cell));
-        });
-      },
-    },
-  },
   mounted() {
-    window.addEventListener('resize', this.autoFit);
-    this.autoFit();
-  },
-  beforeDestroy() {
-    window.removeEventListener('resize', this.autoFit);
+    if (this.protocol) {
+      this.reapplyTemplate(this.protocol);
+      this.updateRenderedProtocol();
+      this.autoFit();
+    }
   },
 };
 </script>
@@ -158,13 +168,13 @@ export default {
     <h3 class="preview__header">
       Предпросмотр
       <template class="preview__controls">
-        <button class="tw-button" @click="zoomIn">
-          <v-icon color="white" size="12">{{ icons.mdiPlus }}</v-icon>
+        <button class="tw-button-small transparent" @click="zoomIn">
+          <v-icon color="white" size="18">{{ icons.zoomIn }}</v-icon>
         </button>
-        <button class="tw-button" @click="zoomOut">
-          <v-icon color="white" size="12">{{ icons.mdiMinus }}</v-icon>
+        <button class="tw-button-small transparent" @click="zoomOut">
+          <v-icon color="white" size="18">{{ icons.zoomOut }}</v-icon>
         </button>
-        <button class="tw-button" @click="resetZoom">Сбросить</button>
+        <button class="tw-button-small transparent" @click="resetZoom">Сбросить</button>
       </template>
     </h3>
     <div class="preview__content" ref="previewContent" @mousedown="startDrag" @mousemove="drag" @mouseup="endDrag" @mouseleave="endDrag" @wheel="handleWheel">

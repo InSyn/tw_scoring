@@ -18,7 +18,7 @@
 
     <div @click="competitorRaceInfo_dialogState = true" class="competitorRow__infoData_wrapper">
       <competitor-race-info-dialog
-        @rebuild-start-list="rebuildStartList"
+        @rebuild-start-list="competition.rebuildStartList"
         @toggle-dialog-state="toggleRaceInfoDialog"
         :competition="competition"
         :competitor="getAthleteObject"
@@ -29,7 +29,7 @@
 
       <div
         class="competitorRow__infoData_dataItem"
-        v-for="(field, f) in competition.competitorsSheet.header.filter((f) => ['bib', 'lastname', 'name'].includes(f.id))"
+        v-for="(field, f) in competition.competitorsSheet.header.filter((f) => ['bib', 'name'].includes(f.id))"
         :key="f"
       >
         {{ getAthleteObject ? getAthleteObject.info_data[field.id] : null }}
@@ -48,11 +48,11 @@ export default {
   name: 'competitorsListItem',
   components: { CompetitorRaceInfoDialog },
   props: {
-    competition: { type: EventClass, default: () => {} },
+    competition: { type: EventClass, default: () => ({}) },
     competitorId: { type: String | Number, default: '' },
     competitorIndex: Number,
     section: String,
-    selectedRace: { type: Object, default: () => {} },
+    selectedRace: { type: Object, default: () => ({}) },
   },
   mixins: [MDragEventEmitterMixin],
   data() {
@@ -89,7 +89,7 @@ export default {
         }
       }
 
-      this.rebuildStartList(race);
+      this.this.competition.rebuildStartList(race);
     },
     toggleRaceInfoDialog(state) {
       this.competitorRaceInfo_dialogState = state;

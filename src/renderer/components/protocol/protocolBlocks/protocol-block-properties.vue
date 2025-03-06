@@ -25,7 +25,7 @@ export default {
   data() {
     return {
       selectedHandler: null,
-      dataSources: getTableDataSources(),
+      tableDataSources: getTableDataSources(),
     };
   },
   computed: {
@@ -51,6 +51,10 @@ export default {
       if (!this.selectedBlock) return;
       this.selectedBlock.updateHandler(handlerId);
     },
+    setBlockName(e) {
+      if (e.target.value === undefined || e.target.value === ' ') this.selectedBlock.setBlockName('');
+      this.selectedBlock.setBlockName(e.target.value);
+    },
   },
 };
 </script>
@@ -58,10 +62,16 @@ export default {
 <template>
   <div class="protocolBlockProperties__wrapper">
     <div v-if="selectedBlock">
+      <h4 class="blockType">{{ selectedBlock.type }}</h4>
+      <div class="protocolNameControl__wrapper">
+        <h3><label for="protocol-name">Название: </label></h3>
+        <input id="protocol-name" type="text" :value="selectedBlock.blockName" @change="setBlockName($event)" />
+      </div>
+
       <div v-if="selectedBlock.type === 'table'" class="tableHandler__wrapper">
         <label for="table-handler"><b>Данные:</b></label>
         <select id="table-handler" :value="selectedBlock.handlerId" @change="updateHandler($event.target.value)">
-          <option v-for="(source, s_key) in dataSources" :key="s_key" :value="s_key">{{ source.label }}</option>
+          <option v-for="(source, s_key) in tableDataSources" :key="s_key" :value="s_key">{{ source.label }}</option>
         </select>
       </div>
 
@@ -118,6 +128,25 @@ export default {
   padding: 8px;
   font-size: 0.95em;
 
+  .blockType {
+    margin: 0 8px 4px;
+  }
+  .protocolNameControl__wrapper {
+    flex: 0 0 auto;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    border-radius: 2px;
+    background-color: var(--background-card-nested);
+    label {
+      flex: 0 0 auto;
+    }
+    input {
+      flex: 1 1 0;
+      min-width: 0;
+      margin-left: 16px;
+    }
+  }
   .tableHandler__wrapper {
     display: flex;
     align-items: center;

@@ -8,11 +8,11 @@ import ProtocolItemsListItem from '../protocolItems/protocol-items-list-item.vue
 import MDragAndDrop from '../../mixins/MDragAndDrop';
 import BlocksListItem from '../protocolBlocks/protocol-blocks-list-item.vue';
 import TwFileInput from '../../ui/tw-file-input.vue';
-import ProtocolTebleItemsList from '../protocolItems/protocol-teble-items-list.vue';
+import ProtocolTableItemsList from '../protocolItems/protocol-table-items-list.vue';
 
 export default {
   name: 'items-management-section',
-  components: { ProtocolTebleItemsList, TwFileInput, BlocksListItem, ProtocolItemsListItem, ProtocolBlockProperties, ProtocolItemProperties },
+  components: { ProtocolTableItemsList, TwFileInput, BlocksListItem, ProtocolItemsListItem, ProtocolBlockProperties, ProtocolItemProperties },
   props: {
     blocks: {
       type: Array,
@@ -167,7 +167,7 @@ export default {
       <div v-if="newItemType === 'custom'">
         <label for="handler-select">Данные:</label>
         <select v-model="selectedHandler" id="handler-select">
-          <option value="" disabled>Источник данных...</option>
+          <option value="">Пустое значение</option>
           <option v-for="handler in handlerOptions" :key="handler" :value="handler">
             {{ handler }}
           </option>
@@ -187,7 +187,7 @@ export default {
     </div>
 
     <div class="itemsSection__body">
-      <protocol-teble-items-list
+      <protocol-table-items-list
         v-if="selectedBlock.type === 'table'"
         :selected-block="selectedBlock"
         :table-headers="tableHeaders"
@@ -198,7 +198,7 @@ export default {
         @update-cell-handler="updateCellHandler"
         @update-cell-content="updateCellContent"
       >
-      </protocol-teble-items-list>
+      </protocol-table-items-list>
 
       <ul v-else class="itemsSection__list">
         <protocol-items-list-item
@@ -222,15 +222,18 @@ export default {
         class="itemsSection__properties"
         :selected-item="selectedItem"
         :selected-block-type="selectedBlock ? selectedBlock.type : ''"
+        :selected-block="selectedBlock"
       />
     </div>
   </div>
 </template>
 
 <style lang="scss">
+@use './../../../assets/styles/shared/selectableListItem' as *;
 .itemsSection__wrapper {
   display: flex;
   flex-direction: column;
+  min-height: 8rem;
   font-size: 0.95em;
 
   .itemsSection__header {
@@ -265,26 +268,40 @@ export default {
       flex: 1 1 100px;
       overflow-y: auto;
       list-style: none;
-      padding: 0;
+      padding: 8px;
       margin: 0;
       background-color: var(--background-deep);
 
       .item-row {
+        @include selectable-list-item;
         padding: 4px;
         background-color: var(--background-card-nested);
         transition: background-color 92ms;
-        &.selected {
-          background-color: var(--subject-background);
-        }
 
         &__controls {
           display: flex;
           align-items: center;
           margin-bottom: 4px;
+          overflow: hidden;
 
+          h3,
+          .item-row__title {
+            flex: 1 1 0;
+            display: flex;
+            align-items: center;
+            margin-right: 1.25rem;
+            overflow: hidden;
+          }
           span {
-            margin-right: auto;
+            &:nth-child(2) {
+              overflow: hidden;
+              text-overflow: ellipsis;
+            }
+          }
+          span,
+          h3 {
             font-weight: bold;
+            white-space: nowrap;
           }
           button {
             margin-right: 8px;

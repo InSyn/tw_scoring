@@ -12,11 +12,7 @@
       <div class="availableCompetitors__list__wrapper">
         <div v-for="(availableCompetitorId, idx) in gatAvailableCompetitors" :key="idx" class="availableCompetitors__list__item">
           <div class="competitorName">
-            {{
-              `${getRaceCompetitor(availableCompetitorId).info_data['bib']} ${getRaceCompetitor(availableCompetitorId).info_data['lastname']} ${
-                getRaceCompetitor(availableCompetitorId).info_data['name']
-              }`
-            }}
+            {{ `${getRaceCompetitor(availableCompetitorId).info_data['bib']} ${getRaceCompetitor(availableCompetitorId).info_data['name']}` }}
           </div>
           <button @click="addRunCompetitor(getRaceCompetitor(availableCompetitorId), 'blue')" class="addRunCompetitor__button course-blue">B</button>
           <button @click="addRunCompetitor(getRaceCompetitor(availableCompetitorId), 'red')" class="addRunCompetitor__button course-red">R</button>
@@ -98,7 +94,7 @@ export default {
       const competitor = this.getRaceCompetitor(this.runParticipants[course]);
       if (!competitor) return 'Не выбран';
 
-      return `${competitor.info_data['bib']} ${competitor.info_data['lastname']} ${competitor.info_data['name']}`;
+      return `${competitor.info_data['bib']} ${competitor.info_data['name']}`;
     },
     removeCompetitorFromCourse(course) {
       this.runParticipants[course] = null;
@@ -218,12 +214,12 @@ export default {
 }
 
 .course-blue {
-  background: var(--dmo-blue);
+  background: var(--dm-blue);
   font-weight: bold;
 }
 .course-red {
   margin-left: 8px;
-  background: var(--dmo-red);
+  background: var(--dm-red);
   font-weight: bold;
 }
 

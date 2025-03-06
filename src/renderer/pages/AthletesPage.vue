@@ -1,81 +1,3 @@
-<template>
-  <div v-if="competition" class="competitorsPage__container">
-    <div class="competitorsPage__wrapper">
-      <div class="competitorsPage__header">
-        <div class="competitorsPage__header__title">
-          {{ localization[lang].app.competitors.title }}
-        </div>
-
-        <div class="competitorsPage__header__actions">
-          <v-btn @click="load_prev_stages()" class="competitorsPage__header__actions__button" color="var(--action-blue)" text>
-            <v-icon class="competitorsPage__header__actions__button__icon" color="var(--text-default)"> mdi-page-previous </v-icon>
-            {{ localization[lang].app.competitors.from_prev }}
-          </v-btn>
-
-          <v-btn class="competitorsPage__header__actions__button" color="var(--success)" text>
-            <label for="startListInput">
-              <v-icon class="competitorsPage__header__actions__button__icon" color="var(--text-default)"> mdi-file-excel </v-icon>
-              {{ localization[lang].app.competitors.load_from_file }}
-            </label>
-          </v-btn>
-          <input
-            @change="load_sheet($event)"
-            id="startListInput"
-            type="file"
-            accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
-            hidden
-          />
-
-          <v-btn class="competitorsPage__header__actions__button" color="var(--action-yellow)" text>
-            <v-icon class="competitorsPage__header__actions__button__icon" color="var(--text-default)"> mdi-arrow-right-bold </v-icon>
-            {{ localization[lang].app.competitors.export_btn }}
-          </v-btn>
-        </div>
-      </div>
-
-      <div class="competitorsSheet__wrapper">
-        <div class="competitorsSheet__header">
-          <div v-for="(head, h) in this.competition.competitorsSheet.header" :key="h" class="competitorsSheet__header__dataItem">
-            <v-btn
-              @click="sortByCol(competition.competitorsSheet.competitors, head.id)"
-              class="competitorsSheet__header__dataItem__sortButton"
-              color="var(--accent)"
-              text
-              small
-            >
-              <div class="competitorsSheet__header__dataItem__value">
-                {{ head.title }}
-              </div>
-
-              <v-icon v-show="sortBy.title === head.id" class="competitorsSheet__header__dataItem__sortIcon" small>
-                {{ sortBy.dir === 'desc' ? `mdi-chevron-down` : `mdi-chevron-up` }}
-              </v-icon>
-            </v-btn>
-          </div>
-        </div>
-
-        <div class="competitorsSheet__competitorsList__wrapper">
-          <competitor-row
-            v-for="(competitor, competitor_idx) in competition.competitorsSheet.competitors"
-            :key="competitor_idx"
-            :competition="competition"
-            :competitor="competitor"
-            :listIsSorted="sortBy.order"
-          ></competitor-row>
-        </div>
-
-        <div class="competitorsSheet__footer">
-          <create-competitor-dialog :competition="competition"></create-competitor-dialog>
-
-          <competitors-sheet-settings-dialog :competition="competition"></competitors-sheet-settings-dialog>
-
-          <clear-competitors-dialog :competition="competition"></clear-competitors-dialog>
-        </div>
-      </div>
-    </div>
-  </div>
-</template>
-
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import XLSX from 'read-excel-file/node';
@@ -93,22 +15,35 @@ export default {
     CreateCompetitorDialog,
     CompetitorRow,
   },
-  // mounted() {
-  //   if (this.competition && !this.competition.competitorsSheet.competitors.length)
-  //     this.load_sheet({
-  //       target: {
-  //         files: [
-  //           {
-  //             path: 'C:\\Users\\insyn\\Desktop\\Events dev\\SL_M.xlsx',
-  //           },
-  //         ],
-  //       },
-  //     });
-  // },
+  mounted() {
+    // this.loadEventOnMount('C:\\Users\\insyn\\Desktop\\Events dev\\SL_M.xlsx');
+  },
+  data() {
+    return {
+      sortBy: { title: '', dir: '' },
+      startListFolder: {
+        dialog: false,
+        list: [],
+        selected: null,
+      },
+    };
+  },
   methods: {
     ...mapActions('main', {
       updateEvent: 'updateEvent',
     }),
+    loadEventOnMount(path) {
+      if (this.competition && !this.competition.competitorsSheet.competitors.length)
+        this.load_sheet({
+          target: {
+            files: [
+              {
+                path,
+              },
+            ],
+          },
+        });
+    },
     deleteCompetitor(competitor) {
       this.competition.races.forEach((race) => {
         race.startList = race.startList.filter((_competitor) => _competitor !== competitor.id);
@@ -240,16 +175,6 @@ export default {
       }
     },
   },
-  data() {
-    return {
-      sortBy: { title: '', dir: '' },
-      startListFolder: {
-        dialog: false,
-        list: [],
-        selected: null,
-      },
-    };
-  },
   computed: {
     ...mapGetters('localization', {
       lang: 'lang',
@@ -263,6 +188,84 @@ export default {
   },
 };
 </script>
+
+<template>
+  <div v-if="competition" class="competitorsPage__container">
+    <div class="competitorsPage__wrapper">
+      <div class="competitorsPage__header">
+        <div class="competitorsPage__header__title">
+          {{ localization[lang].app.competitors.title }}
+        </div>
+
+        <div class="competitorsPage__header__actions">
+          <v-btn @click="load_prev_stages()" class="competitorsPage__header__actions__button" color="var(--action-blue)" text>
+            <v-icon class="competitorsPage__header__actions__button__icon" color="var(--text-default)"> mdi-page-previous </v-icon>
+            {{ localization[lang].app.competitors.from_prev }}
+          </v-btn>
+
+          <v-btn class="competitorsPage__header__actions__button" color="var(--success)" text>
+            <label for="startListInput">
+              <v-icon class="competitorsPage__header__actions__button__icon" color="var(--text-default)"> mdi-file-excel </v-icon>
+              {{ localization[lang].app.competitors.load_from_file }}
+            </label>
+          </v-btn>
+          <input
+            @change="load_sheet($event)"
+            id="startListInput"
+            type="file"
+            accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+            hidden
+          />
+
+          <v-btn class="competitorsPage__header__actions__button" color="var(--action-yellow)" text>
+            <v-icon class="competitorsPage__header__actions__button__icon" color="var(--text-default)"> mdi-arrow-right-bold </v-icon>
+            {{ localization[lang].app.competitors.export_btn }}
+          </v-btn>
+        </div>
+      </div>
+
+      <div class="competitorsSheet__wrapper">
+        <div class="competitorsSheet__header">
+          <div v-for="(head, h) in this.competition.competitorsSheet.header" :key="h" class="competitorsSheet__header__dataItem">
+            <v-btn
+              @click="sortByCol(competition.competitorsSheet.competitors, head.id)"
+              class="competitorsSheet__header__dataItem__sortButton"
+              color="var(--accent)"
+              text
+              small
+            >
+              <div class="competitorsSheet__header__dataItem__value">
+                {{ head.title }}
+              </div>
+
+              <v-icon v-show="sortBy.title === head.id" class="competitorsSheet__header__dataItem__sortIcon" small>
+                {{ sortBy.dir === 'desc' ? `mdi-chevron-down` : `mdi-chevron-up` }}
+              </v-icon>
+            </v-btn>
+          </div>
+        </div>
+
+        <div class="competitorsSheet__competitorsList__wrapper">
+          <competitor-row
+            v-for="(competitor, competitor_idx) in competition.competitorsSheet.competitors"
+            :key="competitor_idx"
+            :competition="competition"
+            :competitor="competitor"
+            :listIsSorted="sortBy.order"
+          ></competitor-row>
+        </div>
+
+        <div class="competitorsSheet__footer">
+          <create-competitor-dialog :competition="competition"></create-competitor-dialog>
+
+          <competitors-sheet-settings-dialog :competition="competition"></competitors-sheet-settings-dialog>
+
+          <clear-competitors-dialog :competition="competition"></clear-competitors-dialog>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
 
 <style scoped>
 .competitorsPage__container {
@@ -353,9 +356,9 @@ export default {
 }
 
 .competitorsSheet__competitorsList__wrapper {
-  flex: 1 1 auto;
+  flex: 1 1 0;
   position: relative;
-  min-height: 600px;
+  min-height: 300px;
 
   margin-left: -16px;
   padding-left: 16px;

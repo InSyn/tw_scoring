@@ -1,6 +1,4 @@
 <script>
-import { mapActions } from 'vuex';
-
 export default {
   name: 'template-selection',
   props: {
@@ -45,7 +43,9 @@ export default {
 .templateSelection__wrapper {
   display: flex;
   flex-direction: column;
-  font-size: 0.95em;
+  overflow: visible;
+  min-height: 6rem;
+  font-size: 0.9em;
 
   .templateSelection__header {
     flex: 0 0 auto;
@@ -53,6 +53,8 @@ export default {
   }
   .templateSelection__list {
     flex: 1 1 50px;
+    display: flex;
+    flex-direction: column;
     list-style: none;
     padding: 0;
     margin: 0;
@@ -61,13 +63,18 @@ export default {
     overflow-y: auto;
 
     li {
-      padding: 0.4rem 0.8rem;
+      flex: 0 0 auto;
+      padding: 0.25rem 0.4rem;
+      font-size: 0.9rem;
       cursor: pointer;
-      transition: background-color 128ms;
-
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      transition: background-color 92ms;
       &:hover {
         background-color: var(--subject-background);
       }
+
       &.selected {
         font-weight: bold;
         background-color: var(--accent);

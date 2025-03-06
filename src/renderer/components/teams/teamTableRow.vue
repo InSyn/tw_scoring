@@ -1,5 +1,5 @@
 <template>
-  <div class="teamTable__row" @click="logTeamRes(team)">
+  <div class="teamTable__row">
     <div class="teamName__wrapper">
       <span class="teamName__label">Название</span>
       <input class="teamName__input" v-model.lazy.trim="team.name" type="text" />
@@ -22,20 +22,18 @@
 import TeamCompetitor from './teamCompetitor';
 import TeamCompetitors_dialog from './dialogs/teamCompetitors_dialog';
 import { mdiDeleteForever } from '@mdi/js';
+import MDragEventEmitterMixin from '../mixins/MDragEventEmitterMixin';
+import DragListItemIcon from '../../assets/icons/drag-list-item-icon.vue';
 
 export default {
   name: 'teamTableRow',
   props: ['competition', 'team'],
-  components: { TeamCompetitors_dialog, TeamCompetitor },
+  components: { DragListItemIcon, TeamCompetitors_dialog, TeamCompetitor },
+  mixins: [MDragEventEmitterMixin],
   methods: {
     getCompetitor(competitorId) {
       const competitor = this.competition.competitorsSheet.competitors.find((competitor) => competitor.id === competitorId);
       return competitor ? competitor : null;
-    },
-    logTeamRes(team) {
-      // console.log(
-      //   this.competition.getTeamRaceResult(team, this.competition.selected_race)
-      // );
     },
     removeTeam(teamToRemove) {
       this.competition.teams = this.competition.teams.filter((team) => team.id !== teamToRemove.id);
@@ -86,12 +84,10 @@ export default {
 .teamName__input {
   min-width: 0;
   margin-left: 8px;
-  padding: 4px;
-  font-size: 1.2rem;
   font-weight: bold;
   color: var(--text-default);
   background: var(--standard-background);
-  border-radius: 6px;
+  border-radius: 2px;
 }
 .teamId__label {
   margin-left: 8px;
@@ -101,10 +97,9 @@ export default {
   min-width: 0;
   width: 6rem;
   margin-left: 4px;
-  padding: 4px;
   color: var(--text-default);
   background: var(--standard-background);
-  border-radius: 6px;
+  border-radius: 2px;
 }
 .teamCompetitors__wrapper {
   display: flex;
@@ -112,8 +107,8 @@ export default {
   position: relative;
   min-height: 32px;
   margin-top: 6px;
-  padding: 6px 0 0 6px;
+  padding: 4px 0 0 4px;
   background: var(--standard-background);
-  border-radius: 6px;
+  border-radius: 4px;
 }
 </style>

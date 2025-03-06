@@ -27,7 +27,7 @@ export default {
       const competitorObject = getCompetitorByBib(this.competition, bib);
       if (!competitorObject) return '';
 
-      return `${competitorObject.info_data['lastname']} ${competitorObject.info_data['name'] ? competitorObject.info_data['name'][0] : ''}`;
+      return `${competitorObject.info_data['name'] || ''}`;
     },
     removeHeat() {
       this.$emit('heat:remove', this.heatIdx);

@@ -1,20 +1,19 @@
 import { generateId } from '../../utils/utils';
 
 export default class JudgeClass {
-  constructor(title, id, lastName, name, location) {
+  constructor({ id = 0, title = 'Судья', ffr_id = '', lastName = '', name = '', location = '', category = '' }) {
     this._id = generateId();
-    this.title = title || 'Judge';
-    this.remoteId = null;
-    this.id = id || 0;
-    this.name = name || '';
-    this.lastName = lastName || '';
-    this.location = location || '';
-    this.setABC = false;
+    this.title = title;
+    this.id = id;
+    this.name = name;
+    this.ffr_id = ffr_id;
+    this.lastName = lastName;
+    this.location = location;
+    this.category = category;
 
     this.moguls_role = 'turns';
   }
-  jury_code = '';
-  category = '';
   socket_id = null;
   connected = false;
+  setABC = false;
 }

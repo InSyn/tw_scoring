@@ -1,4 +1,4 @@
-import { generateId } from '../../utils/utils';
+import { generateId, getShallowCopy } from '../../utils/utils';
 
 export default class RaceClass {
   constructor(params) {
@@ -13,9 +13,16 @@ export default class RaceClass {
     this.onTrack = null;
     this.heats = [...params.heats] || [];
   }
+
+  serialize() {
+    return getShallowCopy(this);
+  }
 }
 
-export const raceStatuses = ['DNS', 'DNF', 'DSQ'];
+export const raceStatuses = { DNF: -1, DNS: -2, DSQ: -3 };
+export const hasStatus = (result) => {
+  return Object.keys(raceStatuses).includes(result);
+};
 
 export const DMRounds = [
   { title: 'Раунд 128', quantity: 64 },
@@ -24,8 +31,7 @@ export const DMRounds = [
   { title: 'Раунд 16', quantity: 8 },
   { title: '1/4 финала', quantity: 4 },
   { title: '1/2 финала', quantity: 2 },
-  { title: 'Малый финал', quantity: 1 },
-  { title: 'Большой финал', quantity: 1 },
+  { title: 'Финал', quantity: 2 },
 ];
 export const SXRounds = [
   { title: '1/128 финала', quantity: 128 },
@@ -35,6 +41,5 @@ export const SXRounds = [
   { title: '1/8 финала', quantity: 8 },
   { title: '1/4 финала', quantity: 4 },
   { title: '1/2 финала', quantity: 2 },
-  { title: 'Малый финал', quantity: 1 },
-  { title: 'Большой финал', quantity: 1 },
+  { title: 'Финал', quantity: 2 },
 ];

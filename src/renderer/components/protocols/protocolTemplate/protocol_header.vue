@@ -12,23 +12,24 @@
       <div class="competitionInfo_asset">
         <img
           class="competitionInfo_asset__image"
+          style="max-height: 80px"
+          alt=""
           v-if="results_protocol.assets.title_logo_left.file && results_protocol.assets.title_logo_left.file.path"
           :src="results_protocol.assets.title_logo_left.file.path"
-          alt=""
         />
       </div>
       <div class="competition_description" style="display: flex; flex-direction: column; align-items: center; margin: auto">
         <div
-          style="font-size: 1.3rem; font-weight: bold; line-height: 1.4; text-align: center"
+          style="font-size: 1.2rem; font-weight: bold; line-height: 1.4; text-align: center"
           v-html="results_protocol.title && results_protocol.title.length > 0 ? results_protocol.title : competition.mainData.title.value"
         ></div>
-        <div style="font-size: 1.3rem; font-weight: bold; line-height: 1.25; text-align: center">
+        <div style="font-size: 1.15rem; font-weight: bold; line-height: 1.25; text-align: center">
           {{ protocol_type }}
         </div>
-        <div v-if="race" style="font-size: 1.25rem; line-height: 1.2">
+        <div v-if="race" style="font-size: 1.1rem; line-height: 1.2">
           {{ race }}
         </div>
-        <div style="font-size: 1.25rem; font-weight: bold; line-height: 1.2">
+        <div style="font-size: 1.1rem; font-weight: bold; line-height: 1.2">
           {{
             `${
               competition.mainData.discipline.value
@@ -40,10 +41,10 @@
             }`
           }}
         </div>
-        <div style="font-size: 1.2rem; line-height: 1.2; text-align: center">
+        <div style="font-size: 1rem; line-height: 1.2; text-align: center">
           {{ `${competition.mainData.country.value ? competition.mainData.country.value + ', ' : ''}${competition.mainData.location.value}` }}
         </div>
-        <div style="font-size: 1.2rem; line-height: 1.2">
+        <div style="font-size: 1rem; line-height: 1.2">
           {{
             `${localization[lang].app.protocols.start_date}: ${getFormattedStartDate} ${localization[lang].app.protocols.start_time}: ${competition.mainData.date.time}`
           }}
@@ -52,9 +53,10 @@
       <div class="competitionInfo_asset">
         <img
           class="competitionInfo_asset__image"
+          style="max-height: 80px"
+          alt=""
           v-if="results_protocol.assets.title_logo_right.file && results_protocol.assets.title_logo_right.file.path"
           :src="results_protocol.assets.title_logo_right.file.path"
-          alt=""
         />
       </div>
     </div>

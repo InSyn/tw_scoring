@@ -29,6 +29,16 @@ export default {
       root.addEventListener('dragover', this.emitDragOver);
       root.addEventListener('drop', this.emitDrop);
     }
+    const childInputs = root.querySelectorAll('input, textarea, select');
+    childInputs.forEach((el) => {
+      el.setAttribute('draggable', 'false');
+      el.addEventListener('dragstart', (e) => {
+        e.stopPropagation();
+      });
+      el.addEventListener('mousedown', (e) => {
+        e.stopPropagation();
+      });
+    });
   },
   beforeDestroy() {
     const root = this.$el;

@@ -8,6 +8,7 @@ import TemplateManager from '../components/protocol/protocolTemplates/template-m
 import { mapActions, mapGetters } from 'vuex';
 import html2pdf from 'html2pdf.js';
 import { mmToPx } from '../utils/protocolTemplate-utils';
+import { debounce } from '../utils/utils';
 
 export default {
   name: 'ProtocolsPage',
@@ -20,6 +21,10 @@ export default {
 
       resizing: false,
       startX: 0,
+      totalWidth: 0,
+      leftWidthBeforeDrag: 0,
+      MIN_LEFT_WIDTH: 200,
+      MIN_RIGHT_WIDTH: 300,
       leftSectionWidth: 0,
       rightSectionWidth: 0,
     };
@@ -30,10 +35,13 @@ export default {
       protocol: 'getProtocol',
     }),
     ...mapGetters('main', {
-      protocolDataCtx: 'getProtocolDataCtx',
+      protocolDataCtx: 'getDataCtx',
     }),
     dataCtx() {
       return this.protocol ? this.protocolDataCtx : {};
+    },
+    selectedCompetitionId() {
+      return this.protocolDataCtx ? this.protocolDataCtx.id : null;
     },
     protocolBlocks() {
       return this.protocol ? this.protocol.blocks : [];
@@ -98,11 +106,14 @@ export default {
       return {
         margin: [-1, -1, -9, -1],
         image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, letterRendering: true, useCORS: true },
+        html2canvas: { scale: 2, letterRendering: true, useCORS: true, allowTaint: true },
         jsPDF: {
           unit: 'px',
           format: [mmToPx(this.protocol.config.page.width), adjustedHeight],
           orientation: this.protocol.config.page.orientation === 'landscape' ? 'landscape' : 'portrait',
+          compress: true,
+          hotfixes: ['px_scaling'],
+          pagebreak: { avoid: 'all' },
         },
       };
     },
@@ -122,33 +133,33 @@ export default {
       this.resizing = true;
       this.startX = event.clientX;
 
-      const leftSection = this.$el.querySelector('.main__section__left');
-      const rightSection = this.$el.querySelector('.preview__section');
-      this.leftSectionWidth = leftSection.offsetWidth;
-      this.rightSectionWidth = rightSection.offsetWidth;
+      const container = this.$refs.mainSection;
+      this.totalWidth = container.offsetWidth;
 
-      document.addEventListener('mousemove', this.resizeSections);
-      document.addEventListener('mouseup', this.stopResizing);
+      this.leftWidthBeforeDrag = this.$refs.leftPane.offsetWidth;
+
+      document.body.classList.add('disable-select');
+
+      document.addEventListener('mousemove', this.onMouseMove);
+      document.addEventListener('mouseup', this.onMouseUp);
     },
-    resizeSections(event) {
-      event.preventDefault();
+    onMouseMove(e) {
       if (!this.resizing) return;
 
-      const deltaX = event.clientX - this.startX;
+      const deltaX = e.clientX - this.startX;
+      let newLeft = this.leftWidthBeforeDrag + deltaX;
+      const maxLeft = this.totalWidth - this.MIN_RIGHT_WIDTH;
+      if (newLeft < this.MIN_LEFT_WIDTH) newLeft = this.MIN_LEFT_WIDTH;
+      if (newLeft > maxLeft) newLeft = maxLeft;
 
-      const newLeftWidth = this.leftSectionWidth + deltaX;
-      const newRightWidth = this.rightSectionWidth - deltaX;
-
-      if (newLeftWidth > 420 && newRightWidth > 320) {
-        document.documentElement.style.setProperty('--left-section-width', `${newLeftWidth}px`);
-        document.documentElement.style.setProperty('--right-section-width', `${newRightWidth}px`);
-      }
+      document.documentElement.style.setProperty('--left-section-width', newLeft + 'px');
     },
-    stopResizing() {
+    onMouseUp() {
       this.resizing = false;
+      document.body.classList.remove('disable-select');
 
-      document.removeEventListener('mousemove', this.resizeSections);
-      document.removeEventListener('mouseup', this.stopResizing);
+      document.removeEventListener('mousemove', this.onMouseMove);
+      document.removeEventListener('mouseup', this.onMouseUp);
     },
   },
   mounted() {
@@ -162,13 +173,13 @@ export default {
 </script>
 
 <template>
-  <div class="protocolPage__wrapper page-wrapper">
+  <div class="protocolPage__wrapper page-wrapper" :class="{ resizing: resizing }">
     <header class="protocolPage__header">
       <h2 class="protocolPage__title">Управление протоколами</h2>
     </header>
 
-    <div class="main__section">
-      <div class="main__section__left">
+    <div class="main__section" ref="mainSection">
+      <div class="main__section__left" ref="leftPane">
         <div class="templates__section">
           <template-selection
             class="section-container"
@@ -186,16 +197,16 @@ export default {
         <items-management-section class="section-container" :blocks="protocolBlocks" :block-id="selectedBlockId" :data-ctx="dataCtx" />
       </div>
 
-      <div class="splitter" @mousedown="startResizing" />
+      <div class="splitter" @mousedown="startResizing" :style="{ cursor: resizing ? 'col-resize' : 'col-resize' }" />
 
-      <aside class="preview__section">
-        <preview ref="preview" class="section-container" :protocol="protocol" :data-ctx="dataCtx" />
+      <aside class="preview__section" ref="rightPane">
+        <preview ref="preview" class="section-container" :protocol="protocol" :data-ctx="dataCtx" :competition-id="selectedCompetitionId" />
       </aside>
     </div>
 
     <footer class="protocolPage__footer">
       <button class="tw-button-big" @click="saveTemplates">Сохранить шаблон</button>
-      <button class="tw-button-big" @click="openTemplateManager">Экспорт шаблона</button>
+      <button class="tw-button-big" @click="openTemplateManager">Импорт/Экспорт</button>
       <button class="tw-button-big" @click="savePDF">Сохранить PDF</button>
     </footer>
 
@@ -207,7 +218,8 @@ export default {
         @delete-template="handleDeleteTemplate"
         @import-template="importTemplate"
         class="templateManager__slider"
-    /></transition>
+      />
+    </transition>
   </div>
 </template>
 
@@ -235,13 +247,16 @@ export default {
       grid-column: 1;
       display: grid;
       grid-template-columns: 1fr;
-      grid-template-rows: minmax(auto, 240px) 1fr 1fr;
+      grid-template-rows: minmax(auto, 216px) 1fr 1fr;
       grid-gap: 8px;
 
       .templates__section {
         display: grid;
         grid-template-columns: 1fr 2fr;
         grid-gap: 8px;
+      }
+      & > * {
+        overflow-x: hidden;
       }
     }
     .splitter {
@@ -295,9 +310,15 @@ export default {
   }
 }
 
+.disable-select {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
 .slide-enter-active,
 .slide-leave-active {
-  transition: transform 128ms ease-out;
+  transition: transform 92ms ease-out;
 }
 .slide-enter,
 .slide-leave-to {

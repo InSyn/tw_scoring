@@ -59,7 +59,8 @@ export const protocolHandlers = {
     ];
   },
   'athlete:info': (protocolFieldData, { id }) => {
-    return [protocolFieldData.competitor ? protocolFieldData.competitor.info_data[id] : ''];
+    if (!protocolFieldData.competitor || !protocolFieldData.competitor.info_data) return '';
+    return [protocolFieldData.competitor.info_data[id] || ' '];
   },
   'athlete:rank': (protocolFieldData) => {
     if (!protocolFieldData.result) return ' ';
@@ -72,7 +73,7 @@ export const protocolHandlers = {
       console.error('Judge reference is missing:', protocolFieldData);
       return '-';
     }
-    return protocolFieldData.competitor.marks.filter((_mark) => _mark.judge === judge.id).map((_mark) => _mark.value) || '-';
+    return protocolFieldData.competitor.marks.filter((_mark) => _mark.judge == judge.id).map((_mark) => _mark.value) || '-';
   },
 
   'race:title': (protocolFieldData) => {

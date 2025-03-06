@@ -1,161 +1,68 @@
 <script>
-import { getCompetitorById, getDMOCompetitorColor, getHeatCompetitorColor } from '../../../utils/competition-utils';
-import { runResultOptions } from '../../../store/classes/DM/DMRunClass';
-import MarkClass from '../../../store/classes/MarkClass';
-import { mapActions } from 'vuex';
+import { getDMCompetitorColor, getHeatCompetitorColor } from '../../../utils/competition-utils';
+import MDraggableContainer from '../../mixins/MDraggableContainer';
+import LocateIcon from '../../../assets/icons/locate-icon.vue';
+import DMGridCompetitorItem from '../../raceList/DM/DMGridCompetitor-item.vue';
 
 export default {
-  name: 'dmo-grid',
+  name: 'dm-grid',
+  components: { DMGridCompetitorItem, LocateIcon },
+  mixins: [MDraggableContainer],
   props: {
-    competition: Object,
+    competition: { type: Object, default: () => ({}) },
     selectedHeat: null,
   },
-  computed: {
-    runResultOptions() {
-      return runResultOptions;
-    },
-  },
   methods: {
-    ...mapActions('main', ['updateEvent']),
-    getDMOCompetitorColor,
+    getDMCompetitorColor,
     getHeatCompetitorColor,
-    getCompetitorData(id) {
-      if (!id || !id.toString().length) return [' ', ' ', ' '];
 
-      const competitorObject = getCompetitorById(this.competition, id);
-      if (!competitorObject) return [' ', ' ', ' '];
+    isSelectedHeat(heat) {
+      if (!this.competition.selected_race || !this.competition.selected_race.onTrack) return false;
 
-      return [competitorObject.info_data['bib'], competitorObject.info_data['lastname'], competitorObject.info_data['name']];
+      return this.competition.selected_race.onTrack === heat.id;
     },
-
-    // getSortedCompetitors(competitors, stage_idx, totalHeats) {
-    //   const markedCompetitors = competitors.map((competitor, index) => ({ ...competitor, color: index === 0 ? 'var(--athlete-blue)' : 'var(--athlete-red)' }));
-    //
-    //   if (Number(totalHeats) - Number(stage_idx) === 1 || Number(totalHeats) - Number(stage_idx) === 2) {
-    //     return markedCompetitors.slice().reverse();
-    //   }
-    //
-    //   return stage_idx % 2 === 0 && stage_idx !== 2 ? markedCompetitors : markedCompetitors.slice().reverse();
-    // },
-
-    isSelectedHeat(stage_idx, heat_idx) {
-      return this.competition.selected_race_id.toString() === stage_idx.toString() && this.selectedHeat === heat_idx;
-    },
-
-    getCompetitorResult(stage_idx, heat_idx, comp_idx) {
-      if (!this.competition.races[stage_idx] || !this.competition.races[stage_idx].runs || !this.competition.races[stage_idx].runs[heat_idx]) return '';
-
-      return this.competition.races[stage_idx].runs[heat_idx].results[comp_idx];
-    },
-
-    setCompetitorResult(stage_idx, heat_idx, comp_idx, value) {
-      if (!this.competition.races[stage_idx] || !this.competition.races[stage_idx].runs || !this.competition.races[stage_idx].runs[heat_idx]) return;
-
-      this.competition.races[stage_idx].runs[heat_idx].results[comp_idx] = value;
-    },
-
-    getCompetitorGap(stage_idx, heat_idx, comp_idx) {
-      if (!this.competition.races[stage_idx] || !this.competition.races[stage_idx].runs[heat_idx]) {
-        console.warn('Gap not found');
-        return;
-      }
-      const course = comp_idx === 0 ? 'red' : 'blue';
-      return this.competition.races[stage_idx].runs[heat_idx][`${course}CourseGap`];
-    },
-    setCompetitorGap(stage_idx, heat_idx, comp_idx, value) {
-      if (!this.competition.races[stage_idx]) {
-        console.warn('Unable to set gap');
-        return;
-      }
-      const course = comp_idx === 0 ? 'red' : 'blue';
-      this.$set(this.competition.races[stage_idx].runs[heat_idx], `${course}CourseGap`, value);
-      this.updateEvent();
-    },
-    getCompetitorScore(stage_idx, heat_idx, comp_idx) {
-      if (!this.competition.races[stage_idx]) {
-        console.warn('Score not found');
-      }
-      const competitor = this.competition.races[stage_idx].runs[heat_idx].competitors[comp_idx];
-      if (!competitor || !competitor.results) return null;
-      const result = competitor.results.find((result) => result.race_id === this.competition.selected_race.id);
-      if (!result || !result.value) return null;
-
-      return result.value;
-    },
-    setCompetitorScore(stage_idx, heat_idx, comp_idx, value) {
-      if (!this.competition.races[stage_idx]) {
-        console.warn('Unable to set found');
-      }
-      const competitor = this.competition.races[stage_idx].runs[heat_idx].competitors[comp_idx];
-
-      this.competition.publishResult({
-        competitor: competitor,
-        race_id: this.competition.selected_race.id,
-        status: competitor.race_status,
-        manualResult: !isNaN(value) ? this.competition.roundWithPrecision(Number(value)) : null,
-        rep: '',
-      });
-      this.updateEvent();
-    },
-    getCompetitorIdx(stage_idx, heat_idx, competitor) {
-      if (!stage_idx[heat_idx] || !stage_idx[heat_idx].competitors) return;
-      return stage_idx[heat_idx].competitors.indexOf(competitor);
+    isFinishedHeat(stage, heat) {
+      if (!stage) return false;
+      return stage.finished.some((fHeat) => fHeat === heat.id);
     },
   },
 };
 </script>
 
 <template>
-  <div class="runsGrid__wrapper section-container">
-    <div class="runsGrid__body">
-      <div class="runsGrid__stage__wrapper" v-for="(stage, stage_idx) in competition.races" :key="stage.id">
-        <div class="runsGrid__stage__title">{{ stage.title }}</div>
-        <div class="runsGrid__stage__heats">
-          <div class="runsGrid__stage__heats__item__wrapper" v-for="(heat, heat_idx) in stage.runs" :key="heat_idx"">
-            <div class="runsGrid__stage__heats__item">
-              <div
-                class="runCompetitor__wrapper"
+  <div class="runsGrid__wrapper section-container" @mousedown="startDrag" @mousemove="drag" @mouseup="endDrag" @mouseleave="endDrag" @wheel="handleWheel">
+    <button type="button" @click.stop.prevent="resetDrag"><locate-icon class="locate-icon" :height="32" :width="32"></locate-icon></button>
+    <div ref="draggable" class="runsGrid__body" :style="transformStyles">
+      <div
+        class="runsGrid__stage__wrapper"
+        :class="{ selectedStage: competition.selected_race_id === stage_idx }"
+        v-for="(stage, stage_idx) in competition.races"
+        :key="stage.id"
+      >
+        <div class="runsGrid__stage__title">{{ stage.title + ' _ ' + stage.id }}</div>
+        <div
+          class="runsGrid__stage__heats"
+          :class="{
+            finalHeats: stage_idx === competition.races.length - 1,
+            isEvenStage: (competition.races.length - 1 - stage_idx) % 2 === 0 && stage_idx !== competition.races.length - 1,
+          }"
+        >
+          <div class="runsGrid__stage__heats__item__wrapper" v-for="(heat, heat_idx) in stage.runs" :key="heat_idx">
+            <div
+              class="runsGrid__stage__heats__item"
+              :class="{ selected: isSelectedHeat(heat), finished: isFinishedHeat(stage, heat) }"
+              @dblclick="$emit('select-heat', stage, heat)"
+            >
+              <h4 class="runsGrid__stage__heats__item__title">{{ heat.title || 'No title' }}</h4>
+              <d-m-grid-competitor-item
                 v-for="(competitor, comp_idx) in heat.competitors"
                 :key="comp_idx"
-                :style="{ backgroundColor: comp_idx === 0 ? 'var(--athlete-blue)' : 'var(--athlete-red)' }"
-              >
-                <div class="runCompetitor__top">
-                  <div class="runCompetitor__bib">
-                    {{ competitor.info_data ? competitor.info_data['bib'] : ' ' }}
-                  </div>
-                  <div class="runCompetitor__info">
-                    {{ competitor.info_data ? competitor.info_data['lastname'] + ' ' + competitor.info_data['name'] : ' ' }}
-                  </div>
-
-                  <select
-                    class="runCompetitor__finish"
-                    type="text"
-                    :value="stage.runs[heat_idx].results[comp_idx] || null"
-                    @change="setCompetitorResult(stage_idx, heat_idx, comp_idx, $event.target.value)"
-                    :disabled="!competitor.id"
-                  >
-                    <option v-for="result in runResultOptions" :value="result">{{ result }}</option>
-                  </select>
-                </div>
-                <div class="runCompetitor__bottom">
-                  <input
-                    type="number"
-                    class="runCompetitor__gap"
-                    :value="getCompetitorGap(stage_idx, heat_idx, comp_idx)"
-                    @change="setCompetitorGap(stage_idx, heat_idx, comp_idx, $event.target.value)"
-                    placeholder="Gap"
-                    :disabled="!competitor.id"
-                  />
-                  <input
-                    type="number"
-                    class="runCompetitor__score"
-                    :value="getCompetitorScore(stage_idx, heat_idx, comp_idx)"
-                    @change="setCompetitorScore(stage_idx, heat_idx, comp_idx, $event.target.value)"
-                    placeholder="Score"
-                    :disabled="!competitor.id"
-                  />
-                </div>
-              </div>
+                :competition="competition"
+                :competitor="competitor"
+                :index="comp_idx"
+                :stage="stage"
+                :heatIdx="heat_idx"
+              ></d-m-grid-competitor-item>
             </div>
           </div>
         </div>
@@ -165,25 +72,70 @@ export default {
 </template>
 
 <style scoped lang="scss">
+//noinspection CssInvalidPropertyValue
 .runsGrid__wrapper {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   padding: 8px;
+  background-color: var(--background-deep);
+  border: 2px solid var(--text-default);
 
+  user-select: none;
+  cursor: grab;
+
+  cursor: -moz-grab;
+  cursor: -webkit-grab;
+  &:active {
+    cursor: grabbing;
+    cursor: -moz-grabbing;
+    cursor: -webkit-grabbing;
+  }
+
+  .locate-icon {
+    position: absolute;
+    z-index: 1;
+    top: 8px;
+    right: 8px;
+    padding: 4px;
+    border-radius: 50%;
+    opacity: 0.75;
+    cursor: pointer;
+    transition: opacity 92ms, background-color 92ms, transform 92ms;
+
+    &:hover {
+      opacity: 0.9;
+      background-color: rgba(255, 255, 255, 0.15);
+    }
+    &:active {
+      opacity: 1;
+      background-color: rgba(255, 255, 255, 0.25);
+      transform: scale(0.92);
+    }
+  }
   .runsGrid__body {
+    position: absolute;
     flex: 1 1 300px;
     display: flex;
     flex-wrap: nowrap;
     overflow: auto;
     padding: 4px;
-    background-color: var(--background-deep);
     border-radius: 4px;
+    transform-origin: center;
 
     .runsGrid__stage__wrapper {
       flex: 0 0 auto;
       display: flex;
       flex-direction: column;
-      margin-right: 12px;
+      min-height: 100%;
+      padding: 0.75rem 1.25rem;
+      border-radius: 4px;
+      &.selectedStage {
+        background-color: var(--background-card);
+        box-shadow: 0 0 0 1px var(--accent-light);
+      }
       &:last-child {
         margin-right: 0;
       }
@@ -193,7 +145,9 @@ export default {
         display: flex;
         align-items: center;
         justify-content: center;
+        margin-bottom: 1.5rem;
         font-weight: bold;
+        font-size: 1.25rem;
       }
       .runsGrid__stage__heats {
         flex: 1 0 auto;
@@ -203,10 +157,25 @@ export default {
         & > * {
           margin: auto 0;
         }
+        &.finalHeats {
+          justify-content: center;
+          & > * {
+            margin: 0;
+          }
+          .runsGrid__stage__heats__item {
+            flex-direction: column-reverse !important;
+          }
+        }
+        &.isEvenStage {
+          .runsGrid__stage__heats__item {
+            flex-direction: column-reverse !important;
+          }
+        }
         .runsGrid__stage__heats__item__wrapper {
           padding: 8px 0;
 
           .runsGrid__stage__heats__item {
+            position: relative;
             display: flex;
             flex-direction: column;
             padding: 4px;
@@ -214,71 +183,29 @@ export default {
             border-radius: 2px;
             user-select: none;
             cursor: pointer;
-            transition: opacity 92ms;
+            transition: opacity 92ms, transform 92ms, box-shadow 92ms;
             &.selected {
-              box-shadow: 0 0 0 2px var(--accent);
+              box-shadow: 0 0 0 2px var(--text-default);
+            }
+            &:hover {
+              opacity: 0.85;
+            }
+            &.finished {
+              opacity: 0.5;
+              box-shadow: 0 0 0 2px var(--success);
+            }
+            &:active {
+              opacity: 0.8;
+              transform: scale(0.99);
             }
 
-            .runCompetitor__wrapper {
-              display: flex;
-              flex-direction: column;
-              &:hover {
-                opacity: 0.75;
-              }
-
-              .runCompetitor__top {
-                flex-shrink: 0;
-                display: flex;
-                align-items: center;
-                flex-wrap: nowrap;
-                padding: 4px;
-                border-radius: 2px;
-                font-size: 0.85rem;
-                &:last-child {
-                  margin-bottom: 0;
-                }
-
-                .runCompetitor__bib {
-                  flex: 0 0 auto;
-                  min-width: 1.75rem;
-                  font-weight: bold;
-                  text-align: center;
-                }
-                .runCompetitor__info {
-                  flex: 1 1 auto;
-                  margin-left: 4px;
-                  overflow: hidden;
-                  white-space: nowrap;
-                  text-overflow: ellipsis;
-                  font-weight: bold;
-                }
-                .runCompetitor__finish {
-                  flex: 0 0 auto;
-                  width: 3.5rem;
-                  margin-left: 0.5rem;
-                  padding: 2px 4px;
-                  background-color: var(--standard-background);
-                  border-radius: 2px;
-                  text-align: center;
-                  font-weight: bold;
-                }
-              }
-              .runCompetitor__bottom {
-                flex-shrink: 0;
-                display: flex;
-                justify-content: flex-end;
-                padding: 2px;
-
-                .runCompetitor__gap,
-                .runCompetitor__score {
-                  min-width: 0;
-                  width: 3.75rem;
-                  margin-right: 4px;
-                  padding: 2px 4px;
-                  border-radius: 2px;
-                  font-weight: bold;
-                }
-              }
+            .runsGrid__stage__heats__item__title {
+              text-align: right;
+              font-size: 0.75rem;
+              position: absolute;
+              left: 0;
+              right: 1.25rem;
+              top: -1rem;
             }
           }
         }

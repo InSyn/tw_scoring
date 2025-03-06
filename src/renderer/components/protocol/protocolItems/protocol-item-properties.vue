@@ -12,12 +12,17 @@ import {
 } from '../../../configs/protocol-builder-config';
 import { mapGetters } from 'vuex';
 import ListRowCellsManagement from './list-row-cells-management.vue';
+import { getListDataSources } from '../../../protocolHandlers/listHandlers';
 
 export default {
   name: 'protocol-item-properties',
   components: { ListRowCellsManagement, ProtocolTableItemDataManagement },
   props: {
     selectedBlockType: String,
+    selectedBlock: {
+      type: Object,
+      default: () => null,
+    },
     selectedItem: {
       type: Object,
       default: () => [],
@@ -27,6 +32,8 @@ export default {
     return {
       handlerOptions: Object.keys(handlerRegistry),
       selectingColor: false,
+
+      listDataSourcesCache: {},
     };
   },
   computed: {
@@ -36,6 +43,7 @@ export default {
     },
   },
   methods: {
+    getListDataSources,
     getStyleTitle,
     getDefaultSelectOptions,
     getStylePlaceholder,
@@ -54,11 +62,20 @@ export default {
       if (!this.selectedItem) return;
       this.selectedItem.setHandler(handlerId);
     },
+    updateListItemDataSource(dataSource) {
+      if (!this.selectedItem || dataSource === undefined) return;
+      this.selectedItem.updateDataSource(dataSource);
+    },
     addListRow() {
       this.selectedItem.addRow({ type: 'list-row', cells: [] });
     },
     addListRowCell() {
       this.selectedItem.addCell({ type: 'list-row-cell', content: '' });
+    },
+    getListDataSourcesCached() {
+      if (Object.keys(this.listDataSourcesCache).length) return this.listDataSourcesCache;
+      this.listDataSourcesCache = getListDataSources();
+      return this.listDataSourcesCache;
     },
   },
 };
@@ -69,9 +86,15 @@ export default {
     <protocol-table-item-data-management
       v-if="(selectedBlockType === 'table' && selectedItem.type === 'row') || selectedItem.type === 'header'"
       :item="selectedItem"
+      :selected-block="selectedBlock"
     />
     <div class="itemData__wrapper">
       <template v-if="selectedItem.type === 'list'">
+        <label for="list-data-control"><b>Данные:</b></label>
+        <select id="list-data-control" :value="selectedItem.handlerId" @input="updateListItemDataSource($event.target.value)">
+          <option value="">Пустое значение</option>
+          <option v-for="(_, dataSourceKey) in getListDataSourcesCached()" :key="dataSourceKey" :value="dataSourceKey">{{ dataSourceKey }}</option>
+        </select>
         <button class="tw-button-small" @click="addListRow">Добавить строку</button>
       </template>
       <template v-if="selectedItem.type === 'list-row'">
@@ -92,7 +115,12 @@ export default {
       </template>
     </div>
 
-    <list-row-cells-management v-if="selectedItem.type === 'list-row'" :selected-row="selectedItem" :cells="selectedItem.cells"></list-row-cells-management>
+    <list-row-cells-management
+      v-if="selectedItem.type === 'list-row'"
+      :selected-row="selectedItem"
+      :selected-item="selectedItem"
+      :cells="selectedItem.cells"
+    ></list-row-cells-management>
 
     <div v-for="category in defaultStyleCategoriesOrder()" :key="category" class="style-category">
       <h5>{{ category }}</h5>

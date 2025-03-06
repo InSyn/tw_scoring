@@ -1,62 +1,9 @@
-<template>
-  <div v-if="competition" class="scoringLayout__container">
-    <div
-      class="scoringLayoutSection layoutSection-1"
-      :style="checkCompetitionDiscipline(competition, ['SX', 'SXT', 'DMO']) && isFinal(competition) && { minHeight: '0', height: 'auto' }"
-    >
-      <controlsMenu></controlsMenu>
-
-      <chat></chat>
-
-      <message-console></message-console>
-    </div>
-
-    <div v-if="!(checkCompetitionDiscipline(competition, ['SX', 'SXT', 'DMO']) && isFinal(competition))" class="scoringLayoutSection layoutSection-2">
-      <start-list></start-list>
-
-      <double-up v-if="competition.result_formula.type === 0 && competition.result_formula.types[0].doubleUp"></double-up>
-      <scores-panel v-else></scores-panel>
-    </div>
-
-    <div v-if="!(checkCompetitionDiscipline(competition, ['SX', 'SXT', 'DMO']) && isFinal(competition))" class="scoringLayoutSection layoutSection-3">
-      <scoring-services></scoring-services>
-      <finish-table></finish-table>
-    </div>
-
-    <div v-if="checkCompetitionDiscipline(competition, ['SX', 'SXT']) && isFinal(competition)" class="sx-layout">
-      <div class="sx-leftPanel">
-        <sx-heats-list :competition="competition" :selected-heat="selectedHeat"></sx-heats-list>
-        <scoring-services></scoring-services>
-      </div>
-      <div class="sx-rightPanel">
-        <sx-heat-controls :competition="competition" :selected-heat="selectedHeat"></sx-heat-controls>
-        <sx-heats-grid :competition="competition" :selected-heat="selectedHeat" @heat:select="selectHeat"></sx-heats-grid>
-      </div>
-    </div>
-
-    <div v-if="checkCompetitionDiscipline(competition, ['DMO'])" class="dmo-layout">
-      <div class="dmo-leftPanel">
-        <round-runs-list :competition="competition"></round-runs-list>
-        <scoring-services></scoring-services>
-      </div>
-      <div class="dmo-rightPanel">
-        <round-run-scoring-panel :competition="competition"></round-run-scoring-panel>
-        <dmo-grid :competition="competition" :selected-heat="selectedHeat" @heat:select="selectHeat"></dmo-grid>
-        <!--        <finished-run-item-->
-        <!--          :competition="competition"-->
-        <!--          :finished-run="competition.selected_race.finished[competition.selected_race.finished.length - 1]"-->
-        <!--        ></finished-run-item>-->
-      </div>
-    </div>
-  </div>
-</template>
-
 <script>
 import { mapGetters } from 'vuex';
 import controlsMenu from '../components/scoring/controlsMenu.vue';
 import chat from '../components/scoring/chat.vue';
 import messageConsole from '../components/scoring/messageConsole.vue';
-import startList from '../components/scoring/startList.vue';
+import Index from '../components/scoring/startList/index.vue';
 import scoresPanel from '../components/scoring/scoresPanel.vue';
 import scoringServices from '../components/scoring/scoringServices.vue';
 import finishTable from '../components/scoring/finishTable.vue';
@@ -70,14 +17,14 @@ import { checkCompetitionDiscipline, isFinal } from '../data/sports';
 import SxHeatsList from '../components/scoring/SX/sx-heats-list.vue';
 import SxHeatControls from '../components/scoring/SX/sx-heat-controls.vue';
 import SxHeatsGrid from '../components/scoring/SX/sx-heats-grid.vue';
-import DmoGrid from '../components/scoring/DM/dmo-grid.vue';
 import FinishedRunItem from '../components/scoring/DM/finishedRun-item.vue';
+import DmGrid from '../components/scoring/DM/dmo-grid.vue';
 
 export default {
   name: 'CompetitionControlPage',
   components: {
+    DmGrid,
     FinishedRunItem,
-    DmoGrid,
     SxHeatsGrid,
     SxHeatControls,
     SxHeatsList,
@@ -90,7 +37,7 @@ export default {
     controlsMenu,
     chat,
     messageConsole,
-    startList,
+    startList: Index,
     scoresPanel,
     scoringServices,
     finishTable,
@@ -109,7 +56,7 @@ export default {
   methods: {
     isFinal,
     checkCompetitionDiscipline,
-    selectHeat({ stage, heat }) {
+    selectSXHeat({ stage, heat }) {
       if (stage === undefined || heat === undefined) return;
 
       if (this.competition.selected_race_id.toString() !== stage.toString()) {
@@ -118,9 +65,76 @@ export default {
       }
       this.selectedHeat = heat;
     },
+    selectDMHeat(stage, heat) {
+      if (!heat.id) return;
+      if (stage.id !== this.competition.selected_race.id) {
+        this.$refs.raceControlsPanel.selectRace(stage);
+      }
+      this.$refs.DMRunsList.startNextRun(heat.id);
+    },
   },
 };
 </script>
+
+<template>
+  <div v-if="competition" class="scoringLayout__container">
+    <div
+      class="scoringLayoutSection layoutSection-1"
+      :style="checkCompetitionDiscipline(competition, ['SX', 'SXT', 'DM']) && isFinal(competition) && { minHeight: '0', height: 'auto' }"
+    >
+      <controlsMenu ref="raceControlsPanel"></controlsMenu>
+
+      <chat></chat>
+
+      <message-console></message-console>
+    </div>
+
+    <div v-if="!(checkCompetitionDiscipline(competition, ['SX', 'SXT', 'DM']) && isFinal(competition))" class="scoringLayoutSection layoutSection-2">
+      <start-list></start-list>
+
+      <double-up v-if="competition.result_formula.type === 0 && competition.result_formula.types[0].doubleUp"></double-up>
+      <scores-panel v-else></scores-panel>
+    </div>
+
+    <div v-if="!(checkCompetitionDiscipline(competition, ['SX', 'SXT', 'DM']) && isFinal(competition))" class="scoringLayoutSection layoutSection-3">
+      <scoring-services></scoring-services>
+      <finish-table></finish-table>
+    </div>
+
+    <div v-if="checkCompetitionDiscipline(competition, ['SX', 'SXT']) && isFinal(competition)" class="sx-layout">
+      <div class="sx-leftPanel">
+        <sx-heats-list :competition="competition" :selected-heat="selectedHeat"></sx-heats-list>
+        <scoring-services></scoring-services>
+      </div>
+      <div class="sx-rightPanel">
+        <sx-heat-controls :competition="competition" :selected-heat="selectedHeat"></sx-heat-controls>
+        <sx-heats-grid :competition="competition" :selected-heat="selectedHeat" @heat:select="selectSXHeat"></sx-heats-grid>
+      </div>
+    </div>
+
+    <div v-if="checkCompetitionDiscipline(competition, ['DM']) && isFinal(competition)" class="dm-layout">
+      <div class="dm-leftPanel">
+        <round-runs-list ref="DMRunsList" :competition="competition"></round-runs-list>
+        <scoring-services></scoring-services>
+      </div>
+      <div class="dm-rightPanel">
+        <round-run-scoring-panel ref="DMScoringPanel" :competition="competition"></round-run-scoring-panel>
+        <dm-grid ref="DMGrid" :competition="competition" :selected-heat="selectedHeat" @select-heat="selectDMHeat"></dm-grid>
+
+        <div class="finishedHeats__wrapper">
+          <div class="finishedHeats__list">
+            <finished-run-item
+              v-for="(heat, heat_idx) in competition.selected_race ? competition.selected_race.finished : []"
+              :key="heat_idx"
+              :competition="competition"
+              :finished-run-id="heat"
+            ></finished-run-item>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
 
 <style scoped lang="scss">
 .scoringLayout__container {
@@ -135,7 +149,7 @@ export default {
 }
 
 .scoringLayoutSection.layoutSection-1 {
-  flex: 1 1 80px;
+  flex: 0 0 160px;
 }
 .scoringLayoutSection.layoutSection-2 {
   flex: 4 1 200px;
@@ -179,15 +193,16 @@ export default {
     }
   }
 }
-.dmo-layout {
+.dm-layout {
   flex: 8 1 0;
   display: flex;
   flex-wrap: nowrap;
+  font-size: 0.92rem;
 
-  .dmo-leftPanel {
+  .dm-leftPanel {
     display: flex;
     flex-direction: column;
-    flex: 1 1 0;
+    flex: 2 1 0;
     padding: 4px;
     & > * {
       &:first-child {
@@ -200,10 +215,10 @@ export default {
       }
     }
   }
-  .dmo-rightPanel {
+  .dm-rightPanel {
     display: flex;
     flex-direction: column;
-    flex: 2 1 0;
+    flex: 5 1 0;
     padding: 4px;
     & > * {
       &:first-child {
@@ -212,6 +227,32 @@ export default {
       }
       &:nth-child(2) {
         flex: 1 1 0;
+      }
+    }
+
+    .finishedHeats__wrapper {
+      flex: 0 0 120px;
+      display: flex;
+      flex-direction: column;
+      margin-top: 8px;
+      padding: 8px;
+      border-radius: 4px;
+      background-color: var(--background-card);
+
+      .finishedHeats__list {
+        flex: 1 1 0;
+        display: flex;
+        flex-direction: column;
+        overflow-y: auto;
+        padding: 4px;
+        background-color: var(--background-deep);
+
+        & > * {
+          margin-bottom: 4px;
+          &:last-child {
+            margin-bottom: 0;
+          }
+        }
       }
     }
   }

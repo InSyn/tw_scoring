@@ -35,27 +35,29 @@ export const generateHTMLTemplate = (title, headers, rows) => {
 };
 
 export const generateStartListHTML = (startList, competitionInfo) => {
-  const headers = ['Ст.№', 'Н\\Н', 'Имя', 'Регион'];
-  const rows = startList.map((comp) => [comp.start_order, comp.bib, comp.fullname, comp.country]);
+  const headers = startList[0] ? Object.keys(startList[0]) : [];
+  const rows = startList.map((comp) => (headers.length ? headers.map((header) => comp[header] || ' ') : []));
 
   return generateHTMLTemplate(`${competitionInfo.title}|Старт-Лист`, headers, rows);
 };
+
 export const generateResultsHTML = (results, competitionInfo) => {
-  const headers = ['Место', 'Н\\Н', 'Имя', 'Рез-т'];
-  const rows = results.map((comp) => [comp.rank, comp.bib, comp.fullname, comp.result]);
+  const headers = results[0] ? Object.keys(results[0]) : [];
+  const rows = results.map((comp) => (headers.length ? headers.map((header) => comp[header] || ' ') : []));
 
   return generateHTMLTemplate(`${competitionInfo.title}|Результаты`, headers, rows);
 };
+
 export const generateOnStartHTML = (onStart, competitionInfo) => {
-  const headers = ['Н\\Н', 'Имя', 'Регион'];
-  const rows = onStart.map((comp) => [comp.bib, comp.fullname, comp.country]);
+  const headers = onStart[0] ? Object.keys(onStart[0]) : [];
+  const rows = onStart.map((comp) => (headers.length ? headers.map((header) => comp[header] || ' ') : []));
 
   return generateHTMLTemplate(`${competitionInfo.title}|На старте`, headers, rows);
 };
 
 export const generateFinishedHTML = (finishedCompetitors, competitionInfo) => {
-  const headers = ['Место', 'Н\\Н', 'Имя', 'Рез-т'];
-  const rows = finishedCompetitors.map((comp) => [comp.rank, comp.bib, comp.fullname, comp.result]);
+  const headers = finishedCompetitors[0] ? Object.keys(finishedCompetitors[0]) : [];
+  const rows = finishedCompetitors.map((comp) => (headers.length ? headers.map((header) => comp[header] || ' ') : []));
 
   return generateHTMLTemplate(`${competitionInfo.title}|На финише`, headers, rows);
 };

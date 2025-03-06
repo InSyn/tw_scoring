@@ -1,3 +1,5 @@
+import { mouseupListeners } from '../../main';
+
 export default {
   data() {
     return {
@@ -25,5 +27,33 @@ export default {
       this.dragIndex = null;
       this.dragOverIndex = null;
     },
+
+    clearDrag() {
+      this.dragIndex = null;
+      this.dragOverIndex = null;
+    },
+  },
+
+  mounted() {
+    const root = this.$el;
+
+    if (root) {
+      root.addEventListener('mouseleave', this.clearDrag);
+      if (!mouseupListeners.has(document)) {
+        document.addEventListener('mouseup', this.clearDrag);
+        mouseupListeners.set(document, true);
+      }
+    }
+  },
+  beforeDestroy() {
+    const root = this.$el;
+
+    if (root) {
+      root.removeEventListener('mouseleave', this.clearDrag);
+      if (mouseupListeners.has(document)) {
+        document.removeEventListener('mouseup', this.clearDrag);
+        mouseupListeners.delete(document);
+      }
+    }
   },
 };

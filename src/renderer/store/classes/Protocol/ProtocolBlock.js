@@ -3,15 +3,19 @@ import { v4 as uuidv4 } from 'uuid';
 import { getDefaultStyles } from '../../../configs/protocol-builder-config';
 
 export class ProtocolBlock extends BaseProtocolComponent {
-  constructor({ id = uuidv4(), type = 'block', styles = {}, elements = [], onUpdate = null }) {
+  constructor({ id = uuidv4(), type = 'block', blockName = '', styles = {}, elements = [], onUpdate = null }) {
     super({ id, onUpdate });
     this.type = type;
+    this.blockName = blockName;
     this.styles = { ...getDefaultStyles('block', type), ...styles };
     this.elements = elements.map((element) => {
       return element.type === 'list'
         ? ProtocolListElement.fromJSON({ ...element, onUpdate: this.triggerUpdate.bind(this) })
         : ProtocolElement.fromJSON({ ...element, onUpdate: this.triggerUpdate.bind(this) });
     });
+  }
+  setBlockName(blockName) {
+    this.blockName = blockName;
   }
 
   addElement(element) {
@@ -42,6 +46,7 @@ export class ProtocolBlock extends BaseProtocolComponent {
     return {
       id: this.id,
       type: this.type,
+      blockName: this.blockName,
       styles: this.styles,
       elements: this.elements.map((el) => {
         return el.toJSON();
@@ -51,9 +56,7 @@ export class ProtocolBlock extends BaseProtocolComponent {
 
   static fromJSON(json) {
     return new ProtocolBlock({
-      id: json.id,
-      type: json.type,
-      styles: json.styles,
+      ...json,
       elements: json.elements.map((el) => {
         return el.type === 'list' ? ProtocolListElement.fromJSON(el) : ProtocolElement.fromJSON(el);
       }),

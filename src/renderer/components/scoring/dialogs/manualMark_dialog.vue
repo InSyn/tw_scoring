@@ -1,9 +1,10 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import MarkClass from '../../../store/classes/MarkClass';
-import { initTerminalData_chiefJudge } from '../../../utils/terminals-utils';
+import { initTerminalData_chiefJudge, packJudgeMark } from '../../../utils/terminals-utils';
 import { roundNumber } from '../../../utils/utils';
-import { checkCompetitionDiscipline } from '../../../data/sports';
+import { checkCompetitionDiscipline, getDisciplineCode } from '../../../data/sports';
+import { getScoresQuantity } from '../../../utils/discipline-utils';
 
 export default {
   name: 'manualMark_dialog',
@@ -172,11 +173,11 @@ export default {
           raceId: this.competition.selected_race.id,
           competitorId: competitor.info_data['bib'],
           competitorNum: competitor.info_data['bib'],
-          scoresQuantity: 1,
+          scoresQuantity: getScoresQuantity(this.competition, getDisciplineCode(this.competition.mainData.discipline.value)),
           judgesQuantity: this.competition.stuff.judges.length,
           marks: this.competition.stuff.judges.map((judge) => {
             const judgeMark = competitor.marks.find((mark) => mark.judge_id === judge._id && mark.race_id === this.competition.selected_race.id);
-            return judgeMark ? [judge.id, judgeMark.value ? parseFloat(judgeMark.value).toFixed(1).split('.') : [0, 0]] : [judge.id, [0, 0]];
+            return judgeMark ? [...packJudgeMark(judge, judgeMark)] : [...packJudgeMark(judge)];
           }),
           competitorName: competitor.info_data['fullname'] || 'Empty',
         });
@@ -254,7 +255,7 @@ export default {
     v-model="change_marks_dialog.state"
     @keydown.enter="setMarksFromChanged()"
     :disabled="!(competition.selected_race && competition.selected_race.onTrack)"
-    width="fit-content"
+    width="720"
   >
     <template v-slot:activator="{ on }">
       <div>
@@ -302,8 +303,10 @@ export default {
           </div>
 
           <div v-if="competition.is_aerials" class="aeMarks__wrapper">
-            <div class="aeMark__wrapper" v-for="aeMark in ['air', 'form', 'landing']" :key="aeMark" style="display: inline-block">
-              <input class="aeMark__input" v-if="aeScores[judge._id]" v-model.number="aeScores[judge._id][aeMark]" type="number" />
+            <div class="aeMark__wrapper" v-for="aeMark in ['air', 'form', 'landing']" :key="aeMark" style="display: flex">
+              <label>
+                <b>{{ aeMark }}</b> <input class="aeMark__input" v-if="aeScores[judge._id]" v-model.number="aeScores[judge._id][aeMark]" type="number"
+              /></label>
             </div>
           </div>
 
@@ -416,9 +419,23 @@ export default {
 }
 
 .aeMarks__wrapper {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
 }
 .aeMark__wrapper {
+  margin-top: 4px;
   margin-right: 6px;
+
+  label {
+    display: flex;
+    align-items: center;
+
+    b {
+      display: block;
+      width: 5rem;
+    }
+  }
 }
 .aeMark__wrapper:last-child {
   margin-right: 0;

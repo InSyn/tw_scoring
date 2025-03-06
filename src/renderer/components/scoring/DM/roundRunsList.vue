@@ -19,7 +19,14 @@
             </div>
           </div>
 
-          <v-btn @click="startNextRun" class="startNextRun__button" :disabled="!competition.selected_race.selectedCompetitor" color="var(--accent)" text small>
+          <v-btn
+            @click="startNextRun(competition.selected_race.selectedCompetitor)"
+            class="startNextRun__button"
+            :disabled="!competition.selected_race.selectedCompetitor"
+            color="var(--accent)"
+            text
+            small
+          >
             <v-icon class="startNextRun__icon">mdi-play</v-icon>
           </v-btn>
         </div>
@@ -44,9 +51,11 @@
 
 <script>
 import ArrowIcon from '../../../assets/icons/arrow-icon.vue';
-import { initTerminalData_judge } from '../../../utils/terminals-utils';
+import { initTerminalData_chiefJudge, initTerminalData_judge } from '../../../utils/terminals-utils';
 import TimerClass from '../../../store/classes/TimerClass';
 import { mapActions } from 'vuex';
+import { getScoresQuantity } from '../../../utils/discipline-utils';
+import { getDisciplineCode } from '../../../data/sports';
 
 export default {
   name: 'roundRunsList',
@@ -70,9 +79,9 @@ export default {
       const competitor = this.competition.competitorsSheet.competitors.find((competitor) => competitor.id === competitorId);
       if (!competitor) return 'Участник не найден';
 
-      const { bib, name, lastname } = competitor.info_data;
+      const { bib, name } = competitor.info_data;
 
-      return `${bib || ''} ${lastname || ''} ${name ? name.toString()[0].toUpperCase() + '.' : ''}`;
+      return `${bib + ' ' || '-'} ${name}`;
     },
     getRunById(id) {
       const emptyRun = {
@@ -93,10 +102,16 @@ export default {
       return run;
     },
     setNextRun(run) {
+      console.log(run);
       if (!this.competition.selected_race) return;
       this.competition.selected_race.selectedCompetitor = run;
+
+      this.updateEvent();
     },
-    startNextRun() {
+    startNextRun(runId) {
+      const nextRun = runId;
+      if (!this.competition.selected_race || !nextRun) return;
+
       if (this.competition.selected_race.onTrack) {
         const prevRun = this.getRunById(this.competition.selected_race.onTrack);
         if (!prevRun) return;
@@ -104,14 +119,12 @@ export default {
         prevRun.timer = null;
       }
 
-      this.competition.selected_race.onTrack = this.competition.selected_race.selectedCompetitor;
+      this.competition.selected_race.onTrack = nextRun;
 
       const currentRun = this.getRunById(this.competition.selected_race.onTrack);
       if (!currentRun) return;
 
       currentRun.timer = new TimerClass(currentRun);
-
-      this.sendTerminalsData(currentRun);
 
       if (this.getFilteredRoundRuns.length > 0) {
         const firstRun = this.getFilteredRoundRuns[0];
@@ -120,7 +133,9 @@ export default {
         this.competition.selected_race.selectedCompetitor = firstRun.id;
       } else this.competition.selected_race.selectedCompetitor = null;
 
-      this.updateEvent();
+      this.sendTerminalsData(currentRun);
+
+      this.updateEvent({ disableSocket: true });
     },
     sendTerminalsData(data) {
       const blueCourseCompetitor = this.competition.competitorsSheet.competitors.find((competitor) => competitor.id === data.blueCourse),
@@ -131,16 +146,23 @@ export default {
         raceId: this.competition.races.indexOf(this.competition.selected_race),
         competitorId: blueCourseCompetitor.info_data['bib'],
         competitorNum: blueCourseCompetitor.info_data['bib'],
-        scoresQuantity: 1,
+        scoresQuantity: getScoresQuantity(this.competition, getDisciplineCode(this.competition.mainData.discipline.value)),
         competitorName: `BLUE | RED ${redCourseCompetitor.info_data['bib']}`,
         isABC: 0,
       };
       initTerminalData_judge(terminalPackage_judge);
+      initTerminalData_chiefJudge({
+        ...terminalPackage_judge,
+        judgesQuantity: this.competition.stuff.judges.length,
+        marks: this.competition.stuff.judges.map((judge) => {
+          return [judge.id, ...new Array(terminalPackage_judge.scoresQuantity).fill([0, 0])];
+        }),
+      });
     },
   },
   computed: {
     getFilteredRoundRuns() {
-      if (!this.competition.selected_race) return [];
+      if (!this.competition.selected_race || !this.competition.selected_race.runs) return [];
 
       const activeRunObj = this.competition.selected_race.runs.find((run) => run.id === this.competition.selected_race.onTrack);
 
@@ -194,10 +216,11 @@ export default {
   align-items: center;
   font-size: 1.1rem;
   font-weight: bold;
+  white-space: nowrap;
 }
 .arrow-icon {
   height: 18px;
-  margin-left: 8px;
+  margin-left: 4px;
 }
 .nextRunParticipants {
   display: flex;
@@ -205,8 +228,10 @@ export default {
   margin-left: 8px;
 }
 .nextRunParticipant {
-  flex: 0 0 auto;
+  flex: 1 1 0;
   overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
   padding: 4px 8px;
   font-size: 0.85rem;
   font-weight: bold;
@@ -262,6 +287,9 @@ export default {
   padding: 4px 8px;
   font-weight: bold;
   border-radius: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .runNumber {
   flex: 0 0 auto;
@@ -276,9 +304,9 @@ export default {
   font-weight: bold;
 }
 .course-blue {
-  background: var(--dmo-blue);
+  background: var(--dm-blue);
 }
 .course-red {
-  background: var(--dmo-red);
+  background: var(--dm-red);
 }
 </style>

@@ -16,8 +16,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import fs from 'fs';
-import EventClass, { competitionDefaultSetup } from './store/classes/EventClass';
-import JudgeClass from './store/classes/JudgeClass';
+import EventClass from './store/classes/EventClass';
 import CreateNewCompetitionMenu from './components/appComponents/createNewCompetitionMenu';
 import CompetitionSelectMenu from './components/appComponents/competitionSelectMenu';
 import AppMenu from './components/appComponents/appMenu';
@@ -53,9 +52,9 @@ export default {
     }),
     ...mapGetters('main', {
       appTheme: 'appTheme',
+      event: 'event',
       competitions: 'competitions',
       competition: 'competition',
-      event: 'event',
       socket: 'socket',
     }),
   },

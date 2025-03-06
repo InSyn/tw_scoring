@@ -2,8 +2,9 @@ export default {
   namespaced: true,
   state: {
     fileTranslationService: {
-      path: '\\\\chelsea.lan\\TW_Translation',
+      path: localStorage.getItem('fileTranslationServicePath') || 'C:\\\\TW_Translation',
       separated: true,
+      saveHTML: false,
       updateData: false,
       updater_id: null,
       updatingInProgress: false,
@@ -24,9 +25,13 @@ export default {
   mutations: {
     SET_FILE_TRANSLATION_SERVICE_PATH: (state, path) => {
       state.fileTranslationService.path = path;
+      localStorage.setItem('fileTranslationServicePath', path);
     },
     SET_FILE_SEPARATION: (state, value) => {
       state.fileTranslationService.separated = value;
+    },
+    SET_HTML_OUTPUT: (state, value) => {
+      state.fileTranslationService.saveHTML = value;
     },
     SET_FILE_UPDATER: (state, value) => {
       state.fileTranslationService.updater_id = value;
@@ -53,6 +58,9 @@ export default {
     },
     setFileSeparation: ({ commit }, value) => {
       commit('SET_FILE_SEPARATION', value);
+    },
+    setHtmlOutput: ({ commit }, value) => {
+      commit('SET_HTML_OUTPUT', value);
     },
     setFileUpdater: ({ commit }, value) => {
       commit('SET_FILE_UPDATER', value);

@@ -69,8 +69,8 @@
           >{{ localization[lang].app.competitors.d_add_col }}
         </v-btn>
 
-        <v-btn @click="acceptCols()" class="competitorsSheetSettings__dialog__footer__button button-cancel" color="var(--accent)" small
-          >{{ localization[lang].app.dialogs.d_accept }}
+        <v-btn @click="acceptCols()" class="competitorsSheetSettings__dialog__footer__button button-cancel" color="var(--accent)" small>
+          {{ localization[lang].app.dialogs.d_accept }}
         </v-btn>
       </div>
     </div>
@@ -122,6 +122,18 @@ export default {
       this.dialogState = false;
     },
     setDataValue(newValue, data, dataKey) {
+      if (dataKey === 'id') {
+        this.competition.competitorsSheet.competitors.forEach((competitor) => {
+          if (competitor && competitor.info_data && competitor.info_data[data[dataKey]]) {
+            competitor.info_data[newValue] = competitor.info_data[data[dataKey]];
+          } else {
+            competitor.info_data[newValue] = '';
+          }
+
+          delete competitor.info_data[data[dataKey]];
+        });
+      }
+
       data[dataKey] = newValue;
     },
     addColToDel(header) {

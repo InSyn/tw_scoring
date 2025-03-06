@@ -9,7 +9,6 @@ ipcMain.on('save-key', (_, data) => {
       key: data.key,
       serial: data.serial,
     };
-    console.log(licenseData);
 
     const dirPath = path.join(__dirname, 'app_assets');
     if (!fs.existsSync(dirPath)) {
@@ -17,7 +16,6 @@ ipcMain.on('save-key', (_, data) => {
     }
 
     const filePath = path.join(dirPath, 'license.json');
-    console.log(filePath);
 
     fs.writeFile(filePath, JSON.stringify(licenseData), { encoding: 'utf8' }, (err) => {
       if (err) {

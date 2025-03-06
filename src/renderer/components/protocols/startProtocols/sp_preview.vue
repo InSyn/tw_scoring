@@ -171,20 +171,22 @@
                         <div style="padding: 2px 4px; font-weight: bold; background-color: #d2d1d2">
                           {{ competition.stuff.settings.jury.title }}
                         </div>
-                        <div style="display: flex; flex-wrap: nowrap; padding: 2px 4px" v-for="(jury, j_idx) in competition.stuff.jury" :key="j_idx">
-                          <div style="font-weight: bold; flex: 3 1 0">
-                            {{ jury.title }}
-                          </div>
-                          <div style="font-weight: bold; flex: 3 1 0">
-                            {{ `${jury.lastName} ${jury.name}` }}
-                          </div>
-                          <div style="font-weight: bold; flex: 2 1 0">
-                            {{ `${jury.category}` }}
-                          </div>
-                          <div style="flex: 4 1 0">
-                            {{ jury.location }}
-                          </div>
-                        </div>
+                        <table>
+                          <tr v-for="(jury, j_idx) in competition.stuff.jury" :key="j_idx">
+                            <td style="padding: 2px; white-space: nowrap; font-weight: bold">
+                              {{ jury.title }}
+                            </td>
+                            <td style="padding: 2px; white-space: nowrap; font-weight: bold">
+                              {{ `${jury.lastName} ${jury.name}` }}
+                            </td>
+                            <td style="padding: 2px; font-weight: bold">
+                              {{ `${jury.category}` }}
+                            </td>
+                            <td style="padding: 2px">
+                              {{ jury.location }}
+                            </td>
+                          </tr>
+                        </table>
                       </div>
                       <!-- //JURY -->
 
@@ -193,20 +195,22 @@
                         <div style="padding: 2px 4px; font-weight: bold; background-color: #d2d1d2">
                           {{ competition.stuff.settings.judges.title }}
                         </div>
-                        <div style="padding: 2px 4px; display: flex; flex-wrap: nowrap" v-for="(judge, j_idx) in competition.stuff.judges" :key="j_idx">
-                          <div style="font-weight: bold; flex: 3 1 0">
-                            {{ judge.title }}
-                          </div>
-                          <div style="font-weight: bold; flex: 3 1 0">
-                            {{ `${judge.lastName} ${judge.name}` }}
-                          </div>
-                          <div style="font-weight: bold; flex: 2 1 0">
-                            {{ `${judge.category}` }}
-                          </div>
-                          <div style="flex: 4 1 0">
-                            {{ judge.location }}
-                          </div>
-                        </div>
+                        <table>
+                          <tr v-for="(judge, j_idx) in competition.stuff.judges" :key="j_idx">
+                            <td style="padding: 2px; white-space: nowrap; font-weight: bold">
+                              {{ judge.title }}
+                            </td>
+                            <td style="padding: 2px; white-space: nowrap; font-weight: bold">
+                              {{ `${judge.lastName} ${judge.name}` }}
+                            </td>
+                            <td style="padding: 2px; font-weight: bold">
+                              {{ `${judge.category}` }}
+                            </td>
+                            <td style="padding: 2px">
+                              {{ judge.location }}
+                            </td>
+                          </tr>
+                        </table>
                       </div>
                       <!-- //JUDGES -->
                     </div>

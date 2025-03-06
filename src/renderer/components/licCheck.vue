@@ -113,7 +113,7 @@ export default {
       if (this._licData.state) {
         setTimeout(() => {
           if (this.$route.name === 'licCheck') this.$router.push({ name: 'competitionSettings' });
-        }, 2000);
+        }, 750);
       }
       return this._licData;
     },
@@ -157,7 +157,8 @@ export default {
         await this.licChecked(license_data);
 
         ipcRenderer.send('save-key', license_data);
-        sessionStorage.setItem('authorized', 'true');
+        localStorage.setItem('license', JSON.stringify(license_data));
+        localStorage.setItem('authorized', 'true');
       }
 
       this.loading = false;
@@ -165,6 +166,11 @@ export default {
   },
 
   mounted() {
+    if (!!localStorage.getItem('license')) {
+      this.licenseData = JSON.parse(localStorage.getItem('license'));
+      this.validateProduct(this.licenseData);
+    }
+
     ipcRenderer.on('checked-key', (event, licenseData) => {
       for (let licenseDataKey in licenseData) {
         if (licenseData[licenseDataKey]) {
@@ -172,7 +178,7 @@ export default {
         }
       }
 
-      if (!!sessionStorage.getItem('authorized') !== true) {
+      if (!!localStorage.getItem('authorized') !== true) {
         this.validateProduct(licenseData);
       } else {
         this.licChecked({ ...this.licenseData, state: true });

@@ -15,12 +15,12 @@
         ></race-competitors-list>
 
         <round-runs
-          v-if="checkCompetitionDiscipline(competition, ['DMO']) && selectedRace && competition.races.some((race) => race.id === selectedRace.id)"
+          v-if="checkCompetitionDiscipline(competition, ['DM']) && isFinal(competition) && selectedRace"
           :competition="competition"
           :selected-race="selectedRace"
         ></round-runs>
         <heats
-          v-if="checkCompetitionDiscipline(competition, ['SX', 'SXT']) && isFinal(competition)"
+          v-if="checkCompetitionDiscipline(competition, ['SX', 'SXT']) && isFinal(competition) && selectedRace"
           :competition="competition"
           :selected-race="selectedRace"
         ></heats>

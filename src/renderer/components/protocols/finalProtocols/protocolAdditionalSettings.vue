@@ -5,50 +5,33 @@
     </div>
     <div>
       <label for="notations" class="ma-1 font-weight-bold">{{ localization[lang].app.protocols.notations }} </label>
-      <div style="border-radius: 6px; background-color: var(--standard-background)">
-        <textarea
-          id="notations"
-          v-model="results_protocol.notations"
-          class="pa-2"
-          style="height: 8rem; width: 100%; max-height: 16rem; color: var(--text-default); outline: none"
-        ></textarea>
-      </div>
+      <textarea
+        id="notations"
+        v-model="results_protocol.notations"
+        class="pa-2"
+        style="height: 8rem; width: 100%; max-height: 16rem; color: var(--text-default); outline: none; border-radius: 4px"
+      ></textarea>
     </div>
     <div class="d-flex flex-column font-weight-bold my-2">
-      <div class="d-flex flex-nowrap align-center justify-space-between">
-        <div class="d-flex flex-column" style="width: 30%">
-          <div class="d-flex align-center justify-space-between">
-            <input
-              type="text"
-              class="pa-1"
-              style="border-radius: 6px; background-color: var(--standard-background); color: var(--text-default)"
-              v-model="results_protocol.signs.left.text"
-            />
-            <div style="cursor: pointer; height: 2rem; width: 2rem; border-radius: 6px; background-color: var(--standard-background)"></div>
-          </div>
-        </div>
-        <div class="d-flex flex-column" style="width: 30%">
-          <div class="d-flex align-center justify-space-between">
-            <input
-              type="text"
-              class="pa-1"
-              style="border-radius: 6px; background-color: var(--standard-background); color: var(--text-default)"
-              v-model="results_protocol.signs.center.text"
-            />
-            <div style="cursor: pointer; height: 2rem; width: 2rem; border-radius: 6px; background-color: var(--standard-background)"></div>
-          </div>
-        </div>
-        <div class="d-flex flex-column" style="width: 30%">
-          <div class="d-flex align-center justify-space-between">
-            <input
-              type="text"
-              class="pa-1"
-              style="border-radius: 6px; background-color: var(--standard-background); color: var(--text-default)"
-              v-model="results_protocol.signs.right.text"
-            />
-            <div style="cursor: pointer; height: 2rem; width: 2rem; border-radius: 6px; background-color: var(--standard-background)"></div>
-          </div>
-        </div>
+      <div class="d-flex flex-nowrap align-center">
+        <input
+          type="text"
+          class="pa-1"
+          style="flex: 1 1 0; border-radius: 2px; background-color: var(--background-deep); color: var(--text-default)"
+          v-model="results_protocol.signs.left.text"
+        />
+        <input
+          type="text"
+          class="pa-1"
+          style="flex: 1 1 0; margin-left: 8px; border-radius: 2px; background-color: var(--background-deep); color: var(--text-default)"
+          v-model="results_protocol.signs.center.text"
+        />
+        <input
+          type="text"
+          class="pa-1"
+          style="flex: 1 1 0; margin-left: 8px; border-radius: 2px; background-color: var(--background-deep); color: var(--text-default)"
+          v-model="results_protocol.signs.right.text"
+        />
       </div>
     </div>
     <div class="infoBlocks" style="display: flex; flex-wrap: wrap; margin-top: 0.5rem">
@@ -146,7 +129,7 @@ export default {
 
 <style scoped>
 .protocolAdditionalSettings__container {
-  flex: 1 0 auto;
+  flex: 1 1 auto;
   display: flex;
   flex-direction: column;
 

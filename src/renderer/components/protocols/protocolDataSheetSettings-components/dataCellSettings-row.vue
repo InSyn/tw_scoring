@@ -23,8 +23,8 @@ export default {
     DataCellDialog,
   },
   props: {
-    competition: { type: EventClass, default: () => {} },
-    dataField: { type: ProtocolDataFieldClass, default: () => {} },
+    competition: { type: EventClass, default: () => ({}) },
+    dataField: { type: ProtocolDataFieldClass, default: () => ({}) },
     fieldIndex: { type: Number | String, default: '' },
     protocolType: String,
     selectedFields: Array,

@@ -1,5 +1,5 @@
 <template>
-  <div class="competitorRow__wrapper" @click="openEditCompetitorDialog(competitor)">
+  <div class="competitorRow__wrapper" @click.right="openEditCompetitorDialog" title="ПКМ - открыть диалог изменения данных">
     <competitor-data-dialog
       :competition="competition"
       :competitor="competitor"
@@ -8,7 +8,13 @@
     ></competitor-data-dialog>
 
     <div class="competitorDataCell" v-for="(dataCell, key, index) in competition.competitorsSheet.header" :key="key">
-      {{ competitor.info_data[dataCell.id] ? competitor.info_data[dataCell.id] : null }}
+      <input
+        class="competitorDataCell__input"
+        type="text"
+        :value="competitor.info_data[dataCell.id] || ''"
+        @change="setAthleteData($event, competitor, dataCell.id)"
+      />
+      <!--      {{ competitor.info_data[dataCell.id] ? competitor.info_data[dataCell.id] : null }}-->
     </div>
 
     <div class="switchCompetitorButtons">
@@ -43,6 +49,12 @@ export default {
     openEditCompetitorDialog() {
       this.editCompetitorDataDialog = true;
     },
+    setAthleteData(e, competitor, dataField) {
+      const value = e.target.value ? e.target.value.toString().trim() : '';
+      competitor.info_data[dataField] = value;
+
+      this.updateEvent();
+    },
     moveCompetitorUp() {
       const id = this.competition.competitorsSheet.competitors.indexOf(this.competitor);
 
@@ -69,30 +81,46 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .competitorRow__wrapper {
   position: relative;
   display: flex;
   flex-wrap: nowrap;
 
   background: var(--standard-background);
-  border: 1px solid var(--standard-background);
+  //border: 1px solid var(--standard-background);
   cursor: pointer;
   user-select: none;
-}
-.competitorRow__wrapper:nth-child(odd) {
-  border: 1px solid var(--background-card);
-  background: var(--background-card);
-}
-.competitorRow__wrapper:hover {
-  background: var(--background-card);
-  border: 1px solid var(--accent);
+
+  &:nth-child(odd) {
+    background: var(--background-card);
+  }
+  &:hover {
+    //border: 1px solid var(--accent);
+    background: var(--subject-background);
+  }
 }
 .competitorDataCell {
   flex: 1 1 0;
-  padding: 6px 0 6px 12px;
   overflow: hidden;
-  white-space: nowrap;
+
+  .competitorDataCell__input {
+    min-width: 0;
+    height: 100%;
+    width: 100%;
+    padding: 4px 0 4px 8px;
+    border-radius: 0;
+    background-color: transparent;
+
+    &:hover {
+      box-shadow: 0 0 0 1px var(--text-default) inset;
+    }
+    &:active,
+    &:focus {
+      box-shadow: 0 0 0 1px var(--accent-light) inset;
+      background-color: var(--background-card-nested);
+    }
+  }
 }
 .switchCompetitorButtons {
   position: absolute;

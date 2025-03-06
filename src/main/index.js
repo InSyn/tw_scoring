@@ -59,7 +59,7 @@ function sendServerMessage({ color, message }) {
 function sendInfoMessage(markData) {
   mainWindow && mainWindow.webContents.send('info-message', markData);
 }
-function sendUdpMessage({ messageType, data }) {
+function sendTerminalsMessage({ messageType, data }) {
   mainWindow && mainWindow.webContents.send(messageType, data);
 }
 
@@ -94,7 +94,7 @@ ipcMain.on('get-build-version', () => {
   mainWindow.webContents.send('build-version', app.getVersion());
 });
 
-export { ipcMain, mainWindow, sendServerMessage, sendInfoMessage, sendUdpMessage };
+export { ipcMain, mainWindow, sendServerMessage, sendInfoMessage, sendTerminalsMessage };
 
 import './lic_server';
 import './socket_setup';

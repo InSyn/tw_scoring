@@ -88,7 +88,7 @@ export default {
     <v-btn class="load__button" color="var(--accent)" min-width="0" width="48" text>
       <label class="loadButton__label">
         <v-icon>{{ icons.mdiDownload }}</v-icon>
-        <input @change="load($event.target.files[0].path)" ref="fileLoader" type="file" accept=".json,.twe" hidden />
+        <input @change="load($event.target.files[0].path)" ref="fileLoader" type="file" accept=".twe" hidden />
       </label>
     </v-btn>
 
@@ -96,7 +96,7 @@ export default {
 
     <competition-select-menu :competition="competition" :competitions="competitions" :event="event"></competition-select-menu>
 
-    <timing-device-settings v-if="checkCompetitionDiscipline(competition, ['MO', 'DMO'])" />
+    <timing-device-settings v-if="checkCompetitionDiscipline(competition, ['MO', 'DM'])" />
 
     <div class="appIcon__wrapper">
       <img v-if="appTheme === 'light'" class="app__icon" src="../../assets/logo/TIMINGWEBLOGO-BLACK.png" alt="" />

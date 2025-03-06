@@ -1,8 +1,5 @@
 import { generateId } from '../../../utils/utils';
-import store from '../../index';
 import { generateEmptyCompetitor } from '../CompetitorClass';
-
-const competition = store.getters['main/competition'];
 
 export default class DMRunClass {
   constructor({ competitors = [{ ...generateEmptyCompetitor() }, { ...generateEmptyCompetitor() }], results = ['', ''], ...params }) {
@@ -13,52 +10,48 @@ export default class DMRunClass {
     this.competitors = competitors;
     this.results = results;
 
-    this.blueCourse = params.competitors && params.competitors[0] ? params.competitors[0].id : '';
-    this.redCourse = params.competitors && params.competitors[1] ? params.competitors[1].id : '';
+    this.blueCourse = competitors && competitors[0] ? competitors[0].id : '';
+    this.redCourse = competitors && competitors[1] ? competitors[1].id : '';
 
     this.timer = null;
-    this.runTime = 0;
+    this.runTime = params.runTime || 0;
 
-    this.blueCourseTime = 0;
-    this.redCourseTime = 0;
+    this.blueCourseTime = params.blueCourseTime || 0;
+    this.redCourseTime = params.redCourseTime || 0;
 
-    this.blueCourseGap = 0;
-    this.redCourseGap = 0;
+    this.blueCourseGap = params.blueCourseGap || 0;
+    this.redCourseGap = params.redCourseGap || 0;
   }
 
-  addCompetitor(competitorId, index) {
+  serialize() {
+    return {
+      id: this.id,
+      number: this.number,
+      title: this.title,
+      competitors: [...this.competitors.map((competitor) => ({ ...competitor }))],
+      results: this.results,
+      blueCourse: this.blueCourse,
+      redCourse: this.redCourse,
+      runTime: this.runTime,
+      blueCourseTime: this.blueCourseTime,
+      redCourseTime: this.redCourseTime,
+      blueCourseGap: this.blueCourseGap,
+      redCourseGap: this.redCourseGap,
+    };
+  }
+  static createFromSerialized(serializedData) {
+    return new DMRunClass(serializedData);
+  }
+  static setDMRunCompetitor({ competition, run, competitorId, course }) {
+    if (!competition || !run || !competitorId) return;
+
+    const index = course === 'blue' ? 0 : 1;
+
     const athlete = competition.competitorsSheet.competitors.find((athlete) => athlete.id === competitorId);
-    this.competitors[index] = athlete ? { ...athlete } : { ...generateEmptyCompetitor() };
-  }
-  removeCompetitor(competitorId, index) {
-    this.competitors[index] = generateEmptyCompetitor();
-  }
+    if (!athlete) return;
 
-  setCourseTime(time, course) {
-    if (course === 'blue') {
-      this.blueCourseTime = time;
-    } else if (course === 'red') {
-      this.redCourseTime = time;
-    }
-  }
-  setCourseGap(time, course) {
-    if (course === 'blue') {
-      this.blueCourseTime = time;
-    } else if (course === 'red') {
-      this.redCourseTime = time;
-    }
-  }
-
-  setRunTime(time) {
-    this.runTime = time;
-  }
-
-  setCompetitorPlace(place, index) {
-    this.results[index] = place;
-  }
-
-  getCompetitorResult(index) {
-    return this.results[index];
+    run.competitors[index] = athlete;
+    run[`${course}Course`] = athlete.id;
   }
 }
 

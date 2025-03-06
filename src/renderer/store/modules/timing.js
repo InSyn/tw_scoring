@@ -14,7 +14,7 @@ ipcRenderer.on('newTime', (e, timeMessage) => {
   const competition = store.getters['main/competition'];
   if (!competition || !competition.selected_race || !competition.selected_race.onTrack) return;
 
-  const timingMode = checkCompetitionDiscipline(competition, ['MO']) ? 'moguls' : checkCompetitionDiscipline(competition, ['DMO']) ? 'dualMoguls' : null;
+  const timingMode = checkCompetitionDiscipline(competition, ['MO']) ? 'moguls' : checkCompetitionDiscipline(competition, ['DM']) ? 'dualMoguls' : null;
   if (!timingMode) return;
 
   const timeChannel = timeMessage[0].split('')[timeMessage[0].length - 1];
@@ -28,7 +28,7 @@ ipcRenderer.on('newTime', (e, timeMessage) => {
 
     activeTimer.startTimer(timerTimeValue);
   } else {
-    timingMode === 'moguls' ? MOTimingHandler(timeChannel, timerTimeValue) : DMOTimingHandler(timeChannel, timerTimeValue);
+    timingMode === 'moguls' ? MOTimingHandler(timeChannel, timerTimeValue) : DMTimingHandler(timeChannel, timerTimeValue);
   }
 });
 
@@ -53,9 +53,10 @@ const MOTimingHandler = (timeChannel, time_ms) => {
       return;
   }
 };
-const DMOTimingHandler = (timeChannel, time_string) => {
+const DMTimingHandler = (timeChannel, time_string) => {
   switch (timeChannel) {
     case '3': {
+      if (!activeTimer) return;
       const redCourseCompetitor = activeTimer.run.competitors[1];
 
       if (activeTimer.competitors.length === 0) {
@@ -70,6 +71,7 @@ const DMOTimingHandler = (timeChannel, time_string) => {
       break;
     }
     case '4': {
+      if (!activeTimer) return;
       const blueCourseCompetitor = activeTimer.run.competitors[0];
 
       if (activeTimer.competitors.length === 0) {

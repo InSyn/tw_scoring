@@ -1,10 +1,21 @@
 <template>
   <div class="exportCSV__wrapper">
     <div class="exportCSV__header">
-      File Translation
+      <h3>File Translation</h3>
 
-      <v-btn class="ml-auto" @click="setFileSeparation(!fileTranslationService.separated)" color="var(--text-default)" width="48" text small>
-        <v-icon size="18">
+      <v-btn
+        @click="setHtmlOutput(!fileTranslationService.saveHTML)"
+        color="var(--text-default)"
+        width="48"
+        text
+        small
+        :style="{ opacity: fileTranslationService.saveHTML ? 1 : 0.5 }"
+        :color="fileTranslationService.saveHTML ? 'var(--accent-light)' : 'var(--text-default)'"
+      >
+        <html-code-icon></html-code-icon>
+      </v-btn>
+      <v-btn @click="setFileSeparation(!fileTranslationService.separated)" color="var(--text-default)" width="48" text small>
+        <v-icon size="16">
           {{ fileTranslationService.separated ? icons.fileMultipleIcon : icons.fileIcon }}
         </v-icon>
       </v-btn>
@@ -33,13 +44,16 @@
 import { mapActions, mapGetters } from 'vuex';
 import { mdiFileOutline, mdiFileMultipleOutline } from '@mdi/js';
 import FilePaginator from './filePaginator.vue';
-// import { generateFinishedHTML, generateOnStartHTML, generateResultsHTML, generateStartListHTML } from '../../../utils/generateHTML-utils';
-import { checkCompetitionDiscipline } from '../../../data/sports';
-import CompetitorClass from '../../../store/classes/CompetitorClass';
+import { generateFinishedHTML, generateOnStartHTML, generateResultsHTML, generateStartListHTML } from '../../../utils/generateHTML-utils';
+import { checkCompetitionDiscipline, getDisciplineCode } from '../../../data/sports';
+import HtmlCodeIcon from '../../../assets/icons/html-code-icon.vue';
+import { getRegionCode } from '../../../data/regions-ru';
+import { roundNumber, sanitizeStageName } from '../../../utils/utils';
+import { generateScoresString } from '../../../utils/discipline-specific-calculation-helpers';
 
 export default {
   name: 'exportCSV',
-  components: { FilePaginator },
+  components: { HtmlCodeIcon, FilePaginator },
   data() {
     return {
       icons: {
@@ -60,10 +74,12 @@ export default {
     ...mapActions('main', {
       exportCSV: 'exportCSV',
       exportHTML: 'exportHTML',
+      exportTXT: 'exportTXT',
     }),
     ...mapActions('scoring_services', {
       setFileTranslationPath: 'setFileTranslationService_path',
       setFileSeparation: 'setFileSeparation',
+      setHtmlOutput: 'setHtmlOutput',
       setFileUpdater: 'setFileUpdater',
       clearFileUpdater: 'clearFileUpdater',
       switchFileUpdateService: 'switchFileUpdateService',
@@ -75,127 +91,102 @@ export default {
       if (!this.competition) return {};
 
       return {
-        title: this.competition.mainData.title.value || ' ',
-        discipline: this.competition.mainData.discipline.value || ' ',
-        country: this.competition.mainData.country.value || ' ',
-        location: this.competition.mainData.location.value || ' ',
-        stage: this.competition.mainData.title.stage.value.value || ' ',
+        title: this.competition.mainData.title.value || '-',
+        discipline: this.competition.mainData.discipline.value || '-',
+        country: this.competition.mainData.country.value || '-',
+        location: this.competition.mainData.location.value || '-',
+        stage: this.competition.mainData.title.stage.value.value || '-',
       };
-    },
-    getCompetitionJuryData() {
-      if (!this.competition) return { judges: [], jury: [] };
-
-      const juryData = {
-        judges: this.competition.stuff.judges.map((judge) => {
-          return {
-            title: judge.title || ' ',
-            name: judge.name || ' ',
-            region: judge.location || ' ',
-            mark: '-',
-          };
-        }),
-        jury: this.competition.stuff.jury.map((jury) => {
-          return {
-            title: jury.title || ' ',
-            name: jury.name || ' ',
-            region: jury.location || ' ',
-          };
-        }),
-      };
-
-      if (this.competition.selected_race) {
-        if (!this.competition.selected_race.onTrack) return juryData;
-
-        this.competition.stuff.judges.map((judge, idx) => {
-          const competitor = this.competition.competitorsSheet.competitors.find((competitor) => competitor.id === this.competition.selected_race.onTrack);
-          if (!competitor) {
-            juryData.judges[idx].mark = '-';
-            return;
-          }
-
-          const mark = competitor.marks.find((mark) => mark.judge_id === judge._id);
-          if (!mark) {
-            juryData.judges[idx].mark = '-';
-            return;
-          }
-
-          juryData.judges[idx].mark = mark.value;
-        });
-      }
-
-      return juryData;
     },
 
     createCompetitorTranslationObj(competitor, competition, options) {
       if (options.createFillerObject) {
         const emptyAthlete = {
-          bib: ' ',
-          ffr_id: ' ',
-          fullname: ' ',
-          lastname: ' ',
-          name: ' ',
-          group: ' ',
-          country: ' ',
-          country_code: ' ',
-          region: ' ',
-          region_code: ' ',
-          flag: ' ',
-          organization: ' ',
-          fullname_eng: ' ',
-          lastname_eng: ' ',
-          name_eng: ' ',
-          photo_url: ' ',
-          photo_tv_url: ' ',
-          finish_order: ' ',
-          rank: ' ',
-          result: ' ',
-          run_result: ' ',
-          qualification_mark: ' ',
-          run1_result: ' ',
-          run_time: ' ',
+          bib: '-',
+          ffr_id: '-',
+          fullname: '-',
+          lastname: '-',
+          name: '-',
+          group: '-',
+          country: '-',
+          country_code: '-',
+          region: '-',
+          region_code: '-',
+          flag: '-',
+          organization: '-',
+          fullname_eng: '-',
+          lastname_eng: '-',
+          name_eng: '-',
+          photo_url: '-',
+          photo_tv_url: '-',
+          finish_order: '-',
+          rank: '-',
+          result: '-',
+          run_result: '-',
+          qualification_mark: '-',
+          run1_result: '-',
+          run_time: '-',
         };
         return emptyAthlete;
       }
 
       if (!competitor) throw new Error('No competitor passed');
 
+      const competitorRegionCode =
+        typeof competitor.info_data['region'] === 'string' && competitor.info_data['region'].split(', ').length > 0
+          ? getRegionCode(competitor.info_data['region'].split(', ')[0])
+          : getRegionCode(competitor.info_data['region']);
+
+      const nameArr = typeof competitor.info_data['name'] === 'string' ? competitor.info_data['name'].split(' ') : [];
+
       let competitorObject = {
         id: this.generateCompetitorId(competitor),
-        bib: competitor.info_data['bib'] || null,
-        ffr_id: competitor.info_data['ffr_id'] || null,
-        fullname: competitor.info_data['fullname'] || null,
-        lastname: competitor.info_data['lastname'] || null,
-        name: competitor.info_data['name'] || null,
-        group: competitor.info_data['group'] || competition.mainData.title.stage.group || null,
-        country: competitor.info_data['country'] || null,
-        country_code: competitor.info_data['country_code'] || null,
-        region: competitor.info_data['region'] || null,
-        region_code: competitor.info_data['region_code'] || null,
-        flag: competitor.info_data['flag'] || null,
-        organization: competitor.info_data['organization'] || null,
+        bib: competitor.info_data['bib'] || '-',
+        ffr_id: competitor.info_data['ffr_id'] || '-',
+        firstname: nameArr.length > 0 ? nameArr[1] : '-',
+        lastname: nameArr.length > 0 ? nameArr[0] : '-',
+        name: competitor.info_data['name'] || '-',
+        group: competitor.info_data['group'] || competition.mainData.title.stage.group || '-',
+        country: competitor.info_data['country'] || '-',
+        country_code: competitor.info_data['country_code'] || '-',
+        region: competitor.info_data['region'] || '-',
+        region_code: competitorRegionCode || '-',
+        flag: competitor.info_data['flag'] || '-',
+        organization: competitor.info_data['organization'] || '-',
 
-        fullname_eng: competitor.info_data['fullname_eng'] || null,
-        lastname_eng: competitor.info_data['lastname_eng'] || null,
-        name_eng: competitor.info_data['name_eng'] || null,
+        fullname_eng: competitor.info_data['fullname_eng'] || '-',
+        lastname_eng: competitor.info_data['lastname_eng'] || '-',
+        name_eng: competitor.info_data['name_eng'] || '-',
 
-        photo_url: competitor.info_data['photo_url'] || null,
-        photo_tv_url: competitor.info_data['photo_tv_url'] || null,
+        photo_url: competitor.info_data['photo_url'] || '-',
+        photo_tv_url: competitor.info_data['photo_tv_url'] || '-',
       };
+
+      const result = competition.getOverallResult(competitor.id);
 
       if (options.forStartlist) {
         competitorObject = {
+          run_number: !isNaN(Number(competition.selected_race_id)) ? Number(competition.selected_race_id) + 1 : '-',
           start_order: competitor._index + 1,
           ...competitorObject,
+          result: result || '-',
         };
       }
 
       if (options.forResults) {
+        const scores = competitor.marks.filter((mark) => mark.race_id === competition.selected_race.id);
+        const runResult = competitor.results.find((result) => result.race_id === competition.selected_race.id);
+
         competitorObject = {
           ...competitorObject,
+          run_number: !isNaN(Number(competition.selected_race_id)) ? Number(competition.selected_race_id) + 1 : '-',
           finish_order: competitor.finish_order,
           rank: competitor._index + 1,
-          result: competition.getOverallResult(competitor.id) || null,
-          run_result: competition.getRaceResult(competitor, competition.selected_race) || null,
+          result: result || '-',
+          result_rounded: !isNaN(Number(result)) ? Math.floor(Number(result)) * 2 : '-',
+          run_result: competition.getRaceResult(competitor, competition.selected_race) || '-',
+          scoresString:
+            generateScoresString(getDisciplineCode(competition.mainData.discipline.value), { competition, competitor, result: runResult, scores }) || '-',
           qualification_mark: competitor._index + 1 <= competition.passed_competitors ? 'q' : 'nq',
         };
 
@@ -210,10 +201,9 @@ export default {
             return jumpCode.code === competitor.info_data[`jump${idx + 1}_code`];
           });
 
-          const jump_code = jumpObj ? jumpObj['code'] : ' ';
-
+          const jump_code = jumpObj ? jumpObj['code'] : '-';
+          const jump_name = jumpObj ? jumpObj['jump_name'] : '-';
           const jump_dd = jumpObj ? jumpObj[`value_${competitorObject.group}`] : Number(0).toFixed(3);
-
           const jump_maxScore = competition.roundWithPrecision(
             parseFloat(
               (competition.stuff.judges.length -
@@ -224,12 +214,30 @@ export default {
             )
           );
 
+          const competitorScores = competitor.marks.filter((mark) => mark.race_id === race.id);
+          const { airSum, formSum, landingSum } = competitorScores.reduce(
+            (sum, judgeScore) => {
+              const air = +sum.airSum + (judgeScore.value_ae ? +judgeScore.value_ae.air : 0);
+              const form = +sum.formSum + (judgeScore.value_ae ? +judgeScore.value_ae.form : 0);
+              const landing = +sum.landingSum + (judgeScore.value_ae ? +judgeScore.value_ae.landing : 0);
+
+              return {
+                airSum: !isNaN(air) ? roundNumber(air, 1) : 0,
+                formSum: !isNaN(form) ? roundNumber(form, 1) : 0,
+                landingSum: !isNaN(landing) ? roundNumber(landing, 1) : 0,
+              };
+            },
+            { airSum: 0, formSum: 0, landingSum: 0 }
+          );
+          const scoresString = `Air ${airSum} | Form ${formSum} | Landing ${landingSum}`;
+
           competitorObject = {
             ...competitorObject,
             [`jump${idx + 1}_code`]: jump_code,
+            [`jump${idx + 1}_name`]: jump_name,
             [`jump${idx + 1}_dd`]: jump_dd,
             [`jump${idx + 1}_maxScore`]: jump_maxScore,
-            [`jump${idx + 1}_animation`]: jumpObj ? 'C:\\\\animations\\' + jumpObj.code + '\\' + jumpObj.code + '00001.png' : 'nj',
+            [`race${idx + 1}_scores`]: scoresString,
           };
         });
       }
@@ -297,21 +305,22 @@ export default {
         const teamCompetitor = competition.competitorsSheet.competitors.find((competitor) => competitor.id === teamCompetitorId);
         if (!teamCompetitor) teamCompetitors[`team_competitor_${idx + 1}`] = '';
 
-        teamCompetitors[`team_competitor_${idx + 1}`] = teamCompetitor.info_data['fullname']
-          ? teamCompetitor.info_data['fullname']
-          : teamCompetitor.info_data['lastname'] + ' ' + teamCompetitor.info_data['name'];
+        teamCompetitors[`team_competitor_${idx + 1}`] = teamCompetitor.info_data['name'] || '-';
+        teamCompetitors[`team_competitor_${idx + 1}_country`] = teamCompetitor.info_data['country'] || '-';
+        teamCompetitors[`team_competitor_${idx + 1}_region`] = teamCompetitor.info_data['region'] || '-';
       });
 
       const teamCompetitorsString = team.competitors
         .map((competitorId) => {
           const competitor = competition.competitorsSheet.competitors.find((competitor) => competitor.id === competitorId);
-          return competitor.info_data['lastname'] || '';
+          return competitor.info_data['name'] || '-';
         })
         .join(' | ');
 
       let teamObject = {
         team_number: team.id || null,
         team_name: team.name || null,
+        team_base: typeof team.name === 'string' ? team.name.split('-')[0] : '',
         flag: teamFlag,
         competitors_string: teamCompetitorsString || null,
         ...teamCompetitors,
@@ -360,15 +369,13 @@ export default {
         );
 
       if (this.fileTranslationService.paginator.page_length > 0) {
-        console.log(this.fileTranslationService.paginator);
         const startIndex = this.fileTranslationService.paginator.current_page * this.fileTranslationService.paginator.page_length;
 
         startList = startList.slice(startIndex, startIndex + this.fileTranslationService.paginator.page_length);
 
         if (startList.length < this.fileTranslationService.paginator.page_length) {
           const fillersCount = this.fileTranslationService.paginator.page_length - startList.length;
-          console.log(fillersCount);
-
+          ``;
           for (let i = 0; i < fillersCount; i++) {
             startList.push(
               this.createCompetitorTranslationObj(null, null, {
@@ -397,7 +404,7 @@ export default {
     getResults({ disablePagination }) {
       if (!this.competition.selected_race) return [];
 
-      let sortedFinishedArray = this.competition.selected_race.finished
+      let sortedFinishedArray = this.competition.selected_race._startList
         .map((competitor, idx) => {
           return {
             ...this.competition.competitorsSheet.competitors.find((comp) => comp.id === competitor),
@@ -415,8 +422,8 @@ export default {
             comp2res = comp2.results_overall.find((overall) => overall.competition_id === this.competition.id);
 
           return (
-            (comp2res ? (comp2res.status ? statuses[comp2res.status] : comp2res.value) : 0) -
-            (comp1res ? (comp1res.status ? statuses[comp1res.status] : comp1res.value) : 0)
+            (comp2res ? (comp2res.status ? statuses[comp2res.status] : comp2res.value) : -999) -
+            (comp1res ? (comp1res.status ? statuses[comp1res.status] : comp1res.value) : -999)
           );
         })
         .map((competitor, idx) => {
@@ -446,9 +453,18 @@ export default {
       return sortedFinishedArray;
     },
     getFinished() {
-      return this.getResults({ disablePagination: true }).filter(
-        (competitor, idx, finishedArray) => parseInt(competitor.finish_order) === finishedArray.length
-      );
+      const sortedFinishedArray = this.getResults({ disablePagination: true })
+        .filter((competitor) => {
+          return this.competition.selected_race.finished.includes(competitor.bib);
+        })
+        .sort((competitor_1, competitor_2) => {
+          const finishOrder_1 = !isNaN(Number(competitor_1.finish_order)) ? Number(competitor_1.finish_order) : 0;
+          const finishOrder_2 = !isNaN(Number(competitor_2.finish_order)) ? Number(competitor_2.finish_order) : 0;
+
+          return finishOrder_2 - finishOrder_1;
+        });
+
+      return sortedFinishedArray[0] ? [sortedFinishedArray[0]] : [];
     },
 
     getTeamsStartlist() {
@@ -497,7 +513,7 @@ export default {
             ...this.createCompetitorTranslationObj(courseCompetitor_blue, this.competition, {}),
             course: 'BLUE',
           }
-        : null;
+        : this.createCompetitorTranslationObj(null, null, { createFillerObject: true });
 
       const courseCompetitor_red = this.competition.competitorsSheet.competitors.find((competitor) => competitor.id === runOnStart.redCourse);
       const courseCompetitorObj_red = courseCompetitor_red
@@ -505,7 +521,7 @@ export default {
             ...this.createCompetitorTranslationObj(courseCompetitor_red, this.competition, {}),
             course: 'RED',
           }
-        : null;
+        : this.createCompetitorTranslationObj(null, null, { createFillerObject: true });
 
       return [courseCompetitorObj_blue, courseCompetitorObj_red];
     },
@@ -522,9 +538,10 @@ export default {
             ...this.createCompetitorTranslationObj(courseCompetitor_blue, this.competition, { forResults: true }),
             course: 'BLUE',
           }
-        : null;
-      const result_blue = this.competition.getRaceResult(courseCompetitor_blue, this.competition.selected_race) || Number(0).toString();
+        : this.createCompetitorTranslationObj(null, null, { createFillerObject: true });
+      const score_blue = this.competition.getRaceResult(courseCompetitor_blue, this.competition.selected_race) || Number(0).toString();
       const gap_blue = finishedRun[`blueCourseGap`] || Number(0).toFixed(2);
+      const runResult_blue = finishedRun.results[0] || '-';
 
       const courseCompetitor_red = this.competition.competitorsSheet.competitors.find((competitor) => competitor.id === finishedRun.redCourse);
       const courseCompetitorObj_red = courseCompetitor_red
@@ -532,19 +549,22 @@ export default {
             ...this.createCompetitorTranslationObj(courseCompetitor_red, this.competition, { forResults: true }),
             course: 'RED',
           }
-        : null;
-      const result_red = this.competition.getRaceResult(courseCompetitor_red, this.competition.selected_race) || Number(0).toString();
+        : this.createCompetitorTranslationObj(null, null, { createFillerObject: true });
+      const score_red = this.competition.getRaceResult(courseCompetitor_red, this.competition.selected_race) || Number(0).toString();
       const gap_red = finishedRun[`redCourseGap`] || Number(0).toFixed(2);
+      const runResult_red = finishedRun.results[1] || '-';
 
       return [
         {
           ...courseCompetitorObj_blue,
-          result: result_blue ? result_blue.split('.')[0] : Number(0),
+          score: score_blue ? score_blue.split('.')[0] : Number(0),
+          result: runResult_blue,
           gap: gap_red,
         },
         {
           ...courseCompetitorObj_red,
-          result: result_red ? result_red.split('.')[0] : Number(0),
+          score: score_red ? score_red.split('.')[0] : Number(0),
+          result: runResult_red,
           gap: gap_blue,
         },
       ];
@@ -555,39 +575,46 @@ export default {
         const group = this.competition.mainData.title.stage.group || '';
         const runs = round.runs.map((roundRun) => {
           const runNum = roundRun.number;
+          const runTitle = roundRun.title;
           const runParticipants = roundRun.competitors.map((runCompetitor, idx) => {
             if (!runCompetitor || !runCompetitor.info_data) {
               return {
-                course: ' ',
-                bib: ' ',
-                name: ' ',
-                region: ' ',
-                photo: ' ',
-                flag: ' ',
-                photo_url: ' ',
-                photo_tv_url: ' ',
-                score: ' ',
-                result: ' ',
-                gap: ' ',
+                course: '-',
+                bib: '-',
+                name: '-',
+                region: '-',
+                photo: '-',
+                flag: '-',
+                photo_url: '-',
+                photo_tv_url: '-',
+                score: '-',
+                result: '-',
+                gap: '-',
               };
             }
 
+            if (!runCompetitor || !runCompetitor.results) return;
             const runResult = runCompetitor.results.find((result) => result.race_id === round.id);
             const course = idx === 0 ? 'blue' : 'red';
-            const bib = runCompetitor.info_data['bib'] || ' ';
-            const name = runCompetitor.info_data['fullname'] || ' ';
-            const region = runCompetitor.info_data['region'] || ' ';
-            const flag = runCompetitor.info_data['flag'] || ' ';
-            const photo_url = runCompetitor.info_data['photo_url'] || ' ';
-            const photo_tv_url = runCompetitor.info_data['photo_tv_url'] || ' ';
-            const score = runResult && runResult.value ? runResult.value : ' ';
-            const result = roundRun.results[idx] || this.competition.roundWithPrecision(' ');
+
+            const bib = runCompetitor.info_data['bib'] || '-';
+            const name = runCompetitor.info_data['name'] || '-';
+            const lastname = runCompetitor.info_data['lastname'] || '-';
+            const fullname = runCompetitor.info_data['fullname'] || '-';
+            const region = runCompetitor.info_data['region'] || '-';
+            const flag = runCompetitor.info_data['flag'] || '-';
+            const photo_url = runCompetitor.info_data['photo_url'] || '-';
+            const photo_tv_url = runCompetitor.info_data['photo_tv_url'] || '-';
+            const score = runResult && runResult.value ? runResult.value : '-';
+            const result = roundRun.results[idx] || '-';
             const gap = roundRun[`${course}CourseGap`] || this.competition.roundWithPrecision(0, 2);
 
             return {
               course,
               bib,
               name,
+              lastname,
+              fullname,
               region,
               flag,
               photo_url,
@@ -600,6 +627,7 @@ export default {
 
           return {
             run_num: runNum,
+            run_title: runTitle,
             participants: runParticipants,
           };
         });
@@ -631,21 +659,26 @@ export default {
       await this.switchUpdatingState(true);
 
       if (this.fileTranslationService.separated) {
-        if (checkCompetitionDiscipline(this.competition, ['DMO'])) {
+        if (checkCompetitionDiscipline(this.competition, ['DM'])) {
           const brackets = this.getDMBrackets();
           const runOnStart = this.getDMOnStart();
           const finishedRun = this.getDMFinished();
 
+          await Promise.all(
+            brackets.map(async (bracketsItem) => {
+              await this.exportCSV({
+                path: `${this.fileTranslationService.path}\\DMO Brackets ${sanitizeStageName(bracketsItem.stage)}.json`,
+                data: [bracketsItem],
+              });
+            })
+          );
+
           await this.exportCSV({
-            path: `${this.fileTranslationService.path}\\DMO Brackets`,
-            data: brackets,
-          });
-          await this.exportCSV({
-            path: `${this.fileTranslationService.path}\\DMO OnStart`,
+            path: `${this.fileTranslationService.path}\\DMO OnStart.json`,
             data: runOnStart,
           });
           await this.exportCSV({
-            path: `${this.fileTranslationService.path}\\DMO Finished`,
+            path: `${this.fileTranslationService.path}\\DMO Finished.json`,
             data: finishedRun,
           });
 
@@ -667,10 +700,10 @@ export default {
         const finishedCompetitor = this.getFinished();
         const results = this.getResults({ disablePagination: false });
 
-        await this.exportCSV({
-          path: `${this.fileTranslationService.path}\\TW_CompetitionInfo`,
-          data: competitionInfo,
-        });
+        // await this.exportCSV({
+        //   path: `${this.fileTranslationService.path}\\TW_CompetitionInfo`,
+        //   data: competitionInfo,
+        // });
 
         // await this.exportCSV({
         //   path: `${this.fileTranslationService.path}\\TW_JuryData`,
@@ -682,51 +715,58 @@ export default {
         // });
 
         await this.exportCSV({
-          path: `${this.fileTranslationService.path}\\TW_Competition_StartList`,
+          path: `${this.fileTranslationService.path}\\TW_Competition_StartList.json`,
           data: startList,
         });
         await this.exportCSV({
-          path: `${this.fileTranslationService.path}\\TW_Competition_OnStart`,
+          path: `${this.fileTranslationService.path}\\TW_Competition_OnStart.json`,
           data: onStart,
         });
         await this.exportCSV({
-          path: `${this.fileTranslationService.path}\\TW_Competition_Finished`,
+          path: `${this.fileTranslationService.path}\\TW_Competition_Finished.json`,
           data: finishedCompetitor,
         });
         await this.exportCSV({
-          path: `${this.fileTranslationService.path}\\TW_Competition_Results`,
+          path: `${this.fileTranslationService.path}\\TW_Competition_Results.json`,
           data: results,
         });
 
-        // const startListHTML = generateStartListHTML(startList, competitionInfo);
-        // const onStartHTML = generateOnStartHTML(onStart, competitionInfo);
-        // const finishedHTML = generateFinishedHTML(finishedCompetitor, competitionInfo);
-        // const resultsHTML = generateResultsHTML(results, competitionInfo);
-        //
-        // await this.exportHTML({
-        //   path: `${this.fileTranslationService.path}\\StartList.html`,
-        //   data: startListHTML,
-        // });
-        // await this.exportHTML({
-        //   path: `${this.fileTranslationService.path}\\OnStart.html`,
-        //   data: onStartHTML,
-        // });
-        // await this.exportHTML({
-        //   path: `${this.fileTranslationService.path}\\Finished.html`,
-        //   data: finishedHTML,
-        // });
-        // await this.exportHTML({
-        //   path: `${this.fileTranslationService.path}\\Results.html`,
-        //   data: resultsHTML,
-        // });
+        await this.exportTXT({
+          path: `${this.fileTranslationService.path}\\scoreboardResult.txt`,
+          data: finishedCompetitor.map((finishedCompetitor) => `${finishedCompetitor.bib || '-'} ${finishedCompetitor.run_result || '-'}`),
+        });
+
+        if (this.fileTranslationService.saveHTML) {
+          const startListHTML = generateStartListHTML(startList, competitionInfo);
+          const onStartHTML = generateOnStartHTML(onStart, competitionInfo);
+          const finishedHTML = generateFinishedHTML(finishedCompetitor, competitionInfo);
+          const resultsHTML = generateResultsHTML(results, competitionInfo);
+
+          await this.exportHTML({
+            path: `${this.fileTranslationService.path}\\StartList.html`,
+            data: startListHTML,
+          });
+          await this.exportHTML({
+            path: `${this.fileTranslationService.path}\\OnStart.html`,
+            data: onStartHTML,
+          });
+          await this.exportHTML({
+            path: `${this.fileTranslationService.path}\\Finished.html`,
+            data: finishedHTML,
+          });
+          await this.exportHTML({
+            path: `${this.fileTranslationService.path}\\Results.html`,
+            data: resultsHTML,
+          });
+        }
 
         if (this.competition.is_teams) {
           await this.exportCSV({
-            path: `${this.fileTranslationService.path}\\TW_Competition_TEAM_StartList`,
+            path: `${this.fileTranslationService.path}\\TW_Competition_TEAM_StartList.json`,
             data: this.getTeamsStartlist(),
           });
           await this.exportCSV({
-            path: `${this.fileTranslationService.path}\\TW_Competition_TEAM_Results`,
+            path: `${this.fileTranslationService.path}\\TW_Competition_TEAM_Results.json`,
             data: this.getTeamsResults(),
           });
         }
@@ -737,7 +777,7 @@ export default {
         const results = this.getResults({ disablePagination: false });
 
         await this.exportCSV({
-          path: `${this.fileTranslationService.path}\\TW_Competition`,
+          path: `${this.fileTranslationService.path}\\TW_Competition.json`,
           data: {
             onStart: onStart,
             finished: finishedCompetitor,
@@ -756,7 +796,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .exportCSV__wrapper {
   flex: 0 0 auto;
   flex-direction: column;
@@ -770,8 +810,11 @@ export default {
   display: flex;
   align-items: center;
   margin: 0 0.5rem 0;
-  font-size: 1.2rem;
   font-weight: bold;
+
+  h3 {
+    margin-right: auto;
+  }
 }
 
 .updater__btn {

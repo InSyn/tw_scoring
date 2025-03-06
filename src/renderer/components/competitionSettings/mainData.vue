@@ -1,6 +1,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import { getDisciplineCode, getSportDisciplines } from '../../data/sports';
+import { defaultStructure } from '../../store/classes/EventClass';
 
 export default {
   name: 'main_data',
@@ -20,18 +21,21 @@ export default {
       lang: 'lang',
       localization: 'localization',
     }),
+    defaultStructure() {
+      return defaultStructure;
+    },
     getCompetitionData() {
       if (!this.competition || !this.competition.mainData) return {};
       return this.competition.mainData;
     },
   },
   methods: {
-    getSportDisciplines,
-    getDisciplineCode,
     ...mapActions('main', {
       input_focus: 'input_focus',
       input_blur: 'input_blur',
     }),
+    getSportDisciplines,
+    getDisciplineCode,
     selectStage(stage, event) {
       this.competition.mainData.title.stage.value = stage;
       event.target.parentNode.parentNode.blur();
@@ -57,7 +61,7 @@ export default {
                     },
                   ]"
                   class="d-flex justify-center ml-2 pa-1"
-                  style="border-radius: 2px; cursor: pointer; width: 100%; background-color: var(--background-deep); transition: box-shadow 128ms"
+                  style="border-radius: 2px; cursor: pointer; width: 100%; background-color: var(--background-deep); transition: box-shadow 92ms"
                   v-on="on"
                 >
                   {{ mainData.value }}
@@ -89,7 +93,7 @@ export default {
                     },
                   ]"
                   class="d-flex justify-center ml-2 pa-1"
-                  style="border-radius: 2px; cursor: pointer; width: 100%; background-color: var(--background-deep); transition: box-shadow 128ms"
+                  style="border-radius: 2px; cursor: pointer; width: 100%; background-color: var(--background-deep); transition: box-shadow 92ms"
                   v-on="on"
                 >
                   {{ mainData.time }}
@@ -156,13 +160,9 @@ export default {
                   border-radius: 4px;
                 "
               >
-                <v-hover v-for="(stage, s_idx) in competition.structure.stages" :key="stage.id" v-slot:default="{ hover }">
+                <v-hover v-for="stage in defaultStructure.stages" :key="stage.id" v-slot:default="{ hover }">
                   <div
                     :style="[
-                      s_idx === 0 && { borderRadius: `4px 4px 0 0` },
-                      s_idx === competition.structure.stages.length - 1 && {
-                        borderRadius: `0 0 4px 4px`,
-                      },
                       hover && {
                         backgroundColor: 'var(--subject-background)',
                       },
@@ -203,7 +203,7 @@ export default {
             style="width: 100%"
             type="text"
           >
-            <option v-for="discipline in getSportDisciplines(event.sport)" :key="discipline.code" :value="discipline.name_rus">
+            <option v-for="(discipline, idx) in getSportDisciplines(event.sport)" :key="`${idx}_${discipline.code}`" :value="discipline.name_rus">
               {{ discipline.name_rus }}
             </option>
           </select>

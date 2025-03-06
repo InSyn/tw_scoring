@@ -17,18 +17,16 @@ export default class CompetitorClass {
 }
 
 export const generateEmptyCompetitor = () => {
-  console.log(
-    new CompetitorClass([
-      ['id', ''],
-      ['bib', ''],
-      ['name', ''],
-      ['lastname', ''],
-    ])
-  );
+  // console.log(
+  //   new CompetitorClass([
+  //     ['id', ''],
+  //     ['bib', ''],
+  //     ['name', ''],
+  //   ])
+  // );
   return new CompetitorClass([
     ['id', ''],
     ['bib', ''],
     ['name', ''],
-    ['lastname', ''],
   ]);
 };

@@ -1,9 +1,14 @@
 button {
+  color: var(button-color);
+  fill: var(button-color);
   outline: transparent;
 }
 
 button.tw-button {
-  border-radius: 2px;
+  $border-radius: 2px;
+  --button-color: white;
+  position: relative;
+  border-radius: $border-radius;
   padding: .3rem 1.2rem;
   color: white;
   background-color: var(--accent);
@@ -13,6 +18,10 @@ button.tw-button {
   outline: transparent;
   font-size: .9rem;
   font-weight: bold;
+  white-space: nowrap;
+  overflow: hidden;
+  -ms-text-overflow: ellipsis;
+  text-overflow: ellipsis;
   text-transform: uppercase;
   transition: background-color 92ms, opacity 92ms, transform 64ms, box-shadow 64ms;
 
@@ -21,31 +30,72 @@ button.tw-button {
     padding: 2px 6px;
     font-size: .76rem;
   }
+
   &-small {
     @extend .tw-button;
     padding: 3px 9px;
     font-size: .82rem;
   }
+
   &-big {
     @extend .tw-button;
-    border-radius: 4px;
+    $border-radius: 4px;
     padding: 4px 12px;
     font-size: 1.05rem;
   }
+
   &.warn {
-    background-color:  var(--action-darkYellow);
+    background-color: var(--action-darkYellow);
   }
+
   &.danger {
-    background-color:  var(--error);
+    background-color: var(--error);
+  }
+
+  &.transparent {
+    --button-color: var(--text-default) !important;
+    background-color: transparent;
+    color: var(--text-default);
+
+    &.danger {
+      --button-color: var(--error) !important;
+      background-color: transparent;
+      color: var(--button-color);
+
+      & * {
+        fill: var(--button-color);
+      }
+    }
+
+    &::before {
+      position: absolute;
+      content: '';
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      opacity: 0;
+      background-color: var(--hover-overlay);
+      border-radius: $border-radius;
+      transition: opacity 92ms;
+    }
+
+    &:hover {
+      &::before {
+        opacity: 1;
+      }
+    }
   }
 
   &:hover {
     opacity: .8;
   }
+
   &:active {
     box-shadow: 0 0 0 1px white inset;
     transform: scale(0.94);
   }
+
   &:disabled {
     opacity: .5;
     pointer-events: none;

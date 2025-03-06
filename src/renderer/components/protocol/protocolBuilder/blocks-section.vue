@@ -75,11 +75,6 @@ export default {
         }
       },
     },
-    'protocol.blocks': {
-      handler() {
-        this.protocol.paginate();
-      },
-    },
   },
 };
 </script>
@@ -99,7 +94,7 @@ export default {
       <ul class="blocksSection__list">
         <blocks-list-item
           v-for="(block, index) in protocol.blocks"
-          :key="index"
+          :key="block.id"
           :block="block"
           :index="index"
           :is-selected-block="isSelectedBlock(block)"
@@ -127,6 +122,7 @@ export default {
 .blocksSection__wrapper {
   display: flex;
   flex-direction: column;
+  min-height: 8rem;
   font-size: 0.95em;
 
   .blocksSection__header {

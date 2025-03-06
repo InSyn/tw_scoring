@@ -1,5 +1,5 @@
 <template>
-  <div class="openers__wrapper">
+  <div class="openers__wrapper" style="flex: 0 0 auto">
     <div class="openers__title">
       <div class="openers__title__value">
         {{ localization[lang].app.event.forerunners }}
@@ -9,30 +9,26 @@
       </v-btn>
     </div>
     <div class="openers__list__wrapper">
-      <div v-for="(opener, o) in competition.stuff.openers" :key="o" class="opener__list__item">
+      <div v-for="(opener, idx) in competition.stuff.openers" :key="idx" class="opener__list__item">
         <div class="pa-2" style="position: relative; border-radius: 6px; background: var(--background-card)">
-          <v-btn icon @click="competition.stuff.openers.splice(o, 1)" small color="red" style="position: absolute; top: 0; right: 0">
+          <v-btn icon @click="competition.stuff.openers.splice(idx, 1)" small color="red" style="position: absolute; top: 0; right: 0">
             <v-icon small>mdi-close</v-icon>
           </v-btn>
           <v-row no-gutters>
             <v-col class="font-weight-bold pa-1" cols="12">
-              <span>{{ `Открывающий ${opener.num}` }}</span>
+              <span>{{ `Открывающий ${idx + 1}` }}</span>
             </v-col>
             <v-col class="d-flex align-center pa-1" cols="3">
-              <div>Номер:</div>
-              <input v-model="opener.bib" style="width: 100%; margin-left: 0.5rem; padding: 2px 4px; border-radius: 6px; transition: border-bottom 92ms" />
+              <input style="width: 100%; margin-left: 0.5rem; padding: 2px 4px" type="text" placeholder="Н/Н" v-model="opener.bib" />
             </v-col>
             <v-col class="d-flex align-center pa-1" cols="9">
-              <div>Фамилия:</div>
-              <input v-model="opener.lastName" style="margin-left: 0.5rem; padding: 2px 4px; transition: border-bottom 92ms; width: 100%; border-radius: 6px" />
+              <input style="margin-left: 0.5rem; padding: 2px 4px; width: 100%" type="text" placeholder="Фамилия" v-model="opener.lastName" />
             </v-col>
             <v-col class="d-flex align-center pa-1" cols="6">
-              <div>Имя:</div>
-              <input v-model="opener.name" style="margin-left: 0.5rem; padding: 2px 4px; transition: border-bottom 92ms; width: 100%; border-radius: 6px" />
+              <input style="margin-left: 0.5rem; padding: 2px 4px; width: 100%" type="text" placeholder="Имя" v-model="opener.name" />
             </v-col>
             <v-col class="d-flex align-center pa-1" cols="6">
-              <div>Регион:</div>
-              <input v-model="opener.location" style="margin-left: 0.5rem; padding: 2px 4px; transition: border-bottom 92ms; width: 100%; border-radius: 6px" />
+              <input style="margin-left: 0.5rem; padding: 2px 4px; width: 100%" type="text" placeholder="Регион" v-model="opener.location" />
             </v-col>
           </v-row>
         </div>
@@ -70,6 +66,8 @@ export default {
 
 <style scoped>
 .openers__wrapper {
+  display: flex;
+  flex-direction: column;
   padding: 8px;
   border-radius: 6px;
   background: var(--background-card);
@@ -86,10 +84,11 @@ export default {
   margin-left: auto;
 }
 .openers__list__wrapper {
+  flex: 1 1 0;
   margin-top: 8px;
   padding: 8px;
   background: var(--background-deep);
-  border-radius: 6px;
+  border-radius: 4px;
 }
 .opener__list__item {
   flex: 0 0 auto;

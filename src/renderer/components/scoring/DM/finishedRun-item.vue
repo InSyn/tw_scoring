@@ -1,4 +1,5 @@
 <script>
+import { icons } from '../../icons';
 export default {
   name: 'finishedRun-item',
   props: {
@@ -6,14 +7,51 @@ export default {
       type: Object,
       required: true,
     },
-    finishedRun: {
-      type: Object,
-      default: () => {},
+    finishedRunId: {
+      type: String,
     },
   },
   data() {
     return {
       manualInputs: {
+        blue: { gap: '', result: '' },
+        red: { gap: '', result: '' },
+      },
+    };
+  },
+  computed: {
+    icons() {
+      return icons;
+    },
+    finishedRun() {
+      if (!this.competition.selected_race || !this.competition.selected_race.runs) return null;
+      return this.competition.selected_race.runs.find((heat) => heat.id === this.finishedRunId) || null;
+    },
+  },
+  methods: {
+    getCompetitorByCourse(run, course) {
+      if (!this.competition.selected_race || !this.competition.selected_race.runs) return '-';
+
+      const competitor = this.competition.competitorsSheet.competitors.find((competitor) => competitor.id === run[`${course}Course`]);
+      if (!competitor) return 'Участник не найден';
+
+      const competitorScore = competitor.results.find((result) => result.race_id === this.competition.selected_race.id) || '-';
+
+      const competitorResult = course === 'blue' ? run.results[0] : run.results[1];
+
+      return `${competitor.info_data['bib']} ${competitor.info_data['name']} Gap: ${run[`${course}CourseGap`] || '-'} Score: ${
+        competitorScore ? competitorScore.value : '-'
+      } | Result: ${competitorResult || '-'}`;
+    },
+    removeHeatFromFinished(heat) {
+      if (!this.competition.selected_race) return;
+      this.competition.selected_race.finished.splice(this.competition.selected_race.finished.indexOf(heat.id), 1);
+    },
+  },
+
+  mounted() {
+    if (this.finishedRun) {
+      this.manualInputs = {
         blue: {
           gap: this.finishedRun.blueCourseGap || '',
           result: this.finishedRun.blueCourseTime || '',
@@ -22,92 +60,30 @@ export default {
           gap: this.finishedRun.redCourseGap || '',
           result: this.finishedRun.redCourseTime || '',
         },
-      },
-    };
-  },
-  methods: {
-    getCompetitorByCourse(run, course) {
-      const competitor = this.competition.competitorsSheet.competitors.find((competitor) => competitor.id === run[`${course}Course`]);
-      if (!competitor) return 'Участник не найден';
-
-      return `${competitor.info_data['bib']} Gap: ${run[`${course}CourseGap`]} |
-      Result: ${this.competition.getOverallResult(competitor.id)}`;
-    },
-    setManualGap(run, course, gap) {
-      if (isNaN(gap)) {
-        alert('Введите корректное число для отставания!');
-        return;
-      }
-      run[`${course}CourseGap`] = parseFloat(gap);
-      this.manualInputs[course].gap = gap;
-    },
-    setManualResult(run, course, result) {
-      this.manualInputs[course].result = result;
-
-      const competitor = this.competition.competitorsSheet.competitors.find((competitor) => competitor.id === run[`${course}Course`]);
-      if (!competitor) return;
-
-      let overallResult = competitor.results_overall.find((res) => res.competition_id === this.competition.id);
-
-      if (!overallResult) return;
-
-      overallResult.value = result;
-    },
+      };
+    }
   },
 };
 </script>
 
 <template>
   <div class="finishedRuns__item">
+    <button class="tw-button-tiny danger" @click="removeHeatFromFinished(finishedRun)">
+      <v-icon size="14" color="white">{{ icons.mdiArrowLeft }}</v-icon>
+    </button>
     <div class="finishedRunInfo__number">
-      {{ `RUN ${finishedRun.number}` }}
+      {{ `RUN ${finishedRun ? finishedRun.number : '-'}` }}
     </div>
     <div class="finishedRunInfo__participants">
       <div class="finishedRunParticipant course-blue">
         <div class="finishedRunParticipant__info">
           {{ getCompetitorByCourse(finishedRun, 'blue') }}
         </div>
-        <div class="manualRes__section">
-          <label for="blueGap">Gap:</label>
-          <input
-            v-model="manualInputs.blue.gap"
-            class="manualGap__input"
-            @change="setManualGap(finishedRun, 'blue', manualInputs.blue.gap)"
-            type="number"
-            placeholder="Enter gap"
-          />
-          <label for="blueResult">Рез:</label>
-          <input
-            v-model="manualInputs.blue.result"
-            class="manualRes__input"
-            @change="setManualResult(finishedRun, 'blue', manualInputs.blue.result)"
-            type="number"
-            placeholder="Enter result"
-          />
-        </div>
       </div>
 
       <div class="finishedRunParticipant course-red">
         <div class="finishedRunParticipant__info">
           {{ getCompetitorByCourse(finishedRun, 'red') }}
-        </div>
-        <div class="manualRes__section">
-          <label for="redGap">Gap:</label>
-          <input
-            v-model="manualInputs.red.gap"
-            class="manualGap__input"
-            @change="setManualGap(finishedRun, 'red', manualInputs.red.gap)"
-            type="number"
-            placeholder="Enter gap"
-          />
-          <label for="redResult">Result:</label>
-          <input
-            v-model="manualInputs.red.result"
-            class="manualRes__input"
-            @change="setManualResult(finishedRun, 'red', manualInputs.red.result)"
-            type="number"
-            placeholder="Enter result"
-          />
         </div>
       </div>
     </div>
@@ -132,6 +108,7 @@ export default {
   background: var(--subject-background);
 }
 .finishedRunInfo__number {
+  margin: auto 0.75rem;
   font-weight: bold;
 }
 .finishedRunInfo__participants {
@@ -158,9 +135,9 @@ export default {
 }
 
 .course-blue {
-  background: var(--dmo-blue);
+  background: var(--dm-blue);
 }
 .course-red {
-  background: var(--dmo-red);
+  background: var(--dm-red);
 }
 </style>

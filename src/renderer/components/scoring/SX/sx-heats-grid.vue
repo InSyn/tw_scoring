@@ -15,7 +15,7 @@ export default {
       const competitorObject = getCompetitorByBib(this.competition, bib);
       if (!competitorObject) return '';
 
-      return `${competitorObject.info_data['lastname']} ${competitorObject.info_data['name']}`;
+      return `${competitorObject.info_data['name']}`;
     },
     selectHeat(stage_idx, heat_idx) {
       this.$emit('heat:select', { stage: stage_idx, heat: heat_idx });

@@ -1,4 +1,4 @@
-import { checkCompetitionDiscipline, getDisciplineCode } from '../../../data/sports';
+import { checkCompetitionDiscipline, getDisciplineCode, isFinalOfDisciplines } from '../../../data/sports';
 
 export const translations = {
   group: { men: 'М', women: 'Ж' },
@@ -21,6 +21,36 @@ const getCompetitions = (competitions, options) => {
 };
 
 const getRaces = (competition, options) => {
+  if (isFinalOfDisciplines(competition, ['DM'])) {
+    const mappedRaces = competition.races.map((stage) => {
+      const mappedRuns = stage.runs
+        ? stage.runs.map((run) => {
+            const mappedCompetitors = run.competitors.map((competitor) => competitor.id || '');
+
+            return {
+              id: run.id,
+              number: run.number || '',
+              title: run.title || '',
+              competitors: mappedCompetitors,
+              gap: [run.blueCourseGap || 0, run.redCourseGap || 0],
+              results: run.results || [],
+            };
+          })
+        : [];
+
+      return {
+        race_id: stage.id,
+        title: stage.title,
+        active_athlete: null,
+        start_list: [],
+        results: getDMResults(stage, competition),
+        heats: mappedRuns,
+      };
+    });
+
+    return mappedRaces;
+  }
+
   return competition.races.map((race) => {
     return {
       race_id: race.id,
@@ -44,6 +74,7 @@ const getRaceResults = (race, competition) => {
 
   const raceResults = finishedCompetitors
     .map((competitor) => {
+      if (!competitor) return null;
       const competitorRaceResult = competitor.results.find((raceResult) => raceResult.race_id === race.id);
       if (!competitorRaceResult) return null;
 
@@ -90,8 +121,30 @@ const getRaceResults = (race, competition) => {
     return sortOrder * (result_2.value_numeric - result_1.value_numeric);
   });
 };
+const getDMResults = (stage, competition) => {
+  if (!stage.runs) return [];
+  return stage.runs.reduce((acc, heat) => {
+    const heatResults = heat.competitors
+      .map((heatCompetitor) => {
+        const competitor = competition.competitorsSheet.competitors.find((competitor) => competitor.id === heatCompetitor.id);
+        if (!competitor) return null;
+
+        const heatResult = competitor.results.find((result) => {
+          return result.race_id === stage.id;
+        });
+        if (!heatResult) return null;
+
+        return { ...heatResult, competitor_id: heatCompetitor.id };
+      })
+      .filter(Boolean);
+
+    return [...acc, ...heatResults];
+  }, []);
+};
 
 const getTotalResults = (competition) => {
+  if (isFinalOfDisciplines(competition, ['DM'])) return [];
+
   const isSX = checkCompetitionDiscipline(competition, ['SX', 'SXT']);
   const sortOrder = isSX ? -1 : 1;
 
@@ -183,19 +236,19 @@ const getCompetitors = (competition, options) => {
       });
   } else {
     competitors = competition.competitorsSheet.competitors.map((competitor) => {
+      const competitorNameArr = competitor.info_data['name'].split(' ');
+
+      const competitorLastname = competitorNameArr[0] ? competitorNameArr[0] : '-';
+      const competitorName = competitorNameArr[1] ? competitorNameArr[1] : '-';
+
       return {
         local_id: competitor.id,
         ffr_id: competitor.info_data['ffr_id'],
         bib: competitor.info_data['bib'],
-        name: competitor.info_data['name'],
-        lastname: competitor.info_data['lastname'],
-        birth_date: competitor.info_data['birth_date'],
+        name: competitorName,
+        lastname: competitorLastname,
         country: competitor.info_data['country'],
-        country_code: competitor.info_data['country_code'],
         region: competitor.info_data['region'],
-        region_code: competitor.info_data['region_code'],
-        organization: competitor.info_data['organization'],
-        category: competitor.info_data['category'],
       };
     });
   }
@@ -249,6 +302,7 @@ export const generateLiveEvent = ({ event, competitions }, options) => {
       track_info,
       conditions,
     };
+    console.log(live_event);
   }
 
   return live_event;

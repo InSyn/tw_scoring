@@ -1,3 +1,88 @@
+<script>
+import { mapActions, mapGetters } from 'vuex';
+import TeamsList from './finishTable/teamsList';
+import { mdiSortClockAscendingOutline, mdiSortVariant } from '@mdi/js';
+import CompetitorResultsDialog from './finishTable/competitorResults-dialog.vue';
+import { checkCompetitionDiscipline } from '../../data/sports';
+import { getCompetitorById } from '../../utils/competition-utils';
+
+export default {
+  name: 'finishTable',
+  components: { CompetitorResultsDialog, TeamsList },
+  data() {
+    return {
+      sortByResult: false,
+      sortByResultIcon: mdiSortVariant,
+      sortByFinishIcon: mdiSortClockAscendingOutline,
+    };
+  },
+  computed: {
+    ...mapGetters('localization', {
+      localization: 'localization',
+      lang: 'lang',
+    }),
+    ...mapGetters('main', { competition: 'competition', appTheme: 'appTheme' }),
+    getFinishedCompetitors() {
+      if (!this.competition.selected_race) return [];
+
+      const finishedCompetitors = this.competition.selected_race.finished
+        .map((competitorId) => getCompetitorById(this.competition, competitorId))
+        .filter((competitor) => !!competitor)
+        .map((competitor, finishedIdx) => ({
+          ...competitor,
+          finishOrder: finishedIdx + 1,
+        }));
+
+      return this.competition.getSortedByRank(finishedCompetitors);
+    },
+  },
+  methods: {
+    ...mapActions('main', {
+      updateEvent: 'updateEvent',
+    }),
+    get_race_res(competitor, _race) {
+      return this.competition.result_formula.get_race_result(
+        competitor.marks.filter((mark) => {
+          return mark.race === _race;
+        })
+      );
+    },
+    get_result(competitor) {
+      let races_marks = [];
+      this.competition.races.forEach((race) => {
+        races_marks.push(this.get_race_res(competitor, this.competition.races.indexOf(race)));
+      });
+      return races_marks.reduce((acc, val) => {
+        return acc + val;
+      });
+    },
+
+    getRankedCompetitors() {
+      if (!this.competition.selected_race) return [];
+      return this.getFinishedCompetitors.sort((a, b) => {
+        const athleteAPlace = a.place || 0;
+        const athleteBPlace = b.place || 0;
+
+        return athleteAPlace - athleteBPlace;
+      });
+    },
+    getSortedByFinishOrder() {
+      if (!this.competition.selected_race) return [];
+      return this.getFinishedCompetitors.sort((a, b) => {
+        const athleteAFOrder = a.finishOrder || 0;
+        const athleteBFOrder = b.finishOrder || 0;
+
+        return athleteBFOrder - athleteAFOrder;
+      });
+    },
+
+    toggleSorting() {
+      this.sortByResult = !this.sortByResult;
+    },
+  },
+};
+</script>
+
 <template>
   <div class="finishTable__container">
     <div style="display: flex; flex-direction: column; height: 100%; border-radius: 6px; background-color: var(--background-card)">
@@ -10,6 +95,7 @@
           style="position: relative; height: 100%; width: 100%; background-color: var(--standard-background); border-radius: 6px"
         >
           <v-row v-if="!competition.is_teams" class="pa-1" no-gutters style="position: absolute; height: 32px; top: 0; right: 0; left: 0; user-select: none">
+            <v-col class="d-flex justify-center align-center" style="max-width: 5rem"> </v-col>
             <v-col class="d-flex justify-center align-center" style="max-width: 5rem">{{ localization[lang].app.scoring.t_rank }} </v-col>
             <v-col class="d-flex justify-center align-center" style="max-width: 5rem">
               {{ localization[lang].app.scoring.t_st_num }}
@@ -33,115 +119,23 @@
 
           <div v-else style="position: absolute; left: 0; right: 0; top: 32px; height: calc(100% - 32px); overflow-y: auto">
             <competitor-results-dialog
-              v-for="(competitor, comp_idx) in sortByResult ? sortedFinishedList : getFinishedList"
-              :key="`${sortByResult} ${comp_idx}_${competitor.id}`"
+              v-for="(competitor, idx) in sortByResult ? getRankedCompetitors() : getSortedByFinishOrder()"
+              :key="idx"
               :competition="competition"
               :competitor="competitor"
             ></competitor-results-dialog>
+            <!--            <competitor-results-dialog-->
+            <!--              v-for="(competitor, comp_idx) in sortedFinishedList"-->
+            <!--              :key="`${sortByResult} ${comp_idx}_${competitor.id}`"-->
+            <!--              :competition="competition"-->
+            <!--              :competitor="competitor"-->
+            <!--            ></competitor-results-dialog>-->
           </div>
         </div>
       </div>
     </div>
   </div>
 </template>
-
-<script>
-import { mapActions, mapGetters } from 'vuex';
-import TeamsList from './finishTable/teamsList';
-import { mdiSortClockAscendingOutline, mdiSortVariant } from '@mdi/js';
-import CompetitorResultsDialog from './finishTable/competitorResults-dialog.vue';
-import { checkCompetitionDiscipline } from '../../data/sports';
-
-export default {
-  name: 'finishTable',
-  components: { CompetitorResultsDialog, TeamsList },
-  methods: {
-    ...mapActions('main', {
-      updateEvent: 'updateEvent',
-    }),
-    get_race_res(competitor, _race) {
-      return this.competition.result_formula.get_race_result(
-        competitor.marks.filter((mark) => {
-          return mark.race === _race;
-        })
-      );
-    },
-    get_result(competitor) {
-      let races_marks = [];
-      this.competition.races.forEach((race) => {
-        races_marks.push(this.get_race_res(competitor, this.competition.races.indexOf(race)));
-      });
-      return races_marks.reduce((acc, val) => {
-        return acc + val;
-      });
-    },
-
-    toggleSorting() {
-      this.sortByResult = !this.sortByResult;
-    },
-  },
-  data() {
-    return {
-      sortByResult: false,
-      sortByResultIcon: mdiSortVariant,
-      sortByFinishIcon: mdiSortClockAscendingOutline,
-    };
-  },
-  computed: {
-    ...mapGetters('localization', {
-      localization: 'localization',
-      lang: 'lang',
-    }),
-    ...mapGetters('main', { competition: 'competition', appTheme: 'appTheme' }),
-    getFinishedList() {
-      let finishedArr = [];
-      if (this.competition.selected_race.finished)
-        finishedArr = this.competition.selected_race.finished
-          .map((finished) => this.sortedFinishedList.find((sortedCompetitor) => sortedCompetitor.id === finished))
-          .reverse();
-
-      return finishedArr;
-    },
-    sortedFinishedList() {
-      const isSX = checkCompetitionDiscipline(this.competition, ['SX', 'SXT']);
-      const sortOrder = isSX ? -1 : 1;
-
-      let list = this.competition.selected_race.finished
-        .map((_comp) => {
-          return this.competition.competitorsSheet.competitors.find((comp) => {
-            return comp.id === _comp;
-          });
-        })
-        .sort((comp1, comp2) => {
-          const statuses = {
-            DNF: -1,
-            DNS: -2,
-            DSQ: -3,
-          };
-
-          const comp1res = comp1.results_overall.find((overall) => overall.competition_id === this.competition.id);
-          const comp2res = comp2.results_overall.find((overall) => overall.competition_id === this.competition.id);
-
-          //STATUS CHECK
-          const comp1StatusValue = comp1res && comp1res.status ? statuses[comp1res.status] : null;
-          const comp2StatusValue = comp2res && comp2res.status ? statuses[comp2res.status] : null;
-          if (comp1StatusValue !== null || comp2StatusValue !== null) {
-            return (comp2StatusValue || 0) - (comp1StatusValue || 0);
-          }
-
-          const comp1Value = comp1res ? comp1res.value : 0;
-          const comp2Value = comp2res ? comp2res.value : 0;
-
-          return sortOrder * (comp2Value - comp1Value);
-        });
-      list.forEach((_comp, c_idx) => {
-        _comp.rank = c_idx + 1;
-      });
-      return list;
-    },
-  },
-};
-</script>
 
 <style scoped>
 * {
@@ -155,7 +149,7 @@ export default {
 }
 
 .resultSorting__icon {
-  transition: color 128ms;
+  transition: color 92ms;
 }
 
 .resultSorting__btn:hover .resultSorting__icon {

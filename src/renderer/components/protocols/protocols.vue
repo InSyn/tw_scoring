@@ -60,14 +60,14 @@ export default {
 
 <style scoped lang="scss">
 .protocolsMainPage__container {
+  flex: 1 1 0;
   position: relative;
   display: flex;
   flex-direction: column;
   padding: 16px;
 
-  height: 100%;
-  min-height: 720px;
-  min-width: 900px;
+  min-height: 100%;
+  min-width: 720px;
 
   .protocolsSettings__wrapper {
     flex: 1 1 auto;

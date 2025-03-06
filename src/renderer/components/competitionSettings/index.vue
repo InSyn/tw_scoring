@@ -1,6 +1,6 @@
 <template>
-  <v-container fluid style="min-width: 1024px; margin: 0; padding: 0" v-if="competition">
-    <div style="display: flex; flex-wrap: wrap; margin: 16px 16px">
+  <div style="flex: 1 0 auto; display: flex; flex-direction: column; padding: 1.25rem 2.5rem; min-width: 1024px" v-if="competition">
+    <div style="flex: 0 0 auto; display: flex; flex-wrap: wrap; margin-bottom: 16px">
       <div style="flex: 0 0 100%; display: flex; align-items: center; margin-bottom: 1rem; font-size: 1.4rem; font-weight: bold">
         {{ localization[lang].app.event.event_header }}
         <div
@@ -56,14 +56,13 @@
         </div>
       </div>
     </div>
-    <v-row style="margin: 16px 16px" no-gutters>
-      <v-col style="font-size: 1.4rem; font-weight: bold">
+
+    <div style="flex: 0 0 auto; display: flex; flex-wrap: nowrap; margin-bottom: 16px">
+      <div style="font-size: 1.4rem; font-weight: bold">
         {{ localization[lang].app.event.competition_header }}
-      </v-col>
-      <v-spacer></v-spacer>
-      <v-col
-        cols="auto"
-        style="display: flex; align-items: center"
+      </div>
+      <div
+        style="display: flex; align-items: center; margin-left: auto"
         :style="{
           color: $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
         }"
@@ -115,27 +114,31 @@
             style="margin-left: 8px; padding: 4px; font-size: 0.9rem; color: var(--text-default); background: var(--standard-background); border-radius: 2px"
           />
         </div>
-      </v-col>
-    </v-row>
-    <v-row style="margin: 8px 16px" no-gutters>
-      <v-col cols="6">
+      </div>
+    </div>
+
+    <div style="flex: 0 0 auto; display: flex; flex-wrap: nowrap; margin-bottom: 8px">
+      <div style="flex: 1 1 0">
         <main_data></main_data>
-      </v-col>
-      <v-col cols="6">
+      </div>
+      <div style="flex: 1 1 0">
         <server_terminal></server_terminal>
-      </v-col>
-    </v-row>
-    <v-row style="margin: 8px 16px" no-gutters>
-      <v-col style="height: 100%" cols="8">
+      </div>
+    </div>
+
+    <data-management-panel :competitions="competitions" :competition="competition"></data-management-panel>
+
+    <div style="flex: 1 0 auto; display: flex; flex-wrap: nowrap">
+      <div style="flex: 2 1 0; display: flex; flex-wrap: nowrap">
         <stuff></stuff>
-      </v-col>
-      <v-col style="height: 100%" cols="4">
+      </div>
+      <div style="flex: 1 1 0; display: flex; flex-direction: column; overflow-y: auto">
         <track_parameters></track_parameters>
         <weather style="margin-top: 8px"></weather>
         <openers style="margin-top: 8px"></openers>
-      </v-col>
-    </v-row>
-  </v-container>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -147,10 +150,12 @@ import track_parameters from './trackParameters.vue';
 import openers from './openers.vue';
 import weather from './weather.vue';
 import { sports } from '../../data/sports';
+import DataManagementPanel from './dataManagement/dataManagement-panel.vue';
 
 export default {
   name: 'competition_settings',
   components: {
+    DataManagementPanel,
     openers,
     main_data,
     server_terminal,

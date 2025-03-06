@@ -3,9 +3,7 @@
     <div class="editFrame-wrapper">
       <div class="editFrame-header">
         <span class="competitorName">{{
-          `${(competitor.info_data['bib'] && competitor.info_data['bib']) || ''} ${
-            (competitor.info_data['lastname'] && competitor.info_data['lastname']) || ''
-          } ${(competitor.info_data['name'] && competitor.info_data['name']) || ''}`
+          `${(competitor.info_data['bib'] && competitor.info_data['bib']) || ''} ${(competitor.info_data['name'] && competitor.info_data['name']) || ''}`
         }}</span>
 
         <div class="editFrame-title">

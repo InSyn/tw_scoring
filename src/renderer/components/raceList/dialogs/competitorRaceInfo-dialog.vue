@@ -6,10 +6,7 @@
           {{ competitor.info_data['bib'] }}
         </div>
         <span class="competitorRaceInfo__dialog__title__competitorName">
-          {{
-            `${competitor.info_data['lastname'] + '&nbsp' || ''}
-                        ${competitor.info_data['name'] || ''}`
-          }}
+          {{ `${competitor.info_data['name'] || ''}` }}
         </span>
 
         <v-btn @click="dialogState = false" class="competitorRaceInfo__dialog__button-close" color="var(--action-red)" icon small>
@@ -99,10 +96,25 @@
 
 <script>
 import { mapGetters } from 'vuex';
+import { generateUUID } from '../../../utils/utils';
 
 export default {
   name: 'competitorRaceInfo-dialog',
   props: ['competition', 'competitor', 'selectedRace', 'section', 'dialogStateProp'],
+  computed: {
+    ...mapGetters('localization', {
+      lang: 'lang',
+      localization: 'localization',
+    }),
+    dialogState: {
+      get() {
+        return this.dialogStateProp;
+      },
+      set() {
+        this.$emit('toggle-dialog-state');
+      },
+    },
+  },
   methods: {
     clearCompetitorRace(competitor, race) {
       competitor.marks = competitor.marks.filter((mark) => mark.race_id !== race.id);
@@ -119,15 +131,15 @@ export default {
 
       if (!race.startList.includes(competitor.id)) race.startList.unshift(competitor.id);
 
-      this.dialogState = false;
+      this.$emit('toggle-dialog-state');
 
-      this.rebuildStartList(race);
+      this.competition.rebuildStartList(race);
     },
     rebuildStartList(race) {
       this.$emit('rebuild-start-list', race);
     },
     removeCompetitor(competitor_id, _race) {
-      this.dialogState = false;
+      this.$emit('toggle-dialog-state');
 
       _race.startList = _race.startList.filter((_comp) => {
         return !(_comp === competitor_id);
@@ -135,21 +147,7 @@ export default {
 
       _race.selectedCompetitor === competitor_id ? (_race.selectedCompetitor = null) : null;
 
-      this.rebuildStartList(_race);
-    },
-  },
-  computed: {
-    ...mapGetters('localization', {
-      lang: 'lang',
-      localization: 'localization',
-    }),
-    dialogState: {
-      get() {
-        return this.dialogStateProp;
-      },
-      set() {
-        this.$emit('toggle-dialog-state');
-      },
+      this.competition.rebuildStartList(_race);
     },
   },
 };

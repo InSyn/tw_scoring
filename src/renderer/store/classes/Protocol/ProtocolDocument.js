@@ -4,37 +4,47 @@ import { v4 as uuidv4 } from 'uuid';
 import { createMeasuringContainer, measureBlockHeight, mmToPx } from '../../../utils/protocolTemplate-utils';
 import { getTableDataSources } from '../../../protocolHandlers/tableHandlers';
 import store from '../../index';
+import { ProtocolGridBlock } from './ProtocolGrid';
 
 export class ProtocolDocument {
-  constructor({ id = uuidv4(), name = 'Untitled Protocol', config = {}, blocks = [] }) {
+  constructor({ id = uuidv4(), name = 'Untitled Protocol', config = {}, blocks = [], updateIsReady = true }) {
     this.id = id;
     this.name = name;
     this.config = config;
 
-    this.blocks = blocks.map((block) =>
-      block.type === 'table'
-        ? new TableBlock({ ...block, onUpdate: this.handleBlockUpdate.bind(this) })
-        : new ProtocolBlock({ ...block, onUpdate: this.handleBlockUpdate.bind(this) })
-    );
+    this.blocks = restoreProtocolBlocks({ blocks, ctx: this });
 
     this.paginatedPages = [];
+    this.pendingUpdate = false;
+    this.updateIsReady = updateIsReady;
+  }
+
+  scheduleUpdate() {
+    if (this.pendingUpdate) return;
+    this.pendingUpdate = true;
+    requestAnimationFrame(() => {
+      this.paginate();
+      this.pendingUpdate = false;
+      this.updateIsReady = true;
+    });
   }
 
   addBlock(block) {
     this.blocks.push(block);
-    this.paginate();
+    this.scheduleUpdate();
   }
+
   removeBlock(blockIdx) {
     this.blocks.splice(blockIdx, 1);
-    this.paginate();
+    this.scheduleUpdate();
   }
 
   handleBlockUpdate() {
-    this.paginate();
+    this.scheduleUpdate();
   }
 
   paginate() {
-    const dataCtx = store.getters['main/getProtocolDataCtx'];
+    const dataCtx = store.getters['main/getDataCtx'];
 
     this.paginatedPages = [];
 
@@ -67,9 +77,9 @@ export class ProtocolDocument {
     normalBlocks.forEach((block, blockIdx) => {
       if (block instanceof TableBlock) {
         const dataSource = getTableDataSources()[block.handlerId];
+
         if (!dataSource) {
           const blockHeight = measureBlockHeight(block, dataCtx, measuringContainer);
-
           if (currentHeight + blockHeight <= availableHeight) {
             currentPage.push(block);
             currentHeight += blockHeight;
@@ -82,30 +92,16 @@ export class ProtocolDocument {
           }
         } else {
           const leftover = availableHeight - currentHeight;
-
           const subTables = block.splitForPagesWithLeftover(dataCtx, dataSource, leftover, availableHeight, measuringContainer);
 
           subTables
             .filter((subTable) => !!subTable)
-            .forEach((subTable, idx) => {
-              if (idx === 0) {
-                currentPage.push(subTable);
-
-                if (subTables.length > 1) {
-                  paginatedPages.push([...currentPage]);
-                  currentPage = [];
-                  currentHeight = 0;
-                  return;
-                }
-
-                currentHeight = currentHeight + measureBlockHeight(subTable, dataCtx, measuringContainer);
-                return;
-              }
-
+            .forEach((subTable) => {
               const subHeight = measureBlockHeight(subTable, dataCtx, measuringContainer);
-              if (leftover - subHeight >= 0) {
+
+              if (currentHeight + subHeight <= availableHeight) {
                 currentPage.push(subTable);
-                currentHeight = currentHeight + subHeight;
+                currentHeight += subHeight;
               } else {
                 if (currentPage.length > 0) {
                   paginatedPages.push([...currentPage]);
@@ -204,10 +200,11 @@ export class ProtocolDocument {
   }
 
   render() {
-    const dataCtx = store.getters['main/getProtocolDataCtx'];
-    this.paginate();
+    const dataCtx = store.getters['main/getDataCtx'];
 
-    return this.paginatedPages.map((_, pageIdx) => this.renderPage(pageIdx, dataCtx)).join('');
+    this.paginate();
+    this.updateIsReady = false;
+    return this.paginatedPages.map((_, pageIdx, pagesArr) => this.renderPage(pageIdx, { ...dataCtx, page: pageIdx + 1, totalPages: pagesArr.length })).join('');
   }
 
   toJSON() {
@@ -224,9 +221,22 @@ export class ProtocolDocument {
       id: json.id,
       name: json.name,
       config: json.config,
-      blocks: json.blocks.map((block) => {
-        return block.type === 'table' ? TableBlock.fromJSON({ ...block }) : ProtocolBlock.fromJSON({ ...block });
-      }),
+      blocks: restoreProtocolBlocks({ blocks: json.blocks }),
     });
   }
 }
+
+const restoreProtocolBlocks = ({ blocks, ctx }) => {
+  return blocks.map((block) => {
+    switch (block.type) {
+      case 'table':
+        return new TableBlock({ ...block, onUpdate: ctx ? ctx.handleBlockUpdate.bind(ctx) : null });
+      case 'block':
+        return new ProtocolBlock({ ...block, onUpdate: ctx ? ctx.handleBlockUpdate.bind(ctx) : null });
+      case 'grid':
+        return new ProtocolGridBlock({ ...block, onUpdate: ctx ? ctx.handleBlockUpdate.bind(ctx) : null });
+      default:
+        return new ProtocolBlock({ ...block, onUpdate: ctx ? ctx.handleBlockUpdate.bind(ctx) : null });
+    }
+  });
+};

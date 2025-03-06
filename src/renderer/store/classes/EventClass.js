@@ -2,11 +2,61 @@ import { cutMarks, generateId, getAECodes, getMGCodes, roundNumber, truncateNumb
 import { skiRamps } from '../modules/skiRamps';
 import { initTerminalData_chiefJudge } from '../../utils/terminals-utils';
 import { checkCompetitionDiscipline } from '../../data/sports';
-import { v4 as uuidv4 } from 'uuid';
 import JudgeClass from './JudgeClass';
+import JuryClass, { defaultRoles } from './JuryClass';
+import store from '../index';
+import { athleteGendersList, getAthleteGroups } from '../../data/athlete-groups';
 
 export const competitionDefaultSetup = {
   protocol_fields: [],
+  mainData: {
+    title: {
+      title: 'Title',
+      value: '',
+      stage: {
+        title: 'Stage',
+        value: null,
+      },
+    },
+    // gender: { title: 'Gender', value: athleteGendersList[1] },
+    // group: { title: 'Group', value: getAthleteGroups(athleteGendersList[1]) },
+    // stage: {
+    //   title: 'Stage',
+    //   value: '',
+    // },
+    discipline: {
+      title: 'Discipline',
+      value: '',
+      min: '',
+    },
+    date: {
+      title: 'Start date',
+      dialog: false,
+      value: new Date().toISOString().substring(0, 10),
+      time_dialog: false,
+      time: '12:00',
+    },
+    country: {
+      title: 'Country',
+      value: '',
+    },
+    location: {
+      title: 'Place',
+      value: '',
+    },
+    provider: {
+      title: 'Organization',
+      value: '',
+    },
+    providerTiming: {
+      title: 'Provider',
+      value: '',
+    },
+    codex: {
+      title: 'Codex',
+      value: '',
+    },
+  },
   stuff: {
     settings: {
       jury: {
@@ -18,18 +68,7 @@ export const competitionDefaultSetup = {
         change_dialog: false,
       },
     },
-    jury: [
-      {
-        id: 'chief',
-        title: 'Старший судья',
-        lastName: '',
-        name: '',
-        loc: '',
-        category: '',
-        connected: false,
-        setABC: false,
-      },
-    ],
+    jury: [],
     judges: [],
     openers: [],
   },
@@ -39,19 +78,19 @@ export const competitionDefaultSetup = {
     records: [
       {
         title: 'Трасса',
-        value: 'Могул',
+        value: '',
       },
       {
         title: 'Длина трассы',
-        value: ' м',
+        value: 'м',
       },
       {
         title: 'Ширина трассы',
-        value: ' м',
+        value: 'м',
       },
       {
-        title: 'Уголб',
-        value: ' °',
+        title: 'Угол',
+        value: '°',
       },
       {
         title: 'Установочное время',
@@ -62,32 +101,32 @@ export const competitionDefaultSetup = {
   weather: [
     {
       descr1: 'Видимость:',
-      descr2: ' °',
+      descr2: '',
     },
     {
       descr1: 'Температура воздуха:',
-      descr2: ' °',
+      descr2: '°',
     },
     {
       descr1: 'Температура снега:',
-      descr2: ' °',
+      descr2: '°',
     },
     {
       descr1: 'Ветер:',
-      descr2: 'С м/с',
+      descr2: '- м/с',
     },
   ],
   competitorsSheet: {
     header: [
       { id: 'bib', title: 'НН' },
       { id: 'ffr_id', title: 'ФФР-ID' },
-      { id: 'lastname', title: 'Фамилия' },
-      { id: 'name', title: 'Имя' },
-      { id: 'fullname', title: 'Фамилия, Имя' },
+      { id: 'name', title: 'Фамилия, Имя' },
       { id: 'year', title: 'Г.р.' },
       { id: 'rank', title: 'Разряд' },
       { id: 'region', title: 'Субъект РФ' },
       { id: 'organization', title: 'СФО' },
+      // { id: 'lastname', title: 'Фамилия' },
+      // { id: 'firstname', title: 'Имя' },
 
       // { id: 'flag', title: 'флаг' },
       // { id: 'photo_url', title: 'фото' },
@@ -147,14 +186,15 @@ export default class EventClass {
   constructor(args) {
     this.id = args.id || generateId();
 
+    this.mainData = !this.mainData && !args.mainData ? { ...competitionDefaultSetup.mainData } : { ...this.mainData, ...args.mainData };
+
     if (Object.keys(args).length === 0) {
       this.structure.selected.type = 0;
       this.structure.selected.discipline = 0;
       this.mainData.title.stage.group = 'men';
-      this.mainData.title.stage.value = this.structure.stages[0];
+      this.mainData.title.stage.value = defaultStructure.stages[0];
     }
 
-    this.mainData = { ...this.mainData, ...args.mainData };
     if (args.structure) this.structure = { ...args.structure };
 
     this.stuff = args.stuff ? { ...args.stuff } : { ...competitionDefaultSetup.stuff };
@@ -173,14 +213,20 @@ export default class EventClass {
     if (args.protocol_fields && args.protocol_fields.length) this.protocol_fields = [...args.protocol_fields];
     this.protocol_settings = args.protocol_settings ? { ...args.protocol_settings } : { ...competitionDefaultSetup.protocol_settings };
 
-    this.teams = args.teams ? [...args.teams] : this.teams;
+    this.teams = args.teams ? [...args.teams] : competitionDefaultSetup.teams;
     this.technicalInfo = args.technicalInfo ? { ...args.technicalInfo } : { ...competitionDefaultSetup.technicalInfo };
-    this.weather = args.weather ? { ...args.weather } : { ...competitionDefaultSetup.weather };
-    this.races = args.races ? [...args.races] : this.races;
+    this.weather = args.weather ? [...args.weather] : [...competitionDefaultSetup.weather];
+    this.races = args.races ? [...args.races] : competitionDefaultSetup.races;
 
     if (args.result_formula) {
       this.result_formula.overall_result.type = args.result_formula.overall_result.type;
       this.result_formula.type = args.result_formula.type;
+
+      if (args.result_formula.types && args.result_formula.types[0]) {
+        this.result_formula.types[0].formula = args.result_formula.types[0].formula;
+        this.result_formula.types[0].higher_marks = args.result_formula.types[0].higher_marks;
+        this.result_formula.types[0].lower_marks = args.result_formula.types[0].lower_marks;
+      }
 
       if (args.result_formula && args.result_formula.type && args.result_formula.types[args.result_formula.type]) {
         for (let typeKey in args.result_formula.types[args.result_formula.type]) {
@@ -205,55 +251,21 @@ export default class EventClass {
       });
       this.stages.prev_stages.push(this.id);
     }
+    if (!this.stuff.jury.length) {
+      defaultRoles.forEach((role, idx) => {
+        const jury = new JuryClass({ id: idx + 1, title: role, name: '', ffr_id: '', lastName: '', location: '', category: '' });
+        if (jury.title === 'Старший судья') {
+          jury.id = 'chief';
+        }
+        this.stuff.jury.push(jury);
+      });
+    }
     if (!this.stuff.judges.length) {
       for (let i = 0; i < 5; i++) {
-        this.stuff.judges.push(new JudgeClass(`Судья ${i + 1}`, i + 1));
+        this.stuff.judges.push(new JudgeClass({ title: `Судья ${i + 1}`, id: i + 1 }));
       }
     }
   }
-
-  mainData = {
-    title: {
-      title: 'Title',
-      value: 'Новое соревнование',
-      stage: {
-        title: 'Stage',
-        value: null,
-      },
-    },
-    discipline: {
-      title: 'Discipline',
-      value: '',
-      min: '',
-    },
-    date: {
-      title: 'Start date',
-      dialog: false,
-      value: new Date().toISOString().substring(0, 10),
-      time_dialog: false,
-      time: '12:00',
-    },
-    country: {
-      title: 'Country',
-      value: '',
-    },
-    location: {
-      title: 'Place',
-      value: '',
-    },
-    provider: {
-      title: 'Organization',
-      value: 'ФЕДЕРАЦИЯ ФРИСТАЙЛА РОССИИ',
-    },
-    providerTiming: {
-      title: 'Provider',
-      value: 'www.ffr-ski.ru',
-    },
-    codex: {
-      title: 'Codex',
-      value: '',
-    },
-  };
 
   structure = {
     selected: {
@@ -266,11 +278,6 @@ export default class EventClass {
       { id: 1, title: '0.1', value: 10, digits: 1 },
       { id: 2, title: '0.01', value: 100, digits: 2 },
       { id: 3, title: '0.001', value: 1000, digits: 3 },
-    ],
-    stages: [
-      { id: 'qual', title: 'Квалификация', value: 'Квалификация' },
-      { id: 'final', title: 'Финал', value: 'Финал' },
-      { id: 'custom', title: 'Custom', value: '' },
     ],
   };
 
@@ -583,9 +590,6 @@ export default class EventClass {
 
               let marks = [];
 
-              const minMarksCount = Number(this.result_formula.types[0].lower_marks);
-              const maxMarksCount = Number(this.result_formula.types[0].higher_marks);
-
               judges.forEach((judge) => {
                 marks.push(
                   ...competitor.marks.filter((mark) => {
@@ -595,26 +599,20 @@ export default class EventClass {
               });
 
               const paceTime = runParameters[`paceTime_${group}`] || 0;
-              const runTime = runParameters.runTime ? runParameters.runTime : 999;
+              const runTime = !isNaN(Number(runParameters.runTime)) ? Number(runParameters.runTime) : 0;
 
-              const runTimePointsSum = 48 - (32 * runTime) / paceTime;
-              const runTimePoints = runTimePointsSum >= 20 ? 20 : runTimePointsSum <= 0 ? 0 : roundNumber(48 - (32 * runTime) / paceTime, 2);
+              const runTimePointsSum = runTime !== 0 ? 48 - (32 * runTime) / paceTime : 0;
+              const runTimePoints = runTimePointsSum >= 20 ? 20 : runTimePointsSum <= 0 ? 0 : truncateNumber(48 - (32 * runTime) / paceTime, 2);
 
-              const turnScores = cutMarks(
-                marks.map((mark) => mark.moguls_value.baseScore || 0).filter((mark) => !!mark),
-                maxMarksCount,
-                minMarksCount
-              ).reduce((acc, val) => roundNumber(acc + Number(val), 1), 0);
+              const turnsSum = marks
+                .filter((mark) => mark.race_id === race_id && mark.moguls_value.baseScore && mark.moguls_value.deduction)
+                .reduce((sum, mark) => {
+                  const calculatedScore = roundNumber(Number(mark.moguls_value.baseScore) - Number(mark.moguls_value.deduction), 1);
+                  const score = calculatedScore < 0.1 ? 0.1 : calculatedScore;
 
-              const turnsDeductions = cutMarks(
-                marks.map((mark) => mark.moguls_value.deduction || 0).filter((mark) => !!mark),
-                maxMarksCount,
-                minMarksCount
-              ).reduce((acc, val) => roundNumber(acc + Number(val), 1), 0);
-
-              const turnsSumRaw = turnScores - turnsDeductions < 0.1 ? 0.1 : turnScores - turnsDeductions;
-
-              const turnsResult = roundNumber(turnsSumRaw, 2);
+                  return sum + score;
+                }, 0);
+              const turnsResult = isNaN(turnsSum) ? 0 : truncateNumber(turnsSum, 2).toFixed(2);
 
               const jump1Code = this.mg_codes.find((jCode) => jCode.code === runParameters.jump1_code);
               const jump1_coef = jump1Code ? Number(jump1Code[`value_${group}`]) : 0;
@@ -623,10 +621,10 @@ export default class EventClass {
               const jump2_coef = jump2Code ? Number(jump2Code[`value_${group}`]) : 0;
 
               const jump1_scores = marks
-                .map((mark) => (mark.moguls_value.jump1_score ? roundNumber(mark.moguls_value.jump1_score * jump1_coef, 2) : 0))
+                .map((mark) => (mark.moguls_value.jump1_score ? truncateNumber(mark.moguls_value.jump1_score * jump1_coef, 2) : 0))
                 .filter((mark) => !!mark);
               const jump2_scores = marks
-                .map((mark) => (mark.moguls_value.jump2_score ? roundNumber(mark.moguls_value.jump2_score * jump2_coef, 2) : 0))
+                .map((mark) => (mark.moguls_value.jump2_score ? truncateNumber(mark.moguls_value.jump2_score * jump2_coef, 2) : 0))
                 .filter((mark) => !!mark);
 
               let judge1_jumpSum = [jump1_scores[0] || 0, jump2_scores[0] || 0].reduce((acc, val) => acc + Number(val), 0);
@@ -635,9 +633,10 @@ export default class EventClass {
               let judge2_jumpSum = [jump1_scores[1] || 0, jump2_scores[1] || 0].reduce((acc, val) => acc + Number(val), 0);
               if (judge2_jumpSum >= 20) judge2_jumpSum = 20;
 
-              const jumpsSum = roundNumber((judge1_jumpSum + judge2_jumpSum) / 2, 2);
+              const jumpsSum = truncateNumber((judge1_jumpSum + judge2_jumpSum) / 2, 2);
 
-              return this.roundWithPrecision(runTimePoints + turnsResult + jumpsSum, 2);
+              const result = [runTimePoints, turnsResult, jumpsSum].reduce((acc, val) => roundNumber(acc + Number(val), 2), 0);
+              return result;
             },
           },
           {
@@ -694,13 +693,13 @@ export default class EventClass {
                   section.push(
                     (this.competitorsSheet.competitors
                       .find((_comp) => _comp.id === comp_id)
-                      .marks.find((_mark) => _mark.race_id === race_id && _mark.judge === _judge.id && _mark.section === _section.s_num) &&
+                      .marks.find((_mark) => _mark.race_id === race_id && _mark.judge == _judge.id && _mark.section === _section.s_num) &&
                       this.competitorsSheet.competitors
                         .find((_comp) => {
                           return _comp.id === comp_id;
                         })
                         .marks.find((_mark) => {
-                          return _mark.race_id === race_id && _mark.judge === _judge.id && _mark.section === _section.s_num;
+                          return _mark.race_id === race_id && _mark.judge == _judge.id && _mark.section === _section.s_num;
                         }).value) ||
                       0
                   );
@@ -740,6 +739,18 @@ export default class EventClass {
   ae_codes = [];
   mg_codes = [];
 
+  async rebuildStartList(race) {
+    race._startList = [...race.startList];
+    race.onTrack && race._startList.unshift(race.onTrack);
+    race.finished.length > 0 && race._startList.unshift(...race.finished);
+
+    await this.refreshStartList(race);
+  }
+  async refreshStartList(race) {
+    race.startList[0] ? (race.selectedCompetitor = race.startList[0]) : null;
+
+    await store.dispatch('main/updateEvent');
+  }
   calculateOverallResult(competitor) {
     const overallResult = {
       competition_id: this.id,
@@ -768,9 +779,9 @@ export default class EventClass {
       const comp1res = comp1.results_overall.find((overall) => overall.competition_id === this.id);
       const comp2res = comp2.results_overall.find((overall) => overall.competition_id === this.id);
 
-      //STATUS CHECK
       const comp1StatusValue = comp1res && comp1res.status ? statuses[comp1res.status] : null;
       const comp2StatusValue = comp2res && comp2res.status ? statuses[comp2res.status] : null;
+
       if (comp1StatusValue !== null || comp2StatusValue !== null) {
         return (comp2StatusValue || 0) - (comp1StatusValue || 0);
       }
@@ -787,14 +798,19 @@ export default class EventClass {
       const comp1Value = comp1res ? comp1res.value : 0;
       const comp2Value = comp2res ? comp2res.value : 0;
 
+      if (comp1Value === comp2Value) {
+        const comp1ResultsSum = comp1.results.reduce((acc, val) => (acc + !isNaN(Number(val.value)) ? Number(val.value) : 0), 0);
+        const comp2ResultsSum = comp2.results.reduce((acc, val) => (acc + !isNaN(Number(val.value)) ? Number(val.value) : 0), 0);
+        return sortOrder * (comp2ResultsSum - comp1ResultsSum);
+      }
+
       return sortOrder * (comp2Value - comp1Value);
     });
 
     return sortedCompetitors.map((comp, idx) => {
       const athleteOverall = comp.results_overall.find((res) => res.competition_id === this.id);
-      if (!athleteOverall) return null;
 
-      const athletePlace = athleteOverall.status ? null : !athleteOverall.value ? null : idx + 1;
+      const athletePlace = !athleteOverall || athleteOverall.status ? ' ' : athleteOverall.value ? idx + 1 : ' ';
 
       return {
         place: athletePlace,
@@ -802,8 +818,28 @@ export default class EventClass {
       };
     });
   }
-  getOverallResult(competitor_id) {
-    const competitor = this.competitorsSheet.competitors.find((_competitor) => _competitor.id === competitor_id);
+  getLastLeader(currentCompetitor) {
+    const sortedCompetitors = this.getSortedByRank(this.competitorsSheet.competitors);
+
+    if (sortedCompetitors.length === 0) return null;
+
+    const currentLeader = sortedCompetitors[0];
+
+    if (currentCompetitor.info_data.bib !== currentLeader.info_data.bib) {
+      return currentLeader;
+    }
+
+    for (let i = 1; i < sortedCompetitors.length; i++) {
+      const lastLeader = sortedCompetitors[i];
+      if (lastLeader.info_data.bib !== currentCompetitor.info_data.bib) {
+        return lastLeader;
+      }
+    }
+
+    return null;
+  }
+  getOverallResult(competitorId) {
+    const competitor = this.competitorsSheet.competitors.find((competitor) => competitor.id === competitorId);
     const overall = competitor ? competitor.results_overall.find((res) => res.competition_id === this.id) : null;
     return overall ? (overall.status ? overall.status : overall.value) : this.roundWithPrecision(0);
   }
@@ -867,17 +903,14 @@ export default class EventClass {
       sjSpeed: 0,
     };
 
-    if (!params.competitor.results.some((_res) => _res.race_id === params.race_id)) {
+    const existingResult = params.competitor.results.find((_res) => _res.race_id === params.race_id);
+
+    if (!existingResult) {
       params.competitor.results.push(res);
     } else {
-      let _res = params.competitor.results.find((_res) => _res.race_id === params.race_id);
-
-      _res.value = res.value;
-      _res.repeat = res.repeat;
-      _res.status = res.status;
-      _res.code = res.code;
-      _res.degree_difficulty = res.degree_difficulty;
-      _res.mgRunParams = res.mgRunParams;
+      for (let existingResultKey in existingResult) {
+        if (res[existingResultKey] !== undefined && res[existingResultKey] !== null) existingResult[existingResultKey] = res[existingResultKey];
+      }
     }
 
     this.calculateOverallResult(params.competitor);
@@ -898,10 +931,10 @@ export default class EventClass {
             }),
         ];
       }),
-      competitorName: params.competitor.info_data['fullname'] || 'Empty',
+      competitorName: params.competitor.info_data['name'] || 'Empty',
     });
 
-    return params.competitor.results;
+    return res;
   }
   roundWithPrecision(val, digits) {
     const precision = digits ? digits : this.structure.accuracy[this.structure.selected.accuracy].digits;
@@ -938,3 +971,11 @@ export default class EventClass {
     return new EventClass(json);
   }
 }
+
+export const defaultStructure = {
+  stages: [
+    { id: 'qual', title: 'Квалификация', value: 'Квалификация' },
+    { id: 'final', title: 'Финал', value: 'Финал' },
+    { id: 'custom', title: 'Custom', value: '' },
+  ],
+};

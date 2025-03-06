@@ -3,8 +3,8 @@
     <div class="chat__wrapper">
       <div class="chat__users__list">
         <div class="chat__users__list__userItem">
-          <v-icon class="chat__users__list__userItem__icon" :color="competition.stuff.jury[0].connected ? 'var(--accent)' : 'var(--text-default)'"
-            >{{ `${competition.stuff.jury[0].connected ? 'mdi-account' : 'mdi-account-cancel'}` }}
+          <v-icon class="chat__users__list__userItem__icon" :color="chiefJudge && chiefJudge.connected ? 'var(--accent)' : 'var(--text-default)'"
+            >{{ `${chiefJudge && chiefJudge.connected ? 'mdi-account' : 'mdi-account-cancel'}` }}
           </v-icon>
 
           <div class="chat__users__list__userItem__title">
@@ -40,7 +40,7 @@
       </div>
 
       <div class="chat__messageForm__wrapper">
-        <input @keypress.enter="addMessage(message)" v-model="message" class="chat__messageForm__input" type="text" />
+        <input @keyup.enter="addMessage(message)" v-model="message" class="chat__messageForm__input" type="text" />
 
         <v-btn @click="addMessage(message)" class="chat__messageForm__button-sendMessage" color="var(--accent)" text small
           >{{ localization[lang].app.scoring.chat_send }}
@@ -74,6 +74,9 @@ export default {
       competition: 'competition',
       timer: 'timer',
     }),
+    chiefJudge() {
+      return this.competition.stuff.jury.find((jury) => jury.id === 'chief');
+    },
   },
   methods: {
     addMessage(m) {

@@ -1,5 +1,6 @@
 <script>
 import { exportTemplateToFile } from '../../../utils/protocolTemplate-utils';
+import { generateUUID } from '../../../utils/utils';
 
 export default {
   name: 'template-export-modal',
@@ -16,7 +17,7 @@ export default {
   },
   methods: {
     exportTemplate() {
-      exportTemplateToFile(this.template, this.exportName + '.json');
+      exportTemplateToFile({ ...this.template, id: generateUUID(), name: this.exportName }, this.exportName + '.json');
 
       this.$emit('close');
       console.log(`Template "${this.exportName}" exported successfully!`);

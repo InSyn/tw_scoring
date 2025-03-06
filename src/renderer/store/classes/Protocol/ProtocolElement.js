@@ -1,28 +1,28 @@
 import { v4 as uuidv4 } from 'uuid';
-import { camelToKebabCase, getBoxHeight, parseSizeUnitsToNumber } from '../../../utils/protocolTemplate-utils';
+import { camelToKebabCase } from '../../../utils/protocolTemplate-utils';
 import { handlerRegistry } from '../../../protocolHandlers';
 import { getDefaultStyles } from '../../../configs/protocol-builder-config';
+import { getListDataSources } from '../../../protocolHandlers/listHandlers';
 
 export class BaseProtocolComponent {
   constructor({ id = uuidv4(), onUpdate = null }) {
     this.id = id;
     this.onUpdate = onUpdate;
+    this.updateQueued = false;
   }
 
   triggerUpdate() {
-    if (this.isUpdating) return;
-    this.isUpdating = true;
-    try {
+    if (this.updateQueued) return;
+    this.updateQueued = true;
+    requestAnimationFrame(() => {
       if (typeof this.onUpdate === 'function') {
         this.onUpdate(this);
       }
-    } finally {
-      this.isUpdating = false;
-    }
+      this.updateQueued = false;
+    });
   }
   updateStyles(styleKey, styleValue) {
     if (!this.styles || !this.styles[styleKey]) return;
-
     this.styles[styleKey] = styleValue;
     this.triggerUpdate();
   }
@@ -35,7 +35,7 @@ export class BaseProtocolComponent {
 
   stylesToCSS(styles) {
     return Object.entries(styles)
-      .map(([key, value]) => `${camelToKebabCase(key)}: ${value};`)
+      .map(([key, value]) => (key && value ? `${camelToKebabCase(key)}: ${value};` : ''))
       .join(' ');
   }
 
@@ -45,12 +45,13 @@ export class BaseProtocolComponent {
 }
 
 export class ProtocolElement extends BaseProtocolComponent {
-  constructor({ id = uuidv4(), type = 'text', content = '', styles = {}, handlerId = null, onUpdate = null }) {
+  constructor({ id = uuidv4(), type = 'text', content = '', styles = {}, handlerId = null, subHandler = null, onUpdate = null }) {
     super({ id, onUpdate });
     this.type = type;
     this.content = content;
     this.styles = { ...getDefaultStyles('item', type), ...styles };
     this.handlerId = handlerId;
+    this.subHandler = subHandler;
   }
 
   setContent(content) {
@@ -105,16 +106,23 @@ export class ProtocolElement extends BaseProtocolComponent {
 }
 
 export class ProtocolListElement extends BaseProtocolComponent {
-  constructor({ id = uuidv4(), type = 'list', rows = [], styles = {}, onUpdate = null }) {
+  constructor({ id = uuidv4(), type = 'list', rows = [], styles = {}, handlerId = null, onUpdate = null }) {
     super({ id, onUpdate });
     this.type = type;
-    this.rows = rows.map((row) => ProtocolListRow.fromJSON({ ...row, onUpdate: this.triggerUpdate.bind(this) }));
+    this.rows = rows.map((row) => ProtocolListRow.fromJSON({ ...row, listHandlerId: handlerId, onUpdate: this.triggerUpdate.bind(this) }));
     this.styles = { ...getDefaultStyles('item', type), ...styles };
+    this.handlerId = handlerId;
   }
 
   addRow(row) {
-    const newRow = ProtocolListRow.fromJSON({ ...row, onUpdate: this.triggerUpdate.bind(this) });
+    const newRow = ProtocolListRow.fromJSON({ ...row, handlerId: this.handlerId, onUpdate: this.triggerUpdate.bind(this) });
     this.rows.push(newRow);
+    this.triggerUpdate();
+  }
+
+  updateDataSource(handlerId) {
+    this.handlerId = handlerId;
+    this.rows.forEach((row) => row.updateDataSource(handlerId));
     this.triggerUpdate();
   }
 
@@ -135,37 +143,39 @@ export class ProtocolListElement extends BaseProtocolComponent {
 
   toJSON() {
     return {
-      id: this.id,
-      type: this.type,
+      ...this,
       rows: this.rows.map((row) => row.toJSON()),
-      styles: this.styles,
     };
   }
 
   static fromJSON(json) {
     return new ProtocolListElement({
-      id: json.id,
-      type: json.type,
+      ...json,
       rows: json.rows.map((row) => ProtocolListRow.fromJSON(row)),
-      styles: json.styles,
     });
   }
 }
 
 export class ProtocolListRow extends BaseProtocolComponent {
-  constructor({ id = uuidv4(), type = 'list-row', cells = [], styles = {}, onUpdate = null }) {
+  constructor({ id = uuidv4(), type = 'list-row', cells = [], styles = {}, handlerId = null, onUpdate = null }) {
     super({ id, onUpdate });
     this.type = type;
+    this.styles = { ...getDefaultStyles('item', type), ...styles };
+    this.handlerId = handlerId;
     this.cells = cells.map((cell) => ProtocolListCell.fromJSON({ ...cell, onUpdate: this.triggerUpdate.bind(this) }));
-    this.styles = { ...getDefaultStyles('item', 'row'), ...styles };
   }
 
-  addCell(cell) {
-    const newCell = ProtocolListCell.fromJSON({ ...cell, onUpdate: this.triggerUpdate.bind(this) });
-    this.cells.push(newCell);
+  updateDataSource(handlerId) {
+    this.handlerId = handlerId;
+    this.cells.forEach((cell) => cell.updateDataSource(handlerId));
     this.triggerUpdate();
   }
 
+  addCell(cell) {
+    const newCell = ProtocolListCell.fromJSON({ ...cell, dataSourceId: this.handlerId, onUpdate: this.triggerUpdate.bind(this) });
+    this.cells.push(newCell);
+    this.triggerUpdate();
+  }
   removeCell(idx) {
     this.cells.splice(idx, 1);
     this.triggerUpdate();
@@ -184,30 +194,55 @@ export class ProtocolListRow extends BaseProtocolComponent {
 
   toJSON() {
     return {
-      id: this.id,
+      ...this,
       cells: this.cells.map((cell) => cell.toJSON()),
-      styles: this.styles,
     };
   }
 
   static fromJSON(json) {
     return new ProtocolListRow({
-      id: json.id,
+      ...json,
       cells: json.cells.map((cell) => ProtocolListCell.fromJSON(cell)),
-      styles: json.styles,
     });
   }
 }
 
 export class ProtocolListCell extends ProtocolElement {
-  constructor({ id = uuidv4(), type = 'list-row-cell', content = '', styles = {}, handlerId = null, onUpdate = null }) {
+  constructor({ id = uuidv4(), type = 'list-row-cell', content = '', styles = {}, dataSourceId = null, handlerId = null, onUpdate = null }) {
     super({ id, content, styles, handlerId, onUpdate });
     this.type = type;
-    this.styles = { ...getDefaultStyles('item', 'cell'), ...styles };
+    this.styles = { ...getDefaultStyles('item', type), ...styles };
+    this.dataSourceId = dataSourceId;
+    this.handlerId = handlerId;
   }
 
-  render(dataCtx) {
-    const cellContent = this.getContent(dataCtx);
+  updateDataSource(dataSourceId) {
+    this.dataSourceId = dataSourceId;
+    this.triggerUpdate();
+  }
+
+  getContent() {
+    if (!this.handlerId || !this.dataSourceId) return this.content;
+
+    try {
+      const dataSources = getListDataSources();
+      if (!dataSources[this.dataSourceId]) return this.content;
+
+      const handler = dataSources[this.dataSourceId].handlers[this.handlerId];
+      if (!handler) return this.content;
+
+      const handlerResult = handler();
+
+      if (handlerResult === undefined) return 'N/A';
+      return handlerResult.join('<br>');
+    } catch (error) {
+      console.error(`Handler error for ProtocolElement: ${this.id}`, error);
+      return 'Error';
+    }
+  }
+
+  render() {
+    const cellContent = this.getContent();
     const cellStyles = this.stylesToCSS(this.styles);
 
     return `
@@ -217,6 +252,11 @@ export class ProtocolListCell extends ProtocolElement {
     `;
   }
 
+  toJSON() {
+    return {
+      ...this,
+    };
+  }
   static fromJSON(json) {
     return new ProtocolListCell(json);
   }

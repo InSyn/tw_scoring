@@ -60,12 +60,24 @@ export const blockTypes = {
       ...defaultBorders,
     },
   },
+  grid: {
+    defaultStyles: {
+      position: 'relative',
+      flexShrink: '0',
+      display: 'flex',
+      overflow: 'hidden',
+      width: '100%',
+      height: '500px',
+      backgroundColor: '#ffffff',
+      fontSize: '12px',
+      ...defaultMargins,
+      ...defaultBorders,
+    },
+  },
   table: {
     defaultStyles: {
       flexShrink: '0',
-      tableLayout: 'fixed',
-      display: 'table',
-      borderCollapse: 'collapse',
+      display: 'block',
       width: '100%',
       maxWidth: '100%',
       overflow: 'hidden',
@@ -106,29 +118,19 @@ export const blockTypes = {
 export const itemTypes = {
   header: {
     defaultStyles: {
-      display: 'table-row',
-      backgroundColor: '#ffffff',
-      ...defaultTypography,
-      ...defaultBorders,
-    },
-  },
-  list: {
-    defaultStyles: {
-      position: 'static',
-      display: 'table',
-      tableLayout: 'fixed',
-      borderCollapse: 'collapse',
-      width: 'auto',
-      maxWidth: '100%',
+      display: 'flex',
+      flexDirection: 'row',
       height: 'auto',
       backgroundColor: '#ffffff',
+      ...defaultTypography,
       ...defaultBorders,
     },
   },
   row: {
     defaultStyles: {
       position: 'static',
-      display: 'table-row',
+      display: 'flex',
+      flexDirection: 'row',
       height: 'auto',
       backgroundColor: '#ffffff',
       ...defaultTypography,
@@ -137,7 +139,10 @@ export const itemTypes = {
   },
   cell: {
     defaultStyles: {
-      display: 'table-cell',
+      flexShrink: '0',
+      flexGrow: '1',
+      flexBasis: '0',
+      display: 'block',
       overflow: 'hidden',
       width: 'auto',
       paddingTop: '2px',
@@ -188,9 +193,24 @@ export const itemTypes = {
       ...defaultBorders,
     },
   },
+  list: {
+    defaultStyles: {
+      position: 'static',
+      display: 'table',
+      tableLayout: 'fixed',
+      borderCollapse: 'collapse',
+      width: 'auto',
+      maxWidth: '100%',
+      height: 'auto',
+      backgroundColor: '#ffffff',
+      ...defaultMargins,
+      ...defaultBorders,
+    },
+  },
   'list-row': {
     defaultStyles: {
       display: 'table-row',
+      width: 'auto',
       backgroundColor: '#ffffff',
       ...defaultTypography,
       ...defaultBorders,
@@ -200,29 +220,14 @@ export const itemTypes = {
     defaultStyles: {
       display: 'table-cell',
       width: 'auto',
+      flexShrink: '0',
+      flexGrow: '1',
+      flexBasis: '0',
+      overflow: 'hidden',
       paddingTop: '2px',
       paddingBottom: '2px',
       paddingLeft: '2px',
       paddingRight: '2px',
-      ...defaultTypography,
-      ...defaultBorders,
-    },
-  },
-  grid: {
-    defaultStyles: {
-      position: 'static',
-      flexShrink: '0',
-      display: 'flex',
-      flexDirection: 'row',
-      justifyContent: 'center',
-      alignItems: 'stretch',
-      overflow: 'hidden',
-      width: '100%',
-      height: '500px',
-      backgroundColor: '#ffffff',
-      ...defaultMargins,
-      ...defaultPaddings,
-      ...defaultBorders,
     },
   },
 };

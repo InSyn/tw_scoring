@@ -8,7 +8,18 @@
         <v-btn @click="addTeam" color="var(--accent)" text> Добавить команду </v-btn>
       </div>
       <div class="teamsTable__body">
-        <team-table-row v-for="team in competition.teams" :key="team.id" :competition="competition" :team="team"></team-table-row>
+        <team-table-row
+          v-for="(team, idx) in teamsList"
+          :key="`team_${idx}`"
+          :competition="competition"
+          :team="team"
+          :class="['drag-drop-item', { dragging: dragIndex === idx, dragOver: dragOverIndex === idx }]"
+          :drag-index="idx"
+          :drag-items="teamsList"
+          @dragstart.exact="onDragStart($event, idx)"
+          @dragover.exact="onDragOver($event, idx)"
+          @drop.exact="onDrop($event, idx, teamsList)"
+        ></team-table-row>
       </div>
     </div>
   </div>
@@ -18,15 +29,19 @@
 import { mapActions, mapGetters } from 'vuex';
 import TeamTableRow from './teamTableRow';
 import TeamClass from '../../store/classes/TeamClass';
+import MDragAndDrop from '../mixins/MDragAndDrop';
+import DataCellSettingsRow from '../protocols/protocolDataSheetSettings-components/dataCellSettings-row.vue';
 
 export default {
   name: 'teams',
-  components: { TeamTableRow },
+  components: { DataCellSettingsRow, TeamTableRow },
+  mixins: [MDragAndDrop],
   methods: {
     ...mapActions('main', {
       updateEvent: 'updateEvent',
     }),
     addTeam() {
+      if (this.competition.teams === undefined) this.competition.teams = [];
       this.competition.teams.push(new TeamClass({}));
 
       this.updateEvent();
@@ -36,16 +51,22 @@ export default {
     ...mapGetters('main', {
       competition: 'competition',
     }),
+    teamsList() {
+      return this.competition.teams || [];
+    },
   },
 };
 </script>
 
 <style scoped>
 .teams__wrapper {
-  height: 100%;
+  flex: 1 1 200px;
+  display: flex;
+  flex-direction: column;
   padding: 12px 32px;
 }
 .teams__header {
+  flex: 0 0 auto;
   padding: 8px;
   user-select: none;
 }
@@ -54,6 +75,9 @@ export default {
   font-weight: bold;
 }
 .teamsTable__wrapper {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
   margin-top: 12px;
   padding: 8px;
   background: var(--background-card);
@@ -63,7 +87,7 @@ export default {
   display: flex;
 }
 .teamsTable__body {
-  height: 60vh;
+  flex: 1 1 0;
   margin-top: 8px;
   padding: 8px;
   background: var(--standard-background);

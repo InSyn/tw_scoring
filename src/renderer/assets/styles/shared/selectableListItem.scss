@@ -1,0 +1,58 @@
+@mixin selectable-list-item {
+  cursor: pointer;
+  outline: transparent;
+  transition: background-color 92ms, border-color 92ms, opacity 92ms;
+
+  button {
+    --button-color-hidden: var(--standard-background);
+    color: var(--button-color-hidden);
+    fill: var(--button-color-hidden);
+
+    & * {
+      fill: var(--button-color-hidden);
+      color: var(--button-color-hidden);
+    }
+  }
+  &.selected,
+  &:hover {
+    background-color: var(--subject-background) !important;
+
+    & * {
+      opacity: 1 !important;
+    }
+
+    button {
+      color: var(--button-color);
+      fill: var(--button-color);
+
+      & * {
+        color: var(--button-color);
+        fill: var(--button-color);
+      }
+    }
+  }
+  &:focus {
+    --button-color-hidden: var(--button-color);
+    box-shadow: 0 0 0 1px var(--text-default) inset;
+
+    & > * {
+      opacity: 1 !important;
+    }
+
+    button {
+      color: var(--button-color);
+      fill: var(--button-color);
+
+      & * {
+        color: var(--button-color);
+        fill: var(--button-color);
+      }
+    }
+  }
+  &.selected {
+    box-shadow: 0 0 0 1px var(--accent) inset;
+  }
+  &:active {
+    background-color: var(--background-card-nested);
+  }
+}

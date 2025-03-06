@@ -1,16 +1,34 @@
 import io from 'socket.io-client';
 import fs from 'fs';
-import router from './../../router';
 
 import EventClass from '../classes/EventClass';
 import { generateId } from '../../utils/utils';
 import { fixProtocolField, generateProtocolField, protocolHandlers } from '../../utils/protocol-utils';
 
+const handleFileWriteErrors = (err) => {
+  if (err) {
+    if (err.code === 'EBUSY') {
+      console.error('File is busy.');
+      return;
+    }
+    if (err.code === 'ENOENT') {
+      console.error('Directory does not exist:', err.path);
+      return;
+    }
+    if (err.code === 'EACCES') {
+      console.error('Permission denied to write to:', err.path);
+      return;
+    }
+    console.error('Error writing file:', err.message);
+    throw new Error(err.message);
+  }
+};
+
 export default {
   namespaced: true,
   state: {
     _licData: {
-      state: true,
+      state: false,
       user: '',
       key: '',
       serial: '',
@@ -47,14 +65,14 @@ export default {
         link: 'scoring',
       },
       {
-        icon: '',
-        title: 'Protocols',
-        link: 'protocols',
-      },
-      {
         icon: 'trophyVariant',
         title: 'Protocols',
         link: 'protocolsPage',
+      },
+      {
+        icon: '',
+        title: 'Protocols[old]',
+        link: 'protocols',
       },
       {
         icon: '',
@@ -88,7 +106,6 @@ export default {
     serverStatus: false,
     serverStatusChecker: null,
     serverMessages: [],
-    showPreview: false,
     showMenu: true,
     socket: null,
   },
@@ -104,7 +121,7 @@ export default {
     flatGrid: (state, getters) => {
       return [].concat(...getters.stageGrid.map((stage) => [stage.title, ...stage.s_competitors]));
     },
-    getProtocolDataCtx: (state) => {
+    getDataCtx: (state) => {
       const { event, competition, competitions } = state;
 
       return {
@@ -121,83 +138,82 @@ export default {
     serverStatus: (state) => state.serverStatus,
     serverStatusChecker: (state) => state.serverStatusChecker,
     showMenu: (state) => state.showMenu,
-    showPreview: (state) => state.showPreview,
     socket: (state) => state.socket,
     stageGrid: (state) => {
-      const flatten = (arr) => {
-        return arr.reduce((flat, toFlatten) => {
-          return flat.concat(Array.isArray(toFlatten) ? flatten(toFlatten) : toFlatten);
+      function flattenArray(arr) {
+        return arr.reduce((acc, val) => {
+          if (Array.isArray(val)) {
+            return acc.concat(flattenArray(val));
+          }
+          return acc.concat(val);
         }, []);
-      };
+      }
 
-      return state.competition.stages.stage_grid
-        .map((stage) => {
-          return {
-            title: { type: 'stageTitle', title: stage.title },
-            s_competitors: stage.s_competitions.map((_competition) =>
-              state.competitions.find((competition) => competition.id === _competition).races.length > 0
-                ? state.competitions
-                    .find((competition) => competition.id === _competition)
-                    .getSortedByRank(
-                      state.competitions
-                        .find((competition) => competition.id === _competition)
-                        .races[state.competitions.find((competition) => competition.id === _competition).races.length - 1]._startList.map((c_id) =>
-                          state.competitions
-                            .find((competition) => competition.id === _competition)
-                            .competitorsSheet.competitors.find((_competitor) => _competitor.id === c_id)
-                        )
-                    )
-                    .map((competitor) => {
-                      return {
-                        type: 'competitorResult',
-                        comp_id: _competition,
-                        competitor: competitor,
-                        s_rank: null,
-                        result: competitor.results_overall.find(
-                          (overall) => overall.competition_id === state.competitions.find((competition) => competition.id === _competition).id
-                        ),
-                      };
-                    })
-                : []
-            ),
-          };
-        })
-        .map((_stage) => {
-          _stage.s_competitors = flatten(_stage.s_competitors);
+      const mappedStages = state.competition.stages.stage_grid.map((stage) => {
+        const s_competitors = stage.s_competitions.map((competitionId) => {
+          const foundCompetition = state.competitions.find((c) => c.id === competitionId);
+          if (!foundCompetition || foundCompetition.races.length === 0) {
+            return [];
+          }
 
-          return _stage;
-        })
-        .map((stage, s_idx, grid) => {
-          stage.s_competitors = stage.s_competitors.filter((competitor) =>
-            grid[s_idx + 1]
-              ? !grid[s_idx + 1].s_competitors.some((competitorToCompare) => {
-                  if (competitor.competitor.info_data['bib'] && competitorToCompare.competitor.info_data['bib']) {
-                    return (
-                      competitorToCompare.competitor.info_data['bib'] === competitor.competitor.info_data['bib'] ||
-                      competitorToCompare.competitor.id === competitor.competitor.id
-                    );
-                  } else {
-                    return competitorToCompare.competitor.id === competitor.competitor.id;
-                  }
-                })
-              : true
-          );
-          return stage;
-        })
-        .reverse()
-        .map((_stage, s_idx, grid) => {
-          _stage.s_competitors.forEach((_competitor) => {
-            _competitor.s_rank =
-              _stage.s_competitors.indexOf(_competitor) +
-              1 +
-              (grid[s_idx - 1]
-                ? grid[s_idx - 1].s_competitors.length > 0
-                  ? grid[s_idx - 1].s_competitors[grid[s_idx - 1].s_competitors.length - 1].s_rank
-                  : 0
-                : 0);
+          const lastRace = foundCompetition.races[foundCompetition.races.length - 1];
+          const competitorObjs = lastRace._startList.map((c_id) => foundCompetition.competitorsSheet.competitors.find((_com) => _com.id === c_id));
+
+          return foundCompetition.getSortedByRank(competitorObjs).map((competitor) => {
+            return {
+              type: 'competitorResult',
+              comp_id: competitionId,
+              competitor,
+              s_rank: null,
+              result: competitor.results_overall.find((overall) => overall.competition_id === foundCompetition.id),
+            };
           });
-          return _stage;
         });
+
+        return {
+          title: { type: 'stageTitle', title: stage.title },
+          s_competitors,
+        };
+      });
+
+      const flattenedStages = mappedStages.map((st) => {
+        st.s_competitors = flattenArray(st.s_competitors);
+        return st;
+      });
+
+      const filteredStages = flattenedStages.map((stage, s_idx, grid) => {
+        const nextStage = grid[s_idx + 1];
+        if (!nextStage) return stage;
+
+        stage.s_competitors = stage.s_competitors.filter((competitor) => {
+          return !nextStage.s_competitors.some((compare) => {
+            const haveBib1 = competitor.competitor.info_data && competitor.competitor.info_data.bib;
+            const haveBib2 = competitor.competitor.info_data && compare.competitor.info_data.bib;
+
+            if (haveBib1 && haveBib2) {
+              return compare.competitor.info_data.bib === competitor.competitor.info_data.bib || compare.competitor.id === competitor.competitor.id;
+            }
+            return compare.competitor.id === competitor.competitor.id;
+          });
+        });
+
+        return stage;
+      });
+
+      const reversed = filteredStages.reverse();
+
+      const withRankAssigned = reversed.map((stage, s_idx, all) => {
+        const prevStage = all[s_idx - 1];
+        stage.s_competitors.forEach((comp) => {
+          const baseRank = stage.s_competitors.indexOf(comp) + 1;
+          const lastRankInPrev = prevStage && prevStage.s_competitors.length > 0 ? prevStage.s_competitors[prevStage.s_competitors.length - 1].s_rank : 0;
+
+          comp.s_rank = baseRank + lastRankInPrev;
+        });
+        return stage;
+      });
+
+      return withRankAssigned;
     },
     startList: (state) => {
       return (
@@ -257,10 +273,14 @@ export default {
             });
         });
         state.socket.on('chief_judge_connected', () => {
-          if (state.competition) state.competition.stuff.jury[0].connected = true;
+          if (!state.competition) return;
+          const chief_judge = state.competition.stuff.jury.find((jury) => jury.id === 'chief');
+          if (chief_judge) chief_judge.connected = true;
         });
         state.socket.on('chief_judge_disconnected', () => {
-          if (state.competition) state.competition.stuff.jury[0].connected = false;
+          if (!state.competition) return;
+          const chief_judge = state.competition.stuff.jury.find((jury) => jury.id === 'chief');
+          if (chief_judge) chief_judge.connected = false;
         });
         state.socket.on('competition_data_updated', (data) => {
           const excludedKeys = ['weather', 'structure', 'stages', 'protocol_fields', 'protocol_settings', 'result_formula', 'teams'];
@@ -357,9 +377,6 @@ export default {
     setStatusChecker: (state, checker) => {
       state.serverStatusChecker = checker;
     },
-    togglePreview: (state, toggleState) => {
-      state.showPreview = toggleState;
-    },
     updateEvent: (state) => {
       if (!state.competition) return;
 
@@ -370,17 +387,17 @@ export default {
         };
       });
 
-      const competition = {
+      const event = {
         ...state.competition,
-        allCompetitions: allCompetitions,
+        allCompetitions,
         races: state.competition.races.map((race) => (race.toSerializable === 'function' ? race.toSerializable() : race)),
       };
 
-      state.socket &&
-        state.socket.connected &&
-        state.socket.emit('set_competition_data', competition, (res) => {
+      if (state.socket && state.socket.connected) {
+        state.socket.emit('set_competition_data', event, (res) => {
           console.log(res);
         });
+      }
     },
   },
   actions: {
@@ -399,42 +416,20 @@ export default {
     createCompetition: ({ commit }, competition) => {
       commit('createCompetition', competition);
     },
-    exportCSV: (store, params) => {
+    exportTXT: async (store, params) => {
+      const txtData = params.data;
+
+      await fs.writeFile(params.path, txtData, { encoding: 'utf-8' }, (err) => handleFileWriteErrors(err));
+    },
+    exportCSV: async (store, params) => {
       const jsonData = JSON.stringify(params.data);
 
-      fs.writeFile(`${params.path}.json`, jsonData, { encoding: 'utf-8' }, (err) => {
-        if (err) {
-          if (err.code === 'EBUSY') {
-            console.error('File is busy.');
-            return;
-          }
-          if (err.code === 'ENOENT') {
-            console.error('Directory does not exist:', params.path);
-            return;
-          }
-          if (err.code === 'EACCES') {
-            console.error('Permission denied to write to:', params.path);
-            return;
-          }
-          console.error('Error writing file:', err.message);
-          throw new Error(err.message);
-        }
-      });
+      await fs.writeFile(params.path, jsonData, { encoding: 'utf-8' }, (err) => handleFileWriteErrors(err));
     },
     exportHTML: (store, params) => {
       const { path, data } = params;
 
-      const dir = require('path').dirname(path);
-      if (!fs.existsSync(dir)) {
-        fs.mkdirSync(dir, { recursive: true });
-      }
-
-      fs.writeFile(`${path}`, data, { encoding: 'utf-8' }, (err) => {
-        if (err) {
-          if (err.code === 'EBUSY') return;
-          throw new Error(err.message);
-        }
-      });
+      fs.writeFile(path, data, { encoding: 'utf-8' }, (err) => handleFileWriteErrors(err));
     },
     input_blur: (s, e) => {
       e.target.parentNode.style.boxShadow = 'inset 0 0 0 0 transparent';
@@ -455,34 +450,30 @@ export default {
       evData.competitions.forEach((evData_competition) => {
         let competition = EventClass.fromJSON(evData_competition);
         if (evData_competition.id) competition.id = evData_competition.id;
-
-        competition.protocol_settings.result_protocols.fields = evData_competition.protocol_settings.result_protocols.fields.map((protocolData) =>
-          fixProtocolField(protocolData, competition.stuff.judges)
-        );
-        competition.protocol_settings.start_protocols.fields = evData_competition.protocol_settings.start_protocols.fields.map((protocolData) =>
-          fixProtocolField(protocolData, competition.stuff.judges)
-        );
-
+        competition.stages = JSON.parse(JSON.stringify(evData_competition.stages));
         state.competitions.push(competition);
       });
 
       commit('setCompetition', state.competitions[0]);
     },
-    save_event: async ({ state }, conf) => {
-      if (conf.path) {
-        const event_to_save = {
-          title: state.event.event_title,
-          sport: state.event.sport,
-          event_id: state.event_id,
-          competitions: state.competitions.map((competition) => competition.toSerializable()),
-        };
-        try {
-          await fs.writeFile(conf.path, JSON.stringify(event_to_save), 'utf-8', (err) => {
-            if (err) console.error(new Error(`Error: ${err}`));
-          });
-        } catch (e) {
-          console.error(new Error(e));
-        }
+    save_event: async ({ state }, { path, file = true }) => {
+      if (file && !path) return;
+
+      const event_to_save = {
+        title: state.event.event_title,
+        sport: state.event.sport,
+        event_id: state.event_id,
+        competitions: state.competitions.map((competition) => competition.toSerializable()),
+      };
+
+      try {
+        if (!file) return event_to_save;
+
+        await fs.writeFile(path, JSON.stringify(event_to_save), 'utf-8', (err) => {
+          if (err) console.error(new Error(`Error: ${err}`));
+        });
+      } catch (e) {
+        console.error(new Error(e));
       }
     },
     serverSetStatus: ({ commit }, status) => {
@@ -490,6 +481,7 @@ export default {
     },
     setEventID: ({ commit }, id) => {
       commit('SET_EVENT_ID', id);
+
       commit('updateEvent');
     },
     setIp: ({ commit }, ip) => {

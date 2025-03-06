@@ -72,10 +72,12 @@ export default {
 .generalSettings__wrapper {
   display: flex;
   flex-direction: column;
+  font-size: 0.9em;
+  overflow: hidden;
 
   .generalSettings__header {
     flex: 0 0 auto;
-    margin-bottom: 16px;
+    margin-bottom: 8px;
   }
   .generalSettings__body {
     flex: 1 1 50px;
@@ -96,7 +98,7 @@ export default {
       flex: 0 0 auto;
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
-      grid-gap: 8px;
+      grid-gap: 4px;
     }
     .margin-inputs {
       flex: 0 0 auto;

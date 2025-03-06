@@ -34,10 +34,15 @@ export default {
       const rankedTeamsArr = this.competition.teams
         .map((team) => {
           const teamResult = this.competition.getTeamRaceResult(team, this.competition.selected_race);
+          const filteredTeamCompetitors = team.competitors.filter((competitorId) => {
+            const competitor = this.competition.competitorsSheet.competitors.find((competitor) => competitor.id === competitorId);
+            return competitor.results.find((result) => result.race_id === this.competition.selected_race.id);
+          });
 
           if (teamResult)
             return {
               ...team,
+              competitors: filteredTeamCompetitors,
               teamResult,
             };
           return team;

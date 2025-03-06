@@ -10,11 +10,7 @@
     >
       <div v-for="(corridor, cor_idx) in corridors" :key="cor_idx" style="flex: 1 0 auto; display: flex; flex-wrap: wrap; align-items: center">
         <div v-if="compById(du_competitors[cor_idx])" style="display: flex; align-items: center; width: 100%; font-size: 1.2rem; font-weight: bold">
-          {{
-            `${compById(du_competitors[cor_idx]).info_data['bib']} ${compById(du_competitors[cor_idx]).info_data['name']} ${
-              compById(du_competitors[cor_idx]).info_data['lastname']
-            }` || '...'
-          }}
+          {{ `${compById(du_competitors[cor_idx]).info_data['bib']} ${compById(du_competitors[cor_idx]).info_data['name']}` || '...' }}
           <v-btn
             @click="publishResult(du_competitors[cor_idx], cor_idx)"
             small

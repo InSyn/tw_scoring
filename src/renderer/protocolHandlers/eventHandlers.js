@@ -7,6 +7,12 @@ export const eventHandlers = {
   'event:sport': (dataCtx) => {
     return [dataCtx.sport || ''];
   },
+  'event:number-of-competitors': (dataCtx) => {
+    const usedCompetitions = dataCtx.stages.stage_grid.reduce((sum, stage) => [...sum, ...stage.s_competitions], []);
+    const competitions = usedCompetitions.map((compId) => dataCtx.competitions.find((comp) => comp.id === compId));
+
+    return [Math.max(...competitions.map((comp) => comp.competitorsSheet.competitors.length)) || ''];
+  },
   'competition:discipline': ({ mainData }) => {
     if (!mainData) return [''];
     return [mainData.discipline.value || ''];
@@ -18,6 +24,23 @@ export const eventHandlers = {
   'competition:discipline-ffr-code': ({ mainData }) => {
     if (!mainData || !mainData.discipline.value) return [''];
     return [getDisciplineFFRCode(getDisciplineCode(mainData.discipline.value)) || ''];
+  },
+  'competition:stage': ({ mainData }) => {
+    if (!mainData) return [''];
+    if (!mainData.title || !mainData.title.stage || !mainData.title.stage.value) return [''];
+    return [mainData.title.stage.value.value || ''];
+  },
+  'competition:group-ru': ({ mainData }) => {
+    if (!mainData) return [''];
+    const group_ru = {
+      men: 'Мужчины',
+      women: 'Женщины',
+      mixed: 'Смешанные',
+      juniors: 'Молодежные',
+      seniors: 'Пожилые',
+      youth: 'Молодежные',
+    };
+    return [group_ru[mainData.title.stage.group] || ''];
   },
   'competition:date': ({ mainData }) => {
     if (!mainData) return [''];
@@ -46,5 +69,8 @@ export const eventHandlers = {
   'competition:codex': ({ mainData }) => {
     if (!mainData) return [''];
     return [mainData.codex.value || ''];
+  },
+  'competition:number-of-competitors': (dataCtx) => {
+    return [dataCtx.competitorsSheet.competitors.length || ''];
   },
 };

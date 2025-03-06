@@ -99,7 +99,6 @@ export function createMeasuringContainer(contentWidthPx, containerType = 'div') 
   container.style.width = `${contentWidthPx}px`;
 
   container.style.display = 'flex';
-  container.style.display = 'flex';
   container.style.flexDirection = 'column';
   container.style.justifyContent = 'flex-start';
 
@@ -115,10 +114,13 @@ export function createMeasuringContainer(contentWidthPx, containerType = 'div') 
 
 export const measureBlockHeight = (block, dataCtx, container) => {
   const wrapper = document.createElement('div');
-  wrapper.style.display = 'block';
+  wrapper.style.flexShrink = '0';
+  wrapper.style.display = 'flex';
+  wrapper.style.flexDirection = 'column';
   wrapper.style.margin = '0';
 
   const blockEl = document.createElement('div');
+  blockEl.style.flexShrink = '0';
   blockEl.innerHTML = block.render(dataCtx);
 
   wrapper.appendChild(blockEl);
@@ -145,7 +147,6 @@ export const measureTableRowHeight = (row, dataCtx, container) => {
 
   const tbodyEl = document.createElement('tr');
   tbodyEl.innerHTML = row.render(dataCtx);
-  console.log(tbodyEl);
 
   wrapper.appendChild(tbodyEl);
 

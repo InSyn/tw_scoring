@@ -9,8 +9,10 @@
 
 <script>
 import JudgeTerminalIcon from '../../../assets/icons/judgeTerminal-icon.vue';
-import { initTerminalData_chiefJudge, initTerminalData_judge } from '../../../utils/terminals-utils';
-import { checkCompetitionDiscipline } from '../../../data/sports';
+import { initTerminalData_chiefJudge, initTerminalData_judge, terminalTCPMessageRequests } from '../../../utils/terminals-utils';
+import { checkCompetitionDiscipline, getDisciplineCode } from '../../../data/sports';
+import { getScoresQuantity } from '../../../utils/discipline-utils';
+import { convertCyrillicToLatin } from '../../../utils/utils';
 
 export default {
   name: 'judgeTerminal-control',
@@ -22,107 +24,108 @@ export default {
 
       if (!this.competition.selected_race || !this.competition.selected_race.onTrack) return;
 
-      if (checkCompetitionDiscipline(this.competition, ['DMO'])) {
-        const blueCourseCompetitor = this.competition.competitorsSheet.competitors.find(
-            (competitor) => competitor.id === this.competition.selected_race.onTrack.blueCourse
-          ),
-          redCourseCompetitor = this.competition.competitorsSheet.competitors.find(
-            (competitor) => competitor.id === this.competition.selected_race.onTrack.redCourse
-          );
-        if (!blueCourseCompetitor || !redCourseCompetitor) return;
-
-        const terminalPackage_judge = {
-          raceId: this.competition.races.indexOf(this.competition.selected_race),
-          competitorId: blueCourseCompetitor.info_data['bib'],
-          competitorNum: blueCourseCompetitor.info_data['bib'],
-          scoresQuantity: 1,
-          competitorName: `BLUE | RED ${redCourseCompetitor.info_data['bib']}`,
-          isABC: 0,
-        };
-
-        try {
-          this.processingDataTransmission = true;
-
-          await initTerminalData_judge(terminalPackage_judge);
-
-          this.processingDataTransmission_timeoutId = setTimeout(() => {
-            this.processingDataTransmission = false;
-          }, 192);
-        } catch (e) {
-          this.processingDataTransmission = false;
-
-          if (e) {
-            this.processingDataError = true;
-            this.processingDataTransmission_timeoutId = setTimeout(() => {
-              this.processingDataError = false;
-            }, 192);
-
-            throw new Error(e.message);
-          }
-        }
-        return;
-      }
-
-      const competitor = this.competition.competitorsSheet.competitors.find(
-        (competitionCompetitor) => competitionCompetitor.id === this.competition.selected_race.onTrack
-      );
-      if (!competitor) return;
-
-      const terminalPackage_judge = {
-        raceId: this.competition.races.indexOf(this.competition.selected_race),
-        competitorId: competitor.info_data['bib'],
-        competitorNum: competitor.info_data['bib'],
-        scoresQuantity: 1,
-        competitorName: competitor.info_data['fullname'],
-        isABC: 0,
-      };
-
-      const competitorMarks = this.competition.stuff.judges.map((judge) => {
-        const judgeMarksPackage = [
-          judge.id,
-          ...competitor.marks
-            .filter((mark) => mark.judge_id === judge._id && mark.race_id === this.competition.selected_race.id)
-            .map((mark) => {
-              return mark.value
-                ? parseFloat(mark.value)
-                    .toFixed(1)
-                    .split('.')
-                    .map((markPart) => parseInt(markPart))
-                : [0, 0];
-            }),
-        ];
-        if (!judgeMarksPackage[1]) {
-          judgeMarksPackage.push([0, 0]);
-        }
-
-        return judgeMarksPackage;
-      });
-      const terminalPackage_chiefJudge = {
-        ...terminalPackage_judge,
-        judgesQuantity: this.competition.stuff.judges.length,
-        marks: competitorMarks,
-      };
-
-      let judgeSections = [];
-      if (this.competition.result_formula.type === 1) {
-        this.competition.stuff.judges.forEach((judge) => {
-          judgeSections.push([
-            judge.id,
-
-            this.competition.result_formula.types[1].sections.filter((section) =>
-              section.judges.some((sectionJudge) => parseInt(judge.id) === parseInt(sectionJudge.id))
-            ).length || 1,
-          ]);
-        });
-
-        terminalPackage_judge.scoresQuantity = judgeSections;
-      }
+      // if (checkCompetitionDiscipline(this.competition, ['DM'])) {
+      //   const blueCourseCompetitor = this.competition.competitorsSheet.competitors.find(
+      //       (competitor) => competitor.id === this.competition.selected_race.onTrack.blueCourse
+      //     ),
+      //     redCourseCompetitor = this.competition.competitorsSheet.competitors.find(
+      //       (competitor) => competitor.id === this.competition.selected_race.onTrack.redCourse
+      //     );
+      //   if (!blueCourseCompetitor || !redCourseCompetitor) return;
+      //
+      //   const terminalPackage_judge = {
+      //     raceId: this.competition.races.indexOf(this.competition.selected_race),
+      //     competitorId: blueCourseCompetitor.id,
+      //     competitorNum: blueCourseCompetitor.id,
+      //     scoresQuantity: getScoresQuantity(this.competition, getDisciplineCode(this.competition.mainData.discipline.value)),
+      //     competitorName: `BLUE | RED ${redCourseCompetitor.info_data['bib']}`,
+      //     isABC: 0,
+      //   };
+      //
+      //   try {
+      //     this.processingDataTransmission = true;
+      //
+      //     initTerminalData_judge(terminalPackage_judge);
+      //
+      //     this.processingDataTransmission_timeoutId = setTimeout(() => {
+      //       this.processingDataTransmission = false;
+      //     }, 192);
+      //   } catch (e) {
+      //     this.processingDataTransmission = false;
+      //
+      //     if (e) {
+      //       this.processingDataError = true;
+      //       this.processingDataTransmission_timeoutId = setTimeout(() => {
+      //         this.processingDataError = false;
+      //       }, 192);
+      //
+      //       throw new Error(e.message);
+      //     }
+      //   }
+      //   return;
+      // }
+      //
+      // const competitor = this.competition.competitorsSheet.competitors.find(
+      //   (competitionCompetitor) => competitionCompetitor.id === this.competition.selected_race.onTrack
+      // );
+      // if (!competitor) return;
+      //
+      // const terminalPackage_judge = {
+      //   raceId: this.competition.races.indexOf(this.competition.selected_race),
+      //   competitorId: competitor.info_data['bib'],
+      //   competitorNum: competitor.info_data['bib'],
+      //   scoresQuantity: getScoresQuantity(this.competition, getDisciplineCode(this.competition.mainData.discipline.value)),
+      //   competitorName: convertCyrillicToLatin(competitor.info_data['name'] || 'Empty name'),
+      //   isABC: 0,
+      // };
+      //
+      // const competitorMarks = this.competition.stuff.judges.map((judge) => {
+      //   const judgeMarksPackage = [
+      //     judge.id,
+      //     ...competitor.marks
+      //       .filter((mark) => mark.judge_id === judge._id && mark.race_id === this.competition.selected_race.id)
+      //       .map((mark) => {
+      //         return mark.value
+      //           ? parseFloat(mark.value)
+      //               .toFixed(1)
+      //               .split('.')
+      //               .map((markPart) => parseInt(markPart))
+      //           : [0, 0];
+      //       }),
+      //   ];
+      //   if (!judgeMarksPackage[1]) {
+      //     judgeMarksPackage.push([0, 0]);
+      //   }
+      //
+      //   return judgeMarksPackage;
+      // });
+      // const terminalPackage_chiefJudge = {
+      //   ...terminalPackage_judge,
+      //   judgesQuantity: this.competition.stuff.judges.length,
+      //   marks: competitorMarks,
+      // };
+      //
+      // let judgeSections = [];
+      // if (this.competition.result_formula.type === 1) {
+      //   this.competition.stuff.judges.forEach((judge) => {
+      //     judgeSections.push([
+      //       judge.id,
+      //
+      //       this.competition.result_formula.types[1].sections.filter((section) =>
+      //         section.judges.some((sectionJudge) => parseInt(judge.id) === parseInt(sectionJudge.id))
+      //       ).length || 1,
+      //     ]);
+      //   });
+      //
+      //   terminalPackage_judge.scoresQuantity = judgeSections;
+      // }
 
       try {
         this.processingDataTransmission = true;
 
-        await initTerminalData_judge(terminalPackage_judge);
-        await initTerminalData_chiefJudge(terminalPackage_chiefJudge);
+        terminalTCPMessageRequests['send-terminals-state']();
+        // initTerminalData_judge(terminalPackage_judge);
+        // initTerminalData_chiefJudge(terminalPackage_chiefJudge);
 
         this.processingDataTransmission_timeoutId = setTimeout(() => {
           this.processingDataTransmission = false;

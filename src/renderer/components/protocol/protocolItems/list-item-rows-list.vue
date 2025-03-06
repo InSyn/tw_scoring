@@ -17,7 +17,7 @@ export default {
 </script>
 
 <template>
-  <ul>
+  <ul class="listItem-rows-list">
     <li v-for="row in rows" :key="row.id" class="listItem-row">
       <list-item-rows-list-item
         :row="row"
@@ -30,13 +30,18 @@ export default {
 </template>
 
 <style scoped lang="scss">
-ul {
-  margin: 0;
-  padding: 0;
+.listItem-rows-list {
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  margin-bottom: 8px;
+  background-color: var(--background-deep);
+  &:last-child {
+    margin-bottom: 0;
+  }
 
-  li {
-    padding: 4px;
-    background-color: var(--background-card-nested);
+  .listItem-row {
+    flex: 0 0 auto;
   }
 }
 </style>

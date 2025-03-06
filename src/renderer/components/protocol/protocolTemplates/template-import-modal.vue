@@ -15,7 +15,6 @@ export default {
   },
   methods: {
     handleFileUpload(event) {
-      console.log(event);
       const file = event.target.files[0];
       this.importError = null;
 
@@ -25,11 +24,8 @@ export default {
         const reader = new FileReader();
         reader.onload = (e) => {
           try {
-            console.log('file: ', e.target.result);
             const parsedData = JSON.parse(e.target.result);
-            console.log('Parsed data: ', parsedData);
             this.fileContent = parsedData;
-            console.log('File content loaded:', parsedData);
           } catch (err) {
             this.importError = 'Invalid JSON file.';
             console.error('Error parsing JSON:', err);
@@ -43,7 +39,6 @@ export default {
     },
     importTemplate() {
       try {
-        console.log('Importing... ', this.fileContent);
         const templateDocument = ProtocolDocument.fromJSON(this.fileContent);
 
         if (templateDocument) {

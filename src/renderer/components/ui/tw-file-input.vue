@@ -94,7 +94,7 @@ export default {
 
   .cfi__label {
     button {
-      flex: 0 1 16ch;
+      flex: 0 1 12ch;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -123,7 +123,7 @@ export default {
       border-radius: 2px;
 
       .cfi__filename {
-        flex: 1 1 auto;
+        flex: 1 1 0;
         white-space: nowrap;
         text-overflow: ellipsis;
         overflow: hidden;

@@ -5,7 +5,7 @@ import MarkClass from '../../../store/classes/MarkClass';
 import JudgeTerminalControl from '../scoresPanel/judgeTerminal-control.vue';
 import Timer from './timer.vue';
 import { getCompetitorById } from '../../../utils/competition-utils';
-import { mapGetters } from 'vuex';
+import DMRunClass from '../../../store/classes/DM/DMRunClass';
 export default {
   name: 'roundRunScoringPanel',
   components: { Timer, JudgeTerminalControl },
@@ -44,28 +44,23 @@ export default {
 
       [competitor, competitor_2].forEach((competitor, idx) => {
         const athlete = getCompetitorById(this.competition, competitor.id);
-        if (!athlete) {
-          input.value = '';
-          console.warn('No athlete found');
-          return;
-        }
-
-        const existingMark = athlete.marks.find(
-          (mark) => mark.judge.toString() === judge.id.toString() && mark.race.toString() === this.competition.selected_race_id.toString()
-        );
-        if (existingMark) {
-          existingMark.value = this.competition.roundWithPrecision(idx > 0 ? 5 - Number(mark) : Number(mark));
-        } else {
-          athlete.marks.push(
-            new MarkClass({
-              race: this.competition.selected_race_id,
-              race_id: this.competition.selected_race.id,
-              judge: judge.id,
-              judge_id: judge._id,
-              value: roundNumber(idx > 0 ? 5 - Number(mark) : Number(mark)),
-            })
+        if (athlete) {
+          const existingMark = athlete.marks.find(
+            (mark) => mark.judge.toString() === judge.id.toString() && mark.race.toString() === this.competition.selected_race_id.toString()
           );
-          console.log(athlete.marks[athlete.marks.length]);
+          if (existingMark) {
+            existingMark.value = this.competition.roundWithPrecision(idx > 0 ? 5 - Number(mark) : Number(mark));
+          } else {
+            athlete.marks.push(
+              new MarkClass({
+                race: this.competition.selected_race_id,
+                race_id: this.competition.selected_race.id,
+                judge: judge.id,
+                judge_id: judge._id,
+                value: roundNumber(idx > 0 ? 5 - Number(mark) : Number(mark)),
+              })
+            );
+          }
         }
       });
 
@@ -85,7 +80,7 @@ export default {
       const competitor = this.competition.competitorsSheet.competitors.find((competitor) => competitor.id === this.getActiveRun[`${course}Course`]);
       if (!competitor) return '';
 
-      return `${competitor.info_data['bib']} ${competitor.info_data['lastname']} ${competitor.info_data['name']}`;
+      return `${competitor.info_data['bib']} ${competitor.info_data['name']}`;
     },
     getJudgeMark(course, judge) {
       if (!this.competition.selected_race || !this.competition.selected_race.onTrack || !this.getActiveRun) {
@@ -125,7 +120,6 @@ export default {
       if (!resultFormula) return this.competition.roundWithPrecision(0);
 
       const competitor = this.competition.competitorsSheet.competitors.find((competitor) => competitor.id === this.getActiveRun[`${course}Course`]);
-      console.log(competitor || 'No athlete found');
       if (!competitor) return this.competition.roundWithPrecision(0);
 
       const result = resultFormula.get_result(
@@ -169,7 +163,7 @@ export default {
         }
       });
 
-      this.competition.publishResult({
+      const competitorResult = this.competition.publishResult({
         competitor: competitor,
         race_id: this.competition.selected_race.id,
         status: competitor.race_status,
@@ -178,19 +172,64 @@ export default {
 
       competitor.res_accepted = false;
       competitor.race_status = null;
+
+      return competitorResult;
     },
     publishRun() {
       if (!this.competition.selected_race || !this.competition.selected_race.onTrack || !this.getActiveRun) return;
 
-      this.getActiveRun.competitors.forEach((competitor) => {
+      const runResults = this.getActiveRun.competitors.map((competitor) => {
         if (!competitor) return;
 
-        this.publishCompetitorResult(competitor.id);
+        return this.publishCompetitorResult(competitor.id);
       });
 
+      const resultsNumeric = runResults.map((result) => {
+        return result && result.value ? (!isNaN(Number(result.value)) ? Number(result.value) : 0) : 0;
+      });
+      if (resultsNumeric[0] === resultsNumeric[1]) {
+        this.getActiveRun.results = ['', ''];
+      } else {
+        if (resultsNumeric[0] > resultsNumeric[1]) {
+          this.getActiveRun.results = ['1', '2'];
+          this.moveToNextRun(this.getActiveRun.competitors[0].id);
+        } else {
+          this.getActiveRun.results = ['2', '1'];
+          this.moveToNextRun(this.getActiveRun.competitors[1].id);
+        }
+      }
+
       this.getActiveRun.timer = null;
-      this.competition.selected_race.finished.push(this.getActiveRun.id);
+
+      if (this.competition.selected_race.finished.includes(this.getActiveRun.id)) {
+        this.competition.selected_race.finished = this.competition.selected_race.finished.filter((_id) => _id !== this.getActiveRun.id);
+      }
+      this.competition.selected_race.finished.unshift(this.getActiveRun.id);
+
       this.competition.selected_race.onTrack = null;
+    },
+    moveToNextRun(competitor_id) {
+      const nextStage = this.competition.races[this.competition.selected_race_id + 1];
+      if (!nextStage || !nextStage.runs.length) return;
+
+      const currentRunIndex = this.competition.selected_race.runs.indexOf(this.getActiveRun);
+      if (currentRunIndex === -1) return;
+
+      const nextRunIndex = !isNaN(currentRunIndex) ? Math.floor(currentRunIndex / 2) : null;
+      const nextRunStartingIndex = Math.round(currentRunIndex % 2);
+
+      const nextRun = nextStage.runs[nextRunIndex];
+      if (!nextRun) return;
+
+      const nextStageIsEven = (this.competition.races.length - 1 - this.competition.races.indexOf(nextStage)) % 2 === 0;
+      const nextRunCourse = nextStageIsEven ? ['red', 'blue'][nextRunStartingIndex] : ['blue', 'red'][nextRunStartingIndex];
+
+      DMRunClass.setDMRunCompetitor({
+        competition: this.competition,
+        run: nextRun,
+        competitorId: competitor_id,
+        course: nextRunCourse,
+      });
     },
   },
 };
@@ -248,177 +287,192 @@ export default {
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .roundRunScoringPanel__container {
   flex: 8 1 0;
-  padding: 4px;
-}
-.roundRunScoringPanel__wrapper {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  padding: 8px;
-  background-color: var(--background-card);
-  border-radius: 6px;
-}
 
-.runParticipants__wrapper {
-  flex: 0 0 auto;
-  display: flex;
-  flex-wrap: nowrap;
-  align-items: center;
-  padding-bottom: 1.75rem;
-}
-.runParticipant__wrapper {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 6px 8px;
+  .roundRunScoringPanel__wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 4px;
+    background-color: var(--background-card);
+    border-radius: 6px;
 
-  border-radius: 6px;
-  font-weight: bold;
-}
-.runParticipant__wrapper:nth-child(1) {
-  margin-right: 12px;
-  margin-left: auto;
-}
-.runParticipant__wrapper:nth-child(3) {
-  margin-right: auto;
-  margin-left: 12px;
-}
-.runParticipant__info {
-  margin: 0 8px;
-  font-size: 1.2rem;
-}
-.runParticipant__result {
-  align-self: stretch;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-width: 3.5rem;
+    .runParticipants__wrapper {
+      flex: 0 0 auto;
+      display: flex;
+      flex-wrap: nowrap;
+      align-items: center;
+      padding: 0.25rem 0.5rem 1.25rem;
 
-  padding: 4px 8px;
-  background: var(--standard-background);
-  border-radius: 4px;
-  text-align: center;
-  font-size: 1.4rem;
-}
-.runParticipant__wrapper:nth-child(1) .runParticipant__result {
-  margin-left: 6px;
-}
-.runParticipant__wrapper:nth-child(2) .runParticipant__result {
-  margin-right: 6px;
-}
-.participantGap {
-  position: absolute;
-  top: 100%;
-  min-width: 4rem;
-  padding: 2px 8px;
+      .runParticipant__wrapper {
+        position: relative;
+        flex: 1 1 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 6px 8px;
 
-  background: var(--standard-background);
-  border-radius: 0 0 4px 4px;
+        border-radius: 6px;
+        font-weight: bold;
 
-  text-align: center;
-  font-size: 1.2rem;
-  font-weight: bold;
-}
-.gap-blue {
-  left: 2rem;
-  box-shadow: 0 0 0 4px var(--dmo-blue);
-}
-.gap-red {
-  right: 2rem;
-  box-shadow: 0 0 0 4px var(--dmo-red);
-}
+        &:nth-child(1) .runParticipant__result {
+          margin-left: 6px;
+        }
+        &:nth-child(2) .runParticipant__result {
+          margin-right: 6px;
+        }
 
-.publishRun__button {
-  margin-left: auto;
-  color: var(--text-default);
-  font-weight: bold;
-}
+        .runParticipant__info {
+          flex: 1 1 0;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          font-size: 1.2rem;
+          margin: 0 8px;
+        }
+        &.course-red .runParticipant__info {
+          text-align: right;
+        }
+        .runParticipant__result {
+          align-self: stretch;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          min-width: 3.5rem;
 
-.runTime__wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-.runTime__value {
-  min-width: 5rem;
-  margin: 0 4px 8px;
-  padding: 2px 6px;
-  color: var(--background-card);
-  background: var(--text-default);
-  border-radius: 6px;
-  text-align: center;
-  font-size: 1.6rem;
-  font-weight: bold;
-}
+          padding: 4px 8px;
+          background: var(--standard-background);
+          border-radius: 4px;
+          text-align: center;
+          font-size: 1.2rem;
+        }
+        .participantGap {
+          position: absolute;
+          top: 100%;
+          min-width: 4rem;
+          padding: 2px 8px;
 
-.runMarks__wrapper {
-  flex: 0 1 auto;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
+          background: var(--standard-background);
+          border-radius: 0 0 4px 4px;
 
-  margin-top: auto;
-  padding: 8px calc(8px - 0.75rem) calc(8px - 0.25rem) 8px;
-  overflow-y: auto;
+          text-align: center;
+          font-size: 1.2rem;
+          font-weight: bold;
 
-  background: var(--standard-background);
-  border-radius: 6px;
-}
-.runMarks__item {
-  flex: 0 0 auto;
-  margin-right: 0.75rem;
-  margin-bottom: 0.25rem;
-  padding: 4px;
-  background: var(--background-card);
-  border-radius: 4px;
-}
-.judgeTitle {
-  flex: 0 0 auto;
-  margin-bottom: 4px;
-  text-align: center;
-  font-size: 1.2rem;
-  font-weight: bold;
-}
-.judgeRunMarks__wrapper {
-  flex: 0 0 auto;
-  display: flex;
-  flex-wrap: nowrap;
-}
-.judgeRunMark {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 4px 8px;
-  min-width: 3rem;
-  font-size: 1.4rem;
-  font-weight: bold;
-}
-.judgeRunMark__input {
-  width: 2.25rem;
-  margin-right: 8px;
-  padding: 2px 4px;
-  color: var(--text-default);
-  background: var(--standard-background);
-  border-radius: 4px;
-}
-.judgeRunMark.course-blue {
-  border-top-left-radius: 4px;
-  border-bottom-left-radius: 4px;
-}
-.judgeRunMark.course-red {
-  border-top-right-radius: 4px;
-  border-bottom-right-radius: 4px;
+          &:nth-child(1) {
+            margin-right: 12px;
+            margin-left: auto;
+          }
+          &:nth-child(3) {
+            margin-right: auto;
+            margin-left: 12px;
+          }
+          &.gap-blue {
+            left: 2rem;
+            box-shadow: 0 0 0 4px var(--dm-blue);
+          }
+          &.gap-red {
+            right: 2rem;
+            box-shadow: 0 0 0 4px var(--dm-red);
+          }
+        }
+      }
+      .runControls {
+        margin-left: 1.25rem;
+      }
+    }
+
+    .publishRun__button {
+      margin-left: auto;
+      color: var(--text-default);
+      font-weight: bold;
+    }
+
+    .runTime__wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .runTime__value {
+      min-width: 5rem;
+      margin: 0 4px 8px;
+      padding: 2px 6px;
+      color: var(--background-card);
+      background: var(--text-default);
+      border-radius: 6px;
+      text-align: center;
+      font-size: 1.4rem;
+      font-weight: bold;
+    }
+
+    .runMarks__wrapper {
+      flex: 0 1 auto;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-start;
+
+      margin-top: auto;
+      padding: 8px calc(8px - 0.75rem) calc(8px - 0.25rem) 8px;
+      overflow-y: auto;
+
+      background: var(--standard-background);
+      border-radius: 6px;
+
+      .runMarks__item {
+        flex: 0 0 auto;
+        margin-right: 0.75rem;
+        margin-bottom: 0.25rem;
+        padding: 4px;
+        background: var(--background-card);
+        border-radius: 4px;
+
+        .judgeTitle {
+          flex: 0 0 auto;
+          margin-bottom: 4px;
+          text-align: center;
+          font-weight: bold;
+        }
+        .judgeRunMarks__wrapper {
+          flex: 0 0 auto;
+          display: flex;
+          flex-wrap: nowrap;
+          .judgeRunMark {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2px 6px;
+            min-width: 3rem;
+            font-size: 1.2rem;
+            font-weight: bold;
+
+            .judgeRunMark__input {
+              width: 2.25rem;
+              margin-right: 8px;
+              color: var(--text-default);
+              background: var(--standard-background);
+              border-radius: 4px;
+            }
+            &.course-blue {
+              border-top-left-radius: 4px;
+              border-bottom-left-radius: 4px;
+            }
+            &.course-red {
+              border-top-right-radius: 4px;
+              border-bottom-right-radius: 4px;
+            }
+          }
+        }
+      }
+    }
+  }
 }
 
 .course-blue {
-  background: var(--dmo-blue);
+  background: var(--dm-blue);
 }
 .course-red {
-  background: var(--dmo-red);
+  background: var(--dm-red);
 }
 </style>

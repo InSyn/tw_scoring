@@ -1,5 +1,6 @@
 import fs from 'fs';
 import Decimal from 'decimal.js';
+import { v4 as uuidv4 } from 'uuid';
 
 export function generateId() {
   let array = new Uint32Array(2);
@@ -10,6 +11,7 @@ export function generateId() {
   }
   return id;
 }
+export const generateUUID = () => uuidv4();
 
 export function getAECodes() {
   let codes = JSON.parse(fs.readFileSync(`${process.cwd()}/app_assets/AE_CODES.json`, 'utf8')) || [];
@@ -86,6 +88,8 @@ export function convertCyrillicToLatin(cyrillicString) {
     ['я', 'ya'],
   ]);
 
+  if (!cyrillicString) return '';
+
   const latinString = cyrillicString
     .toString()
     .trim()
@@ -110,10 +114,44 @@ export function convertCyrillicToLatin(cyrillicString) {
 export const roundNumber = (n, d) => new Decimal(n).toDecimalPlaces(d).toNumber();
 export const truncateNumber = (n, d) => Math.trunc(n * Math.pow(10, d)) / Math.pow(10, d);
 
-export function debounce(func, wait = 100) {
+export function debounce(fn, wait = 25) {
   let timeout;
+  let promise = null;
+  let resolvePromise = null;
+
   return function (...args) {
-    clearTimeout(timeout);
-    timeout = setTimeout(() => func.apply(this, args), wait);
+    if (timeout) clearTimeout(timeout);
+    if (!promise) {
+      promise = new Promise((resolve) => {
+        resolvePromise = resolve;
+      });
+    }
+    timeout = setTimeout(async () => {
+      const result = await fn.apply(this, args);
+      resolvePromise(result);
+      promise = null;
+      timeout = null;
+    }, wait);
+    return promise;
   };
 }
+
+export const sanitizeStageName = (fileNameText) => {
+  return fileNameText.replace(/\//g, '-').replace(/\\/g, '-');
+};
+
+export const getShallowCopy = (obj) => {
+  const copiedObj = {};
+
+  for (let objKey in obj) {
+    if (typeof obj[objKey] === 'object') {
+      copiedObj[objKey] = getShallowCopy(obj[objKey]);
+    } else if (Array.isArray(obj[objKey])) {
+      copiedObj[objKey] = obj[objKey].map((item) => (typeof item === 'object' ? getShallowCopy(item) : item));
+    } else {
+      copiedObj[objKey] = obj[objKey];
+    }
+  }
+
+  return copiedObj;
+};

@@ -52,7 +52,6 @@ export default {
       setLiveData: 'SET_LIVE_DATA',
     }),
     async setEventLiveId(e) {
-      console.log(`${databaseUrl}/events/${e.target.value}`);
       try {
         const response = await axios.get(`${databaseUrl}/events/${e.target.value}`);
         if (response.status === 200) {
@@ -83,7 +82,6 @@ export default {
         { event: this.live_config, competitions: this.competitions },
         { is_teams: this.competition.is_teams, initialize: initializeEventInfo }
       );
-      console.log(live_event);
       if (!(this.live_config.live_id && this.live_config.live_id_validated)) return;
 
       await axios
@@ -100,13 +98,15 @@ export default {
           }
         })
         .catch((e) => {
-          this.live_config.updateLive_Indicator = 'err';
-          setTimeout(() => {
-            this.live_config.updateLive_Indicator = false;
-          }, 192);
-          this.live_config.update_live = false;
+          if (e) {
+            this.live_config.updateLive_Indicator = 'err';
+            setTimeout(() => {
+              this.live_config.updateLive_Indicator = false;
+            }, 192);
+            this.live_config.update_live = false;
 
-          console.error(e.response.data);
+            console.error(e.response.data);
+          }
         });
     },
     setUpdater() {

@@ -1,6 +1,10 @@
 @import "theme.css";
 @import "shared/dragAndDrop.css";
+@import "shared/selectableListItem.scss";
 
+html,body{
+    font-size: 12px;
+}
 
 *::-webkit-scrollbar {
     width: 6px;

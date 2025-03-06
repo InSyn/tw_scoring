@@ -1,17 +1,7 @@
 <template>
   <div class="messageConsole__container">
-    <div class="py-2 px-2" style="height: 100%; border-radius: 6px; background-color: var(--background-card)">
-      <div
-        style="
-          display: flex;
-          flex-direction: column;
-          height: 100%;
-          width: 100%;
-          border-radius: 6px;
-          overflow: auto;
-          background-color: var(--standard-background);
-        "
-      >
+    <div class="py-2 px-2" style="display: flex; flex-direction: column; height: 100%; border-radius: 6px; background-color: var(--background-card)">
+      <div style="flex: 1 1 0; display: flex; flex-direction: column; border-radius: 6px; overflow-y: auto; background-color: var(--standard-background)">
         <v-hover v-slot:default="{ hover }" v-for="(message, m_idx) in competitionLog" :key="m_idx">
           <div
             class="scoring_log_message"

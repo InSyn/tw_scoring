@@ -106,17 +106,13 @@
                     border: `1px solid ${$vuetify.theme.themes[appTheme].accent}`,
                   }"
                 >
-                  <v-hover v-for="(stage, s_idx) in competition.structure.stages" :key="stage.id" v-slot:default="{ hover }">
+                  <v-hover v-for="stage in defaultStructure.stages" :key="stage.id" v-slot:default="{ hover }">
                     <div
                       @click="input.selectStage(stage, $event)"
                       style="flex: 0 0 auto; padding: 4px 8px"
                       :style="[
                         {
                           color: $vuetify.theme.themes[appTheme].textDefault,
-                        },
-                        s_idx === 0 && { borderRadius: `6px 6px 0 0` },
-                        s_idx === competition.structure.stages.length - 1 && {
-                          borderRadius: `0 0 6px 6px`,
                         },
                         hover && {
                           backgroundColor: $vuetify.theme.themes[appTheme].subjectBackgroundRGBA,
@@ -234,7 +230,7 @@
 
 <script>
 import { mdiFolderPlus } from '@mdi/js';
-import EventClass from '../../store/classes/EventClass';
+import EventClass, { defaultStructure } from '../../store/classes/EventClass';
 import { mapGetters } from 'vuex';
 import { generateId } from '../../utils/utils';
 
@@ -386,6 +382,9 @@ export default {
       lang: 'lang',
       localization: 'localization',
     }),
+    defaultStructure() {
+      return defaultStructure;
+    },
   },
 };
 </script>

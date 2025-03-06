@@ -10,9 +10,7 @@
 
         <div class="competitorsList__body">
           <div class="competitor availableCompetitor" @click="addCompetitorToTeam(competitor)" v-for="competitor in availableCompetitors" :key="competitor.id">
-            <span class="competitorName">{{
-              `${competitor.info_data['bib']} ${competitor.info_data['lastname'].toUpperCase()} ${competitor.info_data['name']}`
-            }}</span>
+            <span class="competitorName">{{ `${competitor.info_data['bib']} ${competitor.info_data['name']}` }}</span>
           </div>
         </div>
       </div>
@@ -23,9 +21,7 @@
         <div class="competitorsList__body">
           <div class="competitor teamCompetitor" @click="removeCompetitorFromTeam(competitorId)" v-for="competitorId in team.competitors" :key="competitorId">
             <span v-if="getCompetitor(competitorId)" class="competitorName">{{
-              `${getCompetitor(competitorId).info_data['bib']} ${getCompetitor(competitorId).info_data['lastname'].toUpperCase()} ${
-                getCompetitor(competitorId).info_data['name']
-              }`
+              `${getCompetitor(competitorId).info_data['bib']} ${getCompetitor(competitorId).info_data['name']}`
             }}</span>
           </div>
         </div>
@@ -97,6 +93,7 @@ export default {
   height: calc(100% - 32px);
   background: var(--standard-background);
   overflow-y: auto;
+  user-select: none;
 }
 .competitor {
   position: relative;
@@ -111,7 +108,7 @@ export default {
   bottom: 0;
   left: 0;
   background: transparent;
-  transition: background-color 128ms;
+  transition: background-color 92ms;
 }
 .competitor:hover::before {
   background: rgba(255, 255, 255, 0.2);

@@ -1,6 +1,6 @@
 <script>
-import { mdiArrowRight, mdiCog, mdiTrashCan } from '@mdi/js';
 import MDragEventEmitterMixin from '../../mixins/MDragEventEmitterMixin';
+import { icons } from '../../icons';
 
 export default {
   name: 'blocks-list-item',
@@ -16,14 +16,10 @@ export default {
     isSelectedBlock: Boolean,
   },
   mixins: [MDragEventEmitterMixin],
-  data() {
-    return {
-      icons: {
-        mdiCog,
-        mdiArrowRight,
-        mdiTrashCan,
-      },
-    };
+  computed: {
+    icons() {
+      return icons;
+    },
   },
   methods: {
     editBlock(block) {
@@ -37,43 +33,57 @@ export default {
 </script>
 
 <template>
-  <li class="block-item" :class="{ selected: isSelectedBlock }">
-    <div class="block-item__type">
-      <span>{{ block.type }}</span>
+  <li class="block-item" :class="{ selected: isSelectedBlock }" tabindex="0" @dblclick.stop="editBlock(block)">
+    <div class="block-item__name">
+      <span>[{{ block.type }}]&nbsp;</span>
+      <strong>{{ block.blockName ? block.blockName : '' }}</strong>
     </div>
     <div class="block-item__controls">
-      <button class="tw-button-small danger" @click="deleteBlock(index)">
-        <v-icon color="white" size="12">{{ icons.mdiTrashCan }}</v-icon>
+      <button class="tw-button-small transparent" :class="{ warn: isSelectedBlock }" @click="editBlock(block)">
+        <v-icon color="white" size="12">{{ isSelectedBlock ? icons.mdiArrowLeft : icons.mdiCog }}</v-icon>
       </button>
-      <button class="tw-button-small" :class="{ warn: isSelectedBlock }" @click="editBlock(block)">
-        <v-icon color="white" size="12">{{ isSelectedBlock ? icons.mdiArrowRight : icons.mdiCog }}</v-icon>
+      <button class="tw-button-small transparent danger" @click="deleteBlock(index)">
+        <v-icon color="white" size="12">{{ icons.mdiTrashCan }}</v-icon>
       </button>
     </div>
   </li>
 </template>
 
 <style scoped lang="scss">
+@use './../../../assets/styles/shared/selectableListItem' as *;
 .block-item {
+  @include selectable-list-item;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 4px;
   padding: 4px;
   background-color: var(--background-deep);
-  border-radius: 2px;
-  transition: background-color 128ms;
 
-  &__type {
+  &__name {
     display: flex;
+    flex-direction: column;
     overflow: hidden;
-    text-overflow: ellipsis;
-    &:hover {
-      overflow: visible;
+
+    span,
+    strong {
+      flex: 0 0 auto;
+      white-space: nowrap;
+      &:nth-child(1) {
+        font-size: 0.8rem;
+        opacity: 0.75;
+        transition: opacity 64ms;
+      }
+      &:nth-child(2) {
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
     }
   }
   &__controls {
     display: flex;
     align-items: center;
+    pointer-events: none;
+    opacity: 0;
 
     & > * {
       margin-right: 4px;
@@ -82,8 +92,14 @@ export default {
       }
     }
   }
-  &.selected {
-    background-color: var(--subject-background);
+  &.selected,
+  &:focus,
+  &:focus-within,
+  &:hover {
+    .block-item__controls {
+      pointer-events: all;
+      opacity: 1;
+    }
   }
 }
 </style>

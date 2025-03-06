@@ -3,11 +3,11 @@
     <router-link v-slot="{ navigate, isActive }" custom v-for="(page, p) in getMenuList" :key="p" :to="{ name: page.link }" tag="div">
       <v-hover v-slot:default="{ hover }">
         <div :class="['appMenu__menuItem', { 'menuItem-active': isActive }]" @click="navigate">
-          <v-icon :class="['menuIcon', isActive && 'menuIcon-active']" size="1.8rem" :color="hover || isActive ? 'var(--text-default)' : 'var(--accent)'">
+          <v-icon :class="['menuIcon', isActive && 'menuIcon-active']" size="1.6rem" :color="hover || isActive ? 'var(--text-default)' : 'var(--accent)'">
             {{ icons[page.icon] }}
           </v-icon>
           <div class="text-no-wrap ml-3">
-            {{ localization[lang].app.menu[page.title] }}
+            {{ localization[lang].app.menu[page.title] || page.title }}
           </div>
         </div>
       </v-hover>
@@ -102,7 +102,7 @@ export default {
   display: flex;
   align-items: center;
   padding: 8px;
-  font-size: 1.3rem;
+  font-size: 1.2rem;
   font-weight: bold;
 
   &:last-child {

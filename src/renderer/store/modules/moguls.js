@@ -3,8 +3,11 @@ export default {
   state: {
     mgCodes: [],
     parameters: {
-      paceTime_men: 23.0,
-      paceTime_women: 26.33,
+      trackLength: 200,
+      paceSpeed_men: 10.3,
+      paceSpeed_women: 9,
+      paceTime_men: 16.5,
+      paceTime_women: 18.89,
     },
     mgRunData: {
       jump1_code: '',

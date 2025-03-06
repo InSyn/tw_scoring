@@ -55,7 +55,7 @@ export default {
       const competitor = getCompetitorByBib(this.competition, competitorBib);
       if (!competitor || !competitor.info_data) return '';
 
-      return `${competitor.info_data['lastname']} ${competitor.info_data['name']}`;
+      return `${competitor.info_data['name']}`;
     },
   },
   mounted() {

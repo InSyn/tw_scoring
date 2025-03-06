@@ -41,7 +41,7 @@ export default {
       class="competitorsSheetSettings__dialog__dataItem__button"
       @click.prevent="$emit('add-col-to-del', competition.competitorsSheet.header[idx])"
       color="var(--action-red)"
-      :disabled="dataItem.id === 'bib' || dataItem.id === 'name' || dataItem.id === 'lastname'"
+      :disabled="dataItem.id === 'bib' || dataItem.id === 'name'"
       text
       x-small
       >{{ localization[lang].app.dialogs.d_delete }}

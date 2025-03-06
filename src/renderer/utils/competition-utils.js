@@ -31,7 +31,7 @@ export const getHeatCompetitorColor = (startOrder) => {
       return 'transparent';
   }
 };
-export const getDMOCompetitorColor = (startOrder, totalStages, currentStage) => {
+export const getDMCompetitorColor = (startOrder, totalStages, currentStage) => {
   const isFinalStage = currentStage === totalStages - 1 || currentStage === totalStages - 2;
   const isOddStage = currentStage % 2 === 0;
 

@@ -30,11 +30,7 @@
             @click="dialogCompetitors.push(competitor.id)"
             class="addCompetitorsToRace__dialog__competitorsList__item competitorItem-available"
           >
-            {{
-              `${competitor.info_data.bib && competitor.info_data.bib} ${competitor.info_data['lastname'] && competitor.info_data['lastname']} ${
-                competitor.info_data.name && competitor.info_data.name
-              }`
-            }}
+            {{ `${competitor.info_data.bib && competitor.info_data.bib} ${competitor.info_data.name && competitor.info_data.name}` }}
           </div>
         </div>
 
@@ -51,11 +47,7 @@
             "
             class="addCompetitorsToRace__dialog__competitorsList__item competitorItem-added"
           >
-            {{
-              `${competitor.info_data.bib && competitor.info_data.bib} ${competitor.info_data['lastname'] && competitor.info_data['lastname']} ${
-                competitor.info_data.name && competitor.info_data.name
-              }`
-            }}
+            {{ `${competitor.info_data.bib && competitor.info_data.bib} ${competitor.info_data.name && competitor.info_data.name}` }}
           </div>
         </div>
       </div>
@@ -81,7 +73,7 @@ export default {
       this.dialogState = false;
       this.dialogCompetitors = [];
 
-      this.rebuildStartList(race);
+      this.competition.rebuildStartList(race);
     },
     closeAddCompetitorsDialog() {
       this.dialogCompetitors = [];

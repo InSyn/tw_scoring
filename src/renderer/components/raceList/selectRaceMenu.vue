@@ -9,19 +9,21 @@
         {{ localization[lang].app.races.no_races }}
       </div>
 
-      <div
-        :class="['raceSelect__button', selectedRace && race.id === selectedRace.id && 'raceSelect__button-active']"
-        @click="selectRace(race)"
-        v-for="race in competition.races"
+      <select-race-menu-item
+        v-for="(race, idx) in competition.races"
         :key="race.id"
+        :competition="competition"
+        :race="race"
+        :selected-race="selectedRace"
+        @select-race="selectRace"
+        :class="['drag-drop-item', { dragging: dragIndex === idx, dragOver: dragOverIndex === idx }]"
+        :drag-index="idx"
+        :drag-items="competition.races"
+        @dragstart="onDragStart($event, idx)"
+        @dragover="onDragOver($event, idx)"
+        @drop="onDrop($event, idx, competition.races)"
       >
-        <change-race-title-dialog :race="race"></change-race-title-dialog>
-        <div>
-          {{ race.title }}
-        </div>
-
-        <delete-race-dialog @select-race="selectRace" :competition="competition" :race="race"></delete-race-dialog>
-      </div>
+      </select-race-menu-item>
     </div>
 
     <v-btn @click="turn_race('right')" class="switchRace__button" color="var(--accent)" min-width="0" max-width="42px" max-height="32px" text>
@@ -33,16 +35,35 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 import DeleteRaceDialog from './dialogs/deleteRace-dialog.vue';
 import ChangeRaceTitleDialog from './dialogs/changeRaceTitle-dialog.vue';
 import CreateRaceDialog from './dialogs/createRace-dialog.vue';
+import SelectRaceMenuItem from './selectRaceMenu-item.vue';
+import MDragAndDrop from '../mixins/MDragAndDrop';
+import AthleteHeaderSettingsItem from '../competitors/athleteHeaderSettings-item.vue';
 
 export default {
   name: 'selectRaceMenu',
-  components: { CreateRaceDialog, ChangeRaceTitleDialog, DeleteRaceDialog },
+  components: { AthleteHeaderSettingsItem, SelectRaceMenuItem, CreateRaceDialog, ChangeRaceTitleDialog, DeleteRaceDialog },
   props: ['competition', 'selectedRace'],
+  mixins: [MDragAndDrop],
   methods: {
+    ...mapActions('main', {
+      updateEvent: 'updateEvent',
+    }),
+    onDrop(e, index, items) {
+      e.preventDefault();
+      if (this.dragIndex !== null && items !== null) {
+        const draggedItem = items.splice(this.dragIndex, 1)[0];
+        items.splice(index, 0, draggedItem);
+      }
+
+      this.dragIndex = null;
+      this.dragOverIndex = null;
+
+      this.updateEvent();
+    },
     selectRace(race) {
       this.$emit('menu-select-race', race);
     },
@@ -111,34 +132,6 @@ export default {
   border-radius: 6px;
   overflow: auto;
   background: var(--background-deep);
-}
-
-.raceSelect__button {
-  flex: 0 0 auto;
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  margin: 2px;
-  padding: 6px 24px 4px 4px;
-
-  background: var(--subject-background);
-  color: var(--text-default);
-  border-radius: 6px;
-
-  font-weight: bold;
-  white-space: nowrap;
-  cursor: pointer;
-
-  transition: background-color 92ms, color 92ms;
-  transform-origin: center;
-}
-
-/*noinspection CssUnusedSymbol*/
-.raceSelect__button-active {
-  background: var(--accent);
-  color: var(--text-default);
 }
 .raceSelect__button.emptyRaces {
   padding: 4px 6px;

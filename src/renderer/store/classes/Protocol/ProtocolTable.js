@@ -1,17 +1,21 @@
 import { BaseProtocolComponent, ProtocolElement } from './ProtocolElement';
 import { getTableDataSources } from '../../../protocolHandlers/tableHandlers';
-import { getBoxHeight, measureBlockHeight, measureTableRowHeight, parseSizeUnitsToNumber } from '../../../utils/protocolTemplate-utils';
+import { measureBlockHeight } from '../../../utils/protocolTemplate-utils';
 import { getDefaultStyles } from '../../../configs/protocol-builder-config';
 import { v4 as uuidv4 } from 'uuid';
 
 export class TableBlock extends BaseProtocolComponent {
-  constructor({ id = uuidv4(), type = 'table', styles = {}, headers = [], rows = [], handlerId = null, onUpdate = null }) {
+  constructor({ id = uuidv4(), type = 'table', blockName = '', styles = {}, headers = [], rows = [], handlerId = null, onUpdate = null }) {
     super({ id, onUpdate });
     this.type = type;
+    this.blockName = blockName;
     this.styles = { ...getDefaultStyles('block', type), ...styles };
     this.headers = headers.map((header) => ProtocolTableItem.fromJSON({ ...header, onUpdate: this.triggerUpdate.bind(this) }));
     this.rows = rows.map((row) => ProtocolTableItem.fromJSON({ ...row, onUpdate: this.triggerUpdate.bind(this) }));
     this.handlerId = handlerId;
+  }
+  setBlockName(blockName) {
+    this.blockName = blockName;
   }
 
   addRow(row) {
@@ -36,13 +40,6 @@ export class TableBlock extends BaseProtocolComponent {
   updateHandler(handlerId) {
     this.handlerId = handlerId;
     this.triggerUpdate();
-  }
-
-  getHeight(dataCtx) {
-    const headerHeight = this.headers.reduce((total, hdr) => total + hdr.getHeight(dataCtx), 0);
-    const rowHeight = this.rows.reduce((total, row) => total + row.getHeight(dataCtx), 0);
-
-    return getBoxHeight(this.styles, headerHeight + rowHeight);
   }
 
   splitForPagesWithLeftover(dataCtx, dataSource, leftoverHeight, fullPageHeight, measuringContainer) {
@@ -87,7 +84,6 @@ export class TableBlock extends BaseProtocolComponent {
     const totalCount = dataSource.data.length;
 
     const headerHeight = this.measureHeaderHeight(dataCtx, measuringContainer);
-    console.log(headerHeight);
     if (headerHeight > maxHeight) {
       return { rows: [], lastUsedIdx: startIdx - 1 };
     }
@@ -97,13 +93,13 @@ export class TableBlock extends BaseProtocolComponent {
     let rowIdx = startIdx;
 
     while (rowIdx < totalCount) {
-      const competitorHeights = this.buildRowsForOneCompetitor(dataCtx, dataSource, rowIdx);
+      const competitorHeights = this.buildRowsForOneCompetitor(dataCtx, dataSource, rowIdx, measuringContainer);
       const sumRowH = competitorHeights.reduce((a, b) => a + b, 0);
       if (currentHeight + sumRowH > maxHeight) {
         break;
       }
 
-      const actualRows = this.buildActualRowsForCompetitor(dataCtx, dataSource, rowIdx);
+      const actualRows = this.buildActualRowsForCompetitor(dataCtx, dataSource, rowIdx, measuringContainer);
       currentRows.push(...actualRows);
 
       currentHeight += sumRowH;
@@ -116,15 +112,14 @@ export class TableBlock extends BaseProtocolComponent {
     };
   }
   measureHeaderHeight(dataCtx, measuringContainer) {
-    return this.headers.reduce((total, hdr) => total + measureTableRowHeight(hdr, dataCtx, measuringContainer), 0);
+    return this.headers.reduce((total, hdr) => total + measureBlockHeight(hdr, dataCtx, measuringContainer), 0);
   }
-  buildRowsForOneCompetitor(dataCtx, dataSource, competitorIdx) {
+  buildRowsForOneCompetitor(dataCtx, dataSource, competitorIdx, measuringContainer) {
     const heights = [];
 
     for (const templateRow of this.rows) {
       const row = buildRow(templateRow, competitorIdx, dataCtx, dataSource);
-      const h = row.getHeight(dataCtx, dataSource, 0);
-      // const hNew = measureTableRowHeight(row, dataCtx, container);
+      const h = measureBlockHeight(row, dataCtx, measuringContainer);
       heights.push(h);
     }
     return heights;
@@ -148,10 +143,10 @@ export class TableBlock extends BaseProtocolComponent {
     const renderedRows = this.rows.map((row, rowIdx) => row.render(dataCtx, dataSource, rowIdx)).join('');
 
     return `
-    <table style="${this.stylesToCSS(this.styles)}">
-      <thead>${renderedHeaders}</thead>
-      <tbody>${renderedRows}</tbody>
-    </table>`;
+      <div style="${this.stylesToCSS(this.styles)}">
+        ${renderedHeaders}
+        ${renderedRows}
+      </div>`;
   }
 
   toJSON() {
@@ -160,6 +155,7 @@ export class TableBlock extends BaseProtocolComponent {
       headers: this.headers.map((header) => header.toJSON()),
       rows: this.rows.map((row) => row.toJSON()),
       type: this.type,
+      blockName: this.blockName,
       handlerId: this.handlerId,
       styles: this.styles,
     };
@@ -175,10 +171,11 @@ export class TableBlock extends BaseProtocolComponent {
 }
 
 export class ProtocolTableItem extends ProtocolElement {
-  constructor({ cells = [], styles = {}, type = 'row', ...options }) {
+  constructor({ cells = [], styles = {}, type = 'row', additionalColor = '#e9e9e9', ...options }) {
     super({ ...options });
     this.type = type;
     this.styles = { ...getDefaultStyles('item', type), ...styles };
+    this.additionalColor = additionalColor;
     this.cells = cells.map((cell) => ProtocolTableCell.fromJSON({ ...cell, onUpdate: this.triggerUpdate.bind(this) }));
   }
 
@@ -193,20 +190,48 @@ export class ProtocolTableItem extends ProtocolElement {
     this.triggerUpdate();
   }
 
-  getHeight(dataCtx, dataSource, dataIdx) {
-    if (this.styles.height && this.styles.height !== 'auto') {
-      return parseSizeUnitsToNumber(this.styles.height);
-    }
-    const contentHeight = Math.max(...this.cells.map((cell) => cell.getHeight(dataCtx, dataSource, dataIdx)));
-
-    return getBoxHeight(this.styles, contentHeight);
-  }
-
   render(dataCtx, dataSource, dataIdx) {
+    if (dataSource && dataSource.data[dataIdx].type === 'stageTitle' && this.type !== 'header') {
+      const stageTitleStyles = {
+        fontSize: this.styles.fontSize,
+        fontWeight: 'bold',
+        lineHeight: this.styles.lineHeight,
+        height: this.styles.fontSize * this.styles.lineHeight,
+        paddingTop: '2px',
+        paddingBottom: '4px',
+        paddingLeft: '4px',
+        color: this.styles.color,
+      };
+
+      return `<div style="${this.stylesToCSS(stageTitleStyles)}; ">
+        ${dataSource.data[dataIdx].stageTitle}
+      </div>`;
+    }
+    if (dataSource && dataSource.data[dataIdx].type === 'teamTitle' && this.type !== 'header') {
+      const stageTitleStyles = {
+        display: 'flex',
+        alignItems: 'center',
+        fontSize: this.styles.fontSize,
+        lineHeight: this.styles.lineHeight,
+        height: this.styles.fontSize * this.styles.lineHeight,
+        paddingTop: '2px',
+        paddingRight: '4px',
+        paddingBottom: '4px',
+        paddingLeft: '4px',
+        color: this.styles.color,
+      };
+
+      return `<div style="${this.stylesToCSS(stageTitleStyles)}; ">
+        <strong style="margin-right: 0.5rem; margin-left: 0.5rem">${dataSource.data[dataIdx].s_rank || '-'}</strong>
+        ${dataSource.data[dataIdx].teamTitle}
+        <strong style="display: inline-block; margin-left: auto; margin-right: 0.5rem">${dataSource.data[dataIdx].teamResult || '-'}</strong>
+      </div>`;
+    }
+
     const renderedCells = this.cells.map((cell) => cell.render(dataCtx, dataSource, dataIdx)).join('');
-    return `<tr style="${this.stylesToCSS(this.styles)}; ">
+    return `<div style="${this.stylesToCSS(this.styles)}; ${dataIdx % 2 !== 0 ? 'background-color: ' + this.additionalColor : ''}">
       ${renderedCells}
-     </tr>`;
+     </div>`;
   }
 
   toJSON() {
@@ -229,18 +254,24 @@ export class ProtocolTableItem extends ProtocolElement {
 }
 
 export class ProtocolTableCell extends BaseProtocolComponent {
-  constructor({ id = uuidv4(), type = 'cell', content = '', styles = {}, handlerId = null, onUpdate = null }) {
+  constructor({ id = uuidv4(), type = 'cell', content = '', styles = {}, handlerId = null, subHandler = null, onUpdate = null }) {
     super({ id, onUpdate });
     this.type = type;
     this.content = content;
     this.styles = { ...getDefaultStyles('item', type), ...styles };
     this.handlerId = handlerId;
+    this.subHandler = subHandler;
   }
 
   setHandler(handlerId) {
     this.handlerId = handlerId;
     this.triggerUpdate();
   }
+  setSubHandler(handlerId) {
+    this.subHandler = handlerId;
+    this.triggerUpdate();
+  }
+
   setContent(content) {
     this.content = content;
     this.triggerUpdate();
@@ -248,67 +279,79 @@ export class ProtocolTableCell extends BaseProtocolComponent {
 
   getContent(dataCtx, dataSource, dataIdx) {
     if (!this.handlerId || !dataSource || !dataSource.handlers[this.handlerId]) return [this.content];
-
     const handler = dataSource.handlers[this.handlerId];
     if (!handler) return [this.content];
 
-    return handler(dataCtx, dataSource, dataIdx) || ['N/A'];
+    if (this.subHandler) {
+    }
+    let subHandler;
+    if (this.subHandler && dataSource.handlers[this.subHandler]) {
+      subHandler = dataSource.handlers[this.subHandler];
+    }
+
+    return subHandler ? [handler(dataCtx, dataSource, dataIdx), subHandler(dataCtx, dataSource, dataIdx)] : handler(dataCtx, dataSource, dataIdx) || ['N/A'];
   }
 
-  getHeight(dataCtx, dataSource, dataIdx) {
-    const baseFontSize = parseSizeUnitsToNumber(this.styles.fontSize || '12px');
-    const lineHeightPx = parseFloat(this.styles.lineHeight || '1.2') * baseFontSize;
-
-    const cellContent = this.getContent(dataCtx, dataSource, dataIdx);
-    const contentText = Array.isArray(cellContent) ? cellContent : [cellContent];
-
-    const processedContent = contentText.reduce((acc, item) => {
-      if (typeof item === 'string') {
-        if (item.includes('<br>')) {
-          return acc.concat(item.split('<br>'));
-        }
-      }
-      return acc.concat(item);
-    }, []);
-
-    const numLines = processedContent.length;
-
-    const contentHeight = numLines * lineHeightPx;
-
-    const paddingTop = parseSizeUnitsToNumber(this.styles.paddingTop || '0px');
-    const paddingBottom = parseSizeUnitsToNumber(this.styles.paddingBottom || '0px');
-
-    return contentHeight + paddingTop + paddingBottom;
-  }
-
-  render(dataCtx, dataSource, dataIdx, rowHeight) {
+  render(dataCtx, dataSource, dataIdx) {
     const cellContent = this.getContent(dataCtx, dataSource, dataIdx);
 
-    const contentText = Array.isArray(cellContent) ? cellContent : [cellContent];
+    let content, subContent;
 
-    const processedContent = contentText.reduce((acc, item) => {
-      if (typeof item === 'string') {
-        if (item.includes('<br>')) {
-          return acc.concat(item.split('<br>'));
-        }
-      }
-      return acc.concat(item);
-    }, []);
+    if (Array.isArray(cellContent) && cellContent.length > 1) {
+      [content, subContent] = cellContent;
+    } else if (Array.isArray(cellContent) && cellContent.length === 1) {
+      content = cellContent;
+    } else {
+      content = [cellContent];
+    }
+
+    const processedContent = Array.isArray(content)
+      ? content.reduce((acc, item) => {
+          if (typeof item === 'string') {
+            if (item.includes('<br>')) {
+              return acc.concat(item.split('<br>'));
+            }
+          }
+          return acc.concat(item);
+        }, [])
+      : [content];
+    let processedSubContent;
+    if (subContent) {
+      processedSubContent = Array.isArray(subContent)
+        ? subContent.reduce((acc, item) => {
+            if (typeof item === 'string') {
+              if (item.includes('<br>')) {
+                return acc.concat(item.split('<br>'));
+              }
+            }
+            return acc.concat(item);
+          }, [])
+        : [subContent];
+    }
 
     const { paddingTop, paddingBottom, paddingLeft, paddingRight, ...restStyles } = this.styles;
     const cellStyles = this.stylesToCSS({ ...restStyles });
 
     const divPaddings = this.stylesToCSS({ paddingTop, paddingBottom, paddingLeft, paddingRight });
     const wrapperStyles = `
+    flex-shrink: 0;
     display: block;
     white-space: nowrap;
-    overflow: hidden;
+    overflow: visible;
     width: 100%;
-    vertical-align: top;
+  `;
+    const subContentWrapperStyles = `
+    position: absolute;
+    top: ${this.styles.fontSize * this.styles.lineHeight}px;
+    flex-shrink: 0;
+    display: block;
+    white-space: nowrap;
+    overflow: visible;
+    width: auto;
   `;
 
     return `
-    <td style="${cellStyles};  vertical-align: top">
+    <div style="${cellStyles}; max-width: ${this.styles.width}; position: relative; overflow: ${this.subHandler ? 'visible' : 'hidden'}">
       ${processedContent
         .map(
           (contentCell) => `
@@ -318,7 +361,20 @@ export class ProtocolTableCell extends BaseProtocolComponent {
         `
         )
         .join('')}
-    </td>
+      ${
+        processedSubContent
+          ? processedSubContent
+              .map(
+                (contentCell) => `
+          <div style="${subContentWrapperStyles}; ${divPaddings}">
+            ${contentCell.toString().trim()}
+          </div>
+        `
+              )
+              .join('')
+          : ''
+      }
+    </div>
   `;
   }
 
@@ -328,6 +384,7 @@ export class ProtocolTableCell extends BaseProtocolComponent {
       content: this.content,
       styles: this.styles,
       handlerId: this.handlerId,
+      subHandler: this.subHandler,
     };
   }
 

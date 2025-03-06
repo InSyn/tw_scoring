@@ -5,6 +5,8 @@ import RaceClass, { SXRounds, DMRounds } from '../../../store/classes/RaceClass'
 import RoundClass from '../../../store/classes/DM/RoundClass';
 import SXHeatClass from '../../../store/classes/SX/SXHeatClass';
 import DMRunClass from '../../../store/classes/DM/DMRunClass';
+import { fillDualMogulsBrackets } from '../../../utils/discipline-utils';
+import { generateEmptyCompetitor } from '../../../store/classes/CompetitorClass';
 
 export default {
   name: 'createRace-dialog',
@@ -72,20 +74,31 @@ export default {
           for (let i = 0; i < round.quantity; i++) {
             params.heats.push(new SXHeatClass({}));
           }
-        } else if (checkCompetitionDiscipline(this.competition, ['DMO'])) {
+        } else if (checkCompetitionDiscipline(this.competition, ['DM'])) {
+          let filledBrackets = [];
+          if (params.competitors) filledBrackets = fillDualMogulsBrackets(params.competitors, round.quantity * 2);
+
           for (let i = 0; i < round.quantity; i++) {
-            const runCompetitors = competitors.slice(i * 2, i * 2 + 2);
+            let runCompetitors = [];
+            if (filledBrackets[i]) {
+              runCompetitors = filledBrackets[i].map((competitorId) => {
+                const athlete = this.competition.competitorsSheet.competitors.find((competitor) => competitor.id === competitorId);
+                return athlete ? athlete : { ...generateEmptyCompetitor() };
+              });
+            }
+
             params.runs.push(
               new DMRunClass({
                 number: i + 1,
                 title: `${round.title}-${i + 1}`,
+                competitors: runCompetitors.length ? runCompetitors : undefined,
               })
             );
           }
         }
 
         let race;
-        if (checkCompetitionDiscipline(this.competition, ['DMO'])) {
+        if (checkCompetitionDiscipline(this.competition, ['DM'])) {
           params.stageTitle = round.title;
           race = new RoundClass(params);
         } else {
@@ -94,15 +107,14 @@ export default {
 
         this.competition.races.push(race);
 
-        const nextIndex = checkCompetitionDiscipline(this.competition, ['DMO'])
+        const nextIndex = checkCompetitionDiscipline(this.competition, ['DM'])
           ? DMRounds.findIndex((r) => r.title === round.title) + 1
           : SXRounds.findIndex((r) => r.title === round.title) + 1;
 
-        const nextRound = checkCompetitionDiscipline(this.competition, ['DMO']) ? DMRounds[nextIndex] : SXRounds[nextIndex];
+        const nextRound = checkCompetitionDiscipline(this.competition, ['DM']) ? DMRounds[nextIndex] : SXRounds[nextIndex];
 
         if (nextRound) {
-          const nextCompetitors = competitors.slice(0, nextRound.quantity * 2);
-          createDescendingStages(nextRound, nextCompetitors);
+          createDescendingStages(nextRound);
         }
       };
 
@@ -117,7 +129,7 @@ export default {
       if (this.roundsControl_value) {
         createDescendingStages(this.roundsControl_value, params.competitors);
       } else {
-        if (checkCompetitionDiscipline(this.competition, ['DMO'])) {
+        if (checkCompetitionDiscipline(this.competition, ['DM'])) {
           params.stageTitle = 'Раунд';
           race = new RoundClass(params);
         } else {
@@ -182,16 +194,12 @@ export default {
             v-model="dialogRaceTitle"
           />
 
-          <div v-if="checkCompetitionDiscipline(competition, ['SX', 'SXT', 'DMO'])" class="rounds__control">
+          <div v-if="checkCompetitionDiscipline(competition, ['SX', 'SXT', 'DM'])" class="rounds__control">
             <label>
               <span>Раунд</span>
               <select v-model="roundsControl_value">
                 <option
-                  v-for="round in isFinalOfDisciplines(competition, ['SX', 'SXT'])
-                    ? SXRounds
-                    : checkCompetitionDiscipline(competition, ['DMO'])
-                    ? DMRounds
-                    : []"
+                  v-for="round in isFinalOfDisciplines(competition, ['SX', 'SXT']) ? SXRounds : isFinalOfDisciplines(competition, ['DM']) ? DMRounds : []"
                   :key="round.title"
                   :value="round"
                 >
@@ -264,9 +272,7 @@ export default {
               <div @click="addToStartList(competitor)" class="createRace__dialog__competitorsList__item" v-for="(competitor, c) in filtered_list" :key="c">
                 <div class="createRace__dialog__competitorsList__item__name">
                   {{
-                    `${competitor.info_data['bib'] ? competitor.info_data['bib'] : ' '} ${
-                      competitor.info_data['lastname'] ? competitor.info_data['lastname'] : ' '
-                    } ${competitor.info_data['name'] ? competitor.info_data['name'] : ' '}`
+                    `${competitor.info_data['bib'] ? competitor.info_data['bib'] : ' '} ${competitor.info_data['name'] ? competitor.info_data['name'] : ' '}`
                   }}
                 </div>
 
@@ -291,8 +297,8 @@ export default {
                 <div class="createRace__dialog__competitorsList__item__name">
                   {{
                     `${competitorToRace.info_data['bib'] ? competitorToRace.info_data['bib'] : ' '} ${
-                      competitorToRace.info_data['lastname'] ? competitorToRace.info_data['lastname'] : ' '
-                    } ${competitorToRace.info_data['name'] ? competitorToRace.info_data['name'] : ' '}`
+                      competitorToRace.info_data['name'] ? competitorToRace.info_data['name'] : ' '
+                    }`
                   }}
                 </div>
               </div>

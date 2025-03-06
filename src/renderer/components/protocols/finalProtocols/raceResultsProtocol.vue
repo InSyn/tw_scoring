@@ -247,7 +247,7 @@
                             {{ `${jury.lastName} ${jury.name}` }}
                           </div>
                           <div style="width: 30%">
-                            {{ jury.loc }}
+                            {{ jury.location }}
                           </div>
                         </div>
                       </div>

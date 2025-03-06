@@ -1,5 +1,5 @@
 <template>
-  <div class="flex-column pa-2" style="border-radius: 4px; background-color: var(--background-card)">
+  <div class="flex-column pa-2" style="flex: 0 0 auto; border-radius: 4px; background-color: var(--background-card)">
     <div class="d-flex align-center">
       <div class="font-weight-bold" style="font-size: 1.2rem">
         {{ localization[lang].app.event.weather }}
@@ -12,12 +12,14 @@
           class="pa-1"
           style="width: 100%; font-weight: bold; border-radius: 2px; transition: background-color 112ms"
           type="text"
+          placeholder="Параметр"
           v-model="competition.weather[i].descr1" /></v-col
       ><v-col class="d-flex align-center pl-1 py-1" cols="7"
         ><input
           class="pa-1"
           style="width: 100%; border-radius: 2px; transition: background-color 112ms"
           type="text"
+          placeholder="Значение"
           v-model="competition.weather[i].descr2"
         /> </v-col
       ><v-col cols="1" style="display: flex; align-items: center"

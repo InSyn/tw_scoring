@@ -25,13 +25,22 @@
         >
           {{ selectedCompetitor && selectedCompetitor.info_data['bib'] }}
         </div>
-        <div class="d-flex justify-center align-center" style="margin-left: 1rem">
-          {{ selectedCompetitor && selectedCompetitor.info_data['lastname'].toUpperCase() }}
-        </div>
-        <div class="d-flex justify-center align-center" style="margin-left: 0.5rem">
+        <div class="d-flex justify-center align-center" style="margin-left: 0.5rem; overflow: hidden; white-space: nowrap; text-overflow: ellipsis">
           {{ selectedCompetitor && selectedCompetitor.info_data['name'] }}
         </div>
         <v-spacer></v-spacer>
+        <div class="resultsCheck__wrapper">
+          <competitor-results-control
+            v-for="(race, rIdx) in competition.races"
+            :key="`rRes_${race.id}`"
+            :competition="competition"
+            :competitor="selectedCompetitor"
+            :selected-race="competition.selected_race"
+            :race="race"
+            :race-index="rIdx"
+            @open-results-dialog="handleResultsDialogChange"
+          ></competitor-results-control>
+        </div>
         <div style="display: flex; flex-direction: column" v-if="competition.result_formula.types[0].doubleUp">
           <v-btn
             v-for="(_, cb_idx) in competition.result_formula.types[0].doubleUp_corridors"
@@ -61,8 +70,6 @@
           <div
             class="d-flex flex-nowrap"
             tabindex="0"
-            @focus="setFocused($event)"
-            @blur="setBlur($event)"
             @dblclick="setSelectedCompetitor(competitor.id)"
             @keydown.enter="setSelectedCompetitor(competitor.id)"
             style="border-radius: 4px; cursor: pointer; outline: none"
@@ -74,17 +81,42 @@
                 padding: 2px 4px;
                 color: var(--standard-background);
                 background-color: var(--text-default);
-                border-radius: 4px;
+                border-radius: 2px;
+                font-size: 1rem;
                 font-weight: bold;
               "
             >
               {{ competitor.info_data['bib'] }}
             </div>
-            <div class="d-flex flex-nowrap align-center overflow-hidden" style="margin-left: 4px; padding: 2px 4px; font-weight: bold; white-space: nowrap">
-              {{ `${competitor.info_data['lastname']} ${competitor.info_data['name']}` }}
+            <div
+              class="d-flex flex-nowrap align-center overflow-hidden"
+              style="margin-left: 4px; padding: 2px 4px; font-weight: bold; white-space: nowrap; text-overflow: ellipsis"
+            >
+              {{ `${competitor.info_data['name']}` }}
+            </div>
+            <div class="resultsCheck__wrapper">
+              <competitor-results-control
+                v-for="(race, rIdx) in competition.races"
+                :key="`rRes_${race.id}`"
+                :competition="competition"
+                :competitor="competitor"
+                :selected-race="competition.selected_race"
+                :race="race"
+                :race-index="rIdx"
+                @open-results-dialog="handleResultsDialogChange"
+              ></competitor-results-control>
             </div>
           </div>
         </div>
+
+        <competitor-race-info-dialog
+          :dialog-state-prop="competitorRaceInfo_dialogState"
+          :competition="competition"
+          :competitor="competitorRaceInfo_competitor"
+          :selected-race="competitorRaceInfo_race"
+          @toggle-dialog-state="handleResultsDialogChange"
+          @rebuild-start-list="competition.rebuildStartList"
+        ></competitor-race-info-dialog>
       </div>
     </div>
   </div>
@@ -92,18 +124,29 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import { initTerminalData_chiefJudge, initTerminalData_judge } from '../../utils/terminals-utils';
-import AerialsControls from './scoresPanel/aerialsControls.vue';
+import { initTerminalData_chiefJudge, initTerminalData_judge } from '../../../utils/terminals-utils';
+import AerialsControls from '../scoresPanel/aerialsControls.vue';
+import CompetitorResultsControl from './competitorResultsControl.vue';
+import CompetitorRaceInfoDialog from '../../raceList/dialogs/competitorRaceInfo-dialog.vue';
+import { getScoresQuantity } from '../../../utils/discipline-utils';
+import { getDisciplineCode } from '../../../data/sports';
 
 export default {
   name: 'startList',
-  components: { AerialsControls },
+  components: { CompetitorRaceInfoDialog, CompetitorResultsControl, AerialsControls },
+  data() {
+    return { competitorRaceInfo_dialogState: false, competitorRaceInfo_competitor: null, competitorRaceInfo_race: null };
+  },
   methods: {
     ...mapActions('main', {
       updateEvent: 'updateEvent',
     }),
     setSelectedCompetitor(competitor_id) {
       this.competition.selected_race.selectedCompetitor = competitor_id;
+      [this.competition.selected_race.startList, this.competition.selected_race._startList].forEach((startList) => {
+        startList = startList.filter((sl_competitor_id) => sl_competitor_id !== competitor_id);
+        startList.unshift(competitor_id);
+      });
 
       this.updateEvent();
     },
@@ -122,15 +165,15 @@ export default {
         raceId: this.competition.races.indexOf(this.competition.selected_race),
         competitorId: competitor.info_data['bib'],
         competitorNum: competitor.info_data['bib'],
-        scoresQuantity: 1,
-        competitorName: competitor.info_data['fullname'],
+        scoresQuantity: getScoresQuantity(this.competition, getDisciplineCode(this.competition.mainData.discipline.value)),
+        competitorName: competitor.info_data['name'],
         isABC: 0,
       };
       const terminalPackage_chiefJudge = {
         ...terminalPackage_judge,
         judgesQuantity: this.competition.stuff.judges.length,
         marks: this.competition.stuff.judges.map((judge) => {
-          return [judge.id, [0, 0]];
+          return [judge.id, ...new Array(terminalPackage_judge.scoresQuantity).fill([0, 0])];
         }),
       };
 
@@ -166,11 +209,17 @@ export default {
 
       this.updateEvent();
     },
-    setFocused(e) {
-      e.target.style.backgroundColor = `${this.$vuetify.theme.themes[this.appTheme].subjectBackgroundRGBA}`;
-    },
-    setBlur(e) {
-      e.target.style.backgroundColor = `${this.$vuetify.theme.themes[this.appTheme].standardBackgroundRGBA}`;
+    handleResultsDialogChange({ competitor = null, race = null } = {}) {
+      if (this.competitorRaceInfo_dialogState) {
+        this.competitorRaceInfo_competitor = null;
+        this.competitorRaceInfo_race = null;
+        this.competitorRaceInfo_dialogState = false;
+        return;
+      }
+
+      this.competitorRaceInfo_competitor = competitor;
+      this.competitorRaceInfo_race = race;
+      this.competitorRaceInfo_dialogState = true;
     },
   },
   computed: {
@@ -200,7 +249,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .startList__container {
   flex: 4 1 0;
   padding: 4px;
@@ -234,14 +283,19 @@ export default {
 }
 .startList__competitor__wrapper {
   padding: 2px;
-  border-radius: 4px;
-  margin-bottom: 2px;
+  border-radius: 2px;
   user-select: none;
+  &:focus {
+    background-color: var(--background-card);
+    box-shadow: inset 0 0 0 1px var(--accent);
+  }
+  &:hover {
+    box-shadow: inset 0 0 0 1px var(--accent);
+  }
 }
-.startList__competitor__wrapper:last-child {
-  margin-bottom: 0;
-}
-.startList__competitor__wrapper:hover {
-  box-shadow: inset 0 0 0 2px var(--accent);
+.resultsCheck__wrapper {
+  display: flex;
+  margin-left: auto;
+  padding: 2px;
 }
 </style>

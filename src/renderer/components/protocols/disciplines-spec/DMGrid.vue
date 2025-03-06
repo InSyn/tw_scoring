@@ -1,6 +1,6 @@
 <script>
 export default {
-  name: 'DMGrid',
+  name: '_DMGrid',
   props: {
     competition: { type: Object, default: () => {} },
     stages: {
