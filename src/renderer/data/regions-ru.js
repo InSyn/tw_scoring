@@ -672,6 +672,7 @@ export const getSortedRegions = () => {
 };
 
 export const getRegionCode = (regionName) => {
+  if (typeof regionName === 'string' && regionName.split(',').length > 1) regionName = regionName.split(',')[0].trim();
   const region = russiaRegions.find((region) => region.fullname === regionName);
   if (!region) return regionName || '-';
 

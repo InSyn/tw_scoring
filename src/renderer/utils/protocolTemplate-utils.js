@@ -1,4 +1,4 @@
-import { ProtocolDocument } from '../store/classes/Protocol/ProtocolDocument';
+import { ProtocolDocument } from '../classes/Protocol/ProtocolDocument';
 import { getScreenDPI } from './dpi';
 
 export const exportTemplateToFile = (template, filename = 'protocol_template.json') => {
@@ -118,6 +118,7 @@ export const measureBlockHeight = (block, dataCtx, container) => {
   wrapper.style.display = 'flex';
   wrapper.style.flexDirection = 'column';
   wrapper.style.margin = '0';
+  wrapper.style.padding = '0';
 
   const blockEl = document.createElement('div');
   blockEl.style.flexShrink = '0';
@@ -134,31 +135,76 @@ export const measureBlockHeight = (block, dataCtx, container) => {
 
   return blockHeight;
 };
-export const measureTableRowHeight = (row, dataCtx, container) => {
-  const wrapper = document.createElement('table');
 
-  wrapper.style.flexShrink = '0';
-  wrapper.style.tableLayout = 'fixed';
-  wrapper.style.display = 'table';
-  wrapper.style.borderCollapse = 'collapse';
-  wrapper.style.width = '100%';
-  wrapper.style.maxWidth = '100%';
-  wrapper.style.overflow = 'hidden';
+// function shrinkOneCell(cellEl) {
+//   const container = cellEl.parentElement;
+//   if (!container) return;
+//
+//   const containerStyle = window.getComputedStyle(container);
+//   const contentStyle = window.getComputedStyle(cellEl);
+//
+//   const containerWidth = container.clientWidth - parseFloat(containerStyle.paddingLeft) - parseFloat(containerStyle.paddingRight);
+//
+//   const contentWidth = cellEl.scrollWidth + parseFloat(contentStyle.paddingLeft) + parseFloat(contentStyle.paddingRight);
+//
+//   const baseFontSize = parseFloat(contentStyle.fontSize);
+//
+//   const widthRatio = containerWidth / contentWidth;
+//   const scaleFactor = Math.min(widthRatio, 1.0);
+//
+//   const newFontSize = Math.max(baseFontSize * scaleFactor, 4);
+//
+//   cellEl.style.fontSize = `${newFontSize}px`;
+//   cellEl.classList.remove('shrink-cell');
+// }
 
-  const tbodyEl = document.createElement('tr');
-  tbodyEl.innerHTML = row.render(dataCtx);
+// export function shrinkBlockIfNeeded(htmlSnippet) {
+//   const tempWrapper = document.createElement('div');
+//   tempWrapper.style.position = 'absolute';
+//   tempWrapper.style.visibility = 'hidden';
+//   tempWrapper.style.top = '-9999px';
+//   tempWrapper.style.left = '-9999px';
+//
+//   tempWrapper.innerHTML = htmlSnippet;
+//   document.body.appendChild(tempWrapper);
+//
+//   const shrinkCells = tempWrapper.querySelectorAll('.shrink-cell');
+//   shrinkCells.forEach((cellEl) => {
+//     shrinkOneCell(cellEl);
+//   });
+//
+//   const finalHtml = tempWrapper.innerHTML;
+//
+//   document.body.removeChild(tempWrapper);
+//
+//   return finalHtml;
+// }
 
-  wrapper.appendChild(tbodyEl);
-
-  container.appendChild(wrapper);
-
-  const rect = wrapper.getBoundingClientRect();
-  let blockHeight = rect.height;
-
-  container.removeChild(wrapper);
-
-  return blockHeight;
-};
+// export const measureTableRowHeight = (row, dataCtx, container) => {
+//   const wrapper = document.createElement('table');
+//
+//   wrapper.style.flexShrink = '0';
+//   wrapper.style.tableLayout = 'fixed';
+//   wrapper.style.display = 'table';
+//   wrapper.style.borderCollapse = 'collapse';
+//   wrapper.style.width = '100%';
+//   wrapper.style.maxWidth = '100%';
+//   wrapper.style.overflow = 'hidden';
+//
+//   const tbodyEl = document.createElement('tr');
+//   tbodyEl.innerHTML = row.render(dataCtx);
+//
+//   wrapper.appendChild(tbodyEl);
+//
+//   container.appendChild(wrapper);
+//
+//   const rect = wrapper.getBoundingClientRect();
+//   let blockHeight = rect.height;
+//
+//   container.removeChild(wrapper);
+//
+//   return blockHeight;
+// };
 
 export const parseSizeUnitsToNumber = (value) => {
   if (!value || value === 'auto') return null;

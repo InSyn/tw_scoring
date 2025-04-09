@@ -1,11 +1,11 @@
 <script>
 import LangSelector from '../appComponents/langSelector.vue';
 import CompetitionSelectMenu from '../appComponents/competitionSelectMenu.vue';
-import TimingDeviceSettings from '../timingDeviceSettings/index.vue';
+import TimingDeviceSettings from '../timing/timingDeviceSettings/index.vue';
 import CreateNewCompetitionMenu from '../appComponents/createNewCompetitionMenu.vue';
 import fs from 'fs';
 import { mapActions, mapGetters } from 'vuex';
-import EventClass from '../../store/classes/EventClass';
+import EventClass from '../../classes/EventClass';
 import { mdiBackburger, mdiBrightness6, mdiContentSave, mdiDownload, mdiMenu } from '@mdi/js';
 import { checkCompetitionDiscipline } from '../../data/sports';
 const dialog = require('electron').remote.dialog;
@@ -96,7 +96,7 @@ export default {
 
     <competition-select-menu :competition="competition" :competitions="competitions" :event="event"></competition-select-menu>
 
-    <timing-device-settings v-if="checkCompetitionDiscipline(competition, ['MO', 'DM'])" />
+    <timing-device-settings />
 
     <div class="appIcon__wrapper">
       <img v-if="appTheme === 'light'" class="app__icon" src="../../assets/logo/TIMINGWEBLOGO-BLACK.png" alt="" />

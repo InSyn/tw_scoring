@@ -1,6 +1,6 @@
 <script>
 import { mdiMagnifyPlusOutline, mdiMagnifyMinusOutline } from '@mdi/js/commonjs/mdi';
-import { ProtocolDocument } from '../../../store/classes/Protocol/ProtocolDocument';
+import { ProtocolDocument } from '../../../classes/Protocol/ProtocolDocument';
 import { mapActions } from 'vuex';
 
 export default {
@@ -52,17 +52,20 @@ export default {
 
     updateRenderedProtocol() {
       if (!this.protocol) return;
-      this.renderedProtocol = this.protocol.render();
-      this.$nextTick(() => {
-        this.shrinkToFit();
+
+      requestAnimationFrame(() => {
+        this.renderedProtocol = this.protocol.render();
+        requestAnimationFrame(() => {
+          this.shrinkToFit();
+        });
       });
     },
 
     zoomIn() {
-      this.scale = Math.min(this.scale + 0.1, this.maxZoom);
+      this.scale = Math.min(Number(this.scale) + 0.1, this.maxZoom);
     },
     zoomOut() {
-      this.scale = Math.max(this.scale - 0.1, this.minZoom);
+      this.scale = Math.max(Number(this.scale) - 0.1, this.minZoom);
     },
     resetZoom() {
       this.autoFit();
@@ -137,7 +140,7 @@ export default {
   watch: {
     'protocol.updateIsReady': {
       handler(val) {
-        if (val) {
+        if (val !== undefined) {
           this.updateRenderedProtocol();
         }
       },
@@ -146,7 +149,7 @@ export default {
     },
     competitionId: {
       handler(val) {
-        if (val) {
+        if (val !== undefined) {
           this.updateRenderedProtocol();
         }
       },

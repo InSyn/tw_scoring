@@ -1,4 +1,4 @@
-import { CompetitionLogMessageClass } from '../classes/CompetitionLogMessageClass';
+import { CompetitionLogMessageClass } from '../../classes/CompetitionLogMessageClass';
 
 export default {
   namespaced: true,

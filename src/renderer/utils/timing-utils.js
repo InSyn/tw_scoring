@@ -1,4 +1,4 @@
-const parseTimeToMilliseconds = (timeString) => {
+export const parseTimeToMilliseconds = (timeString) => {
   const timeParts = timeString.split(/[:.]/);
   if (timeParts.length < 4) {
     throw new Error(`Invalid time format: ${timeString}`);
@@ -14,7 +14,7 @@ const parseTimeToMilliseconds = (timeString) => {
   return milliseconds;
 };
 
-const calculateTimeDifference = (startTime, endTime) => {
+export const calculateTimeDifference = (startTime, endTime) => {
   try {
     const startMilliseconds = parseTimeToMilliseconds(startTime);
     const endMilliseconds = parseTimeToMilliseconds(endTime);
@@ -31,17 +31,28 @@ const calculateTimeDifference = (startTime, endTime) => {
   }
 };
 
-const formatTimeDifference = (timeDifference) => {
+export const formatTimeDifference = (timeDifference, { precision = 3, format = 'full' } = {}) => {
   const hours = Math.floor(timeDifference / 3600000);
-  const hoursString = hours.toString().padStart(2, '0') + ':';
+  const hoursString = hours.toString().padStart(2, '0');
   const minutes = Math.floor((timeDifference % 3600000) / 60000);
-  const minutesString = minutes.toString().padStart(2, '0') + ':';
+  const minutesString = minutes.toString().padStart(2, '0');
   const seconds = Math.floor((timeDifference % 60000) / 1000);
-  const secondsString = seconds.toString().padStart(2, '0') + '.';
+  const secondsString = seconds.toString().padStart(2, '0');
   const milliseconds = timeDifference % 1000;
-  const millisecondsString = milliseconds.toString().padStart(3, '0');
+  const millisecondsString = milliseconds.toString().slice(0, precision).padEnd(precision, '0');
 
-  return [hoursString, minutesString, secondsString, millisecondsString].join('');
+  switch (format) {
+    case 'full':
+      return `${hoursString}:${minutesString}:${secondsString}.${millisecondsString}`;
+    case 'short':
+      return `${minutesString}:${secondsString}.${millisecondsString}`;
+  }
 };
 
-export { parseTimeToMilliseconds, calculateTimeDifference, formatTimeDifference };
+export const getCurrentTimeString = () => {
+  const now = new Date();
+  return `${now.getHours().toString()}:${now.getMinutes().toString().padStart(2, '0')}:${now.getSeconds().toString().padStart(2, '0')}.${now
+    .getMilliseconds()
+    .toString()
+    .padEnd(3, '0')}`;
+};

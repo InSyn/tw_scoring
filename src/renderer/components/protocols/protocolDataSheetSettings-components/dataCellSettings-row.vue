@@ -8,8 +8,8 @@ import FontSizeControl from './fontSize-control.vue';
 import FontWeightControl from './fontWeight-control.vue';
 import DataCellTextAlignControl from './dataCellTextAlign-control.vue';
 import MDragEventEmitterMixin from '../../mixins/MDragEventEmitterMixin';
-import EventClass from '../../../store/classes/EventClass';
-import { ProtocolDataFieldClass } from '../../../store/classes/ProtocolDataFieldClass';
+import EventClass from '../../../classes/EventClass';
+import { ProtocolDataFieldClass } from '../../../classes/ProtocolDataFieldClass';
 
 export default {
   name: 'dataCellSettings-row',
@@ -23,8 +23,8 @@ export default {
     DataCellDialog,
   },
   props: {
-    competition: { type: EventClass, default: () => ({}) },
-    dataField: { type: ProtocolDataFieldClass, default: () => ({}) },
+    competition: { type: Object, default: null },
+    dataField: { type: Object, default: null },
     fieldIndex: { type: Number | String, default: '' },
     protocolType: String,
     selectedFields: Array,

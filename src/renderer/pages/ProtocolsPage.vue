@@ -65,6 +65,8 @@ export default {
     handleTemplateSelection(template) {
       this.applyTemplate(template);
       this.selectedTemplateId = template.id;
+
+      this.$refs.preview.updateRenderedProtocol();
     },
     createNewTemplate() {
       this.addEmptyTemplate();

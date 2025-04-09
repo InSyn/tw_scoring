@@ -14,6 +14,7 @@ export default {
     SET_UP_TERMINALS_HANDLERS: () => {
       ipcRenderer.on('new-judge-mark', (e, message) => terminalTCPMessageHandlers['new-judge-mark'](e, message));
       ipcRenderer.on('result-accepted', (e, message) => terminalTCPMessageHandlers['result-accepted'](e, message));
+      ipcRenderer.on('echo-response', (e, message) => terminalTCPMessageHandlers['echo-response'](e, message));
     },
   },
 };

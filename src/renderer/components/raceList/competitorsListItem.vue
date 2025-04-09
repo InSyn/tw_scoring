@@ -42,7 +42,7 @@
 import { mapGetters } from 'vuex';
 import CompetitorRaceInfoDialog from './dialogs/competitorRaceInfo-dialog.vue';
 import MDragEventEmitterMixin from '../mixins/MDragEventEmitterMixin';
-import EventClass from '../../store/classes/EventClass';
+import EventClass from '../../classes/EventClass';
 
 export default {
   name: 'competitorsListItem',

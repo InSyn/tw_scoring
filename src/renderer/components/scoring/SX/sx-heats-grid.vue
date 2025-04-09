@@ -1,68 +1,57 @@
 <script>
-import { getCompetitorByBib, getHeatCompetitorColor } from '../../../utils/competition-utils';
+import { getCompetitorById, getHeatCompetitorColor } from '../../../utils/competition-utils';
+import MDraggableContainer from '../../mixins/MDraggableContainer';
+import LocateIcon from '../../../assets/icons/locate-icon.vue';
+import { setDeepValue } from '../../../utils/utils';
+import SxHeatItem from './sx-heat-item.vue';
 
 export default {
   name: 'sx-heats-grid',
+  components: { SxHeatItem, LocateIcon },
+  mixins: [MDraggableContainer],
   props: {
     competition: Object,
     selectedHeat: null,
   },
   methods: {
     getHeatCompetitorColor,
-    getCompetitorData(bib) {
-      if (!bib.toString().length) return '';
-
-      const competitorObject = getCompetitorByBib(this.competition, bib);
-      if (!competitorObject) return '';
-
-      return `${competitorObject.info_data['name']}`;
-    },
     selectHeat(stage_idx, heat_idx) {
       this.$emit('heat:select', { stage: stage_idx, heat: heat_idx });
     },
-    isSelectedHeat(stage_idx, heat_idx) {
-      return this.competition.selected_race_id.toString() === stage_idx.toString() && this.selectedHeat === heat_idx;
-    },
-    getCompetitorResult(stage_idx, heat_idx, comp_idx) {
-      if (!this.competition.races[stage_idx] || !this.competition.races[stage_idx].heats[heat_idx]) return;
-      if (!this.competition.races[stage_idx].heats[heat_idx]) return '';
-
-      return this.competition.races[stage_idx].heats[heat_idx].results[comp_idx];
+    setHeatCompetitor({ stage, heat, competitor, value }) {
+      if (value === undefined || value === ' ' || value === '') {
+        setDeepValue(this.competition, `races.${stage}.heats.${heat}.competitors.${competitor}`, '');
+        return;
+      }
+      setDeepValue(this.competition, `races.${stage}.heats.${heat}.competitors.${competitor}`, value);
     },
   },
 };
 </script>
 
 <template>
-  <div class="heatsGrid__wrapper section-container">
-    <div class="heatsGrid__body">
-      <div class="heatsGrid__stage__wrapper" v-for="(stage, stage_idx) in competition.races" :key="stage.id">
+  <div class="heatsGrid__wrapper section-container" @mousedown="startDrag" @mousemove="drag" @mouseup="endDrag" @mouseleave="endDrag" @wheel="handleWheel">
+    <button type="button" @click.stop.prevent="resetDrag"><locate-icon class="locate-icon" :height="32" :width="32"></locate-icon></button>
+    <div ref="draggable" class="heatsGrid__body" :style="transformStyles">
+      <div
+        class="heatsGrid__stage__wrapper"
+        :class="{ selectedStage: competition.selected_race_id === stage_idx }"
+        v-for="(stage, stage_idx) in competition.races"
+        :key="stage.id"
+      >
         <div class="heatsGrid__stage__title">{{ stage.title }}</div>
         <div class="heatsGrid__stage__heats">
-          <div
-            class="heatsGrid__stage__heats__item"
-            :class="{ selected: isSelectedHeat(stage_idx, heat_idx) }"
-            v-for="(heat, heat_idx) in stage.heats"
+          <sx-heat-item
+            v-for="(_, heat_idx) in stage.heats"
             :key="heat_idx"
-            @click="selectHeat(stage_idx, heat_idx)"
+            :competition="competition"
+            :stage-idx="stage_idx"
+            :heat-idx="heat_idx"
+            :selected-heat="selectedHeat"
+            @heat:select="selectHeat"
+            @heat:set-competitor="setHeatCompetitor"
           >
-            <div
-              class="heatCompetitor__wrapper"
-              v-for="(competitorBib, comp_idx) in heat.competitors"
-              :key="comp_idx"
-              :style="{ backgroundColor: `var(${getHeatCompetitorColor(comp_idx + 1)})` }"
-            >
-              <div class="heatCompetitor__bib">
-                {{ competitorBib }}
-              </div>
-              <div class="heatCompetitor__info">
-                {{ getCompetitorData(competitorBib) }}
-              </div>
-              <div class="heatCompetitor__finish">
-                {{ getCompetitorResult(stage_idx, heat_idx, comp_idx) }}
-              </div>
-            </div>
-          </div>
+          </sx-heat-item>
         </div>
       </div>
     </div>
@@ -70,28 +59,85 @@ export default {
 </template>
 
 <style scoped lang="scss">
-* {
-  //box-shadow: 0 0 4px crimson inset;
-}
+//noinspection CssInvalidPropertyValue
 .heatsGrid__wrapper {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   padding: 8px;
+  background-color: var(--background-deep);
+  border: 2px solid var(--text-default);
 
+  user-select: none;
+  cursor: grab;
+
+  cursor: -moz-grab;
+  cursor: -webkit-grab;
+  &:active {
+    cursor: grabbing;
+    cursor: -moz-grabbing;
+    cursor: -webkit-grabbing;
+  }
+
+  .locate-icon {
+    position: absolute;
+    z-index: 1;
+    top: 8px;
+    right: 8px;
+    padding: 4px;
+    border-radius: 50%;
+    opacity: 0.75;
+    cursor: pointer;
+    transition: opacity 92ms, background-color 92ms, transform 92ms;
+
+    &:hover {
+      opacity: 0.9;
+      background-color: rgba(255, 255, 255, 0.15);
+    }
+    &:active {
+      opacity: 1;
+      background-color: rgba(255, 255, 255, 0.25);
+      transform: scale(0.92);
+    }
+  }
   .heatsGrid__body {
+    position: absolute;
     flex: 1 1 300px;
     display: flex;
     flex-wrap: nowrap;
     overflow: auto;
     padding: 4px;
-    background-color: var(--background-deep);
     border-radius: 4px;
+    transform-origin: center;
 
     .heatsGrid__stage__wrapper {
+      position: relative;
       flex: 0 0 auto;
       display: flex;
       flex-direction: column;
-      margin-right: 12px;
+      min-height: 100%;
+      padding: 0.75rem 1.25rem;
+      border-radius: 4px;
+      transition: box-shadow 92ms ease-in;
+      & > * {
+        position: relative;
+      }
+      &.selectedStage {
+        box-shadow: 0 0 0 2px white;
+        &::before {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          content: '';
+          border-radius: 4px;
+          background-color: white;
+          opacity: 0.125;
+        }
+      }
       &:last-child {
         margin-right: 0;
       }
@@ -101,7 +147,9 @@ export default {
         display: flex;
         align-items: center;
         justify-content: center;
+        margin-bottom: 1.5rem;
         font-weight: bold;
+        font-size: 1.25rem;
       }
       .heatsGrid__stage__heats {
         flex: 1 0 auto;
@@ -110,55 +158,6 @@ export default {
 
         & > * {
           margin: auto 0;
-        }
-        .heatsGrid__stage__heats__item {
-          display: flex;
-          flex-direction: column;
-          padding: 4px;
-          background-color: var(--background-card);
-          border-radius: 2px;
-          user-select: none;
-          cursor: pointer;
-          transition: opacity 92ms;
-          &:hover {
-            opacity: 0.75;
-          }
-          &.selected {
-            box-shadow: 0 0 0 2px var(--accent);
-          }
-
-          .heatCompetitor__wrapper {
-            display: flex;
-            flex-wrap: nowrap;
-            padding: 2px 8px;
-            margin-bottom: 4px;
-            border-radius: 2px;
-
-            &:last-child {
-              margin-bottom: 0;
-            }
-            .heatCompetitor__bib {
-              padding: 2px;
-              font-weight: bold;
-            }
-            .heatCompetitor__info {
-              flex: 1 1 0;
-              margin-left: 0.5rem;
-              padding: 2px;
-              overflow: hidden;
-              white-space: nowrap;
-              text-overflow: ellipsis;
-            }
-            .heatCompetitor__finish {
-              min-width: 3.25rem;
-              margin-left: 0.5rem;
-              padding: 2px 4px;
-              background-color: var(--standard-background);
-              border-radius: 2px;
-              text-align: center;
-              font-weight: bold;
-            }
-          }
         }
       }
     }

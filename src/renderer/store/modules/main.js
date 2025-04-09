@@ -1,7 +1,7 @@
 import io from 'socket.io-client';
 import fs from 'fs';
 
-import EventClass from '../classes/EventClass';
+import EventClass from '../../classes/EventClass';
 import { generateId } from '../../utils/utils';
 import { fixProtocolField, generateProtocolField, protocolHandlers } from '../../utils/protocol-utils';
 
@@ -430,12 +430,6 @@ export default {
       const { path, data } = params;
 
       fs.writeFile(path, data, { encoding: 'utf-8' }, (err) => handleFileWriteErrors(err));
-    },
-    input_blur: (s, e) => {
-      e.target.parentNode.style.boxShadow = 'inset 0 0 0 0 transparent';
-    },
-    input_focus: (s, e) => {
-      e[0].target.parentNode.style.boxShadow = `inset 0 -2px 2px 0 ${e[1]}`;
     },
     licChecked: ({ commit }, lData) => {
       commit('licChecked', lData);

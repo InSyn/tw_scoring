@@ -49,11 +49,11 @@
               class="competitorRaceInfo__dialog__competitorRaceInfo__section__raceMarks__mark__wrapper"
             >
               <div class="competitorRaceInfo__dialog__competitorRaceInfo__section__raceMarks__markJudge">
-                {{ `${localization[lang].app.scoring.judge_full} ${mark.judge}:` }}
+                {{ `${localization[lang].app.scoring.judge_full} ${mark.judge}:&nbsp;` }}
               </div>
 
               <div class="competitorRaceInfo__dialog__competitorRaceInfo__section__raceMarks__markValue">
-                {{ mark.value }}
+                {{ extractMarkValue(competition, mark) }}
               </div>
             </div>
           </div>
@@ -96,7 +96,7 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import { generateUUID } from '../../../utils/utils';
+import { extractMarkValue } from '../../../classes/MarkClass';
 
 export default {
   name: 'competitorRaceInfo-dialog',
@@ -116,6 +116,7 @@ export default {
     },
   },
   methods: {
+    extractMarkValue,
     clearCompetitorRace(competitor, race) {
       competitor.marks = competitor.marks.filter((mark) => mark.race_id !== race.id);
       competitor.results = competitor.results.filter((result) => result.race_id !== race.id);
@@ -153,7 +154,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .competitorRaceInfo__dialog__wrapper {
   color: var(--text-default);
   background-color: var(--background-card);
@@ -214,29 +215,42 @@ export default {
 .competitorRaceInfo__dialog__competitorRaceInfo__section__body {
   flex: 0 0 auto;
   display: flex;
-  flex-wrap: wrap;
-  padding: 4px 8px;
+  flex-direction: column;
+  padding: 8px;
   border: 1px solid var(--accent);
+
+  & > * {
+    margin-bottom: 4px;
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
 }
 /*noinspection CssUnusedSymbol*/
 .competitorRaceInfo__dialog__competitorRaceInfo__section__body-active {
   border: 2px solid var(--accent-light);
 }
 .competitorRaceInfo__dialog__competitorRaceInfo__section__raceMarks-empty {
+  flex: 0 0 auto;
   font-weight: bold;
   text-align: center;
   flex-grow: 1;
 }
 .competitorRaceInfo__dialog__competitorRaceInfo__section__raceMarks__mark__wrapper {
+  flex: 0 0 auto;
   display: flex;
   align-items: center;
-  width: 25%;
 }
 .competitorRaceInfo__dialog__competitorRaceInfo__section__raceMarks__markJudge {
-  margin-right: 8px;
+  white-space: nowrap;
 }
 .competitorRaceInfo__dialog__competitorRaceInfo__section__raceMarks__markValue {
+  margin-left: auto;
+  padding: 0.25rem 0.75rem;
+  background-color: var(--background-card-nested);
+  border-radius: 2px;
   font-weight: bold;
+  white-space: nowrap;
 }
 
 .competitorRaceInfo__dialog__competitorRaceInfo__section__result__wrapper {

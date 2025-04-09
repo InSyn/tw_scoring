@@ -1,4 +1,4 @@
-import { ProtocolDocument } from '../classes/Protocol/ProtocolDocument';
+import { ProtocolDocument } from '../../classes/Protocol/ProtocolDocument';
 import { createDefaultTemplates } from '../../utils/protocolTemplate-utils';
 
 export default {

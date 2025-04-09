@@ -1,24 +1,28 @@
 import store from '../index';
-import TimerClass from '../classes/TimerClass';
+import TimerClass from '../../classes/TimerClass';
 import { formatTimeDifference } from '../../utils/timing-utils';
 import { checkCompetitionDiscipline } from '../../data/sports';
+import { setDeepValue } from '../../utils/utils';
+import EventBus from '../../classes/EventBus';
 const { ipcRenderer } = require('electron');
 
 let activeTimer = null;
 
 ipcRenderer.on('updateConnectedDevices', (e, devices) => {
-  store.dispatch('timing/UpdateDevices', devices).catch();
+  store.dispatch('timing/UPDATE_DEVICES', devices).catch();
 });
 
 ipcRenderer.on('newTime', (e, timeMessage) => {
   const competition = store.getters['main/competition'];
-  if (!competition || !competition.selected_race || !competition.selected_race.onTrack) return;
-
-  const timingMode = checkCompetitionDiscipline(competition, ['MO']) ? 'moguls' : checkCompetitionDiscipline(competition, ['DM']) ? 'dualMoguls' : null;
-  if (!timingMode) return;
+  if (!competition) return;
 
   const timeChannel = timeMessage[0].split('')[timeMessage[0].length - 1];
   const timerTimeValue = timeMessage[1];
+
+  EventBus.emit('timerTime', { competitionId: competition.id, timeRecord: `${timeChannel}|${timerTimeValue}` });
+
+  const timingMode = checkCompetitionDiscipline(competition, ['MO']) ? 'moguls' : checkCompetitionDiscipline(competition, ['DM']) ? 'dualMoguls' : null;
+  if (!timingMode) return;
 
   if (timeChannel === '1') {
     if (activeTimer && activeTimer.isRunning) return;
@@ -32,12 +36,16 @@ ipcRenderer.on('newTime', (e, timeMessage) => {
   }
 });
 
+EventBus.on('writeTimeSplit', ({ competitionId, timeRecord }) => {
+  store.dispatch('timing/ADD_TIME_RECORD', { competitionId, timeRecord }).catch();
+});
+
 const MOTimingHandler = (timeChannel, time_ms) => {
   switch (timeChannel) {
     case '4': {
       if (!activeTimer || !activeTimer.isRunning) return;
-      if (timeDiff !== null) {
-        const formattedTime = formatTimeDifference(timeDiff);
+      if (time_ms !== null) {
+        const formattedTime = formatTimeDifference(time_ms);
         activeTimer.stopTimer(formattedTime);
         store
           .dispatch('moguls/SET_MG_RUN_DATA', {
@@ -97,18 +105,30 @@ export default {
     setup: {
       enableManual: true,
     },
+
+    timeRecords: {},
   },
   getters: {
     connectedDevices: (state) => state.connectedDevices,
+    getTimeRecords: (state) => state.timeRecords,
   },
   mutations: {
     updateDevices: (state, devices) => {
       state.connectedDevices = devices;
     },
+    addTimeRecord: (state, { competitionId, timeRecord }) => {
+      if (!competitionId) return;
+      if (!Array.isArray(state.timeRecords[competitionId])) setDeepValue(state, `timeRecords.${competitionId}`, []);
+      const timeRecords = state.timeRecords[competitionId];
+      state.timeRecords[competitionId] = [timeRecord, ...timeRecords];
+    },
   },
   actions: {
-    UpdateDevices: ({ commit }, devices) => {
+    UPDATE_DEVICES: ({ commit }, devices) => {
       commit('updateDevices', devices);
+    },
+    ADD_TIME_RECORD: ({ commit }, payload) => {
+      commit('addTimeRecord', payload);
     },
   },
 };

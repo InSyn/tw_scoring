@@ -1,6 +1,6 @@
 <script>
 import { mapGetters } from 'vuex';
-import EventClass from '../../store/classes/EventClass';
+import EventClass from '../../classes/EventClass';
 
 export default {
   name: 'competitionSelectMenu',

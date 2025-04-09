@@ -51,7 +51,7 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import MarkClass from '../../../store/classes/MarkClass';
+import MarkClass from '../../../classes/MarkClass';
 
 export default {
   name: 'doubleUp',

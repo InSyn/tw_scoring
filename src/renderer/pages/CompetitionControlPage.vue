@@ -3,8 +3,8 @@ import { mapGetters } from 'vuex';
 import controlsMenu from '../components/scoring/controlsMenu.vue';
 import chat from '../components/scoring/chat.vue';
 import messageConsole from '../components/scoring/messageConsole.vue';
-import Index from '../components/scoring/startList/index.vue';
-import scoresPanel from '../components/scoring/scoresPanel.vue';
+import startList from '../components/scoring/startList/index.vue';
+import scoresPanel from '../components/scoring/scoresPanel/index.vue';
 import scoringServices from '../components/scoring/scoringServices.vue';
 import finishTable from '../components/scoring/finishTable.vue';
 import doubleUp from '../components/scoring/onRace/doubleUp.vue';
@@ -12,7 +12,7 @@ import RoundRuns from '../components/raceList/DM/roundRuns.vue';
 import RoundRunsList from '../components/scoring/DM/roundRunsList.vue';
 import RoundRunScoringPanel from '../components/scoring/DM/roundRunScoringPanel.vue';
 import RoundRunsFinishedList from '../components/scoring/DM/roundRunsFinishedList.vue';
-import Timer from '../components/scoring/DM/timer.vue';
+import Timer from '../components/timing/timer.vue';
 import { checkCompetitionDiscipline, isFinal } from '../data/sports';
 import SxHeatsList from '../components/scoring/SX/sx-heats-list.vue';
 import SxHeatControls from '../components/scoring/SX/sx-heat-controls.vue';
@@ -37,7 +37,7 @@ export default {
     controlsMenu,
     chat,
     messageConsole,
-    startList: Index,
+    startList,
     scoresPanel,
     scoringServices,
     finishTable,
@@ -59,10 +59,14 @@ export default {
     selectSXHeat({ stage, heat }) {
       if (stage === undefined || heat === undefined) return;
 
-      if (this.competition.selected_race_id.toString() !== stage.toString()) {
-        if (!this.competition.races[stage]) return;
-        this.competition.selected_race_id = stage;
-      }
+      if (!this.competition.races[stage]) return;
+
+      this.competition.selected_race_id = stage;
+
+      const heatToSelect = this.competition.races[stage].heats[heat];
+      if (!heatToSelect) return;
+      this.competition.races[stage].onTrack = heatToSelect.id;
+
       this.selectedHeat = heat;
     },
     selectDMHeat(stage, heat) {

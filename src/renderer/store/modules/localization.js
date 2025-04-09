@@ -41,7 +41,7 @@ export default {
               stage: 'Этап',
               date: 'Дата',
               country: 'Страна',
-              location: 'Город',
+              location: 'Место',
               provider: 'Организация',
               providerTiming: 'Дата-провайдер',
               codex: 'Код',

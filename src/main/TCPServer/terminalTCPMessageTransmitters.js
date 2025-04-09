@@ -32,23 +32,28 @@ const terminalMessageTransmitters = {
   },
 
   initData_chiefJudge: ({ raceId, competitorId, competitorNum, scoresQuantity, judgesQuantity, marks, competitorName }) => {
-    if (!marks || !marks.length) return;
+    const scoresFlatten = [];
 
-    let scoresFlatten = [];
+    if (!marks || !marks.length) {
+      for (let i = 0; i < scoresQuantity; i++) {
+        scoresFlatten.concat([0, 0]);
+      }
+    } else {
+      marks.forEach((judgeScore) =>
+        judgeScore && Array.isArray(judgeScore)
+          ? judgeScore.forEach((judgeScorePart, idx) =>
+              idx === 0
+                ? scoresFlatten.push(judgeScorePart)
+                : Array.isArray(judgeScorePart)
+                ? judgeScorePart.forEach((scoreValue) => scoresFlatten.push(scoreValue))
+                : scoresFlatten.push(judgeScorePart || 0)
+            )
+          : judgeScore
+          ? scoresFlatten.push(judgeScore)
+          : null
+      );
+    }
 
-    marks.forEach((judgeScore) =>
-      judgeScore && Array.isArray(judgeScore)
-        ? judgeScore.forEach((judgeScorePart, idx) =>
-            idx === 0
-              ? scoresFlatten.push(judgeScorePart)
-              : Array.isArray(judgeScorePart)
-              ? judgeScorePart.forEach((scoreValue) => scoresFlatten.push(scoreValue))
-              : scoresFlatten.push(judgeScorePart || 0)
-          )
-        : judgeScore
-        ? scoresFlatten.push(judgeScore)
-        : null
-    );
     console.log(scoresFlatten);
 
     const dataPackage = [

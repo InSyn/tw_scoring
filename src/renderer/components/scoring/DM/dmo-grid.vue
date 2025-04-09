@@ -39,7 +39,7 @@ export default {
         v-for="(stage, stage_idx) in competition.races"
         :key="stage.id"
       >
-        <div class="runsGrid__stage__title">{{ stage.title + ' _ ' + stage.id }}</div>
+        <div class="runsGrid__stage__title">{{ stage.title }}</div>
         <div
           class="runsGrid__stage__heats"
           :class="{

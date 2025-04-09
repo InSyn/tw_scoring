@@ -34,7 +34,7 @@ const getTeamResults = () => {
     const raceResults = [];
     competition.teams.forEach((team) => {
       const teamResult = competition.getTeamRaceResult(team, race);
-      raceResults.push({ ...team, teamRaceRes: teamResult, teamRaceResNum: !isNaN(Number(teamResult)) ? Number(teamResult) : 0 });
+      raceResults.push({ ...team, teamRaceRes: teamResult, teamRaceResNum: !isNaN(teamResult) ? Number(teamResult) : 0 });
     });
 
     const sortedResults = raceResults.sort((team1_res, team2_res) => {
@@ -114,7 +114,7 @@ export const getDMProgressionData = ({ onlyFinals = false } = {}) => {
 
           let numericScore = 0;
           if (foundResult && foundResult.value !== undefined) {
-            numericScore = !isNaN(Number(foundResult.value)) ? Number(foundResult.value) : 0;
+            numericScore = !isNaN(foundResult.value) ? Number(foundResult.value) : 0;
           }
 
           return {
@@ -768,23 +768,23 @@ const generateAEHandlers = (dataCtx) => {
                 return [
                   formattedMarks.air.isExcluded
                     ? `<span style="text-decoration: line-through">${
-                        formattedMarks.air.value && !isNaN(Number(formattedMarks.air.value)) ? formattedMarks.air.value.toFixed(1) : '-'
+                        formattedMarks.air.value && !isNaN(formattedMarks.air.value) ? formattedMarks.air.value.toFixed(1) : '-'
                       }</span>`
-                    : formattedMarks.air.value && !isNaN(Number(formattedMarks.air.value))
+                    : formattedMarks.air.value && !isNaN(formattedMarks.air.value)
                     ? formattedMarks.air.value.toFixed(1)
                     : '-',
                   formattedMarks.form.isExcluded
                     ? `<span style="text-decoration: line-through">${
-                        formattedMarks.form.value && !isNaN(Number(formattedMarks.form.value)) ? formattedMarks.form.value.toFixed(1) : '-'
+                        formattedMarks.form.value && !isNaN(formattedMarks.form.value) ? formattedMarks.form.value.toFixed(1) : '-'
                       }</span>`
-                    : formattedMarks.air.value && !isNaN(Number(formattedMarks.form.value))
+                    : formattedMarks.air.value && !isNaN(formattedMarks.form.value)
                     ? formattedMarks.form.value.toFixed(1)
                     : '-',
                   formattedMarks.landing.isExcluded
                     ? `<span style="text-decoration: line-through">${
-                        formattedMarks.landing.value && !isNaN(Number(formattedMarks.landing.value)) ? formattedMarks.landing.value.toFixed(1) : '-'
+                        formattedMarks.landing.value && !isNaN(formattedMarks.landing.value) ? formattedMarks.landing.value.toFixed(1) : '-'
                       }</span>`
-                    : formattedMarks.landing.value && !isNaN(Number(formattedMarks.landing.value))
+                    : formattedMarks.landing.value && !isNaN(formattedMarks.landing.value)
                     ? formattedMarks.landing.value.toFixed(1)
                     : '-',
                   '&nbsp;',
@@ -931,7 +931,6 @@ const generateDMHandlers = (dataCtx) => {
   };
 
   handlers['dm:points'] = (dataCtx, dataSource, dataIdx) => {
-    console.log(dataIdx, ': <', dataSource.data[dataIdx], '>');
     if (specialTableRows.includes(dataSource.data[dataIdx].type)) return;
 
     const athlete = dataSource.data[dataIdx];

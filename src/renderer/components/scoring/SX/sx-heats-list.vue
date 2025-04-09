@@ -18,10 +18,10 @@ export default {
 
 <template>
   <div class="heatsList__wrapper section-container">
-    <h3 class="heatsList__title">HEATS LIST</h3>
-    <div class="heatsList__body">
-      <div class="heatsList__item" v-for="(heat, idx) in getHeats" :key="idx">{{ `HEAT ${idx + 1}` }}</div>
-    </div>
+    <!--    <h3 class="heatsList__title">HEATS LIST</h3>-->
+    <!--    <div class="heatsList__body">-->
+    <!--      <div class="heatsList__item" v-for="(heat, idx) in getHeats" :key="idx">{{ `HEAT ${idx + 1}` }}</div>-->
+    <!--    </div>-->
   </div>
 </template>
 

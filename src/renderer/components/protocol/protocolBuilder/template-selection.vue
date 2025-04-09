@@ -7,7 +7,7 @@ export default {
       default: () => [],
     },
     selectedTemplateId: {
-      type: [String, Number],
+      type: String,
       default: null,
     },
   },

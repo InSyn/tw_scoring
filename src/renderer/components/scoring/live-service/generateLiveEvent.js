@@ -302,7 +302,7 @@ export const generateLiveEvent = ({ event, competitions }, options) => {
       track_info,
       conditions,
     };
-    console.log(live_event);
+    // console.log(live_event);
   }
 
   return live_event;

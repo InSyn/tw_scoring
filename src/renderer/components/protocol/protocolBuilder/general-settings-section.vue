@@ -1,5 +1,5 @@
 <script>
-import { ProtocolDocument } from '../../../store/classes/Protocol/ProtocolDocument';
+import { ProtocolDocument } from '../../../classes/Protocol/ProtocolDocument';
 
 export default {
   name: 'general-settings-section',

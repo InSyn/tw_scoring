@@ -1,6 +1,6 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import MarkClass from '../../../store/classes/MarkClass';
+import MarkClass from '../../../classes/MarkClass';
 import { initTerminalData_chiefJudge, packJudgeMark } from '../../../utils/terminals-utils';
 import { roundNumber } from '../../../utils/utils';
 import { checkCompetitionDiscipline, getDisciplineCode } from '../../../data/sports';

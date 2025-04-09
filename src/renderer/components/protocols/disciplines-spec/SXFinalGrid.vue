@@ -1,5 +1,5 @@
 <script>
-import { getCompetitorByBib, getHeatCompetitorColor } from '../../../utils/competition-utils';
+import { getCompetitorById, getHeatCompetitorColor } from '../../../utils/competition-utils';
 
 export default {
   name: 'SXFinalGrid',
@@ -15,7 +15,7 @@ export default {
     };
   },
   methods: {
-    getCompetitorByBib,
+    getCompetitorById,
     getHeatCompetitorColor,
     processRounds() {
       this.rounds = this.races.map((race) => ({
@@ -52,7 +52,7 @@ export default {
       return this.$refs.sxGridWrapper.offsetHeight;
     },
     getCompetitorInfo(competitorBib) {
-      const competitor = getCompetitorByBib(this.competition, competitorBib);
+      const competitor = getCompetitorById(this.competition, competitorBib);
       if (!competitor || !competitor.info_data) return '';
 
       return `${competitor.info_data['name']}`;

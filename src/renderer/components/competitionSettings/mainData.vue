@@ -1,16 +1,26 @@
 <script>
-import { mapGetters, mapActions } from 'vuex';
-import { getDisciplineCode, getSportDisciplines } from '../../data/sports';
-import { defaultStructure } from '../../store/classes/EventClass';
+import { mapGetters } from 'vuex';
+import { getDefaultStages, getDisciplineCode, getSportDisciplines } from '../../data/sports';
+import DateTimeInput from '../ui/date-time-input.vue';
+import { setDeepValue } from '../../utils/utils';
+import CompetitionTimeDialog from './dialogs/competition-time-dialog.vue';
+import CompetitionDateDialog from './dialogs/competition-date-dialog.vue';
+import { athleteGendersList, getAthleteGroups } from '../../data/athlete-groups';
+import { countries } from '../../data/countries';
+import { defaultStructure } from '../../classes/EventClass';
 
 export default {
   name: 'main_data',
+  components: { CompetitionDateDialog, CompetitionTimeDialog, DateTimeInput },
   data() {
     return {
       stage_selector: false,
     };
   },
   computed: {
+    defaultStructure() {
+      return defaultStructure;
+    },
     ...mapGetters('main', {
       event: 'event',
       appTheme: 'appTheme',
@@ -21,21 +31,21 @@ export default {
       lang: 'lang',
       localization: 'localization',
     }),
-    defaultStructure() {
-      return defaultStructure;
-    },
     getCompetitionData() {
       if (!this.competition || !this.competition.mainData) return {};
       return this.competition.mainData;
     },
   },
   methods: {
-    ...mapActions('main', {
-      input_focus: 'input_focus',
-      input_blur: 'input_blur',
-    }),
+    getAthleteGroups,
+    athleteGendersList,
+    getDefaultStages,
+    setDeepValue,
     getSportDisciplines,
     getDisciplineCode,
+    countries() {
+      return countries;
+    },
     selectStage(stage, event) {
       this.competition.mainData.title.stage.value = stage;
       event.target.parentNode.parentNode.blur();
@@ -45,202 +55,214 @@ export default {
 </script>
 
 <template>
-  <div class="d-flex flex-column justify-space-between">
-    <v-row v-for="(mainData, md, md_idx) in getCompetitionData" :key="md" :style="md_idx > 0 && { marginTop: '2px' }" no-gutters style="position: relative">
-      <v-col class="d-flex align-center" cols="12" style="position: relative">
-        <div class="d-flex align-center flex-grow-1 px-2 py-1" style="position: relative; border-radius: 4px; background-color: var(--background-card)">
-          <span class="d-block" style="min-width: 11rem; font-weight: bold">{{ localization[lang].app.event.main_data[md] }}</span>
-
-          <v-dialog v-if="md === 'date'" v-model="mainData.dialog" width="300px">
-            <template v-slot:activator="{ on }">
-              <v-hover v-slot:default="{ hover }">
-                <div
-                  :style="[
-                    hover && {
-                      backgroundColor: `var(--subject-background)`,
-                    },
-                  ]"
-                  class="d-flex justify-center ml-2 pa-1"
-                  style="border-radius: 2px; cursor: pointer; width: 100%; background-color: var(--background-deep); transition: box-shadow 92ms"
-                  v-on="on"
-                >
-                  {{ mainData.value }}
-                </div>
-              </v-hover>
-            </template>
-
-            <v-date-picker
-              v-model="mainData.value"
-              :dark="appTheme === 'dark'"
-              width="100%"
-              color="var(--accent)"
-              header-color="var(--background-card)"
-              locale="ru"
-            ></v-date-picker>
-
-            <v-btn @click="mainData.dialog = false" class="acceptTime__button mt-2" :style="{ color: 'var(--text-default)' }" color="var(--accent)">
-              Принять
-            </v-btn>
-          </v-dialog>
-
-          <v-dialog v-if="md === 'date'" v-model="mainData.time_dialog" width="300px">
-            <template v-slot:activator="{ on }">
-              <v-hover v-slot:default="{ hover }">
-                <div
-                  :style="[
-                    hover && {
-                      backgroundColor: `var(--subject-background)`,
-                    },
-                  ]"
-                  class="d-flex justify-center ml-2 pa-1"
-                  style="border-radius: 2px; cursor: pointer; width: 100%; background-color: var(--background-deep); transition: box-shadow 92ms"
-                  v-on="on"
-                >
-                  {{ mainData.time }}
-                </div>
-              </v-hover>
-            </template>
-
-            <v-time-picker
-              v-model="mainData.time"
-              :dark="appTheme === 'dark'"
-              width="100%"
-              color="var(--accent)"
-              header-color="var(--background-card)"
-              format="24hr"
-              locale="ru"
-            ></v-time-picker>
-
-            <v-btn @click="mainData.time_dialog = false" class="acceptTime__button mt-2" :style="{ color: 'var(--text-default)' }" color="var(--accent)">
-              Принять
-            </v-btn>
-          </v-dialog>
+  <div class="competitionMainData__controls__wrapper">
+    <div class="mainData__controlsGroup__wrapper">
+      <div class="mainData__control__wrapper">
+        <label class="mainData__label">
+          <span class="mainData__label__text">{{ localization[lang].app.event.main_data.title }}</span>
           <input
-            v-if="md !== 'date' && md !== 'discipline'"
-            v-model="mainData.value"
-            class="ml-2 pa-1"
-            style="outline: none; border-radius: 2px; width: 100%; color: var(--text-default)"
+            class="mainData__input"
             type="text"
-            @blur="mainData.focus = false"
-            @focus="mainData.focus = true"
+            :value="getCompetitionData.title.value"
+            @change="setDeepValue(competition.mainData, 'title.value', $event.target.value)"
           />
-          <div v-if="md === 'title'" style="display: flex; align-items: center; flex-wrap: nowrap; min-width: 30%">
-            <div style="flex-shrink: 0; margin-left: 1rem; font-weight: bold">
-              {{ mainData.stage.title }}
-            </div>
-            <div
-              style="
-                position: relative;
-                display: flex;
-                align-items: center;
-                flex: 1 0 auto;
-                height: 100%;
-                border-radius: 2px;
-                margin-left: 0.5rem;
-                background-color: var(--background-deep);
-                outline: none;
-                cursor: pointer;
-              "
-              tabindex="0"
-              @blur="stage_selector = false"
-              @focus="stage_selector = true"
-            >
-              <div
-                v-if="stage_selector"
-                style="
-                  position: absolute;
-                  z-index: 1;
-                  top: 0;
-                  left: 0;
-                  min-width: 100%;
-                  display: flex;
-                  flex-direction: column;
-                  background-color: var(--background-card);
-                  border: 1px solid var(--accent);
-                  border-radius: 4px;
-                "
-              >
-                <v-hover v-for="stage in defaultStructure.stages" :key="stage.id" v-slot:default="{ hover }">
-                  <div
-                    :style="[
-                      hover && {
-                        backgroundColor: 'var(--subject-background)',
-                      },
-                    ]"
-                    style="flex: 0 0 auto; padding: 2px 4px"
-                    @click="selectStage(stage, $event)"
-                  >
-                    {{ stage.title }}
-                  </div>
-                </v-hover>
-              </div>
-              <div style="padding: 4px 8px; flex: 0 0 auto">
-                {{
-                  competition.mainData.title.stage.value.id === 'custom'
-                    ? competition.mainData.title.stage.value.title[0]
-                    : competition.mainData.title.stage.value.title
-                }}
-              </div>
-            </div>
-            <div
-              v-if="competition.mainData.title.stage && competition.mainData.title.stage.value.id === 'custom'"
-              style="display: flex; flex-grow: 1; margin-left: 0.4rem; overflow: hidden"
-            >
-              <input
-                v-model="competition.mainData.title.stage.value.value"
-                style="flex: 1 0 auto; padding: 4px 8px; border-radius: 2px; max-width: 100%"
-                type="text"
-                @blur="mainData.focus = false"
-                @focus="mainData.focus = true"
-              />
-            </div>
-          </div>
-          <select
-            v-if="md === 'discipline'"
-            id="group__input"
-            v-model="competition.mainData.discipline.value"
-            class="ml-2 pa-1"
-            style="width: 100%"
+        </label>
+      </div>
+      <div class="mainData__control__wrapper">
+        <label class="mainData__label">
+          <span class="mainData__label__text">{{ localization[lang].app.event.main_data.codex }}</span>
+          <input
+            class="mainData__input"
             type="text"
+            :value="getCompetitionData.codex.value"
+            @change="setDeepValue(competition.mainData, 'codex.value', $event.target.value)"
+          />
+        </label>
+      </div>
+    </div>
+
+    <div class="mainData__controlsGroup__wrapper">
+      <div class="mainData__control__wrapper">
+        <label class="mainData__label">
+          <span class="mainData__label__text">{{ localization[lang].app.event.main_data.discipline }}</span>
+          <select
+            class="mainData__input"
+            :value="getCompetitionData.discipline.value"
+            @change="setDeepValue(competition.mainData, 'discipline.value', $event.target.value)"
           >
-            <option v-for="(discipline, idx) in getSportDisciplines(event.sport)" :key="`${idx}_${discipline.code}`" :value="discipline.name_rus">
+            <option v-for="discipline in getSportDisciplines(event.sport)" :key="discipline.code" :value="discipline.name_rus">
               {{ discipline.name_rus }}
             </option>
           </select>
-          <div
-            v-if="md === 'discipline'"
-            class="discipline-min ml-2 pa-1"
-            style="align-self: stretch; outline: none; border-radius: 2px; width: 6rem"
-            type="text"
-          >
-            {{ getDisciplineCode(competition.mainData.discipline.value) }}
-          </div>
-          <label v-if="md === 'discipline'" for="group__input" style="font-weight: bold; margin-left: 12px">
-            {{ localization[lang].app.event.main_data.group }}
-          </label>
+        </label>
+      </div>
+      <div class="mainData__control__wrapper">
+        <label class="mainData__label">
+          <span class="mainData__label__text">{{ localization[lang].app.event.main_data.stage }}</span>
           <select
-            v-if="md === 'discipline'"
-            id="group__input"
-            v-model="competition.mainData.title.stage.group"
-            class="ml-2 pa-1"
-            style="border-radius: 2px; width: 6rem"
-            type="text"
+            class="mainData__input"
+            :value="getCompetitionData.title.stage.value.value"
+            @change="setDeepValue(competition.mainData, 'title.stage.value.value', $event.target.value)"
           >
-            <option v-for="group in ['men', 'women']" :key="group" :value="group">{{ group }}</option>
+            <option v-for="stage in getDefaultStages()" :key="stage" :value="stage">
+              {{ stage }}
+            </option>
           </select>
-        </div>
-      </v-col>
-    </v-row>
+        </label>
+      </div>
+    </div>
+
+    <div class="mainData__controlsGroup__wrapper">
+      <div class="mainData__control__wrapper">
+        <label class="mainData__label">
+          <span class="mainData__label__text">{{ localization[lang].app.event.main_data.gender }}</span>
+          <select
+            class="mainData__input"
+            :value="getCompetitionData.title.stage.group"
+            @change="setDeepValue(competition.mainData, 'title.stage.group', $event.target.value)"
+          >
+            <option v-for="gender in ['men', 'women']" :key="gender" :value="gender">
+              {{ gender }}
+            </option>
+          </select>
+        </label>
+      </div>
+      <div class="mainData__control__wrapper">
+        <label class="mainData__label">
+          <span class="mainData__label__text">{{ localization[lang].app.event.main_data.group }}</span>
+          <select
+            class="mainData__input"
+            :value="getCompetitionData.group.value"
+            @change="setDeepValue(competition.mainData, 'group.value', $event.target.value)"
+          >
+            <option v-for="group in getAthleteGroups(getCompetitionData.gender.value)" :key="group" :value="group">
+              {{ group }}
+            </option>
+          </select>
+        </label>
+      </div>
+    </div>
+
+    <div class="mainData__controlsGroup__wrapper">
+      <div class="mainData__control__wrapper">
+        <competition-date-dialog v-model="getCompetitionData.date.value"></competition-date-dialog>
+      </div>
+      <div class="mainData__control__wrapper">
+        <competition-time-dialog v-model="getCompetitionData.date.time"></competition-time-dialog>
+      </div>
+    </div>
+
+    <div class="mainData__controlsGroup__wrapper">
+      <div class="mainData__control__wrapper" data-type="country">
+        <label class="mainData__label">
+          <span class="mainData__label__text">{{ localization[lang].app.event.main_data.country }}</span>
+          <select
+            class="mainData__input"
+            :value="getCompetitionData.country.value"
+            @change="setDeepValue(competition.mainData, 'country.value', $event.target.value)"
+          >
+            <option v-for="country in countries()" :key="country.country_code" :value="country.country_name">
+              {{ country.country_name }}
+            </option>
+          </select>
+        </label>
+      </div>
+      <div class="mainData__control__wrapper">
+        <label class="mainData__label">
+          <span class="mainData__label__text">{{ localization[lang].app.event.main_data.location }}</span>
+          <input
+            class="mainData__input"
+            type="text"
+            :value="getCompetitionData.location.value"
+            @change="setDeepValue(competition.mainData, 'location.value', $event.target.value)"
+          />
+        </label>
+      </div>
+    </div>
+
+    <div class="mainData__controlsGroup__wrapper">
+      <div class="mainData__control__wrapper">
+        <label class="mainData__label">
+          <span class="mainData__label__text">{{ localization[lang].app.event.main_data.provider }}</span>
+          <input
+            class="mainData__input"
+            type="text"
+            :value="getCompetitionData.provider.value"
+            @change="setDeepValue(competition.mainData, 'provider.value', $event.target.value)"
+          />
+        </label>
+      </div>
+      <div class="mainData__control__wrapper">
+        <label class="mainData__label">
+          <span class="mainData__label__text">{{ localization[lang].app.event.main_data.providerTiming }}</span>
+          <input
+            class="mainData__input"
+            type="text"
+            :value="getCompetitionData.providerTiming.value"
+            @change="setDeepValue(competition.mainData, 'providerTiming.value', $event.target.value)"
+          />
+        </label>
+      </div>
+    </div>
   </div>
 </template>
 
-<style scoped>
-.discipline-min {
-  padding: 3px 6px;
-  background-color: var(--background-deep);
-  border-radius: 2px;
-  text-align: center;
-  font-weight: bold;
-  overflow: hidden;
+<style lang="scss" scoped>
+.competitionMainData__controls__wrapper {
+  display: flex;
+  flex-direction: column;
+
+  .mainData__controlsGroup__wrapper {
+    flex: 0 0 auto;
+    display: flex;
+    flex-wrap: nowrap;
+    margin-bottom: 4px;
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    .mainData__control__wrapper {
+      flex: 1 1 0;
+      margin-right: 0.5rem;
+      padding: 0.3rem 0.5rem;
+      border-radius: 4px;
+      background-color: var(--background-card);
+      &:last-child {
+        margin-right: 0;
+      }
+
+      .mainData__label {
+        display: flex;
+        align-items: center;
+        flex-wrap: nowrap;
+        &:hover,
+        &:focus-within {
+          .mainData__label__text {
+            font-weight: bold;
+          }
+        }
+
+        .mainData__label__text {
+          width: 36%;
+          min-width: 8ch;
+          font-size: 1.05rem;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          cursor: pointer;
+        }
+        .mainData__input {
+          width: 64%;
+          min-width: 12ch;
+          margin-left: 0.75rem;
+          option {
+            max-width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+        }
+      }
+    }
+  }
 }
 </style>

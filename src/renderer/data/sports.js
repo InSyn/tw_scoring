@@ -1,3 +1,5 @@
+import store from '../store';
+
 export const sports = [
   {
     code: 'FS',
@@ -7,7 +9,7 @@ export const sports = [
       { code: 'MO', name_rus: 'Могул' },
       { code: 'DM', name_rus: 'Парный могул' },
       { code: 'AE', name_rus: 'Акробатика' },
-      { code: 'AET', name_rus: 'АКРОБАТИКА - ГРУППА - СМЕШАННАЯ' },
+      { code: 'AET', name_rus: 'Акробатика - группа - смешанная' },
       { code: 'AES', name_rus: 'Синхронная Акробатика' },
       { code: 'SX', name_rus: 'Ски-кросс' },
       { code: 'SXT', name_rus: 'Командный ски-кросс' },
@@ -36,7 +38,6 @@ export const sports = [
     ],
   },
 ];
-
 export const getSportDisciplines = (sportName) => {
   if (!sportName) return [];
   const sport = sports.find((sport) => {
@@ -46,7 +47,6 @@ export const getSportDisciplines = (sportName) => {
 
   return sport.disciplines;
 };
-
 export const getDisciplineCode = (discipline) => {
   if (!discipline) return '';
 
@@ -59,12 +59,20 @@ export const getDisciplineCode = (discipline) => {
   return dscCode;
 };
 
+const defaultStages = {
+  qualification: { RU_name: 'Квалификация', EN_name: 'Qualification' },
+  final: { RU_name: 'Финал', EN_name: 'Final' },
+};
+export const getDefaultStages = () => {
+  const appLang = store.getters['localization/lang'];
+  return Object.keys(defaultStages).map((stage) => defaultStages[stage][`${appLang}_name`]);
+};
+
 export const checkCompetitionDiscipline = (competition, dscCodesArr) => {
   if (!competition || !dscCodesArr || !dscCodesArr.length) return false;
 
   return dscCodesArr.some((dscCode) => getDisciplineCode(competition.mainData.discipline.value) === dscCode);
 };
-
 export const isQualification = (competition) => {
   if (!competition) return false;
   return competition.mainData.title.stage.value.value === 'Квалификация';
@@ -79,14 +87,6 @@ export const isFinal = (competition) => {
 };
 export const isFinalOfDisciplines = (competition, dscCodes) => {
   return isFinal(competition) && checkCompetitionDiscipline(competition, dscCodes);
-};
-
-export const isSXQualification = (competition) => {
-  if (!competition) return false;
-  const competitionDiscipline = getDisciplineCode(competition.mainData.discipline.value);
-  if (!competitionDiscipline) return false;
-
-  return ['SX', 'SXT'].includes(competitionDiscipline) && competition.mainData.title.stage.value.value.toString().split(' ')[0] === 'Квалификация';
 };
 
 export const getDisciplineFFRCode = (disciplineCode) => {

@@ -52,7 +52,7 @@
 <script>
 import ArrowIcon from '../../../assets/icons/arrow-icon.vue';
 import { initTerminalData_chiefJudge, initTerminalData_judge } from '../../../utils/terminals-utils';
-import TimerClass from '../../../store/classes/TimerClass';
+import TimerClass from '../../../classes/TimerClass';
 import { mapActions } from 'vuex';
 import { getScoresQuantity } from '../../../utils/discipline-utils';
 import { getDisciplineCode } from '../../../data/sports';
@@ -102,7 +102,7 @@ export default {
       return run;
     },
     setNextRun(run) {
-      console.log(run);
+      // console.log(run);
       if (!this.competition.selected_race) return;
       this.competition.selected_race.selectedCompetitor = run;
 

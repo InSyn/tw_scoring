@@ -12,6 +12,7 @@ import scoring_services from './modules/scoring_services';
 import terminalsUdpService from './modules/terminalsUdpService';
 import aerials from './modules/aerials';
 import moguls from './modules/moguls';
+import skiCross from './modules/ski-cross';
 import timing from './modules/timing';
 import protocols from './modules/protocols';
 
@@ -28,10 +29,11 @@ export default new Vuex.Store({
     protocol_settings,
     scoring_services,
     terminalsUdpService,
-    aerials,
-    moguls,
     timing,
     protocols,
+    aerials,
+    moguls,
+    skiCross,
   },
   strict: false,
 });

@@ -1,5 +1,5 @@
 import main from './../modules/main';
-import { ProtocolDataFieldClass } from '../classes/ProtocolDataFieldClass';
+import { ProtocolDataFieldClass } from '../../classes/ProtocolDataFieldClass';
 import { generateProtocolField } from '../../utils/protocol-utils';
 import { checkCompetitionDiscipline } from '../../data/sports';
 

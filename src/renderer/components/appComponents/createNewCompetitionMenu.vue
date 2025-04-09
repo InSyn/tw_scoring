@@ -230,7 +230,7 @@
 
 <script>
 import { mdiFolderPlus } from '@mdi/js';
-import EventClass, { defaultStructure } from '../../store/classes/EventClass';
+import EventClass, { defaultStructure } from '../../classes/EventClass';
 import { mapGetters } from 'vuex';
 import { generateId } from '../../utils/utils';
 

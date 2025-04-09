@@ -204,8 +204,8 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import JudgeClass from '../../store/classes/JudgeClass';
-import JuryClass from '../../store/classes/JuryClass';
+import JudgeClass from '../../classes/JudgeClass';
+import JuryClass from '../../classes/JuryClass';
 import PersonalItem from './personal-item.vue';
 import MDragAndDrop from '../mixins/MDragAndDrop';
 import DataCellSettingsRow from '../protocols/protocolDataSheetSettings-components/dataCellSettings-row.vue';
@@ -229,16 +229,18 @@ export default {
     addStuff(stuffType) {
       switch (stuffType) {
         case 'judge': {
+          const lastJudgeId = this.competition.stuff.judges.length > 0 ? this.competition.stuff.judges[this.competition.stuff.judges.length - 1].id : 0;
+
           this.competition.stuff.judges.push(
             new JudgeClass({
-              title: `Судья ${this.competition.stuff.judges.length + 1}`,
-              id: this.competition.stuff.judges.length > 0 ? this.competition.stuff.judges[this.competition.stuff.judges.length - 1].id + 1 : 1,
+              title: `Судья ${lastJudgeId + 1}`,
+              id: lastJudgeId + 1,
             })
           );
           break;
         }
         case 'jury': {
-          this.competition.stuff[stuffType].push(new JuryClass({ title: `Судья ${this.competition.stuff[stuffType].length + 1}` }));
+          this.competition.stuff[stuffType].push(new JuryClass({ title: `Жюри ${this.competition.stuff[stuffType].length + 1}` }));
         }
       }
 
@@ -301,7 +303,7 @@ export default {
   display: flex;
   flex-direction: column;
   margin: 0 8px 8px;
-  padding: 8px;
+  padding: 4px;
   background: var(--background-deep);
   border-radius: 6px;
 }
@@ -316,14 +318,14 @@ export default {
   cursor: move;
 }
 .stuffCard__wrapper:not(:last-child) {
-  margin-bottom: 8px;
+  margin-bottom: 4px;
 }
 .stuffDataField__wrapper {
   flex: 1 0 auto;
   display: flex;
   flex-wrap: nowrap;
   align-items: center;
-  margin: 0 4px 8px 0;
+  margin: 0 4px 4px 0;
   &[data-fieldType='id'] {
     margin-left: 8px;
   }

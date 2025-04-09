@@ -32,15 +32,18 @@ export const eventHandlers = {
   },
   'competition:group-ru': ({ mainData }) => {
     if (!mainData) return [''];
-    const group_ru = {
-      men: 'Мужчины',
-      women: 'Женщины',
-      mixed: 'Смешанные',
-      juniors: 'Молодежные',
-      seniors: 'Пожилые',
-      youth: 'Молодежные',
-    };
-    return [group_ru[mainData.title.stage.group] || ''];
+
+    const group = mainData.group ? mainData.group.value : mainData.title.stage.group || '-';
+    // const group_ru = {
+    //   men: 'Мужчины',
+    //   women: 'Женщины',
+    //   mixed: 'Смешанные',
+    //   juniors: 'Молодежные',
+    //   seniors: 'Пожилые',
+    //   youth: 'Молодежные',
+    // };
+
+    return [mainData.group.value || mainData.title.stage.group || '-'];
   },
   'competition:date': ({ mainData }) => {
     if (!mainData) return [''];

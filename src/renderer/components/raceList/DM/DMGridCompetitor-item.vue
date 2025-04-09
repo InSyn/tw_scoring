@@ -1,8 +1,8 @@
 <script>
-import { generateEmptyCompetitor } from '../../../store/classes/CompetitorClass';
-import { getCompetitorByBib, getCompetitorById } from '../../../utils/competition-utils';
-import { raceStatuses } from '../../../store/classes/RaceClass';
-import { runResultOptions } from '../../../store/classes/DM/DMRunClass';
+import { generateEmptyCompetitor } from '../../../classes/CompetitorClass';
+import { getCompetitorById } from '../../../utils/competition-utils';
+import { raceStatuses } from '../../../classes/RaceClass';
+import { runResultOptions } from '../../../classes/DM/DMRunClass';
 import { mapActions } from 'vuex';
 
 export default {
@@ -66,7 +66,7 @@ export default {
         return;
       }
 
-      const competitor = getCompetitorByBib(this.competition, e.target.value);
+      const competitor = getCompetitorById(this.competition, e.target.value);
       if (!competitor) {
         e.target.value = '';
         return;
@@ -183,8 +183,8 @@ export default {
         @mousedown.stop
         @mousemove.stop
         @dblclick.stop
-        @change="setCompetitorGap(stage, heatIdx, index, $event.target.value)"
         @click.stop
+        @change="setCompetitorGap(stage, heatIdx, index, $event.target.value)"
       />
       <input
         type="number"

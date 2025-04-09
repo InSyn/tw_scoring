@@ -94,7 +94,12 @@ export default {
           v-if="competition.selected_race"
           style="position: relative; height: 100%; width: 100%; background-color: var(--standard-background); border-radius: 6px"
         >
-          <v-row v-if="!competition.is_teams" class="pa-1" no-gutters style="position: absolute; height: 32px; top: 0; right: 0; left: 0; user-select: none">
+          <v-row
+            v-if="!competition.is_teams"
+            class="pa-1"
+            no-gutters
+            style="position: absolute; height: 32px; top: 0; right: 0; left: 0; border-bottom: 1px solid var(--background-card); user-select: none"
+          >
             <v-col class="d-flex justify-center align-center" style="max-width: 5rem"> </v-col>
             <v-col class="d-flex justify-center align-center" style="max-width: 5rem">{{ localization[lang].app.scoring.t_rank }} </v-col>
             <v-col class="d-flex justify-center align-center" style="max-width: 5rem">

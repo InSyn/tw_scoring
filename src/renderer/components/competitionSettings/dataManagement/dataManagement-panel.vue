@@ -1,9 +1,9 @@
 <script>
 import DataImportModal from './dataImport-modal.vue';
 import DataExportModal from './dataExport-modal.vue';
-import JudgeClass from '../../../store/classes/JudgeClass';
-import JuryClass from '../../../store/classes/JuryClass';
-import OpenerClass from '../../../store/classes/OpenerClass';
+import JudgeClass from '../../../classes/JudgeClass';
+import JuryClass from '../../../classes/JuryClass';
+import OpenerClass from '../../../classes/OpenerClass';
 
 export default {
   name: 'dataManagement-panel',

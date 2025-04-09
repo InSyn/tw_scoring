@@ -1,5 +1,5 @@
 <template>
-  <div class="d-flex" style="height: 100%; margin-left: 8px">
+  <div class="serverTerminal__wrapper d-flex" style="height: 100%; margin-left: 8px">
     <div class="pa-2" style="display: flex; flex-direction: column; height: 100%; width: 100%; background-color: var(--background-card); border-radius: 4px">
       <div style="flex: 0 0 auto">
         <div class="d-flex flex-wrap align-center" style="padding: 2px 4px">
@@ -45,7 +45,7 @@
           </v-btn>
         </div>
       </div>
-      <div class="server_messages_container_wrapper" style="position: relative; flex: 1 0 auto; background-color: var(--background-deep)">
+      <div class="server_messages_container_wrapper" style="position: relative; flex: 1 0 auto; min-height: 18rem; background-color: var(--background-deep)">
         <div
           id="server_messages_container"
           :style="

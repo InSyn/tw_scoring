@@ -3,12 +3,13 @@ import ProtocolItemProperties from '../protocolItems/protocol-item-properties.vu
 import { mdiCog, mdiArrowRight, mdiTrashCan } from '@mdi/js';
 import ProtocolBlockProperties from '../protocolBlocks/protocol-block-properties.vue';
 import { handlerRegistry } from '../../../protocolHandlers';
-import { ProtocolTableCell, ProtocolTableItem } from '../../../store/classes/Protocol/ProtocolTable';
+import { ProtocolTableCell, ProtocolTableItem } from '../../../classes/Protocol/ProtocolTable';
 import ProtocolItemsListItem from '../protocolItems/protocol-items-list-item.vue';
 import MDragAndDrop from '../../mixins/MDragAndDrop';
 import BlocksListItem from '../protocolBlocks/protocol-blocks-list-item.vue';
 import TwFileInput from '../../ui/tw-file-input.vue';
 import ProtocolTableItemsList from '../protocolItems/protocol-table-items-list.vue';
+import { ProtocolElement } from '../../../classes/Protocol/ProtocolElement';
 
 export default {
   name: 'items-management-section',
@@ -139,9 +140,13 @@ export default {
       if (!cell instanceof ProtocolTableCell) return;
       cell.setContent(content);
     },
-    handleImagePathSelection(imageFile) {
+    handleImagePathSelection(imageFile, cell) {
       if (!imageFile[0]) return '';
       this.newItemContent = imageFile[0].path;
+
+      if (cell && cell instanceof ProtocolElement) {
+        this.updateCellContent(cell, imageFile[0].path);
+      }
     },
   },
   watch: {
@@ -223,6 +228,7 @@ export default {
         :selected-item="selectedItem"
         :selected-block-type="selectedBlock ? selectedBlock.type : ''"
         :selected-block="selectedBlock"
+        @file-select-event="handleImagePathSelection"
       />
     </div>
   </div>

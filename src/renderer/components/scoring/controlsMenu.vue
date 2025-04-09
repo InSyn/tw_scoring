@@ -193,7 +193,6 @@ export default {
   flex: 1 1 auto;
   display: flex;
   flex-direction: column;
-  margin-top: 4px;
   padding: 8px;
 
   background: var(--background-card);

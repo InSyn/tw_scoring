@@ -1,12 +1,12 @@
 <script>
 import { mapGetters } from 'vuex';
 import { checkCompetitionDiscipline, isFinalOfDisciplines } from '../../../data/sports';
-import RaceClass, { SXRounds, DMRounds } from '../../../store/classes/RaceClass';
-import RoundClass from '../../../store/classes/DM/RoundClass';
-import SXHeatClass from '../../../store/classes/SX/SXHeatClass';
-import DMRunClass from '../../../store/classes/DM/DMRunClass';
+import RaceClass, { SXRounds, DMRounds } from '../../../classes/RaceClass';
+import RoundClass from '../../../classes/DM/RoundClass';
+import SXHeatClass from '../../../classes/SX/SXHeatClass';
+import DMRunClass from '../../../classes/DM/DMRunClass';
 import { fillDualMogulsBrackets } from '../../../utils/discipline-utils';
-import { generateEmptyCompetitor } from '../../../store/classes/CompetitorClass';
+import { generateEmptyCompetitor } from '../../../classes/CompetitorClass';
 
 export default {
   name: 'createRace-dialog',

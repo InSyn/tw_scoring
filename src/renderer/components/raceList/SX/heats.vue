@@ -1,6 +1,6 @@
 <script>
 import HeatItem from './heat-item.vue';
-import SXHeatClass from '../../../store/classes/SX/SXHeatClass';
+import SXHeatClass from '../../../classes/SX/SXHeatClass';
 
 export default {
   name: 'heats',
@@ -22,13 +22,12 @@ export default {
 <template>
   <div v-if="selectedRace" class="heats__wrapper section-container">
     <h3 class="heats__title">
-      Heats
+      Заезды
       <button class="tw-button" @click="addHeat">Добавить</button>
     </h3>
     <div class="heats__body">
       <div class="heats__list">
         <heat-item class="heat__wrapper" v-for="(heat, idx) in selectedRace.heats" :key="idx" :heat="heat" :heat-idx="idx" @heat:remove="removeHeat">
-          {{ `Heat ${idx + 1}` }}
         </heat-item>
       </div>
     </div>

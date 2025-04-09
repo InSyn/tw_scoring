@@ -5,7 +5,9 @@
     <main style="position: relative">
       <app-menu @import-competition="importCompetition"></app-menu>
       <div class="window">
-        <router-view></router-view>
+        <transition name="page-fade" mode="out-in">
+          <router-view></router-view>
+        </transition>
       </div>
     </main>
 
@@ -16,13 +18,13 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import fs from 'fs';
-import EventClass from './store/classes/EventClass';
+import EventClass from './classes/EventClass';
 import CreateNewCompetitionMenu from './components/appComponents/createNewCompetitionMenu';
 import CompetitionSelectMenu from './components/appComponents/competitionSelectMenu';
-import AppMenu from './components/appComponents/appMenu';
+import AppMenu from './components/layout/app-menu.vue';
 import LangSelector from './components/appComponents/langSelector.vue';
 import { stringifyInfoMsg } from './utils/infoMessages-utils';
-import TimingDeviceSettings from './components/timingDeviceSettings/index.vue';
+import TimingDeviceSettings from './components/timing/timingDeviceSettings/index.vue';
 import AppHeader from './components/layout/app-header.vue';
 import AppFooter from './components/layout/app-footer.vue';
 
@@ -35,7 +37,7 @@ export default {
     AppHeader,
     TimingDeviceSettings,
     LangSelector,
-    AppMenu,
+    AppMenu: AppMenu,
     CompetitionSelectMenu,
     CreateNewCompetitionMenu,
   },
@@ -130,6 +132,7 @@ export default {
     if (this.competitions.length === 0) this.createCompetition(new EventClass({}));
 
     this.$store.commit('main/setCompetition', this.competitions[0]);
+    this.competition.mainData.discipline.value = 'Ски-кросс';
 
     this.serverStatusChecker = setInterval(() => {
       this.socket && this.socket.connected ? this.$store.commit('main/serverSetStatus', true) : this.$store.commit('main/serverSetStatus', false);
@@ -208,5 +211,16 @@ export default {
 }
 .langMenu__item:hover {
   background: var(--subject-background);
+}
+
+.page-fade-enter-active {
+  transition: all 92ms ease;
+}
+.page-fade-leave-active {
+  transition: all 128ms cubic-bezier(1, 0.5, 0.8, 1);
+}
+.page-fade-enter,
+.page-fade-leave-to {
+  opacity: 0;
 }
 </style>

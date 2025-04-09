@@ -45,11 +45,11 @@ import { mapActions, mapGetters } from 'vuex';
 import { mdiFileOutline, mdiFileMultipleOutline } from '@mdi/js';
 import FilePaginator from './filePaginator.vue';
 import { generateFinishedHTML, generateOnStartHTML, generateResultsHTML, generateStartListHTML } from '../../../utils/generateHTML-utils';
-import { checkCompetitionDiscipline, getDisciplineCode } from '../../../data/sports';
+import { checkCompetitionDiscipline, getDisciplineCode, isFinalOfDisciplines } from '../../../data/sports';
 import HtmlCodeIcon from '../../../assets/icons/html-code-icon.vue';
 import { getRegionCode } from '../../../data/regions-ru';
-import { roundNumber, sanitizeStageName } from '../../../utils/utils';
-import { generateScoresString } from '../../../utils/discipline-specific-calculation-helpers';
+import { sanitizeStageName } from '../../../utils/utils';
+import { createCompetitorTranslationObj, getSXFinished, getSXHeats, getSXOnStart } from '../../../utils/fileTranslation/SX';
 
 export default {
   name: 'exportCSV',
@@ -99,196 +99,6 @@ export default {
       };
     },
 
-    createCompetitorTranslationObj(competitor, competition, options) {
-      if (options.createFillerObject) {
-        const emptyAthlete = {
-          bib: '-',
-          ffr_id: '-',
-          fullname: '-',
-          lastname: '-',
-          name: '-',
-          group: '-',
-          country: '-',
-          country_code: '-',
-          region: '-',
-          region_code: '-',
-          flag: '-',
-          organization: '-',
-          fullname_eng: '-',
-          lastname_eng: '-',
-          name_eng: '-',
-          photo_url: '-',
-          photo_tv_url: '-',
-          finish_order: '-',
-          rank: '-',
-          result: '-',
-          run_result: '-',
-          qualification_mark: '-',
-          run1_result: '-',
-          run_time: '-',
-        };
-        return emptyAthlete;
-      }
-
-      if (!competitor) throw new Error('No competitor passed');
-
-      const competitorRegionCode =
-        typeof competitor.info_data['region'] === 'string' && competitor.info_data['region'].split(', ').length > 0
-          ? getRegionCode(competitor.info_data['region'].split(', ')[0])
-          : getRegionCode(competitor.info_data['region']);
-
-      const nameArr = typeof competitor.info_data['name'] === 'string' ? competitor.info_data['name'].split(' ') : [];
-
-      let competitorObject = {
-        id: this.generateCompetitorId(competitor),
-        bib: competitor.info_data['bib'] || '-',
-        ffr_id: competitor.info_data['ffr_id'] || '-',
-        firstname: nameArr.length > 0 ? nameArr[1] : '-',
-        lastname: nameArr.length > 0 ? nameArr[0] : '-',
-        name: competitor.info_data['name'] || '-',
-        group: competitor.info_data['group'] || competition.mainData.title.stage.group || '-',
-        country: competitor.info_data['country'] || '-',
-        country_code: competitor.info_data['country_code'] || '-',
-        region: competitor.info_data['region'] || '-',
-        region_code: competitorRegionCode || '-',
-        flag: competitor.info_data['flag'] || '-',
-        organization: competitor.info_data['organization'] || '-',
-
-        fullname_eng: competitor.info_data['fullname_eng'] || '-',
-        lastname_eng: competitor.info_data['lastname_eng'] || '-',
-        name_eng: competitor.info_data['name_eng'] || '-',
-
-        photo_url: competitor.info_data['photo_url'] || '-',
-        photo_tv_url: competitor.info_data['photo_tv_url'] || '-',
-      };
-
-      const result = competition.getOverallResult(competitor.id);
-
-      if (options.forStartlist) {
-        competitorObject = {
-          run_number: !isNaN(Number(competition.selected_race_id)) ? Number(competition.selected_race_id) + 1 : '-',
-          start_order: competitor._index + 1,
-          ...competitorObject,
-          result: result || '-',
-        };
-      }
-
-      if (options.forResults) {
-        const scores = competitor.marks.filter((mark) => mark.race_id === competition.selected_race.id);
-        const runResult = competitor.results.find((result) => result.race_id === competition.selected_race.id);
-
-        competitorObject = {
-          ...competitorObject,
-          run_number: !isNaN(Number(competition.selected_race_id)) ? Number(competition.selected_race_id) + 1 : '-',
-          finish_order: competitor.finish_order,
-          rank: competitor._index + 1,
-          result: result || '-',
-          result_rounded: !isNaN(Number(result)) ? Math.floor(Number(result)) * 2 : '-',
-          run_result: competition.getRaceResult(competitor, competition.selected_race) || '-',
-          scoresString:
-            generateScoresString(getDisciplineCode(competition.mainData.discipline.value), { competition, competitor, result: runResult, scores }) || '-',
-          qualification_mark: competitor._index + 1 <= competition.passed_competitors ? 'q' : 'nq',
-        };
-
-        competition.races.forEach((race, race_idx) => {
-          competitorObject[`run${race_idx + 1}_result`] = competition.getRaceResult(competitor, race) || null;
-        });
-      }
-
-      if (competition.is_aerials) {
-        competition.races.forEach((race, idx) => {
-          const jumpObj = competition.ae_codes.find((jumpCode) => {
-            return jumpCode.code === competitor.info_data[`jump${idx + 1}_code`];
-          });
-
-          const jump_code = jumpObj ? jumpObj['code'] : '-';
-          const jump_name = jumpObj ? jumpObj['jump_name'] : '-';
-          const jump_dd = jumpObj ? jumpObj[`value_${competitorObject.group}`] : Number(0).toFixed(3);
-          const jump_maxScore = competition.roundWithPrecision(
-            parseFloat(
-              (competition.stuff.judges.length -
-                parseInt(competition.result_formula.types[0].higher_marks) -
-                parseInt(competition.result_formula.types[0].lower_marks)) *
-                10 *
-                jump_dd
-            )
-          );
-
-          const competitorScores = competitor.marks.filter((mark) => mark.race_id === race.id);
-          const { airSum, formSum, landingSum } = competitorScores.reduce(
-            (sum, judgeScore) => {
-              const air = +sum.airSum + (judgeScore.value_ae ? +judgeScore.value_ae.air : 0);
-              const form = +sum.formSum + (judgeScore.value_ae ? +judgeScore.value_ae.form : 0);
-              const landing = +sum.landingSum + (judgeScore.value_ae ? +judgeScore.value_ae.landing : 0);
-
-              return {
-                airSum: !isNaN(air) ? roundNumber(air, 1) : 0,
-                formSum: !isNaN(form) ? roundNumber(form, 1) : 0,
-                landingSum: !isNaN(landing) ? roundNumber(landing, 1) : 0,
-              };
-            },
-            { airSum: 0, formSum: 0, landingSum: 0 }
-          );
-          const scoresString = `Air ${airSum} | Form ${formSum} | Landing ${landingSum}`;
-
-          competitorObject = {
-            ...competitorObject,
-            [`jump${idx + 1}_code`]: jump_code,
-            [`jump${idx + 1}_name`]: jump_name,
-            [`jump${idx + 1}_dd`]: jump_dd,
-            [`jump${idx + 1}_maxScore`]: jump_maxScore,
-            [`race${idx + 1}_scores`]: scoresString,
-          };
-        });
-      }
-      if (checkCompetitionDiscipline(competition, ['MO'])) {
-        const raceResult = competitor.results.find((result) => result.race_id === competition.selected_race.id);
-
-        competitorObject = {
-          ...competitorObject,
-          run_time: raceResult ? parseFloat(raceResult.mgRunParams.runTime).toFixed(2) : Number(0).toFixed(2),
-        };
-      }
-
-      if (competition.is_teams) {
-        const competitorTeam = competition.teams.find((team) => team.competitors.some((teamCompetitorId) => teamCompetitorId === competitor.id));
-
-        competitorObject = {
-          ...competitorObject,
-          teamid: competitorTeam ? competitorTeam.id : null,
-          teamname: competitorTeam ? competitorTeam.name : null,
-        };
-
-        if (options.forResults) {
-          const rankedTeamsArr = competition.teams
-            .map((team) => {
-              const teamResult = competition.getTeamRaceResult(team, competition.selected_race);
-
-              return {
-                ...team,
-                teamResult: +teamResult || 0,
-              };
-            })
-            .sort((team1_result, team2_result) => team2_result.teamResult - team1_result.teamResult);
-
-          const competitorTeamRank = rankedTeamsArr.indexOf(rankedTeamsArr.find((team) => team.id === competitorTeam.id)) + 1;
-
-          const competitorTeamResult = rankedTeamsArr.find((rankedTeam) => rankedTeam.id === competitorTeam.id).teamResult;
-
-          competitorObject = {
-            ...competitorObject,
-            rank_team: competitorTeamRank,
-            result_team: competitorTeamResult,
-          };
-
-          competition.races.forEach((race, race_idx) => {
-            competitorObject[`run${race_idx + 1}_result_team`] = competition.getRaceResult(competitor, race) || null;
-          });
-        }
-      }
-
-      return competitorObject;
-    },
     createTeamTranslationObj(team, competition, options) {
       if (!team) throw new Error('Unable to create team data object');
 
@@ -332,7 +142,7 @@ export default {
           const teamCompetitor = competition.competitorsSheet.competitors.find((competitor) => competitor.id === teamCompetitorId);
           if (!teamCompetitor) teamCompetitors[`team_competitor_result_${idx + 1}`] = '';
 
-          teamCompetitorsResults[`team_competitor_result_${idx + 1}`] = this.competition.getRaceResult(teamCompetitor, this.competition.selected_race);
+          teamCompetitorsResults[`team_competitor_result_${idx + 1}`] = competition.getRaceResult(teamCompetitor, competition.selected_race);
         });
 
         teamObject = {
@@ -345,25 +155,11 @@ export default {
       return teamObject;
     },
 
-    generateCompetitorId(competitor) {
-      if (!competitor) return null;
-
-      const competitorNum = competitor.info_data['bib'] || 0;
-      const competitorName = competitor.info_data['name'] || 'empty';
-      const competitorLastname = competitor.info_data['lastname'] || 'empty';
-
-      if (!(competitorNum && competitorName && competitorLastname)) return null;
-
-      const generatedId = parseInt(competitorNum.toString() + competitorName.charCodeAt(0) + competitorLastname.charCodeAt(competitorLastname.length - 1));
-
-      return generatedId;
-    },
-
     getStartList() {
       let startList = this.competition.selected_race._startList
         .map((competitorId) => this.competition.competitorsSheet.competitors.find((competitor) => competitor.id === competitorId))
         .map((competitor, idx) =>
-          this.createCompetitorTranslationObj({ ...competitor, _index: idx }, this.competition, {
+          createCompetitorTranslationObj({ ...competitor, _index: idx }, this.competition, {
             forStartlist: true,
           })
         );
@@ -378,7 +174,7 @@ export default {
           ``;
           for (let i = 0; i < fillersCount; i++) {
             startList.push(
-              this.createCompetitorTranslationObj(null, null, {
+              createCompetitorTranslationObj(null, null, {
                 createFillerObject: true,
               })
             );
@@ -389,17 +185,23 @@ export default {
       return startList;
     },
     getCompetitorOnStart() {
-      const competitorOnStart = this.competition.selected_race.startList
-        .map((competitorId) => this.competition.competitorsSheet.competitors.find((competitor) => competitor.id === competitorId))
-        .map((competitor, idx) => {
-          const competitorObject = this.createCompetitorTranslationObj({ ...competitor, _index: idx }, this.competition, {
+      const mappedStartList = this.competition.selected_race.startList
+        .map((competitorId) => {
+          const competitor = this.competition.competitorsSheet.competitors.find((competitor) => competitor.id === competitorId);
+          const startIndex = this.competition.selected_race._startList.indexOf(competitorId);
+
+          return competitor ? { ...competitor, _index: startIndex } : null;
+        })
+        .filter((competitor) => competitor !== null)
+        .map((competitor) => {
+          const competitorObject = createCompetitorTranslationObj({ ...competitor }, this.competition, {
             forStartlist: true,
           });
 
           return competitorObject;
         });
 
-      return competitorOnStart.length > 0 ? [competitorOnStart[0]] : [];
+      return mappedStartList.length ? [mappedStartList[0]] : [];
     },
     getResults({ disablePagination }) {
       if (!this.competition.selected_race) return [];
@@ -427,7 +229,7 @@ export default {
           );
         })
         .map((competitor, idx) => {
-          return this.createCompetitorTranslationObj({ ...competitor, _index: idx, createFillerObject: true }, this.competition, {
+          return createCompetitorTranslationObj({ ...competitor, _index: idx, createFillerObject: true }, this.competition, {
             forResults: true,
           });
         });
@@ -442,7 +244,7 @@ export default {
 
           for (let i = 0; i < fillersCount; i++) {
             sortedFinishedArray.push(
-              this.createCompetitorTranslationObj(null, null, {
+              createCompetitorTranslationObj(null, null, {
                 createFillerObject: true,
               })
             );
@@ -458,8 +260,8 @@ export default {
           return this.competition.selected_race.finished.includes(competitor.bib);
         })
         .sort((competitor_1, competitor_2) => {
-          const finishOrder_1 = !isNaN(Number(competitor_1.finish_order)) ? Number(competitor_1.finish_order) : 0;
-          const finishOrder_2 = !isNaN(Number(competitor_2.finish_order)) ? Number(competitor_2.finish_order) : 0;
+          const finishOrder_1 = !isNaN(competitor_1.finish_order) ? Number(competitor_1.finish_order) : 0;
+          const finishOrder_2 = !isNaN(competitor_2.finish_order) ? Number(competitor_2.finish_order) : 0;
 
           return finishOrder_2 - finishOrder_1;
         });
@@ -510,18 +312,22 @@ export default {
       const courseCompetitor_blue = this.competition.competitorsSheet.competitors.find((competitor) => competitor.id === runOnStart.blueCourse);
       const courseCompetitorObj_blue = courseCompetitor_blue
         ? {
-            ...this.createCompetitorTranslationObj(courseCompetitor_blue, this.competition, {}),
+            round: this.competition.selected_race.title,
+            run: runOnStart.number,
+            ...createCompetitorTranslationObj(courseCompetitor_blue, this.competition, {}),
             course: 'BLUE',
           }
-        : this.createCompetitorTranslationObj(null, null, { createFillerObject: true });
+        : createCompetitorTranslationObj(null, null, { createFillerObject: true });
 
       const courseCompetitor_red = this.competition.competitorsSheet.competitors.find((competitor) => competitor.id === runOnStart.redCourse);
       const courseCompetitorObj_red = courseCompetitor_red
         ? {
-            ...this.createCompetitorTranslationObj(courseCompetitor_red, this.competition, {}),
+            round: this.competition.selected_race.title,
+            run: runOnStart.number,
+            ...createCompetitorTranslationObj(courseCompetitor_red, this.competition, {}),
             course: 'RED',
           }
-        : this.createCompetitorTranslationObj(null, null, { createFillerObject: true });
+        : createCompetitorTranslationObj(null, null, { createFillerObject: true });
 
       return [courseCompetitorObj_blue, courseCompetitorObj_red];
     },
@@ -535,22 +341,26 @@ export default {
       const courseCompetitor_blue = this.competition.competitorsSheet.competitors.find((competitor) => competitor.id === finishedRun.blueCourse);
       const courseCompetitorObj_blue = courseCompetitor_blue
         ? {
-            ...this.createCompetitorTranslationObj(courseCompetitor_blue, this.competition, { forResults: true }),
+            ...createCompetitorTranslationObj(courseCompetitor_blue, this.competition, { forResults: true }),
             course: 'BLUE',
           }
-        : this.createCompetitorTranslationObj(null, null, { createFillerObject: true });
-      const score_blue = this.competition.getRaceResult(courseCompetitor_blue, this.competition.selected_race) || Number(0).toString();
+        : createCompetitorTranslationObj(null, null, { createFillerObject: true });
+      const score_blue = courseCompetitor_blue
+        ? this.competition.getRaceResult(courseCompetitor_blue, this.competition.selected_race) || Number(0).toString()
+        : Number(0).toString();
       const gap_blue = finishedRun[`blueCourseGap`] || Number(0).toFixed(2);
       const runResult_blue = finishedRun.results[0] || '-';
 
       const courseCompetitor_red = this.competition.competitorsSheet.competitors.find((competitor) => competitor.id === finishedRun.redCourse);
       const courseCompetitorObj_red = courseCompetitor_red
         ? {
-            ...this.createCompetitorTranslationObj(courseCompetitor_red, this.competition, { forResults: true }),
+            ...createCompetitorTranslationObj(courseCompetitor_red, this.competition, { forResults: true }),
             course: 'RED',
           }
-        : this.createCompetitorTranslationObj(null, null, { createFillerObject: true });
-      const score_red = this.competition.getRaceResult(courseCompetitor_red, this.competition.selected_race) || Number(0).toString();
+        : createCompetitorTranslationObj(null, null, { createFillerObject: true });
+      const score_red = courseCompetitor_red
+        ? this.competition.getRaceResult(courseCompetitor_red, this.competition.selected_race) || Number(0).toString()
+        : Number(0).toString();
       const gap_red = finishedRun[`redCourseGap`] || Number(0).toFixed(2);
       const runResult_red = finishedRun.results[1] || '-';
 
@@ -602,11 +412,12 @@ export default {
             const lastname = runCompetitor.info_data['lastname'] || '-';
             const fullname = runCompetitor.info_data['fullname'] || '-';
             const region = runCompetitor.info_data['region'] || '-';
+            const region_code = region !== '-' ? getRegionCode(region) : '-';
             const flag = runCompetitor.info_data['flag'] || '-';
             const photo_url = runCompetitor.info_data['photo_url'] || '-';
             const photo_tv_url = runCompetitor.info_data['photo_tv_url'] || '-';
             const score = runResult && runResult.value ? runResult.value : '-';
-            const result = roundRun.results[idx] || '-';
+            const result = roundRun.results[idx] ? roundRun.results[idx].toString() : '-';
             const gap = roundRun[`${course}CourseGap`] || this.competition.roundWithPrecision(0, 2);
 
             return {
@@ -616,11 +427,12 @@ export default {
               lastname,
               fullname,
               region,
+              region_code,
               flag,
               photo_url,
               photo_tv_url,
               score,
-              result,
+              result: result !== '-' && result !== '1' ? '2' : result,
               gap,
             };
           });
@@ -680,6 +492,30 @@ export default {
           await this.exportCSV({
             path: `${this.fileTranslationService.path}\\DMO Finished.json`,
             data: finishedRun,
+          });
+
+          await this.setFileUpdater(setTimeout(this.saveCSV, 1536));
+          setTimeout(() => {
+            this.switchUpdatingState(false);
+          }, 176);
+          return;
+        }
+        if (isFinalOfDisciplines(this.competition, ['SX', 'SXT'])) {
+          const heats = getSXHeats(this.competition);
+          const runOnStart = getSXOnStart(this.competition);
+
+          await Promise.all(
+            heats.map(async (heatsItem) => {
+              await this.exportCSV({
+                path: `${this.fileTranslationService.path}\\SX Heats ${sanitizeStageName(heatsItem.stage)}.json`,
+                data: [heatsItem],
+              });
+            })
+          );
+
+          await this.exportCSV({
+            path: `${this.fileTranslationService.path}\\SX OnStart.json`,
+            data: runOnStart,
           });
 
           await this.setFileUpdater(setTimeout(this.saveCSV, 1536));

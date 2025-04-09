@@ -10,7 +10,7 @@
     </div>
     <div class="openers__list__wrapper">
       <div v-for="(opener, idx) in competition.stuff.openers" :key="idx" class="opener__list__item">
-        <div class="pa-2" style="position: relative; border-radius: 6px; background: var(--background-card)">
+        <div class="pa-1" style="position: relative; border-radius: 4px; background: var(--background-card)">
           <v-btn icon @click="competition.stuff.openers.splice(idx, 1)" small color="red" style="position: absolute; top: 0; right: 0">
             <v-icon small>mdi-close</v-icon>
           </v-btn>
@@ -39,7 +39,7 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import OpenerClass from '../../store/classes/OpenerClass';
+import OpenerClass from '../../classes/OpenerClass';
 
 export default {
   name: 'openers',
@@ -69,7 +69,7 @@ export default {
   display: flex;
   flex-direction: column;
   padding: 8px;
-  border-radius: 6px;
+  border-radius: 4px;
   background: var(--background-card);
 }
 .openers__title {
@@ -86,7 +86,7 @@ export default {
 .openers__list__wrapper {
   flex: 1 1 0;
   margin-top: 8px;
-  padding: 8px;
+  padding: 4px;
   background: var(--background-deep);
   border-radius: 4px;
 }
@@ -95,6 +95,6 @@ export default {
   font-size: 0.9rem;
 }
 .opener__list__item:not(:last-child) {
-  margin-bottom: 8px;
+  margin-bottom: 4px;
 }
 </style>

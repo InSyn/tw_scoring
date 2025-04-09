@@ -17,12 +17,12 @@
       </div>
 
       <div class="createCompetitor__dialog__body">
-        <div class="createCompetitor__dialog__dataItem" v-for="(field, fd) in competition.competitorsSheet.header" :key="fd">
+        <div class="createCompetitor__dialog__dataItem" v-for="(field, fd) in competition.competitorsSheet.header" :key="`${field.id}_${fd}`">
           <div class="createCompetitor__dialog__dataItem__label">
             {{ field.title }}
           </div>
 
-          <input v-model="dialogNewCompetitor[fd]" class="createCompetitor__dialog__dataItem__input" type="text" />
+          <input v-model="dialogNewCompetitor[field.id]" class="createCompetitor__dialog__dataItem__input" type="text" />
         </div>
       </div>
 
@@ -37,7 +37,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import CompetitorClass from '../../../store/classes/CompetitorClass';
+import CompetitorClass from '../../../classes/CompetitorClass';
 
 export default {
   name: 'createCompetitor-dialog',
@@ -48,13 +48,15 @@ export default {
     }),
     closeCreateCompetitorDialog() {
       this.dialogState = false;
-      this.dialogNewCompetitor = [];
+      this.dialogNewCompetitor = {};
     },
 
     createCompetitor(data) {
-      let fields = [];
-      this.competition.competitorsSheet.header.map((col) => fields.push([col.id, data[this.competition.competitorsSheet.header.indexOf(col)] || '']));
-      this.competition.competitorsSheet.competitors.push(new CompetitorClass(fields));
+      const competitorData = {};
+      this.competition.competitorsSheet.header.forEach((field) => {
+        competitorData[field.id] = data[field.id] ? data[field.id] : '';
+      });
+      this.competition.competitorsSheet.competitors.push(new CompetitorClass(competitorData));
 
       this.dialogState = false;
       this.dialogNewCompetitor = [];

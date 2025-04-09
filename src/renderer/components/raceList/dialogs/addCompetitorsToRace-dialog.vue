@@ -53,7 +53,7 @@
       </div>
 
       <div class="addCompetitorsToRace__dialog__actions">
-        <v-btn @click="addCompetitorToRace(selectedRace)" class="addCompetitorsToRace__dialog__actions__button-accept" color="var(--action-blue)" text small
+        <v-btn @click="addCompetitorToRace(selectedRace)" class="addCompetitorsToRace__dialog__actions__button-accept" color="var(--accent)" text small
           >{{ localization[lang].app.dialogs.d_accept }}
         </v-btn>
       </div>

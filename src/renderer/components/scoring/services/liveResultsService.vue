@@ -86,7 +86,7 @@ export default {
 
       await axios
         .patch(`${databaseUrl}/events/${live_event.event_id}`, live_event)
-        .then((response) => {
+        .then(() => {
           this.live_config.updateLive_Indicator = 'ok';
           setTimeout(() => {
             this.live_config.updateLive_Indicator = false;

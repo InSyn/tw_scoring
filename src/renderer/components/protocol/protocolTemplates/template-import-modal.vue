@@ -1,5 +1,5 @@
 <script>
-import { ProtocolDocument } from '../../../store/classes/Protocol/ProtocolDocument';
+import { ProtocolDocument } from '../../../classes/Protocol/ProtocolDocument';
 import TwFileInput from '../../ui/tw-file-input.vue';
 
 export default {

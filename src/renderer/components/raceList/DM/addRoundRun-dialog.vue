@@ -46,10 +46,10 @@
 </template>
 
 <script>
-import DMRunClass from '../../../store/classes/DM/DMRunClass';
+import DMRunClass from '../../../classes/DM/DMRunClass';
 import { mapActions } from 'vuex';
 import TrashBinIcon from '../../../assets/icons/trashBin-icon.vue';
-import { generateEmptyCompetitor } from '../../../store/classes/CompetitorClass';
+import { generateEmptyCompetitor } from '../../../classes/CompetitorClass';
 
 export default {
   name: 'addRoundRun-dialog',

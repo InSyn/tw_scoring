@@ -10,32 +10,45 @@
     --dm-blue: #6066bf;
     --dm-red: #aa333a;
 
-    --athlete-blue: #6165b8;
-    --athlete-red: #9c3f40;
-    --athlete-green: #2ba260;
-    --athlete-yellow: #C7AD38;
+    --athlete-blue: #436FD7;
+    --athlete-red: #CF4E43;
+    --athlete-green: #22B45B;
+    --athlete-yellow: #C2AF2E;
 }
 
 :root .app_dark {
     --background-card: #262729;
+    --background-card-hovered: #293032;
     --background-card-nested: #1e1e20;
+    --background-card-nested-hovered: #202022;
     --standard-background: #1B1C1F;
+    --standard-background-hovered: #1E1F21;
     --background-deep: #161619;
+    --background-deep-hovered: #212124;
     --subject-background: #353639;
-
+    --subject-background-hovered: #394043;
     --error: #ff5252;
     --success: #2abe6a;
     --success-light: #2ce98f;
     --text-default: #d2d2d2;
 
     --hover-overlay: rgba(255,255,255, 0.32);
+
+    --container-shadow-s: 2px 3px 6px -1px rgba(0, 0, 0, 0.3), 0 0 16px -1px rgba(255, 255, 255, 0.05);
+    --container-shadow-m: 5px 9px 12px -2px rgba(0, 0, 0, 0.3), 0 0 24px -2px rgba(255, 255, 255, 0.05);
+    --container-shadow-l: 9px 11px 18px -3px rgba(0, 0, 0, 0.3), 0 0 34px -3px rgba(255, 255, 255, 0.05);
 }
 :root .app_light {
     --background-card: #dcdce4;
+    --background-card-hovered: #262729;
     --background-card-nested: #e4e4ef;
+    --background-card-nested-hovered: #1e1e20;
     --standard-background: #aaaab5;
+    --standard-background-hovered: #1B1C1F;
     --background-deep: #bdbdc9;
+    --background-deep-hovered: #161619;
     --subject-background: #b2b2bb;
+    --subject-background-hovered: #353639;
 
     --error: #ff5252;
     --success: #2abe6a;
@@ -43,4 +56,8 @@
     --text-default: #2d2d2d;
 
     --hover-overlay: rgba(0, 0, 0, 0.32);
+
+    --container-shadow-s: 3px 5px 12px -1px rgba(0, 0, 0, 0.15);
+    --container-shadow-m: 6px 11px 15px -2px rgba(0, 0, 0, 0.15);
+    --container-shadow-l: 9px 13px 24px -3px rgba(0, 0, 0, 0.15);
 }

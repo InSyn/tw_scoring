@@ -1,10 +1,6 @@
 import store from '../store';
-const getAppLang = () => {
-  if (!store || !store.getters['localization/lang']) return 'RU';
-  return store.getters['localization/lang'];
-};
 
-const athleteGenders = {
+export const athleteGenders = {
   men: {
     RU_name: 'Мужчины',
     EN_name: 'Men',
@@ -14,11 +10,11 @@ const athleteGenders = {
     EN_name: 'Women',
   },
   mixed: {
-    RU_name: 'Смешанные',
+    RU_name: 'Смешанный',
     EN_name: 'Mixed',
   },
 };
-export const athleteGendersList = Object.keys(athleteGenders);
+export const athleteGendersList = () => Object.keys(athleteGenders).map((gender) => athleteGenders[gender][`${store.getters['localization/lang']}_name`]);
 
 const athleteGroups = {
   men: [
@@ -73,14 +69,27 @@ const athleteGroups = {
       description_en: 'Younger girls (generally up to 14 years old)',
     },
   ],
+  mixed: [
+    {
+      RU_name: 'Смешанный',
+      EN_name: 'Mixed',
+      description_ru: 'Смешанный',
+      description_en: 'Mixed',
+    },
+  ],
 };
 export const getAthleteGroups = (gender) => {
-  const noGroup = {
-    EN_name: 'Без Группы',
-    RU_name: 'No Group',
-  };
+  const appLang = store.getters['localization/lang'];
+  const genderEntry = Object.entries(athleteGenders).find(([key, value]) => value[`${appLang}_name`] === gender);
+  const genderKey = genderEntry ? genderEntry[0] : null;
 
-  if (!gender) return noGroup[`${getAppLang()}_name`];
+  if (!genderKey) {
+    const noGroup = {
+      EN_name: 'Без Группы',
+      RU_name: 'No Group',
+    };
+    return [noGroup[`${appLang}_name`]];
+  }
 
-  return athleteGroups[gender][`${getAppLang()}_name`];
+  return athleteGroups[genderKey].map((group) => group[`${appLang}_name`]);
 };

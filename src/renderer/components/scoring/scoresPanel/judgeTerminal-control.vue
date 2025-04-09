@@ -22,7 +22,7 @@ export default {
     async sendTerminalsData() {
       clearTimeout(this.processingDataTransmission_timeoutId);
 
-      if (!this.competition.selected_race || !this.competition.selected_race.onTrack) return;
+      if (!this.competition.selected_race) return;
 
       // if (checkCompetitionDiscipline(this.competition, ['DM'])) {
       //   const blueCourseCompetitor = this.competition.competitorsSheet.competitors.find(

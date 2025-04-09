@@ -1,7 +1,7 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import XLSX from 'read-excel-file/node';
-import CompetitorClass from '../store/classes/CompetitorClass';
+import CompetitorClass from '../classes/CompetitorClass';
 import CompetitorRow from '../components/competitors/competitorRow.vue';
 import CreateCompetitorDialog from '../components/competitors/dialogs/createCompetitor-dialog.vue';
 import CompetitorsSheetSettingsDialog from '../components/competitors/dialogs/competitorsSheetSettings-dialog.vue';
@@ -89,9 +89,12 @@ export default {
         this.competition.competitorsSheet.competitors = [];
 
         rows.map((row) => {
-          let fields = [];
-          this.competition.competitorsSheet.header.map((col) => fields.push([col.id, row[this.competition.competitorsSheet.header.indexOf(col)] || '']));
-          this.competition.competitorsSheet.competitors.push(new CompetitorClass(fields));
+          const athleteData = {};
+          this.competition.competitorsSheet.header.forEach((athletesSheetHeader, idx) => {
+            athleteData[athletesSheetHeader.id] = row[idx] || '';
+          });
+
+          this.competition.competitorsSheet.competitors.push(new CompetitorClass({ ...athleteData }));
         });
         this.competition.races.forEach((_race) => {
           _race.startList = _race.startList.filter((_comp) => {
@@ -198,7 +201,7 @@ export default {
         </div>
 
         <div class="competitorsPage__header__actions">
-          <v-btn @click="load_prev_stages()" class="competitorsPage__header__actions__button" color="var(--action-blue)" text>
+          <v-btn @click="load_prev_stages()" class="competitorsPage__header__actions__button" color="var(--accent)" text>
             <v-icon class="competitorsPage__header__actions__button__icon" color="var(--text-default)"> mdi-page-previous </v-icon>
             {{ localization[lang].app.competitors.from_prev }}
           </v-btn>

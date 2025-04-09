@@ -31,9 +31,9 @@
 import AddRoundRunDialog from './addRoundRun-dialog.vue';
 import TrashBinIcon from '../../../assets/icons/trashBin-icon.vue';
 import { mapActions } from 'vuex';
-import { getCompetitorByBib } from '../../../utils/competition-utils';
-import DMRunClass from '../../../store/classes/DM/DMRunClass';
-import { generateEmptyCompetitor } from '../../../store/classes/CompetitorClass';
+import { getCompetitorById } from '../../../utils/competition-utils';
+import DMRunClass from '../../../classes/DM/DMRunClass';
+import { generateEmptyCompetitor } from '../../../classes/CompetitorClass';
 
 export default {
   name: 'roundRuns',
@@ -101,7 +101,7 @@ export default {
         return;
       }
 
-      const competitor = getCompetitorByBib(this.competition, e.target.value);
+      const competitor = getCompetitorById(this.competition, e.target.value);
       if (!competitor) {
         e.target.value = '';
         return;

@@ -4,7 +4,7 @@ import { getDisciplineCode, isFinalOfDisciplines, isQualificationOfDisciplines }
 import { getScoresQuantity } from './discipline-utils';
 import { convertCyrillicToLatin } from './utils';
 import { getCompetitorById } from './competition-utils';
-import MarkClass from '../store/classes/MarkClass';
+import MarkClass from '../classes/MarkClass';
 
 const executeHandler = (type, { judgeMessageData, parsedScores, judge, competitor, race, sections } = {}) => {
   const competition = store.getters['main/competition'];
@@ -33,22 +33,34 @@ export const terminalTCPMessageRequests = {
 
     chiefJudgeDataPackage.raceId = competition.races.indexOf(currentRace);
 
-    const athleteOnTrack = currentRace.onTrack;
+    chiefJudgeDataPackage.judgesQuantity = competition.stuff.judges.length || chiefJudgeDataPackage.judgesQuantity;
+    chiefJudgeDataPackage.scoresQuantity =
+      getScoresQuantity(competition, getDisciplineCode(competition.mainData.discipline.value)) || chiefJudgeDataPackage.scoresQuantity;
+
+    const athleteOnTrack = getCompetitorById(currentRace.onTrack);
 
     if (!athleteOnTrack) {
       const nextAthlete = currentRace.startList.length ? getCompetitorById(competition, currentRace.startList[0]) : null;
-
       const infoMessage = nextAthlete ? `Следующий спортсмен: ${nextAthlete.info_data.bib} - ${nextAthlete.info_data.name}` : `Нет спортсменов ожидающих старт`;
-      return { ...chiefJudgeDataPackage, competitorName: convertCyrillicToLatin(infoMessage) };
+
+      console.log({ ...chiefJudgeDataPackage, competitorName: convertCyrillicToLatin(infoMessage) });
+      console.log({
+        ...chiefJudgeDataPackage,
+        competitorName: convertCyrillicToLatin(infoMessage),
+        isABC: competition.result_formula.overall_result.type === 3,
+      });
+      initTerminalData_chiefJudge({ ...chiefJudgeDataPackage, competitorName: convertCyrillicToLatin(infoMessage) });
+      initTerminalData_judge({
+        ...chiefJudgeDataPackage,
+        competitorName: convertCyrillicToLatin(infoMessage),
+        isABC: competition.result_formula.overall_result.type === 3,
+      });
+
+      return;
     }
 
     chiefJudgeDataPackage.competitorId = athleteOnTrack.id || chiefJudgeDataPackage.competitorNum;
     chiefJudgeDataPackage.competitorNum = athleteOnTrack.info_data.bib || chiefJudgeDataPackage.competitorId;
-
-    chiefJudgeDataPackage.scoresQuantity =
-      getScoresQuantity(competition, getDisciplineCode(competition.mainData.discipline.value)) || chiefJudgeDataPackage.scoresQuantity;
-
-    chiefJudgeDataPackage.judgesQuantity = competition.stuff.judges.length || chiefJudgeDataPackage.judgesQuantity;
 
     chiefJudgeDataPackage.marks = competition.stuff.judges
       .map((judge) => [
@@ -161,6 +173,10 @@ export const terminalTCPMessageHandlers = {
     competitor.res_accepted = true;
 
     store.dispatch('main/updateEvent').catch();
+  },
+  'echo-response': (event, packageData) => {
+    const { terminalID } = packageData;
+    // console.log(`Echo response from terminal: ${terminalID}`);
   },
 };
 
@@ -304,7 +320,7 @@ export const packJudgeMark = (judge, mark) => {
 };
 
 const parseJudgeScoreToArray = (score) =>
-  !isNaN(Number(score))
+  !isNaN(score)
     ? Number(score)
         .toFixed(1)
         .split('.')

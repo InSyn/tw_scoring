@@ -1,4 +1,4 @@
-import { ProtocolDataFieldClass } from '../store/classes/ProtocolDataFieldClass';
+import { ProtocolDataFieldClass } from '../classes/ProtocolDataFieldClass';
 import { skiRamps } from '../store/modules/skiRamps';
 import { cutMarks, roundNumber } from './utils';
 import store from '../store';

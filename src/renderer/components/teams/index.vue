@@ -28,7 +28,7 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import TeamTableRow from './teamTableRow';
-import TeamClass from '../../store/classes/TeamClass';
+import TeamClass from '../../classes/TeamClass';
 import MDragAndDrop from '../mixins/MDragAndDrop';
 import DataCellSettingsRow from '../protocols/protocolDataSheetSettings-components/dataCellSettings-row.vue';
 

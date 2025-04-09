@@ -1,6 +1,7 @@
 import fs from 'fs';
 import Decimal from 'decimal.js';
 import { v4 as uuidv4 } from 'uuid';
+import Vue from 'vue';
 
 export function generateId() {
   let array = new Uint32Array(2);
@@ -154,4 +155,33 @@ export const getShallowCopy = (obj) => {
   }
 
   return copiedObj;
+};
+
+export const setDeepValue = (target, path, value) => {
+  // console.log(target, path, value);
+  if (typeof path === 'string') {
+    path = path.split('.').filter((key) => key.length);
+  }
+  if (!Array.isArray(path) || path.length === 0) {
+    return;
+  }
+
+  let current = target;
+  for (let i = 0; i < path.length - 1; i++) {
+    let key = path[i];
+    if (!isNaN(key)) {
+      key = Number(key);
+    }
+    if (current[key] === undefined) {
+      const nextKey = path[i + 1];
+      const newVal = isNaN(nextKey) ? {} : [];
+      Vue.set(current, key, newVal);
+    }
+    current = current[key];
+  }
+  let finalKey = path[path.length - 1];
+  if (!isNaN(finalKey)) {
+    finalKey = Number(finalKey);
+  }
+  Vue.set(current, finalKey, value);
 };

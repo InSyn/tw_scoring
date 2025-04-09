@@ -13,10 +13,11 @@ import {
 import { mapGetters } from 'vuex';
 import ListRowCellsManagement from './list-row-cells-management.vue';
 import { getListDataSources } from '../../../protocolHandlers/listHandlers';
+import TwFileInput from '../../ui/tw-file-input.vue';
 
 export default {
   name: 'protocol-item-properties',
-  components: { ListRowCellsManagement, ProtocolTableItemDataManagement },
+  components: { TwFileInput, ListRowCellsManagement, ProtocolTableItemDataManagement },
   props: {
     selectedBlockType: String,
     selectedBlock: {
@@ -110,7 +111,18 @@ export default {
         </select>
       </template>
 
-      <template v-if="selectedItem.type === 'image' || selectedItem.type === 'text'">
+      <template v-if="selectedItem.type === 'image'">
+        <label for="item-data-control">
+          <tw-file-input
+            @input="$emit('file-select-event', $event, selectedItem)"
+            accept="image/*"
+            :use-for-path="true"
+            :use-for-j-s-o-n="false"
+          ></tw-file-input>
+          <span class="imageFile-path">{{ selectedItem.content || 'Изображение не выбрано...' }}</span>
+        </label>
+      </template>
+      <template v-if="selectedItem.type === 'text'">
         <input :value="selectedItem.content" @change="updateItemContent($event.target.value)" />
       </template>
     </div>
@@ -177,6 +189,8 @@ export default {
 
     label {
       flex: 1 1 8ch;
+      display: flex;
+      align-items: center;
       overflow: hidden;
       text-overflow: ellipsis;
     }
@@ -186,6 +200,18 @@ export default {
     }
     button {
       margin-left: auto;
+    }
+    .imageFile-path {
+      display: inline-block;
+      flex: 1 0 8ch;
+      max-width: 14ch;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      margin-left: 1.25rem;
+      padding: 4px;
+      border-radius: 2px;
+      background-color: var(--background-deep);
     }
   }
   .style-category {

@@ -1,6 +1,6 @@
 <script>
 import { mdiPlus, mdiTrashCan } from '@mdi/js/commonjs/mdi';
-import { ProtocolTableCell } from '../../../store/classes/Protocol/ProtocolTable';
+import { ProtocolTableCell } from '../../../classes/Protocol/ProtocolTable';
 import { getTableDataSources } from '../../../protocolHandlers/tableHandlers';
 
 export default {

@@ -10,8 +10,8 @@ export default {
   methods: {
     dotStyle(idx) {
       return {
-        height: `${Math.floor(!isNaN(Number(this.height)) ? Math.floor(Number(this.height) / 1.5) : 8)}px`,
-        width: `${Math.floor(!isNaN(Number(this.height)) ? Math.floor(Number(this.height) / 1.5) : 8)}px`,
+        height: `${Math.floor(!isNaN(this.height) ? Math.floor(Number(this.height) / 1.5) : 8)}px`,
+        width: `${Math.floor(!isNaN(this.height) ? Math.floor(Number(this.height) / 1.5) : 8)}px`,
         backgroundColor: `rgb(${236 - idx * 8}, ${236 - idx * 8}, 236)`,
         transform: `scale(${1 - idx * 0.2}) translateY(50%)`,
       };

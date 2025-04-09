@@ -51,8 +51,10 @@ export default {
       return this.competition.competitorsSheet.competitors.some((tieCheckCompetitor) => {
         if (tieCheckCompetitor.id === competitor.id) return;
 
-        return tieCheckCompetitor.results_overall.some(
-          (overallResult) => overallResult.competition_id === this.competition.id && overallResult.value === competitorResult.value
+        return tieCheckCompetitor.results_overall.some((overallResult) =>
+          overallResult.status || !overallResult.value
+            ? false
+            : overallResult.competition_id === this.competition.id && overallResult.value === competitorResult.value
         );
       });
     },

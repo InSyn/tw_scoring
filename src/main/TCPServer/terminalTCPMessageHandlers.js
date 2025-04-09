@@ -45,6 +45,13 @@ const terminalMessageHandlers = {
     sendTerminalsMessage({ messageType: 'new-judge-mark', data: message });
   },
 
+  echoResponse: ({ message, clientSocket }) => {
+    const terminalID = clientSocket.terminalID || '[?]';
+
+    sendTerminalsMessage({ messageType: 'echo-response', data: { terminalID } });
+    // console.log(`Echo response from terminal: ${clientSocket.remoteAddress}:${clientSocket.remotePort} -> ${String.fromCharCode(...message)}`);
+  },
+
   messageAccepted: ({ message, clientSocket }) => {
     console.log(`Message accepted: ${clientSocket.remoteAddress}:${clientSocket.remotePort} -> ${String.fromCharCode(...message)}`);
   },
@@ -54,11 +61,13 @@ function handleTerminalMessage({ message, clientSocket, terminalID }) {
   if (!Array.isArray(message)) return;
 
   const clientKey = `${clientSocket.remoteAddress}:${clientSocket.remotePort}`;
-  console.log(`Message from terminal: [${terminalID}]|${clientKey}`);
+
   let messageType = message[1];
   const messageData = message.slice(2, message.length - 2);
+  console.log(`Message from terminal: [${terminalID}]|${clientKey}\n${String.fromCharCode(...messageData)}`);
 
   if (messageData.length === 7 && String.fromCharCode(...messageData) === 'confirm') messageType = 999;
+  else if (messageData.length === 4 && String.fromCharCode(...messageData) === 'echo') messageType = 998;
 
   if (terminalMessagesMap[messageType]) {
     const messageHandlerKey = terminalMessagesMap[messageType];

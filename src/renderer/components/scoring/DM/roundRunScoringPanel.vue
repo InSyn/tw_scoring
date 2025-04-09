@@ -1,11 +1,11 @@
 <script>
 import { mdiTimerOutline } from '@mdi/js';
 import { roundNumber } from '../../../utils/utils';
-import MarkClass from '../../../store/classes/MarkClass';
+import MarkClass from '../../../classes/MarkClass';
 import JudgeTerminalControl from '../scoresPanel/judgeTerminal-control.vue';
-import Timer from './timer.vue';
+import Timer from '../../timing/timer.vue';
 import { getCompetitorById } from '../../../utils/competition-utils';
-import DMRunClass from '../../../store/classes/DM/DMRunClass';
+import DMRunClass from '../../../classes/DM/DMRunClass';
 export default {
   name: 'roundRunScoringPanel',
   components: { Timer, JudgeTerminalControl },
@@ -28,7 +28,7 @@ export default {
         console.warn('No active run');
         return;
       }
-      if (isNaN(Number(input.value))) {
+      if (isNaN(input.value)) {
         input.value = '';
         console.warn('Wrong mark format');
         return;
@@ -185,7 +185,7 @@ export default {
       });
 
       const resultsNumeric = runResults.map((result) => {
-        return result && result.value ? (!isNaN(Number(result.value)) ? Number(result.value) : 0) : 0;
+        return result && result.value ? (!isNaN(result.value) ? Number(result.value) : 0) : 0;
       });
       if (resultsNumeric[0] === resultsNumeric[1]) {
         this.getActiveRun.results = ['', ''];

@@ -1,11 +1,11 @@
 <script>
-import { ProtocolBlock } from '../../../store/classes/Protocol/ProtocolBlock';
-import { TableBlock } from '../../../store/classes/Protocol/ProtocolTable';
+import { ProtocolBlock } from '../../../classes/Protocol/ProtocolBlock';
+import { TableBlock } from '../../../classes/Protocol/ProtocolTable';
 import ProtocolBlockProperties from '../protocolBlocks/protocol-block-properties.vue';
 import BlocksListItem from '../protocolBlocks/protocol-blocks-list-item.vue';
 import PersonalItem from '../../competitionSettings/personal-item.vue';
 import MDragAndDrop from '../../mixins/MDragAndDrop';
-import { ProtocolDocument } from '../../../store/classes/Protocol/ProtocolDocument';
+import { ProtocolDocument } from '../../../classes/Protocol/ProtocolDocument';
 import { blockTypes } from '../../../configs/protocol-builder-config';
 
 export default {

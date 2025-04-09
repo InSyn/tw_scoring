@@ -1,6 +1,7 @@
 import { ipcMain, sendInfoMessage, sendServerMessage } from './index';
 import { competition } from './server_competition';
 import { createTcpServer, tcpServerSetup } from './TCPServer/tcpServerSetup';
+import { raceStatuses } from '../renderer/classes/RaceClass';
 
 const socketApp = require('express')();
 const http = require('http').Server(socketApp);
@@ -33,7 +34,6 @@ io.on('connection', (socket) => {
   socket.on('set_competition_data', (data) => {
     function compareData(obj1, obj2) {
       Object.keys(obj1).forEach((compKey) => {
-        console.log(compKey, obj1[compKey], obj2[compKey]);
         if (obj2[compKey]) {
           if (typeof obj1[compKey] === 'object' && !Array.isArray(obj1[compKey]) && obj1[compKey] !== null) compareData(obj1[compKey], obj2[compKey]);
           else if (obj2[compKey] !== obj1[compKey]) {
@@ -48,18 +48,6 @@ io.on('connection', (socket) => {
     compareData(data, competition);
 
     io.sockets.emit('competition_data_updated', competition);
-  });
-
-  socket.on('create_judges', (judges, cb) => {
-    competition.stuff.judges = judges;
-    cb(competition.stuff.judges);
-
-    sendServerMessage({
-      color: 'blue',
-      message: `К соревнованию могут подключиться судьи: ${competition.stuff.judges.map((judge) => {
-        return ` ${judge.id}`;
-      })}`,
-    });
   });
 
   socket.on('chief_judge_in', (check) => {
@@ -188,21 +176,21 @@ io.on('connection', (socket) => {
     io.sockets.emit('competition_data_updated', competition);
   });
 
-  socket.on('set_raceStatus', (status) => {
-    competition.races[status.race_id] &&
-      competition.races[status.race_id].onTrack &&
-      competition.races[status.race_id].onTrack === status.competitor_id &&
-      (() => {
-        competition.competitorsSheet.competitors.find((_comp) => {
-          return _comp.id === status.competitor_id;
-        }).race_status === status.status
-          ? (competition.competitorsSheet.competitors.find((_comp) => {
-              return _comp.id === status.competitor_id;
-            }).race_status = '')
-          : (competition.competitorsSheet.competitors.find((_comp) => {
-              return _comp.id === status.competitor_id;
-            }).race_status = status.status);
-      })();
+  socket.on('set_raceStatus', ({ race_id, competitor_id, status }) => {
+    if (race_id === undefined || competitor_id === undefined || !Object.keys(raceStatuses).includes(status)) return;
+    if (!competition.races[race_id] || !competition.races[race_id].onTrack) return;
+
+    const athlete = competition.competitorsSheet.competitors.find((athlete) => {
+      return athlete.id.toString() === competitor_id.toString() || athlete.info_data.bib.toString() === competitor_id.toString();
+    });
+    if (!athlete) return;
+
+    if (athlete.race_status === status) {
+      athlete.race_status = '';
+    } else {
+      athlete.race_status = status;
+    }
+
     io.sockets.emit('competition_data_updated', competition);
   });
 
