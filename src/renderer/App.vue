@@ -9,6 +9,8 @@
           <router-view></router-view>
         </transition>
       </div>
+
+      <info-messages-container></info-messages-container>
     </main>
 
     <app-footer></app-footer>
@@ -27,12 +29,14 @@ import { stringifyInfoMsg } from './utils/infoMessages-utils';
 import TimingDeviceSettings from './components/timing/timingDeviceSettings/index.vue';
 import AppHeader from './components/layout/app-header.vue';
 import AppFooter from './components/layout/app-footer.vue';
+import InfoMessagesContainer from './components/appComponents/infoMessages-container.vue';
 
 const { ipcRenderer } = require('electron');
 
 export default {
   name: 'tw_scoring',
   components: {
+    InfoMessagesContainer,
     AppFooter,
     AppHeader,
     TimingDeviceSettings,
@@ -166,6 +170,7 @@ export default {
     overflow-x: auto;
 
     .window {
+      position: relative;
       flex: 1 1 0;
       display: flex;
       flex-direction: column;

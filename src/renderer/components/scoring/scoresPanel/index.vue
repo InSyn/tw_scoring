@@ -731,7 +731,6 @@ export default {
         </div>
       </div>
     </div>
-    <timer-panel></timer-panel>
   </div>
 </template>
 

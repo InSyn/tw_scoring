@@ -5,7 +5,7 @@ import DateTimeInput from '../ui/date-time-input.vue';
 import { setDeepValue } from '../../utils/utils';
 import CompetitionTimeDialog from './dialogs/competition-time-dialog.vue';
 import CompetitionDateDialog from './dialogs/competition-date-dialog.vue';
-import { athleteGendersList, getAthleteGroups } from '../../data/athlete-groups';
+import { getAthleteGendersList, getAthleteGroups } from '../../data/athlete-groups';
 import { countries } from '../../data/countries';
 import { defaultStructure } from '../../classes/EventClass';
 
@@ -38,7 +38,7 @@ export default {
   },
   methods: {
     getAthleteGroups,
-    athleteGendersList,
+    getAthleteGendersList,
     getDefaultStages,
     setDeepValue,
     getSportDisciplines,

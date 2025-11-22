@@ -136,6 +136,16 @@ export function debounce(fn, wait = 25) {
     return promise;
   };
 }
+export function throttle(fn, wait = 100) {
+  let lastCallTime = 0;
+  return function (...args) {
+    const now = Date.now();
+    if (now - lastCallTime >= wait) {
+      lastCallTime = now;
+      fn.apply(this, args);
+    }
+  };
+}
 
 export const sanitizeStageName = (fileNameText) => {
   return fileNameText.replace(/\//g, '-').replace(/\\/g, '-');

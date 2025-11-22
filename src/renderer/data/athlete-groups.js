@@ -14,7 +14,7 @@ export const athleteGenders = {
     EN_name: 'Mixed',
   },
 };
-export const athleteGendersList = () => Object.keys(athleteGenders).map((gender) => athleteGenders[gender][`${store.getters['localization/lang']}_name`]);
+export const getAthleteGendersList = () => Object.keys(athleteGenders).map((gender) => athleteGenders[gender][`${store.getters['localization/lang']}_name`]);
 
 const athleteGroups = {
   men: [

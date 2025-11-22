@@ -1,11 +1,15 @@
 <script>
 import { mapGetters } from 'vuex';
 import { mdiTimerOutline, mdiMinus } from '@mdi/js';
+import TimerPanel from '../timerPanel.vue';
+import MMovableElement from '../../mixins/MMovableElement';
 
 const { ipcRenderer } = require('electron');
 
 export default {
   name: 'timingDeviceSettings',
+  mixins: [MMovableElement],
+  components: { TimerPanel },
   data() {
     return {
       closeIcon: mdiMinus,
@@ -14,7 +18,7 @@ export default {
       connectionTypes: [
         {
           type: 'TCP',
-          host: '192.168.3.127',
+          ip: '192.168.3.127',
           port: 7000,
         },
         // {
@@ -24,11 +28,7 @@ export default {
         // },
       ],
 
-      dragging: false,
-      startX: 0,
-      startY: 0,
-      origLeft: 0,
-      origTop: 0,
+      show_deviceSettings: true,
     };
   },
   computed: {
@@ -39,46 +39,14 @@ export default {
   },
   methods: {
     connectDevice(connection) {
-      if (connection.type === 'TCP') ipcRenderer.send('StartTCPSocket', connection);
+      if (connection.type === 'TCP') ipcRenderer.send('StartTCPSocket', { host: connection.ip, port: connection.port });
     },
     disconnectDevice(connection) {
-      if (connection.type === 'TCP') ipcRenderer.send('DisconnectTCPSocket', connection);
+      if (connection.type === 'TCP') ipcRenderer.send('DisconnectTCPSocket', { host: connection.ip, port: connection.port });
     },
     openSettings() {
       this.opened = !this.opened;
       if (!this.opened) this.stopDrag();
-    },
-    startDrag(event) {
-      const settingsFrame = this.$el.querySelector('.settingsWindow');
-      if (!settingsFrame) return;
-
-      this.dragging = true;
-      this.startX = event.clientX;
-      this.startY = event.clientY;
-
-      const rect = settingsFrame.getBoundingClientRect();
-      this.origLeft = rect.left;
-      this.origTop = rect.top;
-
-      document.addEventListener('mousemove', this.dragHandler);
-      document.addEventListener('mouseup', this.stopDrag);
-    },
-    dragHandler(event) {
-      if (!this.dragging) return;
-
-      const deltaX = event.clientX - this.startX;
-      const deltaY = event.clientY - this.startY;
-      const settingsFrame = this.$el.querySelector('.settingsWindow');
-      if (settingsFrame) {
-        settingsFrame.style.left = `${this.origLeft + deltaX}px`;
-        settingsFrame.style.top = `${this.origTop + deltaY}px`;
-      }
-    },
-    stopDrag() {
-      this.dragging = false;
-
-      document.removeEventListener('mousemove', this.onDrag);
-      document.removeEventListener('mouseup', this.stopDrag);
     },
     syncDevice(connection) {
       const date = new Date();
@@ -119,9 +87,9 @@ export default {
     <v-btn @click="openSettings" class="mx-2" icon color="var(--accent)">
       <v-icon>{{ timerIcon }}</v-icon>
     </v-btn>
-    <div v-if="opened" class="settingsWindow">
-      <div class="settingsHeader" @mousedown.prevent="startDrag">
-        <span class="mr-4">Подключение таймера</span>
+    <div v-show="opened" ref="movableContainer" class="settingsWindow" tabindex="0">
+      <div class="settingsHeader" ref="dragZone" tabindex="0">
+        <span class="mr-4">Таймер</span>
         <v-hover v-slot:default="{ hover }">
           <v-icon
             @click="openSettings"
@@ -129,10 +97,10 @@ export default {
             small
             :color="hover ? $vuetify.theme.themes[appTheme].textDefault : $vuetify.theme.themes[appTheme].accent"
             >{{ closeIcon }}</v-icon
-          ></v-hover
-        >
+          >
+        </v-hover>
       </div>
-      <div class="settingsBody">
+      <div class="settingsBody" v-if="show_deviceSettings">
         <div class="timerConnection" v-for="(c_type, c_idx) in connectionTypes" :key="c_idx">
           <div class="connectionInputs">
             <div class="connectionInput" v-for="(c_input, ci_key) in c_type" :key="ci_key" v-show="ci_key !== 'type'">
@@ -142,78 +110,114 @@ export default {
                   color: $vuetify.theme.themes[appTheme].textDefault,
                 }"
               >
-                {{ ci_key }}
+                {{ ci_key.toUpperCase() }}
               </span>
               <input
                 class="ciInput"
                 :class="[
                   ci_key === 'port' && 'portInput',
-                  ci_key === 'host' && 'hostInput',
+                  ci_key === 'ip' && 'ipInput',
                   ci_key === 'comPort' && 'comInput',
                   ci_key === 'baudRate' && 'bRateInput',
                 ]"
                 v-model="c_type[ci_key]"
-                :style="{
-                  backgroundColor: $vuetify.theme.themes[appTheme].standardBackgroundRGBA,
-                  color: $vuetify.theme.themes[appTheme].textDefault,
-                }"
               />
             </div>
           </div>
           <div class="deviceActions">
-            <v-btn class="sync_btn" @click="syncDevice(c_type)" :color="$vuetify.theme.themes[appTheme].accent" x-small> Sync time </v-btn>
-            <v-btn class="print_btn" @click="testPrint(c_type)" :color="$vuetify.theme.themes[appTheme].accent" x-small> Print test </v-btn>
-            <v-btn
-              class="connect_btn"
-              v-if="!connectedDevices.some((device) => device.host == c_type.host && device.port == c_type.port && device.connected)"
+            <button class="tw-button-small sync_btn" @click="syncDevice(c_type)">Sync time</button>
+            <button class="tw-button-small print_btn" @click="testPrint(c_type)">Print test</button>
+            <button
+              class="tw-button-small connect_btn"
+              v-if="!connectedDevices.some((device) => device.host == c_type.ip && device.port == c_type.port && device.connected)"
               @click="connectDevice(c_type)"
-              :color="$vuetify.theme.themes[appTheme].action_green"
-              x-small
             >
               Подключить
-            </v-btn>
-            <v-btn
-              class="connect_btn"
-              v-if="connectedDevices.some((device) => device.host == c_type.host && device.port == c_type.port && device.connected)"
+            </button>
+            <button
+              class="tw-button-small transparent danger connect_btn"
+              v-if="connectedDevices.some((device) => device.host == c_type.ip && device.port == c_type.port && device.connected)"
               @click="disconnectDevice(c_type)"
-              :color="$vuetify.theme.themes[appTheme].error"
-              x-small
             >
               Отключить
-            </v-btn>
+            </button>
           </div>
         </div>
       </div>
+      <span class="toggleDeviceSettings__control" @click.stop="show_deviceSettings = !show_deviceSettings">{{
+        `${show_deviceSettings ? 'СКРЫТЬ ' : ''}УСТРОЙСТВА`
+      }}</span>
+
+      <timer-panel></timer-panel>
     </div>
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .settingsWrapper {
-}
-.settingsWindow {
-  position: fixed;
-  z-index: 9999;
-  top: 60px;
-  left: 320px;
-  padding: 0.75rem;
-  border-radius: 6px;
-  overflow: hidden;
-  min-width: 300px;
-  box-shadow: 0 0 12px 0 rgba(0, 0, 0, 0.75);
-  background: var(--background-card);
-  border: 1px solid var(--accent);
-}
-.settingsHeader {
-  display: flex;
-  align-items: baseline;
-  margin-bottom: 12px;
-  cursor: move;
-  font-weight: bold;
-  font-size: 1.1rem;
-  user-select: none;
-}
-.settingsBody {
+  .settingsWindow {
+    position: absolute;
+    z-index: 9999;
+    top: 60px;
+    left: 320px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    resize: vertical;
+    min-height: 250px;
+    padding: 0.75rem;
+    border-radius: 4px;
+    outline: transparent;
+    box-shadow: var(--container-shadow-s), 0 0 0 1px var(--background-card-nested);
+    transition: box-shadow 64ms;
+
+    &::before {
+      position: absolute;
+      content: '';
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      background-color: var(--background-card);
+      border-radius: 4px;
+      transition: background-color 64ms, box-shadow 64ms;
+    }
+    &:hover {
+      box-shadow: var(--container-shadow-m);
+    }
+    &:focus-within {
+      box-shadow: var(--container-shadow-m), 0 0 0 1px var(--accent);
+    }
+
+    .settingsHeader {
+      flex: 0 0 auto;
+      position: relative;
+      display: flex;
+      align-items: baseline;
+      margin-bottom: 12px;
+      cursor: move;
+      font-weight: bold;
+      font-size: 1.1rem;
+      outline: transparent;
+      user-select: none;
+    }
+    .settingsBody {
+      position: relative;
+      flex: 0 0 auto;
+      margin-bottom: 0.75rem;
+    }
+    .toggleDeviceSettings__control {
+      position: relative;
+      display: inline-block;
+      text-align: center;
+      opacity: 0.25;
+      cursor: pointer;
+      transition: opacity 64ms;
+      &:hover {
+        opacity: 1;
+      }
+    }
+  }
 }
 .timerConnection {
   align-items: center;
@@ -246,18 +250,14 @@ export default {
   font-weight: bold;
   margin-right: 6px;
 }
-.ciInput {
-  padding: 2px 4px;
-  border-radius: 6px;
-}
 
 /*noinspection CssUnusedSymbol*/
 .portInput {
-  width: 4rem;
+  width: 5ch;
 }
 /*noinspection CssUnusedSymbol*/
-.hostInput {
-  width: 10rem;
+.ipInput {
+  width: 12ch;
 }
 /*noinspection CssUnusedSymbol*/
 .comInput {
@@ -269,14 +269,11 @@ export default {
 }
 .print_btn {
   margin-right: 4px;
-  color: var(--text-default);
 }
 .sync_btn {
   margin-right: 4px;
-  color: var(--text-default);
 }
 .connect_btn {
   margin-left: auto;
-  color: var(--text-default);
 }
 </style>

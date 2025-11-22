@@ -5,7 +5,7 @@ import { checkCompetitionDiscipline, getDefaultStages, isQualificationOfDiscipli
 import JudgeClass from './JudgeClass';
 import JuryClass, { defaultRoles } from './JuryClass';
 import store from '../store';
-import { athleteGenders, athleteGendersList, getAthleteGroups } from '../data/athlete-groups';
+import { athleteGenders, getAthleteGendersList, getAthleteGroups } from '../data/athlete-groups';
 import { formatTimeDifference } from '../utils/timing-utils';
 
 export const competitionDefaultSetup = {
@@ -19,7 +19,7 @@ export const competitionDefaultSetup = {
         value: null,
       },
     },
-    gender: { title: 'Gender', value: athleteGendersList()[1] },
+    gender: { title: 'Gender', value: getAthleteGendersList()[1] },
     group: { title: 'Group', value: getAthleteGroups(Object.keys(athleteGenders)[1]) },
     stage: {
       title: 'Stage',
@@ -777,34 +777,6 @@ export default class EventClass {
 
     await store.dispatch('main/updateEvent');
   }
-  calculateOverallResult(competitor) {
-    const isTimingResult = isQualificationOfDisciplines(this, ['SX', 'SXT']);
-
-    let result = this.result_formula.overall_result.types.find((_f) => _f.id === this.result_formula.overall_result.type).result(competitor.id);
-
-    if (!isTimingResult) {
-      result = this.roundWithPrecision(result);
-    }
-
-    const overallResult = {
-      competition_id: this.id,
-      competitor_id: competitor.id,
-      value: result,
-      value_str: isTimingResult ? formatTimeDifference(result, { precision: this.structure.selected.accuracy, format: 'short' }) : null,
-      status: null,
-    };
-
-    let existedResult = competitor.results_overall.find((res) => res.competition_id === overallResult.competition_id);
-    if (existedResult) {
-      existedResult.value = overallResult.value;
-      existedResult.value_str = overallResult.value_str;
-      existedResult.status = overallResult.status;
-    } else {
-      competitor.results_overall.push(overallResult);
-    }
-
-    return competitor.results_overall;
-  }
   getSortedByRank(competitors) {
     const isSX = checkCompetitionDiscipline(this, ['SX', 'SXT']);
     const sortOrder = isSX ? -1 : 1;
@@ -823,7 +795,7 @@ export default class EventClass {
       const comp2StatusValue = comp2res && comp2res.status ? statuses[comp2res.status] : null;
 
       if (comp1StatusValue !== null || comp2StatusValue !== null) {
-        return (comp2StatusValue || 0) - (comp1StatusValue || 0);
+        return (comp1StatusValue || 0) - (comp2StatusValue || 0);
       }
 
       if (isSX) {
@@ -963,6 +935,34 @@ export default class EventClass {
     });
 
     return res;
+  }
+  calculateOverallResult(competitor) {
+    const isTimingResult = isQualificationOfDisciplines(this, ['SX', 'SXT']);
+
+    let result = this.result_formula.overall_result.types.find((_f) => _f.id === this.result_formula.overall_result.type).result(competitor.id);
+
+    if (!isTimingResult) {
+      result = this.roundWithPrecision(result);
+    }
+
+    const overallResult = {
+      competition_id: this.id,
+      competitor_id: competitor.id,
+      value: result,
+      value_str: isTimingResult ? formatTimeDifference(result, { precision: this.structure.selected.accuracy, format: 'short' }) : null,
+      status: null,
+    };
+
+    let existedResult = competitor.results_overall.find((res) => res.competition_id === overallResult.competition_id);
+    if (existedResult) {
+      existedResult.value = overallResult.value;
+      existedResult.value_str = overallResult.value_str;
+      existedResult.status = overallResult.status;
+    } else {
+      competitor.results_overall.push(overallResult);
+    }
+
+    return competitor.results_overall;
   }
   roundWithPrecision(val, digits) {
     const precision = digits ? digits : this.structure.accuracy[this.structure.selected.accuracy].digits;

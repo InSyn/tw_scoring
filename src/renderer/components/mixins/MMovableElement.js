@@ -34,6 +34,14 @@ export default {
     stopDrag() {
       this.dragging = false;
 
+      const movableContainer = this.$refs.movableContainer;
+      if (movableContainer.offsetLeft < 0) movableContainer.style.left = '0px';
+      if (movableContainer.offsetTop < 0) movableContainer.style.top = '0px';
+      if (movableContainer.offsetLeft + movableContainer.offsetWidth > window.innerWidth)
+        movableContainer.style.left = `${window.innerWidth - movableContainer.offsetWidth}px`;
+      if (movableContainer.offsetTop + movableContainer.offsetHeight > window.innerHeight)
+        movableContainer.style.top = `${window.innerHeight - movableContainer.offsetHeight}px`;
+
       document.removeEventListener('mousemove', this.onDrag);
       document.removeEventListener('mouseup', this.stopDrag);
     },

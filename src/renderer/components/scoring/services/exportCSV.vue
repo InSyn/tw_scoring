@@ -206,6 +206,23 @@ export default {
     getResults({ disablePagination }) {
       if (!this.competition.selected_race) return [];
 
+      const isSX = checkCompetitionDiscipline(this.competition, ['SX', 'SXT']);
+      const sortOrder = isSX ? -1 : 1;
+
+      const baseStatus = Number.MAX_SAFE_INTEGER;
+      const statuses = isSX
+        ? {
+            RAL: baseStatus - 4,
+            DNF: baseStatus - 3,
+            DNS: baseStatus - 2,
+            DSQ: baseStatus - 1,
+          }
+        : {
+            DNF: -1,
+            DNS: -2,
+            DSQ: -3,
+          };
+
       let sortedFinishedArray = this.competition.selected_race._startList
         .map((competitor, idx) => {
           return {
@@ -214,19 +231,35 @@ export default {
           };
         })
         .sort((comp1, comp2) => {
-          const statuses = {
-            DNF: -1,
-            DNS: -2,
-            DSQ: -3,
-          };
-
           const comp1res = comp1.results_overall.find((overall) => overall.competition_id === this.competition.id),
             comp2res = comp2.results_overall.find((overall) => overall.competition_id === this.competition.id);
 
-          return (
-            (comp2res ? (comp2res.status ? statuses[comp2res.status] : comp2res.value) : -999) -
-            (comp1res ? (comp1res.status ? statuses[comp1res.status] : comp1res.value) : -999)
-          );
+          const comp1StatusValue = comp1res && comp1res.status ? statuses[comp1res.status] : null;
+          const comp2StatusValue = comp2res && comp2res.status ? statuses[comp2res.status] : null;
+
+          if (comp1StatusValue !== null || comp2StatusValue !== null) {
+            return (comp1StatusValue || 0) - (comp2StatusValue || 0);
+          }
+
+          if (isSX) {
+            const comp1IsMissingOrZero = !comp1res || comp1res.value === 0;
+            const comp2IsMissingOrZero = !comp2res || comp2res.value === 0;
+
+            if (comp1IsMissingOrZero && comp2IsMissingOrZero) return 0;
+            if (comp1IsMissingOrZero) return 1;
+            if (comp2IsMissingOrZero) return -1;
+          }
+
+          const comp1Value = comp1res ? comp1res.value : 0;
+          const comp2Value = comp2res ? comp2res.value : 0;
+
+          if (comp1Value === comp2Value) {
+            const comp1ResultsSum = comp1.results.reduce((acc, val) => (acc + !isNaN(val.value) ? Number(val.value) : 0), 0);
+            const comp2ResultsSum = comp2.results.reduce((acc, val) => (acc + !isNaN(val.value) ? Number(val.value) : 0), 0);
+            return sortOrder * (comp2ResultsSum - comp1ResultsSum);
+          }
+
+          return sortOrder * (comp2Value - comp1Value);
         })
         .map((competitor, idx) => {
           return createCompetitorTranslationObj({ ...competitor, _index: idx, createFillerObject: true }, this.competition, {

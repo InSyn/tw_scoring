@@ -5,36 +5,28 @@ export default {
   name: 'app-footer',
   data() {
     return {
-      timer: {
-        sec: null,
-        min: null,
-        hrs: null,
-      },
+      time: this.getTimeString(),
       timeIntervalId: null,
+
+      appVersion: app.getVersion(),
     };
   },
   methods: {
-    getVer() {
-      return app.getVersion();
-    },
-    startDayTimer() {
+    getTimeString() {
       const date = new Date();
-      this.timer.sec = `${date.getSeconds().toString().length < 2 ? '0' + date.getSeconds() : date.getSeconds()}`;
-      this.timer.min = `${date.getMinutes().toString().length < 2 ? '0' + date.getMinutes() : date.getMinutes()}`;
-      this.timer.hrs = `${date.getHours().toString().length < 2 ? '0' + date.getHours() : date.getHours()}`;
 
-      this.timeIntervalId = setInterval(this.tickDayTimer, 1000);
+      return `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}:${date.getSeconds().toString().padStart(2, '0')}`;
     },
     tickDayTimer() {
-      const date = new Date();
-      this.timer.sec = `${date.getSeconds().toString().length < 2 ? '0' + date.getSeconds() : date.getSeconds()}`;
-      this.timer.min = `${date.getMinutes().toString().length < 2 ? '0' + date.getMinutes() : date.getMinutes()}`;
-      this.timer.hrs = `${date.getHours().toString().length < 2 ? '0' + date.getHours() : date.getHours()}`;
+      this.time = this.getTimeString();
     },
   },
 
   mounted() {
-    this.startDayTimer();
+    this.timeIntervalId = setInterval(this.tickDayTimer, 1000);
+  },
+  beforeDestroy() {
+    clearInterval(this.timeIntervalId);
   },
 };
 </script>
@@ -47,18 +39,18 @@ export default {
     <span class="font-weight-bold"> Created by TimingWeb &copy; 2020 - {{ new Date().getFullYear() }} </span>
 
     <span class="ml-2 font-weight-bold">
-      {{ `Ver. ${getVer()}beta` }}
+      {{ `Ver. ${appVersion}beta` }}
     </span>
 
     <v-spacer></v-spacer>
 
-    <span class="font-weight-bold" style="color: var(--accent)">
-      {{ `${timer.hrs}:${timer.min}:${timer.sec}` }}
+    <span class="font-weight-bold" style="color: var(--accent); font-size: 1.5em">
+      {{ time }}
     </span>
   </footer>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 footer {
   height: 32px;
 }

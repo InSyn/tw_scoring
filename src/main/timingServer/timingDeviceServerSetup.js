@@ -1,6 +1,8 @@
 import { ipcMain, mainWindow } from './../index';
 import { sendServerMessage } from '../index';
 import Net from 'net';
+import fs from 'fs';
+const path = require('path');
 
 const DeviceTcpSocket = new Net.Socket();
 
@@ -90,8 +92,7 @@ ipcMain.on('DisconnectTCPSocket', (event, connection) => {
     if (device.host == connection.host && device.port == connection.port && device.connected) device.socket.destroy();
   });
 });
-ipcMain.on('StartTCPSocket', (event, { port, host }) => {
-  console.log(port, host);
+ipcMain.on('StartTCPSocket', (event, { host, port }) => {
   DeviceTcpSocket.connect(
     {
       port: port,
@@ -123,4 +124,13 @@ ipcMain.on('SyncTimeTCP', (event, time) => {
   const timeMsg_buf = Buffer.from(timeMsg_hex, 'hex');
 
   send(timeMsg_buf);
+});
+
+ipcMain.on('writeTimer', (event, { filePath, time }) => {
+  const fullPath = path.join(filePath, 'timer.txt');
+  fs.writeFile(fullPath, time, (err) => {
+    if (err) {
+      return err;
+    }
+  });
 });

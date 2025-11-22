@@ -1,14 +1,15 @@
 <script>
-import MMovableElement from '../mixins/MMovableElement';
 import { getCurrentTimeString } from '../../utils/timing-utils';
 import { mapActions, mapGetters } from 'vuex';
 import { formatTimeDifference } from '../../utils/timing-utils';
 import EventBus from '../../classes/EventBus';
 import { isQualificationOfDisciplines } from '../../data/sports';
+import TimerWorker from '../../workers/timer-worker.worker.js';
+import { throttle } from '../../utils/utils';
+const { ipcRenderer } = require('electron');
 
 export default {
   name: 'timerPanel',
-  mixins: [MMovableElement],
   data() {
     return {
       started: false,
@@ -19,6 +20,9 @@ export default {
       finishChannel: 4,
 
       timerWorker: null,
+      throttledSendTimeToFile: null,
+
+      writeFile: false,
     };
   },
   computed: {
@@ -28,6 +32,13 @@ export default {
     ...mapGetters('timing', {
       splitTimes: 'getTimeRecords',
     }),
+    ...mapGetters('scoring_services', {
+      fileTranslationService: 'getFileTranslationService',
+    }),
+    getCompetitionSplitTimes() {
+      if (!this.competition) return [];
+      return this.splitTimes[this.competition.id];
+    },
   },
   methods: {
     isQualificationOfDisciplines,
@@ -40,11 +51,12 @@ export default {
       this.started = true;
 
       if (!this.timerWorker) {
-        this.timerWorker = new Worker('src/renderer/workers/timer-worker.js');
+        this.timerWorker = new TimerWorker();
       }
 
       this.timerWorker.onmessage = (event) => {
         this.$refs.timeDisplay.innerText = event.data.elapsed;
+        this.throttledSendTimeToFile();
       };
       this.timerWorker.postMessage('start');
     },
@@ -83,10 +95,16 @@ export default {
         }
       }
     },
+    sendTimeToFile() {
+      ipcRenderer.send('writeTimer', { filePath: this.fileTranslationService.path, time: this.$refs.timeDisplay.innerText });
+    },
   },
 
   mounted() {
     EventBus.on('timerTime', this.handleTimerTime);
+  },
+  created() {
+    this.throttledSendTimeToFile = throttle(this.sendTimeToFile, 50);
   },
   beforeDestroy() {
     if (this.timerWorker) {
@@ -99,64 +117,50 @@ export default {
 </script>
 
 <template>
-  <div v-if="competition && isQualificationOfDisciplines(competition, ['SX', 'SXT'])" class="timerPanel__wrapper" ref="movableContainer" tabindex="0">
-    <div class="timerPanel__controls" ref="dragZone">
+  <div class="timerPanel__wrapper">
+    <div class="timerPanel__controls">
       <div class="currentTime__frame" ref="timeDisplay" @mousedown.stop @mousemove.stop @click.stop>
         {{ formatTimeDifference(0, { format: 'short', precision: 2 }) }}
       </div>
       <div class="timerButtons__wrapper">
-        <button class="tw-button-small success" :disabled="started" @click.stop="emitTimeSplit(startChannel)">Старт</button>
-        <button class="tw-button-small transparent danger" :disabled="!started" @click.stop="emitTimeSplit(finishChannel)">Стоп</button>
+        <button class="tw-button-small success" :disabled="started" @mousedown.stop @mousemove.stop @click.stop="emitTimeSplit(startChannel)">Старт</button>
+        <button class="tw-button-small transparent danger" :disabled="!started" @mousedown.stop @mousemove.stop @click.stop="emitTimeSplit(finishChannel)">
+          Стоп
+        </button>
       </div>
     </div>
     <div class="timerPanel__body">
       <ul class="splitTimes__list">
-        <li class="splitTimes__item" v-for="time in splitTimes[competition.id]" :key="time">
+        <li class="splitTimes__item" v-for="time in getCompetitionSplitTimes" :key="time">
           <span>{{ time.split('|')[0] }}</span>
           <span>{{ time.split('|')[1] }}</span>
         </li>
       </ul>
+    </div>
+    <div class="timerPanel__actions">
+      <button
+        class="tw-button-tiny transparent"
+        :style="{ color: writeFile ? 'var(--accent-light)' : 'var(--standard-background)' }"
+        @click="writeFile = !writeFile"
+      >
+        TXT
+      </button>
     </div>
   </div>
 </template>
 
 <style scoped lang="scss">
 .timerPanel__wrapper {
-  z-index: 999;
-  position: absolute;
-  isolation: isolate;
+  position: relative;
+  flex: 1 1 120px;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
-  resize: vertical;
-  top: 8px;
-  left: 32rem;
-  min-height: 200px;
   max-height: 720px;
   min-width: 320px;
-  padding: 0.75rem;
-  border-radius: 4px;
-  outline: transparent;
-  box-shadow: var(--container-shadow-s), 0 0 0 1px var(--background-card-nested);
-  transition: box-shadow 64ms;
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+  border-top: 2px solid var(--background-card-nested);
 
-  &::before {
-    position: absolute;
-    content: '';
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    background-color: var(--background-card);
-    border-radius: 4px;
-    transition: background-color 64ms, box-shadow 64ms;
-  }
-  &:hover {
-    box-shadow: var(--container-shadow-m);
-  }
-  &:focus-within {
-    box-shadow: var(--container-shadow-m), 0 0 0 1px var(--accent);
-  }
   .timerPanel__controls {
     position: relative;
     flex: 0 0 auto;
@@ -194,23 +198,14 @@ export default {
     flex: 1 1 48px;
     display: flex;
     flex-direction: column;
-    &::before {
-      position: absolute;
-      content: '';
-      top: 0;
-      right: 0;
-      bottom: 0;
-      left: 0;
-      opacity: 0.75;
-      background-color: var(--background-deep);
-      border-radius: 4px;
-    }
 
     .splitTimes__list {
       position: relative;
       flex: 1 1 0;
       overflow-y: auto;
       user-select: auto;
+      background-color: var(--background-deep);
+      border-radius: 4px;
 
       .splitTimes__item {
         flex: 0 0 auto;
@@ -236,6 +231,13 @@ export default {
         }
       }
     }
+  }
+  .timerPanel__actions {
+    position: absolute;
+    bottom: -0.75rem;
+    right: 0.5rem;
+    display: flex;
+    align-items: center;
   }
 }
 </style>

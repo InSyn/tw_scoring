@@ -8,6 +8,7 @@ import AutoResizeDirective from './directives/AutoResizeDirective';
 import { initSavingStorages } from './utils/applicationDataPersistence';
 import './assets/styles/defaults.css';
 import './assets/styles/main.scss';
+import './utils/logger-override';
 
 export const mouseupListeners = new WeakMap();
 
