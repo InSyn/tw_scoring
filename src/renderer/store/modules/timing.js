@@ -16,10 +16,16 @@ ipcRenderer.on('newTime', (e, timeMessage) => {
   const competition = store.getters['main/competition'];
   if (!competition) return;
 
-  const timeChannel = timeMessage[0].split('')[timeMessage[0].length - 1];
+  const rawChannel = timeMessage[0];
+  const channelDigits = rawChannel && rawChannel.match(/\d+/);
+  const timeChannel = channelDigits ? channelDigits[0] : rawChannel;
   const timerTimeValue = timeMessage[1];
+  const timerFlag = timeMessage[2] || '';
 
-  EventBus.emit('timerTime', { competitionId: competition.id, timeRecord: `${timeChannel}|${timerTimeValue}` });
+  EventBus.emit('timerTime', {
+    competitionId: competition.id,
+    timeRecord: `${timeChannel}|${timerTimeValue}|${timerFlag}|${rawChannel}`,
+  });
 
   const timingMode = checkCompetitionDiscipline(competition, ['MO']) ? 'moguls' : checkCompetitionDiscipline(competition, ['DM']) ? 'dualMoguls' : null;
   if (!timingMode) return;

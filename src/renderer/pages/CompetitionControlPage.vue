@@ -5,7 +5,6 @@ import chat from '../components/scoring/chat.vue';
 import messageConsole from '../components/scoring/messageConsole.vue';
 import startList from '../components/scoring/startList/index.vue';
 import scoresPanel from '../components/scoring/scoresPanel/index.vue';
-import scoringServices from '../components/scoring/scoringServices.vue';
 import finishTable from '../components/scoring/finishTable.vue';
 import doubleUp from '../components/scoring/onRace/doubleUp.vue';
 import RoundRuns from '../components/raceList/DM/roundRuns.vue';
@@ -13,12 +12,13 @@ import RoundRunsList from '../components/scoring/DM/roundRunsList.vue';
 import RoundRunScoringPanel from '../components/scoring/DM/roundRunScoringPanel.vue';
 import RoundRunsFinishedList from '../components/scoring/DM/roundRunsFinishedList.vue';
 import Timer from '../components/timing/timer.vue';
-import { checkCompetitionDiscipline, isFinal } from '../data/sports';
+import { checkCompetitionDiscipline, isFinal, isQualificationOfDisciplines } from '../data/sports';
 import SxHeatsList from '../components/scoring/SX/sx-heats-list.vue';
 import SxHeatControls from '../components/scoring/SX/sx-heat-controls.vue';
 import SxHeatsGrid from '../components/scoring/SX/sx-heats-grid.vue';
 import FinishedRunItem from '../components/scoring/DM/finishedRun-item.vue';
 import DmGrid from '../components/scoring/DM/dmo-grid.vue';
+import SxQualificationScoring from '../components/scoring/SX/SxQualificationScoring.vue';
 
 export default {
   name: 'CompetitionControlPage',
@@ -39,8 +39,8 @@ export default {
     messageConsole,
     startList,
     scoresPanel,
-    scoringServices,
     finishTable,
+    SxQualificationScoring,
   },
   data() {
     return {
@@ -52,6 +52,9 @@ export default {
       competition: 'competition',
       appTheme: 'appTheme',
     }),
+    useSxQualificationLayout() {
+      return isQualificationOfDisciplines(this.competition, ['SX']);
+    },
   },
   methods: {
     isFinal,
@@ -82,6 +85,8 @@ export default {
 
 <template>
   <div v-if="competition" class="scoringLayout__container">
+    <sx-qualification-scoring v-if="useSxQualificationLayout"></sx-qualification-scoring>
+    <template v-else>
     <div
       class="scoringLayoutSection layoutSection-1"
       :style="checkCompetitionDiscipline(competition, ['SX', 'SXT', 'DM']) && isFinal(competition) && { minHeight: '0', height: 'auto' }"
@@ -101,14 +106,12 @@ export default {
     </div>
 
     <div v-if="!(checkCompetitionDiscipline(competition, ['SX', 'SXT', 'DM']) && isFinal(competition))" class="scoringLayoutSection layoutSection-3">
-      <scoring-services></scoring-services>
       <finish-table></finish-table>
     </div>
 
     <div v-if="checkCompetitionDiscipline(competition, ['SX', 'SXT']) && isFinal(competition)" class="sx-layout">
       <div class="sx-leftPanel">
         <sx-heats-list :competition="competition" :selected-heat="selectedHeat"></sx-heats-list>
-        <scoring-services></scoring-services>
       </div>
       <div class="sx-rightPanel">
         <sx-heat-controls :competition="competition" :selected-heat="selectedHeat"></sx-heat-controls>
@@ -119,7 +122,6 @@ export default {
     <div v-if="checkCompetitionDiscipline(competition, ['DM']) && isFinal(competition)" class="dm-layout">
       <div class="dm-leftPanel">
         <round-runs-list ref="DMRunsList" :competition="competition"></round-runs-list>
-        <scoring-services></scoring-services>
       </div>
       <div class="dm-rightPanel">
         <round-run-scoring-panel ref="DMScoringPanel" :competition="competition"></round-run-scoring-panel>
@@ -137,6 +139,7 @@ export default {
         </div>
       </div>
     </div>
+    </template>
   </div>
 </template>
 

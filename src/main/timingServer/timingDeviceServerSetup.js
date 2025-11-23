@@ -32,10 +32,11 @@ DeviceTcpSocket.on('data', (data) => {
       .filter((part) => !!part);
 
     if (msg[0] === 'TN') {
-      mainWindow && mainWindow.webContents.send('newTime', [msg[2], msg[3]]);
+      const markerFlag = msg[4] || '';
+      mainWindow && mainWindow.webContents.send('newTime', [msg[2], msg[3], markerFlag]);
       sendServerMessage({
         color: 'white',
-        message: `New time -> Channel: ${msg[2]} Time: ${msg[3]}`,
+        message: `New time -> Channel: ${msg[2]} Time: ${msg[3]}${markerFlag ? ` Flag: ${markerFlag}` : ''}`,
       });
     } else {
       sendServerMessage({

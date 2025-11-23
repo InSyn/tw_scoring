@@ -1,7 +1,27 @@
 import store from '../store';
 import { getCompetitorById } from '../utils/competition-utils';
 import { cutMarks, roundNumber, truncateNumber } from '../utils/utils';
-import { defaultPointsSheet } from '../data/sports';
+import { defaultPointsSheet, isQualificationOfDisciplines } from '../data/sports';
+
+// Функция форматирования времени в формате как в блоке ФИНИШИРОВАЛИ
+const formatResultFromMs = (ms) => {
+  if (ms === null || ms === undefined || ms === 0) return '0.000';
+  const totalSeconds = ms / 1000;
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+  const secondsFixed = seconds.toFixed(3);
+  if (hours > 0) {
+    const minutesStr = minutes.toString().padStart(2, '0');
+    const secondsStr = secondsFixed.padStart(6, '0');
+    return `${hours}:${minutesStr}:${secondsStr}`;
+  }
+  if (minutes > 0) {
+    const secondsStr = secondsFixed.padStart(6, '0');
+    return `${minutes}:${secondsStr}`;
+  }
+  return secondsFixed;
+};
 
 const specialTableRows = ['stageTitle', 'teamTitle'];
 
@@ -372,6 +392,51 @@ const generateOverallResultsHandlers = (dataCtx) => {
       const athlete = dataSource.data[dataIdx];
       if (!athlete) return ['&nbsp;'];
 
+      const competition = dataCtx.competitions.find((competition) => competition.id === dataSource.data[dataIdx].comp_id);
+      const isSXQualification = competition && isQualificationOfDisciplines(competition, ['SX', 'SXT']);
+      
+      if (isSXQualification && competition.races && competition.races.length > 0) {
+        // Для квалификации SX результаты хранятся в первой гонке с ключами run1, run2
+        const firstRace = competition.races[0];
+        const raceResult = athlete.results.find((result) => result.race_id === firstRace.id);
+        
+        if (raceResult) {
+          // Извлекаем результат для конкретного заезда (raceIdx соответствует индексу заезда)
+          const runKey = `run${raceIdx + 1}`;
+          const upperKey = runKey.toUpperCase();
+          
+          let runValue = null;
+          if (raceResult[runKey] !== undefined && raceResult[runKey] !== null) {
+            runValue = raceResult[runKey];
+          } else if (raceResult[upperKey] !== undefined && raceResult[upperKey] !== null) {
+            runValue = raceResult[upperKey];
+          }
+          
+          if (runValue !== null) {
+            // Форматируем значение
+            if (typeof runValue === 'number') {
+              // Используем форматирование как в блоке ФИНИШИРОВАЛИ
+              return [formatResultFromMs(runValue)];
+            } else if (typeof runValue === 'string') {
+              // Если это строка, пытаемся распарсить и переформатировать
+              // Проверяем, является ли это числом в секундах
+              const numeric = Number(runValue);
+              if (!Number.isNaN(numeric)) {
+                // Если число меньше 1000, считаем что это секунды
+                const ms = numeric < 1000 ? numeric * 1000 : numeric;
+                return [formatResultFromMs(ms)];
+              }
+              return [runValue];
+            }
+          }
+          
+          return ['0.00'];
+        }
+        
+        return ['0.00'];
+      }
+
+      // Для обычных гонок используем стандартную логику
       const raceResult = athlete.results.find((result) => (dataCtx.races[raceIdx] ? result.race_id === dataCtx.races[raceIdx].id : false));
 
       return raceResult ? [raceResult.status ? raceResult.status : raceResult.value] : ['-'];
@@ -408,6 +473,59 @@ const generateOverallResultsHandlers = (dataCtx) => {
     const races = competition.races;
     if (!races.length) return ['&nbsp;'];
 
+    const isSXQualification = isQualificationOfDisciplines(competition, ['SX', 'SXT']);
+    
+    if (isSXQualification && races.length > 0) {
+      // Для квалификации SX извлекаем результаты run1, run2 из первой гонки
+      const firstRace = races[0];
+      const raceResult = athlete.results.find((result) => result.race_id === firstRace.id);
+      
+      if (raceResult) {
+        const runResults = [];
+        // Определяем количество заездов (обычно 2 для квалификации)
+        const runCount = Math.max(races.length, 2);
+        
+        for (let i = 1; i <= runCount; i++) {
+          const runKey = `run${i}`;
+          const upperKey = runKey.toUpperCase();
+          
+          let runValue = null;
+          if (raceResult[runKey] !== undefined && raceResult[runKey] !== null) {
+            runValue = raceResult[runKey];
+          } else if (raceResult[upperKey] !== undefined && raceResult[upperKey] !== null) {
+            runValue = raceResult[upperKey];
+          }
+          
+          if (runValue !== null) {
+            // Форматируем значение
+            if (typeof runValue === 'number') {
+              // Используем форматирование как в блоке ФИНИШИРОВАЛИ
+              runResults.push(formatResultFromMs(runValue));
+            } else if (typeof runValue === 'string') {
+              // Если это строка, пытаемся распарсить и переформатировать
+              const numeric = Number(runValue);
+              if (!Number.isNaN(numeric)) {
+                const ms = numeric < 1000 ? numeric * 1000 : numeric;
+                runResults.push(formatResultFromMs(ms));
+              } else {
+                runResults.push(runValue);
+              }
+            } else {
+              runResults.push('0.000');
+            }
+          } else {
+            runResults.push('0.000');
+          }
+        }
+        
+        return [runResults];
+      }
+      
+      // Если результата нет, возвращаем пустые значения
+      return [Array(races.length).fill('0.00')];
+    }
+
+    // Для обычных гонок используем стандартную логику
     return [races.map((race) => competition.getRaceResult(athlete, race))];
 
     // return [raceResults.join('<br>')];
@@ -433,6 +551,50 @@ const generateOverallResultsHandlers = (dataCtx) => {
 
     const athlete = dataSource.data[dataIdx];
     if (!athlete) return ['&nbsp;'];
+
+    const isSXQualification = isQualificationOfDisciplines(competition, ['SX', 'SXT']);
+    
+    if (isSXQualification) {
+      // Для квалификации SX получаем результат напрямую из competition
+      // Сначала пытаемся получить из results_overall объекта athlete
+      let overallResult = null;
+      if (athlete.results_overall && Array.isArray(athlete.results_overall)) {
+        overallResult = athlete.results_overall.find((res) => res.competition_id === competition.id);
+      }
+      
+      // Если не нашли, получаем через getOverallResult, который ищет в competitorsSheet
+      if (!overallResult) {
+        const competitor = competition.competitorsSheet && competition.competitorsSheet.competitors 
+          ? competition.competitorsSheet.competitors.find((comp) => comp.id === athlete.id)
+          : null;
+        if (competitor && competitor.results_overall) {
+          overallResult = competitor.results_overall.find((res) => res.competition_id === competition.id);
+        }
+      }
+      
+      if (overallResult) {
+        if (overallResult.status) {
+          return [overallResult.status];
+        }
+        
+        // Если это число в миллисекундах, форматируем как в блоке ФИНИШИРОВАЛИ
+        if (typeof overallResult.value === 'number' && overallResult.value > 0) {
+          return [formatResultFromMs(overallResult.value)];
+        }
+        
+        // Если есть value_str, используем его
+        if (overallResult.value_str) {
+          return [overallResult.value_str];
+        }
+        
+        // Если есть value, используем его
+        if (overallResult.value) {
+          return [overallResult.value];
+        }
+      }
+      
+      return ['0.00'];
+    }
 
     const overall = competition.getOverallResult(athlete.id);
     return overall ? [overall] : ['&nbsp;'];

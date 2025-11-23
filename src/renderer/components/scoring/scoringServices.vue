@@ -1,10 +1,6 @@
 <template>
   <div class="scoringServices__container">
     <div class="scoringServices__wrapper">
-      <div class="scoringServices__title">
-        {{ localization[lang].app.scoring.services }}
-      </div>
-
       <div class="scoringServices__servicesList">
         <live-results-service></live-results-service>
         <export-c-s-v></export-c-s-v>
@@ -32,27 +28,23 @@ export default {
 
 <style scoped>
 .scoringServices__container {
-  flex: 4 1 0;
+  width: 100%;
   padding: 4px;
 }
 .scoringServices__wrapper {
   display: flex;
   flex-direction: column;
-  height: 100%;
+  min-width: 320px;
+  max-width: 480px;
   background: var(--background-card);
   border-radius: 6px;
-}
-.scoringServices__title {
-  flex: 0 0 auto;
-  font-size: 1.2rem;
-  font-weight: bold;
-  padding: 8px;
 }
 .scoringServices__servicesList {
   flex: 1 1 auto;
   display: flex;
   flex-direction: column;
   padding: 8px;
+  max-height: 60vh;
   overflow-y: auto;
 }
 </style>

@@ -181,6 +181,7 @@ export const competitionDefaultSetup = {
       raceResultFields: [],
     },
   },
+  timing_splits: [],
 };
 
 export default class EventClass {
@@ -218,6 +219,7 @@ export default class EventClass {
     this.technicalInfo = args.technicalInfo ? { ...args.technicalInfo } : { ...competitionDefaultSetup.technicalInfo };
     this.weather = args.weather ? [...args.weather] : [...competitionDefaultSetup.weather];
     this.races = args.races ? [...args.races] : competitionDefaultSetup.races;
+    this.timing_splits = args.timing_splits ? [...args.timing_splits] : [...competitionDefaultSetup.timing_splits];
 
     if (args.result_formula) {
       this.result_formula.overall_result.type = args.result_formula.overall_result.type;
@@ -837,6 +839,61 @@ export default class EventClass {
     return overall ? (overall.status ? overall.status : overall.value_str ? overall.value_str : overall.value) : this.roundWithPrecision(0);
   }
   getRaceResult(competitor, race) {
+    const isSXQualification = isQualificationOfDisciplines(this, ['SX', 'SXT']);
+    
+    // Для квалификации SX результаты хранятся в первой гонке с ключами run1, run2
+    if (isSXQualification && this.races && this.races.length > 0) {
+      const firstRace = this.races[0];
+      const raceResult = competitor.results.find((result) => result.race_id === firstRace.id);
+      
+      if (raceResult) {
+        // Определяем индекс заезда на основе индекса гонки
+        const raceIdx = this.races.findIndex((r) => r.id === race.id);
+        if (raceIdx >= 0) {
+          const runKey = `run${raceIdx + 1}`;
+          const upperKey = runKey.toUpperCase();
+          
+          let runValue = null;
+          if (raceResult[runKey] !== undefined && raceResult[runKey] !== null) {
+            runValue = raceResult[runKey];
+          } else if (raceResult[upperKey] !== undefined && raceResult[upperKey] !== null) {
+            runValue = raceResult[upperKey];
+          }
+          
+          if (runValue !== null) {
+            // Форматируем значение
+            if (typeof runValue === 'number') {
+              // Используем форматирование как в блоке ФИНИШИРОВАЛИ
+              // Формат: если больше часа - "H:MM:SS.mmm", если больше минуты - "M:SS.mmm", иначе "SS.mmm"
+              const totalSeconds = runValue / 1000;
+              const hours = Math.floor(totalSeconds / 3600);
+              const minutes = Math.floor((totalSeconds % 3600) / 60);
+              const seconds = totalSeconds % 60;
+              const secondsFixed = seconds.toFixed(3);
+              if (hours > 0) {
+                const minutesStr = minutes.toString().padStart(2, '0');
+                const secondsStr = secondsFixed.padStart(6, '0');
+                return `${hours}:${minutesStr}:${secondsStr}`;
+              }
+              if (minutes > 0) {
+                const secondsStr = secondsFixed.padStart(6, '0');
+                return `${minutes}:${secondsStr}`;
+              }
+              return secondsFixed;
+            } else if (typeof runValue === 'string') {
+              return runValue;
+            }
+          }
+        }
+        
+        // Если не нашли результат для конкретного заезда, возвращаем 0
+        return this.roundWithPrecision(0);
+      }
+      
+      return this.roundWithPrecision(0);
+    }
+    
+    // Для обычных гонок используем стандартную логику
     const result = competitor.results.find((result) => result.race_id === race.id);
 
     return result
@@ -938,8 +995,71 @@ export default class EventClass {
   }
   calculateOverallResult(competitor) {
     const isTimingResult = isQualificationOfDisciplines(this, ['SX', 'SXT']);
+    const isSXQualification = isQualificationOfDisciplines(this, ['SX', 'SXT']);
 
     let result = this.result_formula.overall_result.types.find((_f) => _f.id === this.result_formula.overall_result.type).result(competitor.id);
+
+    // Для квалификации SX вычисляем лучшее время из run1 и run2
+    if (isSXQualification && this.races && this.races.length > 0) {
+      const firstRace = this.races[0];
+      const raceResult = competitor.results.find((res) => res.race_id === firstRace.id);
+      
+      if (raceResult) {
+        const runValues = [];
+        
+        // Извлекаем значения для всех заездов
+        for (let i = 1; i <= 2; i++) {
+          const runKey = `run${i}`;
+          const upperKey = runKey.toUpperCase();
+          
+          let runValue = null;
+          if (raceResult[runKey] !== undefined && raceResult[runKey] !== null) {
+            runValue = raceResult[runKey];
+            // Если это число, предполагаем что это миллисекунды
+            if (typeof runValue === 'number') {
+              // Значение уже в миллисекундах, используем как есть
+            }
+          } else if (raceResult[upperKey] !== undefined && raceResult[upperKey] !== null) {
+            runValue = raceResult[upperKey];
+            // Если это строка, конвертируем в число (миллисекунды)
+            if (typeof runValue === 'string') {
+              // Пытаемся распарсить строку времени (формат "MM:SS.mmm" или "SS.mmm")
+              const parts = runValue.split(':');
+              if (parts.length === 2) {
+                // Формат "MM:SS.mmm"
+                const minutes = parseInt(parts[0]) || 0;
+                const secondsParts = parts[1].split('.');
+                const seconds = parseInt(secondsParts[0]) || 0;
+                const milliseconds = parseInt(secondsParts[1] || '0') || 0;
+                runValue = (minutes * 60 + seconds) * 1000 + milliseconds;
+              } else {
+                // Пытаемся распарсить как "SS.mmm" или просто число
+                const numValue = parseFloat(runValue);
+                if (!isNaN(numValue)) {
+                  // Если число меньше 1000, предполагаем что это секунды, иначе миллисекунды
+                  runValue = numValue < 1000 ? numValue * 1000 : numValue;
+                } else {
+                  runValue = null;
+                }
+              }
+            }
+          }
+          
+          if (runValue !== null && typeof runValue === 'number' && runValue > 0) {
+            runValues.push(runValue);
+          }
+        }
+        
+        // Вычисляем лучшее время (минимальное)
+        if (runValues.length > 0) {
+          result = Math.min(...runValues);
+        } else {
+          result = 0;
+        }
+      } else {
+        result = 0;
+      }
+    }
 
     if (!isTimingResult) {
       result = this.roundWithPrecision(result);

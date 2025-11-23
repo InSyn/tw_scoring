@@ -2,6 +2,7 @@
 import LangSelector from '../appComponents/langSelector.vue';
 import CompetitionSelectMenu from '../appComponents/competitionSelectMenu.vue';
 import TimingDeviceSettings from '../timing/timingDeviceSettings/index.vue';
+import LiveServicesPanel from '../scoring/services/liveServicesPanel.vue';
 import CreateNewCompetitionMenu from '../appComponents/createNewCompetitionMenu.vue';
 import fs from 'fs';
 import { mapActions, mapGetters } from 'vuex';
@@ -12,7 +13,7 @@ const dialog = require('electron').remote.dialog;
 
 export default {
   name: 'app-header',
-  components: { LangSelector, TimingDeviceSettings, CompetitionSelectMenu, CreateNewCompetitionMenu },
+  components: { LangSelector, TimingDeviceSettings, LiveServicesPanel, CompetitionSelectMenu, CreateNewCompetitionMenu },
   props: {
     event: {
       type: Object,
@@ -97,6 +98,7 @@ export default {
     <competition-select-menu :competition="competition" :competitions="competitions" :event="event"></competition-select-menu>
 
     <timing-device-settings />
+    <live-services-panel />
 
     <div class="appIcon__wrapper">
       <img v-if="appTheme === 'light'" class="app__icon" src="../../assets/logo/TIMINGWEBLOGO-BLACK.png" alt="" />

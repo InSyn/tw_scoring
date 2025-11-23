@@ -89,6 +89,10 @@ export default {
                 title: 'По секциям',
               },
             },
+            split_settings: {
+              title: 'Настройка отсечек',
+              add_split: 'Добавить отсечку',
+            },
             overall_results: {
               title: 'Формула подсчёта этапа',
               best: 'Лучший',
@@ -167,6 +171,7 @@ export default {
             d_competitor: 'Участник',
             d_result: 'Результат',
             d_overall: 'Общий',
+            status_control: 'Контроль статуса',
           },
           protocols: {
             additional_settings: 'Дополнительные настройки',
@@ -234,6 +239,9 @@ export default {
             d_no: 'Нет',
             d_text: 'Данные заезда будут удалены',
             d_yes: 'Да',
+          },
+          actions: {
+            apply: 'Применить',
           },
         },
       },
@@ -321,6 +329,10 @@ export default {
                 d_coefficient: 'Coefficient',
                 coefficient: 'Coeff.',
               },
+            },
+            split_settings: {
+              title: 'Split settings',
+              add_split: 'Add split',
             },
             overall_results: {
               title: 'Stage result formula',
@@ -466,6 +478,9 @@ export default {
             d_text: 'Race data will be erased',
             d_no: 'No',
             d_yes: 'Yes',
+          },
+          actions: {
+            apply: 'Apply',
           },
         },
       },

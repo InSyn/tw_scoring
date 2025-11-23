@@ -51,30 +51,39 @@ export default {
     ...mapActions('main', {
       setLiveData: 'SET_LIVE_DATA',
     }),
-    async setEventLiveId(e) {
+    async setEventLiveId(event) {
+      const liveId = event && event.target ? event.target.value : '';
+      if (!liveId) {
+        await this.setLiveData({
+          live_id: '',
+          live_id_validated: false,
+        });
+        return;
+      }
       try {
-        const response = await axios.get(`${databaseUrl}/events/${e.target.value}`);
+        const response = await axios.get(`${databaseUrl}/events/${liveId}`);
         if (response.status === 200) {
           const eventData = response.data.event;
 
-          if (eventData && eventData.event_id === e.target.value) {
+          if (eventData && eventData.event_id === liveId) {
             await this.setLiveData({
-              live_id: e.target.value,
+              live_id: liveId,
               live_id_validated: true,
             });
             return;
           }
 
           await this.setLiveData({
-            live_id: e.target.value,
+            live_id: liveId,
             live_id_validated: false,
           });
         }
-      } catch (e) {
+      } catch (error) {
         await this.setLiveData({
-          live_id: e.target.value,
+          live_id: liveId,
           live_id_validated: false,
         });
+        console.error('[LiveResults] setEventLiveId failed:', error.message || error);
       }
     },
     async dbUpdateCompetitionLive(initializeEventInfo) {
@@ -167,13 +176,13 @@ export default {
 .liveResults__body {
   display: flex;
   align-items: center;
-  flex-wrap: wrap;
+  gap: 8px;
 }
 
 .liveResults__liveId__wrapper {
-  flex: 0 0 auto;
   display: flex;
   align-items: center;
+  width: 100%;
   padding: 6px 12px;
   background-color: var(--background-card);
   border-radius: 4px;
@@ -181,12 +190,12 @@ export default {
   transition: box-shadow 92ms;
 }
 .liveResults__liveId__input {
-  flex: 0 0 auto;
+  flex: 1 1 auto;
   margin-left: 1rem;
-  padding: 2px 6px;
+  padding: 6px 10px;
   color: var(--text-default);
   background-color: var(--standard-background);
-  border-radius: 2px;
+  border-radius: 4px;
   transition: box-shadow 92ms;
 }
 .liveResults__liveId__input:focus {
