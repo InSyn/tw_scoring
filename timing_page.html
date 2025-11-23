@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TimingWeb • Тайминг</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap"
+    />
+    <style>
+      :root {
+        --accent: #3b70a9;
+        --accent-light: #3a82ba;
+        --action-blue: #2474d9;
+        --action-darkYellow: #d98e3d;
+        --action-green: #139030;
+        --action-red: #d25748;
+        --action-yellow: #d9bb23;
+        --card-background: #28282a;
+        --error: #ff5252;
+        --standard-background: #1b1b1d;
+        --subject-background: #323234;
+        --success: #2abe6a;
+        --success-light: #2ce98f;
+        --text-default: #d2d2d2;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Montserrat", "Segoe UI", sans-serif;
+        background: var(--standard-background);
+        color: var(--text-default);
+      }
+
+      #app {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        min-height: 100vh;
+        background: var(--standard-background);
+      }
+
+      header {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        height: 54px;
+        padding: 0 16px;
+        background: rgba(40, 40, 42, 0.95);
+        border-bottom: 1px solid var(--subject-background);
+      }
+
+      main {
+        display: flex;
+        flex: 1 1 auto;
+        overflow: hidden;
+      }
+
+      footer {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        height: 38px;
+        padding: 0 32px;
+        background: rgba(40, 40, 42, 0.95);
+        border-top: 1px solid var(--accent);
+        font-size: 0.8rem;
+      }
+
+      .menu {
+        position: relative;
+        width: 220px;
+        min-width: 220px;
+        background: var(--card-background);
+        border-right: 1px solid var(--subject-background);
+        padding: 12px 0;
+      }
+
+      .menu_link {
+        display: flex;
+        align-items: center;
+        padding: 8px 16px;
+        font-weight: 600;
+        cursor: pointer;
+        color: var(--accent);
+        transition: background 0.2s;
+      }
+
+      .menu_link i {
+        font-size: 20px;
+        margin-right: 12px;
+      }
+
+      .menu_link:hover,
+      .menu_link.active {
+        background: var(--accent);
+        color: var(--text-default);
+      }
+
+      .window {
+        position: relative;
+        flex: 1 1 auto;
+        padding: 8px;
+        overflow: auto;
+      }
+
+      .timing_wrapper {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        min-width: 900px;
+        height: calc(100vh - 92px);
+        padding: 8px;
+        font-size: 11px;
+      }
+
+      .actions {
+        display: flex;
+        align-items: center;
+        flex-wrap: nowrap;
+        height: 36px;
+        margin-bottom: 6px;
+      }
+
+      .raceControls {
+        display: flex;
+        align-items: center;
+        padding: 4px;
+        background: var(--card-background);
+        border-radius: 6px;
+      }
+
+      .selectedRace_wrapper {
+        min-width: 120px;
+        margin: 0 6px;
+        padding: 4px 12px;
+        text-align: center;
+        font-weight: 700;
+        font-size: 1rem;
+        background: var(--standard-background);
+        border-radius: 6px;
+      }
+
+      .setResultStatus__wrapper {
+        display: flex;
+        align-items: center;
+        padding: 4px;
+        margin-left: 8px;
+        background: var(--card-background);
+        border-radius: 6px;
+      }
+
+      .competitorBib__input {
+        width: 56px;
+        margin-right: 12px;
+        padding: 4px 6px;
+        font-weight: bold;
+        color: var(--text-default);
+        background: var(--standard-background);
+        border: none;
+        border-radius: 6px;
+      }
+
+      .statusBtn {
+        margin-right: 4px;
+        padding: 4px 8px;
+        font-weight: bold;
+        border: none;
+        border-radius: 6px;
+        background: var(--standard-background);
+        color: var(--text-default);
+        cursor: pointer;
+      }
+
+      .statusBtn.DNF {
+        background: #d1c149;
+      }
+      .statusBtn.DNS {
+        background: #d17e3d;
+      }
+      .statusBtn.DSQ {
+        background: #d1493e;
+      }
+
+      .setStatusBtn {
+        margin-left: 12px;
+        padding: 4px 12px;
+        font-weight: bold;
+        color: var(--text-default);
+        background: var(--accent);
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+
+      .icon-action {
+        margin-left: 8px;
+        padding: 6px 10px;
+        border-radius: 6px;
+        border: 1px solid var(--accent);
+        background: transparent;
+        color: var(--accent);
+        cursor: pointer;
+      }
+
+      .timingRace__panel {
+        flex: 1 1 auto;
+        display: flex;
+        height: calc(100% - 42px);
+      }
+
+      .intermediates {
+        flex: 1 1 auto;
+        display: flex;
+        flex-wrap: wrap;
+        align-content: flex-start;
+        margin-right: 8px;
+        overflow-x: auto;
+      }
+
+      .lap_wrapper {
+        margin: 0 8px 12px 0;
+      }
+
+      .intermediate_wrapper {
+        width: 300px;
+        background: var(--card-background);
+        border: 2px solid var(--standard-background);
+        border-bottom: none;
+      }
+
+      .competitors_wrapper {
+        display: flex;
+        flex-direction: column;
+        height: 120px;
+        overflow-y: auto;
+        border-top: 1px solid var(--subject-background);
+        border-left: 1px solid var(--subject-background);
+      }
+
+      .competitor {
+        padding: 2px 6px;
+        border-top: 1px solid var(--subject-background);
+        font-size: 11px;
+      }
+
+      .competitor_bib {
+        font-weight: bold;
+        margin-right: 6px;
+      }
+
+      .int_title {
+        padding: 4px 8px;
+        font-weight: bold;
+        background: var(--subject-background);
+      }
+
+      .t_header {
+        display: flex;
+        border-right: 6px solid var(--subject-background);
+      }
+
+      .t_header .t_col {
+        font-weight: bold;
+        border: 1px solid var(--subject-background);
+        background: var(--accent);
+        padding: 2px 6px;
+        text-transform: uppercase;
+      }
+
+      .table_wrapper {
+        min-height: 120px;
+        max-height: 360px;
+        overflow-y: auto;
+        border-left: 1px solid var(--subject-background);
+        border-bottom: 1px solid var(--subject-background);
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 11px;
+      }
+
+      td {
+        padding: 4px 6px;
+        border-bottom: 1px solid var(--subject-background);
+      }
+
+      .t_col.btn {
+        width: 24px;
+        text-align: center;
+      }
+
+      .t_col.bib {
+        width: 48px;
+      }
+
+      .t_col.time {
+        width: 120px;
+        font-weight: bold;
+      }
+
+      .timeManual {
+        margin-left: 4px;
+        font-size: 0.7rem;
+        font-weight: 700;
+        color: var(--accent-light);
+      }
+
+      .t_col.res {
+        width: 110px;
+        text-align: right;
+        font-weight: bold;
+      }
+
+      .time_btn {
+        width: 12px;
+        height: 12px;
+        margin: 0 auto;
+        border-radius: 50%;
+        background: var(--action-yellow);
+      }
+
+      .btn_green {
+        background: var(--success);
+      }
+
+      .result_info_wrapper {
+        width: 240px;
+        display: flex;
+        flex-direction: column;
+        margin-left: auto;
+      }
+
+      .result_wrapper {
+        width: 240px;
+        margin-bottom: 12px;
+        background: var(--card-background);
+        border: 2px solid var(--standard-background);
+        border-bottom: none;
+      }
+
+      .res_title {
+        padding: 6px 10px;
+        font-weight: bold;
+        background: var(--subject-background);
+      }
+
+      .services {
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        width: 320px;
+        margin: 8px;
+        padding: 8px;
+        border-radius: 6px;
+        background: var(--card-background);
+      }
+
+      .exportCSV__wrapper {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        padding: 8px;
+        border-radius: 6px;
+        background: var(--standard-background);
+      }
+
+      .exportCSV__wrapper h3 {
+        margin: 0;
+        font-size: 1rem;
+        font-weight: 700;
+      }
+
+      .exportCSV__wrapper .mdi {
+        font-size: 18px;
+      }
+
+      .updater__btn {
+        margin-left: auto;
+        padding: 4px 12px;
+        font-weight: bold;
+        border-radius: 4px;
+        border: 1px solid var(--action-green);
+        background: transparent;
+        color: var(--action-green);
+        cursor: pointer;
+      }
+
+      .exportPath__input__wrapper {
+        flex: 0 0 100%;
+        display: flex;
+        align-items: center;
+        margin-top: 6px;
+        padding: 8px;
+        border-radius: 6px;
+        background: var(--card-background);
+      }
+
+      .exportPath__label {
+        margin-right: 8px;
+        font-weight: bold;
+      }
+
+      .exportPath__input {
+        flex: 1 1 auto;
+        padding: 4px 6px;
+        border-radius: 4px;
+        border: none;
+        font-weight: bold;
+        color: var(--text-default);
+        background: var(--standard-background);
+      }
+
+      .timer__wrapper {
+        margin-top: 8px;
+        padding: 6px;
+        border-radius: 6px;
+        background: var(--standard-background);
+      }
+
+      .timer__wrapper > div {
+        margin: 4px 0;
+        padding: 4px;
+        border-radius: 4px;
+        background: var(--card-background);
+      }
+
+      .passingTimeDisplay {
+        display: flex;
+        align-items: center;
+        font-weight: bold;
+      }
+
+      .passingTimeDisplay__value {
+        margin-left: 8px;
+        padding: 2px 8px;
+        border-radius: 4px;
+        background: var(--standard-background);
+      }
+
+      .timerButtons__wrapper {
+        display: flex;
+        align-items: center;
+        background: transparent;
+        padding: 0;
+      }
+
+      .timerButton {
+        margin: 4px;
+        padding: 4px 12px;
+        font-weight: bold;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+
+      .button-start {
+        background: var(--accent);
+        color: var(--text-default);
+      }
+
+      .button-stop {
+        background: var(--error);
+        color: var(--text-default);
+      }
+
+      .button-reset {
+        margin-left: auto;
+        background: var(--action-darkYellow);
+        color: var(--text-default);
+      }
+
+      .competitorsDisplay {
+        background: var(--card-background);
+      }
+
+      .competitorsDisplay__list {
+        display: flex;
+        flex-direction: column;
+        max-height: 150px;
+        overflow-y: auto;
+        padding: 4px;
+        border-radius: 4px;
+        background: var(--standard-background);
+      }
+
+      .competitorTimer {
+        display: flex;
+        align-items: center;
+        padding: 4px;
+        margin-bottom: 4px;
+        border-radius: 4px;
+        background: var(--card-background);
+      }
+
+      .competitorTimer__competitorControls button {
+        margin-left: 4px;
+      }
+
+      .addCompetitor {
+        display: flex;
+        align-items: center;
+        padding: 4px;
+        background: var(--card-background);
+      }
+
+      .competitorNumber__input {
+        width: 90px;
+        padding: 4px 6px;
+        border-radius: 4px;
+        border: none;
+        font-weight: bold;
+        color: var(--text-default);
+        background: var(--standard-background);
+      }
+
+      .button-addCompetitor {
+        margin-left: auto;
+        background: var(--success);
+        color: var(--text-default);
+      }
+
+      .timerLog {
+        min-height: 60px;
+        border-radius: 4px;
+        border: 1px dashed var(--subject-background);
+        background: transparent;
+      }
+
+      .v-btn,
+      .lang-switch,
+      .tw-chip {
+        border: none;
+        background: transparent;
+        color: var(--accent);
+        cursor: pointer;
+      }
+
+      .v-btn.icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        margin-right: 6px;
+        border: 1px solid var(--accent);
+      }
+
+      .v-btn.icon i {
+        font-size: 18px;
+      }
+
+      .tw-title {
+        display: flex;
+        flex-direction: column;
+        font-size: 0.9rem;
+        margin-left: 16px;
+      }
+
+      .competition-select {
+        margin-left: 16px;
+        padding: 6px 12px;
+        border-radius: 6px;
+        background: var(--standard-background);
+        font-size: 0.9rem;
+        min-width: 260px;
+      }
+
+      .tw-logo-center {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        height: 100%;
+        display: flex;
+        align-items: center;
+      }
+
+      .tw-logo-center img,
+      .header-logo {
+        height: 30px;
+        user-select: none;
+      }
+
+      .lang-switch {
+        margin: 0 16px;
+        padding: 6px 12px;
+        border-radius: 6px;
+        background: var(--standard-background);
+        font-weight: bold;
+        color: var(--text-default);
+      }
+
+      .tw-spacer {
+        flex: 1 1 auto;
+      }
+
+      .footer-time {
+        color: var(--accent);
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <header>
+        <button class="v-btn icon" aria-label="Меню">
+          <i class="mdi mdi-backburger"></i>
+        </button>
+        <button class="v-btn icon" aria-label="Сохранить">
+          <i class="mdi mdi-content-save"></i>
+        </button>
+        <button class="v-btn icon" aria-label="Загрузить">
+          <i class="mdi mdi-download"></i>
+        </button>
+        <button class="v-btn icon" aria-label="Новый файл">
+          <i class="mdi mdi-folder-plus"></i>
+        </button>
+        <div class="competition-select">
+          <div style="display: flex; justify-content: space-between">
+            <span style="color: var(--accent)">1</span>
+            <span>ID: a8lwzeog</span>
+          </div>
+          <div>New event. Qualification</div>
+        </div>
+
+        <div class="tw-logo-center">
+          <img
+            src="src/renderer/assets/logo/TIMINGWEBLOGO-WHITE.png"
+            alt="TimingWeb"
+          />
+        </div>
+
+        <div class="tw-spacer"></div>
+
+        <img
+          class="header-logo"
+          src="src/renderer/assets/logo/timing_light.png"
+          alt="Timing Light"
+        />
+
+        <button class="v-btn icon" aria-label="Устройства тайминга">
+          <i class="mdi mdi-timer-outline"></i>
+        </button>
+
+        <div class="lang-switch">RU</div>
+
+        <button class="v-btn icon" aria-label="Сменить тему">
+          <i class="mdi mdi-brightness-6"></i>
+        </button>
+      </header>
+
+      <main>
+        <aside class="menu">
+          <div class="menu_link">
+            <i class="mdi mdi-view-dashboard"></i>
+            <span>Событие</span>
+          </div>
+          <div class="menu_link">
+            <i class="mdi mdi-cog"></i>
+            <span>Настройки</span>
+          </div>
+          <div class="menu_link">
+            <i class="mdi mdi-account-group"></i>
+            <span>Участники</span>
+          </div>
+          <div class="menu_link">
+            <i class="mdi mdi-account-multiple"></i>
+            <span>Команды</span>
+          </div>
+          <div class="menu_link">
+            <i class="mdi mdi-clipboard-list"></i>
+            <span>Заезды</span>
+          </div>
+          <div class="menu_link active">
+            <i class="mdi mdi-timer"></i>
+            <span>Тайминг</span>
+          </div>
+          <div class="menu_link">
+            <i class="mdi mdi-trophy-variant"></i>
+            <span>Протоколы</span>
+          </div>
+        </aside>
+
+        <section class="window">
+          <div class="timing_wrapper">
+            <div class="actions">
+              <div class="raceControls">
+                <button class="v-btn icon" aria-label="Предыдущий заезд">
+                  <i class="mdi mdi-chevron-double-left"></i>
+                </button>
+                <div class="selectedRace_wrapper">Race 1</div>
+                <button class="v-btn icon" aria-label="Следующий заезд">
+                  <i class="mdi mdi-chevron-double-right"></i>
+                </button>
+              </div>
+
+              <div class="setResultStatus__wrapper">
+                <input
+                  class="competitorBib__input"
+                  type="number"
+                  placeholder="bib"
+                  value="2"
+                />
+                <button class="statusBtn DNF">DNF</button>
+                <button class="statusBtn DNS">DNS</button>
+                <button class="statusBtn DSQ">DSQ</button>
+                <button class="setStatusBtn">SET</button>
+              </div>
+
+              <button class="icon-action" aria-label="Ручная отсечка">
+                <i class="mdi mdi-timer-plus-outline"></i>
+              </button>
+              <button class="icon-action" aria-label="Масс-старт">
+                <i class="mdi mdi-account-group-outline"></i>
+              </button>
+            </div>
+
+            <div class="timingRace__panel">
+              <div class="intermediates">
+                <div class="lap_wrapper">
+                  <div class="intermediate_wrapper">
+                    <div class="competitors_wrapper">
+                      <div class="competitor">
+                        <span class="competitor_bib">301</span>
+                        <span class="competitor_name">ИВАНОВ ИВАН</span>
+                      </div>
+                      <div class="competitor">
+                        <span class="competitor_bib">302</span>
+                        <span class="competitor_name">ПЕТРОВ ПЁТР</span>
+                      </div>
+                      <div class="competitor">
+                        <span class="competitor_bib">303</span>
+                        <span class="competitor_name">СИДОРОВ СИДОР</span>
+                      </div>
+                      <div class="competitor">
+                        <span class="competitor_bib">304</span>
+                        <span class="competitor_name">КОНОВАЛОВ АЛЕКСЕЙ</span>
+                      </div>
+                      <div class="competitor">
+                        <span class="competitor_bib">305</span>
+                        <span class="competitor_name">ПАВЛОВ НИКИТА</span>
+                      </div>
+                      <div class="competitor">
+                        <span class="competitor_bib">306</span>
+                        <span class="competitor_name">ЖУКОВ СТЕПАН</span>
+                      </div>
+                    </div>
+                    <div class="int_title">START</div>
+                    <div class="t_header">
+                      <div class="t_col btn"></div>
+                      <div class="t_col bib">bib</div>
+                      <div class="t_col time">time</div>
+                      <div class="t_col res">diff</div>
+                    </div>
+                    <div class="table_wrapper">
+                      <table>
+                        <tbody>
+                          <tr>
+                            <td class="t_col btn">
+                              <div class="time_btn btn_green"></div>
+                            </td>
+                            <td class="t_col bib">3</td>
+                            <td class="t_col time">
+                              23:35:31.6 <span class="timeManual">M</span>
+                            </td>
+                            <td class="t_col res">+00:00.0</td>
+                          </tr>
+                          <tr>
+                            <td class="t_col btn">
+                              <div class="time_btn btn_green"></div>
+                            </td>
+                            <td class="t_col bib">2</td>
+                            <td class="t_col time">
+                              23:35:13.2 <span class="timeManual">M</span>
+                            </td>
+                            <td class="t_col res">+00:02.4</td>
+                          </tr>
+                          <tr>
+                            <td class="t_col btn">
+                              <div class="time_btn btn_green"></div>
+                            </td>
+                            <td class="t_col bib">1</td>
+                            <td class="t_col time">
+                              23:35:10.8 <span class="timeManual">M</span>
+                            </td>
+                            <td class="t_col res">+00:04.8</td>
+                          </tr>
+                          <tr>
+                            <td class="t_col btn">
+                              <div class="time_btn btn_green"></div>
+                            </td>
+                            <td class="t_col bib">5</td>
+                            <td class="t_col time">
+                              23:35:01.9 <span class="timeManual">M</span>
+                            </td>
+                            <td class="t_col res">+00:12.0</td>
+                          </tr>
+                          <tr>
+                            <td class="t_col btn">
+                              <div class="time_btn"></div>
+                            </td>
+                            <td class="t_col bib">4</td>
+                            <td class="t_col time">
+                              23:20:58.7 <span class="timeManual">M</span>
+                            </td>
+                            <td class="t_col res">+14:32.9</td>
+                          </tr>
+                          <tr>
+                            <td class="t_col btn">
+                              <div class="time_btn"></div>
+                            </td>
+                            <td class="t_col bib">6</td>
+                            <td class="t_col time">
+                              23:20:54.5 <span class="timeManual">M</span>
+                            </td>
+                            <td class="t_col res">+14:37.1</td>
+                          </tr>
+                          <tr>
+                            <td class="t_col btn">
+                              <div class="time_btn"></div>
+                            </td>
+                            <td class="t_col bib">7</td>
+                            <td class="t_col time">
+                              23:16:05.0 <span class="timeManual">M</span>
+                            </td>
+                            <td class="t_col res">+19:26.5</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="lap_wrapper">
+                  <div class="intermediate_wrapper">
+                    <div class="int_title">FINISH</div>
+                    <div class="t_header">
+                      <div class="t_col btn"></div>
+                      <div class="t_col bib">bib</div>
+                      <div class="t_col time">time</div>
+                      <div class="t_col res">result</div>
+                    </div>
+                    <div class="table_wrapper">
+                      <table>
+                        <tbody>
+                          <tr>
+                            <td class="t_col btn">
+                              <div class="time_btn btn_green"></div>
+                            </td>
+                            <td class="t_col bib">2</td>
+                            <td class="t_col time">00:04:07.9</td>
+                            <td class="t_col res">00:04:07.9</td>
+                          </tr>
+                          <tr>
+                            <td class="t_col btn">
+                              <div class="time_btn btn_green"></div>
+                            </td>
+                            <td class="t_col bib">3</td>
+                            <td class="t_col time">00:04:32.6</td>
+                            <td class="t_col res">+00:00.5</td>
+                          </tr>
+                          <tr>
+                            <td class="t_col btn">
+                              <div class="time_btn btn_green"></div>
+                            </td>
+                            <td class="t_col bib">1</td>
+                            <td class="t_col time">00:08:01.6</td>
+                            <td class="t_col res">+00:03.2</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="result_info_wrapper">
+                <div class="result_wrapper">
+                  <div class="res_title">History</div>
+                  <div class="t_header">
+                    <div class="t_col rank">rank</div>
+                    <div class="t_col bib">bib</div>
+                    <div class="t_col res">result</div>
+                  </div>
+                  <div class="table_wrapper">
+                    <table>
+                      <tbody>
+                        <tr>
+                          <td class="t_col rank">2</td>
+                          <td class="t_col bib">3</td>
+                          <td class="t_col res">00:04:32.6</td>
+                        </tr>
+                        <tr>
+                          <td class="t_col rank">1</td>
+                          <td class="t_col bib">2</td>
+                          <td class="t_col res">00:04:07.9</td>
+                        </tr>
+                        <tr>
+                          <td class="t_col rank">3</td>
+                          <td class="t_col bib">1</td>
+                          <td class="t_col res">00:08:01.6</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <div class="result_wrapper">
+                  <div class="res_title">Results</div>
+                  <div class="t_header">
+                    <div class="t_col rank">rank</div>
+                    <div class="t_col bib">bib</div>
+                    <div class="t_col res">result</div>
+                  </div>
+                  <div class="table_wrapper">
+                    <table>
+                      <tbody>
+                        <tr>
+                          <td class="t_col rank">1</td>
+                          <td class="t_col bib">2</td>
+                          <td class="t_col res">00:04:07.9</td>
+                        </tr>
+                        <tr>
+                          <td class="t_col rank">2</td>
+                          <td class="t_col bib">3</td>
+                          <td class="t_col res">00:04:32.6</td>
+                        </tr>
+                        <tr>
+                          <td class="t_col rank">3</td>
+                          <td class="t_col bib">1</td>
+                          <td class="t_col res">00:08:01.6</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="services">
+              <div class="exportCSV__wrapper">
+                <h3>File Translation</h3>
+                <button class="v-btn icon" aria-label="Изменить режим">
+                  <i class="mdi mdi-file-multiple-outline"></i>
+                </button>
+                <button class="updater__btn">Save CSV</button>
+                <div class="exportPath__input__wrapper">
+                  <span class="exportPath__label">Путь:</span>
+                  <input
+                    class="exportPath__input"
+                    type="text"
+                    value="C:/TW_Translation"
+                  />
+                </div>
+              </div>
+
+              <div class="timer__wrapper">
+                <div class="timeStartedAt">Таймер запущен: 3:00:00.00</div>
+                <div class="timeStoppedAt">Таймер остановлен: 3:00:00.00</div>
+                <div class="timeElapsed">Времени прошло: 00.00 сек.</div>
+                <div class="passingTimeDisplay">
+                  Текущее время:
+                  <div class="passingTimeDisplay__value">0.00</div>
+                  &nbsp;сек.
+                </div>
+                <div class="timerButtons__wrapper">
+                  <button class="timerButton button-start">Старт</button>
+                  <button class="timerButton button-stop">Стоп</button>
+                  <button class="timerButton button-reset">Сброс</button>
+                </div>
+                <div class="competitorsDisplay">
+                  <div class="competitorsDisplay__list">
+                    <div class="competitorTimer">
+                      <div class="competitorTimer__competitorInfo">
+                        Участник 12:
+                        <div class="passingTimeDisplay__value">12.58</div>
+                      </div>
+                      <div class="competitorTimer__competitorControls">
+                        <button class="timerButton button-start">Старт</button>
+                        <button class="timerButton button-stop">Стоп</button>
+                      </div>
+                    </div>
+                    <div class="competitorTimer">
+                      <div class="competitorTimer__competitorInfo">
+                        Участник 14:
+                        <div class="passingTimeDisplay__value">9.12</div>
+                      </div>
+                      <div class="competitorTimer__competitorControls">
+                        <button class="timerButton button-start">Старт</button>
+                        <button class="timerButton button-stop">Стоп</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="addCompetitor">
+                  <input
+                    class="competitorNumber__input"
+                    type="text"
+                    placeholder="Номер уч..."
+                  />
+                  <button class="timerButton button-addCompetitor">
+                    Добавить участника
+                  </button>
+                </div>
+                <div class="timerLog"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer>
+        <span style="font-weight: bold; margin-right: 8px">V 1.0.0</span>
+        <span style="font-weight: bold"
+          >Created by TimingWeb © 2020 - 2025</span
+        >
+        <div class="tw-spacer"></div>
+        <span class="footer-time">01:49:12</span>
+      </footer>
+    </div>
+  </body>
+</html>
+
