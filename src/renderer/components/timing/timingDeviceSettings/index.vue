@@ -18,7 +18,7 @@ export default {
       connectionTypes: [
         {
           type: 'TCP',
-          ip: '192.168.3.127',
+          ip: '192.168.0.51',
           port: 7000,
         },
         // {
@@ -29,6 +29,7 @@ export default {
       ],
 
       show_deviceSettings: true,
+      syncWaitInterval: null, // Интервал для ожидания 59 секунды
     };
   },
   computed: {
@@ -49,18 +50,72 @@ export default {
       if (!this.opened) this.stopDrag();
     },
     syncDevice(connection) {
-      const date = new Date();
+      // Очищаем предыдущий интервал, если он есть
+      if (this.syncWaitInterval) {
+        clearInterval(this.syncWaitInterval);
+        this.syncWaitInterval = null;
+      }
 
-      const HH = date.getHours();
-      const MM = date.getMinutes();
-      const SS = date.getSeconds();
-      const DD = date.getDate();
-      const XX = date.getMonth() + 1;
-      const YY = date.getFullYear().toString().slice(-2);
+      // Функция для отправки синхронизации со следующей минутой
+      const sendSyncWithNextMinute = () => {
+        const date = new Date();
+        let HH = date.getHours();
+        let MM = date.getMinutes() + 1; // Следующая минута
+        const DD = date.getDate();
+        const XX = date.getMonth() + 1;
+        const YY = date.getFullYear().toString().slice(-2);
 
-      const dateMsg = `${HH}:${MM}:${SS} ${DD}/${XX}/${YY}`;
+        // Если минута перешла за 59, переходим на следующий час
+        if (MM >= 60) {
+          MM = 0;
+          HH += 1;
+          // Если час перешел за 23, переходим на следующий день
+          if (HH >= 24) {
+            HH = 0;
+          }
+        }
 
-      if (connection.type === 'TCP') ipcRenderer.send('SyncTimeTCP', dateMsg);
+        // Форматируем время (без секунд, так как отправляем следующую минуту)
+        const HHStr = HH.toString().padStart(2, '0');
+        const MMStr = MM.toString().padStart(2, '0');
+        const DDStr = DD.toString().padStart(2, '0');
+        const XXStr = XX.toString().padStart(2, '0');
+
+        // Отправляем время следующей минуты (в формате HH:MM:SS, но SS будет 00)
+        const dateMsg = `${HHStr}:${MMStr}:00 ${DDStr}/${XXStr}/${YY}`;
+
+        if (connection.type === 'TCP') {
+          ipcRenderer.send('SyncTimeTCP', dateMsg);
+        }
+
+        // Очищаем интервал после отправки
+        if (this.syncWaitInterval) {
+          clearInterval(this.syncWaitInterval);
+          this.syncWaitInterval = null;
+        }
+      };
+
+      // Проверяем текущее время
+      const now = new Date();
+      const currentSeconds = now.getSeconds();
+
+      // Если текущая секунда уже 59, отправляем сразу
+      if (currentSeconds === 59) {
+        sendSyncWithNextMinute();
+        return;
+      }
+
+      // Иначе ждем до 59 секунды
+      // Проверяем каждые 100мс, чтобы точно поймать момент, когда секунда станет 59
+      this.syncWaitInterval = setInterval(() => {
+        const checkDate = new Date();
+        const seconds = checkDate.getSeconds();
+
+        // Когда секунда станет 59, отправляем синхронизацию
+        if (seconds === 59) {
+          sendSyncWithNextMinute();
+        }
+      }, 100); // Проверяем каждые 100мс
     },
     testPrint(connection) {
       const date = new Date();
@@ -78,6 +133,13 @@ export default {
 
       if (connection.type === 'TCP') ipcRenderer.send('PrintTCPMessage', testMsg);
     },
+  },
+  beforeDestroy() {
+    // Очищаем интервал при уничтожении компонента
+    if (this.syncWaitInterval) {
+      clearInterval(this.syncWaitInterval);
+      this.syncWaitInterval = null;
+    }
   },
 };
 </script>

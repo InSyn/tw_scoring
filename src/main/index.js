@@ -99,6 +99,7 @@ export { ipcMain, mainWindow, sendServerMessage, sendInfoMessage, sendTerminalsM
 import './lic_server';
 import './socket_setup';
 import './timingServer/timingDeviceServerSetup';
+import './mobileServer/mobileServerSetup';
 
 /**
  * Auto Updater

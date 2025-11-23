@@ -116,15 +116,65 @@ ipcMain.on('StartTCPSocket', (event, { host, port }) => {
 });
 
 ipcMain.on('SyncTimeTCP', (event, time) => {
-  const timeMsg_hex =
-    '!T'
-      .split('')
-      .map((letter) => `${letter.charCodeAt(0).toString(16)}`)
-      .join('') + '090D0A';
+  // Проверяем, подключен ли таймер
+  const isConnected = connectedDevices.some((device) => device.connected === true);
+  if (!isConnected) {
+    sendServerMessage({
+      color: 'red',
+      message: 'Cannot sync time: Timer is not connected',
+    });
+    return;
+  }
 
-  const timeMsg_buf = Buffer.from(timeMsg_hex, 'hex');
-
-  send(timeMsg_buf);
+  // Согласно протоколу THCOM08:
+  // #WC_007_TT_HH:MM_DD/XX/YY - команда для синхронизации времени
+  // TT = 2 (Manual Synchro) - ручная синхронизация с указанным временем
+  // В протоколе символ '_' в описании означает пробел в реальной команде для Ethernet
+  // time приходит в формате "HH:MM:SS DD/MM/YY"
+  // Нужно преобразовать в формат "HH:MM DD/XX/YY" (без секунд, месяц как XX)
+  const timeParts = time.split(' ');
+  const timePart = timeParts[0]; // "HH:MM:SS"
+  const datePart = timeParts[1]; // "DD/MM/YY"
+  
+  // Убираем секунды из времени: "HH:MM:SS" -> "HH:MM"
+  const timeOnly = timePart.split(':').slice(0, 2).join(':');
+  
+  // Разбираем дату: "DD/MM/YY" -> DD, MM, YY
+  const dateParts = datePart.split('/');
+  const DD = dateParts[0].padStart(2, '0');
+  const XX = dateParts[1].padStart(2, '0');
+  const YY = dateParts[2];
+  
+  // Согласно документации TAG Heuer CP 540:
+  // Процесс синхронизации состоит из двух шагов:
+  // 1. Отправить команду #WC 007 02 HH:MM DD/MM/YY (02 = Manual Synchro)
+  // 2. После того, как таймер перейдет в режим "Ready for synchro", 
+  //    отправить команду #WC 008 01 для активации синхронизации
+  
+  // Шаг 1: Отправляем команду начала синхронизации
+  const command1 = `#WC 007 02 ${timeOnly} ${DD}/${XX}/${YY}\r\n`;
+  const command1_buf = Buffer.from(command1, 'utf8');
+  
+  send(command1_buf);
+  
+  sendServerMessage({
+    color: 'blue',
+    message: `Sync time step 1 sent: #WC 007 02 ${timeOnly} ${DD}/${XX}/${YY}`,
+  });
+  
+  // Шаг 2: Ждем немного и отправляем команду активации синхронизации
+  // Используем небольшую задержку, чтобы таймер успел перейти в режим "Ready for synchro"
+  setTimeout(() => {
+    const command2 = `#WC 008 01\r\n`;
+    const command2_buf = Buffer.from(command2, 'utf8');
+    
+    send(command2_buf);
+    
+    sendServerMessage({
+      color: 'blue',
+      message: `Sync time step 2 sent: #WC 008 01`,
+    });
+  }, 500); // Задержка 500мс для перехода таймера в режим готовности
 });
 
 ipcMain.on('writeTimer', (event, { filePath, time }) => {

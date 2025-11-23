@@ -3,6 +3,15 @@
     <div class="sxSplitColumn__titleRow">
       <div class="sxSplitColumn__title">{{ split.title }}</div>
       <button
+        class="sxSplitColumn__mobileBtn"
+        type="button"
+        aria-label="Mobile interface"
+        @click="showMobileModal = true"
+        title="Мобильный интерфейс"
+      >
+        <i class="mdi mdi-cellphone"></i>
+      </button>
+      <button
         v-if="canRemove"
         class="sxSplitColumn__removeBtn"
         type="button"
@@ -12,6 +21,35 @@
         🗑
       </button>
     </div>
+    
+    <!-- Модальное окно для мобильного интерфейса -->
+    <v-dialog v-model="showMobileModal" width="500">
+      <div class="mobileModal__wrapper">
+        <div class="mobileModal__header">
+          <span>Мобильный интерфейс - {{ split.title }}</span>
+          <button class="mobileModal__closeBtn" @click="showMobileModal = false">
+            <i class="mdi mdi-close"></i>
+          </button>
+        </div>
+        <div class="mobileModal__body">
+          <div class="mobileModal__urlSection">
+            <label>Ссылка для мобильного устройства:</label>
+            <div class="mobileModal__urlInput">
+              <input type="text" :value="mobileUrl" readonly ref="urlInput" />
+              <button @click="copyUrl" class="mobileModal__copyBtn" title="Копировать">
+                <i class="mdi mdi-content-copy"></i>
+              </button>
+            </div>
+          </div>
+          <div class="mobileModal__actions">
+            <button class="mobileModal__startBtn" @click="startMobileServer">
+              <i class="mdi mdi-play"></i>
+              Запустить сервер
+            </button>
+          </div>
+        </div>
+      </div>
+    </v-dialog>
 
     <div v-if="isStart" class="sxSplitColumn__queueList">
       <template v-if="queue && queue.length">
@@ -49,7 +87,7 @@
       </template>
     </div>
 
-    <div class="sxSplitColumn__table">
+    <div class="sxSplitColumn__table" ref="scrollContainer">
       <div class="sxSplitColumn__tableHead" :class="tableColumnsClass">
         <span class="stateHeader">
           <button
@@ -66,7 +104,27 @@
         <span>{{ labels.bib }}</span>
         <span class="timeHeader">{{ labels.time }}</span>
         <span v-if="showDiff">{{ labels.diff }}</span>
-        <span v-if="showResult" class="resultHeader">{{ labels.result }}</span>
+        <span v-if="showResult" class="resultHeader">
+          <button
+            v-if="!isStart"
+            class="sxSplitColumn__lockBtn"
+            type="button"
+            :title="resultLocked ? 'Разблокировать редактирование результатов' : 'Заблокировать редактирование результатов'"
+            @click.stop="$emit('toggle-result-lock')"
+          >
+            <i :class="resultLocked ? 'mdi mdi-lock' : 'mdi mdi-lock-open-variant'"></i>
+          </button>
+          <button
+            v-if="!isStart && !resultLocked"
+            class="sxSplitColumn__recalculateBtn"
+            type="button"
+            title="Пересчитать результат"
+            @click.stop="$emit('recalculate-results')"
+          >
+            <i class="mdi mdi-check-circle"></i>
+          </button>
+          {{ labels.result }}
+        </span>
       </div>
 
       <div
@@ -86,7 +144,10 @@
           placeholder="bib"
         />
 
-        <div class="timeValue" @dblclick="startEditing(entry)">
+        <div
+          :class="['timeValue', { 'timeValue--manual': entry.manualSource }]"
+          @dblclick="startEditing(entry)"
+        >
           <template v-if="editingEntryId === entry.id">
             <input
               class="timeEditInput"
@@ -105,7 +166,28 @@
         </div>
 
         <div v-if="showDiff" class="diffValue">{{ entry.diff || '00:00:00.0' }}</div>
-        <div v-if="showResult" class="resultValue">{{ entry.result || '' }}</div>
+        <div v-if="showResult" class="resultValue">
+          <template v-if="!resultLocked && editingResultId === entry.id">
+            <input
+              class="resultEditInput"
+              :ref="`resultInput-${entry.id}`"
+              v-model="editingResultValue"
+              @keyup.enter.prevent="confirmResultEdit(entry)"
+              @keyup.esc.prevent="cancelResultEdit"
+              @blur="confirmResultEdit(entry)"
+            />
+          </template>
+          <template v-else>
+            <span
+              v-if="!resultLocked"
+              class="resultValueEditable"
+              @dblclick="startResultEditing(entry)"
+            >
+              {{ entry.result || '' }}
+            </span>
+            <span v-else>{{ entry.result || '' }}</span>
+          </template>
+        </div>
       </div>
     </div>
   </div>
@@ -131,15 +213,28 @@ export default {
     showDiff: { type: Boolean, default: false },
     autoAssignEnabled: { type: Boolean, default: false },
     selectedEntryId: { type: String, default: '' },
+    resultLocked: { type: Boolean, default: true },
   },
   data() {
     return {
       editingEntryId: null,
       editingValue: '',
       editingOriginalValue: '',
+      editingResultId: null,
+      editingResultValue: '',
+      editingResultOriginalValue: '',
+      showMobileModal: false,
+      mobileServerRunning: false,
+      localIp: '192.168.0.1',
+      mobilePort: 8080,
+      scrollContainer: null,
+      savedScrollTop: 0,
     };
   },
   computed: {
+    mobileUrl() {
+      return `http://${this.localIp}:${this.mobilePort}/mobile/${this.split.id}`;
+    },
     tableColumnsClass() {
       if (this.showDiff && this.showResult) return 'grid-5';
       if (this.showDiff || this.showResult) return 'grid-4';
@@ -160,6 +255,43 @@ export default {
         'autoBtn--paused': !this.autoAssignEnabled,
       };
     },
+  },
+  watch: {
+    entries: {
+      handler() {
+        // Сохраняем позицию прокрутки перед обновлением
+        if (this.scrollContainer) {
+          this.savedScrollTop = this.scrollContainer.scrollTop;
+        }
+        // Восстанавливаем позицию прокрутки после обновления DOM
+        this.$nextTick(() => {
+          if (this.scrollContainer && this.savedScrollTop > 0) {
+            this.scrollContainer.scrollTop = this.savedScrollTop;
+          }
+        });
+      },
+      deep: true,
+    },
+  },
+  mounted() {
+    this.getLocalIp();
+    this.$nextTick(() => {
+      this.scrollContainer = this.$refs.scrollContainer;
+    });
+    const { ipcRenderer } = require('electron');
+    ipcRenderer.on('mobile-server-started', (event, { ip, port }) => {
+      this.localIp = ip;
+      this.mobilePort = port;
+      this.mobileServerRunning = true;
+    });
+    ipcRenderer.on('mobile-server-stopped', () => {
+      this.mobileServerRunning = false;
+    });
+  },
+  beforeDestroy() {
+    const { ipcRenderer } = require('electron');
+    ipcRenderer.removeAllListeners('mobile-server-started');
+    ipcRenderer.removeAllListeners('mobile-server-stopped');
   },
   methods: {
     startEditing(entry) {
@@ -197,6 +329,61 @@ export default {
       this.editingValue = '';
       this.editingOriginalValue = '';
     },
+    startResultEditing(entry) {
+      if (this.resultLocked) return;
+      this.editingResultId = entry.id;
+      this.editingResultValue = entry.result || '';
+      this.editingResultOriginalValue = entry.result || '';
+      this.$nextTick(() => {
+        let ref = this.$refs[`resultInput-${entry.id}`];
+        if (Array.isArray(ref)) {
+          ref = ref[0];
+        }
+        if (ref && typeof ref.focus === 'function') {
+          ref.focus();
+          if (typeof ref.select === 'function') {
+            ref.select();
+          }
+        }
+      });
+    },
+    confirmResultEdit(entry) {
+      if (this.editingResultId !== entry.id) return;
+      const currentValue = (this.editingResultValue || '').trim();
+      const originalValue = (this.editingResultOriginalValue || '').trim();
+      if (currentValue === originalValue) {
+        this.cancelResultEdit();
+        return;
+      }
+      this.$emit('update-entry-result', { entry, value: this.editingResultValue });
+      this.editingResultId = null;
+      this.editingResultValue = '';
+      this.editingResultOriginalValue = '';
+    },
+    cancelResultEdit() {
+      this.editingResultId = null;
+      this.editingResultValue = '';
+      this.editingResultOriginalValue = '';
+    },
+    getLocalIp() {
+      const { ipcRenderer } = require('electron');
+      const ip = ipcRenderer.sendSync('get-local-ip');
+      if (ip) {
+        this.localIp = ip;
+      }
+    },
+    copyUrl() {
+      this.$refs.urlInput.select();
+      document.execCommand('copy');
+      // Можно добавить уведомление об успешном копировании
+    },
+    startMobileServer() {
+      const { ipcRenderer } = require('electron');
+      ipcRenderer.send('start-mobile-server', {
+        splitId: this.split.id,
+        port: this.mobilePort,
+      });
+    },
   },
 };
 </script>
@@ -229,9 +416,39 @@ export default {
   text-transform: uppercase;
   font-weight: 700;
   letter-spacing: 0.04rem;
+  gap: 8px;
 }
 .sxSplitColumn__title {
   flex: 1 1 auto;
+}
+.sxSplitColumn__mobileBtn {
+  border: none;
+  background: transparent;
+  color: var(--accent);
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+  
+  &:hover {
+    background-color: rgba(90, 180, 255, 0.1);
+  }
+  
+  i {
+    font-size: 18px;
+  }
+}
+.sxSplitColumn__removeBtn {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 4px;
+  font-size: 16px;
 }
 .stateHeader {
   display: flex;
@@ -360,6 +577,7 @@ export default {
   flex: 1 1 auto;
   min-height: 0;
   overflow-y: auto;
+  padding-bottom: 32px; /* Высота одной строки отсечки, чтобы поднять границу вверх */
 }
 
 .sxSplitColumn__tableHead {
@@ -436,6 +654,9 @@ export default {
   text-align: left;
   flex: 1 1 auto;
 }
+.timeValue--manual {
+  color: #5ab4ff;
+}
 .timeHeader {
   text-align: left;
 }
@@ -443,6 +664,86 @@ export default {
   text-align: right;
   margin-left: auto;
   min-width: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 4px;
+}
+
+.resultValueEditable {
+  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.resultValueEditable:hover {
+  background-color: rgba(90, 180, 255, 0.1);
+}
+
+.resultEditInput {
+  width: 100%;
+  padding: 2px 4px;
+  border-radius: 4px;
+  border: 1px solid var(--accent);
+  background-color: var(--standard-background);
+  color: var(--text-default);
+  font-family: 'Roboto Mono', monospace;
+  font-size: 0.9rem;
+  text-align: right;
+}
+
+.resultHeader {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+.sxSplitColumn__lockBtn {
+  border: none;
+  background: transparent;
+  color: var(--text-default);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+  padding: 0;
+}
+
+.sxSplitColumn__lockBtn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.sxSplitColumn__lockBtn i {
+  font-size: 1.2rem;
+}
+
+.sxSplitColumn__recalculateBtn {
+  border: none;
+  background: transparent;
+  color: #27c46b;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+  padding: 0;
+}
+
+.sxSplitColumn__recalculateBtn:hover {
+  background-color: rgba(39, 196, 107, 0.1);
+}
+
+.sxSplitColumn__recalculateBtn i {
+  font-size: 1.2rem;
 }
 .manualMark {
   margin-left: 4px;
@@ -468,6 +769,115 @@ export default {
   flex: 0 0 340px;
   min-width: 340px;
   max-width: 340px;
+}
+
+// Стили для модального окна мобильного интерфейса
+.mobileModal__wrapper {
+  background-color: var(--card-background);
+  color: var(--text-default);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.mobileModal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  background-color: var(--subject-background);
+  font-weight: 600;
+  
+  .mobileModal__closeBtn {
+    border: none;
+    background: transparent;
+    color: var(--text-default);
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+    
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+  }
+}
+
+.mobileModal__body {
+  padding: 16px;
+  
+  .mobileModal__urlSection {
+    margin-bottom: 16px;
+    
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+    }
+    
+    .mobileModal__urlInput {
+      display: flex;
+      gap: 8px;
+      
+      input {
+        flex: 1;
+        padding: 8px 12px;
+        border: 1px solid var(--standard-background);
+        border-radius: 4px;
+        background-color: var(--standard-background);
+        color: var(--text-default);
+        font-family: 'Roboto Mono', monospace;
+        font-size: 0.875rem;
+      }
+      
+      .mobileModal__copyBtn {
+        padding: 8px 12px;
+        border: 1px solid var(--accent);
+        border-radius: 4px;
+        background-color: transparent;
+        color: var(--accent);
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+        
+        &:hover {
+          background-color: rgba(90, 180, 255, 0.1);
+        }
+      }
+    }
+  }
+  
+  .mobileModal__actions {
+    display: flex;
+    justify-content: flex-end;
+    
+    .mobileModal__startBtn {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 4px;
+      background-color: var(--accent);
+      color: #ffffff;
+      cursor: pointer;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: opacity 0.2s ease;
+      
+      &:hover {
+        opacity: 0.9;
+      }
+      
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+    }
+  }
 }
 
 </style>

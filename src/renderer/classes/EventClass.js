@@ -785,9 +785,9 @@ export default class EventClass {
 
     const sortedCompetitors = competitors.sort((comp1, comp2) => {
       const statuses = {
-        DNF: -1,
-        DNS: -2,
-        DSQ: -3,
+        DNF: 1,
+        DNS: 2,
+        DSQ: 3,
       };
 
       const comp1res = comp1.results_overall.find((overall) => overall.competition_id === this.id);
@@ -796,10 +796,16 @@ export default class EventClass {
       const comp1StatusValue = comp1res && comp1res.status ? statuses[comp1res.status] : null;
       const comp2StatusValue = comp2res && comp2res.status ? statuses[comp2res.status] : null;
 
-      if (comp1StatusValue !== null || comp2StatusValue !== null) {
-        return (comp1StatusValue || 0) - (comp2StatusValue || 0);
+      // Если оба со статусами, сортируем по порядку статусов
+      if (comp1StatusValue !== null && comp2StatusValue !== null) {
+        return comp1StatusValue - comp2StatusValue;
       }
+      
+      // Если только один со статусом, он идет после (возвращаем 1)
+      if (comp1StatusValue !== null) return 1;
+      if (comp2StatusValue !== null) return -1;
 
+      // Оба без статусов - сортируем по результатам
       if (isSX) {
         const comp1IsMissingOrZero = !comp1res || comp1res.value === 0;
         const comp2IsMissingOrZero = !comp2res || comp2res.value === 0;
@@ -821,16 +827,23 @@ export default class EventClass {
       return sortOrder * (comp2Value - comp1Value);
     });
 
-    return sortedCompetitors.map((comp, idx) => {
-      const athleteOverall = comp.results_overall.find((res) => res.competition_id === this.id);
+    return sortedCompetitors
+      .filter((comp) => {
+        // Фильтруем участников без результатов
+        const athleteOverall = comp.results_overall.find((res) => res.competition_id === this.id);
+        // Показываем только тех, у кого есть результат (время или статус)
+        return athleteOverall && (athleteOverall.value !== null && athleteOverall.value !== undefined && athleteOverall.value !== 0 || athleteOverall.status);
+      })
+      .map((comp, idx) => {
+        const athleteOverall = comp.results_overall.find((res) => res.competition_id === this.id);
 
-      const athletePlace = !athleteOverall || athleteOverall.status ? ' ' : athleteOverall.value ? idx + 1 : ' ';
+        const athletePlace = !athleteOverall || athleteOverall.status ? ' ' : athleteOverall.value ? idx + 1 : ' ';
 
-      return {
-        place: athletePlace,
-        ...comp,
-      };
-    });
+        return {
+          place: athletePlace,
+          ...comp,
+        };
+      });
   }
   getOverallResult(competitorId) {
     const competitor = this.competitorsSheet.competitors.find((competitor) => competitor.id === competitorId);
@@ -1006,52 +1019,93 @@ export default class EventClass {
       
       if (raceResult) {
         const runValues = [];
+        const runStatuses = [];
         
         // Извлекаем значения для всех заездов
         for (let i = 1; i <= 2; i++) {
           const runKey = `run${i}`;
           const upperKey = runKey.toUpperCase();
+          const statusKey = `${runKey}_status`;
           
-          let runValue = null;
-          if (raceResult[runKey] !== undefined && raceResult[runKey] !== null) {
-            runValue = raceResult[runKey];
-            // Если это число, предполагаем что это миллисекунды
-            if (typeof runValue === 'number') {
-              // Значение уже в миллисекундах, используем как есть
-            }
-          } else if (raceResult[upperKey] !== undefined && raceResult[upperKey] !== null) {
-            runValue = raceResult[upperKey];
-            // Если это строка, конвертируем в число (миллисекунды)
-            if (typeof runValue === 'string') {
-              // Пытаемся распарсить строку времени (формат "MM:SS.mmm" или "SS.mmm")
-              const parts = runValue.split(':');
-              if (parts.length === 2) {
-                // Формат "MM:SS.mmm"
-                const minutes = parseInt(parts[0]) || 0;
-                const secondsParts = parts[1].split('.');
-                const seconds = parseInt(secondsParts[0]) || 0;
-                const milliseconds = parseInt(secondsParts[1] || '0') || 0;
-                runValue = (minutes * 60 + seconds) * 1000 + milliseconds;
-              } else {
-                // Пытаемся распарсить как "SS.mmm" или просто число
-                const numValue = parseFloat(runValue);
-                if (!isNaN(numValue)) {
-                  // Если число меньше 1000, предполагаем что это секунды, иначе миллисекунды
-                  runValue = numValue < 1000 ? numValue * 1000 : numValue;
+          // Проверяем статус заезда
+          let status = null;
+          if (raceResult[statusKey]) {
+            status = raceResult[statusKey].toUpperCase();
+            runStatuses.push(status);
+          } else if (raceResult[upperKey] && typeof raceResult[upperKey] === 'string' && ['DNS', 'DNF', 'DSQ'].includes(raceResult[upperKey].toUpperCase())) {
+            status = raceResult[upperKey].toUpperCase();
+            runStatuses.push(status);
+          } else {
+            // Извлекаем числовое значение
+            let runValue = null;
+            if (raceResult[runKey] !== undefined && raceResult[runKey] !== null) {
+              runValue = raceResult[runKey];
+              // Если это число, предполагаем что это миллисекунды
+              if (typeof runValue === 'number') {
+                // Значение уже в миллисекундах, используем как есть
+              }
+            } else if (raceResult[upperKey] !== undefined && raceResult[upperKey] !== null) {
+              runValue = raceResult[upperKey];
+              // Если это строка, конвертируем в число (миллисекунды)
+              if (typeof runValue === 'string') {
+                // Пытаемся распарсить строку времени (формат "MM:SS.mmm" или "SS.mmm")
+                const parts = runValue.split(':');
+                if (parts.length === 2) {
+                  // Формат "MM:SS.mmm"
+                  const minutes = parseInt(parts[0]) || 0;
+                  const secondsParts = parts[1].split('.');
+                  const seconds = parseInt(secondsParts[0]) || 0;
+                  const milliseconds = parseInt(secondsParts[1] || '0') || 0;
+                  runValue = (minutes * 60 + seconds) * 1000 + milliseconds;
                 } else {
-                  runValue = null;
+                  // Пытаемся распарсить как "SS.mmm" или просто число
+                  const numValue = parseFloat(runValue);
+                  if (!isNaN(numValue)) {
+                    // Если число меньше 1000, предполагаем что это секунды, иначе миллисекунды
+                    runValue = numValue < 1000 ? numValue * 1000 : numValue;
+                  } else {
+                    runValue = null;
+                  }
                 }
               }
             }
-          }
-          
-          if (runValue !== null && typeof runValue === 'number' && runValue > 0) {
-            runValues.push(runValue);
+            
+            if (runValue !== null && typeof runValue === 'number' && runValue > 0) {
+              runValues.push(runValue);
+            }
           }
         }
         
-        // Вычисляем лучшее время (минимальное)
-        if (runValues.length > 0) {
+        // Определяем общий статус результата
+        let overallStatus = null;
+        if (runStatuses.length > 0) {
+          // Если есть хоть один DSQ, то общий результат DSQ
+          if (runStatuses.includes('DSQ')) {
+            overallStatus = 'DSQ';
+          } else if (runStatuses.length === 2) {
+            // Если во всех заездах статус
+            if (runStatuses.every(s => s === 'DNS')) {
+              overallStatus = 'DNS';
+            } else if (runStatuses.every(s => s === 'DNF')) {
+              overallStatus = 'DNF';
+            } else if (runStatuses.some(s => s === 'DNF') && runStatuses.some(s => s === 'DNS')) {
+              // Если есть и DNF и DNS, то DNF
+              overallStatus = 'DNF';
+            } else {
+              // Иначе берем первый статус
+              overallStatus = runStatuses[0];
+            }
+          } else if (runStatuses.length === 1 && runValues.length === 0) {
+            // Если только один статус и нет времен
+            overallStatus = runStatuses[0];
+          }
+        }
+        
+        // Если есть общий статус, сохраняем его
+        if (overallStatus) {
+          result = overallStatus;
+        } else if (runValues.length > 0) {
+          // Вычисляем лучшее время (минимальное)
           result = Math.min(...runValues);
         } else {
           result = 0;
@@ -1065,12 +1119,15 @@ export default class EventClass {
       result = this.roundWithPrecision(result);
     }
 
+    const overallStatus = typeof result === 'string' ? result : null;
+    const overallValue = typeof result === 'string' ? null : result;
+    
     const overallResult = {
       competition_id: this.id,
       competitor_id: competitor.id,
-      value: result,
-      value_str: isTimingResult ? formatTimeDifference(result, { precision: this.structure.selected.accuracy, format: 'short' }) : null,
-      status: null,
+      value: overallValue,
+      value_str: overallValue && isTimingResult ? formatTimeDifference(overallValue, { precision: this.structure.selected.accuracy, format: 'short' }) : null,
+      status: overallStatus,
     };
 
     let existedResult = competitor.results_overall.find((res) => res.competition_id === overallResult.competition_id);

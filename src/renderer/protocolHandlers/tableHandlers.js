@@ -413,6 +413,11 @@ const generateOverallResultsHandlers = (dataCtx) => {
           }
           
           if (runValue !== null) {
+            // Проверяем, является ли это статусом
+            if (typeof runValue === 'string' && ['DNS', 'DNF', 'DSQ'].includes(runValue.toUpperCase())) {
+              return [runValue.toUpperCase()];
+            }
+            
             // Форматируем значение
             if (typeof runValue === 'number') {
               // Используем форматирование как в блоке ФИНИШИРОВАЛИ
@@ -428,6 +433,12 @@ const generateOverallResultsHandlers = (dataCtx) => {
               }
               return [runValue];
             }
+          }
+          
+          // Проверяем статус через statusKey
+          const statusKey = `run${raceIdx + 1}_status`;
+          if (raceResult && raceResult[statusKey]) {
+            return [raceResult[statusKey].toUpperCase()];
           }
           
           return ['0.00'];
@@ -497,24 +508,35 @@ const generateOverallResultsHandlers = (dataCtx) => {
           }
           
           if (runValue !== null) {
-            // Форматируем значение
-            if (typeof runValue === 'number') {
-              // Используем форматирование как в блоке ФИНИШИРОВАЛИ
-              runResults.push(formatResultFromMs(runValue));
-            } else if (typeof runValue === 'string') {
-              // Если это строка, пытаемся распарсить и переформатировать
-              const numeric = Number(runValue);
-              if (!Number.isNaN(numeric)) {
-                const ms = numeric < 1000 ? numeric * 1000 : numeric;
-                runResults.push(formatResultFromMs(ms));
+            // Проверяем, является ли это статусом
+            if (typeof runValue === 'string' && ['DNS', 'DNF', 'DSQ'].includes(runValue.toUpperCase())) {
+              runResults.push(runValue.toUpperCase());
+            } else {
+              // Форматируем значение
+              if (typeof runValue === 'number') {
+                // Используем форматирование как в блоке ФИНИШИРОВАЛИ
+                runResults.push(formatResultFromMs(runValue));
+              } else if (typeof runValue === 'string') {
+                // Если это строка, пытаемся распарсить и переформатировать
+                const numeric = Number(runValue);
+                if (!Number.isNaN(numeric)) {
+                  const ms = numeric < 1000 ? numeric * 1000 : numeric;
+                  runResults.push(formatResultFromMs(ms));
+                } else {
+                  runResults.push(runValue);
+                }
               } else {
-                runResults.push(runValue);
+                runResults.push('0.000');
               }
+            }
+          } else {
+            // Проверяем статус через statusKey
+            const statusKey = `run${i}_status`;
+            if (raceResult && raceResult[statusKey]) {
+              runResults.push(raceResult[statusKey].toUpperCase());
             } else {
               runResults.push('0.000');
             }
-          } else {
-            runResults.push('0.000');
           }
         }
         
@@ -575,6 +597,11 @@ const generateOverallResultsHandlers = (dataCtx) => {
       if (overallResult) {
         if (overallResult.status) {
           return [overallResult.status];
+        }
+        
+        // Проверяем статус
+        if (overallResult.status) {
+          return [overallResult.status.toUpperCase()];
         }
         
         // Если это число в миллисекундах, форматируем как в блоке ФИНИШИРОВАЛИ

@@ -8,32 +8,48 @@
           <button class="navBtn" type="button" @click="switchRace(1)">»</button>
         </div>
 
-        <div class="sxStatusBar">
-          <div class="sxStatusBar__input">
-            <input class="statusInput" v-model="statusForm.bib" type="text" placeholder="bib" />
-          </div>
-          <div class="sxStatusBar__buttons">
-            <button
-              v-for="status in statusOptions"
-              :key="status"
-              :class="['statusSquare', `status-${status.toLowerCase()}`, { active: statusForm.status === status }]"
-              type="button"
-              @click="statusForm.status = status"
-            >
-              {{ status }}
-            </button>
-          </div>
-          <button class="statusApply" type="button" @click="applyStatus">SET</button>
+        <div class="sxTopActionButtons">
+          <button 
+            class="actionBtn actionBtn--add" 
+            type="button" 
+            @click="handleAddManualSplit" 
+            title="Добавить ручную отсечку"
+          >
+            <i class="mdi mdi-plus"></i>
+          </button>
+          <button 
+            class="actionBtn actionBtn--mass" 
+            type="button" 
+            @click="handleMassStart" 
+            title="Масстарт"
+          >
+            <i class="mdi mdi-account-group"></i>
+          </button>
+          <button 
+            class="actionBtn actionBtn--dns" 
+            type="button" 
+            @click="handleSetStatus('DNS')" 
+            title="DNS - Did Not Start"
+          >
+            DNS
+          </button>
+          <button 
+            class="actionBtn actionBtn--dnf" 
+            type="button" 
+            @click="handleSetStatus('DNF')" 
+            title="DNF - Did Not Finish"
+          >
+            DNF
+          </button>
+          <button 
+            class="actionBtn actionBtn--dsq" 
+            type="button" 
+            @click="handleSetStatus('DSQ')" 
+            title="DSQ - Disqualified"
+          >
+            DSQ
+          </button>
         </div>
-      </div>
-
-      <div class="sxTopIcons">
-        <button class="iconBtn" type="button" @click="handleManualSplit" title="Добавить ручную отсечку">
-          <i class="mdi mdi-timer-plus-outline"></i>
-        </button>
-        <button class="iconBtn" type="button" @click="handleMassStart" title="Масстарт">
-          <i class="mdi mdi-account-group"></i>
-        </button>
       </div>
     </div>
 
@@ -53,6 +69,7 @@
           :show-diff="false"
           :auto-assign-enabled="!!autoAssignSplits[split.id]"
           :selected-entry-id="selectedEntry && selectedEntry.splitId === split.id ? selectedEntry.entryId : ''"
+          :result-locked="resultLocks[split.id] !== false"
           :get-bib="getBib"
           :get-name="getName"
           @assign-bib="assignBib(split.id, $event.entry, $event.value)"
@@ -60,6 +77,9 @@
           @select-entry="setSelectedEntry(split.id, $event)"
           @toggle-auto-assign="toggleAutoAssign(split.id)"
           @update-entry-time="updateEntryTime(split.id, $event)"
+          @update-entry-result="updateEntryResult(split.id, $event)"
+          @toggle-result-lock="toggleResultLock(split.id)"
+          @recalculate-results="recalculateResults(split.id)"
           @queue-drag-start="setDragIndex"
           @queue-drag-over="setHoverIndex"
           @queue-drop="handleQueueDrop"
@@ -124,11 +144,6 @@ export default {
   components: { SxSplitColumn, FinishTable },
   data() {
     return {
-      statusOptions: ['DNF', 'DNS', 'DSQ'],
-      statusForm: {
-        bib: '',
-        status: null,
-      },
       splitEntries: {},
       startQueue: [],
       dragIndex: null,
@@ -140,6 +155,7 @@ export default {
       autoAssignSplits: {},
       selectedEntry: null,
       resultsViewMode: 'finished', // 'finished' или 'results'
+      resultLocks: {}, // Состояние замков для каждого сплита (true = заблокирован, false = разблокирован)
     };
   },
   computed: {
@@ -202,28 +218,40 @@ export default {
           this.runColumns.forEach(({ key, index }) => {
             const runKey = `run${index}`;
             const upperKey = runKey.toUpperCase();
+            const statusKey = `${runKey}_status`;
             // Извлекаем значение для конкретного заезда из объекта результата основного заезда
             let valueRaw = null;
             let numericValue = null;
+            let status = null;
             
             if (raceResult) {
-              // Сначала проверяем числовое значение (в миллисекундах)
-              if (raceResult[runKey] !== undefined && raceResult[runKey] !== null) {
-                valueRaw = raceResult[runKey];
-                numericValue = typeof valueRaw === 'number' ? valueRaw : this.convertFormattedTimeToMs(valueRaw);
-              } else if (raceResult[upperKey] !== undefined && raceResult[upperKey] !== null) {
-                // Если есть строковое значение, конвертируем его
-                valueRaw = raceResult[upperKey];
-                numericValue = this.convertFormattedTimeToMs(valueRaw);
+              // Проверяем статус заезда
+              if (raceResult[statusKey]) {
+                status = raceResult[statusKey].toUpperCase();
+                runs[key] = status;
+              } else if (raceResult[upperKey] && typeof raceResult[upperKey] === 'string' && ['DNS', 'DNF', 'DSQ'].includes(raceResult[upperKey].toUpperCase())) {
+                // Если в верхнем ключе статус
+                status = raceResult[upperKey].toUpperCase();
+                runs[key] = status;
+              } else {
+                // Сначала проверяем числовое значение (в миллисекундах)
+                if (raceResult[runKey] !== undefined && raceResult[runKey] !== null) {
+                  valueRaw = raceResult[runKey];
+                  numericValue = typeof valueRaw === 'number' ? valueRaw : this.convertFormattedTimeToMs(valueRaw);
+                } else if (raceResult[upperKey] !== undefined && raceResult[upperKey] !== null) {
+                  // Если есть строковое значение, конвертируем его
+                  valueRaw = raceResult[upperKey];
+                  numericValue = this.convertFormattedTimeToMs(valueRaw);
+                }
+                
+                const formattedValue = this.formatRunValue(numericValue !== null ? numericValue : valueRaw);
+                runs[key] = formattedValue;
+                
+                // Сохраняем числовое значение для вычисления лучшего времени
+                if (numericValue !== null && numericValue !== undefined && numericValue > 0) {
+                  runValues.push(numericValue);
+                }
               }
-            }
-            
-            const formattedValue = this.formatRunValue(numericValue !== null ? numericValue : valueRaw);
-            runs[key] = formattedValue;
-            
-            // Сохраняем числовое значение для вычисления лучшего времени
-            if (numericValue !== null && numericValue !== undefined && numericValue > 0) {
-              runValues.push(numericValue);
             }
           });
 
@@ -233,12 +261,46 @@ export default {
             bestTime = Math.min(...runValues);
           }
 
+          // Определяем общий статус результата
+          let overallStatus = null;
+          const runStatuses = this.runColumns.map(({ key }) => {
+            const runValue = runs[key];
+            if (typeof runValue === 'string' && ['DNS', 'DNF', 'DSQ'].includes(runValue.toUpperCase())) {
+              return runValue.toUpperCase();
+            }
+            return null;
+          }).filter(Boolean);
+
+          if (runStatuses.length > 0) {
+            // Если есть хоть один DSQ, то общий результат DSQ
+            if (runStatuses.includes('DSQ')) {
+              overallStatus = 'DSQ';
+            } else if (runStatuses.length === this.runColumns.length) {
+              // Если во всех заездах статус
+              if (runStatuses.every(s => s === 'DNS')) {
+                overallStatus = 'DNS';
+              } else if (runStatuses.every(s => s === 'DNF')) {
+                overallStatus = 'DNF';
+              } else if (runStatuses.some(s => s === 'DNF') && runStatuses.some(s => s === 'DNS')) {
+                // Если есть и DNF и DNS, то DNF
+                overallStatus = 'DNF';
+              } else {
+                // Иначе берем первый статус
+                overallStatus = runStatuses[0];
+              }
+            } else {
+              // Если не во всех заездах статус, то берем лучшее время
+              overallStatus = null;
+            }
+          }
+
           return {
             bib: competitor.info_data['bib'],
             name: competitor.info_data['name'] || '',
             runs,
-            result: this.formatRunValue(bestTime),
+            result: overallStatus || this.formatRunValue(bestTime),
             bestTimeNumeric: bestTime, // Сохраняем числовое значение для сортировки
+            overallStatus, // Сохраняем общий статус
             competitorId, // Сохраняем ID для отслеживания порядка финиша
           };
         })
@@ -249,7 +311,21 @@ export default {
       
       if (this.resultsViewMode === 'results') {
         // Сортировка от лучшего к худшему (по лучшему времени)
+        // Статусы идут после всех результатов
         return results.sort((a, b) => {
+          const statusOrder = { DSQ: 3, DNS: 2, DNF: 1 };
+          const aStatus = statusOrder[a.overallStatus] || 0;
+          const bStatus = statusOrder[b.overallStatus] || 0;
+          
+          // Если оба со статусами, сортируем по порядку статусов
+          if (aStatus > 0 && bStatus > 0) {
+            return aStatus - bStatus;
+          }
+          // Если только один со статусом, он идет после
+          if (aStatus > 0) return 1;
+          if (bStatus > 0) return -1;
+          
+          // Оба без статусов - сортируем по времени
           const aTime = a.bestTimeNumeric || Infinity;
           const bTime = b.bestTimeNumeric || Infinity;
           return aTime - bTime;
@@ -284,6 +360,15 @@ export default {
   mounted() {
     this.initializeSplitEntries();
     EventBus.on('timerTime', this.handleTimerTime);
+    
+    // Обработчик создания отсечки из мобильного интерфейса
+    const { ipcRenderer } = require('electron');
+    ipcRenderer.on('mobile-create-split', (event, data) => {
+      this.handleMobileCreateSplit(data.splitId, data);
+    });
+    
+    // Обновляем данные мобильного сервера при изменении отсечек
+    this.updateMobileServerData();
   },
   watch: {
     splitConfigs: {
@@ -306,6 +391,10 @@ export default {
   beforeDestroy() {
     EventBus.off('timerTime', this.handleTimerTime);
     this.clearRunningTimers();
+    
+    // Удаляем обработчик мобильного интерфейса
+    const { ipcRenderer } = require('electron');
+    ipcRenderer.removeAllListeners('mobile-create-split');
   },
   methods: {
     ...mapActions('main', {
@@ -362,6 +451,10 @@ export default {
         if (this.autoAssignSplits[split.id] === undefined) {
           this.$set(this.autoAssignSplits, split.id, false);
         }
+        // Инициализируем состояние замка для каждого сплита (по умолчанию заблокирован)
+        if (this.resultLocks[split.id] === undefined) {
+          this.$set(this.resultLocks, split.id, true);
+        }
       });
       Object.keys(this.autoAssignSplits).forEach((splitId) => {
         if (!configs.find((cfg) => cfg.id === splitId)) {
@@ -379,6 +472,85 @@ export default {
       this.rebuildLastStartTimes();
       this.recalculateTransitQueues();
     },
+    updateMobileServerData() {
+      // Обновляем данные мобильного сервера для всех сплитов
+      const { ipcRenderer } = require('electron');
+      this.splitConfigs.forEach((split) => {
+        const entries = this.splitEntries[split.id] || [];
+        // Сортируем по capturedAt/времени так, чтобы свежие записи были сверху
+        const sortedEntries = [...entries].filter((entry) => entry.rawTime);
+        sortedEntries.sort((a, b) => {
+          const bValue = this.getEntrySortValue(b);
+          const aValue = this.getEntrySortValue(a);
+          return bValue - aValue;
+        });
+
+        const formattedEntries = sortedEntries.map((entry, index) => ({
+            id: entry.id || index,
+            channel: entry.channel || '',
+            time: entry.displayTime || entry.rawTime || '',
+            bib: entry.bib || '', // Включаем отсечки без номера (bib будет пустым)
+          }));
+        
+        ipcRenderer.send('update-mobile-split-data', {
+          splitId: split.id,
+          title: split.title || 'SPLIT',
+          entries: formattedEntries,
+          channel: 1, // Можно сделать настраиваемым
+        });
+      });
+    },
+    handleMobileCreateSplit(splitId, data) {
+      // Находим сплит по ID
+      const split = this.splitConfigs.find((s) => s.id === splitId);
+      if (!split) return;
+      
+      const { bib, channel, entryId, createNew, time } = data;
+      
+      if (createNew && time) {
+        // Создаем новую отсечку с указанным временем
+        const normalizedTime = this.normalizeHourCell(time);
+        const entry = {
+          id: generateId(),
+          channel: Number(channel || 1),
+          rawTime: normalizedTime,
+          displayTime: normalizedTime,
+          capturedAt: Date.now(),
+          originalRawTime: normalizedTime,
+          bib: '',
+          marker: '',
+          edited: false,
+          state: 'pending',
+          manualSource: true,
+        };
+        
+        if (!this.splitEntries[splitId]) {
+          this.$set(this.splitEntries, splitId, []);
+        }
+        this.splitEntries[splitId].unshift(entry);
+        this.persistSplitEntries();
+        this.updateMobileServerData();
+      } else if (entryId !== undefined && bib) {
+        // Обновляем существующую отсечку
+        const entries = this.splitEntries[splitId] || [];
+        const entry = entries.find((e) => (e.id || entries.indexOf(e).toString()) === entryId.toString());
+        if (entry) {
+          this.assignBib(splitId, entry, bib);
+        }
+      } else if (bib) {
+        // Находим последнюю отсечку без номера в этом сплите
+        const entries = this.splitEntries[splitId] || [];
+        const emptyEntry = entries.find((entry) => !entry.bib && entry.rawTime);
+        
+        if (emptyEntry) {
+          // Присваиваем номер последней отсечке
+          this.assignBib(splitId, emptyEntry, bib);
+        }
+      }
+      
+      // Обновляем данные мобильного сервера
+      this.updateMobileServerData();
+    },
     persistSplitEntries(shouldUpdateQueues = true) {
       if (this.competition && this.competition.selected_race) {
         this.competition.selected_race.split_entries = this.splitEntries;
@@ -395,10 +567,13 @@ export default {
     },
     handleTimerTime({ timeRecord }) {
       if (!timeRecord) return;
-      const [channel, timeValue, markerFlagRaw = '', rawChannelLabel = ''] = timeRecord.split('|');
+      const recordParts = timeRecord.split('|');
+      const [channel, timeValue, markerFlagRaw = '', rawChannelLabel = ''] = recordParts;
+      const isManualSource = recordParts.length <= 2;
       const split = this.splitConfigs.find((cfg) => cfg.channel && Number(cfg.channel) === Number(channel));
       if (!split) return;
       const cleanTime = this.cleanHourCellValue(timeValue);
+      const normalizedTime = this.normalizeHourCell(cleanTime);
       const markerFlag = markerFlagRaw ? markerFlagRaw.toUpperCase() : '';
       const channelLabelUpper = rawChannelLabel ? rawChannelLabel.toUpperCase() : '';
       const marker =
@@ -407,19 +582,22 @@ export default {
       const entry = {
         id: generateId(),
         channel: Number(channel),
-        rawTime: cleanTime,
-        displayTime: this.normalizeHourCell(cleanTime),
+        rawTime: normalizedTime,
+        displayTime: normalizedTime,
         capturedAt: Date.now(),
-        originalRawTime: cleanTime,
+        originalRawTime: normalizedTime,
         bib: '',
         marker,
         edited: false,
         state: 'pending',
+        manualSource: isManualSource,
       };
 
       this.splitEntries[split.id].unshift(entry);
       if (!this.tryAutoAssignEntry(split, entry)) {
         this.persistSplitEntries();
+        // Сразу обновляем данные мобильного сервера для синхронизации в реальном времени
+        this.updateMobileServerData();
       }
     },
     tryAutoAssignEntry(split, entry) {
@@ -477,16 +655,31 @@ export default {
           this.startCapturedTimes = updatedCaptured;
           this.restoreStartQueue(previousBib);
         }
+        
+        // Если удалили номер из финишного сплита, пересчитываем результаты
+        const isFinish = splitId === this.splitConfigs[this.splitConfigs.length - 1].id;
+        if (isFinish && previousBib) {
+          this.recalculateFinishedResults();
+        }
       }
 
       this.persistSplitEntries();
+      this.updateMobileServerData();
     },
     toggleEntryState(splitId, entry) {
       if (entry.state === 'pending') entry.state = 'confirmed';
       else if (entry.state === 'confirmed') entry.state = 'invalid';
       else entry.state = 'pending';
-      if (entry.state === 'invalid') entry.result = null;
+      if (entry.state === 'invalid') {
+        entry.result = null;
+        // Если это финишный сплит, пересчитываем результаты в блоке ФИНИШИРОВАЛИ
+        const isFinish = splitId === this.splitConfigs[this.splitConfigs.length - 1].id;
+        if (isFinish && entry.bib) {
+          this.recalculateFinishedResults();
+        }
+      }
       this.persistSplitEntries();
+      this.updateMobileServerData();
     },
     updateEntryTime(splitId, { entry, value }) {
       if (!entry) return;
@@ -513,6 +706,13 @@ export default {
       }
       this.persistSplitEntries();
       this.updateEntryResults();
+      this.updateMobileServerData();
+      
+      // Если изменили время в финишном сплите, пересчитываем результаты в блоке ФИНИШИРОВАЛИ
+      const isFinish = splitId === this.splitConfigs[this.splitConfigs.length - 1].id;
+      if (isFinish && entry.bib && entry.result) {
+        this.publishResult(entry.bib, entry.result);
+      }
     },
     calculateNetTime(startTime, finishTime, trimLeadingZeros = false) {
       const diff = calculateTimeDifference(startTime, finishTime);
@@ -628,20 +828,54 @@ export default {
       const current = !!this.autoAssignSplits[splitId];
       this.$set(this.autoAssignSplits, splitId, !current);
     },
-    applyStatus() {
-      if (!this.statusForm.bib || !this.statusForm.status) return;
-      const competitor = this.findCompetitorByBib(this.statusForm.bib);
-      if (!competitor) return;
-
-      competitor.race_status = this.statusForm.status;
-      this.updateEvent();
-      this.statusForm = { bib: '', status: null };
-    },
-    handleManualSplit() {
+    handleAddManualSplit() {
+      // Если отсечка не выделена, спрашиваем в какой сплит создать
       if (!this.selectedEntry || !this.selectedEntry.splitId) {
-        alert('Сначала выберите отсечку, над которой нужно вставить ручную метку.');
+        const splitOptions = this.splitConfigs.map((split, idx) => ({
+          label: split.title || `Сплит ${idx + 1}`,
+          value: split.id,
+        }));
+        
+        const splitNames = splitOptions.map((opt, idx) => `${idx + 1}. ${opt.label}`).join('\n');
+        const splitIndex = prompt(`В каком сплите создать отсечку?\n${splitNames}\n\nВведите номер сплита (1-${splitOptions.length}):`);
+        
+        if (!splitIndex) return;
+        
+        const selectedIdx = parseInt(splitIndex, 10) - 1;
+        if (selectedIdx < 0 || selectedIdx >= splitOptions.length) {
+          alert('Неверный номер сплита');
+          return;
+        }
+        
+        const targetSplitId = splitOptions[selectedIdx].value;
+        const entries = this.splitEntries[targetSplitId] || [];
+        
+        // Создаем отсечку с нулевыми значениями
+        const zeroTime = this.formatHourCellFromMs(0);
+        const manualEntry = {
+          id: generateId(),
+          channel: null,
+          rawTime: zeroTime,
+          displayTime: this.normalizeHourCell(zeroTime),
+          capturedAt: Date.now(),
+          originalRawTime: zeroTime,
+          bib: '',
+          marker: '+',
+          edited: false,
+          state: 'pending',
+        };
+        
+        if (!Array.isArray(this.splitEntries[targetSplitId])) {
+          this.$set(this.splitEntries, targetSplitId, []);
+        }
+        this.splitEntries[targetSplitId].push(manualEntry);
+        this.setSelectedEntry(targetSplitId, manualEntry);
+        this.persistSplitEntries();
+        this.updateMobileServerData();
         return;
       }
+      
+      // Если отсечка выделена, вставляем над ней
       const { splitId, entryId } = this.selectedEntry;
       const entries = this.splitEntries[splitId] || [];
       const referenceIndex = entries.findIndex((item) => item.id === entryId);
@@ -666,6 +900,100 @@ export default {
       entries.splice(referenceIndex, 0, manualEntry);
       this.setSelectedEntry(splitId, manualEntry);
       this.persistSplitEntries();
+      this.updateMobileServerData();
+    },
+    handleSetStatus(status) {
+      // Нужно выбрать отсечку с присвоенным номером
+      if (!this.selectedEntry || !this.selectedEntry.splitId) {
+        alert('Сначала выберите отсечку с присвоенным номером.');
+        return;
+      }
+      
+      const { splitId, entryId } = this.selectedEntry;
+      const entries = this.splitEntries[splitId] || [];
+      const entry = entries.find((item) => item.id === entryId);
+      
+      if (!entry) {
+        alert('Не удалось найти выбранную отсечку.');
+        return;
+      }
+      
+      if (!entry.bib || entry.bib.trim() === '') {
+        alert('У выбранной отсечки нет присвоенного номера.');
+        return;
+      }
+      
+      // Проверяем, что это финишный сплит
+      const isFinish = splitId === this.splitConfigs[this.splitConfigs.length - 1].id;
+      if (!isFinish) {
+        alert('Статус можно установить только для финишного сплита.');
+        return;
+      }
+      
+      // Заменяем результат на статус
+      entry.result = status.toLowerCase();
+      entry.state = 'invalid';
+      
+      // Публикуем результат со статусом
+      this.publishResultWithStatus(entry.bib, status);
+      
+      this.persistSplitEntries();
+    },
+    publishResultWithStatus(bib, status) {
+      const competitor = this.findCompetitorByBib(bib);
+      if (!competitor || !this.competition.selected_race) return;
+
+      // Для квалификации используем первую гонку для хранения результатов всех заездов
+      const firstRace = this.competition.races && this.competition.races.length > 0 
+        ? this.competition.races[0] 
+        : this.competition.selected_race;
+      const existingResult = competitor.results.find((res) => res.race_id === firstRace.id);
+      
+      // Определяем индекс текущего заезда
+      let runIdx = this.competition.selected_race_id || 0;
+      const maxRuns = 2;
+      if (runIdx >= maxRuns) {
+        runIdx = maxRuns - 1;
+      }
+      
+      const runKey = `run${runIdx + 1}`;
+      const upperKey = runKey.toUpperCase();
+      const statusStr = status.toUpperCase();
+
+      if (!existingResult) {
+        competitor.results.push({
+          id: generateId(),
+          race_id: firstRace.id,
+          value: null,
+          value_str: null,
+          status: null,
+          [runKey]: null,
+          [runKey.toUpperCase()]: statusStr,
+          [`${runKey}_status`]: statusStr,
+        });
+      } else {
+        // Обновляем статус текущего заезда
+        this.$set(existingResult, runKey, null);
+        this.$set(existingResult, upperKey, statusStr);
+        this.$set(existingResult, `${runKey}_status`, statusStr);
+      }
+
+      // Добавляем участника в список финишировавших
+      if (!Array.isArray(firstRace.finished)) {
+        this.$set(firstRace, 'finished', []);
+      }
+      if (!firstRace.finished.includes(competitor.id)) {
+        firstRace.finished.push(competitor.id);
+        this.$set(firstRace, 'finished', [...firstRace.finished]);
+      }
+
+      // Пересчитываем общий результат с учетом статусов
+      this.competition.calculateOverallResult(competitor);
+
+      this.updateEvent();
+      this.$nextTick(() => {
+        this.$forceUpdate();
+      });
     },
     handleMassStart() {
       // Placeholder for mass start dialog
@@ -876,10 +1204,26 @@ export default {
     },
     cleanHourCellValue(value) {
       if (value === null || value === undefined) return value;
-      return value
-        .toString()
-        .trim()
-        .replace(/[^0-9:.]/g, '');
+      const raw = value.toString().trim().replace(/[^0-9:.,]/g, '');
+      if (!raw) return raw;
+      const parts = raw.split(':');
+      let hours = '00';
+      let minutes = '00';
+      let secondsPart = '0';
+      if (parts.length === 3) {
+        hours = parts[0].padStart(2, '0');
+        minutes = parts[1].padStart(2, '0');
+        secondsPart = parts[2];
+      } else if (parts.length === 2) {
+        minutes = parts[0].padStart(2, '0');
+        secondsPart = parts[1];
+      } else if (parts.length === 1) {
+        secondsPart = parts[0];
+      }
+      const secondSplit = secondsPart.split(/[.,]/);
+      const seconds = (secondSplit[0] || '0').padStart(2, '0');
+      const fractional = (secondSplit[1] || '').padEnd(4, '0').slice(0, 4);
+      return `${hours}:${minutes}:${seconds}.${fractional}`;
     },
     formatElapsedFromEpoch(epoch) {
       if (epoch === null || epoch === undefined) {
@@ -948,6 +1292,49 @@ export default {
       
       return null;
     },
+    getEntrySortValue(entry) {
+      if (!entry) return 0;
+      if (typeof entry.capturedAt === 'number' && entry.capturedAt > 0) {
+        return entry.capturedAt;
+      }
+      const sourceTime = entry.rawTime || entry.displayTime || entry.originalRawTime;
+      return this.convertTimeStringToMs(sourceTime);
+    },
+    convertTimeStringToMs(timeString) {
+      if (!timeString) return 0;
+      const normalized = timeString.toString().trim().replace(',', '.');
+      if (!normalized) return 0;
+      const cleaned = normalized.replace(/[^0-9:.,]/g, '');
+      if (!cleaned) return 0;
+      const parseSeconds = (value) => {
+        const secondsParts = value.split(/[.,]/);
+        const seconds = parseInt(secondsParts[0], 10) || 0;
+        const milliseconds = parseInt((secondsParts[1] || '0').padEnd(3, '0').slice(0, 3), 10) || 0;
+        return { seconds, milliseconds };
+      };
+      const parts = cleaned.split(':');
+      let hours = 0;
+      let minutes = 0;
+      let seconds = 0;
+      let milliseconds = 0;
+      if (parts.length === 3) {
+        hours = parseInt(parts[0], 10) || 0;
+        minutes = parseInt(parts[1], 10) || 0;
+        const parsed = parseSeconds(parts[2]);
+        seconds = parsed.seconds;
+        milliseconds = parsed.milliseconds;
+      } else if (parts.length === 2) {
+        minutes = parseInt(parts[0], 10) || 0;
+        const parsed = parseSeconds(parts[1]);
+        seconds = parsed.seconds;
+        milliseconds = parsed.milliseconds;
+      } else {
+        const parsed = parseSeconds(cleaned);
+        seconds = parsed.seconds;
+        milliseconds = parsed.milliseconds;
+      }
+      return hours * 3600000 + minutes * 60000 + seconds * 1000 + milliseconds;
+    },
     formatRunValue(value) {
       if (value === null || value === undefined || value === '') return '';
       if (typeof value === 'number') {
@@ -1008,6 +1395,9 @@ export default {
     updateEntryResults() {
       const startSplit = this.splitConfigs[0];
       if (!startSplit) return;
+      const finishSplit = this.splitConfigs[this.splitConfigs.length - 1];
+      const finishSplitId = finishSplit ? finishSplit.id : null;
+      
       this.splitConfigs.forEach((split, idx) => {
         const entries = this.splitEntries[split.id] || [];
         entries.forEach((entry) => {
@@ -1033,6 +1423,10 @@ export default {
           }
           if (idx === 0) {
             entry.result = '';
+          } else if (entry.resultEdited) {
+            // Если результат был отредактирован вручную, не пересчитываем его автоматически
+            // Просто нормализуем формат, если нужно
+            entry.result = entry.result && this.normalizeResultFormat(entry.result);
           } else if (entry.bib && entry.rawTime && this.lastStartTimes[entry.bib]) {
             entry.result = this.calculateNetTime(this.lastStartTimes[entry.bib], entry.rawTime, true);
           } else {
@@ -1040,6 +1434,93 @@ export default {
           }
         });
       });
+      
+      // Пересчитываем результаты в блоке ФИНИШИРОВАЛИ для всех участников с результатами
+      this.recalculateFinishedResults();
+    },
+    recalculateFinishedResults() {
+      if (!this.competition || !this.competition.races || this.competition.races.length === 0) return;
+      
+      const firstRace = this.competition.races[0];
+      const finishSplit = this.splitConfigs[this.splitConfigs.length - 1];
+      if (!finishSplit) return;
+      
+      const finishEntries = this.splitEntries[finishSplit.id] || [];
+      const competitorsWithResults = new Set();
+      
+      // Собираем все номера участников, которые имеют результаты в финишном сплите
+      finishEntries.forEach((entry) => {
+        if (entry && entry.bib && entry.result) {
+          competitorsWithResults.add(entry.bib);
+        }
+      });
+      
+      // Пересчитываем результаты для всех участников с результатами
+      competitorsWithResults.forEach((bib) => {
+        const competitor = this.findCompetitorByBib(bib);
+        if (!competitor) return;
+        
+        // Находим запись в финишном сплите для этого номера
+        const finishEntry = finishEntries.find((e) => e && e.bib === bib && e.result);
+        if (!finishEntry || !finishEntry.result) return;
+        
+        // Проверяем, является ли результат статусом
+        const isStatus = typeof finishEntry.result === 'string' && ['dns', 'dnf', 'dsq'].includes(finishEntry.result.toLowerCase());
+        
+        if (isStatus) {
+          // Публикуем статус
+          this.publishResultWithStatus(bib, finishEntry.result.toUpperCase());
+        } else {
+          // Публикуем обычный результат
+          this.publishResult(bib, finishEntry.result);
+        }
+      });
+      
+      // Удаляем результаты для участников, которые больше не имеют результатов в финишном сплите
+      if (Array.isArray(firstRace.finished)) {
+        // Преобразуем номера в строки для сравнения
+        const currentFinishedBibs = new Set(
+          Array.from(competitorsWithResults).map((bib) => bib !== undefined && bib !== null ? bib.toString() : '')
+        );
+        const competitorsToRemove = [];
+        
+        firstRace.finished.forEach((competitorId) => {
+          const competitor = (this.competition.competitorsSheet && this.competition.competitorsSheet.competitors) 
+            ? this.competition.competitorsSheet.competitors.find((c) => c.id === competitorId)
+            : null;
+          
+          if (competitor) {
+            const bib = this.getBib(competitor.id);
+            const bibString = bib && bib !== '--' ? bib.toString() : '';
+            if (bibString && !currentFinishedBibs.has(bibString)) {
+              competitorsToRemove.push(competitorId);
+            }
+          }
+        });
+        
+        // Удаляем участников без результатов из списка финишировавших
+        if (competitorsToRemove.length > 0) {
+          const updatedFinished = firstRace.finished.filter((id) => !competitorsToRemove.includes(id));
+          this.$set(firstRace, 'finished', updatedFinished);
+          
+          // Удаляем результаты для этих участников
+          competitorsToRemove.forEach((competitorId) => {
+            const competitor = (this.competition.competitorsSheet && this.competition.competitorsSheet.competitors)
+              ? this.competition.competitorsSheet.competitors.find((c) => c.id === competitorId)
+              : null;
+            
+            if (competitor && Array.isArray(competitor.results)) {
+              const resultIndex = competitor.results.findIndex((res) => res.race_id === firstRace.id);
+              if (resultIndex >= 0) {
+                competitor.results.splice(resultIndex, 1);
+                this.$set(competitor, 'results', [...competitor.results]);
+              }
+            }
+          });
+          
+          this.updateEvent();
+        }
+      }
     },
     normalizeResultFormat(result) {
       if (!result) return '';
@@ -1075,6 +1556,76 @@ export default {
       this.lastStartTimes = startMap;
       this.startCapturedTimes = capturedMap;
       this.updateEntryResults();
+    },
+    toggleResultLock(splitId) {
+      const currentLock = this.resultLocks[splitId] !== false;
+      this.$set(this.resultLocks, splitId, !currentLock);
+    },
+    updateEntryResult(splitId, { entry, value }) {
+      if (!entry) return;
+      // Сохраняем оригинальное значение, если его еще нет
+      if (entry.originalResult === undefined) {
+        this.$set(entry, 'originalResult', entry.result);
+      }
+      // Обновляем результат - применяем значение независимо от отсечек
+      entry.result = value;
+      entry.resultEdited = true;
+      this.persistSplitEntries();
+      
+      // Если это финишный сплит, обновляем результаты в блоке ФИНИШИРОВАЛИ
+      const isFinish = splitId === this.splitConfigs[this.splitConfigs.length - 1].id;
+      if (isFinish && entry.bib && entry.result) {
+        // Проверяем, является ли результат статусом
+        const isStatus = typeof entry.result === 'string' && ['dns', 'dnf', 'dsq'].includes(entry.result.toLowerCase());
+        if (isStatus) {
+          this.publishResultWithStatus(entry.bib, entry.result.toUpperCase());
+        } else {
+          // Конвертируем строковое значение в миллисекунды для публикации
+          const normalizedMs = this.convertFormattedTimeToMs(entry.result);
+          if (normalizedMs !== null) {
+            const normalizedStr = this.formatResultFromMs(normalizedMs);
+            this.publishResult(entry.bib, normalizedStr);
+          } else {
+            // Если не удалось конвертировать, публикуем как есть
+            this.publishResult(entry.bib, entry.result);
+          }
+        }
+      }
+    },
+    recalculateResults(splitId) {
+      const entries = this.splitEntries[splitId] || [];
+      const selectedEntry = entries.find((e) => e && e.id === (this.selectedEntry && this.selectedEntry.entryId));
+      
+      if (!selectedEntry || !selectedEntry.bib) {
+        alert('Выберите отсечку с присвоенным номером для пересчета результата.');
+        return;
+      }
+      
+      // Пересчитываем результат на основе отсечек
+      if (selectedEntry.bib && selectedEntry.rawTime && this.lastStartTimes[selectedEntry.bib]) {
+        const recalculatedResult = this.calculateNetTime(this.lastStartTimes[selectedEntry.bib], selectedEntry.rawTime, true);
+        selectedEntry.result = recalculatedResult;
+        selectedEntry.resultEdited = false;
+        // Удаляем сохраненное оригинальное значение, так как результат пересчитан
+        if (selectedEntry.originalResult !== undefined) {
+          this.$delete(selectedEntry, 'originalResult');
+        }
+        this.persistSplitEntries();
+        
+        // Если это финишный сплит, обновляем результаты в блоке ФИНИШИРОВАЛИ
+        const isFinish = splitId === this.splitConfigs[this.splitConfigs.length - 1].id;
+        if (isFinish && selectedEntry.result) {
+          // Проверяем, является ли результат статусом
+          const isStatus = typeof selectedEntry.result === 'string' && ['dns', 'dnf', 'dsq'].includes(selectedEntry.result.toLowerCase());
+          if (isStatus) {
+            this.publishResultWithStatus(selectedEntry.bib, selectedEntry.result.toUpperCase());
+          } else {
+            this.publishResult(selectedEntry.bib, selectedEntry.result);
+          }
+        }
+      } else {
+        alert('Не удалось пересчитать результат. Убедитесь, что у отсечки есть время и номер участника.');
+      }
     },
   },
 };
@@ -1205,16 +1756,16 @@ export default {
   height: 100%;
 }
 
-.sxTopIcons {
+.sxTopActionButtons {
   display: flex;
-  gap: 15px;
   align-items: center;
   padding: 4px 12px;
   background-color: var(--card-background);
   border-radius: 8px;
   border: 1px solid var(--standard-background);
 }
-.iconBtn {
+
+.actionBtn {
   width: 40px;
   height: 40px;
   border-radius: 8px;
@@ -1225,6 +1776,64 @@ export default {
   color: var(--accent);
   border: 1px solid var(--accent);
   cursor: pointer;
+  font-weight: bold;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  transition: all 0.2s ease;
+  margin-right: 10px;
+}
+
+.actionBtn:last-child {
+  margin-right: 0;
+}
+
+.actionBtn:hover {
+  background-color: rgba(90, 180, 255, 0.1);
+}
+
+.actionBtn--add {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.actionBtn--add i {
+  font-size: 1.5rem;
+}
+
+.actionBtn--mass {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.actionBtn--mass i {
+  font-size: 1.5rem;
+}
+
+.actionBtn--dns {
+  color: #d17e3d;
+  border-color: #d17e3d;
+}
+
+.actionBtn--dns:hover {
+  background-color: rgba(209, 126, 61, 0.1);
+}
+
+.actionBtn--dnf {
+  color: #d1c149;
+  border-color: #d1c149;
+}
+
+.actionBtn--dnf:hover {
+  background-color: rgba(209, 193, 73, 0.1);
+}
+
+.actionBtn--dsq {
+  color: #d1493e;
+  border-color: #d1493e;
+}
+
+.actionBtn--dsq:hover {
+  background-color: rgba(209, 73, 62, 0.1);
 }
 
 .sxQualification__content {
