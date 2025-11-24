@@ -13,7 +13,6 @@ import RoundRunScoringPanel from '../components/scoring/DM/roundRunScoringPanel.
 import RoundRunsFinishedList from '../components/scoring/DM/roundRunsFinishedList.vue';
 import Timer from '../components/timing/timer.vue';
 import { checkCompetitionDiscipline, isFinal, isQualificationOfDisciplines } from '../data/sports';
-import SxHeatsList from '../components/scoring/SX/sx-heats-list.vue';
 import SxHeatControls from '../components/scoring/SX/sx-heat-controls.vue';
 import SxHeatsGrid from '../components/scoring/SX/sx-heats-grid.vue';
 import FinishedRunItem from '../components/scoring/DM/finishedRun-item.vue';
@@ -27,7 +26,6 @@ export default {
     FinishedRunItem,
     SxHeatsGrid,
     SxHeatControls,
-    SxHeatsList,
     Timer,
     RoundRunsFinishedList,
     RoundRunScoringPanel,
@@ -55,6 +53,64 @@ export default {
     useSxQualificationLayout() {
       return isQualificationOfDisciplines(this.competition, ['SX']);
     },
+    isSxFinalLayout() {
+      return this.checkCompetitionDiscipline(this.competition, ['SX', 'SXT']) && this.isFinal(this.competition);
+    },
+    flattenedSxHeats() {
+      if (!this.competition || !Array.isArray(this.competition.races)) return [];
+      return this.competition.races.reduce((acc, race, stageIdx) => {
+        if (!race || !Array.isArray(race.heats)) return acc;
+        race.heats.forEach((heat, heatIdx) => {
+          acc.push({
+            stageIdx,
+            heatIdx,
+            stageTitle: race.title || '',
+          });
+        });
+        return acc;
+      }, []);
+    },
+    currentSxHeatIndex() {
+      if (!this.flattenedSxHeats.length || this.competition.selected_race_id === undefined || this.selectedHeat === null)
+        return -1;
+      return this.flattenedSxHeats.findIndex(
+        (item) => item.stageIdx === this.competition.selected_race_id && item.heatIdx === this.selectedHeat
+      );
+    },
+    currentSxHeatInfo() {
+      if (!this.flattenedSxHeats.length) return null;
+      if (this.currentSxHeatIndex >= 0) return this.flattenedSxHeats[this.currentSxHeatIndex];
+      return this.flattenedSxHeats[0];
+    },
+    currentSxHeatLabel() {
+      const info = this.currentSxHeatInfo;
+      if (!info) return 'Заезд';
+      const stageTitle = (info.stageTitle || '').trim();
+      const normalizedStage = stageTitle.toLowerCase();
+      if (normalizedStage === 'финал') {
+        return info.heatIdx === 0 ? 'Большой финал' : 'Малый финал';
+      }
+      return `${stageTitle || 'Заезд'} / Заезд ${info.heatIdx + 1}`;
+    },
+    canNavigatePrevHeat() {
+      return this.flattenedSxHeats.length > 0 && (this.currentSxHeatIndex > 0 || this.currentSxHeatIndex === -1);
+    },
+    canNavigateNextHeat() {
+      if (!this.flattenedSxHeats.length) return false;
+      if (this.currentSxHeatIndex === -1) return this.flattenedSxHeats.length > 1;
+      return this.currentSxHeatIndex < this.flattenedSxHeats.length - 1;
+    },
+  },
+  mounted() {
+    this.ensureSelectedSxHeat();
+  },
+  watch: {
+    flattenedSxHeats() {
+      this.$nextTick(() => this.ensureSelectedSxHeat());
+    },
+    isSxFinalLayout() {
+      this.$nextTick(() => this.ensureSelectedSxHeat());
+    },
   },
   methods: {
     isFinal,
@@ -79,6 +135,30 @@ export default {
       }
       this.$refs.DMRunsList.startNextRun(heat.id);
     },
+    changeSxHeat(direction) {
+      if (!this.flattenedSxHeats.length) return;
+      let targetIndex = this.currentSxHeatIndex;
+      if (targetIndex === -1) {
+        targetIndex = 0;
+      } else {
+        targetIndex = Math.min(
+          Math.max(targetIndex + direction, 0),
+          this.flattenedSxHeats.length - 1
+        );
+      }
+      const target = this.flattenedSxHeats[targetIndex];
+      if (target) {
+        this.selectSXHeat({ stage: target.stageIdx, heat: target.heatIdx });
+      }
+    },
+    ensureSelectedSxHeat() {
+      if (!this.isSxFinalLayout || !this.flattenedSxHeats.length) return;
+      if (this.currentSxHeatIndex >= 0) return;
+      const firstHeat = this.flattenedSxHeats[0];
+      if (firstHeat) {
+        this.selectSXHeat({ stage: firstHeat.stageIdx, heat: firstHeat.heatIdx });
+      }
+    },
   },
 };
 </script>
@@ -88,6 +168,7 @@ export default {
     <sx-qualification-scoring v-if="useSxQualificationLayout"></sx-qualification-scoring>
     <template v-else>
     <div
+      v-if="!isSxFinalLayout"
       class="scoringLayoutSection layoutSection-1"
       :style="checkCompetitionDiscipline(competition, ['SX', 'SXT', 'DM']) && isFinal(competition) && { minHeight: '0', height: 'auto' }"
     >
@@ -109,12 +190,18 @@ export default {
       <finish-table></finish-table>
     </div>
 
-    <div v-if="checkCompetitionDiscipline(competition, ['SX', 'SXT']) && isFinal(competition)" class="sx-layout">
-      <div class="sx-leftPanel">
-        <sx-heats-list :competition="competition" :selected-heat="selectedHeat"></sx-heats-list>
+    <div v-if="isSxFinalLayout" class="sx-finalLayout">
+      <div class="sx-finalTopRow">
+        <div class="sx-finalNav">
+          <button class="navBtn" type="button" :disabled="!canNavigatePrevHeat" @click="changeSxHeat(-1)">«</button>
+          <span class="navLabel">{{ currentSxHeatLabel }}</span>
+          <button class="navBtn" type="button" :disabled="!canNavigateNextHeat" @click="changeSxHeat(1)">»</button>
+        </div>
+        <div class="sx-finalControlsWrapper">
+          <sx-heat-controls :competition="competition" :selected-heat="selectedHeat" class="sx-finalControls"></sx-heat-controls>
+        </div>
       </div>
-      <div class="sx-rightPanel">
-        <sx-heat-controls :competition="competition" :selected-heat="selectedHeat"></sx-heat-controls>
+      <div class="sx-finalGridRow">
         <sx-heats-grid :competition="competition" :selected-heat="selectedHeat" @heat:select="selectSXHeat"></sx-heats-grid>
       </div>
     </div>
@@ -156,47 +243,86 @@ export default {
 }
 
 .scoringLayoutSection.layoutSection-1 {
-  flex: 0 0 160px;
+  flex: 0 0 80px;
+  margin-bottom: 15px;
 }
 .scoringLayoutSection.layoutSection-2 {
   flex: 4 1 200px;
+  margin-bottom: 15px;
 }
 .scoringLayoutSection.layoutSection-3 {
   flex: 4 1 200px;
+  margin-bottom: 15px;
 }
-.sx-layout {
-  flex: 3 1 0;
+.sx-finalLayout {
+  flex: 1 1 auto;
   display: flex;
-  flex-wrap: nowrap;
+  flex-direction: column;
+  gap: 15px;
+  padding: 8px 15px 15px;
 
-  .sx-leftPanel {
+  .sx-finalTopRow {
+    flex: 0 0 auto;
     display: flex;
-    flex-direction: column;
-    flex: 1 1 0;
-    padding: 4px;
-    & > * {
-      &:first-child {
-        flex: 1 1 0;
-        margin-bottom: 8px;
+    align-items: stretch;
+    gap: 16px;
+    margin-bottom: 0;
+
+    .sx-finalNav {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 6px 16px;
+      border-radius: 12px;
+      background-color: var(--background-card);
+      font-weight: bold;
+      text-transform: uppercase;
+
+      .navBtn {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        border: none;
+        background: transparent;
+        color: var(--accent-light);
+        font-size: 2rem;
+        cursor: pointer;
+        transition: opacity 120ms ease;
+        &:disabled {
+          opacity: 0.35;
+          cursor: default;
+        }
       }
-      &:nth-child(2) {
-        flex: 0 0 auto;
-        padding: 0;
+      .navLabel {
+        font-size: 1.1rem;
+        letter-spacing: 0.08em;
       }
     }
+
+    .sx-finalControlsWrapper {
+      flex: 1 1 auto;
+      max-width: 1000px;
+      display: flex;
+      justify-content: flex-start;
+      margin-left: 15px;
+    }
+
+    .sx-finalControls {
+      flex: 1 1 auto;
+      width: 100%;
+    }
   }
-  .sx-rightPanel {
+
+  .sx-finalGridRow {
+    flex: 1 1 auto;
+    min-height: 0;
     display: flex;
     flex-direction: column;
-    flex: 2 1 0;
-    padding: 4px;
-    & > * {
-      &:first-child {
-        margin-bottom: 8px;
-      }
-      &:nth-child(2) {
-        flex: 1 1 0;
-      }
+    margin-top: 15px;
+
+    ::v-deep(.heatsGrid__wrapper) {
+      flex: 1 1 auto;
+      height: 100%;
     }
   }
 }

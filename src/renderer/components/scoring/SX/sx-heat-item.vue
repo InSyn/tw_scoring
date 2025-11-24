@@ -21,6 +21,18 @@ export default {
     selectedHeat: null,
   },
   computed: {
+    computedHeatTitle() {
+      if (!this.stage || !this.stage.title) return this.heat && this.heat.title ? this.heat.title : 'Заезд';
+
+      const stageTitle = this.stage.title.trim();
+      const normalizedStage = stageTitle.toLowerCase();
+
+      if (normalizedStage === 'финал') {
+        return this.heatIdx === 0 ? 'Большой финал' : 'Малый финал';
+      }
+
+      return `${stageTitle} - Заезд ${this.heatIdx + 1}`;
+    },
     stage() {
       if (!this.competition) return null;
       return this.competition.races[this.stageIdx];
@@ -39,7 +51,7 @@ export default {
 <template>
   <div class="runsGrid__stage__heats__item__wrapper">
     <div class="heatsGrid__stage__heats__item" :class="{ selected: isSelectedHeat }" @dblclick="$emit('heat:select', stageIdx, heatIdx)">
-      <span class="heatsGrid__stage__heats__item__title" @click="$emit('heat:select', stageIdx, heatIdx)">{{ heat ? heat.title : '-' || '-' }}</span>
+      <span class="heatsGrid__stage__heats__item__title" @click="$emit('heat:select', stageIdx, heatIdx)">{{ computedHeatTitle }}</span>
       <sx-heat-competitor-item
         v-for="(competitorId, comp_idx) in heat.competitors"
         :key="`${comp_idx}_${competitorId}`"

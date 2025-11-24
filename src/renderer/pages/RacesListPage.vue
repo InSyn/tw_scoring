@@ -7,7 +7,7 @@
     <div class="racesMenu__container">
       <select-race-menu @menu-select-race="selectRace" :competition="competition" :selected-race="selectedRace"></select-race-menu>
 
-      <div class="raceLists__container">
+      <div class="raceLists__container" :class="{ 'raceLists__container--sxFinal': isSXFinalLayout }">
         <race-competitors-list
           v-if="selectedRace && competition.races.some((race) => race.id === selectedRace.id)"
           :competition="competition"
@@ -53,6 +53,10 @@ export default {
     ...mapGetters('main', {
       competition: 'competition',
     }),
+    isSXFinalLayout() {
+      if (!this.competition) return false;
+      return this.checkCompetitionDiscipline(this.competition, ['SX', 'SXT']) && this.isFinal(this.competition);
+    },
   },
   methods: {
     isFinal,
@@ -108,6 +112,16 @@ export default {
 
       &:last-child {
         margin-right: 0;
+      }
+    }
+
+    &.raceLists__container--sxFinal {
+      ::v-deep(.raceCompetitorsList__wrapper) {
+        flex: 0 0 38%;
+      }
+
+      ::v-deep(.heats__wrapper) {
+        flex: 1 1 62%;
       }
     }
   }

@@ -1,10 +1,11 @@
 import { generateId } from '../../utils/utils';
 
 export default class SXHeatClass {
-  constructor({ id = generateId(), title = 'Заезд', competitors = ['', '', '', ''], results = ['', '', '', ''] }) {
+  constructor({ id = generateId(), title = 'Заезд', competitors = ['', '', '', ''], results = ['', '', '', ''], seeds = ['', '', '', ''] }) {
     this.id = id;
     this.title = title;
     this.competitors = competitors;
     this.results = results;
+    this.seeds = seeds;
   }
 }

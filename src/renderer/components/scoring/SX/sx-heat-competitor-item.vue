@@ -1,9 +1,36 @@
 <script>
 import { getCompetitorById, getHeatCompetitorColor } from '../../../utils/competition-utils';
+import { LANE_ORDER, SX_SEEDINGS } from '../../../utils/sxSeeding';
 
 export default {
   name: 'sx-heat-competitor-item',
-  methods: { getHeatCompetitorColor },
+  methods: {
+    getHeatCompetitorColor,
+    getLaneDisplayNumber(competitorIdx) {
+      const storedSeed = this.getStoredSeed(competitorIdx);
+      if (storedSeed !== undefined && storedSeed !== null && storedSeed !== '') return storedSeed;
+
+      if (!this.stageTitle || !this.isEarliestStage) return '';
+
+      const stageSeeds = SX_SEEDINGS[this.stageTitle];
+      if (!stageSeeds) return '';
+
+      const heatSeeds = stageSeeds[this.heatIdx];
+      if (!heatSeeds) return '';
+
+      const laneKey = LANE_ORDER[competitorIdx];
+      if (!laneKey) return '';
+
+      const seedValue = heatSeeds[laneKey];
+      return seedValue !== undefined ? seedValue : '';
+    },
+    getStoredSeed(competitorIdx) {
+      const heat = this.currentHeat;
+      if (!heat || !Array.isArray(heat.seeds)) return '';
+      const seedValue = heat.seeds[competitorIdx];
+      return seedValue !== undefined ? seedValue : '';
+    },
+  },
   props: {
     competition: Object,
     competitorId: { default: null },
@@ -12,6 +39,31 @@ export default {
     heatIdx: Number,
   },
   computed: {
+    currentHeat() {
+      if (!this.competition || !this.competition.races) return null;
+      const stage = this.competition.races[this.stageIdx];
+      if (!stage || !stage.heats) return null;
+      return stage.heats[this.heatIdx] || null;
+    },
+    stageTitle() {
+      if (!this.competition || !this.competition.races || !this.competition.races[this.stageIdx]) return null;
+      return this.competition.races[this.stageIdx].title;
+    },
+    isEarliestStage() {
+      if (!this.competition || !this.competition.races) return false;
+      const sxStagesOrder = Object.keys(SX_SEEDINGS);
+      const currentStageTitle = this.stageTitle;
+      if (!currentStageTitle) return false;
+
+      const availableStageIndexes = this.competition.races
+        .map((race) => (race && race.title ? sxStagesOrder.indexOf(race.title) : -1))
+        .filter((idx) => idx !== -1);
+      if (!availableStageIndexes.length) return false;
+
+      const earliestIndex = Math.min(...availableStageIndexes);
+      const currentIndex = sxStagesOrder.indexOf(currentStageTitle);
+      return currentIndex === earliestIndex && currentIndex !== -1;
+    },
     getCompetitorData() {
       const competitorObject = getCompetitorById(this.competition, this.competitorId);
       if (!competitorObject) return '-';
@@ -31,6 +83,9 @@ export default {
 
 <template>
   <div class="heatCompetitor__wrapper">
+    <div class="heatCompetitor__seed">
+      {{ getLaneDisplayNumber(competitorIdx) }}
+    </div>
     <div class="heatCompetitor__bib" :style="{ border: `4px solid var(${getHeatCompetitorColor(competitorIdx + 1)})` }">
       <input
         type="text"
@@ -61,6 +116,21 @@ export default {
 
   &:last-child {
     margin-bottom: 0;
+  }
+  .heatCompetitor__seed {
+    flex: 0 0 50px;
+    min-width: 50px;
+    height: 100%;
+    margin-right: 0.4rem;
+    padding: 0 6px;
+    background-color: #fff;
+    color: #000;
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1rem;
   }
   .heatCompetitor__bib {
     border-radius: 2px;
