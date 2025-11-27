@@ -14,6 +14,9 @@ export function generateId() {
 }
 export const generateUUID = () => uuidv4();
 
+// Generic string normalizer for case/whitespace-insensitive comparisons
+export const normalizeString = (value) => (value || '').toString().trim().toLowerCase();
+
 export function getAECodes() {
   let codes = JSON.parse(fs.readFileSync(`${process.cwd()}/app_assets/AE_CODES.json`, 'utf8')) || [];
 

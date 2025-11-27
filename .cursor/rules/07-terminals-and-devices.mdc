@@ -1,0 +1,45 @@
+---
+alwaysApply: true
+---
+## Judge Terminals (TCP)
+
+- `TCPServer/tcpServerSetup.js` owns the judge terminal TCP server; treat it as the single authority for:
+  - client lifecycle (`clients` map, `clientTimeout`, command‑check intervals, response timeouts)
+  - message encoding/decoding (`encodeMessage`, `decodeMessage`)
+  - terminal ID association via `checkTerminalId`.
+- `terminalTCPMessageHandlers.js` maps raw terminal messages to domain events:
+  - `judgeMark` → `new-judge-mark` IPC → renderer → scoring UI.
+  - `syncTime` → time sync response and initial status message to the terminal.
+  - `resultAccepted` → `result-accepted` IPC → renderer (for result confirmation flows).
+- When modifying terminal protocol, keep message formats and codes centralized in `terminalMessagesMap` and `messageModeMap`, and update renderer‑side handlers (`utils/terminals-utils`, Vuex, components) accordingly.
+
+## Timing Devices
+
+- `timingServer/timingDeviceServerSetup.js` manages TCP connections to hardware timers and converts raw data into:
+  - log messages via `sendServerMessage`
+  - IPC events (`newTime`, `updateConnectedDevices`) to the renderer.
+- The `timing` Vuex module and `TimerClass` handle:
+  - competition‑specific timing behaviour (MO/DM channels, splits, competitor mapping)
+  - writing and storing time records per competition (`timeRecords`).
+- For time synchronization:
+  - `SyncTimeTCP` IPC follows the documented TAG Heuer CP 540 sequence: `#WC 007 02 HH:MM DD/MM/YY` then `#WC 008 01`, with correct formatting and minimal delay.
+  - `timingDeviceSettings` schedules sync near minute boundaries; avoid adding extra asynchronous delays that could introduce drift.
+
+## Socket.IO & Live Services
+
+- `socket_setup.js` coordinates the Socket.IO HTTP server and ensures that:
+  - clients receive initial `competition_data_updated` on connect
+  - judge and chief‑judge connection events propagate correctly
+  - scoring events (`set_mark`, `set_raceStatus`, `accept_res`, etc.) update shared `competition` state and broadcast updates.
+- Live service integrations and HTTP APIs must reuse the canonical `competition` representation to prevent divergence between local UI, terminals, and remote systems.
+
+## Robustness & Safety
+
+- Guard all network and device operations with:
+  - connection state checks
+  - error handlers that log descriptive messages and clean up resources.
+- On malformed or unexpected messages:
+  - prefer **logging and ignoring** the offending input to corrupting competition or timing state
+  - consider adding lightweight counters/metrics for recurring protocol issues.
+- Keep configuration (ports, IPs, timeouts) explicit and, when user‑editable, validate it in the UI before sending to main process.
+

@@ -1,0 +1,46 @@
+---
+alwaysApply: true
+---
+## Vuex Modules & Domain Boundaries
+
+- Maintain **one Vuex module per major domain**:
+  - `main`: app shell, licensing state, competitions list, active competition, server config, exports/imports, live config.
+  - Discipline modules (`aerials`, `moguls`, `skiCross`, `skiRamps`) encapsulate sport‑specific rules, scoring, and derived data.
+  - `timing`: timing devices, time records, integration with `TimerClass` and timing EventBus events.
+  - `terminalsUdpService`: IPC bridge for judge terminals (TCP server messages) and their local handling.
+  - `protocols` / `protocol_settings`: protocol templates, fields, export/import, and protocol builder logic.
+  - `scoring_services`, `message_system`, `localization`, `key`: live services, messaging, localisation, and licensing.
+- Modules should expose narrow public APIs: **getters** for derived data, **actions** for workflows, **mutations** for simple synchronous state changes.
+
+## Reactive Data Flow
+
+- UI emits **intents** (user actions, IPC events, Socket.IO events) which are mapped to Vuex actions; actions commit mutations; components read state via getters.
+- State that originates from backend (Socket.IO `competition_data_updated`, TCP terminals, timing devices, live services) must be funneled through **single, well‑named actions/mutations** (e.g. `main/updateEvent`, `timing/ADD_TIME_RECORD`) rather than arbitrary direct state edits.
+- Avoid duplicating the same state across modules; when multiple domains need the same data, share via:
+  - read‑only getters on the owning module
+  - IDs or references (competition ID, race ID, judge ID, bib number) instead of copying full objects.
+
+## Domain Models
+
+- Keep **competition and race logic inside classes** in `src/renderer/classes` (`EventClass`, `RaceClass`, `MarkClass`, `TimerClass`, etc.), not inside components or Vuex modules.
+- Vuex mutations/actions should orchestrate and call methods on these classes instead of re‑implementing business rules.
+- When introducing new behaviours (e.g. new race statuses, result formulas, timing modes), prefer:
+  - extending the relevant class(es)
+  - adding small helper utilities in `src/renderer/utils`
+  - keeping mutations as thin “wiring” around domain objects.
+
+## Real‑time & Synchronization
+
+- Treat the following as **authoritative sources**:
+  - Vuex store for current UI state.
+  - `competition` object (main process and renderer) for competition structure and results.
+  - TCP/timing servers for real‑time judges and timing signals.
+- For Socket.IO updates (`competition_data_updated`), reconcile via **field‑level merges** that respect existing structure (as in `main/connect_socket`), avoiding wholesale object replacement that can break reactivity or discard local state.
+- All real‑time flows must be **id‑driven** (competition ID, race ID, judge ID, bib numbers) so they remain stable under sorting, filtering, or list mutations.
+
+## Don’ts
+
+- Do not mutate Vuex state directly inside components or asynchronous callbacks; always use actions/mutations.
+- Do not keep large chunks of UI‑only or derived data in Vuex if it can be computed on the fly from canonical state.
+- Avoid long‑running or I/O‑bound work in mutations; keep them synchronous and deterministic.
+

@@ -4,24 +4,41 @@ import fs from 'fs';
 import EventClass from '../../classes/EventClass';
 import { generateId } from '../../utils/utils';
 import { fixProtocolField, generateProtocolField, protocolHandlers } from '../../utils/protocol-utils';
+import { getAthleteGendersList, getAthleteGroups, inferGenderLabelFromCandidates, getAthleteGenderKey } from '../../data/athlete-groups';
 
 const handleFileWriteErrors = (err) => {
-  if (err) {
-    if (err.code === 'EBUSY') {
-      console.error('File is busy.');
-      return;
-    }
-    if (err.code === 'ENOENT') {
-      console.error('Directory does not exist:', err.path);
-      return;
-    }
-    if (err.code === 'EACCES') {
-      console.error('Permission denied to write to:', err.path);
-      return;
-    }
-    console.error('Error writing file:', err.message);
-    throw new Error(err.message);
+  if (!err) return;
+
+  const baseMsg = '[EXPORT] Error writing file';
+
+  if (err.code === 'EBUSY') {
+    console.error(`${baseMsg}: file is busy`, { path: err.path });
+    return;
   }
+  if (err.code === 'ENOENT') {
+    console.error(`${baseMsg}: directory does not exist`, { path: err.path });
+    return;
+  }
+  if (err.code === 'EACCES') {
+    console.error(`${baseMsg}: permission denied`, { path: err.path });
+    return;
+  }
+
+  console.error(`${baseMsg}:`, { path: err.path, message: err.message });
+};
+
+const writeFileSafe = (filePath, data, options = { encoding: 'utf-8' }) => {
+  return new Promise((resolve, reject) => {
+    fs.writeFile(filePath, data, options, (err) => {
+      if (err) {
+        handleFileWriteErrors(err);
+        // Surface a concise error for UI-level handling
+        reject(new Error(err.message || 'Failed to write file'));
+        return;
+      }
+      resolve();
+    });
+  });
 };
 
 export default {
@@ -416,20 +433,30 @@ export default {
     createCompetition: ({ commit }, competition) => {
       commit('createCompetition', competition);
     },
-    exportTXT: async (store, params) => {
-      const txtData = params.data;
-
-      await fs.writeFile(params.path, txtData, { encoding: 'utf-8' }, (err) => handleFileWriteErrors(err));
+    exportTXT: async (store, { path, data }) => {
+      try {
+        await writeFileSafe(path, data, { encoding: 'utf-8' });
+      } catch (err) {
+        console.error('[EXPORT] Error writing TXT:', err);
+        throw new Error('Failed to export TXT file');
+      }
     },
-    exportCSV: async (store, params) => {
-      const jsonData = JSON.stringify(params.data);
-
-      await fs.writeFile(params.path, jsonData, { encoding: 'utf-8' }, (err) => handleFileWriteErrors(err));
+    exportCSV: async (store, { path, data }) => {
+      const jsonData = JSON.stringify(data);
+      try {
+        await writeFileSafe(path, jsonData, { encoding: 'utf-8' });
+      } catch (err) {
+        console.error('[EXPORT] Error writing CSV:', err);
+        throw new Error('Failed to export CSV file');
+      }
     },
-    exportHTML: (store, params) => {
-      const { path, data } = params;
-
-      fs.writeFile(path, data, { encoding: 'utf-8' }, (err) => handleFileWriteErrors(err));
+    exportHTML: async (store, { path, data }) => {
+      try {
+        await writeFileSafe(path, data, { encoding: 'utf-8' });
+      } catch (err) {
+        console.error('[EXPORT] Error writing HTML:', err);
+        throw new Error('Failed to export HTML file');
+      }
     },
     licChecked: ({ commit }, lData) => {
       commit('licChecked', lData);
@@ -439,10 +466,87 @@ export default {
       state.event.event_title = evData.title;
       state.event.sport = evData.sport;
 
-      state.competitions = [];
+      const checkDeprecatedFields = (competitionData) => {
+        if (!competitionData.mainData) return competitionData;
 
+        const mainData = competitionData.mainData;
+
+        const extractStringValue = (value) => {
+          if (!value) return null;
+          if (typeof value === 'string') return value;
+          if (typeof value === 'object' && typeof value.value === 'string') return value.value;
+          return null;
+        };
+
+        const gendersList = getAthleteGendersList();
+
+        const genderFieldValue = extractStringValue(mainData.gender);
+        const groupFieldValue = extractStringValue(mainData.group);
+
+        const stageGroupValue = extractStringValue(mainData.title && mainData.title.stage && mainData.title.stage.group);
+        const stageTitleValue = extractStringValue(mainData.title && mainData.title.stage && mainData.title.stage.value);
+
+        const genderCandidates = [genderFieldValue, groupFieldValue, stageGroupValue, stageTitleValue].filter(Boolean);
+
+        let resolvedGenderLabel = inferGenderLabelFromCandidates(genderCandidates);
+
+        if (!resolvedGenderLabel) {
+          // Fall back to the historical default: second gender in the list (women) if available, else the first one
+          resolvedGenderLabel = gendersList[1] || gendersList[0] || null;
+        }
+
+        // Ensure mainData.gender has the new { title, value } shape
+        if (!mainData.gender || typeof mainData.gender !== 'object') {
+          mainData.gender = {
+            title: 'Gender',
+            value: resolvedGenderLabel,
+          };
+        } else {
+          if (!mainData.gender.title) mainData.gender.title = 'Gender';
+          if (!mainData.gender.value) mainData.gender.value = resolvedGenderLabel;
+        }
+
+        // Resolve group label (localized) for the competition
+        let resolvedGroupValue = groupFieldValue;
+
+        if (!resolvedGroupValue && resolvedGenderLabel) {
+          const groupsForGender = getAthleteGroups(resolvedGenderLabel);
+          if (Array.isArray(groupsForGender) && groupsForGender.length) {
+            resolvedGroupValue = groupsForGender[0];
+          }
+        }
+
+        if (!resolvedGroupValue) {
+          const fallbackGroups = getAthleteGroups(gendersList[0] || '');
+          if (Array.isArray(fallbackGroups) && fallbackGroups.length) {
+            resolvedGroupValue = fallbackGroups[0];
+          }
+        }
+
+        if (!mainData.group || typeof mainData.group !== 'object') {
+          mainData.group = {
+            title: 'Group',
+            value: resolvedGroupValue || '',
+          };
+        } else {
+          if (!mainData.group.title) mainData.group.title = 'Group';
+          if (!mainData.group.value) mainData.group.value = resolvedGroupValue || mainData.group.value;
+        }
+
+        // Ensure title.stage.group is set to a stable key ('men' | 'women' | 'mixed') for scoring logic
+        if (mainData.title && mainData.title.stage && !mainData.title.stage.group && resolvedGenderLabel) {
+          const genderKey = getAthleteGenderKey(resolvedGenderLabel);
+          if (genderKey) {
+            mainData.title.stage.group = genderKey;
+          }
+        }
+
+        return competitionData;
+      };
+
+      state.competitions = [];
       evData.competitions.forEach((evData_competition) => {
-        let competition = EventClass.fromJSON(evData_competition);
+        const competition = EventClass.fromJSON(checkDeprecatedFields(evData_competition));
         if (evData_competition.id) competition.id = evData_competition.id;
         competition.stages = JSON.parse(JSON.stringify(evData_competition.stages));
         state.competitions.push(competition);
@@ -496,8 +600,8 @@ export default {
       }
     },
     xml_export: async (s, data) => {
-      const object = data[0],
-        competition = data[1];
+      const object = data[0];
+      const competition = data[1];
       const xmlConverter = require('xml-js');
       const options = {
         compact: true,
@@ -505,16 +609,16 @@ export default {
         fullTagEmptyElement: true,
         spaces: 4,
       };
-      let xml = xmlConverter.js2xml(object, options);
+      const xml = xmlConverter.js2xml(object, options);
+      const filename = `./FIS_XML ${competition.mainData.date.value}_${competition.mainData.title.value.trim().split(' ').join('_')}.xml`;
 
-      await require('fs').writeFile(
-        `./FIS_XML ${competition.mainData.date.value}_${competition.mainData.title.value.trim().split(' ').join('_')}.xml`,
-        xml,
-        (err) => {
-          if (err) throw `XML export error: ${err}`;
-          console.log(`XML: FIS_XML ${competition.mainData.date.value}_${competition.mainData.title.value.trim().split(' ').join('_')}.xml Saved`);
-        }
-      );
+      try {
+        await writeFileSafe(filename, xml, { encoding: 'utf-8' });
+        console.log(`[EXPORT] XML saved: ${filename}`);
+      } catch (err) {
+        console.error('[EXPORT] Error writing XML:', err);
+        throw new Error('XML export error');
+      }
     },
     export_protocol: ({ state }, competitionId) => {
       const competition = state.competitions.find((comp) => comp.id === competitionId);

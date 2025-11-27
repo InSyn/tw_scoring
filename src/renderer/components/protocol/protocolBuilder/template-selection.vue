@@ -28,7 +28,8 @@ export default {
   <div class="templateSelection__wrapper">
     <h3 class="templateSelection__header">Шаблоны протоколов</h3>
     <ul class="templateSelection__list">
-      <li v-for="template in getSortedTemplates" :key="template.id" :class="{ selected: template.id === selectedTemplateId }" @click="selectTemplate(template)">
+      <li v-for="template in getSortedTemplates" :key="template.id"
+        :class="{ selected: template.id === selectedTemplateId }" @click="selectTemplate(template)">
         {{ template.name }}
       </li>
     </ul>
@@ -41,6 +42,7 @@ export default {
 
 <style scoped lang="scss">
 .templateSelection__wrapper {
+  position: relative;
   display: flex;
   flex-direction: column;
   overflow: visible;
@@ -51,6 +53,7 @@ export default {
     flex: 0 0 auto;
     margin-bottom: 8px;
   }
+
   .templateSelection__list {
     flex: 1 1 50px;
     display: flex;
@@ -71,6 +74,7 @@ export default {
       white-space: nowrap;
       text-overflow: ellipsis;
       transition: background-color 92ms;
+
       &:hover {
         background-color: var(--subject-background);
       }
@@ -82,14 +86,16 @@ export default {
       }
     }
   }
+
   .templateSelection__actions {
     flex: 0 0 auto;
     display: flex;
     justify-content: flex-end;
     margin-top: 8px;
 
-    & > * {
+    &>* {
       margin-left: 8px;
+
       &:first-child {
         margin-left: 0;
       }

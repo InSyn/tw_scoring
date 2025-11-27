@@ -9,7 +9,7 @@ export const getCompetitorById = (competition, competitorId) => {
   return competitor;
 };
 
-export const heatColors = ['red', 'green', 'blue', 'yellow'];
+export const heatColors = ['red', 'green', 'yellow', 'blue'];
 export const getHeatCompetitorColor = (startOrder) => {
   return heatColors[startOrder - 1] ? `--athlete-${heatColors[startOrder - 1]}` : 'transparent';
 };

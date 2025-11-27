@@ -1,4 +1,5 @@
 import store from '../store';
+import { normalizeString } from '../utils/utils';
 
 export const athleteGenders = {
   men: {
@@ -14,7 +15,17 @@ export const athleteGenders = {
     EN_name: 'Mixed',
   },
 };
-export const getAthleteGendersList = () => Object.keys(athleteGenders).map((gender) => athleteGenders[gender][`${store.getters['localization/lang']}_name`]);
+
+export const getAthleteGendersList = () =>
+  Object.keys(athleteGenders).map((genderKey) => {
+    return athleteGenders[genderKey][`${store.getters['localization/lang']}_name`];
+  });
+
+export const getGenderLabelByKey = (genderKey) => {
+  if (!genderKey || !athleteGenders[genderKey]) return '';
+  const appLang = store.getters['localization/lang'];
+  return athleteGenders[genderKey][`${appLang}_name`] || '';
+};
 
 const athleteGroups = {
   men: [
@@ -78,10 +89,23 @@ const athleteGroups = {
     },
   ],
 };
-export const getAthleteGroups = (gender) => {
+
+// Centralized mapping from localized gender label to canonical gender key
+const findGenderKeyByLabel = (genderLabel) => {
+  if (!genderLabel) return null;
   const appLang = store.getters['localization/lang'];
-  const genderEntry = Object.entries(athleteGenders).find(([key, value]) => value[`${appLang}_name`] === gender);
-  const genderKey = genderEntry ? genderEntry[0] : null;
+  const labelNorm = normalizeString(genderLabel);
+
+  const genderEntry = Object.entries(athleteGenders).find(([, value]) => {
+    return normalizeString(value[`${appLang}_name`]) === labelNorm;
+  });
+
+  return genderEntry ? genderEntry[0] : null;
+};
+
+export const getAthleteGroups = (genderLabel) => {
+  const appLang = store.getters['localization/lang'];
+  const genderKey = findGenderKeyByLabel(genderLabel);
 
   if (!genderKey) {
     const noGroup = {
@@ -92,4 +116,57 @@ export const getAthleteGroups = (gender) => {
   }
 
   return athleteGroups[genderKey].map((group) => group[`${appLang}_name`]);
+};
+
+// Public helper to convert localized gender label -> canonical key ('men' | 'women' | 'mixed')
+export const getAthleteGenderKey = (genderLabel) => findGenderKeyByLabel(genderLabel);
+
+// Synonyms for free-form gender inputs (stage titles, legacy JSON, etc.)
+const genderSynonyms = {
+  men: ['men', 'man', 'm', 'м', 'муж', 'мужчины'],
+  women: ['women', 'woman', 'w', 'f', 'ж', 'жен', 'женщины', 'ladies', 'lady'],
+  mixed: ['mixed', 'mix', 'mx', 'см', 'смеш', 'смешанный'],
+};
+
+// Given a list of arbitrary text candidates (group label, stage group, etc.),
+// infer the best matching localized gender label using athleteGenders + athleteGroups.
+export const inferGenderLabelFromCandidates = (candidates) => {
+  const appLang = store.getters['localization/lang'];
+  const gendersList = getAthleteGendersList();
+
+  const uniqueCandidates = (candidates || [])
+    .filter(Boolean)
+    .map((c) => c.toString())
+    .filter((c, idx, arr) => arr.indexOf(c) === idx);
+
+  for (const candidate of uniqueCandidates) {
+    const candNorm = normalizeString(candidate);
+    if (!candNorm) continue;
+
+    // 1) Direct match against localized gender labels
+    const directIdx = gendersList.findIndex((g) => normalizeString(g) === candNorm);
+    if (directIdx !== -1) {
+      return gendersList[directIdx];
+    }
+
+    // 2) Synonym match mapped to canonical gender keys
+    const synonymKey = Object.keys(genderSynonyms).find((key) => genderSynonyms[key].includes(candNorm));
+    if (synonymKey && athleteGenders[synonymKey]) {
+      return athleteGenders[synonymKey][`${appLang}_name`];
+    }
+
+    // 3) Match via athlete groups: see which gender owns this group label
+    for (let i = 0; i < gendersList.length; i += 1) {
+      const genderLabel = gendersList[i];
+      const groupsForGender = getAthleteGroups(genderLabel) || [];
+      const normGroups = groupsForGender.map((g) => normalizeString(g));
+
+      const matchesGroup = normGroups.some((g) => g === candNorm || g.includes(candNorm) || candNorm.includes(g));
+      if (matchesGroup) {
+        return genderLabel;
+      }
+    }
+  }
+
+  return null;
 };

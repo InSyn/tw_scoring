@@ -11,6 +11,8 @@
     "build:clean": "cross-env BUILD_TARGET=clean node .electron-vue/build.js",
     "build:web": "cross-env BUILD_TARGET=web node .electron-vue/build.js",
     "dev": "set NODE_OPTIONS=--openssl-legacy-provider && node .electron-vue/dev-runner.js",
+    "mcp:build": "cd electron-mcp-server && npm run build",
+    "mcp:start": "cd electron-mcp-server && npm run start",
     "pack": "npm run pack:main && npm run pack:renderer",
     "pack:main": "cross-env NODE_ENV=production webpack --progress --colors --config .electron-vue/webpack.main.config.js",
     "pack:renderer": "cross-env NODE_ENV=production webpack --progress --colors --config .electron-vue/webpack.renderer.config.js",

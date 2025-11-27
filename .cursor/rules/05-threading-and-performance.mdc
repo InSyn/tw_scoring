@@ -1,0 +1,50 @@
+---
+alwaysApply: true
+---
+## Process & Thread Roles
+
+- **Electron main process**:
+  - creates the browser window and owns IPC handlers
+  - runs the Socket.IO HTTP server
+  - runs the TCP server for judge terminals
+  - manages TCP client connections to timing devices
+  - performs selected file system operations that require Node privileges.
+- **Renderer process** (Vue app):
+  - renders UI and handles user interaction
+  - owns Vuex store and domain classes
+  - coordinates with main process via IPC and with remote clients via Socket.IO client.
+- **Background work**:
+  - heavy I/O and CPU‑intensive tasks (large exports/imports, complex protocol generation) belong on the Node side or in dedicated workers, not in the Vue render path.
+
+## Patterns
+
+- Use **event‑driven communication** everywhere:
+  - IPC (`ipcMain`/`ipcRenderer`) for local app events (licence, timing devices, file paths).
+  - Socket.IO for networked clients and remote judging terminals.
+  - EventBus for decoupled renderer‑side events (info messages, timing).
+- Avoid any pattern that requires busy‑waiting or blocking calls in response to events; always prefer callbacks, promises, or scheduled timeouts/intervals.
+
+## Real‑time Throughput
+
+- Honour real‑time constraints:
+  - judge marks, race status toggles, and result acceptance must propagate quickly and predictably between terminals, main process, and renderer.
+  - timing device events (`newTime`) must be parsed and forwarded with minimal delay.
+- Keep periodic checks (`serverStatusChecker`, TCP cmdCheck) at reasonable intervals and de‑duplicate overlapping timers.
+- Never flood renderer or terminals with redundant messages; consolidate state updates where possible (e.g. single `competition_data_updated` after a batch of changes).
+
+## Resource Management & Shutdown
+
+- Guard server start/stop logic:
+  - prevent multiple `start-socket-server` or TCP server starts on the same port
+  - ensure `close-server` shuts down both Socket.IO and TCP servers cleanly.
+- For timing devices:
+  - track `connectedDevices` in a single source of truth
+  - cleanly handle disconnects, errors, and reconnect attempts.
+- On app shutdown, ensure sockets are closed, intervals cleared, and long‑running operations stopped gracefully.
+
+## Performance Hygiene
+
+- Avoid per‑message heap churn in TCP and timer handlers; reuse buffers or small helper objects where possible.
+- When investigating latency or performance issues, add **targeted logging and timing** around suspect sections instead of broad, noisy logging in every handler.
+- Regularly review long‑lived timers/intervals and event handlers for leaks (e.g. duplicate listeners, never‑cleared intervals).
+

@@ -1,0 +1,3 @@
+{"timestamp":"2025-11-24T08:08:27.952Z","sessionId":"c32b5a28-c91d-49cc-bb21-b9ea9f9f49c9","action":"window_info","command":"62648c375a80704e38172d8ce5e74c2f:5812f8502a9bb68b5b4b8f8eb8fa1707","riskLevel":"low","success":true,"executionTime":2}
+{"timestamp":"2025-11-24T08:12:33.901Z","sessionId":"845005ef-4c9f-4d2c-b129-c5e5c734133c","action":"window_info","command":"6110438ee6d93ee53284c07a69da825d:87f0d38f90d7f9b5060937268410be86","riskLevel":"low","success":true,"executionTime":1}
+{"timestamp":"2025-11-24T08:13:47.614Z","sessionId":"1abd7c47-5e9d-4af6-a22a-13e5f0031ddd","action":"screenshot","command":"856b8567b989943d5cdceee76cbad91c:0ddd1f5cf5c28967415ed80a99313015","riskLevel":"low","success":true,"executionTime":1}

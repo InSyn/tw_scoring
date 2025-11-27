@@ -8,18 +8,10 @@
         <v-btn @click="addTeam" color="var(--accent)" text> Добавить команду </v-btn>
       </div>
       <div class="teamsTable__body">
-        <team-table-row
-          v-for="(team, idx) in teamsList"
-          :key="`team_${idx}`"
-          :competition="competition"
-          :team="team"
+        <team-table-row v-for="(team, idx) in teamsList" :key="`team_${idx}`" :competition="competition" :team="team"
           :class="['drag-drop-item', { dragging: dragIndex === idx, dragOver: dragOverIndex === idx }]"
-          :drag-index="idx"
-          :drag-items="teamsList"
-          @dragstart.exact="onDragStart($event, idx)"
-          @dragover.exact="onDragOver($event, idx)"
-          @drop.exact="onDrop($event, idx, teamsList)"
-        ></team-table-row>
+          :drag-index="idx" :drag-items="teamsList" @dragstart.exact="onDragStart($event, idx)"
+          @dragover.exact="onDragOver($event, idx)" @drop.exact="onDrop($event, idx, teamsList)"></team-table-row>
       </div>
     </div>
   </div>
@@ -30,7 +22,7 @@ import { mapActions, mapGetters } from 'vuex';
 import TeamTableRow from './teamTableRow';
 import TeamClass from '../../classes/TeamClass';
 import MDragAndDrop from '../mixins/MDragAndDrop';
-import DataCellSettingsRow from '../protocols/protocolDataSheetSettings-components/dataCellSettings-row.vue';
+import DataCellSettingsRow from '../protocols[old]/protocolDataSheetSettings-components/dataCellSettings-row.vue';
 
 export default {
   name: 'teams',
@@ -65,15 +57,18 @@ export default {
   flex-direction: column;
   padding: 12px 32px;
 }
+
 .teams__header {
   flex: 0 0 auto;
   padding: 8px;
   user-select: none;
 }
+
 .teams__title {
   font-size: 1.4rem;
   font-weight: bold;
 }
+
 .teamsTable__wrapper {
   flex: 1 1 0;
   display: flex;
@@ -83,9 +78,11 @@ export default {
   background: var(--background-card);
   border-radius: 6px;
 }
+
 .teamsTable__actions {
   display: flex;
 }
+
 .teamsTable__body {
   flex: 1 1 0;
   margin-top: 8px;

@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { createMeasuringContainer, measureBlockHeight, mmToPx } from '../../utils/protocolTemplate-utils';
 import { getTableDataSources } from '../../protocolHandlers/tableHandlers';
 import store from '../../store';
-import { ProtocolGridBlock } from './ProtocolGrid';
+import { ProtocolGridBlock, splitGridIntoPages } from './ProtocolGrid';
 
 export class ProtocolDocument {
   constructor({ id = uuidv4(), name = 'Untitled Protocol', config = {}, blocks = [], updateIsReady = true }) {
@@ -75,7 +75,34 @@ export class ProtocolDocument {
     let currentHeight = 0;
 
     normalBlocks.forEach((block) => {
-      if (block instanceof TableBlock) {
+      if (block instanceof ProtocolGridBlock) {
+        // Grid blocks (DMO brackets) can span multiple pages. We:
+        // - flush the current page (if it has content) to avoid mixing grids
+        //   with unrelated blocks in awkward ways;
+        // - delegate to splitGridIntoPages to build per-page clones with
+        //   pageSegments describing which runs to render;
+        // - push each grid segment as its own full page.
+        if (currentPage.length > 0) {
+          paginatedPages.push([...currentPage]);
+          currentPage = [];
+          currentHeight = 0;
+        }
+
+        const gridPages = splitGridIntoPages({
+          block,
+          dataCtx,
+          availableHeight,
+          measuringContainer,
+          maxPages: 4,
+        });
+
+        gridPages.forEach((gridBlock) => {
+          paginatedPages.push([gridBlock]);
+        });
+
+        currentPage = [];
+        currentHeight = 0;
+      } else if (block instanceof TableBlock) {
         const dataSource = getTableDataSources()[block.handlerId];
 
         if (!dataSource) {

@@ -5,7 +5,7 @@ import { mapActions, mapGetters } from 'vuex';
 import AddCompetitorsToRaceDialog from './dialogs/addCompetitorsToRace-dialog.vue';
 import CompetitorsListItem from './competitorsListItem.vue';
 import MDragAndDrop from '../mixins/MDragAndDrop';
-import DataCellSettingsRow from '../protocols/protocolDataSheetSettings-components/dataCellSettings-row.vue';
+import DataCellSettingsRow from '../protocols[old]/protocolDataSheetSettings-components/dataCellSettings-row.vue';
 
 export default {
   name: 'raceCompetitorsList',
@@ -183,80 +183,62 @@ export default {
     <div class="raceCompetitorsList__title">
       {{ selectedRace.title }}
 
-      <add-competitors-to-race-dialog
-        @rebuild-start-list="competition.rebuildStartList"
-        :competition="competition"
-        :selected-race="selectedRace"
-      ></add-competitors-to-race-dialog>
+      <add-competitors-to-race-dialog @rebuild-start-list="competition.rebuildStartList" :competition="competition"
+        :selected-race="selectedRace"></add-competitors-to-race-dialog>
     </div>
 
     <div class="raceCompetitors__list__wrapper">
-      <div class="raceCompetitors__list__raceStage__wrapper" v-for="section in ['startList', 'onTrack', 'finished']" :key="section">
+      <div class="raceCompetitors__list__raceStage__wrapper" v-for="section in ['startList', 'onTrack', 'finished']"
+        :key="section">
         <div class="raceCompetitors__list__raceStage__title">
           {{ section.toUpperCase() }}
         </div>
 
         <div v-if="section === 'onTrack'" class="raceCompetitors__list__raceStage__list">
-          <competitors-list-item
-            v-for="(competitorId, comp_idx) in getOnTrackSection"
-            :key="comp_idx"
-            @rebuild-start-list="competition.rebuildStartList"
-            :competition="competition"
-            :competitor-id="competitorId"
-            :competitor-index="comp_idx"
-            :section="section"
-            :selected-race="selectedRace"
-          ></competitors-list-item>
+          <competitors-list-item v-for="(competitorId, comp_idx) in getOnTrackSection" :key="comp_idx"
+            @rebuild-start-list="competition.rebuildStartList" :competition="competition" :competitor-id="competitorId"
+            :competitor-index="comp_idx" :section="section" :selected-race="selectedRace"></competitors-list-item>
         </div>
         <div v-else class="raceCompetitors__list__raceStage__list">
           <competitors-list-item
             v-for="(competitorId, comp_idx) in section === 'startList' ? getStartListSection : getFinishedSection"
-            :key="comp_idx"
-            @rebuild-start-list="section === 'startList' ? competition.rebuildStartList : null"
-            :competition="competition"
-            :competitor-id="competitorId"
-            :competitor-index="comp_idx"
-            :section="section"
-            :selected-race="selectedRace"
-            class="drag-drop-item"
-            :class="{
+            :key="comp_idx" @rebuild-start-list="section === 'startList' ? competition.rebuildStartList : null"
+            :competition="competition" :competitor-id="competitorId" :competitor-index="comp_idx" :section="section"
+            :selected-race="selectedRace" class="drag-drop-item" :class="{
               dragging: dragIndex === comp_idx,
               dragOver: dragOverIndex === comp_idx,
-            }"
-            :drag-index="comp_idx"
-            :drag-items="section === 'startList' ? getStartListSection : getFinishedSection"
-            @dragstart="onDragStart($event, comp_idx)"
-            @dragover="onDragOver($event, comp_idx)"
-            @drop="onDrop($event, comp_idx, section === 'startList' ? getStartListSection : getFinishedSection, selectedRace)"
-          ></competitors-list-item>
+            }" :drag-index="comp_idx" :drag-items="section === 'startList' ? getStartListSection : getFinishedSection"
+            @dragstart="onDragStart($event, comp_idx)" @dragover="onDragOver($event, comp_idx)"
+            @drop="onDrop($event, comp_idx, section === 'startList' ? getStartListSection : getFinishedSection, selectedRace)"></competitors-list-item>
         </div>
       </div>
     </div>
 
     <div class="raceMenu__wrapper">
-      <v-btn @click="arrangeByResults(selectedRace)" class="raceMenu__button button-rangeByResults" color="var(--accent-light)" text small
-        >{{ localization[lang].app.races.range_by_res }}
+      <v-btn @click="arrangeByResults(selectedRace)" class="raceMenu__button button-rangeByResults"
+        color="var(--accent-light)" text small>{{ localization[lang].app.races.range_by_res }}
       </v-btn>
 
-      <v-btn @click="turnAround(selectedRace)" class="raceMenu__button button-turnOver" color="var(--accent-light)" text small
-        >{{ localization[lang].app.races.turn_over }}
+      <v-btn @click="turnAround(selectedRace)" class="raceMenu__button button-turnOver" color="var(--accent-light)" text
+        small>{{ localization[lang].app.races.turn_over }}
       </v-btn>
 
-      <v-btn @click="shuffle(selectedRace)" class="raceMenu__button button-shuffle" color="var(--accent-light)" text small
-        >{{ localization[lang].app.races.shuffle }}
+      <v-btn @click="shuffle(selectedRace)" class="raceMenu__button button-shuffle" color="var(--accent-light)" text
+        small>{{ localization[lang].app.races.shuffle }}
       </v-btn>
 
-      <v-btn @click="listUndo(selectedRace)" class="raceMenu__button button-undo" :disabled="listPrev.length < 1" color="var(--action-red)" icon small>
+      <v-btn @click="listUndo(selectedRace)" class="raceMenu__button button-undo" :disabled="listPrev.length < 1"
+        color="var(--action-red)" icon small>
         <v-icon>mdi-undo</v-icon>
       </v-btn>
 
-      <v-btn @click="exportXlsxList(competition, selectedRace)" class="raceMenu__button button-exportXlsx" color="var(--action-green)" text small
-        >{{ localization[lang].app.races.export_race }}
+      <v-btn @click="exportXlsxList(competition, selectedRace)" class="raceMenu__button button-exportXlsx"
+        color="var(--action-green)" text small>{{ localization[lang].app.races.export_race }}
         <v-icon small>mdi-file-excel</v-icon>
       </v-btn>
 
-      <v-btn @click="clearRaceResults(selectedRace)" class="raceMenu__button button-clearResults" color="var(--action-red)" small elevation="0"
-        >{{ localization[lang].app.races.clear_res }}
+      <v-btn @click="clearRaceResults(selectedRace)" class="raceMenu__button button-clearResults"
+        color="var(--action-red)" small elevation="0">{{ localization[lang].app.races.clear_res }}
       </v-btn>
     </div>
   </div>
@@ -272,6 +254,7 @@ export default {
   background-color: var(--background-card);
   border-radius: 4px;
 }
+
 .raceCompetitorsList__title {
   flex: 0 0 auto;
   display: flex;
@@ -283,6 +266,7 @@ export default {
   font-weight: bold;
   font-size: 1.4rem;
 }
+
 .raceCompetitors__list__wrapper {
   flex: 1 1 200px;
   overflow-y: auto;
@@ -290,9 +274,11 @@ export default {
   background-color: var(--background-deep);
   border-radius: 6px;
 }
+
 .raceCompetitors__list__raceStage__wrapper {
   margin: 4px 0;
 }
+
 .raceCompetitors__list__raceStage__title {
   display: inline-block;
   padding: 4px 12px;
@@ -309,12 +295,15 @@ export default {
   flex-wrap: wrap;
   margin-top: 8px;
 }
+
 .raceMenu__button.button-undo {
   margin-left: 1rem;
 }
+
 .raceMenu__button.button-exportXlsx {
   margin-left: auto;
 }
+
 .raceMenu__button.button-clearResults {
   color: var(--text-default);
 }

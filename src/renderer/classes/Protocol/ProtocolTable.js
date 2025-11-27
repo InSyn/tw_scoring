@@ -224,7 +224,9 @@ export class ProtocolTableItem extends ProtocolElement {
       return `<div style="${this.stylesToCSS(stageTitleStyles)}; ">
         <strong style="margin-right: 0.5rem; margin-left: 0.5rem">${dataSource.data[dataIdx].s_rank || '-'}</strong>
         ${dataSource.data[dataIdx].teamTitle}
-        <strong style="display: inline-block; margin-left: auto; margin-right: 0.5rem">${dataSource.data[dataIdx].teamResult || '-'}</strong>
+        <strong style="display: inline-block; margin-left: auto; margin-right: 0.5rem">
+          ${dataSource.data[dataIdx].teamResult ? `<span style="font-size: 0.8em">${dataSource.data[dataIdx].teamResult}</span>` : '-'}
+        </strong>
       </div>`;
     }
 
@@ -366,10 +368,10 @@ export class ProtocolTableCell extends BaseProtocolComponent {
           ? processedSubContent
               .map(
                 (contentCell) => `
-          <div style="${subContentWrapperStyles}; ${divPaddings}">
-            ${contentCell.toString().trim()}
-          </div>
-        `
+                  <div style="${subContentWrapperStyles}; ${divPaddings}">
+                    ${contentCell.toString().trim()}
+                  </div>
+                `
               )
               .join('')
           : ''

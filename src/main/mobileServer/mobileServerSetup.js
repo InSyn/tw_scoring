@@ -16,31 +16,31 @@ function getLocalIp() {
   const interfaces = os.networkInterfaces();
   const preferredIps = []; // Приоритетные IP (локальные сети)
   const otherIps = []; // Остальные IP
-  
+
   for (const name of Object.keys(interfaces)) {
     // Пропускаем виртуальные интерфейсы (VMware, VirtualBox и т.д.)
-    if (name.toLowerCase().includes('virtual') || 
-        name.toLowerCase().includes('vmware') || 
-        name.toLowerCase().includes('virtualbox') ||
-        name.toLowerCase().includes('vbox') ||
-        name.toLowerCase().includes('hyper-v')) {
+    if (
+      name.toLowerCase().includes('virtual') ||
+      name.toLowerCase().includes('vmware') ||
+      name.toLowerCase().includes('virtualbox') ||
+      name.toLowerCase().includes('vbox') ||
+      name.toLowerCase().includes('hyper-v')
+    ) {
       continue;
     }
-    
+
     for (const iface of interfaces[name]) {
       // Пропускаем внутренние и не-IPv4 адреса
       if (iface.family === 'IPv4' && !iface.internal) {
         const ip = iface.address;
-        
+
         // Пропускаем link-local адреса (169.254.x.x)
         if (ip.startsWith('169.254.')) {
           continue;
         }
-        
+
         // Приоритет: локальные сети (192.168.x.x, 10.x.x.x, 172.16-31.x.x)
-        if (ip.startsWith('192.168.') || 
-            ip.startsWith('10.') || 
-            /^172\.(1[6-9]|2[0-9]|3[0-1])\./.test(ip)) {
+        if (ip.startsWith('192.168.') || ip.startsWith('10.') || /^172\.(1[6-9]|2[0-9]|3[0-1])\./.test(ip)) {
           preferredIps.push(ip);
         } else {
           otherIps.push(ip);
@@ -48,17 +48,17 @@ function getLocalIp() {
       }
     }
   }
-  
+
   // Возвращаем первый приоритетный IP, если есть
   if (preferredIps.length > 0) {
     return preferredIps[0];
   }
-  
+
   // Иначе возвращаем первый не-приоритетный IP
   if (otherIps.length > 0) {
     return otherIps[0];
   }
-  
+
   return '127.0.0.1';
 }
 
@@ -289,7 +289,7 @@ function getMobileHTML(splitId, splitTitle) {
     let latestRenderedEntryKey = null;
 
     // Хранилище значений ввода для каждого поля
-    const inputValues = {};
+    let inputValues = {};
     
     function convertTimeStringToMs(timeString) {
       if (!timeString) return 0;
@@ -357,7 +357,7 @@ function getMobileHTML(splitId, splitTitle) {
       });
       
       timesList.innerHTML = '';
-      if (!newEntries || newEntries.length === 0) {
+      if (!newEntries || !Array.isArray(newEntries) || newEntries.length === 0) {
         timesList.innerHTML = '<div style="padding: 16px; text-align: center; color: #666;">Нет отсечек</div>';
         entries = [];
         inputValues = {};
@@ -578,10 +578,10 @@ function getMobileHTML(splitId, splitTitle) {
       fetch('/api/split/' + splitId + '/data')
         .then(res => res.json())
         .then(data => {
-          if (data.entries) updateTimesList(data.entries);
-          if (data.channel) updateChannel(data.channel);
+          if (data && Array.isArray(data.entries)) updateTimesList(data.entries);
+          if (data && data.channel) updateChannel(data.channel);
         })
-        .catch(err => console.error('Error fetching data:', err));
+        .catch(err => console.error('[MOBILE] Error fetching split data:', err));
     }
 
     // Обновление каждые 500мс
@@ -600,7 +600,7 @@ function createMobileServer(port = 8080) {
 
   mobileServer = http.createServer((req, res) => {
     const parsedUrl = url.parse(req.url, true);
-    
+
     // CORS заголовки
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
@@ -632,10 +632,12 @@ function createMobileServer(port = 8080) {
       const splitData = getSplitData(splitId);
       if (splitData) {
         res.writeHead(200, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({
-          entries: splitData.entries || [],
-          channel: splitData.channel || 1,
-        }));
+        res.end(
+          JSON.stringify({
+            entries: splitData.entries || [],
+            channel: splitData.channel || 1,
+          })
+        );
       } else {
         res.writeHead(404, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({ error: 'Split not found' }));
@@ -647,7 +649,7 @@ function createMobileServer(port = 8080) {
     if (parsedUrl.pathname && parsedUrl.pathname.startsWith('/api/split/') && parsedUrl.pathname.endsWith('/create-split')) {
       const splitId = parsedUrl.pathname.split('/api/split/')[1].split('/create-split')[0];
       let body = '';
-      req.on('data', chunk => {
+      req.on('data', (chunk) => {
         body += chunk.toString();
       });
       req.on('end', () => {
@@ -679,7 +681,7 @@ function createMobileServer(port = 8080) {
     mobileServerRunning = true;
     mobileServerPort = port;
     const localIp = getLocalIp();
-    
+
     // Логируем все сетевые интерфейсы для отладки
     const interfaces = os.networkInterfaces();
     const allIps = [];
@@ -690,7 +692,7 @@ function createMobileServer(port = 8080) {
         }
       }
     }
-    
+
     sendServerMessage({
       color: 'blue',
       message: `Mobile server started on http://${localIp}:${port}`,
@@ -699,7 +701,7 @@ function createMobileServer(port = 8080) {
       color: 'white',
       message: `Available network interfaces: ${allIps.join(', ')}`,
     });
-    
+
     if (mainWindow) {
       mainWindow.webContents.send('mobile-server-started', {
         ip: localIp,
@@ -783,4 +785,3 @@ ipcMain.on('get-local-ip', (event) => {
 });
 
 export { createMobileServer, stopMobileServer, setSplitData, getSplitData, updateSplitEntries };
-

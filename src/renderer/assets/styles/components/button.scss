@@ -9,32 +9,33 @@ button.tw-button {
   --button-color: white;
   position: relative;
   border-radius: $border-radius;
-  padding: .3rem 1.2rem;
+  padding: 0.3rem 1.2rem;
   color: white;
   background-color: var(--accent);
   cursor: pointer;
   font-family: inherit;
   border: none;
   outline: transparent;
-  font-size: .9rem;
+  font-size: 0.9rem;
   font-weight: bold;
   white-space: nowrap;
   overflow: hidden;
   -ms-text-overflow: ellipsis;
   text-overflow: ellipsis;
   text-transform: uppercase;
+  // box-shadow: 1px 1px 3px -1px rgba(0, 0, 0, 0.8), -1px -1px 3px -1px rgba(255, 255, 255, 0.75);
   transition: background-color 92ms, opacity 92ms, transform 64ms, box-shadow 64ms;
 
   &-tiny {
     @extend .tw-button;
     padding: 2px 6px;
-    font-size: .75rem;
+    font-size: 0.75rem;
   }
 
   &-small {
     @extend .tw-button;
     padding: 3px 9px;
-    font-size: .8rem;
+    font-size: 0.8rem;
   }
 
   &-big {
@@ -93,16 +94,17 @@ button.tw-button {
   }
 
   &:hover {
-    opacity: .8;
+    opacity: 0.85;
   }
 
   &:active {
-    box-shadow: 0 0 0 1px white inset;
-    transform: scale(0.94);
+    // box-shadow: 1px 1px 4px -1px rgba(0, 0, 0, 0.75) inset, -1px -1px 4px -1px rgba(255, 255, 255, 0.55) inset;
+    box-shadow: 1px solid white;
+    transform: scale(0.98);
   }
 
   &:disabled {
-    opacity: .5;
+    opacity: 0.5;
     pointer-events: none;
   }
 }

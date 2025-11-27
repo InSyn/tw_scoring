@@ -1,0 +1,63 @@
+---
+alwaysApply: true
+---
+## Core JavaScript & Electron
+
+- Prefer **ES modules** (`import`) in new code; keep `require(...)` only where Electron/main-process constraints demand it or where legacy code already uses it.
+- Keep files focused on a single responsibility (e.g. competition model, Socket.IO server, TCP timing integration); avoid “god modules”.
+- Asynchronous work:
+  - Use **async/await** around Node APIs when possible; wrap callback-style APIs into helpers with centralized error handling.
+  - Never block the event loop in main or renderer with long loops or heavy sync work; move heavy processing to Node side, workers, or chunked async operations.
+- Avoid hidden globals; funnel shared concerns through:
+  - Vuex store (renderer)
+  - exported singletons (e.g. `competition` object, `tcpServerSetup`)
+  - explicit IPC / Socket.IO events with clear payload shapes.
+
+## File Size & Structure
+
+- Keep files focused on a single responsibility (e.g. competition model, Socket.IO server, TCP timing integration); avoid “god modules”.
+- Modules and components must remain compact: as a rule of thumb, keep each file under ~500–600 LOC. If a file grows beyond that, split it by responsibility into smaller modules/components until each unit has a narrow, well-defined role.
+
+## Vue & Vuex
+
+- Use **Single File Components (SFC)** with separate `template`, `script`, and `style` sections; keep script logic testable and styles scoped when appropriate.
+- State flow: **components → dispatch actions → commit mutations → update domain classes/state**, never mutate Vuex state outside mutations.
+- Keep Vuex modules domain‑oriented:
+  - `main`: shell, competitions list, active competition, Socket.IO client, exports/imports.
+  - `timing`, `terminalsUdpService`, `message_system`, `protocols`, `protocol_settings`, `scoring_services`, discipline modules (`aerials`, `moguls`, `skiCross`, `skiRamps`), `localization`, `key`.
+- Avoid deep prop drilling of global concepts (competition, server status, devices); prefer Vuex getters/actions or EventBus.
+- Expensive computed properties or watchers must:
+  - derive from minimal primitive state
+  - avoid recreating large arrays/objects on each tick
+  - be split into smaller, composable getters when they grow complex.
+ - The existing UI uses Vuetify, but new code must not introduce additional Vuetify components, mixins, or utilities without explicit product-owner approval. Prefer native HTML elements, custom components, utility classes, and the shared theme system for layout and interaction.
+
+## Naming & Structure
+
+- **Files/modules**: descriptive names reflecting role (e.g. `timingDeviceServerSetup.js`, `competitionSettings/index.vue`, `rulesSetup/index.vue`).
+- **Classes** (domain models): PascalCase (`EventClass`, `RaceClass`, `TimerClass`, `JudgeClass`).
+- **Vuex modules**: file name = module name; exported object is `namespaced: true`.
+- **Mutations**:
+  - SCREAMING_SNAKE_CASE for mutations called from actions (`SET_UP_TERMINALS_HANDLERS`, `SET_PORT`, `SET_EVENT_ID`).
+  - camelCase acceptable for local/internal mutations within a module, but keep it consistent.
+- Favour descriptive function names over inline anonymous callbacks inside critical flows (Socket.IO handlers, TCP/timing message handlers, file import/export).
+
+## Safety & Compatibility
+
+- Treat `.twe` event files, XML FIS exports, TCP judge protocols, and timing messages as **public contracts**:
+  - Changes must be backward compatible or gated by explicit migrations and versioning.
+  - Keep parsing/formatting logic centralized in helpers or dedicated modules, not scattered across components.
+- When changing protocol‑related code (Socket.IO event names, TCP messages, timing sync commands), update both:
+  - main‑process handlers
+  - renderer consumers (Vuex modules, utilities, components).
+- Log and handle errors gracefully rather than throwing from deep inside event handlers; surface important failures via UI messages where appropriate (see `06-error-logging-and-status.mdc`).
+
+## Code Reuse & Decomposition
+
+- Avoid duplicating **domain data or heuristics** (e.g. gender labels, group mappings, synonym lists):
+  - Reuse or extend existing modules under `src/renderer/data` and `src/renderer/utils` instead of re‑declaring constants inside Vuex modules or components.
+  - Keep cross‑cutting helpers like string normalization or nested data access in shared utilities (e.g. `utils/utils.js`, `utils/dataAccess.js`).
+- For non‑trivial transformations (legacy data migration, heuristic inference, parsing):
+  - Prefer small, focused helpers in `utils/*` or domain‑specific data modules over large inline functions inside Vuex modules.
+  - Keep Vuex actions/mutations as orchestration layers that delegate complex logic to reusable helpers.
+ - DRY is mandatory: extract any repeated view logic into reusable components, and any repeated data/algorithmic logic into shared helpers. If the same pattern appears in more than two places, it should live in a dedicated utility or component.
