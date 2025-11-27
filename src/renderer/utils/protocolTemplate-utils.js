@@ -1,8 +1,43 @@
 import { ProtocolDocument } from '../classes/Protocol/ProtocolDocument';
 import { getScreenDPI } from './dpi';
 
+/**
+ * Lightweight structural check for protocol templates.
+ * We deliberately keep this minimal and non-strict so older templates
+ * produced by the builder remain valid while obviously broken data
+ * (e.g. missing blocks/page config) is rejected.
+ */
+export const validateProtocolTemplateShape = (template) => {
+  if (!template || typeof template !== 'object' || Array.isArray(template)) return false;
+
+  const { config, blocks, name } = template;
+  if (!config || typeof config !== 'object') return false;
+
+  const page = config.page;
+  if (!page || typeof page !== 'object') return false;
+
+  // width/height are critical for layout calculations
+  if (typeof page.width !== 'number' || typeof page.height !== 'number') return false;
+
+  // margins object is required but individual fields may be added/extended in the future
+  if (!page.margins || typeof page.margins !== 'object') return false;
+
+  // blocks must be an array – contents are validated deeper by Protocol* classes
+  if (!Array.isArray(blocks)) return false;
+
+  // name is nice to have, but missing name is not fatal
+  if (name != null && typeof name !== 'string') return false;
+
+  return true;
+};
+
 export const exportTemplateToFile = (template, filename = 'protocol_template.json') => {
   try {
+    if (!template) {
+      console.error('[PROTOCOL] No template provided for export');
+      return;
+    }
+
     const data = JSON.stringify(template, null, 2);
     const blob = new Blob([data], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
@@ -14,23 +49,53 @@ export const exportTemplateToFile = (template, filename = 'protocol_template.jso
 
     URL.revokeObjectURL(url);
   } catch (error) {
-    console.error('Failed to export template:', error);
+    console.error('[PROTOCOL] Failed to export template:', error);
   }
 };
 
 export const importTemplateFromFile = (file) => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
+
     reader.onload = (e) => {
       try {
-        const json = JSON.parse(e.target.result);
-        if (!json) console.error(new Error('Empty JSON data'));
-        resolve(json);
+        const raw = e.target.result;
+        let parsed;
+
+        try {
+          parsed = JSON.parse(raw);
+        } catch (parseErr) {
+          console.error('[PROTOCOL] Invalid JSON while importing template:', parseErr);
+          reject(new Error('Invalid JSON file structure'));
+          return;
+        }
+
+        const candidates = Array.isArray(parsed) ? parsed : parsed && typeof parsed === 'object' ? [parsed] : [];
+        if (!candidates.length) {
+          reject(new Error('Invalid JSON file structure'));
+          return;
+        }
+
+        const validTemplates = candidates.filter((tpl) => validateProtocolTemplateShape(tpl));
+
+        if (!validTemplates.length) {
+          console.error('[PROTOCOL] Imported JSON does not match protocol template schema');
+          reject(new Error('Template schema mismatch'));
+          return;
+        }
+
+        resolve(validTemplates);
       } catch (err) {
-        reject(new Error('Invalid JSON file structure'));
+        console.error('[PROTOCOL] Unexpected error while importing template:', err);
+        reject(new Error('Error importing template'));
       }
     };
-    reader.onerror = () => reject(new Error('File reading error'));
+
+    reader.onerror = () => {
+      console.error('[PROTOCOL] File reading error while importing template');
+      reject(new Error('File reading error'));
+    };
+
     reader.readAsText(file);
   });
 };
@@ -233,6 +298,42 @@ export const parseSizeUnitsToNumber = (value) => {
 export const mmToPx = (mm, dpi = getScreenDPI()) => {
   const INCHES_PER_MM = 0.0393701;
   return mm * INCHES_PER_MM * dpi;
+};
+
+export const getProtocolPdfOptions = (protocol, adjustedHeight) => {
+  if (!protocol || !protocol.config || !protocol.config.page) {
+    console.error('[PROTOCOL] Invalid protocol passed to getProtocolPdfOptions');
+    return {
+      margin: [0, 0, 0, 0],
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2, letterRendering: true, useCORS: true, allowTaint: true },
+      jsPDF: {
+        unit: 'px',
+        format: 'a4',
+        orientation: 'portrait',
+        compress: true,
+        hotfixes: ['px_scaling'],
+        pagebreak: { avoid: 'all' },
+      },
+    };
+  }
+
+  const page = protocol.config.page;
+  const heightPx = typeof adjustedHeight === 'number' ? adjustedHeight : mmToPx(page.height);
+
+  return {
+    margin: [-1, -1, -9, -1],
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: { scale: 2, letterRendering: true, useCORS: true, allowTaint: true },
+    jsPDF: {
+      unit: 'px',
+      format: [mmToPx(page.width), heightPx],
+      orientation: page.orientation === 'landscape' ? 'landscape' : 'portrait',
+      compress: true,
+      hotfixes: ['px_scaling'],
+      pagebreak: { avoid: 'all' },
+    },
+  };
 };
 
 export const camelToKebabCase = (key) => {

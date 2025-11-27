@@ -1,0 +1,41 @@
+---
+alwaysApply: true
+---
+## Layout & Shell
+
+- `App.vue` defines the main shell: `app-header` + `app-menu` + central `router-view` + `info-messages-container` + `app-footer` inside a Vuetify `v-app`.
+- Keep **layout components** (`layout/app-header.vue`, `layout/app-menu.vue`, `layout/app-footer.vue`) free from domain‑specific business logic; they coordinate:
+  - navigation and menu visibility
+  - event save/load
+  - theme switching
+  - top‑level tools (timing panel, live services, language selector).
+- Existing layouts are built on Vuetify’s `v-app`, but new layouts should prefer native CSS flex/grid and the app’s own utility classes and theme tokens. Do not add new Vuetify components or helpers without explicit approval; keep using existing ones only where refactoring risk would be high.
+
+## Component Boundaries
+
+- Pages in `src/renderer/pages` own **high‑level workflows** (athletes, races, scoring, protocols) and compose domain components from `components/*`.
+- Domain folders inside `components/` (`competitionSettings`, `competitors`, `raceList`, `scoring`, `protocols`, `timing`, `teams`, `rulesSetup`, `jumpCodes`, etc.) should expose small, focused components with clear props and emitted events.
+- Reusable UI building blocks live in `components/ui` and `components/appComponents`; they should avoid direct store access when possible and interact via props/events or thin wrapper components.
+- All new components must be modular and reusable where practical: avoid one-off “god components”. If a component’s script/template approaches ~500–600 LOC or mixes unrelated concerns, split it into smaller building blocks and compose them.
+
+## Data & UX Flows
+
+- Complex steps (creating events, managing competitors, configuring protocols, controlling races) should be broken into **dialogs, panels, and wizards** with explicit input validation and clear success/failure feedback.
+- Use Vuetify form validation rules and clear domain‑specific copy for errors (e.g. “Invalid timer IP/port”, “Live ID not validated”) instead of generic messages.
+- Maintain **dark/light theme** compatibility by using CSS variables and Vuetify theme tokens, not hardcoded colors in components.
+
+## Performance & Rendering
+
+- For large tables/lists (competitors, races, results, logs):
+  - fetch and compute only the data needed for the current view
+  - use computed properties backed by Vuex getters
+  - consider pagination, filters, or lazy rendering for large data sets.
+- Avoid watchers on whole competition objects or big arrays; watch specific fields or IDs when necessary.
+- Keep visual transitions (like `page-fade`) short and subtle so they do not interfere with perceived responsiveness.
+
+## Navigation & Access Control
+
+- Router routes must map to logical workflows: `/competition_settings`, `/competitors`, `/races-list`, `/scoring`, `/protocols-page`, `/jump_codes`, `/rules_setup`, etc.
+- Licence enforcement (`licCheck` route + `router.beforeEach`) is the **single gatekeeper** to the rest of the app; new routes and flows must respect this and not bypass licence checks.
+- Default route should point to the main entry view and handle missing/legacy paths via redirects instead of blank pages or crashes.
+

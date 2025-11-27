@@ -9,26 +9,27 @@
             </v-btn>
           </template>
 
-          <v-card
-            :style="{
-              backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
-              color: $vuetify.theme.themes[appTheme].textDefault,
-            }"
-          >
+          <v-card :style="{
+            backgroundColor: $vuetify.theme.themes[appTheme].cardBackgroundRGBA,
+            color: $vuetify.theme.themes[appTheme].textDefault,
+          }">
             <v-card-title class="pa-2" style="font-size: 1.2rem"> Изменить название </v-card-title>
 
             <div class="pa-2" style="font-size: 1.1rem">
-              <input type="text" style="padding: 2px 4px; font-size: 1.1rem" v-model.lazy="competition.stuff.settings.jury.title" />
+              <input type="text" style="padding: 2px 4px; font-size: 1.1rem"
+                v-model.lazy="competition.stuff.settings.jury.title" />
             </div>
 
             <v-card-actions class="d-flex justify-end pa-1">
-              <v-btn small @click.stop="competition.stuff.settings.jury.change_dialog = false" :color="$vuetify.theme.themes[appTheme].textDefault">
+              <v-btn small @click.stop="competition.stuff.settings.jury.change_dialog = false"
+                :color="$vuetify.theme.themes[appTheme].textDefault">
                 Close
               </v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
-        <div :style="{ color: $vuetify.theme.themes[appTheme].textDefault }" style="font-weight: bold; font-size: 1.4rem">
+        <div :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
+          style="font-weight: bold; font-size: 1.4rem">
           {{ competition.stuff.settings.jury.title }}
         </div>
         <v-btn @click="addStuff('jury')" text :color="$vuetify.theme.themes[appTheme].accent" style="margin-left: auto">
@@ -36,20 +37,11 @@
         </v-btn>
       </div>
       <div class="stuff__list">
-        <personal-item
-          v-for="(jury, idx) in competition.stuff.jury"
-          :key="idx"
-          :competition="competition"
-          :jury-obj="jury"
-          :index="idx"
-          @toggle-abc="toggleABC"
-          :drag-index="idx"
-          :drag-items="competition.stuff.jury"
+        <personal-item v-for="(jury, idx) in competition.stuff.jury" :key="idx" :competition="competition"
+          :jury-obj="jury" :index="idx" @toggle-abc="toggleABC" :drag-index="idx" :drag-items="competition.stuff.jury"
           :class="['drag-drop-item', { dragging: dragIndex === idx, dragOver: dragOverIndex === idx }]"
-          @dragstart="onDragStart($event, idx)"
-          @dragover="onDragOver($event, idx)"
-          @drop="onDrop($event, idx, competition.stuff.jury)"
-        ></personal-item>
+          @dragstart="onDragStart($event, idx)" @dragover="onDragOver($event, idx)"
+          @drop="onDrop($event, idx, competition.stuff.jury)"></personal-item>
       </div>
     </div>
 
@@ -66,18 +58,21 @@
             <v-card-title class="pa-2" style="font-size: 1.2rem"> Изменить название </v-card-title>
 
             <div class="pa-2" style="font-size: 1.1rem">
-              <input type="text" style="padding: 2px 4px; font-size: 1.1rem" v-model.lazy="competition.stuff.settings.judges.title" />
+              <input type="text" style="padding: 2px 4px; font-size: 1.1rem"
+                v-model.lazy="competition.stuff.settings.judges.title" />
             </div>
 
             <v-card-actions class="d-flex justify-end pa-1">
-              <v-btn small @click.stop="competition.stuff.settings.judges.change_dialog = false" :color="$vuetify.theme.themes[appTheme].textDefault">
+              <v-btn small @click.stop="competition.stuff.settings.judges.change_dialog = false"
+                :color="$vuetify.theme.themes[appTheme].textDefault">
                 Close
               </v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
 
-        <div :style="{ color: $vuetify.theme.themes[appTheme].textDefault }" style="font-weight: bold; font-size: 1.4rem">
+        <div :style="{ color: $vuetify.theme.themes[appTheme].textDefault }"
+          style="font-weight: bold; font-size: 1.4rem">
           {{ competition.stuff.settings.judges.title }}
         </div>
         <v-btn @click="addStuff('judge')" text color="var(--accent)" style="margin-left: auto">
@@ -86,16 +81,14 @@
       </div>
 
       <div class="stuff__list">
-        <div class="stuffCard__wrapper" style="flex: 0 0 auto" v-for="(judge, jd) in competition.stuff.judges" :key="jd">
-          <div
-            v-if="judge.connected !== undefined"
+        <div class="stuffCard__wrapper" style="flex: 0 0 auto" v-for="(judge, jd) in competition.stuff.judges"
+          :key="jd">
+          <div v-if="judge.connected !== undefined"
             style="position: absolute; top: 4px; left: 8px; font-weight: bold; font-size: 0.9rem; background-color: var(--background-card)"
-            :style="
-              judge.connected && {
+            :style="judge.connected && {
                 color: $vuetify.theme.themes[appTheme].accent,
               }
-            "
-          >
+              ">
             Online
           </div>
           <div class="stuffDataField__wrapper" data-fieldType="id">
@@ -104,37 +97,40 @@
           </div>
 
           <div class="stuffDataField__wrapper" data-fieldType="judgeTitle">
-            <input class="stuffParameter__input" type="text" placeholder="Позиция" v-model="competition.stuff.judges[jd].title" />
+            <input class="stuffParameter__input" type="text" placeholder="Позиция"
+              v-model="competition.stuff.judges[jd].title" />
           </div>
           <div class="stuffDataField__wrapper" data-fieldType="ffr-id">
-            <input class="stuffParameter__input" type="text" placeholder="FFR-ID" v-model="competition.stuff.judges[jd].ffr_id" />
+            <input class="stuffParameter__input" type="text" placeholder="FFR-ID"
+              v-model="competition.stuff.judges[jd].ffr_id" />
           </div>
 
           <div class="stuffDataField__wrapper" data-fieldType="lastname">
-            <input class="stuffParameter__input" type="text" placeholder="Фамилия" v-model="competition.stuff.judges[jd].lastName" />
+            <input class="stuffParameter__input" type="text" placeholder="Фамилия"
+              v-model="competition.stuff.judges[jd].lastName" />
           </div>
 
           <div class="stuffDataField__wrapper" data-fieldType="name">
-            <input class="stuffParameter__input" type="text" placeholder="Имя" v-model="competition.stuff.judges[jd].name" />
+            <input class="stuffParameter__input" type="text" placeholder="Имя"
+              v-model="competition.stuff.judges[jd].name" />
           </div>
 
           <div class="stuffDataField__wrapper" data-fieldType="region">
-            <input class="stuffParameter__input" type="text" placeholder="Регион" v-model="competition.stuff.judges[jd].location" />
+            <input class="stuffParameter__input" type="text" placeholder="Регион"
+              v-model="competition.stuff.judges[jd].location" />
           </div>
 
           <div class="stuffDataField__wrapper" data-fieldType="category">
-            <input class="stuffParameter__input" type="text" placeholder="Категория" v-model="competition.stuff.judges[jd].category" />
+            <input class="stuffParameter__input" type="text" placeholder="Категория"
+              v-model="competition.stuff.judges[jd].category" />
           </div>
 
           <v-col class="stuffActions__wrapper">
-            <button
-              class="tw-button-tiny"
+            <button class="tw-button-tiny"
               style="background-color: var(--background-deep); border-radius: 2px; font-size: 0.8rem; font-weight: bold; cursor: pointer; user-select: none"
-              @click="toggleABC({ id: judge.id, stuffType: 'judges' })"
-            >
+              @click="toggleABC({ id: judge.id, stuffType: 'judges' })">
               <span>ABC</span>
-              <span
-                style="
+              <span style="
                   display: inline-block;
                   margin-left: 1rem;
                   height: 8px;
@@ -143,40 +139,26 @@
                   transition: 92ms;
                   background-color: var(--subject-background);
                   box-shadow: none;
-                "
-                :style="
-                  judge.setABC && {
+                " :style="judge.setABC && {
                     backgroundColor: 'var(--success)',
                     boxShadow: '0 0 2px 2px var(--success)',
                   }
-                "
-              ></span>
+                  "></span>
             </button>
             <div v-if="checkCompetitionDiscipline(competition, ['MO'])" class="mogulsRoles__wrapper">
-              <div
-                :class="['mogulsRole', judge.moguls_role === role && 'mogulsRole-selected']"
-                @click="setMogulsRole(judge, role)"
-                v-for="role in ['turns', 'jumps']"
-                :key="role"
-              >
+              <div :class="['mogulsRole', judge.moguls_role === role && 'mogulsRole-selected']"
+                @click="setMogulsRole(judge, role)" v-for="role in ['turns', 'jumps']" :key="role">
                 {{ role }}
               </div>
             </div>
           </v-col>
 
-          <v-btn
-            x-small
-            icon
-            style="position: absolute; top: 2px; right: 4px"
-            @click="remove_judge(judge._id)"
-            :color="$vuetify.theme.themes[appTheme].action_red"
-          >
+          <v-btn x-small icon style="position: absolute; top: 2px; right: 4px" @click="remove_judge(judge._id)"
+            :color="$vuetify.theme.themes[appTheme].action_red">
             <v-icon x-small>mdi-close</v-icon>
           </v-btn>
 
-          <span
-            @click="force_disconnect(judge)"
-            style="
+          <span @click="force_disconnect(judge)" style="
               display: block;
               cursor: pointer;
               transition: background-color 192ms, box-shadow 192ms;
@@ -188,14 +170,11 @@
               height: 4px;
               width: 48px;
               background-color: var(--background-deep);
-            "
-            :style="
-              competition.stuff.judges[jd].connected && {
+            " :style="competition.stuff.judges[jd].connected && {
                 backgroundColor: $vuetify.theme.themes[appTheme].success,
                 boxShadow: `0 0 3px 1px ${$vuetify.theme.themes[appTheme].success}`,
               }
-            "
-          ></span>
+              "></span>
         </div>
       </div>
     </div>
@@ -208,7 +187,7 @@ import JudgeClass from '../../classes/JudgeClass';
 import JuryClass from '../../classes/JuryClass';
 import PersonalItem from './personal-item.vue';
 import MDragAndDrop from '../mixins/MDragAndDrop';
-import DataCellSettingsRow from '../protocols/protocolDataSheetSettings-components/dataCellSettings-row.vue';
+import DataCellSettingsRow from '../protocols[old]/protocolDataSheetSettings-components/dataCellSettings-row.vue';
 import { checkCompetitionDiscipline } from '../../data/sports';
 
 export default {
@@ -293,11 +272,13 @@ export default {
   border-radius: 6px;
   background: var(--background-card);
 }
+
 .stuffSection__header {
   display: flex;
   align-items: center;
   padding: 8px 8px 0;
 }
+
 .stuff__list {
   flex: 0 0 auto;
   display: flex;
@@ -307,6 +288,7 @@ export default {
   background: var(--background-deep);
   border-radius: 6px;
 }
+
 .stuffCard__wrapper {
   position: relative;
   display: flex;
@@ -317,35 +299,43 @@ export default {
   font-size: 0.9rem;
   cursor: move;
 }
+
 .stuffCard__wrapper:not(:last-child) {
   margin-bottom: 4px;
 }
+
 .stuffDataField__wrapper {
   flex: 1 0 auto;
   display: flex;
   flex-wrap: nowrap;
   align-items: center;
   margin: 0 4px 4px 0;
+
   &[data-fieldType='id'] {
     margin-left: 8px;
   }
 }
+
 .stuffDataField__wrapper[data-fieldType='id'] {
   width: 6rem;
 }
+
 .stuffDataField__wrapper[data-fieldType='ffr-id'] {
   width: 10rem;
 }
+
 .stuffParameter__title {
   flex: 0 0 auto;
   font-weight: bold;
   white-space: nowrap;
 }
+
 .stuffParameter__input {
   flex: 1 1 3rem;
   min-width: 0;
   margin-left: 8px;
 }
+
 .stuffActions__wrapper {
   flex: 1 0 100%;
   display: flex;
@@ -354,14 +344,17 @@ export default {
   padding: 4px;
   border-radius: 2px;
 }
+
 .judgesSection {
   border: 1px solid var(--accent);
 }
+
 .mogulsRoles__wrapper {
   display: flex;
   padding: 6px;
   margin-left: auto;
 }
+
 .mogulsRole {
   margin-right: 6px;
   padding: 4px;
@@ -372,6 +365,7 @@ export default {
 
   cursor: pointer;
 }
+
 .mogulsRole:last-child {
   margin-right: 0;
 }

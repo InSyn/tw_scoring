@@ -6,8 +6,7 @@ export default {
   name: 'infoMessages-container',
   data() {
     return {
-      show: false,
-
+      showMessages: this.getShowMessages,
       messageNotification: false,
       lastMessage: null,
 
@@ -16,6 +15,9 @@ export default {
   },
   computed: {
     ...mapGetters('message_system', { infoMessages: 'getInfoMessages' }),
+    getShowMessages() {
+      return localStorage.getItem('showInfoMessages') ? JSON.parse(localStorage.getItem('showInfoMessages')) : false;
+    },
   },
   methods: {
     handleNewMessage() {
@@ -27,11 +29,13 @@ export default {
       }, 5000);
     },
     toggleVisibility() {
-      if (this.show) {
-        this.show = false;
+      if (this.showMessages) {
+        this.showMessages = false;
+        localStorage.setItem('showInfoMessages', false);
       } else {
         this.messageNotification = false;
-        this.show = true;
+        this.showMessages = true;
+        localStorage.setItem('showInfoMessages', true);
       }
     },
   },
@@ -50,12 +54,9 @@ export default {
     <div class="infoMessagesContainer__header" @click.stop="toggleVisibility">{{ 'Сообщения'.toUpperCase() }}</div>
 
     <transition name="page-fade" mode="out-in">
-      <div class="infoMessagesContainer__body" v-if="show || messageNotification">
-        <div
-          v-for="(message, mKey) in messageNotification ? [infoMessages[infoMessages.length - 1]] : infoMessages"
-          :key="mKey"
-          class="infoMessagesContainer__message"
-        >
+      <div class="infoMessagesContainer__body" v-if="showMessages || messageNotification">
+        <div v-for="(message, mKey) in messageNotification ? [infoMessages[infoMessages.length - 1]] : infoMessages"
+          :key="mKey" class="infoMessagesContainer__message">
           <span class="infoMessagesContainer__date">{{ new Date(message[0]).toLocaleTimeString('ru-RU') }}</span>
           <span class="infoMessagesContainer__text">{{ message[1] }}</span>
         </div>
@@ -84,11 +85,13 @@ export default {
     cursor: pointer;
     user-select: none;
     transition: background-color 64ms, opacity 64ms;
+
     &:hover {
       opacity: 1;
       background-color: var(--background-card);
     }
   }
+
   .infoMessagesContainer__body {
     flex: 1 1 0;
     display: flex;
@@ -102,6 +105,7 @@ export default {
     .infoMessagesContainer__message {
       flex: 0 0 auto;
       padding: 4px;
+
       &:hover {
         background-color: var(--background-card);
       }
@@ -113,6 +117,7 @@ export default {
         font-size: 0.75rem;
         opacity: 0.5;
       }
+
       .infoMessagesContainer__text {
         font-size: 0.9rem;
         overflow: hidden;

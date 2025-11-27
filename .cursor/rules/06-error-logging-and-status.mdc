@@ -1,0 +1,39 @@
+---
+alwaysApply: true
+---
+## Logging
+
+- Use `console.log` and `console.error` with **short tags + payloads** (e.g. `[TCP] New terminal connected`, `[TIMING] New time message`, `[SOCKET.IO] Server error`) so `logger-override.js` can forward them through `EventBus` into `message_system`.
+- Avoid logging inside hot loops or per‑packet processing unless diagnosing a specific issue; prefer logging connection lifecycle events, configuration, and error conditions.
+- Keep logging lightweight in production flows; reserve detailed dumps (raw messages, full objects) for explicit debug paths.
+
+## User Feedback
+
+- Surface important backend events via:
+  - `server-message` IPC channel → `main/serverMessages` → UI console/log.
+  - `info-message` IPC → `message_system` → `InfoMessagesContainer` with human‑readable messages (see `stringifyInfoMsg`).
+- Messages that require user action (server not running, invalid licence, timer disconnected) should:
+  - be concise and explain what went wrong
+  - suggest the next step (e.g. “Start server from header panel”, “Check timer IP/port”)
+  - avoid blocking the UI unnecessarily (use toasts/log entries instead of modal dialogs where possible).
+
+## Validation & Guarding
+
+- Validate all external inputs before applying them:
+  - Socket.IO payloads before merging into `competition` state.
+  - judge terminal messages using decoding helpers and known message types.
+  - timing device messages (channels, time format, flags) before creating time records.
+  - file system paths and existence before reading/writing.
+- On validation failure, **log the issue, keep state unchanged**, and, if it affects the user workflow, surface a clear info message.
+
+## Diagnostics & Monitoring
+
+- Maintain a clear picture of system health via:
+  - server status indicators (`serverStatus`, `opened_sockets`)
+  - connected terminals and timers (`connectedTerminals`, `connectedDevices`)
+  - recent competition log entries and info messages.
+- When adding new services (e.g. additional live result providers, new timing devices, extra terminal types), add minimal diagnostics for:
+  - connection lifecycle (connected/disconnected/error)
+  - key state transitions (start/stop, sync, publish)
+  - critical failures (protocol mismatch, unexpected payloads).
+

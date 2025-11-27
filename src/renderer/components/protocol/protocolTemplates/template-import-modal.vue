@@ -1,5 +1,6 @@
 <script>
 import { ProtocolDocument } from '../../../classes/Protocol/ProtocolDocument';
+import { importTemplateFromFile } from '../../../utils/protocolTemplate-utils';
 import TwFileInput from '../../ui/tw-file-input.vue';
 
 export default {
@@ -9,48 +10,58 @@ export default {
   data() {
     return {
       importedFileName: '',
-      fileContent: null,
+      file: null,
       importError: null,
     };
   },
   methods: {
     handleFileUpload(event) {
-      const file = event.target.files[0];
+      const file = event.target.files && event.target.files[0];
       this.importError = null;
+      this.file = null;
 
-      if (file && file.type === 'application/json') {
-        this.importedFileName = file.name;
-
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          try {
-            const parsedData = JSON.parse(e.target.result);
-            this.fileContent = parsedData;
-          } catch (err) {
-            this.importError = 'Invalid JSON file.';
-            console.error('Error parsing JSON:', err);
-          }
-        };
-        reader.readAsText(file);
-      } else {
-        this.importError = 'Please upload a valid JSON file.';
-        console.warn('Invalid file type.');
+      if (!file) {
+        return;
       }
-    },
-    importTemplate() {
-      try {
-        const templateDocument = ProtocolDocument.fromJSON(this.fileContent);
 
-        if (templateDocument) {
-          this.$emit('import-template', templateDocument);
-          this.closeModal();
-          console.log('Template imported successfully!');
-        } else {
-          this.importError = 'No valid file loaded.';
+      const isJsonType = file.type === 'application/json' || (file.name && file.name.toLowerCase().endsWith('.json'));
+      if (!isJsonType) {
+        this.importError = 'Please upload a valid JSON file.';
+        console.warn('[PROTOCOL] Invalid file type for template import:', file.type || '(unknown)');
+        return;
+      }
+
+      this.importedFileName = file.name;
+      this.file = file;
+    },
+    async importTemplate() {
+      if (!this.file) {
+        this.importError = 'No valid file loaded.';
+        return;
+      }
+
+      try {
+        const parsedTemplates = await importTemplateFromFile(this.file);
+        const firstTemplate = Array.isArray(parsedTemplates) ? parsedTemplates[0] : parsedTemplates;
+
+        if (!firstTemplate) {
+          this.importError = 'Template schema mismatch';
+          return;
         }
+
+        const templateDocument = ProtocolDocument.fromJSON(firstTemplate);
+        this.$emit('import-template', templateDocument);
+        this.closeModal();
+        console.log('Template imported successfully!');
       } catch (err) {
-        this.importError = 'Error importing template.';
-        console.error('Error importing template:', err);
+        console.error('[PROTOCOL] Error importing template:', err);
+        if (err && err.message === 'Invalid JSON file structure') {
+          this.importError = 'Invalid JSON file.';
+        } else if (err && err.message === 'Template schema mismatch') {
+          this.importError = 'Template file does not match expected schema.';
+        } else {
+          this.importError = 'Error importing template.';
+        }
       }
     },
     closeModal() {
@@ -75,12 +86,13 @@ export default {
           <!--          <tw-file-input accept="application/json" button-label="Выбрать файл" use-native @input="handleFileUpload"></tw-file-input>-->
           <input type="file" accept="application/json" @change="handleFileUpload" />
         </label>
-        <div v-if="importedFileName" class="importModal__file-info"><strong>Выбранный файл:</strong> {{ importedFileName }}</div>
+        <div v-if="importedFileName" class="importModal__file-info"><strong>Выбранный файл:</strong> {{ importedFileName
+          }}</div>
         <div v-if="importError" class="importModal__error">{{ importError }}</div>
       </div>
       <div class="importModal__actions">
         <button class="tw-button danger" @click="closeModal">Отмена</button>
-        <button class="tw-button" :disabled="!fileContent" @click="importTemplate">Импорт</button>
+        <button class="tw-button" :disabled="!file" @click="importTemplate">Импорт</button>
       </div>
     </div>
   </div>
@@ -145,8 +157,9 @@ export default {
       display: flex;
       justify-content: flex-end;
 
-      & > * {
+      &>* {
         margin-right: 8px;
+
         &:last-child {
           margin-right: 0;
         }

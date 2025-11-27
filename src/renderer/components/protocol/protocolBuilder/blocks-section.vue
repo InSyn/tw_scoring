@@ -81,39 +81,28 @@ export default {
 
 <template>
   <div class="blocksSection__wrapper">
-    <h3 class="blocksSection__header">Настройка секций протокола</h3>
-    <div class="blocksSection__controls">
-      <select v-model="newBlockType">
-        <option v-for="type in blockTypes" :key="type" :value="type">
-          {{ type }}
-        </option>
-      </select>
-      <button class="tw-button-small" :disabled="!newBlockType" @click="addBlock">Добавить секцию</button>
-    </div>
+    <h3 class="blocksSection__header">
+      <span>Настройка секций протокола</span>
+      <div class="blocksSection__controls">
+        <select v-model="newBlockType">
+          <option v-for="type in blockTypes" :key="type" :value="type">
+            {{ type }}
+          </option>
+        </select>
+        <button class="tw-button-small" :disabled="!newBlockType" @click="addBlock">Добавить секцию</button>
+      </div>
+    </h3>
     <div class="blocksSection__body">
       <ul class="blocksSection__list">
-        <blocks-list-item
-          v-for="(block, index) in protocol.blocks"
-          :key="block.id"
-          :block="block"
-          :index="index"
-          :is-selected-block="isSelectedBlock(block)"
-          @edit-block="editBlock"
-          @delete-block="deleteBlock"
-          :drag-index="index"
-          :drag-items="protocol.blocks"
+        <blocks-list-item v-for="(block, index) in protocol.blocks" :key="block.id" :block="block" :index="index"
+          :is-selected-block="isSelectedBlock(block)" @edit-block="editBlock" @delete-block="deleteBlock"
+          :drag-index="index" :drag-items="protocol.blocks"
           :class="['drag-drop-item', { dragging: dragIndex === index, dragOver: dragOverIndex === index }]"
-          @dragstart="onDragStart($event, index)"
-          @dragover="onDragOver($event, index)"
-          @drop="onDrop($event, index, protocol.blocks)"
-        ></blocks-list-item>
+          @dragstart="onDragStart($event, index)" @dragover="onDragOver($event, index)"
+          @drop="onDrop($event, index, protocol.blocks)"></blocks-list-item>
       </ul>
-      <protocol-block-properties
-        class="blocksSection__properties"
-        v-if="selectedBlockId"
-        :block-id="selectedBlockId"
-        :blocks="protocol.blocks"
-      ></protocol-block-properties>
+      <protocol-block-properties class="blocksSection__properties" v-if="selectedBlockId" :block-id="selectedBlockId"
+        :blocks="protocol.blocks"></protocol-block-properties>
     </div>
   </div>
 </template>
@@ -126,24 +115,26 @@ export default {
   font-size: 0.95em;
 
   .blocksSection__header {
-    flex: 0 0 auto;
-    margin-bottom: 4px;
-    font-weight: bold;
-  }
-
-  .blocksSection__controls {
-    flex: 0 0 auto;
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 12px;
+    flex: 0 0 auto;
+    margin-bottom: 8px;
+    font-weight: bold;
 
-    select {
-      min-width: 8ch;
-    }
-    & > * {
-      &:nth-child(2) {
-        margin-left: 2rem;
+    .blocksSection__controls {
+      flex: 0 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-left: auto;
+
+      select {
+        min-width: 8ch;
+      }
+
+      &>* {
+        &:nth-child(2) {
+          margin-left: 2rem;
+        }
       }
     }
   }
@@ -161,6 +152,7 @@ export default {
       margin: 0;
       background-color: var(--background-deep);
     }
+
     .blocksSection__properties {
       flex: 2 1 80px;
       margin-left: 8px;

@@ -180,7 +180,8 @@ export default {
         <button class="tw-button-small transparent" @click="resetZoom">Сбросить</button>
       </template>
     </h3>
-    <div class="preview__content" ref="previewContent" @mousedown="startDrag" @mousemove="drag" @mouseup="endDrag" @mouseleave="endDrag" @wheel="handleWheel">
+    <div class="preview__content" ref="previewContent" @mousedown="startDrag" @mousemove="drag" @mouseup="endDrag"
+      @mouseleave="endDrag" @wheel="handleWheel">
       <div class="protocol-content" ref="protocolContent" v-html="renderedProtocol" :style="transformStyles"></div>
     </div>
   </div>
@@ -200,10 +201,11 @@ export default {
     margin-bottom: 8px;
     font-weight: bold;
 
-    & > * {
+    &>* {
       &:nth-child(1) {
         margin-left: auto;
       }
+
       &:not(:last-child) {
         margin-right: 8px;
       }
@@ -220,6 +222,7 @@ export default {
     cursor: grab;
     cursor: -moz-grab;
     cursor: -webkit-grab;
+
     &:active {
       cursor: grabbing;
       cursor: -moz-grabbing;

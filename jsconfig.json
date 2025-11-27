@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "ES2017",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "checkJs": false,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/renderer/*"]
+    },
+    "lib": ["dom", "dom.iterable", "es2017"]
+  },
+  "include": ["src/**/*.js", "src/**/*.vue", "tests/**/*.js", "tests/**/*.vue"],
+  "exclude": ["node_modules", "dist", "build", "build/*", "dist/*"]
+}

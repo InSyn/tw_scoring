@@ -94,6 +94,52 @@ ipcMain.on('get-build-version', () => {
   mainWindow.webContents.send('build-version', app.getVersion());
 });
 
+ipcMain.on('print-protocol-html', (event, payload) => {
+  const { html, title } = payload || {};
+
+  if (!html || typeof html !== 'string') {
+    console.error('[PRINT] Missing HTML content for print-protocol-html');
+    return;
+  }
+
+  let printWindow = null;
+
+  try {
+    printWindow = new BrowserWindow({
+      show: false,
+      webPreferences: {
+        nodeIntegration: false,
+        contextIsolation: true,
+      },
+    });
+
+    const safeTitle = typeof title === 'string' && title.trim().length ? title.trim() : 'Protocol';
+    const htmlContent = `<!DOCTYPE html><html><head><meta charset="utf-8"><title>${safeTitle}</title></head><body style="margin:0;padding:0;">${html}</body></html>`;
+
+    printWindow.loadURL(`data:text/html;charset=utf-8,${encodeURIComponent(htmlContent)}`);
+
+    printWindow.webContents.on('did-finish-load', () => {
+      printWindow.webContents.print({ silent: false, printBackground: true }, (success, failureReason) => {
+        if (!success) {
+          console.error('[PRINT] Error printing protocol:', failureReason);
+        }
+        if (printWindow && !printWindow.isDestroyed()) {
+          printWindow.close();
+        }
+      });
+    });
+
+    printWindow.on('closed', () => {
+      printWindow = null;
+    });
+  } catch (err) {
+    console.error('[PRINT] Unexpected error while printing protocol:', err);
+    if (printWindow && !printWindow.isDestroyed()) {
+      printWindow.close();
+    }
+  }
+});
+
 export { ipcMain, mainWindow, sendServerMessage, sendInfoMessage, sendTerminalsMessage };
 
 import './lic_server';

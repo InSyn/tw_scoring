@@ -11,65 +11,56 @@
       <div class="competitorsSheetSettings__dialog__header">
         {{ localization[lang].app.competitors.sheet_settings }}
 
-        <v-btn @click="closeColsDialog()" class="competitorsSheetSettings__dialog__header__button-close" color="var(--action-red)" small icon>
+        <v-btn @click="closeColsDialog()" class="competitorsSheetSettings__dialog__header__button-close"
+          color="var(--action-red)" small icon>
           <v-icon>mdi-close</v-icon>
         </v-btn>
       </div>
 
       <div class="competitorsSheetSettings__dialog__body">
         <div class="competitorsSheetSettings__dialog__body__list">
-          <athlete-header-settings-item
-            v-for="(dataItem, idx) in competition.competitorsSheet.header"
-            :key="idx"
-            :competition="competition"
-            :dataItem="dataItem"
-            :idx="idx"
-            :columns-to-del="dialogColumnToDel"
-            @set-data-value="setDataValue"
-            @add-col-to-del="addColToDel"
-            @remove-col-to-del="removeColToDel"
+          <athlete-header-settings-item v-for="(dataItem, idx) in competition.competitorsSheet.header" :key="idx"
+            :competition="competition" :dataItem="dataItem" :idx="idx" :columns-to-del="dialogColumnToDel"
+            @set-data-value="setDataValue" @add-col-to-del="addColToDel" @remove-col-to-del="removeColToDel"
             :class="['drag-drop-item', { dragging: dragIndex === idx, dragOver: dragOverIndex === idx }]"
-            :drag-index="idx"
-            :drag-items="competition.competitorsSheet.header"
-            @dragstart="onDragStart($event, idx)"
+            :drag-index="idx" :drag-items="competition.competitorsSheet.header" @dragstart="onDragStart($event, idx)"
             @dragover="onDragOver($event, idx)"
-            @drop="onDrop($event, idx, competition.competitorsSheet.header)"
-          ></athlete-header-settings-item>
+            @drop="onDrop($event, idx, competition.competitorsSheet.header)"></athlete-header-settings-item>
 
-          <div v-for="(_, idx) in dialogColumnToAdd" :key="`dataToAdd_${idx}`" class="competitorsSheetSettings__dialog__dataItem__wrapper newItem">
+          <div v-for="(_, idx) in dialogColumnToAdd" :key="`dataToAdd_${idx}`"
+            class="competitorsSheetSettings__dialog__dataItem__wrapper newItem">
             <div class="competitorsSheetSettings__dialog__dataItem__container">
               <label for="dataToAddID" class="competitorsSheetSettings__dialog__dataItem__label">ID: </label>
-              <input id="dataToAddID" class="competitorsSheetSettings__dialog__dataItem__input" type="text" v-model="dialogColumnToAdd[idx].id" />
+              <input id="dataToAddID" class="competitorsSheetSettings__dialog__dataItem__input" type="text"
+                v-model="dialogColumnToAdd[idx].id" />
             </div>
 
             <div class="competitorsSheetSettings__dialog__dataItem__container">
               <label for="dataToAddTitle" class="competitorsSheetSettings__dialog__dataItem__label">Title: </label>
-              <input id="dataToAddTitle" class="competitorsSheetSettings__dialog__dataItem__input" type="text" v-model="dialogColumnToAdd[idx].title" />
+              <input id="dataToAddTitle" class="competitorsSheetSettings__dialog__dataItem__input" type="text"
+                v-model="dialogColumnToAdd[idx].title" />
             </div>
 
-            <v-btn @click.prevent="cancelDataToAdd(idx)" color="var(--text-default)" class="competitorsSheetSettings__dialog__dataItem__button" text x-small
-              >{{ localization[lang].app.dialogs.d_cancel }}
+            <v-btn @click.prevent="cancelDataToAdd(idx)" color="var(--text-default)"
+              class="competitorsSheetSettings__dialog__dataItem__button" text x-small>{{
+                localization[lang].app.dialogs.d_cancel }}
             </v-btn>
           </div>
         </div>
       </div>
 
       <div class="competitorsSheetSettings__dialog__footer">
-        <v-btn
-          @click="
-            dialogColumnToAdd.push({
-              id: '',
-              title: '',
-            })
-          "
-          class="competitorsSheetSettings__dialog__footer__button button-addColumn"
-          color="var(--accent)"
-          small
-          text
-          >{{ localization[lang].app.competitors.d_add_col }}
+        <v-btn @click="
+          dialogColumnToAdd.push({
+            id: '',
+            title: '',
+          })
+          " class="competitorsSheetSettings__dialog__footer__button button-addColumn" color="var(--accent)" small
+          text>{{ localization[lang].app.competitors.d_add_col }}
         </v-btn>
 
-        <v-btn @click="acceptCols()" class="competitorsSheetSettings__dialog__footer__button button-cancel" color="var(--accent)" small>
+        <v-btn @click="acceptCols()" class="competitorsSheetSettings__dialog__footer__button button-cancel"
+          color="var(--accent)" small>
           {{ localization[lang].app.dialogs.d_accept }}
         </v-btn>
       </div>
@@ -80,7 +71,7 @@
 <script>
 import { mapGetters } from 'vuex';
 import AthleteHeaderSettingsItem from '../athleteHeaderSettings-item.vue';
-import DataCellSettingsRow from '../../protocols/protocolDataSheetSettings-components/dataCellSettings-row.vue';
+import DataCellSettingsRow from '../../protocols[old]/protocolDataSheetSettings-components/dataCellSettings-row.vue';
 import MDragAndDrop from '../../mixins/MDragAndDrop';
 
 export default {
@@ -165,8 +156,7 @@ export default {
 </script>
 
 <style>
-.competitorsSheetSettings__dialog__button {
-}
+.competitorsSheetSettings__dialog__button {}
 
 .competitorsSheetSettings__dialog__icon {
   margin-right: 0.5rem;
@@ -199,6 +189,7 @@ export default {
   margin-bottom: 8px;
   padding: 8px 0 0 8px;
 }
+
 .competitorsSheetSettings__dialog__body__list {
   display: flex;
   flex-wrap: wrap;
@@ -219,12 +210,15 @@ export default {
   position: relative;
   border-radius: 6px;
 }
+
 .competitorsSheetSettings__dialog__dataItem__wrapper:hover {
   background: var(--subject-background);
 }
+
 .competitorsSheetSettings__dialog__dataItem__wrapper.newItem {
   background: rgba(48, 212, 101, 0.2);
 }
+
 .competitorsSheetSettings__dialog__dataItem__container {
   isolation: isolate;
   display: flex;
@@ -232,13 +226,16 @@ export default {
   margin-bottom: 4px;
   padding-top: 8px;
 }
+
 .competitorsSheetSettings__dialog__dataItem__container:last-child {
   margin-bottom: 0;
 }
+
 .competitorsSheetSettings__dialog__dataItem__label {
   flex: 1 0 0;
   font-weight: bold;
 }
+
 .competitorsSheetSettings__dialog__dataItem__input {
   flex: 4 1 0;
   min-width: 0;
@@ -248,9 +245,11 @@ export default {
   background: var(--standard-background);
   border-radius: 4px;
 }
+
 .competitorsSheetSettings__dialog__dataItem__input:focus {
   box-shadow: inset 0 0 0 1px var(--accent);
 }
+
 .competitorsSheetSettings__dialog__dataItem__button {
   position: absolute;
   z-index: 1;
@@ -273,6 +272,7 @@ export default {
   border-radius: 6px;
   background: rgba(225, 32, 38, 0.4);
 }
+
 .competitorsSheetSettings__dialog__dataItem__overlay-deleting__button-delete {
   font-weight: bold;
   color: var(--text-default);
@@ -283,10 +283,11 @@ export default {
   display: flex;
   padding: 8px;
 }
-.competitorsSheetSettings__dialog__footer__button {
-}
-.button-addColumn {
-}
+
+.competitorsSheetSettings__dialog__footer__button {}
+
+.button-addColumn {}
+
 .button-cancel {
   margin-left: auto;
   color: var(--text-default);

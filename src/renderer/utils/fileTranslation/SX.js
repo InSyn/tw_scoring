@@ -286,7 +286,6 @@ export const getSXHeats = (competition) => {
 
       if (rIdx === rArr.length - 1) {
         runParticipants = sortSXHeat(runParticipants);
-        console.log('SORTED: ', runParticipants);
       }
 
       return {
@@ -302,4 +301,35 @@ export const getSXHeats = (competition) => {
       runs,
     };
   });
+};
+
+export const getSXFinalClassification = (competition) => {
+  if (!competition || !competition.races || !competition.races.length) return [];
+
+  const stages = getSXHeats(competition);
+  if (!Array.isArray(stages) || !stages.length) return [];
+
+  const finalStage = stages[stages.length - 1];
+  if (!finalStage || !Array.isArray(finalStage.runs) || !finalStage.runs.length) return [];
+
+  const winners = [];
+  let rank = 1;
+
+  finalStage.runs.forEach((run) => {
+    const participants = Array.isArray(run.participants) ? run.participants : [];
+    participants.forEach((p) => {
+      if (!p || p.bib === '-' || p.bib === undefined || p.bib === null) return;
+
+      winners.push({
+        bib: p.bib || '-',
+        name: p.name || '-',
+        result: p.result || '-',
+        rank,
+      });
+
+      rank += 1;
+    });
+  });
+
+  return winners;
 };

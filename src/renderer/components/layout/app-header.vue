@@ -3,6 +3,7 @@ import LangSelector from '../appComponents/langSelector.vue';
 import CompetitionSelectMenu from '../appComponents/competitionSelectMenu.vue';
 import TimingDeviceSettings from '../timing/timingDeviceSettings/index.vue';
 import LiveServicesPanel from '../scoring/services/liveServicesPanel.vue';
+import QuickProtocolsWindow from '../protocol/quickProtocolsWindow.vue';
 import CreateNewCompetitionMenu from '../appComponents/createNewCompetitionMenu.vue';
 import fs from 'fs';
 import { mapActions, mapGetters } from 'vuex';
@@ -13,7 +14,7 @@ const dialog = require('electron').remote.dialog;
 
 export default {
   name: 'app-header',
-  components: { LangSelector, TimingDeviceSettings, LiveServicesPanel, CompetitionSelectMenu, CreateNewCompetitionMenu },
+  components: { LangSelector, TimingDeviceSettings, LiveServicesPanel, CompetitionSelectMenu, CreateNewCompetitionMenu, QuickProtocolsWindow },
   props: {
     event: {
       type: Object,
@@ -95,9 +96,11 @@ export default {
 
     <create-new-competition-menu :competition="competition"></create-new-competition-menu>
 
-    <competition-select-menu :competition="competition" :competitions="competitions" :event="event"></competition-select-menu>
+    <competition-select-menu :competition="competition" :competitions="competitions"
+      :event="event"></competition-select-menu>
 
     <timing-device-settings />
+    <quick-protocols-window />
     <live-services-panel />
 
     <div class="appIcon__wrapper">
@@ -129,9 +132,11 @@ export default {
   .menu__button {
     margin-right: 1rem;
   }
+
   .save__button {
     padding: 0;
   }
+
   .load__button {
     padding: 0 !important;
 
@@ -157,6 +162,7 @@ export default {
       user-select: none;
     }
   }
+
   .app__icon__text {
     height: 100%;
     margin-right: 32px;

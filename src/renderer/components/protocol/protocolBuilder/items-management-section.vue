@@ -91,14 +91,14 @@ export default {
         const newElement =
           this.newItemType === 'list'
             ? {
-                type: this.newItemType,
-                rows: [],
-              }
+              type: this.newItemType,
+              rows: [],
+            }
             : {
-                type: this.newItemType,
-                content: this.newItemType !== 'custom' ? this.newItemContent : '',
-                handlerId: this.newItemType === 'custom' ? this.selectedHandler : null,
-              };
+              type: this.newItemType,
+              content: this.newItemType !== 'custom' ? this.newItemContent : '',
+              handlerId: this.newItemType === 'custom' ? this.selectedHandler : null,
+            };
 
         this.selectedBlock.addElement(newElement);
       }
@@ -161,81 +161,59 @@ export default {
 
 <template>
   <div v-if="selectedBlock" class="itemsSection__wrapper section-container">
-    <h3 class="itemsSection__header">Настройка элементов секции</h3>
-    <div class="itemsSection__controls">
-      <select v-model="newItemType">
-        <option v-for="type in getItemTypes" :key="type" :value="type">
-          {{ type }}
-        </option>
-      </select>
-
-      <div v-if="newItemType === 'custom'">
-        <label for="handler-select">Данные:</label>
-        <select v-model="selectedHandler" id="handler-select">
-          <option value="">Пустое значение</option>
-          <option v-for="handler in handlerOptions" :key="handler" :value="handler">
-            {{ handler }}
+    <h3 class="itemsSection__header">
+      <span>Настройка элементов секции</span>
+      <div class="itemsSection__controls">
+        <select v-model="newItemType">
+          <option v-for="type in getItemTypes" :key="type" :value="type">
+            {{ type }}
           </option>
         </select>
+
+        <div v-if="newItemType === 'custom'">
+          <label for="handler-select">Данные:</label>
+          <select v-model="selectedHandler" id="handler-select">
+            <option value="">Пустое значение</option>
+            <option v-for="handler in handlerOptions" :key="handler" :value="handler">
+              {{ handler }}
+            </option>
+          </select>
+        </div>
+
+        <tw-file-input v-else-if="newItemType === 'image'" @input="handleImagePathSelection" accept="image/*"
+          :use-for-path="true" :use-for-j-s-o-n="false"></tw-file-input>
+        <input v-else-if="newItemType === 'text'" type="text" v-model="newItemContent" placeholder="Item Content" />
+
+        <button class="tw-button" @click="addItem" @keyup.enter="addItem" :disabled="!newItemType">Добавить</button>
       </div>
-
-      <tw-file-input
-        v-else-if="newItemType === 'image'"
-        @input="handleImagePathSelection"
-        accept="image/*"
-        :use-for-path="true"
-        :use-for-j-s-o-n="false"
-      ></tw-file-input>
-      <input v-else-if="newItemType === 'text'" type="text" v-model="newItemContent" placeholder="Item Content" />
-
-      <button class="tw-button" @click="addItem" @keyup.enter="addItem" :disabled="!newItemType">Добавить</button>
-    </div>
+    </h3>
 
     <div class="itemsSection__body">
-      <protocol-table-items-list
-        v-if="selectedBlock.type === 'table'"
-        :selected-block="selectedBlock"
-        :table-headers="tableHeaders"
-        :table-rows="tableRows"
-        :is-selected-item="isSelectedItem"
-        @select-item="selectItem"
-        @delete-item="deleteItem"
-        @update-cell-handler="updateCellHandler"
-        @update-cell-content="updateCellContent"
-      >
+      <protocol-table-items-list v-if="selectedBlock.type === 'table'" :selected-block="selectedBlock"
+        :table-headers="tableHeaders" :table-rows="tableRows" :is-selected-item="isSelectedItem"
+        @select-item="selectItem" @delete-item="deleteItem" @update-cell-handler="updateCellHandler"
+        @update-cell-content="updateCellContent">
       </protocol-table-items-list>
 
       <ul v-else class="itemsSection__list">
-        <protocol-items-list-item
-          v-for="(item, index) in items"
-          :key="`item_${index}`"
-          :item="item"
-          :is-selected="isSelectedItem"
-          @select-item="selectItem"
-          @delete-item="deleteItem"
-          :drag-index="index"
+        <protocol-items-list-item v-for="(item, index) in items" :key="`item_${index}`" :item="item"
+          :is-selected="isSelectedItem" @select-item="selectItem" @delete-item="deleteItem" :drag-index="index"
           :drag-items="items"
           :class="['drag-drop-item', { dragging: dragIndex === index, dragOver: dragOverIndex === index }]"
-          @dragstart="onDragStart($event, index)"
-          @dragover="onDragOver($event, index)"
-          @drop="onDrop($event, index, items)"
-        ></protocol-items-list-item>
+          @dragstart="onDragStart($event, index)" @dragover="onDragOver($event, index)"
+          @drop="onDrop($event, index, items)"></protocol-items-list-item>
       </ul>
 
-      <protocol-item-properties
-        v-if="selectedItem"
-        class="itemsSection__properties"
-        :selected-item="selectedItem"
-        :selected-block-type="selectedBlock ? selectedBlock.type : ''"
-        :selected-block="selectedBlock"
-        @file-select-event="handleImagePathSelection"
-      />
+      <protocol-item-properties v-if="selectedItem" class="itemsSection__properties" :selected-item="selectedItem"
+        :selected-block-type="selectedBlock ? selectedBlock.type : ''" :selected-block="selectedBlock"
+        @file-select-event="handleImagePathSelection" />
     </div>
   </div>
 </template>
 
 <style lang="scss">
 @use './../../../assets/styles/shared/selectableListItem' as *;
+
 .itemsSection__wrapper {
   display: flex;
   flex-direction: column;
@@ -243,24 +221,28 @@ export default {
   font-size: 0.95em;
 
   .itemsSection__header {
+    display: flex;
+    flex: 0 0 auto;
     margin-bottom: 8px;
     font-weight: bold;
-  }
 
-  .itemsSection__controls {
-    flex: 0 0 auto;
-    display: flex;
-    align-items: center;
-    margin-bottom: 12px;
+    .itemsSection__controls {
+      flex: 0 0 auto;
+      display: flex;
+      align-items: center;
+      margin-left: auto;
 
-    select {
-      min-width: 8ch;
-    }
-    & > * {
-      margin-right: 8px;
-      &:last-child {
-        margin-right: 0;
-        margin-left: auto;
+      select {
+        min-width: 8ch;
+      }
+
+      &>* {
+        margin-right: 8px;
+
+        &:last-child {
+          margin-right: 0;
+          margin-left: auto;
+        }
       }
     }
   }
@@ -298,24 +280,29 @@ export default {
             margin-right: 1.25rem;
             overflow: hidden;
           }
+
           span {
             &:nth-child(2) {
               overflow: hidden;
               text-overflow: ellipsis;
             }
           }
+
           span,
           h3 {
             font-weight: bold;
             white-space: nowrap;
           }
+
           button {
             margin-right: 8px;
+
             &:last-child {
               margin-right: 0;
             }
           }
         }
+
         &__content {
           display: flex;
           align-items: center;
@@ -327,12 +314,14 @@ export default {
             min-width: 0;
             margin-left: 8px;
           }
+
           button {
             margin-left: 16px;
           }
         }
       }
     }
+
     .itemsSection__properties {
       flex: 2 1 80px;
       margin-left: 8px;

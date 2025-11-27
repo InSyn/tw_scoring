@@ -7,7 +7,7 @@ import Preview from '../components/protocol/protocolBuilder/preview.vue';
 import TemplateManager from '../components/protocol/protocolTemplates/template-manager.vue';
 import { mapActions, mapGetters } from 'vuex';
 import html2pdf from 'html2pdf.js';
-import { mmToPx } from '../utils/protocolTemplate-utils';
+import { mmToPx, getProtocolPdfOptions } from '../utils/protocolTemplate-utils';
 import { debounce } from '../utils/utils';
 
 export default {
@@ -79,12 +79,12 @@ export default {
     },
     async savePDF() {
       if (!this.protocol) {
-        console.error('No protocol available for saving PDF.');
+        console.error('[PROTOCOL] No protocol available for saving PDF.');
         return;
       }
 
       const adjustedHeight = Math.floor(mmToPx(this.protocol.config.page.height));
-      const options = this.getPDFOptions(adjustedHeight);
+      const options = getProtocolPdfOptions(this.protocol, adjustedHeight);
 
       const renderedPages = Array.from(document.querySelectorAll('.protocol-page'))
         .map((page) => page.outerHTML)
@@ -99,25 +99,10 @@ export default {
         link.download = `${this.protocol.name || 'Protocol'}.pdf`;
         link.click();
 
-        console.log('PDF saved successfully!');
+        console.log('[PROTOCOL] PDF saved successfully');
       } catch (error) {
-        console.error('Error saving PDF:', error);
+        console.error('[PROTOCOL] Error saving PDF:', error);
       }
-    },
-    getPDFOptions(adjustedHeight) {
-      return {
-        margin: [-1, -1, -9, -1],
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, letterRendering: true, useCORS: true, allowTaint: true },
-        jsPDF: {
-          unit: 'px',
-          format: [mmToPx(this.protocol.config.page.width), adjustedHeight],
-          orientation: this.protocol.config.page.orientation === 'landscape' ? 'landscape' : 'portrait',
-          compress: true,
-          hotfixes: ['px_scaling'],
-          pagebreak: { avoid: 'all' },
-        },
-      };
     },
     saveTemplates() {
       if (!this.protocol) return;
