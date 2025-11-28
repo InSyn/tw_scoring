@@ -17,6 +17,8 @@ import start_protocols from '../components/protocols[old]/start_protocols.vue';
 import teams from '../components/teams';
 import store from '../store';
 import ProtocolsPage from '../pages/ProtocolsPage.vue';
+import CupsPage from '../pages/CupsPage.vue';
+import RatingsPage from '../pages/RatingsPage.vue';
 
 const router = new Router({
   routes: [
@@ -76,6 +78,16 @@ const router = new Router({
       path: '/protocols-page',
       name: 'protocolsPage',
       component: ProtocolsPage,
+    },
+    {
+      path: '/cups',
+      name: 'cups',
+      component: CupsPage,
+    },
+    {
+      path: '/ratings',
+      name: 'ratings',
+      component: RatingsPage,
     },
     {
       path: '/jump_codes',

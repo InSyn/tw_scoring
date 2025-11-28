@@ -15,6 +15,7 @@ import moguls from './modules/moguls';
 import skiCross from './modules/ski-cross';
 import timing from './modules/timing';
 import protocols from './modules/protocols';
+import cups from './modules/cups';
 
 export default new Vuex.Store({
   state: {},
@@ -34,6 +35,7 @@ export default new Vuex.Store({
     aerials,
     moguls,
     skiCross,
+    cups,
   },
   strict: false,
 });

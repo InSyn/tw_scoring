@@ -92,6 +92,16 @@ export default {
         link: 'protocols',
       },
       {
+        icon: 'trophy',
+        title: 'Cups',
+        link: 'cups',
+      },
+      {
+        icon: 'chartLine',
+        title: 'Ratings',
+        link: 'ratings',
+      },
+      {
         icon: '',
         title: 'Jumps',
         link: 'jumpCodes',

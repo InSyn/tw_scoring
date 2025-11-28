@@ -17,7 +17,17 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import { mdiAccountGroup, mdiAccountMultiple, mdiClipboardList, mdiCog, mdiNumeric10BoxMultiple, mdiTrophyVariant, mdiViewDashboard } from '@mdi/js';
+import {
+  mdiAccountGroup,
+  mdiAccountMultiple,
+  mdiChartLine,
+  mdiClipboardList,
+  mdiCog,
+  mdiNumeric10BoxMultiple,
+  mdiTrophy,
+  mdiTrophyVariant,
+  mdiViewDashboard,
+} from '@mdi/js';
 import { checkCompetitionDiscipline } from '../../data/sports';
 import CompetitionImport from '../appComponents/competitionImport.vue';
 
@@ -30,9 +40,11 @@ export default {
       icons: {
         accountGroup: mdiAccountGroup,
         accountMultiple: mdiAccountMultiple,
+        chartLine: mdiChartLine,
         clipboardList: mdiClipboardList,
         cog: mdiCog,
         numeric10BoxMultiple: mdiNumeric10BoxMultiple,
+        trophy: mdiTrophy,
         trophyVariant: mdiTrophyVariant,
         viewDashboard: mdiViewDashboard,
       },
