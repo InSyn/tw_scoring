@@ -1,171 +1,187 @@
 <template>
   <div class="ratingsPage page-wrapper">
-    <header class="page-header">
-      <h2>Рейтинги</h2>
-      <p class="page-subtitle">
-        {{ ratingsTexts.description }}
-      </p>
+    <header class="ratingsPage__header">
+      <div>
+        <h2 class="ratingsPage__title">{{ texts.title || 'Рейтинги' }}</h2>
+        <p class="ratingsPage__subtitle">
+          {{ texts.description || 'Управление рейтингами спортсменов' }}
+        </p>
+      </div>
+
+      <button class="tw-button-primary" @click="openCreateDialog">
+        + {{ texts.toolbar && texts.toolbar.create ? texts.toolbar.create : 'Создать Рейтинг' }}
+      </button>
     </header>
 
-    <section v-if="!hasCompetitions" class="info-card">
-      {{ ratingsTexts.noCompetitions }}
+    <section v-if="!ratings || ratings.length === 0" class="info-card">
+      {{ texts.empty || 'Нет созданных рейтингов. Добавьте первый.' }}
     </section>
 
-    <section v-else class="controls">
-      <label class="control">
-        <span>{{ ratingsTexts.selectCompetition }}</span>
-        <select v-model="selectedCompetitionId">
-          <option v-for="competition in competitions" :key="competition.id" :value="competition.id">
-            {{ getCompetitionTitle(competition) }}
-          </option>
-        </select>
-      </label>
+    <section v-else class="ratings-list">
+      <rating-card
+        v-for="(rating, index) in ratings"
+        :key="rating.id"
+        :rating="rating"
+        :index="index"
+        :texts="texts"
+        @toggle="toggleRatingAction(rating.id)"
+        @update-title="handleUpdateTitle"
+        @update-calculation="handleUpdateCalculation"
+        @update-gender="handleUpdateGender"
+        @add-competition="(ratingId) => addCompetitionAction({ ratingId })"
+        @remove-competition="handleRemoveCompetition"
+        @open-competition-settings="handleCompetitionSettings"
+        @delete="handleDeleteRating"
+        @request-update="handleRefreshRating"
+      />
     </section>
 
-    <section v-if="!selectedCompetition || ratingRows.length === 0" class="info-card">
-      {{ ratingsTexts.empty }}
-    </section>
+    <rating-create-dialog
+      :visible="isCreateDialogOpen"
+      :texts="texts.createModal || {}"
+      @close="closeCreateDialog"
+      @confirm="handleCreateRating"
+    />
 
-    <section v-else class="ratings-table__wrapper">
-      <table class="ratings-table">
-        <thead>
-          <tr>
-            <th>{{ ratingsTexts.table.place }}</th>
-            <th>{{ ratingsTexts.table.bib }}</th>
-            <th>{{ ratingsTexts.table.name }}</th>
-            <th>{{ ratingsTexts.table.result }}</th>
-            <th>{{ ratingsTexts.table.status }}</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="row in ratingRows" :key="row.id">
-            <td>{{ row.place }}</td>
-            <td>{{ row.bib }}</td>
-            <td>{{ row.name }}</td>
-            <td>{{ row.result }}</td>
-            <td>{{ row.status }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </section>
+    <competition-settings-modal
+      :visible="competitionModal.visible"
+      :competition="selectedCompetition"
+      :texts="texts.competitionModal || {}"
+      @close="closeCompetitionModal"
+      @update-title="handleCompetitionTitleChange"
+      @update-discipline="handleCompetitionDisciplineChange"
+      @select-event="handleCompetitionEventSelect"
+      @select-points="handleCompetitionPointsSelect"
+    />
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
-
-const fallbackTexts = {
-  description: '',
-  selectCompetition: '',
-  empty: '',
-  noCompetitions: '',
-  table: {
-    place: '',
-    bib: '',
-    name: '',
-    result: '',
-    status: '',
-  },
-};
+import { mapActions, mapGetters } from 'vuex';
+import RatingCard from '../components/ratings/RatingCard.vue';
+import RatingCreateDialog from '../components/ratings/RatingCreateDialog.vue';
+import CompetitionSettingsModal from '../components/ratings/CompetitionSettingsModal.vue';
 
 export default {
   name: 'RatingsPage',
+  components: { RatingCard, RatingCreateDialog, CompetitionSettingsModal },
   data() {
     return {
-      selectedCompetitionId: null,
+      isCreateDialogOpen: false,
+      competitionModal: {
+        visible: false,
+        ratingId: null,
+        competitionId: null,
+      },
     };
   },
   computed: {
+    ...mapGetters('ratings', {
+      ratings: 'ratings',
+      getRatingById: 'getRatingById',
+    }),
     ...mapGetters('localization', {
       lang: 'lang',
       localization: 'localization',
     }),
-    ...mapGetters('main', {
-      competitions: 'competitions',
-    }),
-    ratingsTexts() {
+    texts() {
       const localized = this.localization[this.lang] && this.localization[this.lang].app;
-      return (localized && localized.ratings) || fallbackTexts;
-    },
-    hasCompetitions() {
-      return Array.isArray(this.competitions) && this.competitions.length > 0;
+      return (localized && localized.ratings) || {};
     },
     selectedCompetition() {
-      if (!this.hasCompetitions || !this.selectedCompetitionId) return null;
-      return this.competitions.find((competition) => competition.id === this.selectedCompetitionId) || null;
-    },
-    ratingRows() {
-      if (!this.selectedCompetition || !this.selectedCompetition.getSortedByRank) {
-        return [];
-      }
-
-      const sheet = this.selectedCompetition.competitorsSheet;
-      const competitors = sheet && Array.isArray(sheet.competitors) ? sheet.competitors.slice() : [];
-      if (competitors.length === 0) return [];
-
-      const ordered = this.selectedCompetition.getSortedByRank(competitors.slice());
-
-      return ordered.map((competitor) => {
-        const overall =
-          competitor &&
-          Array.isArray(competitor.results_overall) &&
-          competitor.results_overall.find((result) => result.competition_id === this.selectedCompetition.id);
-
-        return {
-          id: competitor.id,
-          place: this.getPlace(overall, competitor.place),
-          bib: this.getBib(competitor),
-          name: this.getName(competitor),
-          result: this.getResultString(overall),
-          status: overall && overall.status ? overall.status : '—',
-        };
-      });
+      if (!this.competitionModal.ratingId || !this.competitionModal.competitionId) return null;
+      const rating = this.getRatingById(this.competitionModal.ratingId);
+      if (!rating) return null;
+      return rating.competitions.find((comp) => comp.id === this.competitionModal.competitionId) || null;
     },
   },
-  watch: {
-    competitions: {
-      immediate: true,
-      handler(newCompetitions) {
-        if (!Array.isArray(newCompetitions) || newCompetitions.length === 0) {
-          this.selectedCompetitionId = null;
-          return;
-        }
-        if (!this.selectedCompetitionId) {
-          this.selectedCompetitionId = newCompetitions[0].id;
-        } else {
-          const exists = newCompetitions.some((competition) => competition.id === this.selectedCompetitionId);
-          if (!exists) {
-            this.selectedCompetitionId = newCompetitions[0].id;
-          }
-        }
-      },
-    },
+  created() {
+    this.initRatings();
   },
   methods: {
-    getCompetitionTitle(competition) {
-      if (!competition || !competition.mainData || !competition.mainData.title) return '—';
-      const title = competition.mainData.title.value;
-      return title && title.trim().length > 0 ? title : '—';
+    ...mapActions('ratings', {
+      initRatings: 'initialize',
+      createRatingAction: 'createRating',
+      deleteRatingAction: 'deleteRating',
+      toggleRatingAction: 'toggleRating',
+      updateRatingTitleAction: 'updateRatingTitle',
+      updateRatingCalculationModeAction: 'updateRatingCalculationMode',
+      updateRatingGenderAction: 'updateRatingGender',
+      addCompetitionAction: 'addCompetition',
+      removeCompetitionAction: 'removeCompetition',
+      updateCompetitionEventPathAction: 'updateCompetitionEventPath',
+      updateCompetitionTitleAction: 'updateCompetitionTitle',
+      updateCompetitionDisciplineAction: 'updateCompetitionDiscipline',
+      updateCompetitionPointsPathAction: 'updateCompetitionPointsPath',
+      refreshRatingDataAction: 'refreshRatingData',
+    }),
+    openCreateDialog() {
+      this.isCreateDialogOpen = true;
     },
-    getBib(competitor) {
-      const info = competitor && competitor.info_data;
-      return info && info.bib ? info.bib : '—';
+    closeCreateDialog() {
+      this.isCreateDialogOpen = false;
     },
-    getName(competitor) {
-      const info = competitor && competitor.info_data;
-      return info && info.name ? info.name : this.ratingsTexts.table.name;
+    closeCompetitionModal() {
+      this.competitionModal = { visible: false, ratingId: null, competitionId: null };
     },
-    getPlace(overall, fallbackPlace) {
-      if (overall && overall.status) return '-';
-      return fallbackPlace || '—';
+    handleCreateRating({ title, competitionsCount }) {
+      this.createRatingAction({ title, competitionsCount }).then(() => {
+        this.isCreateDialogOpen = false;
+      });
     },
-    getResultString(overall) {
-      if (!overall) return '—';
-      if (overall.status) return overall.status;
-
-      if (overall.value_str) return overall.value_str;
-      if (typeof overall.value === 'number') return overall.value.toFixed(2);
-      return overall.value || '—';
+    handleUpdateTitle({ ratingId, title }) {
+      this.updateRatingTitleAction({ ratingId, title });
+    },
+    handleUpdateCalculation({ ratingId, calculationMode }) {
+      this.updateRatingCalculationModeAction({ ratingId, calculationMode });
+    },
+    async handleUpdateGender({ ratingId, gender }) {
+      await this.updateRatingGenderAction({ ratingId, gender });
+      await this.refreshRatingDataAction({ ratingId });
+    },
+    handleCompetitionSettings({ ratingId, competitionId }) {
+      this.competitionModal = { visible: true, ratingId, competitionId };
+    },
+    handleCompetitionTitleChange({ title }) {
+      if (!this.competitionModal.ratingId || !this.competitionModal.competitionId) return;
+      this.updateCompetitionTitleAction({
+        ratingId: this.competitionModal.ratingId,
+        competitionId: this.competitionModal.competitionId,
+        title,
+      });
+    },
+    handleCompetitionDisciplineChange({ discipline }) {
+      if (!this.competitionModal.ratingId || !this.competitionModal.competitionId) return;
+      this.updateCompetitionDisciplineAction({
+        ratingId: this.competitionModal.ratingId,
+        competitionId: this.competitionModal.competitionId,
+        discipline,
+      });
+    },
+    handleCompetitionEventSelect(filePath) {
+      if (!this.competitionModal.ratingId || !this.competitionModal.competitionId || !filePath) return;
+      this.updateCompetitionEventPathAction({
+        ratingId: this.competitionModal.ratingId,
+        competitionId: this.competitionModal.competitionId,
+        eventPath: filePath,
+      });
+    },
+    handleCompetitionPointsSelect(filePath) {
+      if (!this.competitionModal.ratingId || !this.competitionModal.competitionId || !filePath) return;
+      this.updateCompetitionPointsPathAction({
+        ratingId: this.competitionModal.ratingId,
+        competitionId: this.competitionModal.competitionId,
+        pointsTablePath: filePath,
+      });
+    },
+    handleRemoveCompetition({ ratingId, competitionId }) {
+      this.removeCompetitionAction({ ratingId, competitionId });
+    },
+    handleDeleteRating(ratingId) {
+      this.deleteRatingAction(ratingId);
+    },
+    handleRefreshRating(ratingId) {
+      this.refreshRatingDataAction({ ratingId });
     },
   },
 };
@@ -176,61 +192,53 @@ export default {
   display: flex;
   flex-direction: column;
   gap: 16px;
+}
 
-  .page-header {
-    .page-subtitle {
-      margin: 0;
-      color: var(--text-muted);
-    }
-  }
+.ratingsPage__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+}
 
-  .controls {
-    display: flex;
-    gap: 16px;
+.ratingsPage__title {
+  margin: 0;
+  font-size: 1.6rem;
+}
 
-    .control {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      font-weight: bold;
+.ratingsPage__subtitle {
+  margin: 4px 0 0;
+  color: var(--text-muted);
+}
 
-      select {
-        padding: 8px;
-        border-radius: 6px;
-        border: 1px solid var(--subject-background);
-        background: var(--background-card);
-        color: var(--text-default);
-      }
-    }
-  }
+.tw-button-primary {
+  height: 40px;
+  padding: 0 16px;
+  border-radius: 6px;
+  border: none;
+  background: #1cbf73;
+  color: #0c111d;
+  font-weight: bold;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
 
-  .info-card {
-    padding: 24px;
-    border-radius: 8px;
-    background: var(--background-card);
-    border: 1px solid var(--subject-background);
-  }
-
-  .ratings-table__wrapper {
-    overflow-x: auto;
-  }
-
-  .ratings-table {
-    width: 100%;
-    border-collapse: collapse;
-
-    th,
-    td {
-      padding: 12px 8px;
-      text-align: left;
-      border-bottom: 1px solid var(--subject-background);
-    }
-
-    th {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-    }
+  &:hover {
+    opacity: 0.85;
   }
 }
-</style>
 
+.info-card {
+  padding: 24px;
+  border-radius: 8px;
+  background: var(--background-card);
+  border: 1px solid var(--subject-background);
+}
+
+.ratings-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-bottom: 24px;
+}
+</style>
